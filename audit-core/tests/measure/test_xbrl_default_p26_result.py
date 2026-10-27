@@ -576,17 +576,46 @@ def check_doc(rec, doc, bounds):
 
 
 # ----------------------------------------------------------------------------------------------------------------
+# 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file に挿入だけを足した。EXPECT["vocab_sha16"] は段 2 が測った時点の値で消さない。
+# 受け入れるのは、その封が履歴に在り、値が下の値(P27 の段 2 の後)のときだけ。
+SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"
+P27_LATER = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
+             "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
+             "adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
+             "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
+             "adapters/xbrl/report_customer.py": ("6679138d350ec382", SEAL_P27)}
+#: 2026-10-27(P27 の段 2): 重い走らせ直し(S-7 の「封の commit からの numstat」・環境の engine の欄)が記録と違ってよい欄の全部。封 SEAL_P27 §2-3 の遷移(engine の 5 file に挿入だけ。削除は 0 のまま)。
+#: 直前の値(記録の値。4・0・0・0・0・4f417562…・e2873306…)は測った時点の値として残す。受け入れるのは、封が履歴に在り、値が下の宣言の値のときだけ。S-1〜S-6 の測った欄はここに無い(1 字でも違えば赤)。
+P27_HEAVY_S7 = {"adapters/xbrl/vocabulary.py": 23, "adapters/xbrl/recipes.py": 125, "adapters/xbrl/extract.py": 19,
+                "adapters/xbrl/registry_setup.py": 2, "adapters/xbrl/report_customer.py": 2}
+P27_HEAVY_BUNDLE = "9dd27fab331b2e4962c6d9c6a2710a7f91816395f3c820abbc92016437d4cbb0"
+
+
+def p27_declared(rel):
+    u"""rel が P27 の封の遷移の値なら True(封が履歴に在り、値が宣言の値のときだけ)。遷移の値でなければ AssertionError。"""
+    later, seal_rel = P27_LATER[rel]
+    assert git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(), u"遷移を宣言した封が履歴に無い: " + rel
+    assert sha16(rel) == later, u"**%s が、宣言された遷移の値とも違う**" % rel
+    return True
+
+
 def engine_ok():
-    u"""いまの engine: vocabulary.py は段 2 の後の値(封の commit 時点の値でも、字で留めた段 2 の後の値でもなければ赤)、ほかの adapters の file は封の commit のまま。"""
+    u"""いまの engine: vocabulary.py は段 2 の後の値か P27 の封の遷移の値(どちらでもなければ赤)、ほかの adapters の file は封の commit のまま(P27 の封が足した 4 file は遷移の値)。"""
     from adapters.xbrl import vocabulary as V
-    assert sha16("adapters/xbrl/vocabulary.py") == EXPECT["vocab_sha16"], u"vocabulary.py が段 2 の後の値と違う"
+    vocab_moved = sha16("adapters/xbrl/vocabulary.py") != EXPECT["vocab_sha16"]
+    if vocab_moved:
+        p27_declared("adapters/xbrl/vocabulary.py")
     assert V.DEFAULT_PROFILE == "P26", V.DEFAULT_PROFILE
     for rel in sorted(f for f in os.listdir(os.path.join(ROOT, "adapters", "xbrl")) if f.endswith(".py")):
         r = git("diff", SEAL_COMMIT, "--numstat", "--", "adapters/xbrl/" + rel)
         if rel != "vocabulary.py":
+            if r.stdout.strip() != u"" and ("adapters/xbrl/" + rel) in P27_LATER:
+                p27_declared("adapters/xbrl/" + rel)
+                continue
             assert r.stdout.strip() == u"", u"vocabulary.py 以外の engine の file が封の commit から動いている: " + rel
     r = git("diff", SEAL_COMMIT, "--numstat", "--", "adapters/xbrl/vocabulary.py")
-    assert r.stdout.split()[:2] == ["4", "1"], r.stdout
+    if not vocab_moved:
+        assert r.stdout.split()[:2] == ["4", "1"], r.stdout
     assert git("diff", SEAL_COMMIT, "--numstat", "--", "core").stdout.strip() == u""
     assert git("status", "--porcelain", "--", "core").stdout.strip() == u""
 
@@ -765,6 +794,28 @@ class RerunTest(unittest.TestCase):
                 part.pop(k, None)
             part[u"S7"].pop(u"adapters/xbrl の file 数", None)
             part[u"入力"].pop(u"試験の赤の入力 file の sha256", None)      # 試験の赤の表は人が書いた入力で、走らせ直しでは測らない
+        # 2026-10-27(P27 の段 2): engine の状態を写す欄だけ、封が履歴に在り値が宣言の値のときに記録の値へ戻す(測った欄 S-1〜S-6 は戻さない)
+        moved = False
+        for rel, ins in sorted(P27_HEAVY_S7.items()):
+            if got[u"S7"][rel] != want[u"S7"][rel]:
+                moved = True
+                self.assertEqual(got[u"S7"][rel], {u"挿入": ins, u"削除": want[u"S7"][rel][u"削除"]}, rel)
+                got[u"S7"][rel] = want[u"S7"][rel]
+        if got[u"S7"][u"vocabulary.py 以外で封の commit から動いた file"] != want[u"S7"][u"vocabulary.py 以外で封の commit から動いた file"]:
+            moved = True
+            self.assertEqual(got[u"S7"][u"vocabulary.py 以外で封の commit から動いた file"], [u"extract.py", u"recipes.py", u"registry_setup.py", u"report_customer.py"])
+            got[u"S7"][u"vocabulary.py 以外で封の commit から動いた file"] = want[u"S7"][u"vocabulary.py 以外で封の commit から動いた file"]
+        bk = u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)"
+        if got[u"環境"][bk] != want[u"環境"][bk]:
+            moved = True
+            self.assertEqual(got[u"環境"][bk], P27_HEAVY_BUNDLE)
+            got[u"環境"][bk] = want[u"環境"][bk]
+        if got[u"環境"][u"vocabulary.py の sha16"] != want[u"環境"][u"vocabulary.py の sha16"]:
+            moved = True
+            self.assertEqual(got[u"環境"][u"vocabulary.py の sha16"], P27_LATER["adapters/xbrl/vocabulary.py"][0])
+            got[u"環境"][u"vocabulary.py の sha16"] = want[u"環境"][u"vocabulary.py の sha16"]
+        if moved:
+            self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", SEAL_P27).stdout.split(), u"engine の状態が動いているのに、遷移を宣言した封が履歴に無い")
         self.assertEqual(json.dumps(got, sort_keys=True), json.dumps(want, sort_keys=True))
 
 
@@ -923,13 +974,20 @@ class MutationTest(unittest.TestCase):
         self._red(seal_bounds, self.seal.replace(u"| **S-5** |", u"| S-5 |", 1))
 
     def test_m14_a_wrong_engine_sha_is_red(self):
-        old = dict(EXPECT)
+        # 2026-10-27(P27 の段 2): vocabulary.py は段 2 の値(EXPECT)でも、P27 の封の遷移の値(P27_LATER)でもよい。どちらにも当たらない値は赤。
+        old, old27 = dict(EXPECT), dict(P27_LATER)
         try:
             EXPECT["vocab_sha16"] = u"0" * 16
+            P27_LATER["adapters/xbrl/vocabulary.py"] = (u"0" * 16, SEAL_P27)
             self._red(engine_ok)
+            EXPECT.clear()
+            EXPECT.update(old)
+            self._red(engine_ok)                 # P27 の遷移の値だけが違っても赤
         finally:
             EXPECT.clear()
             EXPECT.update(old)
+            P27_LATER.clear()
+            P27_LATER.update(old27)
         engine_ok()
 
     def test_m15_reds_table_must_add_up(self):

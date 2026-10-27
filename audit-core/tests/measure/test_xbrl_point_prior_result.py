@@ -362,11 +362,13 @@ SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 SEAL_CUSTOMER_REPORT = "docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md"    # 2026-10-21 追記: 顧客向けの日本語の報告形(新しい module adapters/xbrl/report_customer.py。下の ENGINE_LATER の新規 file)
 SEAL_CUSTOMER_REPORT_FIX = "docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md"    # 2026-10-21 追記: 顧客向けの報告形の直し(report_customer.py の中身だけ。下の ENGINE_LATER)
+SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に旗 vocab_2026_10_21・frame_rebind の塊(+224 行・既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
 # d5308700eae78c10(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 3461c3f8b7af6675。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)、vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)、registry_setup.py に理由 no_same_value(+2 行)を足した(DEFAULT_PROFILE は P22 のまま)。
 # recipes.py の 3461c3f8b7af6675・vocabulary.py の 83498c04a7b70396・registry_setup.py の 9a0b08954cf22639(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+# 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
                 # 2026-10-20 追記(段 2): vocabulary.py の sha は 段 1 3320c8c で 1fdb48e7e3ba58ce(残す。測った時点の値)、段 2(DEFAULT_PROFILE を
                 # P21 -> P22 にし、決定の注記を足した。vocabulary.py だけ・recipes.py は 0 行。同じ封 SEAL_PERIOD_BIND の段 2)で 25a3c0992e10daaa。
                 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 2 つ・資金の句の表・P24・PROFILES の登録を足した(DEFAULT_PROFILE は P22 のまま)。
@@ -375,20 +377,20 @@ ENGINE_LATER = {"adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
                 # 27e71e9861fc5aad(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 83025e9c0525d08b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
                 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
                 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-                "adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26),
+                "adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
                 # 2026-10-21(P24 の段 1): registry_setup.py に理由 other_frame を足した(+2 行)。この file はこの門が測った時点では動いていない(封の commit から 0 行だった)。
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で registry_setup.py に理由 3 つ(+6 行) を足した。
                 # f42ffe23aaa7673b(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 7f2cbded9c830211。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
-                "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26),
+                "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
                 # 2026-10-21(顧客向けの日本語の報告形): 封 docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md(engine 側に module を足す。人間の事前承認 2026-10-21)で、新しい file adapters/xbrl/report_customer.py を足した
                 # (既存の file は 1 字も触らない。report.py・verify_document.py・vocabulary.py・recipes.py・registry_setup.py は 0 行)。新規 file なので「測った時点の値」は無い。受け入れるのは、その封が履歴に在り、sha16 が下の値のときだけ。
                 # d82481697762d167(段 1 の c13a746)は残す(測った時点の値)。2026-10-21 追記(顧客向けの報告形の直し。封 docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md が
                 # module の中身だけを直す。判定と節の割り当ては変えない)で 715468699973cc4a。受け入れるのは、その封が履歴に在り、値が直した後の値のときだけ。
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で report_customer.py の理由の表に 3 行(+7 行・-2 行。判定と節の割り当ては変えない) を足した。
                 # 715468699973cc4a(報告形の直し 段 1)は残す(測った時点の値)、P26 の段 1 で 141767d189b63733。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
-                "adapters/xbrl/report_customer.py": ("141767d189b63733", SEAL_P26),
+                "adapters/xbrl/report_customer.py": ("6679138d350ec382", SEAL_P27),
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で extract.py に数の読み取りの足し(+42 行・-0 行)を足した。この file はこの門が測った時点では動いていない(封の commit から 0 行だった)。
-                "adapters/xbrl/extract.py": ("9982599fc31cbab3", SEAL_P26)}
+                "adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27)}
 
 
 def only_declared_changes(numstat_out, status_out):

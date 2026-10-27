@@ -79,6 +79,8 @@ _UNVERIFIABLE_REASONS = (
     "direction_on_cause_item",
     # P26 G3 rounded_diff_hold(封 docs/XBRL_P26_SEAL_2026-10-21.md): 丸めた値の差が 2 倍の切り捨ての帯でだけ合う数。名指した対は provenance。
     "rounded_diff_within_double_band",
+    # P27 C2 per_unit_counter(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-4): 「1人当たり」「1株当たり」の「1」。数の主張ではない。
+    "per_unit_counter",
 )
 
 

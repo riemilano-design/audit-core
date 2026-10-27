@@ -392,7 +392,7 @@ class ProfileShapeTest(unittest.TestCase):
 
     def test_every_other_profile_keeps_the_flag_off(self):
         for name, p in V.PROFILES.items():
-            if name in ("P20", "P21", "P22", "P23", "P24", "P25", "P26"):    # P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)、P25 = P24 + last_branch_names_only_if_evidence(封 XBRL_LASTBRANCH_SEAL_2026-10-21)、P24 = P23 + vocab_2026_10_21 + frame_rebind(封 XBRL_VOCAB_SEAL_2026-10-21)、P23 = P22 + pct_tolerance_from_decimals + truncate_abs_band(封 XBRL_ROUNDING_SEAL_2026-10-21)、P21 = P20 + last_branch_cues(封 XBRL_NAMING_FIX_SEAL_2026-10-20)、P22 = P21 + period_bind(封 XBRL_PERIOD_BIND_SEAL_2026-10-20、2026-10-20)
+            if name in ("P20", "P21", "P22", "P23", "P24", "P25", "P26", "P27", "P27E"):    # 2026-10-27 P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ(封 XBRL_P27_SEAL_2026-10-27)も引き継ぐ。P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)、P25 = P24 + last_branch_names_only_if_evidence(封 XBRL_LASTBRANCH_SEAL_2026-10-21)、P24 = P23 + vocab_2026_10_21 + frame_rebind(封 XBRL_VOCAB_SEAL_2026-10-21)、P23 = P22 + pct_tolerance_from_decimals + truncate_abs_band(封 XBRL_ROUNDING_SEAL_2026-10-21)、P21 = P20 + last_branch_cues(封 XBRL_NAMING_FIX_SEAL_2026-10-20)、P22 = P21 + period_bind(封 XBRL_PERIOD_BIND_SEAL_2026-10-20、2026-10-20)
                 continue
             self.assertFalse(p.nonconsolidated_fallback, name)
 

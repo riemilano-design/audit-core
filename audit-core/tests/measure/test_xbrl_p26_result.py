@@ -68,7 +68,13 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/extract.py": "9982599fc31cbab3", "adapters/x
 #: 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が宣言した遷移。vocabulary.py は DEFAULT_PROFILE の 1 行と決定の注記(+4 行・-1 行)だけ動いた。
 #: 83025e9c0525d08b(P26 の段 1。ENGINE_AT_MEASURE に残す = 測った時点の値)から段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"
-ENGINE_TRANSITIONS = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26)}
+SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+# 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
+ENGINE_TRANSITIONS = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
+                      "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
+                      "adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
+                      "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
+                      "adapters/xbrl/report_customer.py": ("6679138d350ec382", SEAL_P27)}
 #: 封の commit から 0 行でなければならない file(core/ は別に見る)。
 UNTOUCHED = ("adapters/xbrl/report.py", "adapters/xbrl/verify_document.py", "adapters/xbrl/comparators.py")
 
@@ -760,6 +766,16 @@ class RerunTest(unittest.TestCase):
             if k == u"Q1":
                 for part in (a, b):
                     part[u"動いた行"] = strip_readings(part[u"動いた行"])
+            if k == u"Q7":
+                # 2026-10-27(P27 の段 2。封 SEAL_P27 §2-3「登録簿の理由 19 → 20」): 登録簿の理由が 1 つ増えただけ(UNVERIFIABLE 9 → 10・合計 19 → 20・表 REASON_JA にある 19 → 20)。
+                # 封が履歴に在り、この 3 欄が記録の値 +1 のときだけ記録の値に戻す。ほかの欄は 1 字でも違えば赤。
+                reg_a, reg_b = a[u"登録簿の理由"], b[u"登録簿の理由"]
+                moved = [u"UNVERIFIABLE", u"合計", u"表 REASON_JA にある"]
+                if any(reg_a[f] != reg_b[f] for f in moved):
+                    self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", SEAL_P27).stdout.split(), u"登録簿が動いているのに、遷移を宣言した封が履歴に無い")
+                    for f in moved:
+                        self.assertEqual(reg_a[f], reg_b[f] + 1, f)
+                        reg_a[f] = reg_b[f]
             self.assertEqual(json.dumps(a, sort_keys=True), json.dumps(b, sort_keys=True), k)
 
 

@@ -84,6 +84,9 @@ def _state_of(reason, result):
     if r == CAUSE_ITEM_DIRECTION:
         # P26 G4 cause_item_direction(封 docs/XBRL_P26_SEAL_2026-10-21.md): 向きの語が主語でなく要因の項目にかかる形。主語の向きの主張にしない。
         return "UNVERIFIABLE"
+    if r == PER_UNIT_COUNTER:
+        # P27 C2 per_unit_counter(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-4): 「1人当たり」「1株当たり」の「1」。数の主張にしない。
+        return "UNVERIFIABLE"
     raise KeyError(r)
 
 
@@ -281,6 +284,8 @@ def _build_point_diff_claim_2026_10_21(claim, s, a, b, elems, member, facts, con
 def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
                         profile=None, rounding=None):
     scale = prec if unit == "円" else V.UNIT_SCALE[unit]
+    if getattr(profile, "written_precision_2026_10_27", False) and unit in V.UNIT_SCALE and prec is not None:
+        scale = prec   # P27 A(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-1): 書かれた精度。照合の帯・claim_scale・最後の枝の桁にそのまま使われる
     unit_scale = 1.0 if unit == "円" else V.UNIT_SCALE[unit]
     mag_trunc = _mag_trunc(profile, rounding)
     if mag_trunc:
@@ -439,6 +444,10 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                         claim["recomputed"] = cur[0]["value"] - mate["value"]
                         claim["reason"] = "value differs(segment/other period?)"
                         return
+                if (getattr(profile, "last_branch_relative_2026_10_27", False)
+                        and _last_branch_decide_2026_10_27(claim, target, scale, rounding, mag_trunc, cur[0], facts)):
+                    # P27E B(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-2): 相対の近さを名指しの証拠に足す。下の P26 G2・P25 の行より前。
+                    return
                 if (getattr(profile, "last_branch_names_only_if_evidence", False) and getattr(profile, "last_branch_digit_needs_size", False)
                         and _last_branch_unname_2026_10_21(claim, target, scale, rounding, mag_trunc, cur[0], facts)):
                     # P26 G2(封 docs/XBRL_P26_SEAL_2026-10-21.md): (ii) を名指す値の大きさで締めた証拠で先に見る。証拠があれば下の P25 の行が今までどおり名指す。
@@ -1381,6 +1390,8 @@ def _concept_gate_why(claim, elems, facts_by_key, rules):
         return None
     if "unit_family" in rules and (claim.get("unit") in CONCEPT_GATE_MONEY_UNITS or claim.get("unit") is None):
         per_share_subject = CONCEPT_GATE_PER_SHARE_WORD in (claim.get("subject") or "")
+        if claim.get("per_share_window_2026_10_27"):
+            per_share_subject = True   # P27 C1(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-3): 上の行で per_share_subject を決めた後に、窓の印で真にする
         for p in xptrs:
             f = facts_by_key.get(_ctx_of(p))
             u = ((f or {}).get("unit") or "").upper()
@@ -1562,9 +1573,117 @@ def _cause_item_gate(claim, sentences):
 def _numbers_of(profile, s):
     """G5: 旗が真なら extract.iter_numbers_2026_10_21、偽なら extract.iter_numbers(今までどおり)。"""
 
+    if getattr(profile, "written_precision_2026_10_27", False):
+        return E.iter_numbers_2026_10_27(s)   # P27 A(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-1)
     if getattr(profile, "numbers_2026_10_21", False):
         return E.iter_numbers_2026_10_21(s)
     return E.iter_numbers(s)
+
+
+# ---------------------------------------------------------------------------
+# P27(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-2・§1-3・§1-4)。それぞれの旗が真のときだけ呼ばれる。人間の決定の行の字は変えない。
+#   B (P27E): 最後の枝で、P25 の証拠 (i)〜(iii) が無く、名指す当期の fact との相対の差が LAST_BRANCH_REL_RHO 以内なら名指す。
+#   C1: 数の手前 PER_SHARE_WINDOW 字に PER_SHARE_RE が当たれば、G1(concept_gate)の per_share_subject を真にする印を付ける。
+#   C2: 「1人当たり」「1株当たり」の「1」(数の後ろが「当たり」「あたり」)は数の主張にしない(UNVERIFIABLE、per_unit_counter)。
+#   C3: 当期末より後の「YYYY年M月期」の後ろの数は UNVERIFIABLE(既存の target_or_plan)。
+# ---------------------------------------------------------------------------
+LAST_BRANCH_REL_RHO = 0.15   # 字で留める(B: ||名指す値| − |文の値|| <= この数 × |名指す値| なら名指す)
+PER_SHARE_WINDOW = 20        # 字で留める(C1: 数の手前の窓)
+PER_SHARE_RE = re.compile(r"株当たり|EPS|BPS")   # 字で留める(C1)
+PER_UNIT_COUNTER = "per_unit_counter"   # 登録簿の固定の名前(UNVERIFIABLE。C2)
+PER_UNIT_COUNTER_UNITS = ("人", "名", "株", "千株", "台", "店", "店舗", "社", "件")   # 字で留める(C2)
+PER_UNIT_COUNTER_AFTER = ("当たり", "あたり")   # 字で留める(C2: 数の直後 3 字)
+_FUTURE_PERIOD_RE = re.compile(r"(\d{4})年(\d{1,2})月期")   # C3
+_INSTANT_YM_RE = re.compile(r"^(\d{4})-(\d{1,2})")   # C3: 当期末の instant の (年, 月)
+# C2・C3 が束縛を消すとき、前の束縛を説明していた欄も消す(消さないと Recipe の provenance に名指さなかった fact などが残り、規則ごとの数え方も古い印を数える)。
+_P27_STALE_KEYS = ("match", "no_same_value", "other_frame", "rounded_diff_hold", "last_branch_evidence", "last_branch_digit_floor", "ambiguous_count")
+
+
+def _last_branch_decide_2026_10_27(claim, target, scale, rounding, mag_trunc, named, facts):
+    """B: 証拠 = ``_last_branch_evidence`` (P25 の (i)〜(iii))。G2 と同じく、(ii) は |名指す値| が LAST_BRANCH_NAMED_MIN_K × 主張の桁
+    より小さいときは数えず (iii) だけを見直す。証拠があれば何も書かず False(下の G2・P25 の行が今までどおり名指す)。
+    証拠が無く、名指す値が 0 でなく、相対の差が LAST_BRANCH_REL_RHO 以内なら P21 の最後の 5 行と同じ字で名指して True。
+    どちらでもなければ G2 と同じ POINTER_NOT_FOUND(no_same_value)にして True。"""
+
+    ev = _last_branch_evidence(target, scale, rounding, mag_trunc, named, facts)
+    floored = False
+    if ev == "digit_within_k" and abs(named["value"]) < LAST_BRANCH_NAMED_MIN_K * scale:
+        ev = None
+        floored = True
+        prec = _written_precision(target, scale)
+        for n in LAST_BRANCH_SCALE_EXPONENTS:
+            if V.match_value(named["value"], target * 10.0 ** (-n), prec * 10.0 ** (-n), rounding, mag_trunc):
+                ev = "scale_10^%d" % n
+                break
+    if ev is not None:
+        return False
+    if floored:
+        claim["last_branch_digit_floor"] = True
+    if named["value"] != 0 and abs(abs(named["value"]) - abs(target)) <= LAST_BRANCH_REL_RHO * abs(named["value"]):
+        claim["pointer"] = "xbrl:%s@%s" % (named["name"], named["context"])
+        claim["bound"] = True
+        claim["result"] = "VALUE_MISMATCH"
+        claim["recomputed"] = named["value"]
+        claim["reason"] = "value differs(segment/other period?)"
+        claim["last_branch_evidence"] = "relative_within_rho"
+        return True
+    claim["last_branch_evidence"] = None
+    claim["pointer"] = None
+    claim["bound"] = False
+    claim["result"] = None
+    claim["recomputed"] = None
+    claim["reason"] = NO_SAME_VALUE
+    claim["no_same_value"] = {"named": "xbrl:%s@%s" % (named["name"], named["context"]), "value": named["value"]}
+    return True
+
+
+def _future_period_2026_10_27(s, pos, contexts):
+    """C3: s[:pos] の中の最後の「YYYY年M月期」の (年, 月) が、当期末(CurrentYearInstant の instant)の (年, 月) より後なら真。"""
+
+    cur = _INSTANT_YM_RE.match(((contexts.get("CurrentYearInstant") or {}).get("instant")) or "")
+    if cur is None:
+        return False
+    last = None
+    for last in _FUTURE_PERIOD_RE.finditer(s[:pos]):
+        pass
+    if last is None:
+        return False
+    return (int(last.group(1)), int(last.group(2))) > (int(cur.group(1)), int(cur.group(2)))
+
+
+def _p27_gate(c, sentences, contexts, profile):
+    """数の claim 1 件に C1 の印・C2・C3 を当てる。既に reason が target_or_plan の claim には触らない。"""
+
+    if c.get("reason") == "target_or_plan":
+        return
+    s = sentences[c["sentence"]]
+    a = c["pos"]
+    hit = [(b, unit) for (a2, b, _v, unit, _p) in _numbers_of(profile, s) if a2 == a]
+    if not hit:
+        return
+    b, unit = hit[0]
+    if getattr(profile, "per_share_window_2026_10_27", False) and unit in V.UNIT_SCALE and c.get("unit") in V.UNIT_SCALE:
+        if PER_SHARE_RE.search(s[max(0, a - PER_SHARE_WINDOW):a]):
+            c["per_share_window_2026_10_27"] = True
+    if getattr(profile, "per_unit_counter_2026_10_27", False) and unit in PER_UNIT_COUNTER_UNITS and s[b:b + 3] in PER_UNIT_COUNTER_AFTER:
+        c["pointer"] = None
+        c["bound"] = False
+        c["recomputed"] = None
+        c["result"] = None
+        for k in _P27_STALE_KEYS:
+            c.pop(k, None)
+        c["reason"] = PER_UNIT_COUNTER
+        c["p27_gate"] = "per_unit_counter"
+        return
+    if getattr(profile, "future_period_2026_10_27", False) and _future_period_2026_10_27(s, a, contexts):
+        c["pointer"] = None
+        c["bound"] = False
+        c["recomputed"] = None
+        c["result"] = "UNVERIFIABLE"
+        for k in _P27_STALE_KEYS:
+            c.pop(k, None)
+        c["reason"] = "target_or_plan"
+        c["p27_gate"] = "future_period"
 
 
 _PCT_PHRASE_RE = re.compile(r"(\d+(?:\.\d+)?)\s*(％|%)\s*の?(?:大幅な?)?(増加|減少|増益|減益|増収|減収|増|減)")
@@ -1845,6 +1964,12 @@ def build_raw_claims(zb, profile, info=None):
         # P26 G4(封 docs/XBRL_P26_SEAL_2026-10-21.md): 全部の claim を作った後に 1 度だけ、文字の主張に。G1 より先。
         for c in text_claims:
             _cause_item_gate(c, sentences)
+    if (getattr(profile, "per_share_window_2026_10_27", False) or getattr(profile, "per_unit_counter_2026_10_27", False)
+            or getattr(profile, "future_period_2026_10_27", False)):
+        # P27 C1 の印・C2・C3(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-3・§1-4): 全部の claim を作った後に 1 度だけ。G4 の後・G1 の前。
+        # 数の claim を作る段(_target_or_plan を含む。人間の決定の行)の字は変えない。
+        for c in num_claims:
+            _p27_gate(c, sentences, contexts, profile)
     if getattr(profile, "concept_gate", ()):
         # P26 G1 concept_gate(封 docs/XBRL_P26_SEAL_2026-10-21.md): 全部の claim を作った後に 1 度だけ。GROUNDED の行には触らない。
         facts_by_key = {(f["name"], f["context"]): f for f in facts}

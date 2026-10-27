@@ -37,6 +37,7 @@ SEAL_REL = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"
 SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追記: 最後の枝 P25 の段 1(下の ENGINE_LATER の遷移)
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
+SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
 SEAL = os.path.join(ROOT, SEAL_REL)
 ROUNDING_JSON = os.path.join(ROOT, "fixtures", "xbrl", "rounding_2026-10-21.json")
 POINT_PRIOR_JSON = os.path.join(ROOT, "fixtures", "xbrl", "point_prior_2026-10-20.json")
@@ -64,13 +65,14 @@ ENGINE_AT_SEAL = {"adapters/xbrl/vocabulary.py": "f7b8d925eb6787ec",
 # vocabulary.py の 83498c04a7b70396・recipes.py の 3461c3f8b7af6675・registry_setup.py の 9a0b08954cf22639(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26),
+# 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に G1〜G5 の塊(+251 行・-1 行。既存の行の書き換えは数の読み取りの for 文 1 行だけ) を足した。
                 # bff243f13429b553(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 181b370420ab751b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
-                "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+                "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で registry_setup.py に理由 3 つ(+6 行) を足した。
                 # f42ffe23aaa7673b(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 7f2cbded9c830211。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
-                "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
+                "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27)}
 
 # §1「過去の門の engine の留め」の一覧(封の字)と、実物の在りか
 PIN_FILES_ENGINE_LATER = ("tests/measure/test_xbrl_branch_a.py", "tests/measure/test_xbrl_role_swap_result.py",
@@ -523,7 +525,7 @@ class EngineAtSealTest(unittest.TestCase):
             self.assertIn(flag, fields)
             self.assertIs(fields[flag].default, False)
             # 2026-10-21: P25 = P24 + 旗 1 つ(封 XBRL_LASTBRANCH_SEAL_2026-10-21)は P24 の旗 2 つを引き継ぐ
-            self.assertEqual(sorted(n for n, p in V.PROFILES.items() if getattr(p, flag)), ["P24", "P25", "P26"], flag)   # 2026-10-22: P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)も引き継ぐ
+            self.assertEqual(sorted(n for n, p in V.PROFILES.items() if getattr(p, flag)), ["P24", "P25", "P26", "P27", "P27E"], flag)   # 2026-10-22: P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)も引き継ぐ。(2026-10-27: P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ。封 XBRL_P27_SEAL_2026-10-27)も引き継ぐ
         self.assertIn("P24", V.PROFILES)
         self.assertEqual(V.PROFILES["P24"], dataclasses.replace(V.P23, name="P24", vocab_2026_10_21=True, frame_rebind=True))
         # 登録簿: other_frame は新しい名前で registry_setup.py にだけ在る(engine の 3 file の外と core/ には無い)
@@ -550,7 +552,7 @@ class EngineAtSealTest(unittest.TestCase):
         self.assertFalse(p23.truncate_on_magnitude)
         # 2026-10-21: P24 = P23 + 旗 2 つ(段 1 の実装)は truncate_abs_band を引き継ぐ
         # 2026-10-21: P25 = P24 + 旗 1 つ(封 XBRL_LASTBRANCH_SEAL_2026-10-21)も引き継ぐ
-        self.assertEqual(sorted(n for n, p in V.PROFILES.items() if p.truncate_abs_band), ["P23", "P24", "P25", "P26"])   # 2026-10-22: P26 も引き継ぐ
+        self.assertEqual(sorted(n for n, p in V.PROFILES.items() if p.truncate_abs_band), ["P23", "P24", "P25", "P26", "P27", "P27E"])   # 2026-10-22: P26 も引き継ぐ。(2026-10-27: P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ。封 XBRL_P27_SEAL_2026-10-27)も引き継ぐ
 
 
 class OrderTest(unittest.TestCase):

@@ -116,9 +116,10 @@ class RegisterAllTest(unittest.TestCase):
         self.assertEqual(len(RS._POINTER_NOT_FOUND_REASONS), 10)
         # 2026-10-21 P24 の段 1: 理由 other_frame を足して 7(封 XBRL_VOCAB_SEAL_2026-10-21)
         # 2026-10-22 P26 の段 1: 理由 direction_on_cause_item・rounded_diff_within_double_band を足して 9(封 XBRL_P26_SEAL_2026-10-21)
-        self.assertEqual(len(RS._UNVERIFIABLE_REASONS), 9)
+        # 2026-10-27 P27 の段 2: 理由 per_unit_counter を足して 10(封 XBRL_P27_SEAL_2026-10-27)
+        self.assertEqual(len(RS._UNVERIFIABLE_REASONS), 10)
         total = 2 + len(RS._COMPARATORS) + len(RS._NORMALIZATIONS) + len(RS._POINTER_NOT_FOUND_REASONS) + len(RS._UNVERIFIABLE_REASONS)
-        self.assertEqual(total, 35)
+        self.assertEqual(total, 36)
 
     def test_registering_a_reason_twice_raises(self):
         with self.assertRaises(ValueError):

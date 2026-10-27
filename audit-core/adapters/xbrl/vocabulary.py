@@ -439,6 +439,17 @@ class Profile:
     cause_item_direction: bool = False
     # G5: 数の読み取りで「兆」と「億(カンマ)」、「万」と「千」、「円」と「銭」を 1 つの数に読む(extract.iter_numbers_2026_10_21)。
     numbers_2026_10_21: bool = False
+    # P27(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-5): 外部の数の文のための直しの旗 5 つ。どれも偽(既定)なら P1〜P26 の振る舞いは 1 行も変わらない。
+    # A 書かれた精度で照合する(extract.iter_numbers_2026_10_27 と recipes._direct_value_claim の scale)。
+    written_precision_2026_10_27: bool = False
+    # B 最後の枝で、相対の近さ(recipes.LAST_BRANCH_REL_RHO 以内)を名指しの証拠に足す(P27E だけ)。
+    last_branch_relative_2026_10_27: bool = False
+    # C1 数の手前の窓に 1 株当たりの語があれば、概念の門 G1 の per_share_subject を真にする。
+    per_share_window_2026_10_27: bool = False
+    # C2「1人当たり」「1株当たり」の「1」は数の主張にしない(UNVERIFIABLE、理由 per_unit_counter)。
+    per_unit_counter_2026_10_27: bool = False
+    # C3 当期末より先の決算期(「2027年5月期」等)の後ろの数は UNVERIFIABLE(target_or_plan)。
+    future_period_2026_10_27: bool = False
 
 
 P1 = Profile(
@@ -783,3 +794,11 @@ PROFILES["P25"] = P25
 # 旗 1 つずつの profile は engine に登録しない(旗ごとの効きは measure の中で dataclasses.replace して測る)。
 P26 = dataclasses.replace(P25, name="P26", concept_gate=("unit_family", "loose_prefix"), last_branch_digit_needs_size=True, rounded_diff_hold=True, cause_item_direction=True, numbers_2026_10_21=True)
 PROFILES["P26"] = P26
+
+# P27 = P26 + A・C1・C2・C3(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-5)。P27E = P27 + B(外部の数の文のための名指し。既定の候補にしない)。
+# 既定は変えない(DEFAULT_PROFILE は P26 のまま)。PROFILES の行(P26 まで)は字を変えず、ここで足す。旗 1 つずつの profile は engine に登録しない。
+P27 = dataclasses.replace(P26, name="P27", written_precision_2026_10_27=True, per_share_window_2026_10_27=True,
+                          per_unit_counter_2026_10_27=True, future_period_2026_10_27=True)
+PROFILES["P27"] = P27
+P27E = dataclasses.replace(P27, name="P27E", last_branch_relative_2026_10_27=True)
+PROFILES["P27E"] = P27E

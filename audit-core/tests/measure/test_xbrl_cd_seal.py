@@ -81,10 +81,11 @@ FROZEN_LATER = {
     # 27e71e9861fc5aad(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 83025e9c0525d08b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
     # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
     # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-    "adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"),
+    # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
+    "adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", "docs/XBRL_P27_SEAL_2026-10-27.md"),
     # 2026-10-22(P26 の段 1): 同じ封で extract.py に数の読み取りの新しい関数 iter_numbers_2026_10_21(+42 行・-0 行。iter_numbers の字は変えない)を足した。
     # 封 G-9 の 68a78f99f4d4c216 は消さない。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
-    "adapters/xbrl/extract.py": ("9982599fc31cbab3", "docs/XBRL_P26_SEAL_2026-10-21.md"),
+    "adapters/xbrl/extract.py": ("3cf55966f12919f0", "docs/XBRL_P27_SEAL_2026-10-27.md"),
     # 2026-10-20(席と Core の一致の信頼 段 2): measure/inject.py に型 T6_PRIOR・T7_ROUND と select の quota・fallback を足した
     # (既存の型 T1/T2/T3/T5・MACHINE_TYPES・TYPE_POLICY・types を明示しない呼び出しの結果は不変。封 §4。司令塔の承認 2026-10-20)。
     # 封 G-9 の 92d34774c4cc76bb は消さない(10-17 の便の値)。受け入れるのは、その封が履歴に在り、値が足した後の値のときだけ。

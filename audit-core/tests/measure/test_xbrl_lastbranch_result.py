@@ -71,11 +71,13 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/vocabulary.py": "27e71e9861fc5aad", "adapter
 #: 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py・recipes.py・registry_setup.py が動いた。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
+SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26),
-                "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
-                "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
+# 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
+                "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
+                "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27)}
 
 
 def jtext(p):

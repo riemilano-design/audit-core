@@ -106,7 +106,7 @@ class FlagShapeTest(unittest.TestCase):
     def test_only_p26_has_any_flag_and_p26_is_the_only_new_profile(self):
         for n, p in sorted(V.PROFILES.items()):
             have = [f for f in FLAGS if getattr(p, f) != OFF[f]]
-            self.assertEqual(list(FLAGS) if n == "P26" else [], have, n)
+            self.assertEqual(list(FLAGS) if n in ("P26", "P27", "P27E") else [], have, n)      # 2026-10-27 P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ(封 XBRL_P27_SEAL_2026-10-27)も P26 の旗 5 つを引き継ぐ
         self.assertEqual(["P26"], sorted(n for n in V.PROFILES if "P26" in n))      # 旗 1 つずつの profile・P26b は engine に登録しない
 
     def test_with_all_flags_false_p26_is_p25(self):
@@ -158,9 +158,10 @@ class FlagShapeTest(unittest.TestCase):
             self.assertEqual(ja, RC.REASON_JA[r])
             st = "POINTER_NOT_FOUND" if r == REASON_CONCEPT else "UNVERIFIABLE"
             self.assertEqual(RC.SECTION_CHECK, RC.section_of({"state": st, "reason": r}), r)
-        # 登録簿の理由 19 の全部が表にある
+        # 登録簿の理由 19 の全部が表にある(2026-10-27 P27 の C2 で理由 per_unit_counter を足して 20。P26 の 19 は残る)
         reasons = set(RS._POINTER_NOT_FOUND_REASONS) | set(RS._UNVERIFIABLE_REASONS)
-        self.assertEqual(19, len(reasons))
+        self.assertEqual(20, len(reasons))
+        self.assertEqual("per_unit_counter", (reasons - set(R.UNBOUND_REASON_STATE) - {"other_frame", "no_same_value", REASON_CONCEPT, REASON_DIR, REASON_HOLD}).pop())
         self.assertEqual([], sorted(r for r in reasons if r not in RC.REASON_JA))
 
 

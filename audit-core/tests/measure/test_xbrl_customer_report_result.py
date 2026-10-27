@@ -76,14 +76,17 @@ FIX_SEAL_REL = "docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md"
 #: engine の 4 file(extract・vocabulary・recipes・registry_setup)を書き換えたので、いまの値は下の値(その封が履歴に在るときだけ受け入れる)。
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
-MODULE_LATER = {"sha16": "141767d189b63733", "seal": SEAL_P26}
+SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+# 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
+MODULE_LATER = {"sha16": "6679138d350ec382", "seal": SEAL_P27}
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): engine の束ねた指紋は vocabulary.py の 1 行と注記で動く。498993e29055472a…(P26 の段 1)は残す(測った時点の次の値)、段 2 で 5aba774925968356…。受け入れるのは、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が履歴に在り、値が段 2 の後の値のときだけ。
-ENGINE_ADAPTER_SHA_LATER = {"value": "5aba7749259683563c37e62353717f64b4e4828931998a7c42518aca107f3504", "seal": SEAL_DEFAULT_P26}
+ENGINE_ADAPTER_SHA_LATER = {"value": "0e51211a8aed2151409cb6bf443fb6eae2aed87e6b2b4bd6150c8286afee87de", "seal": SEAL_P27}
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26), "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
-                   "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
+UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27), "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
+                   "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27)}
 P26_REASONS = {"other_concept", "direction_on_cause_item", "rounded_diff_within_double_band"}
+P27_REASONS = {"per_unit_counter"}       # 2026-10-27(P27 の段 2。封 docs/XBRL_P27_SEAL_2026-10-27.md §1-4・§2-3「登録簿の理由 19 → 20」。UNVERIFIABLE)
 ALLOWED_RESIDUAL = []
 YEN_KEY = u"文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)"
 #: 報告の末尾の指紋の行の prefix。報告の「本体」= この 1 行だけを除いた残り(git の欄は HEAD で、adapters の欄は engine の file で変わる)。
@@ -272,6 +275,8 @@ def live_c3():
     want = set(R.UNBOUND_REASON_STATE) | {"other_frame", "no_same_value"}
     if git("log", "--diff-filter=A", "--format=%H", "--", SEAL_P26).stdout.split():
         want |= P26_REASONS         # 登録簿の理由 16 → 19(封 docs/XBRL_P26_SEAL_2026-10-21.md §2 Q-7)
+    if git("log", "--diff-filter=A", "--format=%H", "--", SEAL_P27).stdout.split():
+        want |= P27_REASONS         # 登録簿の理由 19 → 20(封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3)
     if len(reg) != len(want) or reg != want:
         return False
     if set(RC.REASON_JA) != reg:
@@ -594,7 +599,7 @@ HEAVY_RERUN_LATER = {
     (u"C5", u"sha256", "adapters/xbrl/recipes.py"): (UNTOUCHED_LATER["adapters/xbrl/recipes.py"][0], UNTOUCHED_LATER["adapters/xbrl/recipes.py"][1], 16),
     (u"C5", u"sha256", "adapters/xbrl/registry_setup.py"): (UNTOUCHED_LATER["adapters/xbrl/registry_setup.py"][0], UNTOUCHED_LATER["adapters/xbrl/registry_setup.py"][1], 16),
     (u"C5", u"report_customer.py の sha256"): (MODULE_LATER["sha16"], MODULE_LATER["seal"], 16),
-    (u"C5", u"report_customer.py の行数"): (1025, SEAL_P26, None),
+    (u"C5", u"report_customer.py の行数"): (1027, SEAL_P27, None),      # 2026-10-27: P27 の封が理由の表に 1 行(+コメント 1 行)を足した(1025 は P26 の段 1 の後の値。残す)
     (u"C5", u"engine の指紋", u"adapter_xbrl_py_sha256"): (ENGINE_ADAPTER_SHA_LATER["value"], ENGINE_ADAPTER_SHA_LATER["seal"], None),
 }
 
@@ -628,13 +633,14 @@ def heavy_rerun_check(got, rec, later):
     g3, r3 = g[u"C3"], r[u"C3"]
     if g3 != r3:
         reg, tbl, one = u"登録簿の理由", u"1 つ消したときの網羅の検査(消した key → 表に無い登録簿の理由)", u"登録簿 − 理由の表"
-        A = sorted(P26_REASONS)
+        added = set(P26_REASONS) | (set(P27_REASONS) if declared(SEAL_P27) else set())      # 2026-10-27: P27 の封が履歴に在るなら、P27 の 1 つ(UNVERIFIABLE)も足された形
+        A = sorted(added)
         assert declared(SEAL_P26), u"**C3 が動いているのに、遷移を宣言した封が履歴に無い**"
         assert set(g3) == set(r3), u"C3 の key の集合が違う"
         assert set(g3[reg]) == set(r3[reg]), u"登録簿の理由の key の集合が違う"
         assert g3[reg][u"POINTER_NOT_FOUND"] == r3[reg][u"POINTER_NOT_FOUND"] + [u"other_concept"], u"(i)"
-        assert g3[reg][u"UNVERIFIABLE"] == r3[reg][u"UNVERIFIABLE"] + [u"direction_on_cause_item", u"rounded_diff_within_double_band"], u"(ii)"
-        assert g3[reg][u"数"] == r3[reg][u"数"] + 3, u"(iii)"
+        assert g3[reg][u"UNVERIFIABLE"] == r3[reg][u"UNVERIFIABLE"] + [u"direction_on_cause_item", u"rounded_diff_within_double_band"] + ([u"per_unit_counter"] if declared(SEAL_P27) else []), u"(ii)"
+        assert g3[reg][u"数"] == r3[reg][u"数"] + len(added), u"(iii)"
         assert g3[one] == A, u"(iv)"
         for k in (u"登録簿 − UNBOUND_REASON_STATE", u"実測に出なかった登録簿の理由"):
             assert g3[k] == sorted(set(r3[k]) | set(A)), u"(v) %s" % k
@@ -846,13 +852,13 @@ class MutationTest(unittest.TestCase):
                 parent[path[-1]] = after + parent[path[-1]][digits:] if digits else after
             c3 = g[u"C3"]
             c3[reg][u"POINTER_NOT_FOUND"] = c3[reg][u"POINTER_NOT_FOUND"] + [u"other_concept"]
-            c3[reg][u"UNVERIFIABLE"] = c3[reg][u"UNVERIFIABLE"] + [u"direction_on_cause_item", u"rounded_diff_within_double_band"]
-            c3[reg][u"数"] += 3
-            c3[u"登録簿 − 理由の表"] = sorted(P26_REASONS)
+            c3[reg][u"UNVERIFIABLE"] = c3[reg][u"UNVERIFIABLE"] + [u"direction_on_cause_item", u"rounded_diff_within_double_band", u"per_unit_counter"]
+            c3[reg][u"数"] += 4
+            c3[u"登録簿 − 理由の表"] = sorted(P26_REASONS | P27_REASONS)
             for k in (u"登録簿 − UNBOUND_REASON_STATE", u"実測に出なかった登録簿の理由"):
-                c3[k] = sorted(set(c3[k]) | P26_REASONS)
+                c3[k] = sorted(set(c3[k]) | P26_REASONS | P27_REASONS)
             for k in c3[tbl]:
-                c3[tbl][k] = sorted(set(c3[tbl][k]) | P26_REASONS)
+                c3[tbl][k] = sorted(set(c3[tbl][k]) | P26_REASONS | P27_REASONS)
             return g
 
         with self.subTest(u"V-0 基準"):

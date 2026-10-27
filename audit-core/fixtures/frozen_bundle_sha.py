@@ -127,6 +127,13 @@ FROZEN_BUNDLE_GENERATIONS = (
      "判定は封 docs/XBRL_FRESH_SAMPLE_SEAL_2026-10-21.md §3(commit 14cdd21)の基準を記録の数から機械で求めた結果(commit 52289c4)で P26。"
      "人間の方針 2026-10-21「あとは全て任せる」・engine の事前承認 2026-10-21、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(commit 6a78b42)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("29fd733c8988164aa7655d7efc90b8215499360987ca01ad14e137bf966bc837",
+     "2026-10-27 feature/audit-core-final-eval-8(外部の数の文のための engine の直し P27 の段 2): vocabulary.py に旗 5 つ・P27(= P26 + 旗 4 つ)・P27E(= P27 + 旗 1 つ)・PROFILES の登録を足し、"
+     "recipes.py に A・B・C1・C2・C3 の塊を足し(挿入だけ。既存の行の書き換え 0)、extract.py に新しい関数 iter_numbers_2026_10_27 を足し(iter_numbers・iter_numbers_2026_10_21 の字は変えない)、"
+     "registry_setup.py に理由 per_unit_counter を足し、report_customer.py の理由の表に 1 行を足した(判定と節の割り当ては変えない)。"
+     "comparators.py・report.py・verify_document.py・run.py・core/py は 0 行。DEFAULT_PROFILE は P26 のまま。"
+     "人間の承認 2026-10-27「寝るから今の作業終えたら p27 進めて 君に任せる」(範囲は封の §2-1・§8)、封 docs/XBRL_P27_SEAL_2026-10-27.md(commit 43fe0e3)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

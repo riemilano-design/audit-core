@@ -60,7 +60,9 @@ TARGET_AT_SEAL = "d82481697762d167"
 # 715468699973cc4a(この封の実装の便の値)は残す(測った時点の値)、P26 の段 1 で 141767d189b63733。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
-LATER_TARGET = {TARGET: ("141767d189b63733", SEAL_P26)}
+SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+# 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
+LATER_TARGET = {TARGET: ("6679138d350ec382", SEAL_P27)}
 
 # §4 の file 一覧。**新規**の 4 本は封の commit 時点で作業木にも履歴にも無い。既存を直す file は EXISTING_EDITED。
 NEW_FILES = ("measure/xbrl_customer_report_fix_2026-10-21.py",
@@ -92,12 +94,12 @@ UNTOUCHED = {"adapters/xbrl/__init__.py": "65474b49e6b84626",
 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md が engine の 4 file を書き換えた(extract.py +42・vocabulary.py +17・recipes.py +251/-1・registry_setup.py +6。
 # comparators.py・report.py・verify_document.py は 0 行)。上の UNTOUCHED は「この封は触らない」の値(封の commit 時点)で消さない。
 # 受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ(comparators.py ほかの 11 file は遷移を持たない: 動いたら赤のまま)。
-UNTOUCHED_LATER = {"adapters/xbrl/extract.py": ("9982599fc31cbab3", SEAL_P26),
-                   "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
-                   "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26),
+UNTOUCHED_LATER = {"adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
+                   "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
+                   "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
                    # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
                    # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-                   "adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26)}
+                   "adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27)}
 
 # 封の commit 時点の engine の束ねた指紋(verify_document.engine_fingerprint())と frozen_bundle。**宣言された遷移の前の値**で、消さない。
 FINGERPRINT_AT_SEAL = {"adapter_xbrl_py_sha256": "c556de1cb26e975a172d54a4e39f4971bb5c11a5fd8a02a8404b9a719eb27acb",
@@ -110,11 +112,11 @@ FROZEN_COUNT_AT_SEAL = 37
 # 2026-10-21 実装の便: module の中身が動くので束ねた指紋が動く(file の数 16 は動かない)。封の commit 時点の値(FINGERPRINT_AT_SEAL)は残す。
 # 2026-10-22(P26 の段 1): 束ねた指紋が 11840a09…(この封の実装の便の値。残す)から 498993e2… に動いた(file の数 16 は動かない)。
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 束ねた指紋が 498993e2…(P26 の段 1。残す)から 5aba7749… に動いた(file の数 16 は動かない)。受け入れるのは、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が履歴に在り、値が段 2 の後の値のときだけ。
-LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("5aba7749259683563c37e62353717f64b4e4828931998a7c42518aca107f3504", SEAL_DEFAULT_P26)}
+LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("0e51211a8aed2151409cb6bf443fb6eae2aed87e6b2b4bd6150c8286afee87de", SEAL_P27)}
 # 2026-10-21 実装の便: frozen_bundle に新しい世代(5c4da2e2…)。本数は 37 のまま(module の中身だけが動く)。封の commit 時点の世代(FROZEN_BUNDLE_AT_SEAL)は消さない。
 # 2026-10-22(P26 の段 1): frozen_bundle の世代がもう 1 つ増えた(a97ecf7c…。本数は 37 のまま)。5c4da2e2…(この封の実装の便の世代)は消さない。
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): frozen_bundle の世代がもう 1 つ増えた(26b52706…。本数は 37 のまま)。a97ecf7c…(P26 の段 1 の世代)は消さない。
-LATER_FROZEN = {"bundle": ("26b5270646f2d8d8fcb7ca829f5f36066f9e2e9a1c3d1f0e4cdde1822e5d6fb6", SEAL_DEFAULT_P26)}
+LATER_FROZEN = {"bundle": ("29fd733c8988164aa7655d7efc90b8215499360987ca01ad14e137bf966bc837", SEAL_P27)}
 FROZEN_BUNDLE_FIX = "5c4da2e2ff3f30b7dcb6ebcbc84a5c68b074e8dc495f2d260551d7e10a4ce66c"
 # 名簿に jpigp が入る遷移: 封の commit 時点は名簿 2 行・README に jpigp 無し。後は {"roster": (行, 封の path), "readme_has_jpigp": True}
 # 2026-10-21 実装の便: 名簿に jpigp の 1 行、README に jpigp の取り方。封の commit 時点(名簿 2 行・README に jpigp 無し)は test_8 の docstring と上の定数が残す。

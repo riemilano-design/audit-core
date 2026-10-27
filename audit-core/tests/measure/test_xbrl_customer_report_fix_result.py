@@ -70,13 +70,15 @@ UNTOUCHED = {"adapters/xbrl/report.py": "0d2854e659a5d8e0", "adapters/xbrl/verif
 #: 上の UNTOUCHED・下の MODULE_SHA16・ENGINE_FP は「測った時点」の値で消さない(記録の C5・R2-7 が測った値)。いまの値は下の *_LATER で、その封が履歴に在るときだけ受け入れる。
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
+SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26), "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
-                   "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
-MODULE_LATER = {"sha16": "141767d189b63733", "seal": SEAL_P26}
+# 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
+UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27), "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
+                   "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27)}
+MODULE_LATER = {"sha16": "6679138d350ec382", "seal": SEAL_P27}
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 束ねた指紋 498993e29055472a…(P26 の段 1)は残す(測った時点の次の値)、段 2 で 5aba774925968356…。受け入れるのは、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が履歴に在り、値が段 2 の後の値のときだけ。
-ENGINE_FP_LATER = {"adapter_xbrl_py_sha256": ("5aba7749259683563c37e62353717f64b4e4828931998a7c42518aca107f3504", SEAL_DEFAULT_P26)}
+ENGINE_FP_LATER = {"adapter_xbrl_py_sha256": ("0e51211a8aed2151409cb6bf443fb6eae2aed87e6b2b4bd6150c8286afee87de", SEAL_P27)}
 #: 測った時点の module(report_customer.py)の sha256 の先頭 16 桁と engine の束ねた指紋。module が動けば測り直す。
 MODULE_SHA16 = "715468699973cc4a"
 ENGINE_FP = {"adapter_xbrl_py_sha256": "11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693", "adapter_xbrl_py_files": 16,
@@ -573,7 +575,7 @@ def drop_time(rows):
 HEAVY_RERUN_LATER = dict(
     [((u"R2-7", kind, rel), (UNTOUCHED_LATER[rel][0], UNTOUCHED_LATER[rel][1], 16)) for rel in sorted(UNTOUCHED_LATER) for kind in (u"sha256", u"sha16")]
     + [((u"R2-7", u"report_customer.py の sha256"), (MODULE_LATER["sha16"], MODULE_LATER["seal"], 16)),
-       ((u"R2-7", u"report_customer.py の行数"), (1025, SEAL_P26, None)),
+       ((u"R2-7", u"report_customer.py の行数"), (1027, SEAL_P27, None)),      # 2026-10-27: P27 の封が理由の表に 1 行(+コメント 1 行)を足した(1025 は P26 の段 1 の後の値。残す)
        ((u"R2-7", u"engine の指紋", u"adapter_xbrl_py_sha256"), (ENGINE_FP_LATER["adapter_xbrl_py_sha256"][0], ENGINE_FP_LATER["adapter_xbrl_py_sha256"][1], None))])
 
 

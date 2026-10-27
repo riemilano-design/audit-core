@@ -69,7 +69,13 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/extract.py": "9982599fc31cbab3", "adapters/x
 #: 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が宣言した遷移。vocabulary.py は DEFAULT_PROFILE の 1 行と決定の注記(+4 行・-1 行)だけ動いた。
 #: 83025e9c0525d08b(P26 の段 1。ENGINE_AT_MEASURE に残す = 測った時点の値)から段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"
-ENGINE_TRANSITIONS = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26)}
+SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+# 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
+ENGINE_TRANSITIONS = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
+                      "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
+                      "adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
+                      "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
+                      "adapters/xbrl/report_customer.py": ("6679138d350ec382", SEAL_P27)}
 FILES_NOT_TOUCHED = ("adapters/xbrl/report.py", "adapters/xbrl/verify_document.py", "adapters/xbrl/comparators.py")
 
 
@@ -713,13 +719,14 @@ class RerunTest(unittest.TestCase):
             part[u"環境"].pop(u"所要秒", None)
         # 2026-10-23(既定を P22 -> P26 に切り替える 段 2)の宣言された遷移: 記録が測った時点の既定(P22)と vocabulary.py の sha16(P26 の段 1 の値)は、
         # 段 2 の後の値(既定 P26・ENGINE_TRANSITIONS の値)に読み替えて比べる。読み替えるのは、その封が履歴に在り、走らせ直しの値が段 2 の後の値のときだけ。ほかの欄は 1 字も読み替えない。
-        rel = "adapters/xbrl/vocabulary.py"
-        later, seal_rel = ENGINE_TRANSITIONS[rel]
-        self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(), seal_rel)
+        # 2026-10-27(P27 の段 2): 遷移を宣言した file が vocabulary.py の 1 つから 5 つ(ENGINE_TRANSITIONS の全部)に増えた。どの file も、封が履歴に在り、走らせ直しの値が宣言の値のときだけ読み替える。
+        for rel in sorted(ENGINE_TRANSITIONS):
+            later, seal_rel = ENGINE_TRANSITIONS[rel]
+            self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(), seal_rel)
+            self.assertEqual((got[u"環境"][u"engine の sha256(先頭 16 桁)"][rel], want[u"環境"][u"engine の sha256(先頭 16 桁)"][rel]), (later, ENGINE_AT_MEASURE[rel]), rel)
+            want[u"環境"][u"engine の sha256(先頭 16 桁)"][rel] = got[u"環境"][u"engine の sha256(先頭 16 桁)"][rel]
         self.assertEqual((got[u"環境"][u"DEFAULT_PROFILE"], want[u"環境"][u"DEFAULT_PROFILE"]), ("P26", "P22"))
-        self.assertEqual((got[u"環境"][u"engine の sha256(先頭 16 桁)"][rel], want[u"環境"][u"engine の sha256(先頭 16 桁)"][rel]), (later, ENGINE_AT_MEASURE[rel]))
         want[u"環境"][u"DEFAULT_PROFILE"] = got[u"環境"][u"DEFAULT_PROFILE"]
-        want[u"環境"][u"engine の sha256(先頭 16 桁)"][rel] = got[u"環境"][u"engine の sha256(先頭 16 桁)"][rel]
         self.assertEqual(json.dumps(got, sort_keys=True), json.dumps(want, sort_keys=True))
 
 

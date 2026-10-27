@@ -128,6 +128,25 @@ def iter_numbers_2026_10_21(s):
     return sorted(kept + rest, key=lambda t: t[0])
 
 
+# P27 A(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-1): 書かれた精度。``iter_numbers``・``iter_numbers_2026_10_21`` の字は変えない。
+# 円族の単位(V.UNIT_SCALE の key)で精度が在る数について、その字の最後の数字の組に小数部があれば、精度を 10^(小数部の桁数) で割る
+# (0.1 を掛けない。整数のべきで割る)。「12.3億円」は 1 億円 -> 0.1 億円、「132.47円」は 1 円 -> 0.01 円。小数部が無ければ変えない。
+_LAST_DIGITS_RE_2026_10_27 = re.compile(r"(\d[\d,]*)(?:\.(\d+))?(?=\D*$)")
+
+
+def iter_numbers_2026_10_27(s):
+    """``iter_numbers_2026_10_21`` の各 (開始, 終わり, 値, 単位, 精度) の精度を、書かれた小数部の桁数で細かくした読み。"""
+
+    out = []
+    for (a, b, v, unit, prec) in iter_numbers_2026_10_21(s):
+        if unit in V.UNIT_SCALE and prec is not None:
+            m = _LAST_DIGITS_RE_2026_10_27.search(s[a:b])
+            if m is not None and m.group(2):
+                prec = prec / (10 ** len(m.group(2)))
+        out.append((a, b, v, unit, prec))
+    return out
+
+
 # P17 B1(計画 docs/P17_PLAN_2026-10-14.md §1): 原因の印。字で書く。
 CAUSE_MARK_RE = re.compile(r"により|による|によって")
 

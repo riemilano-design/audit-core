@@ -81,18 +81,20 @@ SEAL_VOCAB = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"    # 2026-10-21 追記: 語彙
 SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追記: 最後の枝 P25 の段 1(下の ENGINE_LATER の遷移)
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
+SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に旗 vocab_2026_10_21・frame_rebind の塊(+224 行・既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
 # d5308700eae78c10(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 3461c3f8b7af6675。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)、vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)を足した(DEFAULT_PROFILE は P22 のまま)。
 # recipes.py の 3461c3f8b7af6675・vocabulary.py の 83498c04a7b70396(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+# 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
                 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 2 つ・資金の句の表・P24・PROFILES の登録を足した(DEFAULT_PROFILE は P22 のまま)。
                 # f7b8d925eb6787ec(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 83498c04a7b70396。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 5 つ・P26・PROFILES の登録(+17 行・-0 行) を足した。
                 # 27e71e9861fc5aad(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 83025e9c0525d08b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
                 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
                 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-                "adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26)}
+                "adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27)}
 FACT = {
     "e1": (485, 1, 482, 2),                    # 注入・P22 で通した・止めた・その他
     "e1_p21": (459, 458),                      # P21(対照)で通した・うち前期へ移った(穴 B の記録と同じ 459・458)
@@ -778,7 +780,8 @@ def check_frozen_generation(generations, current):
     # 段 2 の宣言は最新の世代の 5 つ前になる。
     # 2026-10-22 追記(pin の遷移): P26 の段 1(docs/XBRL_P26_SEAL_2026-10-21.md。engine 5 file を変え 37 本のまま世代をもう 1 つ足した)の後は、段 2 の宣言は最新の世代の 6 つ前になる。
     # 2026-10-23 追記(pin の遷移): 既定を P22 -> P26 に切り替える 段 2(docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md。vocabulary.py だけ、37 本のまま世代をもう 1 つ足した)の後は、段 2 の宣言は最新の世代の 7 つ前になる。
-    for later in (u"XBRL_DEFAULT_P26_SEAL_2026-10-23", u"XBRL_P26_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_SEAL_2026-10-21", u"XBRL_LASTBRANCH_SEAL_2026-10-21", u"XBRL_VOCAB_SEAL_2026-10-21", u"XBRL_ROUNDING_SEAL_2026-10-21"):
+    # 2026-10-27 追記(pin の遷移): P27 の段 2(docs/XBRL_P27_SEAL_2026-10-27.md。engine 5 file を変え 37 本のまま世代をもう 1 つ足した)の後は、段 2 の宣言は最新の世代の 8 つ前になる。
+    for later in (u"XBRL_P27_SEAL_2026-10-27", u"XBRL_DEFAULT_P26_SEAL_2026-10-23", u"XBRL_P26_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_SEAL_2026-10-21", u"XBRL_LASTBRANCH_SEAL_2026-10-21", u"XBRL_VOCAB_SEAL_2026-10-21", u"XBRL_ROUNDING_SEAL_2026-10-21"):
         if later in generations[i][1]:
             i -= 1
             assert i >= 0, u"後の封の宣言の前に段 2 の世代が無い"
@@ -1009,7 +1012,8 @@ HEAVY_RERUN_LATER = {
     (u"recipes.py の sha16",): (ENGINE_LATER["adapters/xbrl/recipes.py"][0], ENGINE_LATER["adapters/xbrl/recipes.py"][1], None),
     (u"vocabulary.py の sha16",): (ENGINE_LATER["adapters/xbrl/vocabulary.py"][0], ENGINE_LATER["adapters/xbrl/vocabulary.py"][1], None),
     (u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)",):
-        ("4f417562d322caa7241199d8462783e6a260a275a4e2794d18396a3bc6dc6b39", SEAL_DEFAULT_P26, None),
+        # 2026-10-27(P27 の段 2): 4f417562…(既定を P22 -> P26 にした段 2 の後の値。残す)から、P27 の封が宣言した遷移の値(engine の 5 file に挿入だけを足した後。ritual の engine_bundle_sha256)。
+        ("9dd27fab331b2e4962c6d9c6a2710a7f91816395f3c820abbc92016437d4cbb0", SEAL_P27, None),
 }
 
 

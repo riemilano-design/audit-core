@@ -32,18 +32,18 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **226 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **229 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
 | `measure/tests` | 1 |
 | `tests/adapters/kokkai` | 11 |
 | `tests/adapters/shogi` | 8 |
-| `tests/adapters/xbrl` | 32 |
+| `tests/adapters/xbrl` | 33 |
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 161 |
+| `tests/measure` | 163 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -158,6 +158,9 @@ P27 段 1 の調整用の測定 script `measure/xbrl_p27_tune_2026-10-27.py`(封
 
 **2026-10-27 に +1**(`tests/measure/test_xbrl_p27_tune_result.py`。
 P27 段 1 の調整用の診断 `docs/XBRL_P27_TUNE_DIAG_2026-10-27.md`(封 §5-7・§7・§10-4 後半)の数と R-5〜R-12 の当否を記録から作り直して縛る門と、P27 の記録 5 本の中身の門)。225 → 226(`tests/measure` 160 → 161)。
+
+**2026-10-27 に +3**(`tests/adapters/xbrl/test_recipes_p27.py`・`tests/measure/test_xbrl_p27_seal.py`・`tests/measure/test_xbrl_p27_engine_result.py`。
+P27 段 2 の engine(封 `docs/XBRL_P27_SEAL_2026-10-27.md` §1・§2・§9-2。profile P27・P27E と 5 つの旗)の挙動の試験、封の門、N-1〜N-3・U-1〜U-5 の結果の門)。226 → 229(`tests/adapters/xbrl` 32 → 33、`tests/measure` 161 → 163)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
