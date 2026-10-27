@@ -126,7 +126,10 @@ LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixt
                       "fixtures/xbrl/p27/tune_inject_2026-10-27.json", "docs/XBRL_P27_TUNE_DIAG_2026-10-27.md",
                       "measure/xbrl_p27_tune_2026-10-27.py", "tests/measure/test_xbrl_p27_tune_result.py",
                       "fixtures/xbrl/p27/regress97_2026-10-27.json", "fixtures/xbrl/p27/tune_p27_2026-10-27.json",
-                      "fixtures/xbrl/p27/tune_p27_inject_2026-10-27.json")
+                      "fixtures/xbrl/p27/tune_p27_inject_2026-10-27.json",
+                      "fixtures/xbrl/p27/eval_2026-10-27.json", "fixtures/xbrl/p27/eval_inject_2026-10-27.json",
+                      "fixtures/xbrl/p27/eval_readings_2026-10-27.json", "docs/XBRL_P27_RESULT_2026-10-27.md",
+                      "tests/measure/test_xbrl_p27_result.py")
 
 
 def drop_later_naming_files(named):
