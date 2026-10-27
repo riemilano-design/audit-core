@@ -1,0 +1,195 @@
+{
+ "seal": "audit-core/docs/XBRL_P27_SEAL_2026-10-27.md",
+ "step": "P27 段 2 §7 ― 評価用の読みの合わせ(2 席・人の目なし)",
+ "dry_run": false,
+ "backend": "なし",
+ "HEAD の commit": "c7aa44fcb2a3528d2d507f23913c1c514652642c",
+ "W の commit": "c48f4648c07d185807f07f78872d20d2a6d49c75",
+ "T の commit": "c0d7cc0748f91003ef3f11ac102958bedf256087",
+ "S2 の commit": "43fe0e37eff85985b8b111a549a96d514ea7d6c8",
+ "E の commit": "b2c3f56dabbc96a72ecc51e114901f14de6909f2",
+ "走る前の確かめ": {
+  "封の file は HEAD で追跡され作業木と同じ": true,
+  "W ⊑ S2": true,
+  "S2 ⊏ E": true,
+  "E ⊑ HEAD": true,
+  "E と HEAD の間で adapters・core に差が無い": true,
+  "profile の一覧": [
+   "P22",
+   "P26",
+   "P27",
+   "P27E"
+  ],
+  "既定の profile": "P26"
+ },
+ "この script の sha256": "640caccbcae32195d41ee06320ce2bb8b66af733a9d3795d46ac4d7491cc7677",
+ "段 1 の測定の script(読むだけ・1 字も変えない)の sha256": "0891c2d652eabddc2db8f0ee1887672e4001c070a6b717aa9c60dc93816a40a4",
+ "97 書類の測定の script(rule_counts を読むだけ・1 字も変えない)の sha256": "d4e3430e7cf67b8465e48f8799c4b679d02ca9203d7f63d8c1973c2df1cf57ab",
+ "対象の docID": [
+  "S100YYUS",
+  "S100YZ57",
+  "S100YYFP",
+  "S100YZ9G",
+  "S100YYMC",
+  "S100YYEO",
+  "S100YXXB",
+  "S100YYVJ",
+  "S100YYQN",
+  "S100YZC8"
+ ],
+ "対象は評価用の全部": true,
+ "評価用の件数": 10,
+ "使った文の sha256": {
+  "S100YYUS": "4f1a6667400ecdcd0c2c20602b277d4839accae30314a0b445167004f7843cc8",
+  "S100YZ57": "af89d3facb07e8867b8e549f3630926e404d62bad8bea4d08a6d1475ef60100e",
+  "S100YYFP": "fa77a5e804eb53919fd5d1f8d11034e0d7dc821fbe157c56c83bb073f915e242",
+  "S100YZ9G": "c35a5bd8528ec14336069c0fbad4ed7ad54e10a6577a0a56dd472b1ccdceac4f",
+  "S100YYMC": "801222c42da7b9614509f2608c8c9ac83925afcfe00c0244b0f3e324e8e71fdb",
+  "S100YYEO": "2da595d461d0546e0d505456329f4da9f7659e91a2708dde03318eef03467ab6",
+  "S100YXXB": "b73163a311d21fe2f5d08c9b926c517858f0f26d635bcbdee0176ae025895d74",
+  "S100YYVJ": "f7fbcdc556181a28fb98f4c7b8dce2239a7e03ef195e5a4cc4522bf5aa46e02e",
+  "S100YYQN": "56aa66ebbeba26a3aacc05a0b2eca87e2d33d79dfa82fbf128fa14290408b0bd",
+  "S100YZC8": "59b649d158ed583a0ce58874f775aae1ee0296fff8f632db23105898f47b7f16"
+ },
+ "engine の指紋": {},
+ "cache の前後": {
+  "前": {
+   "既存の cache": {
+    "folder": "~/.cache/audit-core/edinet",
+    "存在": true,
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "ZIP の folder": {
+    "folder": "~/.cache/audit-core/edinet-fresh-2026-10-21",
+    "存在": true,
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   }
+  },
+  "後": {
+   "既存の cache": {
+    "folder": "~/.cache/audit-core/edinet",
+    "存在": true,
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "ZIP の folder": {
+    "folder": "~/.cache/audit-core/edinet-fresh-2026-10-21",
+    "存在": true,
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   }
+  },
+  "変化なし": true
+ },
+ "読みは": "エージェントの読み(2 席。互いの読みを見ない)で、人間の読みではない",
+ "合わせ方(段 1 の封 §5-5)": "側が割れたら 分からない(細目なし)。側が同じで細目が割れたら 側はその側・細目は 分からない",
+ "入力": {
+  "判定の記録": "fixtures/xbrl/p27/eval_2026-10-27.json",
+  "判定の記録の sha256": "970478766e5e25c656ecae6073c29d4bad20cd31b391dda073f2c895a7f27d72",
+  "席1 の札の file の sha256": "f5b21bf55be7e05710aaf2ebda2f9ca039c2cc2a84f2e8c1685c6d15c927b730",
+  "席2 の札の file の sha256": "be01cbc69ed0657b466529064c27c996fa01973655a4e6eeec92f83959d680c0"
+ },
+ "行": [
+  {
+   "行": "S100YZ57:N018",
+   "docID": "S100YZ57",
+   "id": "N018",
+   "条件": [
+    "P27E_VALUE_MISMATCH_and_P26_not_VALUE_MISMATCH"
+   ],
+   "席1": {
+    "側": "道具",
+    "細目": "道4"
+   },
+   "席2": {
+    "側": "道具",
+    "細目": "道4"
+   },
+   "合わせた": {
+    "側": "道具",
+    "細目": "道4"
+   }
+  },
+  {
+   "行": "S100YZ57:N024",
+   "docID": "S100YZ57",
+   "id": "N024",
+   "条件": [
+    "P26_GROUNDED_and_P27_not_GROUNDED"
+   ],
+   "席1": {
+    "側": "道具",
+    "細目": "道4"
+   },
+   "席2": {
+    "側": "道具",
+    "細目": "道4"
+   },
+   "合わせた": {
+    "側": "道具",
+    "細目": "道4"
+   }
+  }
+ ],
+ "集計": {
+  "読む行": 2,
+  "2 席の側が一致した行": {
+   "件": 2,
+   "分母": 2,
+   "率": 100.0
+  },
+  "合わせた側の内訳": {
+   "文": 0,
+   "道具": 2,
+   "分からない": 0
+  },
+  "合わせた側が道具の行": 2,
+  "合わせた細目が付いた道具の行": {
+   "行": 2,
+   "細目の内訳": {
+    "道4": 2
+   },
+   "道1〜道4": {
+    "件": 2,
+    "分母": 2,
+    "率": 100.0
+   },
+   "道5": {
+    "件": 0,
+    "分母": 2,
+    "率": 0.0
+   }
+  },
+  "合わせた札が文2の行": 0,
+  "条件ごと(重なる)": {
+   "P27E_VALUE_MISMATCH_and_P26_not_VALUE_MISMATCH": {
+    "行": 1,
+    "合わせた側の内訳": {
+     "文": 0,
+     "道具": 1,
+     "分からない": 0
+    },
+    "合わせた側が道具の行": 1
+   },
+   "P26_GROUNDED_and_P27_not_GROUNDED": {
+    "行": 1,
+    "合わせた側の内訳": {
+     "文": 0,
+     "道具": 1,
+     "分からない": 0
+    },
+    "合わせた側が道具の行": 1
+   }
+  }
+ },
+ "repo の外に置いたもの": {
+  "folder": "~/.cache/audit-core/edinetdb-p27/eval",
+  "道5 の形と各席の理由の文": {
+   "file": "readings_free_text.json",
+   "sha256": "e05ffce03f974304e4be6f35c889ff3015d0cee08eaa1e45a06bcb7fb8922beb",
+   "bytes": 1866
+  }
+ }
+}
