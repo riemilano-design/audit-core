@@ -778,6 +778,27 @@ class TestT8Rel(unittest.TestCase):
         self.assertEqual(M.claim_for_p27([{"value": 1.1e9, "span": u"窓", "unit": u"円"}], inj, u"億円")["span"], u"窓")
 
 
+    def test_58_find_base_claim_narrows_two_same_value_claims_by_the_written_digits(self):
+        """封 §6-2「`_find_base_claim` と同じ」: 値が合う claim が 2 つあるとき、書かれた桁の字が span にある 1 件に絞る
+        (絞る段を外すと 2 件のまま None になり、正しい土台を失う)。"""
+        c1 = {"id": "N001", "value": 1e9, "span": u"一は10億円だった", "unit": u"円", "state": "GROUNDED"}
+        c2 = {"id": "N002", "value": 1e9, "span": u"二は1,000百万円だった", "unit": u"円", "state": "GROUNDED"}
+        claims = [c1, c2]
+        self.assertEqual(M.find_base_claim(claims, 10.0, u"10", u"億円")["id"], "N001")
+        self.assertEqual(M.find_base_claim(claims, 1000.0, u"1,000", u"百万円")["id"], "N002")
+        self.assertEqual(M.find_base_claim(list(reversed(claims)), 10.0, u"10", u"億円")["id"], "N001")      # 並びに依らない
+        # 桁の字が両方の span に在る / どちらにも無い -> 絞れず None
+        both = [dict(c1, span=u"一は10億円だった"), dict(c2, span=u"二は10億円だった")]
+        self.assertIsNone(M.find_base_claim(both, 10.0, u"10", u"億円"))
+        self.assertIsNone(M.find_base_claim(claims, 10.0, u"99", u"億円"))
+        # 値が合うのが 1 件だけなら桁の字が span に無くても、その 1 件(前例の『値だけ』の段)
+        self.assertEqual(M.find_base_claim([c1], 10.0, u"99", u"億円")["id"], "N001")
+        # span の無い claim は桁で絞る段の候補にならない(落ちずに、もう 1 件の側に絞る)
+        self.assertEqual(M.find_base_claim([dict(c2, span=None), c1], 10.0, u"10", u"億円")["id"], "N001")
+        # 値が合わない claim は数えない
+        self.assertIsNone(M.find_base_claim([dict(c1, value=2e9)], 10.0, u"10", u"億円"))
+
+
 class TestInject(Base):
     def setUp(self):
         Base.setUp(self)
@@ -807,6 +828,34 @@ class TestInject(Base):
                 self.big.inject(docs=[TUNE[0]], cap=2, out=os.path.join(self.tmp, "o", "rt.json"))
         self.assertIn("round-trip", str(cm.exception))
         self.assertFalse(os.path.exists(os.path.join(self.tmp, "o", "rt.json")))
+
+    def test_61b_round_trip_failure_of_one_type_alone_stops_for_each_type(self):
+        """どちらか 1 つの型の round-trip だけが壊れても止まる。T1_VALUE だけ・T1 と T8 の両方を壊す試験(61)では、T8_REL のとき確かめを飛ばす変異が黙る
+        (T1 が先に処理されて止まる)。T1_VALUE のとき確かめの結果を無視する変異も、T8 が止めるので 61 では黙る。型ごとに単独で壊して確かめる。"""
+        real_revert = M.IJ.revert
+        for broken, other in (("T8_REL", "T1_VALUE"), ("T1_VALUE", "T8_REL")):
+            seen_types = []
+
+            def revert_breaks_one_type(tampered, chosen, placements, original, broken=broken, seen_types=seen_types):
+                seen_types.append(chosen[0]["type"])
+                if chosen[0]["type"] == broken:
+                    return original + u"。"
+                return real_revert(tampered, chosen, placements, original)
+            out = os.path.join(self.tmp, "o", "rt_%s.json" % broken)
+            with mock.patch.object(M.IJ, "revert", revert_breaks_one_type):
+                with self.assertRaises(M.Stop) as cm:
+                    self.big.inject(docs=[TUNE[0]], cap=2, out=out)
+            self.assertIn("round-trip", str(cm.exception), broken)
+            self.assertIn(TUNE[0], str(cm.exception), broken)
+            self.assertIn("-T8-" if broken == "T8_REL" else "-T1-", str(cm.exception), broken)       # 止めた注入の id が壊した型のもの
+            self.assertEqual(seen_types[-1], broken)                                                 # 壊した型の確かめで止まった
+            if broken == "T8_REL":
+                self.assertIn(other, seen_types)                                                     # T1 は先に確かめられて通り、T8 で止まった
+            self.assertFalse(os.path.exists(out), broken)
+        # 戻す関数が壊れていなければ、同じ入力が通る(対照)
+        out = os.path.join(self.tmp, "o", "rt_ok.json")
+        self.big.inject(docs=[TUNE[0]], cap=2, out=out)
+        self.assertTrue(os.path.exists(out))
 
     def test_62_each_injection_changes_one_number_and_reverts(self):
         text = BIG_TEXT
