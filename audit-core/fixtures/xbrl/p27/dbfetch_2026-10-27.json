@@ -1,0 +1,2297 @@
+{
+ "seal": "docs/XBRL_P27_SAMPLE_SEAL_2026-10-27.md",
+ "step": "**P27 段 1 §1・§2。候補の照らしと U の決定、U の /companies と /ratios の取得。費用 0 USD(Free プラン)**",
+ "dry_run": false,
+ "鍵": {
+  "環境変数の名前": "EDINETDB_API_KEY",
+  "値": "**読まない・印字しない・記録しない**"
+ },
+ "応答の値の扱い": "**この記録に応答の値(数・会社名・業種の字)は入れない。** 応答は repo の外に受け取った byte のまま置き、sha256 だけを記録する",
+ "除いた 3 コード": {
+  "コード": [
+   "E02144",
+   "E01777",
+   "E02367"
+  ],
+  "除かれた件数": 0
+ },
+ "照らし": [
+  {
+   "docID": "S100YXFQ",
+   "位置": 1,
+   "区分": "主",
+   "EDINET コード": "E34960",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YZ4M",
+   "位置": 2,
+   "区分": "主",
+   "EDINET コード": "E01508",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYIV",
+   "位置": 3,
+   "区分": "主",
+   "EDINET コード": "E03465",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYHK",
+   "位置": 4,
+   "区分": "主",
+   "EDINET コード": "E03423",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYGF",
+   "位置": 5,
+   "区分": "主",
+   "EDINET コード": "E30598",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYAI",
+   "位置": 6,
+   "区分": "主",
+   "EDINET コード": "E37399",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YZ2B",
+   "位置": 7,
+   "区分": "主",
+   "EDINET コード": "E00866",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YZFP",
+   "位置": 8,
+   "区分": "主",
+   "EDINET コード": "E03989",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYSK",
+   "位置": 9,
+   "区分": "主",
+   "EDINET コード": "E39165",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "除く",
+   "理由": "当期の doc_id が違う"
+  },
+  {
+   "docID": "S100YYMP",
+   "位置": 10,
+   "区分": "主",
+   "EDINET コード": "E00890",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYKZ",
+   "位置": 11,
+   "区分": "主",
+   "EDINET コード": "E31454",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYUS",
+   "位置": 12,
+   "区分": "主",
+   "EDINET コード": "E40189",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YZ57",
+   "位置": 13,
+   "区分": "主",
+   "EDINET コード": "E39646",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYFP",
+   "位置": 14,
+   "区分": "主",
+   "EDINET コード": "E01649",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YZ9G",
+   "位置": 15,
+   "区分": "主",
+   "EDINET コード": "E04601",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYMC",
+   "位置": 16,
+   "区分": "主",
+   "EDINET コード": "E38662",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYEO",
+   "位置": 17,
+   "区分": "主",
+   "EDINET コード": "E00004",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YXXB",
+   "位置": 18,
+   "区分": "主",
+   "EDINET コード": "E31306",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYVJ",
+   "位置": 19,
+   "区分": "主",
+   "EDINET コード": "E02968",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYQN",
+   "位置": 20,
+   "区分": "主",
+   "EDINET コード": "E01059",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YZC8",
+   "位置": 21,
+   "区分": "主",
+   "EDINET コード": "E05601",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYYH",
+   "位置": 22,
+   "区分": "主",
+   "EDINET コード": "E04685",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYF5",
+   "位置": 23,
+   "区分": "主",
+   "EDINET コード": "E34644",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YXG0",
+   "位置": 24,
+   "区分": "主",
+   "EDINET コード": "E35765",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YXZQ",
+   "位置": 25,
+   "区分": "主",
+   "EDINET コード": "E38684",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YY3A",
+   "位置": 26,
+   "区分": "主",
+   "EDINET コード": "E05313",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YW7F",
+   "位置": 27,
+   "区分": "主",
+   "EDINET コード": "E05729",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYH7",
+   "位置": 28,
+   "区分": "主",
+   "EDINET コード": "E33254",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YYQQ",
+   "位置": 29,
+   "区分": "主",
+   "EDINET コード": "E03386",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YX88",
+   "位置": 30,
+   "区分": "主",
+   "EDINET コード": "E24129",
+   "ZIP の sha256 が記録と一致": true,
+   "financials の応答": {
+    "status": 200,
+    "試行": 1
+   },
+   "判定": "残る",
+   "理由": null,
+   "差し替え": "通った"
+  },
+  {
+   "docID": "S100YXYC",
+   "位置": 31,
+   "区分": "予備の候補",
+   "判定": "照らさなかった(主の候補で K が 20 以上)"
+  },
+  {
+   "docID": "S100YXNS",
+   "位置": 32,
+   "区分": "予備の候補",
+   "判定": "照らさなかった(主の候補で K が 20 以上)"
+  },
+  {
+   "docID": "S100YYNI",
+   "位置": 33,
+   "区分": "予備の候補",
+   "判定": "照らさなかった(主の候補で K が 20 以上)"
+  },
+  {
+   "docID": "S100YYLT",
+   "位置": 34,
+   "区分": "予備の候補",
+   "判定": "照らさなかった(主の候補で K が 20 以上)"
+  },
+  {
+   "docID": "S100YYO2",
+   "位置": 35,
+   "区分": "予備の候補",
+   "判定": "照らさなかった(主の候補で K が 20 以上)"
+  },
+  {
+   "docID": "S100YXXZ",
+   "位置": 36,
+   "区分": "予備の候補",
+   "判定": "照らさなかった(主の候補で K が 20 以上)"
+  },
+  {
+   "docID": "S100YXSF",
+   "位置": 37,
+   "区分": "予備の候補",
+   "判定": "照らさなかった(主の候補で K が 20 以上)"
+  },
+  {
+   "docID": "S100YYOW",
+   "位置": 38,
+   "区分": "予備の候補",
+   "判定": "照らさなかった(主の候補で K が 20 以上)"
+  },
+  {
+   "docID": "S100YYF7",
+   "位置": 39,
+   "区分": "予備の候補",
+   "判定": "照らさなかった(主の候補で K が 20 以上)"
+  },
+  {
+   "docID": "S100YUI9",
+   "位置": 40,
+   "区分": "予備の候補",
+   "判定": "照らさなかった(主の候補で K が 20 以上)"
+  }
+ ],
+ "予備の候補を照らしたか": false,
+ "除いた理由の内訳": {
+  "当期の doc_id が違う": 1
+ },
+ "K": [
+  "S100YXFQ",
+  "S100YZ4M",
+  "S100YYIV",
+  "S100YYHK",
+  "S100YYGF",
+  "S100YYAI",
+  "S100YZ2B",
+  "S100YZFP",
+  "S100YYMP",
+  "S100YYKZ",
+  "S100YYUS",
+  "S100YZ57",
+  "S100YYFP",
+  "S100YZ9G",
+  "S100YYMC",
+  "S100YYEO",
+  "S100YXXB",
+  "S100YYVJ",
+  "S100YYQN",
+  "S100YZC8",
+  "S100YYYH",
+  "S100YYF5",
+  "S100YXG0",
+  "S100YXZQ",
+  "S100YY3A",
+  "S100YW7F",
+  "S100YYH7",
+  "S100YYQQ",
+  "S100YX88"
+ ],
+ "|K|": 29,
+ "U": [
+  "S100YXFQ",
+  "S100YZ4M",
+  "S100YYIV",
+  "S100YYHK",
+  "S100YYGF",
+  "S100YYAI",
+  "S100YZ2B",
+  "S100YZFP",
+  "S100YYMP",
+  "S100YYKZ",
+  "S100YYUS",
+  "S100YZ57",
+  "S100YYFP",
+  "S100YZ9G",
+  "S100YYMC",
+  "S100YYEO",
+  "S100YXXB",
+  "S100YYVJ",
+  "S100YYQN",
+  "S100YZC8"
+ ],
+ "|U|": 20,
+ "調整用": [
+  "S100YXFQ",
+  "S100YZ4M",
+  "S100YYIV",
+  "S100YYHK",
+  "S100YYGF",
+  "S100YYAI",
+  "S100YZ2B",
+  "S100YZFP",
+  "S100YYMP",
+  "S100YYKZ"
+ ],
+ "評価用": [
+  "S100YYUS",
+  "S100YZ57",
+  "S100YYFP",
+  "S100YZ9G",
+  "S100YYMC",
+  "S100YYEO",
+  "S100YXXB",
+  "S100YYVJ",
+  "S100YYQN",
+  "S100YZC8"
+ ],
+ "予備": [
+  "S100YYYH",
+  "S100YYF5",
+  "S100YXG0",
+  "S100YXZQ",
+  "S100YY3A",
+  "S100YW7F",
+  "S100YYH7",
+  "S100YYQQ",
+  "S100YX88"
+ ],
+ "型の割り当て": {
+  "S100YXFQ": "A",
+  "S100YZ4M": "B",
+  "S100YYIV": "C",
+  "S100YYHK": "A",
+  "S100YYGF": "B",
+  "S100YYAI": "C",
+  "S100YZ2B": "A",
+  "S100YZFP": "B",
+  "S100YYMP": "C",
+  "S100YYKZ": "A",
+  "S100YYUS": "B",
+  "S100YZ57": "C",
+  "S100YYFP": "A",
+  "S100YZ9G": "B",
+  "S100YYMC": "C",
+  "S100YYEO": "A",
+  "S100YXXB": "B",
+  "S100YYVJ": "C",
+  "S100YYQN": "A",
+  "S100YZC8": "B"
+ },
+ "止め": null,
+ "U の材料": [
+  {
+   "docID": "S100YXFQ",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYIV",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYAI",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YZ2B",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYMP",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYKZ",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYUS",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YZ57",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYFP",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YZ9G",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYMC",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYEO",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YXXB",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYVJ",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YYQN",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  },
+  {
+   "docID": "S100YZC8",
+   "companies": {
+    "status": 200,
+    "JSON として読める": true
+   },
+   "ratios": {
+    "status": 200,
+    "JSON として読める": true
+   }
+  }
+ ],
+ "材料が欠けた U の会社": [],
+ "呼び出し": [
+  {
+   "順": 1,
+   "docID": "S100YXFQ",
+   "EDINET コード": "E34960",
+   "種類": "financials",
+   "path": "/companies/E34960/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:16:51Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:16:51Z",
+   "bytes": 20600,
+   "sha256": "afbb949ceb14e17a6d70dcd6c7580ad05be633aab0f9f5ff4cd38fe218699aec",
+   "JSON として読める": true
+  },
+  {
+   "順": 2,
+   "docID": "S100YZ4M",
+   "EDINET コード": "E01508",
+   "種類": "financials",
+   "path": "/companies/E01508/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:16:54Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:16:54Z",
+   "bytes": 20494,
+   "sha256": "27a7ef4234579efa8b78166b201ed891b19f25b638f7d0f81ab163c02fcc7cb5",
+   "JSON として読める": true
+  },
+  {
+   "順": 3,
+   "docID": "S100YYIV",
+   "EDINET コード": "E03465",
+   "種類": "financials",
+   "path": "/companies/E03465/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:16:56Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:16:56Z",
+   "bytes": 20516,
+   "sha256": "8de28458668b006440a18404f4562457bf092edb24a114e5dce2f7df8adb29af",
+   "JSON として読める": true
+  },
+  {
+   "順": 4,
+   "docID": "S100YYHK",
+   "EDINET コード": "E03423",
+   "種類": "financials",
+   "path": "/companies/E03423/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:16:57Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:16:57Z",
+   "bytes": 20802,
+   "sha256": "eb18ea089c1f4d4efdfd352b2128ec8bb86b098814d8da97a9a5dc94518e7b18",
+   "JSON として読める": true
+  },
+  {
+   "順": 5,
+   "docID": "S100YYGF",
+   "EDINET コード": "E30598",
+   "種類": "financials",
+   "path": "/companies/E30598/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:16:58Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:16:58Z",
+   "bytes": 20340,
+   "sha256": "37694afe44866fb1d11aa9d55d5508caef0c2ee11e856b06f760ad4d80af7741",
+   "JSON として読める": true
+  },
+  {
+   "順": 6,
+   "docID": "S100YYAI",
+   "EDINET コード": "E37399",
+   "種類": "financials",
+   "path": "/companies/E37399/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:16:59Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:16:59Z",
+   "bytes": 20492,
+   "sha256": "232cf64be8d43e3d7a042baf777d70153df1a6132910e6fdc38c81b5643edb00",
+   "JSON として読める": true
+  },
+  {
+   "順": 7,
+   "docID": "S100YZ2B",
+   "EDINET コード": "E00866",
+   "種類": "financials",
+   "path": "/companies/E00866/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:01Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:01Z",
+   "bytes": 21081,
+   "sha256": "f93a294b7aebc01931e2c53c94f7285d046069e5bf0483671b57394bc06ccfa4",
+   "JSON として読める": true
+  },
+  {
+   "順": 8,
+   "docID": "S100YZFP",
+   "EDINET コード": "E03989",
+   "種類": "financials",
+   "path": "/companies/E03989/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:02Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:02Z",
+   "bytes": 20878,
+   "sha256": "08b6719ccab0172cd71ee4ce1135fbe6f0ce268ad6727544e8086ffdf8e1bc8d",
+   "JSON として読める": true
+  },
+  {
+   "順": 9,
+   "docID": "S100YYSK",
+   "EDINET コード": "E39165",
+   "種類": "financials",
+   "path": "/companies/E39165/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:03Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:03Z",
+   "bytes": 19856,
+   "sha256": "bd2c54268d956f84f5c2f982528c678e100378713776a082ce7fa1d6e8fe4972",
+   "JSON として読める": true
+  },
+  {
+   "順": 10,
+   "docID": "S100YYMP",
+   "EDINET コード": "E00890",
+   "種類": "financials",
+   "path": "/companies/E00890/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:04Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:04Z",
+   "bytes": 20987,
+   "sha256": "954c79fc6306961af42b4bc495abaf98fe3376e1dc2705f49f6cea392d21e67f",
+   "JSON として読める": true
+  },
+  {
+   "順": 11,
+   "docID": "S100YYKZ",
+   "EDINET コード": "E31454",
+   "種類": "financials",
+   "path": "/companies/E31454/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:05Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:05Z",
+   "bytes": 20330,
+   "sha256": "94350a407f4ebb2ff6b7d05e9bd0508428340b8150e3b2fb8355b2540dc19c2b",
+   "JSON として読める": true
+  },
+  {
+   "順": 12,
+   "docID": "S100YYUS",
+   "EDINET コード": "E40189",
+   "種類": "financials",
+   "path": "/companies/E40189/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:07Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:07Z",
+   "bytes": 19559,
+   "sha256": "64c55ee5997caae145be61a8092b8f6bb4f90133b39d88de2d5f604e68c47468",
+   "JSON として読める": true
+  },
+  {
+   "順": 13,
+   "docID": "S100YZ57",
+   "EDINET コード": "E39646",
+   "種類": "financials",
+   "path": "/companies/E39646/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:08Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:08Z",
+   "bytes": 20291,
+   "sha256": "25556f989f212617fafd87390a1654272de590cefb5bf9ffdda817e8b8686080",
+   "JSON として読める": true
+  },
+  {
+   "順": 14,
+   "docID": "S100YYFP",
+   "EDINET コード": "E01649",
+   "種類": "financials",
+   "path": "/companies/E01649/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:09Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:09Z",
+   "bytes": 20925,
+   "sha256": "1c2b19b0d528ef6d2d1e6c6247c3793f35f6d86e6d1ed44a943cf6ce8ad4d62e",
+   "JSON として読める": true
+  },
+  {
+   "順": 15,
+   "docID": "S100YZ9G",
+   "EDINET コード": "E04601",
+   "種類": "financials",
+   "path": "/companies/E04601/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:10Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:10Z",
+   "bytes": 17514,
+   "sha256": "1120172f915cb05fe9997ad7cb13236638c65b1aa9707a3564a21492494875a4",
+   "JSON として読める": true
+  },
+  {
+   "順": 16,
+   "docID": "S100YYMC",
+   "EDINET コード": "E38662",
+   "種類": "financials",
+   "path": "/companies/E38662/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:12Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:12Z",
+   "bytes": 19877,
+   "sha256": "a60d49f77e96e96186f55b576c933be762594808fb7d842bf652aaacea36018a",
+   "JSON として読める": true
+  },
+  {
+   "順": 17,
+   "docID": "S100YYEO",
+   "EDINET コード": "E00004",
+   "種類": "financials",
+   "path": "/companies/E00004/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:13Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:13Z",
+   "bytes": 20942,
+   "sha256": "2cd4d621ac231bba1ad75ccf90210900e1ee5e334f6cf130ab13bb33e95b6cbe",
+   "JSON として読める": true
+  },
+  {
+   "順": 18,
+   "docID": "S100YXXB",
+   "EDINET コード": "E31306",
+   "種類": "financials",
+   "path": "/companies/E31306/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:14Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:14Z",
+   "bytes": 20519,
+   "sha256": "070022afb1deefb4b93b44092cbbc823bd9a1f3116d3b51cdd296e6627d14f0e",
+   "JSON として読める": true
+  },
+  {
+   "順": 19,
+   "docID": "S100YYVJ",
+   "EDINET コード": "E02968",
+   "種類": "financials",
+   "path": "/companies/E02968/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:15Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:15Z",
+   "bytes": 20831,
+   "sha256": "30669bd356219f4199e1d7c386b03e2ccf1a77c4c5055fbe7006af3b03d61ce4",
+   "JSON として読める": true
+  },
+  {
+   "順": 20,
+   "docID": "S100YYQN",
+   "EDINET コード": "E01059",
+   "種類": "financials",
+   "path": "/companies/E01059/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:16Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:16Z",
+   "bytes": 20484,
+   "sha256": "0d59af03cee1b4e87c402ad11942d9902452688de64259662f504921b4ec3ddf",
+   "JSON として読める": true
+  },
+  {
+   "順": 21,
+   "docID": "S100YZC8",
+   "EDINET コード": "E05601",
+   "種類": "financials",
+   "path": "/companies/E05601/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:18Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:18Z",
+   "bytes": 20143,
+   "sha256": "fff7c2165dc020aad961871818418276362bf5b16da252c2d43b909530df12b1",
+   "JSON として読める": true
+  },
+  {
+   "順": 22,
+   "docID": "S100YYYH",
+   "EDINET コード": "E04685",
+   "種類": "financials",
+   "path": "/companies/E04685/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:19Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:19Z",
+   "bytes": 17223,
+   "sha256": "28d8de9be57174ff68ae57ca69b6fc8cf10f49030849f1bf445412603952ab9e",
+   "JSON として読める": true
+  },
+  {
+   "順": 23,
+   "docID": "S100YYF5",
+   "EDINET コード": "E34644",
+   "種類": "financials",
+   "path": "/companies/E34644/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:20Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:20Z",
+   "bytes": 20389,
+   "sha256": "78da2d36d59a455730a2a9ce95fb2d5002efa802bc9f837501f70e5d4efa12ba",
+   "JSON として読める": true
+  },
+  {
+   "順": 24,
+   "docID": "S100YXG0",
+   "EDINET コード": "E35765",
+   "種類": "financials",
+   "path": "/companies/E35765/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:21Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:21Z",
+   "bytes": 19810,
+   "sha256": "c70729247eda9759381758d2e85185d89bec68f0a820e79355ad10dbac32a8d9",
+   "JSON として読める": true
+  },
+  {
+   "順": 25,
+   "docID": "S100YXZQ",
+   "EDINET コード": "E38684",
+   "種類": "financials",
+   "path": "/companies/E38684/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:22Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:22Z",
+   "bytes": 20254,
+   "sha256": "66f921da793c5dfdfd4d472d802b63f6e894e9be9f62d11961752801cfa3125c",
+   "JSON として読める": true
+  },
+  {
+   "順": 26,
+   "docID": "S100YY3A",
+   "EDINET コード": "E05313",
+   "種類": "financials",
+   "path": "/companies/E05313/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:24Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:24Z",
+   "bytes": 20952,
+   "sha256": "b2c20296ae682ce64aeac88bd2d874098401c168344fd829b97693304699d8a3",
+   "JSON として読める": true
+  },
+  {
+   "順": 27,
+   "docID": "S100YW7F",
+   "EDINET コード": "E05729",
+   "種類": "financials",
+   "path": "/companies/E05729/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:25Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:25Z",
+   "bytes": 21046,
+   "sha256": "821db51ff0a05a7c31bc03eb2e197ef63d73a8f08047efc8eaf1f7708e8a6c3a",
+   "JSON として読める": true
+  },
+  {
+   "順": 28,
+   "docID": "S100YYH7",
+   "EDINET コード": "E33254",
+   "種類": "financials",
+   "path": "/companies/E33254/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:26Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:26Z",
+   "bytes": 19895,
+   "sha256": "c1253b65af933e4a1cb0e4136eeb59236f55ac54c39ba03c4bb4adf81c5903a3",
+   "JSON として読める": true
+  },
+  {
+   "順": 29,
+   "docID": "S100YYQQ",
+   "EDINET コード": "E03386",
+   "種類": "financials",
+   "path": "/companies/E03386/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:27Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:27Z",
+   "bytes": 20504,
+   "sha256": "9eca2f3eab5fd26f0682e9a668e5410f55c70a8e1293043588b5223e6db1fbac",
+   "JSON として読める": true
+  },
+  {
+   "順": 30,
+   "docID": "S100YX88",
+   "EDINET コード": "E24129",
+   "種類": "financials",
+   "path": "/companies/E24129/financials?years=3&include_nulls=true&include_null_reasons=true",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:29Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:29Z",
+   "bytes": 20943,
+   "sha256": "5a4e974b84004e9c699642ecf028500687a7d238a3837b0a58842854ec774822",
+   "JSON として読める": true
+  },
+  {
+   "順": 31,
+   "docID": "S100YXFQ",
+   "EDINET コード": "E34960",
+   "種類": "companies",
+   "path": "/companies/E34960",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:30Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:30Z",
+   "bytes": 10152,
+   "sha256": "51c02fedf75618e79404d85d78862877f71c8df5904809474d037039ba353b7e",
+   "JSON として読める": true
+  },
+  {
+   "順": 32,
+   "docID": "S100YXFQ",
+   "EDINET コード": "E34960",
+   "種類": "ratios",
+   "path": "/companies/E34960/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:31Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:31Z",
+   "bytes": 21020,
+   "sha256": "ffe72d7b99805828d4583834aa651dd595f2b3a3663cc1fde939869bc75cb62a",
+   "JSON として読める": true
+  },
+  {
+   "順": 33,
+   "docID": "S100YZ4M",
+   "EDINET コード": "E01508",
+   "種類": "companies",
+   "path": "/companies/E01508",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:32Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:32Z",
+   "bytes": 8916,
+   "sha256": "e9353eafc8fd0b5d339e389d5938f4c22b6b82d26229b6bf70ca67a67c984e08",
+   "JSON として読める": true
+  },
+  {
+   "順": 34,
+   "docID": "S100YZ4M",
+   "EDINET コード": "E01508",
+   "種類": "ratios",
+   "path": "/companies/E01508/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:33Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:33Z",
+   "bytes": 33835,
+   "sha256": "8e215a0ab8d2a9d4cf728708cc486ccf4a966c776aea9ec4c2a56db1800e8c21",
+   "JSON として読める": true
+  },
+  {
+   "順": 35,
+   "docID": "S100YYIV",
+   "EDINET コード": "E03465",
+   "種類": "companies",
+   "path": "/companies/E03465",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:34Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:34Z",
+   "bytes": 9533,
+   "sha256": "a66f0b71f418487a6c42738e99f9b1f9ed2108289807392dfc3e7f289c08403d",
+   "JSON として読める": true
+  },
+  {
+   "順": 36,
+   "docID": "S100YYIV",
+   "EDINET コード": "E03465",
+   "種類": "ratios",
+   "path": "/companies/E03465/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:35Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:35Z",
+   "bytes": 32596,
+   "sha256": "c6f2e6bbf7ddc243ae58a038bea0c411da2b8294c6aae9fd877a2bf8398a98aa",
+   "JSON として読める": true
+  },
+  {
+   "順": 37,
+   "docID": "S100YYHK",
+   "EDINET コード": "E03423",
+   "種類": "companies",
+   "path": "/companies/E03423",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:36Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:36Z",
+   "bytes": 9821,
+   "sha256": "9e240ed70a402958dd96d58bfa214ca98ac071c65a371a458e995378ad2c35ae",
+   "JSON として読める": true
+  },
+  {
+   "順": 38,
+   "docID": "S100YYHK",
+   "EDINET コード": "E03423",
+   "種類": "ratios",
+   "path": "/companies/E03423/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:38Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:38Z",
+   "bytes": 33977,
+   "sha256": "691a7405cbe5c1d635fb66d9a651e996f3f62c21b4833012b977a5091a25ea1e",
+   "JSON として読める": true
+  },
+  {
+   "順": 39,
+   "docID": "S100YYGF",
+   "EDINET コード": "E30598",
+   "種類": "companies",
+   "path": "/companies/E30598",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:39Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:39Z",
+   "bytes": 8525,
+   "sha256": "05d2842bc1204d8b3fb2e9572f4b643a1b26b78cdbf86ee62199a99cf62b5b9b",
+   "JSON として読める": true
+  },
+  {
+   "順": 40,
+   "docID": "S100YYGF",
+   "EDINET コード": "E30598",
+   "種類": "ratios",
+   "path": "/companies/E30598/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:40Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:40Z",
+   "bytes": 33127,
+   "sha256": "f5d28afe4e0ee02239fa85a78f6488d82d0bbd6fad32c36f145b3701933302ce",
+   "JSON として読める": true
+  },
+  {
+   "順": 41,
+   "docID": "S100YYAI",
+   "EDINET コード": "E37399",
+   "種類": "companies",
+   "path": "/companies/E37399",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:41Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:41Z",
+   "bytes": 9706,
+   "sha256": "b2d507ab22505215343fe08610d97caa630bf4993e51fb8fca072090e932aeac",
+   "JSON として読める": true
+  },
+  {
+   "順": 42,
+   "docID": "S100YYAI",
+   "EDINET コード": "E37399",
+   "種類": "ratios",
+   "path": "/companies/E37399/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:42Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:42Z",
+   "bytes": 15350,
+   "sha256": "b46c3dac1f510251d99bb0d26ba5328f03e3291666e712fd739696db6ba63762",
+   "JSON として読める": true
+  },
+  {
+   "順": 43,
+   "docID": "S100YZ2B",
+   "EDINET コード": "E00866",
+   "種類": "companies",
+   "path": "/companies/E00866",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:43Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:43Z",
+   "bytes": 9458,
+   "sha256": "eb5a3fdd1e94d840df5e3a548ef584eb1ba97ce63526f2ee4678a91ce97d523d",
+   "JSON として読める": true
+  },
+  {
+   "順": 44,
+   "docID": "S100YZ2B",
+   "EDINET コード": "E00866",
+   "種類": "ratios",
+   "path": "/companies/E00866/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:44Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:44Z",
+   "bytes": 36475,
+   "sha256": "92c5e1e24af6c4203ec25e70a1a5d7809fa61e651feb07d17cdb4338df1a87fc",
+   "JSON として読める": true
+  },
+  {
+   "順": 45,
+   "docID": "S100YZFP",
+   "EDINET コード": "E03989",
+   "種類": "companies",
+   "path": "/companies/E03989",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:45Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:45Z",
+   "bytes": 9321,
+   "sha256": "5d362eb14739a0d27ed7582d4efa7c71e942208bd290b070e951cc4b9b3859da",
+   "JSON として読める": true
+  },
+  {
+   "順": 46,
+   "docID": "S100YZFP",
+   "EDINET コード": "E03989",
+   "種類": "ratios",
+   "path": "/companies/E03989/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:46Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:46Z",
+   "bytes": 35891,
+   "sha256": "47084a264a2541631403957bf4bf26934ffa063ac05f045d241fdd3167513821",
+   "JSON として読める": true
+  },
+  {
+   "順": 47,
+   "docID": "S100YYMP",
+   "EDINET コード": "E00890",
+   "種類": "companies",
+   "path": "/companies/E00890",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:49Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:49Z",
+   "bytes": 9971,
+   "sha256": "5d61952c21eabfcb65342852c36152342d2070d7ab10adab667df1fe323e9a22",
+   "JSON として読める": true
+  },
+  {
+   "順": 48,
+   "docID": "S100YYMP",
+   "EDINET コード": "E00890",
+   "種類": "ratios",
+   "path": "/companies/E00890/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:50Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:50Z",
+   "bytes": 36127,
+   "sha256": "dc090a9b199389e35ef1950cea421f2cf60947c483809712663d12fcb254bfcb",
+   "JSON として読める": true
+  },
+  {
+   "順": 49,
+   "docID": "S100YYKZ",
+   "EDINET コード": "E31454",
+   "種類": "companies",
+   "path": "/companies/E31454",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:51Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:51Z",
+   "bytes": 8610,
+   "sha256": "eac4af3106de9a3c94513e5d4b00442ef645de1310802b7e8bcc8033e4dea55c",
+   "JSON として読める": true
+  },
+  {
+   "順": 50,
+   "docID": "S100YYKZ",
+   "EDINET コード": "E31454",
+   "種類": "ratios",
+   "path": "/companies/E31454/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:52Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:52Z",
+   "bytes": 25156,
+   "sha256": "981bb00e35ce211a1edf142ea2684090868eda75ed15dc8d84d7047f70f858cd",
+   "JSON として読める": true
+  },
+  {
+   "順": 51,
+   "docID": "S100YYUS",
+   "EDINET コード": "E40189",
+   "種類": "companies",
+   "path": "/companies/E40189",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:53Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:53Z",
+   "bytes": 7896,
+   "sha256": "0c52f22f2950f0d9bb770a955af1371b461fcf28a3273182630e683357837eb6",
+   "JSON として読める": true
+  },
+  {
+   "順": 52,
+   "docID": "S100YYUS",
+   "EDINET コード": "E40189",
+   "種類": "ratios",
+   "path": "/companies/E40189/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:54Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:54Z",
+   "bytes": 10207,
+   "sha256": "64c2902b1c370586043931a1c4f34d7ccbf57d481a62ac0cfaf6a06aabe67f5d",
+   "JSON として読める": true
+  },
+  {
+   "順": 53,
+   "docID": "S100YZ57",
+   "EDINET コード": "E39646",
+   "種類": "companies",
+   "path": "/companies/E39646",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:55Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:55Z",
+   "bytes": 9128,
+   "sha256": "016be2e266755c481a4237099eb1230fd5f9075857c44ad6883d2a013e069ceb",
+   "JSON として読める": true
+  },
+  {
+   "順": 54,
+   "docID": "S100YZ57",
+   "EDINET コード": "E39646",
+   "種類": "ratios",
+   "path": "/companies/E39646/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:56Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:56Z",
+   "bytes": 11425,
+   "sha256": "34b3a34b9e94f46c4bdfbebd80d7ee55aa8ffa605895ede3b3f428cbe35f5d48",
+   "JSON として読める": true
+  },
+  {
+   "順": 55,
+   "docID": "S100YYFP",
+   "EDINET コード": "E01649",
+   "種類": "companies",
+   "path": "/companies/E01649",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:57Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:57Z",
+   "bytes": 9959,
+   "sha256": "176a8d73b0a257b4e05e2fc6a8b94ec01d39b0f2013fffa5627f98199f6e7d3e",
+   "JSON として読める": true
+  },
+  {
+   "順": 56,
+   "docID": "S100YYFP",
+   "EDINET コード": "E01649",
+   "種類": "ratios",
+   "path": "/companies/E01649/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:17:58Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:17:58Z",
+   "bytes": 27585,
+   "sha256": "84e1793f8da48129974441a3a4b1afdb70fb2c71837cdc8b5929121742623e2b",
+   "JSON として読める": true
+  },
+  {
+   "順": 57,
+   "docID": "S100YZ9G",
+   "EDINET コード": "E04601",
+   "種類": "companies",
+   "path": "/companies/E04601",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:00Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:00Z",
+   "bytes": 3328,
+   "sha256": "45321e149aee5230e215851e6c6265646a2dc82bf664b6188bdcee297efb4543",
+   "JSON として読める": true
+  },
+  {
+   "順": 58,
+   "docID": "S100YZ9G",
+   "EDINET コード": "E04601",
+   "種類": "ratios",
+   "path": "/companies/E04601/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:01Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:01Z",
+   "bytes": 6012,
+   "sha256": "0ac3be35745920162b0a7a3cf762053dcbec99ebaa86c71949843ffeed474ba3",
+   "JSON として読める": true
+  },
+  {
+   "順": 59,
+   "docID": "S100YYMC",
+   "EDINET コード": "E38662",
+   "種類": "companies",
+   "path": "/companies/E38662",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:02Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:02Z",
+   "bytes": 7913,
+   "sha256": "050ed1e8adf0540c59888c23562574c5fddb8dff10fbb0442024c5cca9f8430d",
+   "JSON として読める": true
+  },
+  {
+   "順": 60,
+   "docID": "S100YYMC",
+   "EDINET コード": "E38662",
+   "種類": "ratios",
+   "path": "/companies/E38662/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:03Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:03Z",
+   "bytes": 12108,
+   "sha256": "490e37d4cf649117a0a9c843c73e2373f707b1f952c54f8cfe40c5911e701aa3",
+   "JSON として読める": true
+  },
+  {
+   "順": 61,
+   "docID": "S100YYEO",
+   "EDINET コード": "E00004",
+   "種類": "companies",
+   "path": "/companies/E00004",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:04Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:04Z",
+   "bytes": 10230,
+   "sha256": "fe95e245e4893dfba76b347ebabdc623d8844b5f0b594cef0b95f2a3d5bc41d9",
+   "JSON として読める": true
+  },
+  {
+   "順": 62,
+   "docID": "S100YYEO",
+   "EDINET コード": "E00004",
+   "種類": "ratios",
+   "path": "/companies/E00004/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:05Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:05Z",
+   "bytes": 33761,
+   "sha256": "0eef152a7e77a6f45365b56583851b4abfc2a2dcb0bd55af47e01e422c90df10",
+   "JSON として読める": true
+  },
+  {
+   "順": 63,
+   "docID": "S100YXXB",
+   "EDINET コード": "E31306",
+   "種類": "companies",
+   "path": "/companies/E31306",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:06Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:06Z",
+   "bytes": 9466,
+   "sha256": "503cb27e96aab167fa06fd583018e4f4abcc1420fe45eb0e3efed4fb86dab5ec",
+   "JSON として読める": true
+  },
+  {
+   "順": 64,
+   "docID": "S100YXXB",
+   "EDINET コード": "E31306",
+   "種類": "ratios",
+   "path": "/companies/E31306/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:07Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:07Z",
+   "bytes": 24911,
+   "sha256": "2c4bdacb414362c4687b047ccee97e33ca8c91f4c89200f083e692a639ed85a3",
+   "JSON として読める": true
+  },
+  {
+   "順": 65,
+   "docID": "S100YYVJ",
+   "EDINET コード": "E02968",
+   "種類": "companies",
+   "path": "/companies/E02968",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:08Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:08Z",
+   "bytes": 9736,
+   "sha256": "2cf3b01e5179c1552dafd51715cd63e8a00cf42d6b04f81ea2bf2797c9b70f94",
+   "JSON として読める": true
+  },
+  {
+   "順": 66,
+   "docID": "S100YYVJ",
+   "EDINET コード": "E02968",
+   "種類": "ratios",
+   "path": "/companies/E02968/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:09Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:09Z",
+   "bytes": 34171,
+   "sha256": "59489607fbf4640524e6a4892aff7c1e7504343c75f9366fb5a45b80e09d7f77",
+   "JSON として読める": true
+  },
+  {
+   "順": 67,
+   "docID": "S100YYQN",
+   "EDINET コード": "E01059",
+   "種類": "companies",
+   "path": "/companies/E01059",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:10Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:10Z",
+   "bytes": 8573,
+   "sha256": "3d1c9849137a4ffb7517442d27d56f415c23fa0dd34d3ae5c48b93a7644c26d3",
+   "JSON として読める": true
+  },
+  {
+   "順": 68,
+   "docID": "S100YYQN",
+   "EDINET コード": "E01059",
+   "種類": "ratios",
+   "path": "/companies/E01059/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:12Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:12Z",
+   "bytes": 30982,
+   "sha256": "656871eb0478469a93d1077e01ab7c5c2679a54093539de2dcd6d1c98e4a049b",
+   "JSON として読める": true
+  },
+  {
+   "順": 69,
+   "docID": "S100YZC8",
+   "EDINET コード": "E05601",
+   "種類": "companies",
+   "path": "/companies/E05601",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:13Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:13Z",
+   "bytes": 6821,
+   "sha256": "beb22de216d01dc06f499c97eca5b98ba2397dfbbfc9ef0773efc6d4c76cf1dc",
+   "JSON として読める": true
+  },
+  {
+   "順": 70,
+   "docID": "S100YZC8",
+   "EDINET コード": "E05601",
+   "種類": "ratios",
+   "path": "/companies/E05601/ratios",
+   "試行": [
+    {
+     "時刻(UTC)": "2026-10-26T23:18:14Z",
+     "JST の日付": "2026-10-27",
+     "status": 200
+    }
+   ],
+   "status": 200,
+   "再試行の回数": 0,
+   "時刻(UTC)": "2026-10-26T23:18:14Z",
+   "bytes": 26619,
+   "sha256": "2a2d128dea1af9c8faf4bd189d29179042b6e4806ad5f1f282e2a58cd3d1d67c",
+   "JSON として読める": true
+  }
+ ],
+ "回数": {
+  "上限(1 日 JST・再試行を含む)": 95,
+  "既に使った数として数えた分(封 §11-0 の下見)": {
+   "2026-10-27": 2
+  },
+  "この script の試行の合計": 70,
+  "試行の日別(JST)": {
+   "2026-10-27": 70
+  },
+  "最大の 1 日(下見の分を含む)": 72,
+  "呼び出し(応答の最終の行)の数": 70,
+  "応答なしの数": 0
+ },
+ "上限で止まった履歴": [],
+ "置いた場所": {
+  "応答": "~/.cache/audit-core/edinetdb-p27/<docID>/{financials,companies,ratios}.json",
+  "既存の cache": "**`~/.cache/audit-core/edinet/` と `~/.cache/audit-core/edinet-fresh-2026-10-21/` には 1 file も書かない**。repo に応答は入れない"
+ },
+ "cache の前後": {
+  "前": {
+   "既存の cache": {
+    "folder": "~/.cache/audit-core/edinet",
+    "存在": true,
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "ZIP の folder": {
+    "folder": "~/.cache/audit-core/edinet-fresh-2026-10-21",
+    "存在": true,
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   }
+  },
+  "後": {
+   "既存の cache": {
+    "folder": "~/.cache/audit-core/edinet",
+    "存在": true,
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "ZIP の folder": {
+    "folder": "~/.cache/audit-core/edinet-fresh-2026-10-21",
+    "存在": true,
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   }
+  },
+  "変化なし": true
+ },
+ "取得した時刻(UTC)": "2026-10-26T23:18:14Z",
+ "引き直さない": "封 §1-6・§2-1。応答なしの会社は引き直さない。U の後ろの会社(予備)は取らない・書かない",
+ "limits": [
+  "**照らしと取得だけである。**レポートは書いていない・engine は通していない",
+  "応答の値は読んだが記録していない(doc_id の字は、当期の doc_id が違う会社の分だけ記録した)",
+  "U の会社の /companies と /ratios は JSON として読めるかだけ確かめた(中身は見ていない)"
+ ]
+}

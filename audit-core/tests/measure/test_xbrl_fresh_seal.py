@@ -119,7 +119,11 @@ def is_roster(path):
 # 結果の門は軽い走らせ直しの書類 1 本(S100YXFQ)の docID を字で持つ。どれも draw の commit(14cdd21)より後に足した file で、前例と同じ扱い(引きは動かさない)。
 LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixtures/xbrl/p26_2026-10-21.json",
                       "fixtures/xbrl/default_p26_2026-10-23.json", "measure/xbrl_default_p26_2026-10-23.py", "tests/measure/test_xbrl_default_p26_result.py",
-                      "docs/XBRL_P27_SAMPLE_SEAL_2026-10-27.md")
+                      "docs/XBRL_P27_SAMPLE_SEAL_2026-10-27.md",
+                      "fixtures/xbrl/p27/dbfetch_2026-10-27.json", "fixtures/xbrl/p27/reports_2026-10-27.json",
+                      "fixtures/xbrl/p27/tune_2026-10-27.json", "fixtures/xbrl/p27/tune_readings_2026-10-27.json",
+                      "fixtures/xbrl/p27/tune_inject_2026-10-27.json", "docs/XBRL_P27_TUNE_DIAG_2026-10-27.md",
+                      "measure/xbrl_p27_tune_2026-10-27.py", "tests/measure/test_xbrl_p27_tune_result.py")
 
 
 def drop_later_naming_files(named):
