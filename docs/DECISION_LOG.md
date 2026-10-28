@@ -988,6 +988,39 @@ DECISION_LOGにD-021〜D-023を記録する。 採用・実装・判断の経緯
 3. **委任の実行**: 仕分けの規則は司令塔が決めて目録に記録、人間の「法的に問題ない」の判断により資料と NOTICE の「法務確認前」の印を外した(文面は不変)。
 4. **していないこと**: 議事録 adapter の実装、会議録デモ、XBRL の新しい封、顧客向けの体裁、値段の提示。相手の反応を見てから。
 
+## D-024(2026-10-23)**XBRL adapter の既定 profile を P22 から P26 に切り替える**(P26 の段 2)。判定は封 14cdd21 §3 の基準を記録の数から機械で求めた結果(commit 52289c4)
+
+**人間の言葉(封 `audit-core/docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md`・commit 6a78b42 の冒頭に在る引用。会話記録からの機械的な転記はしていない = 司令塔が足すなら後日の追記で)**:
+
+```text
+(2026-10-21 朝)新しい標本取り、テストしてP25にするか判断したらどう?
+取って良い あとは全て任せる
+(engine の事前承認 2026-10-21)engine に触るので承認が要る 先に承認しておくので好きに進めて これをもって承認とする
+```
+
+**経緯**:
+
+1. 既定にするかどうかは封 `audit-core/docs/XBRL_FRESH_SAMPLE_SEAL_2026-10-21.md`(commit 14cdd21)§3 の基準(K-1〜K-3)で決め、「判定は記録の数から機械で(門で縛る)。司令塔は判定を覆さない」と封じてあった。新しい標本 30 書類の結果 `audit-core/docs/XBRL_FRESH_SAMPLE_RESULT_2026-10-21.md`(commit 52289c4)で、候補の順は P26 → P25 → P24、既定は **P26**(K-1 通した 5 対 P22 の 5・K-2 偽 0 / 新 GROUNDED 59・K-3 文が本当に違う 0・分からない 0)。読みはエージェントの読みで、人間の読みではない。
+2. 段 2 の封 `audit-core/docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md`(commit 6a78b42)が、触る file・予測 S-1〜S-12・pin の遷移・代価を実装の前に固定した。engine の差分は `audit-core/adapters/xbrl/vocabulary.py` の `DEFAULT_PROFILE` の 1 行と日付つきの注記だけ。結果は `audit-core/docs/XBRL_DEFAULT_P26_RESULT_2026-10-23.md`。
+3. `vocabulary.py` の既定の注記は「変えるときは人間の決定と DECISION_LOG の項目が要る」と書く。P20・P21・P22 の切り替えはこの文書に項目を足さず、封・結果文書と人間の言葉で残していた(最後の更新は 2026-10-13)。この項は P26 の段 2 から足す。
+4. **この項が言わないこと**: engine 全体の品質証明ではない。K-3 の読みを変えれば既定は P25 か P24 になる(封 §3)。`adapters/xbrl/verify_document.py` の docstring「既定 P20」は食い違ったまま(人間の 1 行の承認待ち)。
+
+## D-025(2026-10-28)**XBRL adapter の既定 profile を P26 から P27 に切り替える**(P27 の段 2)。判定は封 43fe0e3 §4 の条件を評価用の記録から門で機械で求めた結果(commit aeae608「P27 を既定の候補として記録する」)
+
+**人間の言葉(封 `audit-core/docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md`・commit 87f83fd の冒頭に在る引用)**:
+
+```text
+(2026-10-27)価値を上げるためにも君に任せる 進めよう
+(2026-10-28、司令塔が「既定を P26 から P27 に替えるか・DECISION_LOG の D-024・Cabocia の第 2 の評価用」を人間の決定として挙げた直後)君に任せるよ
+```
+
+**経緯**:
+
+1. P27 段 2 の封 `audit-core/docs/XBRL_P27_SEAL_2026-10-27.md`(43fe0e3)§4 は「P27 を『既定の候補』として記録する」条件(K-1・K-4・K-5 を P27 で、K-3 の代わりに VALUE_MISMATCH の行 ≤ P26、N-2 の 4 つの数)と「既定に替えるのは別の便で人間が決める」(§9-5)を封じた。評価用 10 社の結果 `audit-core/docs/XBRL_P27_RESULT_2026-10-27.md`(aeae608)で 9 小項目が全部当たり。同じ結果で P27E は「外部の数の文に使う profile」として採用(K-1〜K-5 の 8 小項目当たり)。
+2. 司令塔の決定(2026-10-28、人間の委任による): 既定は **P27**(P27E ではない。B の相対の名指しは有報の原文で偽の「違う」を増やす ― 97 書類で VALUE_MISMATCH に入る行 81 + 24、封 §0-3・§8)。`adapters/xbrl/verify_document.py` の docstring「既定 P20」の食い違い(D-024 の 4)も同じ便で直す。
+3. 段 2 の封(87f83fd)が触る file・予測 S-1〜S-12・pin の遷移・代価を実装の前に固定した。engine の差分は `vocabulary.py` の `DEFAULT_PROFILE` の 1 行と注記、`verify_document.py` の docstring の 1 行。結果は `audit-core/docs/XBRL_DEFAULT_P27_RESULT_2026-10-28.md`(commit 6a34db5)。
+4. **この項が言わないこと**: engine 全体の品質の主張ではない。97 書類の有報の原文では GROUNDED・VALUE_MISMATCH の数が P26 と同じで、動いた行は UNVERIFIABLE と POINTER_NOT_FOUND の間だけ(28 + 15)。評価用の読みはエージェントの読み(同じ model の 2 席、読む行 2 行・1 社)。文2(DB の値 = 翌期の有報の前期の欄)は未測定。
+
 ## 原文(時刻順)
 
 ### R-2026-10-09-01 ― 封B の材料 2 件を引き直す((b) 承認)
