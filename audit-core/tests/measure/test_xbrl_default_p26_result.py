@@ -58,6 +58,9 @@ LIGHT_DOCS = (("S100YMFV", False), ("S100YXFQ", True))        # 手元の 67 か
 STATES = ("GROUNDED", "VALUE_MISMATCH", "UNVERIFIABLE", "POINTER_NOT_FOUND")
 README_REL = ("README.md", "README.en.md")
 FACTS_REL = "docs/FACTS_FOR_BUYERS_2026-10-20.md"
+# 2026-10-28 の注記: 台帳(``FACTS_FOR_BUYERS``)は P26 の段 2 の時点では P22・P26 の字が 0(記録 S10 の値。書き換えない)。2026-10-28 の便で P27 の段 1・段 2・切り替えの行を
+# 足すと、行の中に P22・P26 の字が入る。宣言された遷移: 下の ID の行が**全部**在るときだけ、P22・P26 の字は「その ID の行」か「2026-10-28 を含む行」にだけ在ってよい。
+FACTS_ROWS_2026_10_28 = tuple([u"L-%d" % n for n in range(32, 39)] + [u"D-%d" % n for n in range(21, 27)] + [u"H-12", u"H-13", u"H-14", u"P-19", u"P-20", u"P-21"])
 STEP_NAMES = (u"S-1", u"S-2", u"S-3", u"S-4", u"S-5", u"S-6", u"S-7", u"S-8", u"S-9", u"S-10", u"S-11", u"S-12")
 
 #: **字で留める**(測った事実。定数から作らない)。変えたら記録も文書も作り直す。
@@ -711,7 +714,7 @@ class RecordTest(unittest.TestCase):
         self.assertEqual((j[u"既定"], j[u"順"]), (self.rec[u"S12"][u"既定"], self.rec[u"S12"][u"候補の順"]))
 
     def test_8_readme_facts_and_suite_count_are_live(self):
-        u"""S-10・S-11 を記録でなく**いまの木**から。README の節は記録から作った字と 1 対 1(儀式の門が全文を縛る)。ここは記録の欄と木の一致。(2026-10-27 追記: 試験 file の数の比べは、いまのディスクでなく段 2 の commit 917157c の木と。いまの木の数は覆いの記録だけが縛る。)"""
+        u"""S-10・S-11 を記録でなく**いまの木**から。README の節は記録から作った字と 1 対 1(儀式の門が全文を縛る)。ここは記録の欄と木の一致。(2026-10-27 追記: 試験 file の数の比べは、いまのディスクでなく段 2 の commit 917157c の木と。いまの木の数は覆いの記録だけが縛る。2026-10-28 追記: 記録 S10 の「台帳の P22・P26 の字 0」は P26 の段 2 の時点の測った値で、書き換えない。いまの木は 2026-10-28 の便の行を足す宣言された遷移(``FACTS_ROWS_2026_10_28``)に従う。)"""
         ritual = jload(RITUAL_REC)
         for rel, head in (("README.md", u"## 10 分の再現"), ("README.en.md", u"## 10-minute reproduction")):
             t = jtext(os.path.join(ROOT, rel))
@@ -722,7 +725,17 @@ class RecordTest(unittest.TestCase):
             self.assertIn(ritual[u"止めた"][u"字"], sec, rel)
             self.assertNotIn(jload(RITUAL_P22)[u"通した"][u"字"].split(u" = ")[0] + u" = ", sec, rel + u": P22 の字が節の先頭の数に残っている")
         facts = jtext(FACTS_DOC)
-        self.assertEqual((facts.count(u"P22"), facts.count(u"P26")), (0, 0))
+        # 2026-10-28 の注記(宣言された遷移): 記録 S10 の「台帳の P22・P26 の字 0」は測った時点の値で、そのまま残す。いまの木は次のとおり。
+        #   2026-10-28 の便の行が 1 つも無い -> 従来どおり (0, 0)。全部在る -> P22・P26 の字は、その ID の行か、字 2026-10-28 を含む行にだけ在る。一部だけ -> 赤(中途の遷移は受け入れない)。
+        lines = facts.split(u"\n")
+        present = [i for i in FACTS_ROWS_2026_10_28 if any(l.startswith(u"| %s |" % i) for l in lines)]
+        if not present:
+            self.assertEqual((facts.count(u"P22"), facts.count(u"P26")), (0, 0))
+        else:
+            self.assertEqual(sorted(present), sorted(FACTS_ROWS_2026_10_28), u"2026-10-28 の便の行が一部だけ在る(中途の遷移)")
+            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28)
+            stray = [l[:60] for l in lines if (u"P22" in l or u"P26" in l) and not l.startswith(row_heads) and u"2026-10-28" not in l]
+            self.assertEqual(stray, [], u"遷移の外の行に P22・P26 の字がある")
         n = 0
         for base, dirs, files in os.walk(ROOT):
             dirs[:] = [d for d in dirs if d not in (".git", "node_modules", "__pycache__", ".pytest_cache")]

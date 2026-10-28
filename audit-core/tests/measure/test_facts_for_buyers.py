@@ -34,8 +34,8 @@ SUITE = os.path.join(ROOT, "fixtures", "suite_coverage_2026-10-16.json")
 REV = "c740e61"
 
 # 行の本数・印の本数。**黙って減らすと赤くなる**ように字で留める(増やすときは直す)
-EXPECT_ROWS = {"L": 31, "D": 20, "H": 7, "HD": 4, "P": 18, "Q": 8, "N": 13, "A": 11}
-EXPECT_CLAIMS = 331   # 印の本数(表の行の印、§5 の本数の印 1、§6 の印 11)
+EXPECT_ROWS = {"L": 38, "D": 26, "H": 10, "HD": 4, "P": 21, "Q": 8, "N": 13, "A": 11}
+EXPECT_CLAIMS = 474   # 印の本数(表の行の印、§5 の本数の印 1、§6 の印 11)
 
 FORBIDDEN = [u"精度", u"LLM より正確", u"世界で 1 社", u"金額", u"契約", u"税", u"USD"]
 ALLOWED_PATH_PREFIX = (u"fixtures/", u"tests/adapters/xbrl/mutations.json", u"core/py/audit_core/")
@@ -459,7 +459,9 @@ class NoApiNoNetworkTest(unittest.TestCase):
         doc = text()
         hashes = sorted(set(re.findall(r"`([0-9a-f]{7})`", doc)))
         self.assertEqual(hashes, sorted([u"8f18b53", u"4e7f490", u"9994f64", u"bcf2bad",
-                                         u"5eb80a2", u"26ee30f", u"a516288", u"c740e61"]))
+                                         u"5eb80a2", u"26ee30f", u"a516288", u"c740e61",
+                                         u"e37ae3b", u"c0d7cc0", u"43fe0e3", u"aeae608",
+                                         u"87f83fd", u"6a34db5"]))
         r = subprocess.run(["git", "cat-file", "-e", REV + "^{commit}"], cwd=ROOT,
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if r.returncode != 0:

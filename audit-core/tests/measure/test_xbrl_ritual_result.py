@@ -383,7 +383,7 @@ def render_ja(rec):
         u"- 通した %d の中身: 丸めの帯の中(±1 最小単位)%d(率 %d・金額ほか %d)・退化値(%s。字は変わるが値が変わらない)%d・帯の外 %d。これが欠陥でないかは読む人が決める。" % (
             p[u"件"], c[C_IN][u"件"], c[C_IN][u"うち率(単位が %)"], c[C_IN][u"うち金額ほか(単位が % でない)"],
             first_degenerate(rec), c[C_DEG][u"件"], c[C_OUT][u"件"]),
-        u"- 既定は P27(2026-10-28。P26 に P27 の旗 4 つ(書かれた精度での照合・1 株当たりの窓・「1人当たり」の「1」・先の決算期)を積んだもの)。前期の値を当期の数として書くと止まるのは、P22(期を縛る。2026-10-20)から変わらない: P21 で注入後の値が前期の fact に合い、"
+        u"- 既定は P27(2026-10-28。P26 に P27 の旗 4 つ(書かれた桁での照合・1 株当たりの窓・「1人当たり」の「1」・先の決算期)を積んだもの)。前期の値を当期の数として書くと止まるのは、P22(期を縛る。2026-10-20)から変わらない: P21 で注入後の値が前期の fact に合い、"
         u"参照先が当期から前期へ移ったまま GROUNDED で通した %s は、P27 では止める(%s)。通した行のうち参照先が前期へ移った行は %d。" % (
             u"・".join(moved_ids(p21_record())), u"・".join(u"%s は %s" % x for x in stop_outcomes(rec, moved_ids(p21_record()))), len(mv)),
         u"- P26 のとき(2026-10-23 の P26 の段 2 から、2026-10-28 の P27 の段 2 の前まで)は 通した %d / %d、止めた %d / %d(記録 `fixtures/xbrl/ritual_2026-10-20_p26.json`)。" % (
@@ -426,7 +426,7 @@ def render_en(rec):
         u"- What the %d passed are: inside the rounding band (+-1 last unit) %d (rates %d, amounts and others %d); degenerate (%s: the text changes but the value does not) %d; outside the band %d. Whether these are defects is for the reader to decide." % (
             p[u"件"], c[C_IN][u"件"], c[C_IN][u"うち率(単位が %)"], c[C_IN][u"うち金額ほか(単位が % でない)"],
             first_degenerate_en(rec), c[C_DEG][u"件"], c[C_OUT][u"件"]),
-        u"- The default is P27 (2026-10-28: P26 with four P27 flags on top: matching at the printed precision, the per-share window, the \"1\" of \"per person\", and the later fiscal period). Writing a prior-period value as a current-period number stops, as it has since P22 (the period is pinned; 2026-10-20): %s, whose injected value matched the prior-period fact under P21 so the reference moved from the current period to the prior period and was still reported as GROUNDED, are stopped under P27 (%s). Passed rows whose reference moved to the prior period: %d." % (
+        u"- The default is P27 (2026-10-28: P26 with four P27 flags on top: matching at the written digits, the per-share window, the \"1\" of \"per person\", and the later fiscal period). Writing a prior-period value as a current-period number stops, as it has since P22 (the period is pinned; 2026-10-20): %s, whose injected value matched the prior-period fact under P21 so the reference moved from the current period to the prior period and was still reported as GROUNDED, are stopped under P27 (%s). Passed rows whose reference moved to the prior period: %d." % (
             u", ".join(moved_ids(p21_record())), u", ".join(u"%s: %s" % x for x in stop_outcomes(rec, moved_ids(p21_record()))), len(mv)),
         u"- Under P26 (from the P26 step 2 on 2026-10-23 until the P27 step 2 on 2026-10-28) it was passed %d / %d, stopped %d / %d (record `fixtures/xbrl/ritual_2026-10-20_p26.json`)." % (
             p26_record()[K_PASSED][u"件"], p26_record()[K_PASSED][u"分母"], p26_record()[K_DETECTED][u"件"], p26_record()[K_DETECTED][u"分母"]),
