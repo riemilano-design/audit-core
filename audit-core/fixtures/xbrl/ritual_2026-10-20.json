@@ -85,8 +85,8 @@
   "claim": 412,
   "state の分布": {
    "GROUNDED": 340,
-   "POINTER_NOT_FOUND": 27,
-   "UNVERIFIABLE": 31,
+   "POINTER_NOT_FOUND": 25,
+   "UNVERIFIABLE": 33,
    "VALUE_MISMATCH": 14
   }
  },
@@ -97,8 +97,8 @@
   "束の大きさ": 25,
   "土台(経営分析の文のまま)の state の分布": {
    "GROUNDED": 340,
-   "POINTER_NOT_FOUND": 27,
-   "UNVERIFIABLE": 31,
+   "POINTER_NOT_FOUND": 25,
+   "UNVERIFIABLE": 33,
    "VALUE_MISMATCH": 14
   }
  },
@@ -107,7 +107,7 @@
   "sha256": "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799",
   "bytes": 580260,
   "書類ID": "S100Z4Q1",
-  "profile": "P26"
+  "profile": "P27"
  },
  "注入の一覧": [
   {
@@ -3279,15 +3279,15 @@
   }
  ],
  "所要秒": {
-  "素の書類の検証": 0.9,
-  "注入の再検証": 18.0,
-  "全体": 19.0
+  "素の書類の検証": 1.2,
+  "注入の再検証": 21.6,
+  "全体": 22.8
  },
  "実行環境": {
   "封": "docs/XBRL_RITUAL_SEAL_2026-10-20.md",
-  "HEAD": "6a78b42f900d42234d371c29b00393abf780d5f8",
+  "HEAD": "87f83fd6b09d6968dd1dd84fb0c6bd1c4dbf1b94",
   "python": "3.9.6",
-  "engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)": "4f417562d322caa7241199d8462783e6a260a275a4e2794d18396a3bc6dc6b39",
+  "engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)": "49bcd3ac7c3bfdcdadf275a8829f14b21e45a4908c3e857872231412e2d3e41c",
   "engine の file 数": 37,
   "鍵の名前の有無(値は読まない)": {
    "ANTHROPIC_API_KEY": false,

@@ -77,14 +77,19 @@ FIX_SEAL_REL = "docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md"
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
 MODULE_LATER = {"sha16": "6679138d350ec382", "seal": SEAL_P27}
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): engine の束ねた指紋は vocabulary.py の 1 行と注記で動く。498993e29055472a…(P26 の段 1)は残す(測った時点の次の値)、段 2 で 5aba774925968356…。受け入れるのは、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が履歴に在り、値が段 2 の後の値のときだけ。
-ENGINE_ADAPTER_SHA_LATER = {"value": "0e51211a8aed2151409cb6bf443fb6eae2aed87e6b2b4bd6150c8286afee87de", "seal": SEAL_P27}
+# 0e51211a8aed2151(P27 の段 2) は残す(測った時点の値。束ねた指紋 adapter_xbrl_py_sha256 の頭 16 字)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 92326a0f4dcefd21。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_ADAPTER_SHA_LATER = {"value": "92326a0f4dcefd21fae4393a611e4206ef174b19258ddadd0213117191e7b399", "seal": SEAL_DEFAULT_P27}
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27), "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
-                   "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27)}
+# 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行。実行の字は変えない)。67e7639de3f5f2ad(UNTOUCHED。測った時点の値)は残す。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+# 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("514ebb8104451c07", SEAL_DEFAULT_P27), "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
+                   "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
+                   "adapters/xbrl/verify_document.py": ("c3791080ab5aef2f", SEAL_DEFAULT_P27)}
 P26_REASONS = {"other_concept", "direction_on_cause_item", "rounded_diff_within_double_band"}
 P27_REASONS = {"per_unit_counter"}       # 2026-10-27(P27 の段 2。封 docs/XBRL_P27_SEAL_2026-10-27.md §1-4・§2-3「登録簿の理由 19 → 20」。UNVERIFIABLE)
 ALLOWED_RESIDUAL = []
@@ -596,6 +601,8 @@ def drop_time(rows):
 #: 桁が 16 なら頭 16 字で、None なら値そのもので比べる。既存の定数が持つ値はその定数を参照する(同じ sha を 2 か所に字で書かない)。ここに名前の無い欄は 1 字でも違えば赤。
 HEAVY_RERUN_LATER = {
     (u"C5", u"sha256", "adapters/xbrl/vocabulary.py"): (UNTOUCHED_LATER["adapters/xbrl/vocabulary.py"][0], UNTOUCHED_LATER["adapters/xbrl/vocabulary.py"][1], 16),
+    # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): verify_document.py の docstring の 1 行(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1)。記録の値 67e7639d…(測った時点の値)は残す。
+    (u"C5", u"sha256", "adapters/xbrl/verify_document.py"): (UNTOUCHED_LATER["adapters/xbrl/verify_document.py"][0], UNTOUCHED_LATER["adapters/xbrl/verify_document.py"][1], 16),
     (u"C5", u"sha256", "adapters/xbrl/recipes.py"): (UNTOUCHED_LATER["adapters/xbrl/recipes.py"][0], UNTOUCHED_LATER["adapters/xbrl/recipes.py"][1], 16),
     (u"C5", u"sha256", "adapters/xbrl/registry_setup.py"): (UNTOUCHED_LATER["adapters/xbrl/registry_setup.py"][0], UNTOUCHED_LATER["adapters/xbrl/registry_setup.py"][1], 16),
     (u"C5", u"report_customer.py の sha256"): (MODULE_LATER["sha16"], MODULE_LATER["seal"], 16),

@@ -45,6 +45,7 @@ sys.path.insert(0, os.path.join(ROOT, "core", "py"))
 SEAL_REL = "docs/XBRL_P26_SEAL_2026-10-21.md"
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 SEAL = os.path.join(ROOT, SEAL_REL)
 LASTBRANCH_JSON = os.path.join(ROOT, "fixtures", "xbrl", "lastbranch_2026-10-21.json")
 FRESH_SEAL_REL = "docs/XBRL_FRESH_SAMPLE_SEAL_2026-10-21.md"
@@ -89,10 +90,15 @@ UNTOUCHED = {"adapters/xbrl/__init__.py": "65474b49e6b84626",
 ENGINE_TRANSITIONS = {"adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
                       # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ)。
                       # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-                      "adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
+                      # 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+                      "adapters/xbrl/vocabulary.py": ("514ebb8104451c07", SEAL_DEFAULT_P27),
                       "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
                       "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
                       "adapters/xbrl/report_customer.py": ("6679138d350ec382", SEAL_P27)}
+
+# 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1・§4 (a′) が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行。実行の字は変えない)。
+# 上の UNTOUCHED の 67e7639de3f5f2ad(封の commit 時点の値)は残す。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ(他の UNTOUCHED の file は遷移を持たない: 動いたら赤のまま)。
+VD_DOCSTRING_DECLARED = ("c3791080ab5aef2f", SEAL_DEFAULT_P27)
 
 # 封の commit 時点の engine の束ねた指紋(verify_document.engine_fingerprint())と frozen_bundle。**宣言された遷移の前の値**で、消さない。
 FINGERPRINT_AT_SEAL = {"adapter_xbrl_py_sha256": "11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693",
@@ -105,9 +111,11 @@ FROZEN_COUNT_AT_SEAL = 37
 # adapter_xbrl_py_files は 16 のまま(file の数は動かない。段 1 が足すのは tests / measure / fixtures / docs で、adapters/ には 1 file も足さない)。
 # 段 1 の実装の便: 束ねた指紋が 11840a09…(封の commit 時点)から 498993e2… に動き(file の数 16 は動かない)、frozen_bundle の世代がもう 1 つ増えた(a97ecf7c…。本数は 37 のまま)。
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 束ねた指紋が 498993e2…(P26 の段 1。残す)から 5aba7749… に動いた(file の数 16 は動かない)。受け入れるのは、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が履歴に在り、値が段 2 の後の値のときだけ。
-LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("0e51211a8aed2151409cb6bf443fb6eae2aed87e6b2b4bd6150c8286afee87de", SEAL_P27)}
+# 0e51211a8aed2151(P27 の段 2) は残す(測った時点の値。束ねた指紋 adapter_xbrl_py_sha256 の頭 16 字)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 92326a0f4dcefd21。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("92326a0f4dcefd21fae4393a611e4206ef174b19258ddadd0213117191e7b399", SEAL_DEFAULT_P27)}
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): frozen_bundle の世代がもう 1 つ増えた(26b52706…。本数は 37 のまま)。a97ecf7c…(P26 の段 1 の世代)は消さない。
-LATER_FROZEN = {"bundle": ("29fd733c8988164aa7655d7efc90b8215499360987ca01ad14e137bf966bc837", SEAL_P27)}
+# 29fd733c8988164a(P27 の段 2) は残す(測った時点の値。frozen_bundle の束ねた sha の頭 16 字)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 030455282c89661b。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+LATER_FROZEN = {"bundle": ("030455282c89661b4c0152498d76bc30314362b5896b15ab67a8886a6887b0f6", SEAL_DEFAULT_P27)}
 
 # §1「触る枝の中の人間の決定」の 9 つ(封の字の順)と、決定の commit が履歴に在ること
 DECISIONS = (u"案ア(no_subject)", u"§1b の止め", u"C2 `period_cue`", u"C-1g §1-3 `_build_point_diff_claim`", u"P21 の最後の枝",
@@ -667,6 +675,11 @@ class EngineAtSealTest(unittest.TestCase):
     def test_11_untouched_files_keep_their_sha(self):
         """P26 が触らない adapters/xbrl 11 file(`comparators.py`・`report.py`・`verify_document.py`・`resolve.py` ほか)。宣言の遷移を持たない: 動いたら赤のまま。"""
         for rel, want in sorted(UNTOUCHED.items()):
+            if rel == "adapters/xbrl/verify_document.py" and sha16(rel) != want:
+                later, seal_rel = VD_DOCSTRING_DECLARED
+                self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(), u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % (rel, seal_rel))
+                self.assertEqual(sha16(rel), later, u"**%s が、宣言された遷移の値とも違う**" % rel)
+                continue
             self.assertEqual(sha16(rel), want, u"**%s が動いている(この封は触らない)**" % rel)
         for rel in ("report", "verify_document"):
             self.assertIn("adapters/xbrl/%s.py" % rel, UNTOUCHED)

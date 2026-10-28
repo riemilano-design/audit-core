@@ -92,7 +92,10 @@ _PINNED_BODY_SHA256_S100Z4B6 = "b0f5b32496a745526ba5b9107f1cc6856fef0a811c46f4e6
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 既定が P22 -> P26 になり、既定の値が動いた。**今度は profile 欄の字だけでなく本体が動く**
 # (S100Z4B6 は P22 と P26 で claims が違う行がある。P22 の値は P22 を明示して回した結果として残す = 測った時点の字。消さない)。
 # 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md の段 2。
-_PINNED_BODY_SHA256_S100Z4B6_P26 = "b0bb68e45aaea47a42f0f8039978070fb05d506f4537b328512b6438065a624b"
+_PINNED_BODY_SHA256_S100Z4B6_P26 = "b0bb68e45aaea47a42f0f8039978070fb05d506f4537b328512b6438065a624b"      # P26(2026-10-23 の P26 の段 2 から P27 の段 2 の前までの既定。いまは P26 を明示して留める)
+# 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 既定が P26 -> P27 になり、既定の値が動いた(S100Z4B6 は profile 欄の字が違う。本体の claims は P26 と同じ)。P26 の値は P26 を明示して回した結果として残す = 測った時点の字。消さない。
+# 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md の段 2。
+_PINNED_BODY_SHA256_S100Z4B6_P27 = "424b2ce92ede62582904b56956aead68885c3f6764658455fc6a4f7b61a47ee2"
 
 
 def _zip(doc):
@@ -211,13 +214,25 @@ class DocumentLevelRuleTest(unittest.TestCase):
             # 旗が外れても Claim 個別の state の合計は全件のまま
             self.assertEqual(sum(out["document"]["states"].values()), out["document"]["claims"], doc)
 
+    def test_the_two_documents_are_no_longer_flagged_under_p26(self):
+        """**P26 のときの事実(2026-10-23 の P26 の段 2 から P27 の段 2 の前まで既定だった。いまは P26 を明示)。**この 2 書類は書類ごと
+        UNVERIFIABLE にならない(字の試験ではなく振る舞いで)。"""
+
+        for doc in DOC_UNVERIFIABLE_DOCS:
+            out = VD.verify_document(_read(doc), profile_name="P26")
+            self.assertEqual(out["profile"], "P26", doc)
+            self.assertFalse(out["document"]["unverifiable"], doc)
+            self.assertGreater(out["document"]["states"].get("GROUNDED", 0), 0, doc)
+            # 旗が外れても Claim 個別の state の合計は全件のまま
+            self.assertEqual(sum(out["document"]["states"].values()), out["document"]["claims"], doc)
+
     def test_the_two_documents_are_no_longer_flagged_under_the_default(self):
-        """**既定(2026-10-23 の P26 の段 2 から P26)の事実。**既定の経路でも、この 2 書類は書類ごと
+        """**既定(2026-10-28 の P27 の段 2 から P27)の事実。**既定の経路でも、この 2 書類は書類ごと
         UNVERIFIABLE にならない(字の試験ではなく振る舞いで)。"""
 
         for doc in DOC_UNVERIFIABLE_DOCS:
             out = VD.verify_document(_read(doc))
-            self.assertEqual(out["profile"], "P26", doc)
+            self.assertEqual(out["profile"], "P27", doc)
             self.assertFalse(out["document"]["unverifiable"], doc)
             self.assertGreater(out["document"]["states"].get("GROUNDED", 0), 0, doc)
             # 旗が外れても Claim 個別の state の合計は全件のまま
@@ -255,18 +270,32 @@ class OutputStabilityTest(unittest.TestCase):
                          "%s" % _PINNED_BODY_SHA256_S100Z4B6)
 
     @unittest.skipUnless(_have("S100Z4B6"), "材料が無い")
-    def test_one_documents_output_sha256_is_pinned_literally(self):
+    def test_one_documents_output_sha256_is_pinned_literally_under_p26(self):
         """**形式を変えたら赤くなる。** 2 回比べるだけでは、字下げや並びを
         変えても両方同じになるので黙る(人間の決定の「出力の安定」の 2 つ目)。
         engine の指紋は adapters/xbrl の .py が変わるたびに動くので除いて留める
-        (指紋自体は別の試験で見ている)。既定(2026-10-23 の P26 の段 2 から P26)の値。"""
+        (指紋自体は別の試験で見ている)。2026-10-23 の P26 の段 2 から P27 の段 2 の前までの既定(P26)のときの値を、P26 を**明示して**残す(測った時点の字。消さない)。"""
 
-        out = VD.verify_document(_read("S100Z4B6"))
+        out = VD.verify_document(_read("S100Z4B6"), profile_name="P26")
         del out["engine"]
         body = VD.dumps(out)
         self.assertEqual(out["profile"], "P26")
         self.assertEqual(hashlib.sha256(body.encode("utf-8")).hexdigest(),
                          "%s" % _PINNED_BODY_SHA256_S100Z4B6_P26)
+
+    @unittest.skipUnless(_have("S100Z4B6"), "材料が無い")
+    def test_one_documents_output_sha256_is_pinned_literally(self):
+        """**形式を変えたら赤くなる。** 2 回比べるだけでは、字下げや並びを
+        変えても両方同じになるので黙る(人間の決定の「出力の安定」の 2 つ目)。
+        engine の指紋は adapters/xbrl の .py が変わるたびに動くので除いて留める
+        (指紋自体は別の試験で見ている)。既定(2026-10-28 の P27 の段 2 から P27)の値。"""
+
+        out = VD.verify_document(_read("S100Z4B6"))
+        del out["engine"]
+        body = VD.dumps(out)
+        self.assertEqual(out["profile"], "P27")
+        self.assertEqual(hashlib.sha256(body.encode("utf-8")).hexdigest(),
+                         "%s" % _PINNED_BODY_SHA256_S100Z4B6_P27)
 
     @unittest.skipUnless(_have("S100Z4B6"), "材料が無い")
     def test_one_documents_output_sha256_is_pinned_literally_under_p21(self):
@@ -318,7 +347,7 @@ class OutputStabilityTest(unittest.TestCase):
             self.assertEqual(on_disk, VD.dumps(VD.verify_document(_read("S100Z4B6"))))
             data = json.loads(on_disk)
             self.assertEqual(data["profile"], V.DEFAULT_PROFILE)
-            self.assertEqual(data["profile"], "P26")     # 2026-10-14 は P20、2026-10-20(段 2)から P21、同日の期を縛る P22 の段 2 から P22、2026-10-23 の P26 の段 2 から P26
+            self.assertEqual(data["profile"], "P27")     # 2026-10-14 は P20、2026-10-20(段 2)から P21、同日の期を縛る P22 の段 2 から P22、2026-10-23 の P26 の段 2 から P26、2026-10-28 の P27 の段 2 から P27
 
 
 class SemanticMatchAgainstTheDevelopmentMeasurementTest(unittest.TestCase):
@@ -520,15 +549,19 @@ class SemanticMatchAgainstTheHoldoutMeasurementTest(unittest.TestCase):
                      "H-147": ("UNVERIFIABLE", "other_frame")}}
     HOLDOUT_P26_STATES = {"S100Z39P": {"GROUNDED": 79, "POINTER_NOT_FOUND": 6, "UNVERIFIABLE": 16, "VALUE_MISMATCH": 2},
                           "S100Z4N9": {"GROUNDED": 98, "POINTER_NOT_FOUND": 29, "UNVERIFIABLE": 42, "VALUE_MISMATCH": 17}}
+    # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 既定が P27 になって、未使用 2 書類の P16 の記録と違う行・state の内訳を P27 で測り直した。
+    # **P26 の表と 1 行も違わなかった**(動いた 39 行・先の state と reason・GROUNDED を離れる 1 行・内訳が同じ)ので、表は P26 の表をそのまま使う(P26 の表は消さない。測った時点の字)。
+    HOLDOUT_P27_MOVED = HOLDOUT_P26_MOVED
+    HOLDOUT_P27_STATES = HOLDOUT_P26_STATES
 
-    def test_the_default_p26_moves_the_recorded_rows_and_leaves_grounded_on_one_row(self):
-        """**既定(2026-10-23 の P26 の段 2 から P26)で P16 の記録と違う行は、HOLDOUT_P26_MOVED の行だけ。**それ以外の行は 4 つの欄とも P16 の記録と同一。
+    def test_p26_moves_the_recorded_rows_and_leaves_grounded_on_one_row(self):
+        """**P26(2026-10-23 の P26 の段 2 から P27 の段 2 の前まで既定だった。いまは P26 を明示)で P16 の記録と違う行は、HOLDOUT_P26_MOVED の行だけ。**それ以外の行は 4 つの欄とも P16 の記録と同一。
         dump の GROUNDED の行で GROUNDED を離れるのは S100Z39P の H-042 の 1 行だけ(P22 と同じ行)。非 GROUNDED の行が GROUNDED になる行は 0。
         GROUNDED の数は S100Z39P 79・S100Z4N9 98(P22 と同じ)。state の内訳は HOLDOUT_P26_STATES。"""
 
         for doc in HOLDOUT_DOCS:
             dump, by_row = self._dump_and_rows(doc)
-            out = VD.verify_document(_read(doc))
+            out = VD.verify_document(_read(doc), profile_name="P26")
             self.assertEqual(out["profile"], "P26", doc)
             got = {c["id"]: c for c in out["claims"]}
             self.assertEqual(len(out["claims"]), HOLDOUT_EXPECTED[doc]["claims"], doc)
@@ -553,6 +586,39 @@ class SemanticMatchAgainstTheHoldoutMeasurementTest(unittest.TestCase):
             self.assertEqual(seen, expect, doc)
             self.assertEqual(left_grounded, ["H-042"] if doc == "S100Z39P" else [], doc)
         self.assertEqual(sum(len(v) for v in self.HOLDOUT_P26_MOVED.values()), 39)
+
+    def test_the_default_p27_moves_the_recorded_rows_and_leaves_grounded_on_one_row(self):
+        """**既定(2026-10-28 の P27 の段 2 から P27)で P16 の記録と違う行は、HOLDOUT_P27_MOVED の行だけ(P26 と同じ 39 行・同じ先)。**それ以外の行は 4 つの欄とも P16 の記録と同一。
+        dump の GROUNDED の行で GROUNDED を離れるのは S100Z39P の H-042 の 1 行だけ(P22 と同じ行)。非 GROUNDED の行が GROUNDED になる行は 0。
+        GROUNDED の数は S100Z39P 79・S100Z4N9 98(P22 と同じ)。state の内訳は HOLDOUT_P27_STATES。"""
+
+        for doc in HOLDOUT_DOCS:
+            dump, by_row = self._dump_and_rows(doc)
+            out = VD.verify_document(_read(doc))
+            self.assertEqual(out["profile"], "P27", doc)
+            got = {c["id"]: c for c in out["claims"]}
+            self.assertEqual(len(out["claims"]), HOLDOUT_EXPECTED[doc]["claims"], doc)
+            self.assertEqual(out["document"]["states"], self.HOLDOUT_P27_STATES[doc], doc)
+            self.assertEqual(out["document"]["states"]["GROUNDED"], self.HOLDOUT_P22_GROUNDED[doc], doc)
+            expect = self.HOLDOUT_P27_MOVED[doc]
+            seen, left_grounded = {}, []
+            for row_key, want in dump.items():
+                rid = row_key.split(":", 1)[1]
+                g = got[by_row[rid]]
+                self.assertEqual(g["subject"], want["subject"], (doc, rid))
+                if want["state"] != "GROUNDED":
+                    self.assertNotEqual(g["state"], "GROUNDED", (doc, rid))       # 新しく GROUNDED になる行は 0
+                elif g["state"] != "GROUNDED":
+                    left_grounded.append(rid)
+                if rid in expect:
+                    self.assertEqual((g["state"], g["reason"]), expect[rid], (doc, rid))
+                    seen[rid] = (g["state"], g["reason"])
+                else:
+                    for f in ("state", "pointers", "reason"):
+                        self.assertEqual(g[f], want[f], (doc, rid, f))
+            self.assertEqual(seen, expect, doc)
+            self.assertEqual(left_grounded, ["H-042"] if doc == "S100Z39P" else [], doc)
+        self.assertEqual(sum(len(v) for v in self.HOLDOUT_P27_MOVED.values()), 39)
 
 
 class RobustnessTableTest(unittest.TestCase):
@@ -647,9 +713,11 @@ class RobustnessTableTest(unittest.TestCase):
     # 違う書類は 9 書類で、増える書類と減る書類の両方が在る(合計は -10)。claim の数は profile で変わらない。字で留める(測った値)。
     ROBUSTNESS_P26_STOPPED = {"S100YMFV": 50, "S100Z1WR": 36, "S100Z35K": 109, "S100Z37J": 42, "S100Z3BW": 51, "S100Z3CO": 58, "S100Z3HP": 19,
                               "S100Z3JY": 50, "S100Z3V1": 51, "S100Z433": 31, "S100Z4B6": 59, "S100Z4DE": 42, "S100Z4PA": 64, "S100Z4Q1": 11}
+    # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 既定が P27 になって、14 書類の止めた件数を P27 で測り直した。P26 の表と 14 書類とも同じ(動かない)。P26 の表は消さない。
+    ROBUSTNESS_P27_STOPPED = ROBUSTNESS_P26_STOPPED
 
-    def test_the_default_p26_stop_counts_of_the_fourteen_documents_are_pinned(self):
-        """**既定(2026-10-23 の P26 の段 2 から P26)。**14 書類の止めた件数(全件 - GROUNDED)を字で留める。claim の数は P16 の表のまま。"""
+    def test_p26_stop_counts_of_the_fourteen_documents_are_pinned(self):
+        """**P26(2026-10-23 の P26 の段 2 から P27 の段 2 の前まで既定だった。いまは P26 を明示)。**14 書類の止めた件数(全件 - GROUNDED)を字で留める。claim の数は P16 の表のまま。"""
 
         docs = [d for d in sorted(ROBUSTNESS_P16) if _have(d)]
         if len(docs) < 10:
@@ -657,12 +725,32 @@ class RobustnessTableTest(unittest.TestCase):
         got = {}
         for doc in docs:
             _want_stopped, want_total = ROBUSTNESS_P16[doc]
-            out = VD.verify_document(_read(doc))          # 既定 = P26
+            out = VD.verify_document(_read(doc), profile_name="P26")          # 2026-10-23 の P26 の段 2 の既定 = P26(いまは明示)
             self.assertEqual(out["profile"], "P26", doc)
             total = out["document"]["claims"]
             self.assertEqual(total, want_total, doc)
             got[doc] = total - out["document"]["states"].get("GROUNDED", 0)
         self.assertEqual(got, dict((d, self.ROBUSTNESS_P26_STOPPED[d]) for d in docs))
+        base = dict((d, ROBUSTNESS_P20_MOVED.get(d, ROBUSTNESS_P16[d][0])) for d in docs)
+        differs = sorted(d for d in docs if got[d] != base[d])
+        self.assertEqual(differs, ["S100YMFV", "S100Z1WR", "S100Z37J", "S100Z3CO", "S100Z3JY", "S100Z3V1", "S100Z433", "S100Z4B6", "S100Z4PA"])
+        self.assertEqual(sum(got[d] - base[d] for d in docs), -10)
+
+    def test_the_default_p27_stop_counts_of_the_fourteen_documents_are_pinned(self):
+        """**既定(2026-10-28 の P27 の段 2 から P27)。**14 書類の止めた件数(全件 - GROUNDED)を字で留める。claim の数は P16 の表のまま。"""
+
+        docs = [d for d in sorted(ROBUSTNESS_P16) if _have(d)]
+        if len(docs) < 10:
+            raise unittest.SkipTest("材料が足りない(%d 書類)" % len(docs))
+        got = {}
+        for doc in docs:
+            _want_stopped, want_total = ROBUSTNESS_P16[doc]
+            out = VD.verify_document(_read(doc))          # 既定 = P27
+            self.assertEqual(out["profile"], "P27", doc)
+            total = out["document"]["claims"]
+            self.assertEqual(total, want_total, doc)
+            got[doc] = total - out["document"]["states"].get("GROUNDED", 0)
+        self.assertEqual(got, dict((d, self.ROBUSTNESS_P27_STOPPED[d]) for d in docs))
         base = dict((d, ROBUSTNESS_P20_MOVED.get(d, ROBUSTNESS_P16[d][0])) for d in docs)
         differs = sorted(d for d in docs if got[d] != base[d])
         self.assertEqual(differs, ["S100YMFV", "S100Z1WR", "S100Z37J", "S100Z3CO", "S100Z3JY", "S100Z3V1", "S100Z433", "S100Z4B6", "S100Z4PA"])

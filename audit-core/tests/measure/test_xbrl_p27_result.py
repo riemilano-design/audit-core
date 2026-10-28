@@ -38,6 +38,8 @@ for _p in (ROOT, os.path.join(ROOT, "core", "py")):
         sys.path.insert(0, _p)
 
 SEAL_REL = "docs/XBRL_P27_SEAL_2026-10-27.md"
+DEFAULT_P27_SEAL_REL = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"       # 2026-10-28: 既定を P26 -> P27 に切り替える 段 2 の封(下の test_61・test_65 の遷移)
+DEFAULT_P27_FP_TO = "92326a0f4dcefd21fae4393a611e4206ef174b19258ddadd0213117191e7b399"
 DOC_REL = "docs/XBRL_P27_RESULT_2026-10-27.md"
 EVAL_REC_REL = collections.OrderedDict([
     ("eval", "fixtures/xbrl/p27/eval_2026-10-27.json"),
@@ -1570,12 +1572,20 @@ class TestPins(Base):
         # E の記録(97 書類)が測った engine と同じ
         fp97 = self.e_recs["regress97"][u"engine の指紋"]
         self.assertEqual(dict((k, fp97[k]) for k in fp_e), fp_e)
-        # E から HEAD まで engine は動いていない(動いたら宣言された遷移が要る)
-        self.assertEqual(git("diff", "--quiet", e, "HEAD", "--", *ENGINE_TREES).returncode, 0)
-        # いまの作業木の engine の指紋も同じ
+        # E から作業木まで engine は動いていない(動いたら宣言された遷移が要る)。
+        # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §4 (j) が宣言した遷移。動いてよいのは vocabulary.py と verify_document.py の 2 file だけで、
+        # 作業木の指紋が段 2 の後の値(下の DEFAULT_P27_FP_TO)のときに限る。封が履歴に無ければ従来どおり 0 行。
         from adapters.xbrl import verify_document as VD
         now = VD.engine_fingerprint()
-        self.assertEqual(dict((k, now[k]) for k in fp_e), fp_e)
+        moved = [l.decode("utf-8") for l in git("diff", "--name-only", e, "--", *ENGINE_TREES).stdout.split() if l]
+        if now["adapter_xbrl_py_sha256"] != fp_e["adapter_xbrl_py_sha256"]:
+            self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + DEFAULT_P27_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
+            self.assertEqual(now["adapter_xbrl_py_sha256"], DEFAULT_P27_FP_TO)
+            self.assertEqual(sorted(moved), ["audit-core/adapters/xbrl/verify_document.py", "audit-core/adapters/xbrl/vocabulary.py"])
+            self.assertEqual(dict((k, now[k]) for k in fp_e if k != "adapter_xbrl_py_sha256"), dict((k, fp_e[k]) for k in fp_e if k != "adapter_xbrl_py_sha256"))
+        else:
+            self.assertEqual(moved, [])
+            self.assertEqual(dict((k, now[k]) for k in fp_e), fp_e)
 
     def test_62_i_the_commits_in_the_three_records_agree_with_each_other(self):
         for key in (u"HEAD の commit", u"W の commit", u"T の commit", u"S2 の commit", u"E の commit"):
@@ -1623,7 +1633,9 @@ class TestPins(Base):
 
     def test_65_the_p27_profiles_and_the_default_in_the_engine_are_the_sealed_ones(self):
         self.assertTrue(set(P4) <= set(M.V.PROFILES))
-        self.assertEqual(M.V.DEFAULT_PROFILE, "P26")
+        # 2026-10-28: 既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)が履歴に在るときは P27(P26 は測った当時の既定)
+        declared = bool(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + DEFAULT_P27_SEAL_REL).stdout.split())
+        self.assertEqual(M.V.DEFAULT_PROFILE, "P27" if declared else "P26")
         self.assertIs(M.V.PROFILES["P27"].per_unit_counter_2026_10_27, True)
         self.assertIs(M.V.PROFILES["P27"].last_branch_relative_2026_10_27, False)
         self.assertIs(M.V.PROFILES["P27E"].last_branch_relative_2026_10_27, True)

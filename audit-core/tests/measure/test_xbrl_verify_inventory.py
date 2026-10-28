@@ -8,6 +8,7 @@ import hashlib
 import io
 import json
 import os
+import subprocess
 import sys
 import unittest
 
@@ -22,6 +23,10 @@ ENGINE_SHA = {"core/py/audit_core/verify.py": "d29b21dccec8af24",
               "adapters/xbrl/comparators.py": "d8706338325e725b",
               "adapters/xbrl/resolve.py": "a41043763c1d4073",
               "adapters/xbrl/verify_document.py": "67e7639de3f5f2ad"}
+# 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1・§4 (a′) が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行。実行の字は変えない)。
+# 上の ENGINE_SHA の 67e7639de3f5f2ad(測った時点の値)は残す。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ(他の file は遷移を持たない: 動いたら赤のまま)。
+SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"
+VD_DOCSTRING_DECLARED = {"adapters/xbrl/verify_document.py": ("c3791080ab5aef2f", SEAL_DEFAULT_P27)}
 
 
 def text(p):
@@ -135,9 +140,15 @@ class DisciplineTest(unittest.TestCase):
             if want is None:
                 continue
             with io.open(os.path.join(ROOT, rel), "rb") as fh:
-                self.assertEqual(
-                    hashlib.sha256(fh.read()).hexdigest()[:16], want,
-                    u"**%s が動いている**" % rel)
+                got = hashlib.sha256(fh.read()).hexdigest()[:16]
+            if got != want and rel in VD_DOCSTRING_DECLARED:
+                later, seal_rel = VD_DOCSTRING_DECLARED[rel]
+                added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal_rel],
+                                       cwd=ROOT, capture_output=True, text=True).stdout.split()
+                self.assertTrue(added, u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % (rel, seal_rel))
+                self.assertEqual(got, later, u"**%s が、宣言された遷移の値とも違う**" % rel)
+                continue
+            self.assertEqual(got, want, u"**%s が動いている**" % rel)
         self.assertIn(u"**engine は 1 行も変えていない。0 USD・席は呼んでいない。"
                       u"正解とは照合していない。**", self.t)
 

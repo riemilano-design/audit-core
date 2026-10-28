@@ -72,7 +72,9 @@ OUT_REL = "fixtures/xbrl/default_p26_2026-10-23.json"
 P26_REL = "fixtures/xbrl/p26_2026-10-21.json"
 FRESH_REL = "fixtures/xbrl/fresh/fresh_2026-10-21.json"
 FETCHED_REL = "fixtures/xbrl/fresh/fetched_2026-10-21.json"
-RITUAL_REL = "fixtures/xbrl/ritual_2026-10-20.json"
+#: 2026-10-28(既定を P26 -> P27 に切り替える 段 2。封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md): ``ritual_2026-10-20.json`` は P27(既定)で採り直したので、P26 のときの記録は
+#: 同じバイト列の写し ``ritual_2026-10-20_p26.json`` を読む。記録の欄の名前(``採り直した儀式の記録(ritual_2026-10-20.json)と違う欄…``)は測った当時の字で変えない。
+RITUAL_REL = "fixtures/xbrl/ritual_2026-10-20_p26.json"
 RITUAL_P22_REL = "fixtures/xbrl/ritual_2026-10-20_p22.json"
 SUITE_REL = "fixtures/suite_coverage_2026-10-16.json"
 README_REL = ("README.md", "README.en.md")
@@ -80,6 +82,10 @@ FACTS_REL = "docs/FACTS_FOR_BUYERS_2026-10-20.md"
 EXISTING_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet")
 FRESH_DIR = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet-fresh-2026-10-21")
 OLD, NEW = "P22", "P26"
+#: 2026-10-28(既定を P26 -> P27 に切り替える 段 2。封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §4 (f)(g)): この測定は**測った当時の既定 P26 を明示して**行う(profile を省く = 既定 に頼らない)。
+#: 既定が P27 になった今も記録が再現する。記録の字(``省略(None = vocabulary.DEFAULT_PROFILE)``・``DEFAULT_PROFILE: P26``・``対照: 既定を実行中だけ P22 に戻す``)は測った当時のもので変えない
+#: (測った当時、省略は P26 だった。今の走らせ直しでは『既定』の経路も P26 の明示で通すので、``既定と P26 明示が同じ byte`` は自明に真になる ― 対照の変異は実行中だけ既定を P22 に戻す形のまま効く)。
+PROFILE_AT_MEASURE = "P26"
 KEY_NAMES = PB.KEY_NAMES
 ENGINE_FILES = ("adapters/xbrl/vocabulary.py", "adapters/xbrl/recipes.py", "adapters/xbrl/extract.py", "adapters/xbrl/registry_setup.py",
                 "adapters/xbrl/report_customer.py", "adapters/xbrl/comparators.py", "adapters/xbrl/report.py", "adapters/xbrl/verify_document.py", "adapters/xbrl/run.py")
@@ -154,7 +160,7 @@ def doc_job(args):
     doc, fresh = args
     with io.open(zip_path(doc, fresh), "rb") as fh:
         zb = fh.read()
-    out_def = VD.verify_document(zb, None, None)
+    out_def = VD.verify_document(zb, PROFILE_AT_MEASURE, None)
     out_26 = VD.verify_document(zb, NEW, None)
     old_default = V.DEFAULT_PROFILE
     V.DEFAULT_PROFILE = OLD
@@ -218,7 +224,7 @@ def ritual_default(label_shas):
         zb = fh.read()
     if sha_bytes(zb) != RIT.ZIP_SHA256:
         raise SystemExit(u"**儀式の入力の sha256 が封の字と違う。止める**")
-    built = RIT.build(zb, V.DEFAULT_PROFILE, label_shas)       # 儀式 script の main と同じ呼び方(profile = 既定)
+    built = RIT.build(zb, PROFILE_AT_MEASURE, label_shas)       # 儀式 script の main と同じ呼び方(profile = 測った当時の既定 P26 を明示)
     rec = jload(RITUAL_REL)
     vol = lambda r: dict((k, v) for k, v in r.items() if k not in (u"所要秒", u"実行環境"))
     differ = [k for k in sorted(set(vol(rec)) | set(vol(built))) if rec.get(k) != built.get(k)]
@@ -237,7 +243,7 @@ def report_doc(doc):
     with io.open(zp, "rb") as fh:
         zb = fh.read()
     labels, _meta = RF.compose(G["std_labels"], G["std_meta"], zp)
-    out = VD.verify_document(zb, None, None)
+    out = VD.verify_document(zb, PROFILE_AT_MEASURE, None)
     dei = RC.dei_from_zip(zp, (out.get("input") or {}).get("instance_source"))
     md = RC.render_markdown(out, labels, True, dei)
     heads = RF.heading_counts(md)
@@ -253,7 +259,7 @@ def hole_b_doc(doc):
     sites, _diag, _b, _o, sentences, _base = PP.find_sites(zb, text)
     for s in sites:
         s[u"書類"] = doc
-    rows_def = PB.inject_with_profile(doc, zb, text, sites, sentences, None)           # 既定
+    rows_def = PB.inject_with_profile(doc, zb, text, sites, sentences, PROFILE_AT_MEASURE)           # 既定(測った当時の P26 を明示)
     rows_22 = PB.inject_with_profile(doc, zb, text, sites, sentences, OLD)             # 対照: P22 明示
     by22 = dict((r[u"id"], r) for r in rows_22)
     out = []
@@ -279,7 +285,7 @@ def s2_default(work):
             with io.open(ED.cache_path(doc), "rb") as fh:
                 zb = fh.read()
             chosen = dict((c["id"], c) for c in rb["chosen"])
-            core_def = PB.core_say_for(zb, rb["tampered"], None, rb["rows"])
+            core_def = PB.core_say_for(zb, rb["tampered"], PROFILE_AT_MEASURE, rb["rows"])
             for m in sorted(rb["rows"], key=lambda r: r["id"]):
                 rid = m["id"]
                 inj_id = m.get("**注入**")
@@ -530,7 +536,7 @@ def finish(rec, secs, t_all, label_shas, sha67, sha30, n_existing0, n_fresh0, id
     in30 = dict((x["docID"], x["sha256"]) for x in fetched[u"取得した書類"])
     out = {u"step": u"**既定の profile を P22 から P26 に切り替える(段 2)の測定。profile を省いた製品の経路が P26 を明示した経路と 1 byte も違わないか。0 USD・通信なし・engine は測る側から 1 行も変えない**",
            u"封": SEAL,
-           u"環境": {u"HEAD": RIT.git_head(), u"python": platform.python_version(), u"DEFAULT_PROFILE": V.DEFAULT_PROFILE,
+           u"環境": {u"HEAD": RIT.git_head(), u"python": platform.python_version(), u"DEFAULT_PROFILE": PROFILE_AT_MEASURE,
                    u"比べた profile": [u"省略(None = vocabulary.DEFAULT_PROFILE)", u"P26(明示)", u"P22(既定を実行中だけ P22 に戻した対照)"],
                    u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)": bundle, u"engine の file 数": n_files,
                    u"vocabulary.py の sha16": sha_file(os.path.join(ROOT, "adapters/xbrl/vocabulary.py"))[:16],
@@ -587,13 +593,13 @@ def main(argv=None):
         return 0
     if a.partial:
         PARTIAL_PATH = a.partial
-    if V.DEFAULT_PROFILE != NEW:
-        raise SystemExit(u"**既定 profile が %s でない: %r(この測定は既定が P26 になった後)。止める**" % (NEW, V.DEFAULT_PROFILE))
+    if PROFILE_AT_MEASURE != NEW:
+        raise SystemExit(u"**測定の profile が %s でない: %r(この測定は測った当時の既定 P26 を明示して行う)。止める**" % (NEW, PROFILE_AT_MEASURE))
     out = run(a.stage, only, a.jobs, a.reds)
     with io.open(out_path, "w", encoding="utf-8") as fh:
         fh.write(json.dumps(out, ensure_ascii=False, indent=1, sort_keys=False) + u"\n")
     s2 = out.get(u"S2", {})
-    print(u"=== 既定 %s・書類 %d + %d ===" % (V.DEFAULT_PROFILE, len(out[u"入力"][u"手元の 67 書類の sha256"]), len(out[u"入力"][u"新しい標本 30 書類の sha256"])))
+    print(u"=== 測った当時の既定 %s(明示)・書類 %d + %d ===" % (PROFILE_AT_MEASURE, len(out[u"入力"][u"手元の 67 書類の sha256"]), len(out[u"入力"][u"新しい標本 30 書類の sha256"])))
     print(u"S-1  既定と P26 明示で違った書類: 67 で %s・30 で %s / 対照(既定を P22 に戻す)で違った書類 %s・%s" % (
         out[u"S1"][u"手元の 67"][u"既定と P26 明示で違った書類"], out[u"S1"][u"新しい標本 30"][u"既定と P26 明示で違った書類"],
         out[u"S1"][u"手元の 67"][u"対照(既定を実行中だけ P22 に戻す)で違った書類"], out[u"S1"][u"新しい標本 30"][u"対照(既定を実行中だけ P22 に戻す)で違った書類"]))

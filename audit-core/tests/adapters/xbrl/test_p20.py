@@ -408,9 +408,10 @@ class ProfileShapeTest(unittest.TestCase):
         2026-10-20(期を縛る P22 の段 2)に P21 -> P22(人間の決定「任せる」。封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md の E-8)。
         P22 = P21 + period_bind なので、落とし込みの旗は P22 でも真のまま。
         2026-10-23(P26 の段 2)に P22 -> P26(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)。P26 は P22 から作るので、落とし込みの旗は P26 でも真のまま。
+        2026-10-28(既定を P26 -> P27 に切り替える 段 2)に P26 -> P27(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)。P27 は P26 から作るので、落とし込みの旗は P27 でも真のまま。
         """
 
-        self.assertEqual("P26", V.DEFAULT_PROFILE)
+        self.assertEqual("P27", V.DEFAULT_PROFILE)
         self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].nonconsolidated_fallback)
 
 

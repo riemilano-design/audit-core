@@ -45,7 +45,9 @@ SCRIPT = os.path.join(ROOT, "measure", "xbrl_default_p26_2026-10-23.py")
 P26_REC = os.path.join(ROOT, "fixtures", "xbrl", "p26_2026-10-21.json")
 FRESH_REC = os.path.join(ROOT, "fixtures", "xbrl", "fresh", "fresh_2026-10-21.json")
 FETCHED = os.path.join(ROOT, "fixtures", "xbrl", "fresh", "fetched_2026-10-21.json")
-RITUAL_REC = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20.json")
+# 2026-10-28(既定を P26 -> P27 に切り替える 段 2。封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md): ritual_2026-10-20.json は P27(既定)で採り直したので、P26 のときの記録は
+# 同じバイト列(HEAD aeae608 の ritual_2026-10-20.json と byte 一致)の写し ritual_2026-10-20_p26.json を読む。
+RITUAL_REC = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20_p26.json")
 RITUAL_P22 = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20_p22.json")
 SUITE_REC = os.path.join(ROOT, "fixtures", "suite_coverage_2026-10-16.json")
 FACTS_DOC = os.path.join(ROOT, "docs", "FACTS_FOR_BUYERS_2026-10-20.md")
@@ -579,16 +581,23 @@ def check_doc(rec, doc, bounds):
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file に挿入だけを足した。EXPECT["vocab_sha16"] は段 2 が測った時点の値で消さない。
 # 受け入れるのは、その封が履歴に在り、値が下の値(P27 の段 2 の後)のときだけ。
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"
-P27_LATER = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
+SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
+# 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+P27_LATER = {"adapters/xbrl/vocabulary.py": ("514ebb8104451c07", SEAL_DEFAULT_P27),
              "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
              "adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
              "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
-             "adapters/xbrl/report_customer.py": ("6679138d350ec382", SEAL_P27)}
+             "adapters/xbrl/report_customer.py": ("6679138d350ec382", SEAL_P27),
+             # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 SEAL_DEFAULT_P27 §1-1 が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行)。受け入れるのは、その封が履歴に在り、値が下の値のときだけ。
+             "adapters/xbrl/verify_document.py": ("c3791080ab5aef2f", SEAL_DEFAULT_P27)}
 #: 2026-10-27(P27 の段 2): 重い走らせ直し(S-7 の「封の commit からの numstat」・環境の engine の欄)が記録と違ってよい欄の全部。封 SEAL_P27 §2-3 の遷移(engine の 5 file に挿入だけ。削除は 0 のまま)。
 #: 直前の値(記録の値。4・0・0・0・0・4f417562…・e2873306…)は測った時点の値として残す。受け入れるのは、封が履歴に在り、値が下の宣言の値のときだけ。S-1〜S-6 の測った欄はここに無い(1 字でも違えば赤)。
-P27_HEAVY_S7 = {"adapters/xbrl/vocabulary.py": 23, "adapters/xbrl/recipes.py": 125, "adapters/xbrl/extract.py": 19,
-                "adapters/xbrl/registry_setup.py": 2, "adapters/xbrl/report_customer.py": 2}
-P27_HEAVY_BUNDLE = "9dd27fab331b2e4962c6d9c6a2710a7f91816395f3c820abbc92016437d4cbb0"
+#: 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 SEAL_DEFAULT_P27 が宣言した遷移の後の値({path: (挿入, 削除)}。封の commit 6a78b42 からの numstat)。vocabulary.py は 23 行・-1 から 27 行・-1
+#: (決定の注記 +4 行と DEFAULT_PROFILE の 1 行の書き換え)、verify_document.py は 0 行から 1 行・-1 行(docstring の 1 行)。直前の値(23・125・19・2・2)は測った時点の値として残す。
+P27_HEAVY_S7 = {"adapters/xbrl/vocabulary.py": (27, 1), "adapters/xbrl/recipes.py": (125, 0), "adapters/xbrl/extract.py": (19, 0),
+                "adapters/xbrl/registry_setup.py": (2, 0), "adapters/xbrl/report_customer.py": (2, 0), "adapters/xbrl/verify_document.py": (1, 1)}
+#: 9dd27fab…(P27 の段 2 の後の値。残す)から、既定を P27 に切り替える 段 2 の後の値(ritual の engine_bundle_sha256)。
+P27_HEAVY_BUNDLE = "49bcd3ac7c3bfdcdadf275a8829f14b21e45a4908c3e857872231412e2d3e41c"
 
 
 def p27_declared(rel):
@@ -605,7 +614,7 @@ def engine_ok():
     vocab_moved = sha16("adapters/xbrl/vocabulary.py") != EXPECT["vocab_sha16"]
     if vocab_moved:
         p27_declared("adapters/xbrl/vocabulary.py")
-    assert V.DEFAULT_PROFILE == "P26", V.DEFAULT_PROFILE
+    assert V.DEFAULT_PROFILE == "P27", V.DEFAULT_PROFILE      # 2026-10-28: 段 2 の後は P26 だった。既定を P26 -> P27 に切り替える 段 2(封 SEAL_DEFAULT_P27)で P27
     for rel in sorted(f for f in os.listdir(os.path.join(ROOT, "adapters", "xbrl")) if f.endswith(".py")):
         r = git("diff", SEAL_COMMIT, "--numstat", "--", "adapters/xbrl/" + rel)
         if rel != "vocabulary.py":
@@ -776,9 +785,12 @@ class RerunTest(unittest.TestCase):
 
     def test_light_the_script_stops_when_the_default_is_not_p26(self):
         u"""既定が P26 でないと測定は止まる(『既定を測る』script が既定でない経路を測らない)。コピーした script を P22 の既定の vocabulary で走らせる代わりに、字の守りを見る。"""
+        # 2026-10-28(既定を P26 -> P27 に切り替える 段 2。封 SEAL_DEFAULT_P27 §4 (g)): script は測った当時の既定 P26 を明示して固定した(PROFILE_AT_MEASURE)。止める守りは明示した profile が P26 でないとき。
         src = jtext(SCRIPT)
-        self.assertIn(u'if V.DEFAULT_PROFILE != NEW:', src)
+        self.assertIn(u'if PROFILE_AT_MEASURE != NEW:', src)
         self.assertEqual(src.count(u'OLD, NEW = "P22", "P26"'), 1)
+        self.assertEqual(src.count(u'PROFILE_AT_MEASURE = "P26"'), 1)
+        self.assertNotIn(u'if V.DEFAULT_PROFILE != NEW:', src)
 
     @unittest.skipUnless(RUN_HEAVY, u"AUDIT_CORE_DEFAULT_P26=1 のときだけ走る(97 書類 + 注入 + 報告形の走らせ直し。約 十五分)")
     def test_heavy_everything_matches_the_record(self):
@@ -796,14 +808,14 @@ class RerunTest(unittest.TestCase):
             part[u"入力"].pop(u"試験の赤の入力 file の sha256", None)      # 試験の赤の表は人が書いた入力で、走らせ直しでは測らない
         # 2026-10-27(P27 の段 2): engine の状態を写す欄だけ、封が履歴に在り値が宣言の値のときに記録の値へ戻す(測った欄 S-1〜S-6 は戻さない)
         moved = False
-        for rel, ins in sorted(P27_HEAVY_S7.items()):
+        for rel, (ins, dele) in sorted(P27_HEAVY_S7.items()):
             if got[u"S7"][rel] != want[u"S7"][rel]:
                 moved = True
-                self.assertEqual(got[u"S7"][rel], {u"挿入": ins, u"削除": want[u"S7"][rel][u"削除"]}, rel)
+                self.assertEqual(got[u"S7"][rel], {u"挿入": ins, u"削除": dele}, rel)
                 got[u"S7"][rel] = want[u"S7"][rel]
         if got[u"S7"][u"vocabulary.py 以外で封の commit から動いた file"] != want[u"S7"][u"vocabulary.py 以外で封の commit から動いた file"]:
             moved = True
-            self.assertEqual(got[u"S7"][u"vocabulary.py 以外で封の commit から動いた file"], [u"extract.py", u"recipes.py", u"registry_setup.py", u"report_customer.py"])
+            self.assertEqual(got[u"S7"][u"vocabulary.py 以外で封の commit から動いた file"], [u"extract.py", u"recipes.py", u"registry_setup.py", u"report_customer.py", u"verify_document.py"])
             got[u"S7"][u"vocabulary.py 以外で封の commit から動いた file"] = want[u"S7"][u"vocabulary.py 以外で封の commit から動いた file"]
         bk = u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)"
         if got[u"環境"][bk] != want[u"環境"][bk]:
@@ -816,6 +828,7 @@ class RerunTest(unittest.TestCase):
             got[u"環境"][u"vocabulary.py の sha16"] = want[u"環境"][u"vocabulary.py の sha16"]
         if moved:
             self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", SEAL_P27).stdout.split(), u"engine の状態が動いているのに、遷移を宣言した封が履歴に無い")
+            self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", SEAL_DEFAULT_P27).stdout.split(), u"engine の状態が動いているのに、遷移を宣言した封が履歴に無い")
         self.assertEqual(json.dumps(got, sort_keys=True), json.dumps(want, sort_keys=True))
 
 

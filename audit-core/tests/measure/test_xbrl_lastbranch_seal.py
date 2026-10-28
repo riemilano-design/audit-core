@@ -43,6 +43,7 @@ SEAL_REL = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 SEAL = os.path.join(ROOT, SEAL_REL)
 VOCAB_JSON = os.path.join(ROOT, "fixtures", "xbrl", "vocab_2026-10-21.json")
 
@@ -68,7 +69,8 @@ ENGINE_AT_SEAL = {"adapters/xbrl/vocabulary.py": "83498c04a7b70396",
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
+# 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("514ebb8104451c07", SEAL_DEFAULT_P27),
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に G1〜G5 の塊(+251 行・-1 行。既存の行の書き換えは数の読み取りの for 文 1 行だけ) を足した。
                 # bff243f13429b553(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 181b370420ab751b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
                 "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
@@ -511,7 +513,7 @@ class SealTest(unittest.TestCase):
         """P25 は P24 に積むので、P24 の旗は封の commit 時点のまま(P24 = P23 + 旗 2 つ)。段 1 の後も残す。"""
         from adapters.xbrl import vocabulary as V
         self.assertEqual(V.PROFILES["P24"], dataclasses.replace(V.P23, name="P24", vocab_2026_10_21=True, frame_rebind=True))
-        self.assertEqual(V.DEFAULT_PROFILE, "P26")      # 段 1 の commit 時点は P22。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26
+        self.assertEqual(V.DEFAULT_PROFILE, "P27")      # 段 1 の commit 時点は P22。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26、2026-10-28 の P27 の段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で P27
         for flag in ("vocab_2026_10_21", "frame_rebind"):
             self.assertEqual(sorted(n for n, p in V.PROFILES.items() if getattr(p, flag)), ["P24", "P25", "P26", "P27", "P27E"], flag)   # 2026-10-22: P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)も引き継ぐ。(2026-10-27: P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ。封 XBRL_P27_SEAL_2026-10-27)も引き継ぐ
 
@@ -612,7 +614,7 @@ class EngineAtSealTest(unittest.TestCase):
         self.assertIs(fields[flag].default, False)
         self.assertEqual(sorted(n for n, p in V.PROFILES.items() if getattr(p, flag)), ["P25", "P26", "P27", "P27E"])   # 2026-10-22: P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)も引き継ぐ。(2026-10-27: P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ。封 XBRL_P27_SEAL_2026-10-27)も引き継ぐ
         self.assertEqual(V.PROFILES["P25"], dataclasses.replace(V.P24, name="P25", last_branch_names_only_if_evidence=True))
-        self.assertEqual(V.DEFAULT_PROFILE, "P26")      # 段 1 の commit 時点は P22。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26
+        self.assertEqual(V.DEFAULT_PROFILE, "P27")      # 段 1 の commit 時点は P22。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26、2026-10-28 の P27 の段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で P27
         from adapters.xbrl import registry_setup as RS
         self.assertIn("no_same_value", RS._POINTER_NOT_FOUND_REASONS)
         self.assertNotIn("no_same_value", RS._UNVERIFIABLE_REASONS)

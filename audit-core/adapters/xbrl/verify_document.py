@@ -19,7 +19,7 @@ Claim 個別の state は変えない。
     python3 -m adapters.xbrl.verify_document --zip <書類.zip> --text <文章.txt> --out out.json
     python3 -m adapters.xbrl.verify_document --doc S100Z4N9 --out out.json      # キャッシュから
 
-``--profile`` を省くと ``vocabulary.DEFAULT_PROFILE``(= P20。2026-10-14 の人間の決定)。
+``--profile`` を省くと ``vocabulary.DEFAULT_PROFILE``(いまは P27。P20 → P21 → P22 → P26 → P27 の履歴と根拠は vocabulary.py の注記。この行は 2026-10-28 の人間の委任「君に任せるよ」で直した)。
 ``--text`` を渡すと、その書類の経営分析の節をその文章で差し替えてから検証する
 (差し替えは ``prose.build_modified_zip``。開発書類の測定と同じ方法)。
 

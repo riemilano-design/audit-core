@@ -30,12 +30,13 @@ class ProfileShapeTest(unittest.TestCase):
             self.assertFalse(p.segment_carry_to_result_sentence or p.external_revenue_for_sales
                              or p.subject_skip_before_cause_marker or p.loss_variants or p.prefer_net_when_labelled, name)
 
-    def test_default_profile_is_p26(self):
+    def test_default_profile_is_p27(self):
         """2026-10-14 の人間の決定で P16 -> P20、2026-10-20(段 2)に P20 -> P21(封 XBRL_NAMING_FIX_SEAL_2026-10-20)、
         同じ日の期を縛る P22 の段 2 で P21 -> P22(封 XBRL_PERIOD_BIND_SEAL_2026-10-20。人間の決定「任せる」)、
-        2026-10-23 の P26 の段 2 で P22 -> P26(封 XBRL_DEFAULT_P26_SEAL_2026-10-23。人間の決定 2026-10-21「あとは全て任せる」)。"""
+        2026-10-23 の P26 の段 2 で P22 -> P26(封 XBRL_DEFAULT_P26_SEAL_2026-10-23。人間の決定 2026-10-21「あとは全て任せる」)、
+        2026-10-28 の P27 の段 2 で P26 -> P27(封 XBRL_DEFAULT_P27_SEAL_2026-10-28。人間の言葉 2026-10-27「価値を上げるためにも君に任せる 進めよう」・2026-10-28「君に任せるよ」)。"""
 
-        self.assertEqual(V.DEFAULT_PROFILE, "P26")
+        self.assertEqual(V.DEFAULT_PROFILE, "P27")
 
 
 class SegmentCarryTest(unittest.TestCase):

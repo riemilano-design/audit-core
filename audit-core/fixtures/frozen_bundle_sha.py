@@ -134,6 +134,13 @@ FROZEN_BUNDLE_GENERATIONS = (
      "comparators.py・report.py・verify_document.py・run.py・core/py は 0 行。DEFAULT_PROFILE は P26 のまま。"
      "人間の承認 2026-10-27「寝るから今の作業終えたら p27 進めて 君に任せる」(範囲は封の §2-1・§8)、封 docs/XBRL_P27_SEAL_2026-10-27.md(commit 43fe0e3)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("030455282c89661b4c0152498d76bc30314362b5896b15ab67a8886a6887b0f6",
+     "2026-10-28 feature/audit-core-final-eval-8(既定を P26 -> P27 に切り替える 段 2): vocabulary.py の DEFAULT_PROFILE を P26 -> P27 にし、"
+     "決定の注記に日付と根拠を足した(+5 行・-1 行)。verify_document.py は docstring の 1 行を直した(+1 行・-1 行。実行の字は変えない)。"
+     "recipes.py・extract.py・registry_setup.py・report_customer.py・comparators.py・report.py・run.py・core/py ほか他の file は 0 行。"
+     "判定は封 docs/XBRL_P27_SEAL_2026-10-27.md §4 の条件を記録の数から機械で求めた結果 docs/XBRL_P27_RESULT_2026-10-27.md(commit aeae608)で「P27 を既定の候補として記録する」。"
+     "人間の言葉 2026-10-27「価値を上げるためにも君に任せる 進めよう」・2026-10-28「君に任せるよ」、封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md(commit 87f83fd)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

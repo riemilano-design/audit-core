@@ -82,7 +82,11 @@ FROZEN_LATER = {
     # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
     # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
     # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
-    "adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", "docs/XBRL_P27_SEAL_2026-10-27.md"),
+    # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 が宣言した遷移(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)。
+    # 85896a67913ce1e7(P27 の段 2)は残す(測った時点の値)、既定を P27 にした段 2 で下の値。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+    "adapters/xbrl/vocabulary.py": ("514ebb8104451c07", "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"),
+    # 67e7639de3f5f2ad(上の FROZEN。測った時点の値)は残す。docstring の「= P20」の 1 行を直した(実行の字は変えない)。同じ封が履歴に在り、値が段 2 の後の値のときだけ受け入れる。
+    "adapters/xbrl/verify_document.py": ("c3791080ab5aef2f", "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"),
     # 2026-10-22(P26 の段 1): 同じ封で extract.py に数の読み取りの新しい関数 iter_numbers_2026_10_21(+42 行・-0 行。iter_numbers の字は変えない)を足した。
     # 封 G-9 の 68a78f99f4d4c216 は消さない。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
     "adapters/xbrl/extract.py": ("3cf55966f12919f0", "docs/XBRL_P27_SEAL_2026-10-27.md"),

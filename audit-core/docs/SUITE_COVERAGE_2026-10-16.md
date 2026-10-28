@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **232 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **234 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 166 |
+| `tests/measure` | 168 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -167,6 +167,9 @@ P27 段 2 の評価用の測定 script `measure/xbrl_p27_eval_2026-10-27.py`(封
 
 **2026-10-28 に +2**(`tests/measure/test_xbrl_p27_result.py`・`tests/measure/test_xbrl_p27_order.py`。
 P27 段 2 の評価用の結果の門(結果文書 `docs/XBRL_P27_RESULT_2026-10-27.md` の表を記録から作り直す・V・N・K の当否と採用の判定を記録の行から求める・記録の中身)と順序の門(W・T・S2・E・R の祖先関係。封 `docs/XBRL_P27_SEAL_2026-10-27.md` §6・§9-4 後半)。順序の門は R の記録が commit される前は赤で、R の中で初めて緑になる)。230 → 232(`tests/measure` 164 → 166)。
+
+**2026-10-28 に +2**(`tests/measure/test_xbrl_default_p27_seal.py`・`tests/measure/test_xbrl_default_p27_result.py`。
+既定を P26 から P27 に切り替える段 2 の封の門(封 `docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md` の人間の言葉・§0 の数・§1-2 の区分表・予測の行・§4 の一覧・順序)と結果の門(結果文書 `docs/XBRL_DEFAULT_P27_RESULT_2026-10-28.md` の表を記録から作り直す・予測 S-1〜S-12 の当否を封の字から求める・記録の中身)。封の門で 232 → 233、結果の門で 233 → 234(`tests/measure` 166 → 168)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

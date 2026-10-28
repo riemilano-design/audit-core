@@ -112,10 +112,11 @@ class FlagShapeTest(unittest.TestCase):
     def test_with_all_flags_false_p26_is_p25(self):
         self.assertEqual(dataclasses.replace(V.P25, name="P26_OFF"), P26_OFF)
 
-    def test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2(self):
+    def test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2_and_p27_since_default_p27_step_2(self):
         """段 1 では既定にしなかった。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で既定は P26 になり、P26 の旗 5 つは既定で全部入っている。"""
-        self.assertEqual("P26", V.DEFAULT_PROFILE)
-        self.assertIs(V.PROFILES[V.DEFAULT_PROFILE], V.P26)
+        # 2026-10-28(既定を P26 -> P27 に切り替える 段 2。封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md): 既定は P27(= P26 + 旗 4 つ)になった。P26 の旗 5 つは P27 でも全部入っている。
+        self.assertEqual("P27", V.DEFAULT_PROFILE)
+        self.assertIs(V.PROFILES[V.DEFAULT_PROFILE], V.P27)
         for f in FLAGS:
             self.assertNotEqual(OFF[f], getattr(V.PROFILES[V.DEFAULT_PROFILE], f), f)
 

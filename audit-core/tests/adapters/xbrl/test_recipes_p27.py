@@ -2,7 +2,7 @@
 """P27・P27E(外部の数の文のための engine の直し)の試験。封 docs/XBRL_P27_SEAL_2026-10-27.md §1・§2-1。
 
 P27 = P26 + A・C1・C2・C3(出どころに依らない直し)。P27E = P27 + B(外部の数の文のための名指し。既定の候補にしない)。
-**既定は P26 のまま**(``DEFAULT_PROFILE``)。どの旗も偽なら P1〜P26 の振る舞いは 1 行も変わらない。
+**既定は段 1 の commit までは P26 のまま**(``DEFAULT_PROFILE``)。2026-10-28 の既定を P27 に切り替える段 2(封 ``docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md``)で P27 になった(P27E は既定にしない)。どの旗も偽なら P1〜P26 の振る舞いは 1 行も変わらない。
 
   A  ``written_precision_2026_10_27``   : 書かれた小数部の桁数で精度を細かくする(「12.3億円」は 1 億円でなく 0.1 億円で照合)。
   B  ``last_branch_relative_2026_10_27``: 最後の枝で、P25 の証拠が無く相対の差が ρ = 0.15 以内なら名指す(P27E だけ)。
@@ -112,12 +112,14 @@ class FlagShapeTest(unittest.TestCase):
         self.assertEqual(dataclasses.replace(V.P26, name="P27_OFF"), P27_OFF)
         self.assertEqual(dataclasses.replace(V.P26, name="P27E_OFF"), P27E_OFF)
 
-    def test_no_per_flag_profile_is_registered_and_the_default_is_still_p26(self):
+    def test_no_per_flag_profile_is_registered_and_the_default_is_p27_since_default_p27_step_2(self):
         self.assertEqual(["P27", "P27E"], sorted(n for n in V.PROFILES if "P27" in n))
-        self.assertEqual("P26", V.DEFAULT_PROFILE)
-        self.assertIs(V.PROFILES[V.DEFAULT_PROFILE], V.P26)
+        # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 既定は P27。P27 の旗 4 つは真・B の旗(last_branch_relative_2026_10_27)は偽(P27E は既定にしない)
+        self.assertEqual("P27", V.DEFAULT_PROFILE)
+        self.assertIs(V.PROFILES[V.DEFAULT_PROFILE], V.P27)
+        self.assertIsNot(V.PROFILES[V.DEFAULT_PROFILE], V.P27E)
         for f in FLAGS:
-            self.assertFalse(getattr(V.PROFILES[V.DEFAULT_PROFILE], f), f)
+            self.assertEqual(f != "last_branch_relative_2026_10_27", getattr(V.PROFILES[V.DEFAULT_PROFILE], f), f)
 
     def test_the_constants_are_pinned_in_letters(self):
         self.assertEqual(0.15, R.LAST_BRANCH_REL_RHO)

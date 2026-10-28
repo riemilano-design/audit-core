@@ -180,3 +180,22 @@ AUDIT_CORE_RITUAL=1 python3 -m pytest -q tests/measure/test_xbrl_ritual_result.p
 - README の節は P26 の記録と 1 対 1(門が節の全文を縛る)。README には P22 のときの数の 1 行を足し、P21 のときの数の 1 行は残した。
 - 走らせ直しの門(`AUDIT_CORE_RITUAL=1`)は P26 の記録と出力が一致することを見る。engine の束ねた sha256 は P26 の記録を採ったときの値に縛る。
 - **HUMAN の残り 1 点(変わらず)**: `adapters/xbrl/verify_document.py` の docstring『`--profile` を省くと P20』は、既定 P26 と食い違う(P20・P21・P22 に続き 4 つめ)。engine の file なので触っていない(承認待ち)。
+
+
+## 8. 追記(2026-10-28、P27 の段 2 ― 既定が P27 になった)
+
+本文(§0〜§5)の数は P21 のときの記録(`fixtures/xbrl/ritual_2026-10-20_p21.json`)に、§6 の数は P22 のときの記録(`fixtures/xbrl/ritual_2026-10-20_p22.json`)に、§7 の数は P26 のときの記録(`fixtures/xbrl/ritual_2026-10-20_p26.json`)に縛ったまま、1 字も直さない。この追記は日付つきの足しだけ。
+
+- 買い手が clone して走らせるのは今の既定である。2026-10-28 の P27 の段 2(封 `docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md`。人間の言葉 2026-10-27「価値を上げるためにも君に任せる 進めよう」・2026-10-28「君に任せるよ」。既定にするかどうかの判定は commit `aeae608` の評価用の結果で「P27 を既定の候補として記録する」)で既定が P26 から P27 になったので、`fixtures/xbrl/ritual_2026-10-20.json` と README の数は P27(既定)で走らせ直して置き換えた。P26 のときの記録は同じバイト列の写し `fixtures/xbrl/ritual_2026-10-20_p26.json` と git の履歴(`aeae608`)に残る。
+- **通した 2 / 243 = 0.8%・止めた 210 / 243 = 86.4%**(P27 = 既定。P26 のときは 通した 2 / 243 = 0.8%・止めた 210 / 243 = 86.4%)。
+- 止めた(VALUE_MISMATCH)のほかに、参照先が結べず止めた(POINTER_NOT_FOUND)が 31(P26 のときは 31)。
+- 通した 2 の中身: 丸めの帯の中 1(率 1・金額ほか 0)・退化値 1・帯の外 0(P26 のときと同じ中身か: 同じ)。
+- 参照先が前期へ移って通した行は 0(P26 のときは 0 行)。
+- 注入の対象は 243 → 243(P26 → P27)。注入の行のうち結果の字が違った行は 0。
+- 素の書類(claim 412)の state(P26 → P27): GROUNDED 340 → 340・VALUE_MISMATCH 14 → 14・POINTER_NOT_FOUND 27 → 25・UNVERIFIABLE 31 → 33。
+- 所要 22.8 秒(P27 の記録を採った機械。P26 のときは 19.0 秒)。
+- 記録: P26 のとき `fixtures/xbrl/ritual_2026-10-20_p26.json`(sha256 `42ff63e27e43200fbbc2172482a9c8fefc687e78da65f152138639134f87e3b9`)、P27(既定)`fixtures/xbrl/ritual_2026-10-20.json`。
+- 予測 R-1〜R-8 は封の字のまま、判定は P21 のときの記録に対するもの(本文 §1)。P22・P26・P27 の数は封の予測の対象外で、既定が変わった結果として別に記す。外れではなく、測る対象が変わったということ。封 `docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md` の予測 S-4(儀式の数)の当たり外れは `docs/XBRL_DEFAULT_P27_RESULT_2026-10-28.md` に記す。
+- README の節は P27 の記録と 1 対 1(門が節の全文を縛る)。README には P26 のときの数の 1 行を足し、P22・P21 のときの数の 1 行は残した。
+- 走らせ直しの門(`AUDIT_CORE_RITUAL=1`)は P27 の記録と出力が一致することを見る。engine の束ねた sha256 は P27 の記録を採ったときの値に縛る。
+- **HUMAN の残り 1 点(解消)**: `adapters/xbrl/verify_document.py` の docstring『`--profile` を省くと P20』は、この段 2 で直した(人間の委任 2026-10-28「君に任せるよ」、封 §1-1。実行の字は変えていない)。

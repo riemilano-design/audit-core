@@ -70,8 +70,10 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/extract.py": "9982599fc31cbab3", "adapters/x
 #: 83025e9c0525d08b(P26 の段 1。ENGINE_AT_MEASURE に残す = 測った時点の値)から段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
-ENGINE_TRANSITIONS = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
+# 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_TRANSITIONS = {"adapters/xbrl/vocabulary.py": ("514ebb8104451c07", SEAL_DEFAULT_P27),
                       "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
                       "adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
                       "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
@@ -642,11 +644,16 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(git("diff", "--numstat", SEAL_COMMIT, "--", "core").stdout, "")
         self.assertEqual(git("status", "--porcelain", "--", "core").stdout, "")
         for rel in FILES_NOT_TOUCHED:
+            # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行)だけは動いてよい
+            # (封が履歴に在り、sha16 が宣言の値のときだけ。他の file は従来どおり 0 行)。
+            if rel == "adapters/xbrl/verify_document.py" and sha16(rel) == "c3791080ab5aef2f" and git("log", "--diff-filter=A", "--format=%H", "--", "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md").stdout.split():
+                self.assertEqual(git("diff", "--numstat", SEAL_COMMIT, "--", rel).stdout.split()[:2], ["1", "1"], rel)
+                continue
             self.assertEqual(git("diff", "--numstat", SEAL_COMMIT, "--", rel).stdout, "", rel)
         from adapters.xbrl import vocabulary as V
         # この結果の commit では既定を変えない(判定は段 2 の封で別に諮る)。段 2 の遷移(vocabulary.py が宣言された値)の後は P26(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)
         moved = sha16("adapters/xbrl/vocabulary.py") != ENGINE_AT_MEASURE["adapters/xbrl/vocabulary.py"]
-        self.assertEqual(V.DEFAULT_PROFILE, "P26" if moved else "P22")
+        self.assertEqual(V.DEFAULT_PROFILE, "P27" if moved else "P22")      # 2026-10-28: P26 の段 2 の後は P26 だった。P27 の段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で P27
         self.assertEqual(git("diff", "--numstat", SEAL_COMMIT, "--", SEAL_REL).stdout, "")
         self.assertEqual(git("status", "--porcelain", "--", SEAL_REL).stdout, "")
 
@@ -725,7 +732,8 @@ class RerunTest(unittest.TestCase):
             self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(), seal_rel)
             self.assertEqual((got[u"環境"][u"engine の sha256(先頭 16 桁)"][rel], want[u"環境"][u"engine の sha256(先頭 16 桁)"][rel]), (later, ENGINE_AT_MEASURE[rel]), rel)
             want[u"環境"][u"engine の sha256(先頭 16 桁)"][rel] = got[u"環境"][u"engine の sha256(先頭 16 桁)"][rel]
-        self.assertEqual((got[u"環境"][u"DEFAULT_PROFILE"], want[u"環境"][u"DEFAULT_PROFILE"]), ("P26", "P22"))
+        # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 走らせ直しの既定は P27(記録が測った時点は P22 のまま)。ENGINE_TRANSITIONS の値も段 2 の後の値(vocabulary.py の 514ebb8104451c07 ほか)
+        self.assertEqual((got[u"環境"][u"DEFAULT_PROFILE"], want[u"環境"][u"DEFAULT_PROFILE"]), ("P27", "P22"))
         want[u"環境"][u"DEFAULT_PROFILE"] = got[u"環境"][u"DEFAULT_PROFILE"]
         self.assertEqual(json.dumps(got, sort_keys=True), json.dumps(want, sort_keys=True))
 

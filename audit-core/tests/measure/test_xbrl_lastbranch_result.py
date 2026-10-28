@@ -72,10 +72,12 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/vocabulary.py": "27e71e9861fc5aad", "adapter
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
+# 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("514ebb8104451c07", SEAL_DEFAULT_P27),
                 "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
                 "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27)}
 
@@ -717,9 +719,9 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(out.returncode, 0)
         self.assertEqual(out.stdout.strip(), u"", u"core/ が封の commit から動いている")
         src = jtext(VOCAB)
-        self.assertEqual(re.findall(r'(?m)^DEFAULT_PROFILE = "(P\d+)"$', src), ["P26"], u"段 1 の commit 時点は既定が P22 だった。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26")
+        self.assertEqual(re.findall(r'(?m)^DEFAULT_PROFILE = "(P\d+)"$', src), ["P27"], u"段 1 の commit 時点は既定が P22 だった。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26、2026-10-28 の P27 の段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で P27")
         from adapters.xbrl import vocabulary as V
-        self.assertEqual(V.DEFAULT_PROFILE, "P26")
+        self.assertEqual(V.DEFAULT_PROFILE, "P27")      # 2026-10-28: P26 の段 2 の後は P26 だった。P27 の段 2 で P27
         self.assertTrue(V.PROFILES["P25"].last_branch_names_only_if_evidence)
         self.assertFalse(V.PROFILES["P24"].last_branch_names_only_if_evidence)
         self.assertFalse(V.PROFILES["P22"].last_branch_names_only_if_evidence or V.PROFILES["P23"].last_branch_names_only_if_evidence)

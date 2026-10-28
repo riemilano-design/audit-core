@@ -137,10 +137,10 @@ class FlagShapeTest(unittest.TestCase):
     def test_with_both_flags_false_p24_is_p23(self):
         self.assertEqual(dataclasses.replace(V.P23, name="P24_OFF"), P24_OFF)
 
-    def test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2(self):
+    def test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2_and_p27_since_default_p27_step_2(self):
         """段 1 では既定にしなかった(封 §1)。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で既定は P26 になり、
         P24 の旗 2 つは既定で真(P26 は P24 を引き継ぐ)。"""
-        self.assertEqual("P26", V.DEFAULT_PROFILE)
+        self.assertEqual("P27", V.DEFAULT_PROFILE)      # 2026-10-28: P26 の段 2 の後は P26 だった。P27 の段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で既定は P27 になった。
         self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].vocab_2026_10_21)
         self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].frame_rebind)
 

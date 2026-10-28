@@ -285,10 +285,27 @@ def check_cache_unchanged(rec):
         assert snaps[u"既存の cache"][u"件数"] == 281 and snaps[u"ZIP の folder"][u"件数"] == 40, u"cache の件数が 281・40 でない"
 
 
+#: 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1・§4 (j) が宣言した遷移。記録が測った engine の束ねた指紋(E の engine)は測った時点の値として残す。
+#: いまの指紋が下の「後の値」で、記録の値が下の「前の値」(E の engine)のときだけ受け入れる。封が履歴に在ること。
+DEFAULT_P27_SEAL_REL = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"
+DEFAULT_P27_FP_FROM = "0e51211a8aed2151409cb6bf443fb6eae2aed87e6b2b4bd6150c8286afee87de"
+DEFAULT_P27_FP_TO = "92326a0f4dcefd21fae4393a611e4206ef174b19258ddadd0213117191e7b399"
+
+
+def default_p27_declared_for(rec_sha, now_sha):
+    import subprocess
+    if rec_sha == now_sha:
+        return True
+    assert rec_sha == DEFAULT_P27_FP_FROM and now_sha == DEFAULT_P27_FP_TO, u"記録が測った engine がいまの engine と違う(宣言された遷移の値でもない)"
+    added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", DEFAULT_P27_SEAL_REL], cwd=ROOT, capture_output=True, text=True).stdout.split()
+    assert added, u"engine が動いているのに、遷移を宣言した封が履歴に無い"
+    return True
+
+
 def check_engine_and_script(rec, script_rel, engine_now):
     assert rec[u"この script の sha256"] == sha_file(script_rel), u"記録が測った script がいまの file と違う: " + script_rel
     fp = rec[u"engine の指紋"]
-    assert fp[u"adapter_xbrl_py_sha256"] == engine_now[u"adapter_xbrl_py_sha256"], u"記録が測った engine がいまの engine と違う"
+    assert default_p27_declared_for(fp[u"adapter_xbrl_py_sha256"], engine_now[u"adapter_xbrl_py_sha256"]), u"記録が測った engine がいまの engine と違う"
     assert fp[u"adapter_xbrl_py_files"] == engine_now[u"adapter_xbrl_py_files"] == 16
     assert fp[u"core_py_sha256"] == engine_now[u"core_py_sha256"] and fp[u"core_py_files"] == engine_now[u"core_py_files"]
 

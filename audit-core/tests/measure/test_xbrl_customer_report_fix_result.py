@@ -71,14 +71,19 @@ UNTOUCHED = {"adapters/xbrl/report.py": "0d2854e659a5d8e0", "adapters/xbrl/verif
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
-UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27), "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
-                   "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27)}
+# 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行。実行の字は変えない)。67e7639de3f5f2ad(UNTOUCHED。測った時点の値)は残す。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+# 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("514ebb8104451c07", SEAL_DEFAULT_P27), "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
+                   "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
+                   "adapters/xbrl/verify_document.py": ("c3791080ab5aef2f", SEAL_DEFAULT_P27)}
 MODULE_LATER = {"sha16": "6679138d350ec382", "seal": SEAL_P27}
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 束ねた指紋 498993e29055472a…(P26 の段 1)は残す(測った時点の次の値)、段 2 で 5aba774925968356…。受け入れるのは、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が履歴に在り、値が段 2 の後の値のときだけ。
-ENGINE_FP_LATER = {"adapter_xbrl_py_sha256": ("0e51211a8aed2151409cb6bf443fb6eae2aed87e6b2b4bd6150c8286afee87de", SEAL_P27)}
+# 0e51211a8aed2151(P27 の段 2) は残す(測った時点の値。束ねた指紋 adapter_xbrl_py_sha256 の頭 16 字)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 92326a0f4dcefd21。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_FP_LATER = {"adapter_xbrl_py_sha256": ("92326a0f4dcefd21fae4393a611e4206ef174b19258ddadd0213117191e7b399", SEAL_DEFAULT_P27)}
 #: 測った時点の module(report_customer.py)の sha256 の先頭 16 桁と engine の束ねた指紋。module が動けば測り直す。
 MODULE_SHA16 = "715468699973cc4a"
 ENGINE_FP = {"adapter_xbrl_py_sha256": "11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693", "adapter_xbrl_py_files": 16,

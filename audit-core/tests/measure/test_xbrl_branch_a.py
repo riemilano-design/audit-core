@@ -37,6 +37,7 @@ SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追�
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)、vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)を足した(DEFAULT_PROFILE は P22 のまま)。
 # recipes.py の 3461c3f8b7af6675・vocabulary.py の 83498c04a7b70396(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
 ENGINE_LATER = {
@@ -66,7 +67,10 @@ ENGINE_LATER = {
     # 27e71e9861fc5aad(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 83025e9c0525d08b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
     # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
     # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-    "adapters/xbrl/vocabulary.py": ("85896a67913ce1e7", SEAL_P27),
+    # 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+    "adapters/xbrl/vocabulary.py": ("514ebb8104451c07", SEAL_DEFAULT_P27),
+    # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行)。上の表の 67e7639de3f5f2ad は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+    "adapters/xbrl/verify_document.py": ("c3791080ab5aef2f", SEAL_DEFAULT_P27),
 }
 
 
@@ -129,7 +133,7 @@ class BranchTest(unittest.TestCase):
         # 記録の事実: 2026-10-17 に測った時点の Core の既定は P20。2026-10-20(段 2)に既定は P21 になった
         # (封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md)ので、記録は字で留め、いまのコードの既定は別に確かめる。
         self.assertEqual(p[u"**Core の既定**"], "P20")
-        self.assertEqual(V.DEFAULT_PROFILE, "P26")      # 2026-10-20(期を縛る P22 の段 2)で P21 -> P22、2026-10-23(P26 の段 2)で P22 -> P26。連結の無い書類の落とし込みは P26 でも真
+        self.assertEqual(V.DEFAULT_PROFILE, "P27")      # 2026-10-20(期を縛る P22 の段 2)で P21 -> P22、2026-10-23(P26 の段 2)で P22 -> P26、2026-10-28(P27 の段 2)で P26 -> P27。連結の無い書類の落とし込みは P27 でも真
         self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].nonconsolidated_fallback)
         self.assertEqual(p[u"今回の測定で使った"], "P16")
         self.assertFalse(V.PROFILES["P16"].nonconsolidated_fallback)

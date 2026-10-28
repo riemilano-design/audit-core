@@ -38,6 +38,7 @@ sys.path.insert(0, os.path.join(ROOT, "core", "py"))
 
 SEAL_REL = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
+SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 SEAL = os.path.join(ROOT, SEAL_REL)
 BASE = "52289c46acdb60b450c71c5bf80774eccdb91fd7"        # 判定の commit。封の数はこの木の記録
 BASE7 = "52289c4"
@@ -91,17 +92,27 @@ FROZEN_COUNT_AT_BASE = 37
 # 2026-10-23(段 2 の実装の便): vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記(+4 行・-1 行)だけが動いた。上の ADAPTERS_AT_BASE・FINGERPRINT_AT_BASE・FROZEN_AT_BASE は
 # 封の commit 時点の値で消さない。受け入れるのは、この封が履歴に在り、値が段 2 の後の値のときだけ。
 # 2026-10-27(P27 の段 2): vocabulary_sha16 は段 2 の値 e28733067b1f17f5 から、P27 の封の遷移の値に動いた(下の P27_LATER も同じ封)。段 2 の値は残す(この封が測った時点の値)。
-DECLARED = {"vocabulary_sha16": ("85896a67913ce1e7", SEAL_P27),
+# 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+DECLARED = {"vocabulary_sha16": ("514ebb8104451c07", SEAL_DEFAULT_P27),
             # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
-            "adapter_xbrl_py_sha256": ("0e51211a8aed2151409cb6bf443fb6eae2aed87e6b2b4bd6150c8286afee87de", SEAL_P27),
-            "frozen_bundle": ("29fd733c8988164aa7655d7efc90b8215499360987ca01ad14e137bf966bc837", SEAL_P27)}
+            # 0e51211a8aed2151(P27 の段 2) は残す(測った時点の値。束ねた指紋 adapter_xbrl_py_sha256 の頭 16 字)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 92326a0f4dcefd21。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+            "adapter_xbrl_py_sha256": ("92326a0f4dcefd21fae4393a611e4206ef174b19258ddadd0213117191e7b399", SEAL_DEFAULT_P27),
+            # 29fd733c8988164a(P27 の段 2) は残す(測った時点の値。frozen_bundle の束ねた sha の頭 16 字)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 030455282c89661b。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+            "frozen_bundle": ("030455282c89661b4c0152498d76bc30314362b5896b15ab67a8886a6887b0f6", SEAL_DEFAULT_P27)}
 
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。ADAPTERS_AT_BASE の「vocabulary.py 以外は動いたら赤」は、engine の 4 file
 # (recipes・extract・registry_setup・report_customer)に挿入だけを足した P27 の封の遷移の値に限って受け入れる(封が履歴に在り、値が下の値のときだけ)。
 P27_LATER = {"adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
              "adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
              "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
-             "adapters/xbrl/report_customer.py": ("6679138d350ec382", SEAL_P27)}
+             "adapters/xbrl/report_customer.py": ("6679138d350ec382", SEAL_P27),
+             # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1・§4 (a′) が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行。実行の字は変えない)。
+             # 封の commit 時点の 67e7639de3f5f2ad(ADAPTERS_AT_BASE)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+             "adapters/xbrl/verify_document.py": ("c3791080ab5aef2f", SEAL_DEFAULT_P27)}
+#: 2026-10-28: ``verify_document.py`` の docstring の 1 行の、封の commit 時点の字(P26 の段 2 の封 §1-3 の HUMAN)と、既定を P27 に切り替える段 2 の後の字(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1)。
+VD_DOC_LINE_AT_BASE = u"``--profile`` を省くと ``vocabulary.DEFAULT_PROFILE``(= P20。2026-10-14 の人間の決定)。"
+VD_DOC_LINE_LATER = (u"``--profile`` を省くと ``vocabulary.DEFAULT_PROFILE``(いまは P27。P20 → P21 → P22 → P26 → P27 の履歴と根拠は vocabulary.py の注記。"
+                     u"この行は 2026-10-28 の人間の委任「君に任せるよ」で直した)。", "c3791080ab5aef2f", SEAL_DEFAULT_P27)
 
 CRITERIA_ORDER = ("P26", "P25", "P24")
 STATES = ("GROUNDED", "VALUE_MISMATCH", "UNVERIFIABLE", "POINTER_NOT_FOUND")
@@ -383,8 +394,17 @@ class SealTest(unittest.TestCase):
         # 前例: 儀式の封・P22 の段 2 の結果が HUMAN として残した
         self.assertIn(u"**HUMAN**: 1 行の docstring の直しの承認", base_text("docs/XBRL_RITUAL_SEAL_2026-10-20.md"))
         self.assertIn(u"HUMAN の残り一点(承認待ち)", base_text("docs/XBRL_PERIOD_BIND_RESULT_2026-10-20.md"))
-        # verify_document.py の sha16 は封の commit 時点のまま(別便で直したら、下の test_11 が先に赤くなる)
-        self.assertEqual(sha16("adapters/xbrl/verify_document.py"), ADAPTERS_AT_BASE["adapters/xbrl/verify_document.py"])
+        # verify_document.py の sha16 は封の commit 時点のまま(別便で直したら赤になる)。
+        # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 がこの 1 行を直した。前提が変わったことを、宣言された遷移(docstring の後の字・sha16)で残す。
+        # 封の commit 時点の字(上の base_text の 1 行)は消さない。受け入れるのは、その封が履歴に在り、実物の字と sha16 が段 2 の後の値のときだけ。
+        got = sha16("adapters/xbrl/verify_document.py")
+        if got != ADAPTERS_AT_BASE["adapters/xbrl/verify_document.py"]:
+            line_later, sha_later, seal_rel = VD_DOC_LINE_LATER
+            self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(), u"**docstring が直っているのに、遷移を宣言した封が履歴に無い**")
+            self.assertEqual(got, sha_later, u"**verify_document.py が、宣言された遷移の値とも違う**")
+            now = [l for l in text(os.path.join(ROOT, "adapters/xbrl/verify_document.py")).splitlines() if l.startswith(u"``--profile`` を省くと ``vocabulary.DEFAULT_PROFILE``")]
+            self.assertEqual(now, [line_later])
+            self.assertNotEqual(now, [VD_DOC_LINE_AT_BASE])
 
     def test_8_the_human_confirmation_points_are_listed_and_match_the_facts(self):
         b = sec(self.t, "### §1-4 ", "## §2")
@@ -753,7 +773,7 @@ class EngineAtBaseTest(unittest.TestCase):
             later, seal_rel = DECLARED["vocabulary_sha16"]
             self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(), u"遷移を宣言した封が履歴に無い")
             self.assertEqual(got, later, u"**vocabulary.py が、宣言された遷移の値とも違う**")
-            self.assertEqual(V.DEFAULT_PROFILE, "P26")
+            self.assertEqual(V.DEFAULT_PROFILE, "P27")      # 2026-10-28: 既定を P26 -> P27 に切り替える 段 2 の後の既定(封の commit 時点は P22。段 2 の後 P26 だった)
             return
         # 実装前: 既定はまだ P22、P26 は登録済み(段 1)
         self.assertEqual(V.DEFAULT_PROFILE, "P22")
