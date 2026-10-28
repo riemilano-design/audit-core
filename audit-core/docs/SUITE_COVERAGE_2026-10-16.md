@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **234 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **235 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 168 |
+| `tests/measure` | 169 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -170,6 +170,9 @@ P27 段 2 の評価用の結果の門(結果文書 `docs/XBRL_P27_RESULT_2026-10
 
 **2026-10-28 に +2**(`tests/measure/test_xbrl_default_p27_seal.py`・`tests/measure/test_xbrl_default_p27_result.py`。
 既定を P26 から P27 に切り替える段 2 の封の門(封 `docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md` の人間の言葉・§0 の数・§1-2 の区分表・予測の行・§4 の一覧・順序)と結果の門(結果文書 `docs/XBRL_DEFAULT_P27_RESULT_2026-10-28.md` の表を記録から作り直す・予測 S-1〜S-12 の当否を封の字から求める・記録の中身)。封の門で 232 → 233、結果の門で 233 → 234(`tests/measure` 166 → 168)。
+
+**2026-10-28 に +1**(`tests/measure/test_xbrl_t2_pass_diag.py`。
+注入 T2(単位の差し替え)で P22〜P26 の全部が通した 5 行の診断の門(封 `docs/XBRL_T2_PASS_DIAG_SEAL_2026-10-28.md` §5-2 の (a)〜(i)。診断の文書 `docs/XBRL_T2_PASS_DIAG_2026-10-28.md` の表を記録 `fixtures/xbrl/t2_pass_diag_2026-10-28.json` から作り直す・予測 T-1〜T-8 の当否を封の字から求める・分類を別の書き方で求め直す・封の commit が script・記録・文書・門より前)。234 → 235(`tests/measure` 168 → 169)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

@@ -1,0 +1,3332 @@
+{
+ "注意": "診断の記録(封 docs/XBRL_T2_PASS_DIAG_SEAL_2026-10-28.md §5)。engine は 0 行。fresh_2026-10-21.json は書き換えない。",
+ "封": {
+  "file": "docs/XBRL_T2_PASS_DIAG_SEAL_2026-10-28.md",
+  "commit": "2726563",
+  "期待する commit": "2726563"
+ },
+ "HEAD": "2726563e5effe5d6134221ae4428368a7437840e",
+ "DEFAULT_PROFILE": "P27",
+ "engine sha16": {
+  "adapters/xbrl/extract.py": "3cf55966f12919f0",
+  "adapters/xbrl/vocabulary.py": "514ebb8104451c07",
+  "adapters/xbrl/recipes.py": "52d645e713c53c1c",
+  "adapters/xbrl/resolve.py": "a41043763c1d4073",
+  "adapters/xbrl/comparators.py": "d8706338325e725b",
+  "adapters/xbrl/verify_document.py": "c3791080ab5aef2f"
+ },
+ "種": {
+  "seed_file": "audit-core/measure/SEED.json",
+  "seed_file_sha256": "f74146592f68b88dab89869a185d9f69bc68e8b4fa0c4eee1400581354b19f80",
+  "sealed_in_commit": "e945ee66a2b76789793a2e4163b95e06dc01ba74"
+ },
+ "通した行(記録から)": [
+  "S100YYHK-T2-06",
+  "S100YW7F-T2-13",
+  "S100YW7F-T2-36",
+  "S100YW7F-T2-39",
+  "S100YYH7-T2-07"
+ ],
+ "書類(出てくる順)": [
+  "S100YYHK",
+  "S100YW7F",
+  "S100YYH7"
+ ],
+ "書類ごと": {
+  "S100YYHK": {
+   "材料の sha256": "b5979477967f73f82c9339e12ab34d2d3c2f99bc04af35d945dc27773f01b967",
+   "材料の sha256 が取得の記録と一致": true,
+   "T2 の行": 6,
+   "配線の一致": 6,
+   "claims(P22)": 217,
+   "claims(P27)": 217,
+   "facts": 999,
+   "T2 の作れる site": 31,
+   "採った": 31
+  },
+  "S100YW7F": {
+   "材料の sha256": "73b4aa4f001455b07337ada7deb2ddfe0389969207760996985f44d22776c7a9",
+   "材料の sha256 が取得の記録と一致": true,
+   "T2 の行": 4,
+   "配線の一致": 4,
+   "claims(P22)": 279,
+   "claims(P27)": 279,
+   "facts": 1403,
+   "T2 の作れる site": 186,
+   "採った": 40
+  },
+  "S100YYH7": {
+   "材料の sha256": "7753678234297a2b3a30b6214f65276f4a5e5b57fa34cc101a164a5a6b48cb9d",
+   "材料の sha256 が取得の記録と一致": true,
+   "T2 の行": 3,
+   "配線の一致": 3,
+   "claims(P22)": 123,
+   "claims(P27)": 123,
+   "facts": 932,
+   "T2 の作れる site": 90,
+   "採った": 40
+  }
+ },
+ "配線の門": {
+  "行": 13,
+  "一致": 13,
+  "記録の T2_UNIT の行(3 書類)": 13,
+  "id の集合が記録と同じ": true,
+  "通した行の id が記録から機械で選んだ行と一致": true,
+  "行ごと": [
+   {
+    "doc": "S100YYHK",
+    "id": "S100YYHK-T2-06",
+    "型": "T2_UNIT",
+    "元の字": "時間",
+    "後の字": "秒",
+    "基準の claim": "N105",
+    "結果": {
+     "P22": [
+      "GROUNDED",
+      null
+     ],
+     "P23": [
+      "GROUNDED",
+      null
+     ],
+     "P24": [
+      "GROUNDED",
+      null
+     ],
+     "P25": [
+      "GROUNDED",
+      null
+     ],
+     "P26": [
+      "GROUNDED",
+      null
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YYHK",
+    "id": "S100YYHK-T2-10",
+    "型": "T2_UNIT",
+    "元の字": "円",
+    "後の字": "百万円",
+    "基準の claim": "N127",
+    "結果": {
+     "P22": null,
+     "P23": null,
+     "P24": null,
+     "P25": null,
+     "P26": null
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YYHK",
+    "id": "S100YYHK-T2-20",
+    "型": "T2_UNIT",
+    "元の字": "％",
+    "後の字": "ポイント",
+    "基準の claim": "N133",
+    "結果": {
+     "P22": [
+      "POINTER_NOT_FOUND",
+      "no_element(point without prior phrase)"
+     ],
+     "P23": [
+      "POINTER_NOT_FOUND",
+      "no_element(point without prior phrase)"
+     ],
+     "P24": [
+      "POINTER_NOT_FOUND",
+      "no_element(point without prior phrase)"
+     ],
+     "P25": [
+      "POINTER_NOT_FOUND",
+      "no_element(point without prior phrase)"
+     ],
+     "P26": [
+      "POINTER_NOT_FOUND",
+      "no_element(point without prior phrase)"
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YYHK",
+    "id": "S100YYHK-T2-21",
+    "型": "T2_UNIT",
+    "元の字": "％",
+    "後の字": "ポイント",
+    "基準の claim": "N105",
+    "結果": {
+     "P22": [
+      "POINTER_NOT_FOUND",
+      "no_element"
+     ],
+     "P23": [
+      "POINTER_NOT_FOUND",
+      "no_element"
+     ],
+     "P24": [
+      "POINTER_NOT_FOUND",
+      "no_element"
+     ],
+     "P25": [
+      "POINTER_NOT_FOUND",
+      "no_element"
+     ],
+     "P26": [
+      "POINTER_NOT_FOUND",
+      "no_element"
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YYHK",
+    "id": "S100YYHK-T2-26",
+    "型": "T2_UNIT",
+    "元の字": "％",
+    "後の字": "ポイント",
+    "基準の claim": "N132",
+    "結果": {
+     "P22": [
+      "POINTER_NOT_FOUND",
+      "no_element(point without prior phrase)"
+     ],
+     "P23": [
+      "POINTER_NOT_FOUND",
+      "no_element(point without prior phrase)"
+     ],
+     "P24": [
+      "POINTER_NOT_FOUND",
+      "no_element(point without prior phrase)"
+     ],
+     "P25": [
+      "POINTER_NOT_FOUND",
+      "no_element(point without prior phrase)"
+     ],
+     "P26": [
+      "POINTER_NOT_FOUND",
+      "no_element(point without prior phrase)"
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YYHK",
+    "id": "S100YYHK-T2-30",
+    "型": "T2_UNIT",
+    "元の字": "％",
+    "後の字": "ポイント",
+    "基準の claim": "N107",
+    "結果": {
+     "P22": [
+      "POINTER_NOT_FOUND",
+      "no_element"
+     ],
+     "P23": [
+      "POINTER_NOT_FOUND",
+      "no_element"
+     ],
+     "P24": [
+      "POINTER_NOT_FOUND",
+      "no_element"
+     ],
+     "P25": [
+      "POINTER_NOT_FOUND",
+      "no_element"
+     ],
+     "P26": [
+      "POINTER_NOT_FOUND",
+      "no_element"
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YW7F",
+    "id": "S100YW7F-T2-13",
+    "型": "T2_UNIT",
+    "元の字": "百万円",
+    "後の字": "千円",
+    "基準の claim": "N025",
+    "結果": {
+     "P22": [
+      "GROUNDED",
+      null
+     ],
+     "P23": [
+      "GROUNDED",
+      null
+     ],
+     "P24": [
+      "GROUNDED",
+      null
+     ],
+     "P25": [
+      "GROUNDED",
+      null
+     ],
+     "P26": [
+      "GROUNDED",
+      null
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YW7F",
+    "id": "S100YW7F-T2-16",
+    "型": "T2_UNIT",
+    "元の字": "百万円",
+    "後の字": "億円",
+    "基準の claim": "N170",
+    "結果": {
+     "P22": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P23": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P24": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P25": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P26": [
+      "VALUE_MISMATCH",
+      null
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YW7F",
+    "id": "S100YW7F-T2-36",
+    "型": "T2_UNIT",
+    "元の字": "百万円",
+    "後の字": "億円",
+    "基準の claim": "N024",
+    "結果": {
+     "P22": [
+      "GROUNDED",
+      null
+     ],
+     "P23": [
+      "GROUNDED",
+      null
+     ],
+     "P24": [
+      "GROUNDED",
+      null
+     ],
+     "P25": [
+      "GROUNDED",
+      null
+     ],
+     "P26": [
+      "GROUNDED",
+      null
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YW7F",
+    "id": "S100YW7F-T2-39",
+    "型": "T2_UNIT",
+    "元の字": "百万円",
+    "後の字": "円",
+    "基準の claim": "N025",
+    "結果": {
+     "P22": [
+      "GROUNDED",
+      null
+     ],
+     "P23": [
+      "GROUNDED",
+      null
+     ],
+     "P24": [
+      "GROUNDED",
+      null
+     ],
+     "P25": [
+      "GROUNDED",
+      null
+     ],
+     "P26": [
+      "GROUNDED",
+      null
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YYH7",
+    "id": "S100YYH7-T2-01",
+    "型": "T2_UNIT",
+    "元の字": "百万円",
+    "後の字": "円",
+    "基準の claim": "N072",
+    "結果": {
+     "P22": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P23": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P24": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P25": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P26": [
+      "VALUE_MISMATCH",
+      null
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YYH7",
+    "id": "S100YYH7-T2-07",
+    "型": "T2_UNIT",
+    "元の字": "百万円",
+    "後の字": "兆円",
+    "基準の claim": "N069",
+    "結果": {
+     "P22": [
+      "GROUNDED",
+      null
+     ],
+     "P23": [
+      "GROUNDED",
+      null
+     ],
+     "P24": [
+      "GROUNDED",
+      null
+     ],
+     "P25": [
+      "GROUNDED",
+      null
+     ],
+     "P26": [
+      "GROUNDED",
+      null
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   },
+   {
+    "doc": "S100YYH7",
+    "id": "S100YYH7-T2-18",
+    "型": "T2_UNIT",
+    "元の字": "百万円",
+    "後の字": "円",
+    "基準の claim": "N070",
+    "結果": {
+     "P22": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P23": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P24": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P25": [
+      "VALUE_MISMATCH",
+      null
+     ],
+     "P26": [
+      "VALUE_MISMATCH",
+      null
+     ]
+    },
+    "一致": {
+     "記録に同じ id の行が在る": true,
+     "元の字": true,
+     "後の字": true,
+     "基準の claim": true,
+     "結果(P22〜P26)": true,
+     "4 欄とも一致": true
+    }
+   }
+  ],
+  "通った": true
+ },
+ "rows": [
+  {
+   "doc": "S100YYHK",
+   "id": "S100YYHK-T2-06",
+   "元の字": "時間",
+   "後の字": "秒",
+   "元の token の span(材料の本文)": [
+    3451,
+    3453
+   ],
+   "digits_unchanged": "8",
+   "基準の claim": "N105",
+   "結果": {
+    "P22": [
+     "GROUNDED",
+     null
+    ],
+    "P23": [
+     "GROUNDED",
+     null
+    ],
+    "P24": [
+     "GROUNDED",
+     null
+    ],
+    "P25": [
+     "GROUNDED",
+     null
+    ],
+    "P26": [
+     "GROUNDED",
+     null
+    ],
+    "P27": [
+     "GROUNDED",
+     null
+    ]
+   },
+   "profile": {
+    "P22": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "8.0",
+      "文の番号": 159,
+      "文の中の位置": 20,
+      "claim": {
+       "id": "N105",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上総利益",
+       "value": 8.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上総利益は742億2千2百万円(前期比8.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 8.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 74222000000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 68723000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "8.0",
+      "文の番号": 159,
+      "文の中の位置": 20,
+      "claim": {
+       "id": "N105",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上総利益",
+       "value": 8.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上総利益は742億2千2百万円(前期比8.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 8.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 74222000000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 68723000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 129,
+      "文の中で最初に違う位置": 39,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       0,
+       0
+      ],
+      "その文の claim": {
+       "無改変": [],
+       "注入後": []
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       null,
+       null
+      ],
+      "value×倍率(無改変, 注入後)": [
+       8.0,
+       8.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       74222000000.0,
+       74222000000.0
+      ],
+      "注入後 value×倍率 / fact": 1.0778475384656841e-10,
+      "無改変 value×倍率 / fact": 1.0778475384656841e-10
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    },
+    "P26": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "8.0",
+      "文の番号": 159,
+      "文の中の位置": 20,
+      "claim": {
+       "id": "N105",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上総利益",
+       "value": 8.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上総利益は742億2千2百万円(前期比8.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 8.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 74222000000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 68723000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "8.0",
+      "文の番号": 159,
+      "文の中の位置": 20,
+      "claim": {
+       "id": "N105",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上総利益",
+       "value": 8.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上総利益は742億2千2百万円(前期比8.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 8.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 74222000000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 68723000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 129,
+      "文の中で最初に違う位置": 39,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       0,
+       0
+      ],
+      "その文の claim": {
+       "無改変": [],
+       "注入後": []
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       null,
+       null
+      ],
+      "value×倍率(無改変, 注入後)": [
+       8.0,
+       8.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       74222000000.0,
+       74222000000.0
+      ],
+      "注入後 value×倍率 / fact": 1.0778475384656841e-10,
+      "無改変 value×倍率 / fact": 1.0778475384656841e-10
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    },
+    "P27": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "8.0",
+      "文の番号": 159,
+      "文の中の位置": 20,
+      "claim": {
+       "id": "N105",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上総利益",
+       "value": 8.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上総利益は742億2千2百万円(前期比8.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 8.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 74222000000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 68723000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "8.0",
+      "文の番号": 159,
+      "文の中の位置": 20,
+      "claim": {
+       "id": "N105",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上総利益",
+       "value": 8.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上総利益は742億2千2百万円(前期比8.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 8.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 74222000000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:GrossProfit",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": 68723000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 129,
+      "文の中で最初に違う位置": 39,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       0,
+       0
+      ],
+      "その文の claim": {
+       "無改変": [],
+       "注入後": []
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       null,
+       null
+      ],
+      "value×倍率(無改変, 注入後)": [
+       8.0,
+       8.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       74222000000.0,
+       74222000000.0
+      ],
+      "注入後 value×倍率 / fact": 1.0778475384656841e-10,
+      "無改変 value×倍率 / fact": 1.0778475384656841e-10
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    }
+   }
+  },
+  {
+   "doc": "S100YW7F",
+   "id": "S100YW7F-T2-13",
+   "元の字": "百万円",
+   "後の字": "千円",
+   "元の token の span(材料の本文)": [
+    2407,
+    2410
+   ],
+   "digits_unchanged": "1,237",
+   "基準の claim": "N025",
+   "結果": {
+    "P22": [
+     "GROUNDED",
+     null
+    ],
+    "P23": [
+     "GROUNDED",
+     null
+    ],
+    "P24": [
+     "GROUNDED",
+     null
+    ],
+    "P25": [
+     "GROUNDED",
+     null
+    ],
+    "P26": [
+     "GROUNDED",
+     null
+    ],
+    "P27": [
+     "GROUNDED",
+     null
+    ]
+   },
+   "profile": {
+    "P22": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 152,
+      "文の中で最初に違う位置": 6,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       1,
+       1
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N091",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "百万円",
+         "state": "UNVERIFIABLE",
+         "reason": "no_subject",
+         "pointers": [],
+         "recomputed": null
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N091",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "千円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_element",
+         "pointers": [],
+         "recomputed": null
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       1000000.0,
+       1000000.0
+      ],
+      "value×倍率(無改変, 注入後)": [
+       1237000000.0,
+       1237000000.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       -1237000000.0,
+       -1237000000.0
+      ],
+      "注入後 value×倍率 / fact": -1.0,
+      "無改変 value×倍率 / fact": -1.0
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    },
+    "P26": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 152,
+      "文の中で最初に違う位置": 6,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       1,
+       1
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N091",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "百万円",
+         "state": "UNVERIFIABLE",
+         "reason": "no_subject",
+         "pointers": [],
+         "recomputed": null
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N091",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "千円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_element",
+         "pointers": [],
+         "recomputed": null
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       1000000.0,
+       1000000.0
+      ],
+      "value×倍率(無改変, 注入後)": [
+       1237000000.0,
+       1237000000.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       -1237000000.0,
+       -1237000000.0
+      ],
+      "注入後 value×倍率 / fact": -1.0,
+      "無改変 value×倍率 / fact": -1.0
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    },
+    "P27": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 152,
+      "文の中で最初に違う位置": 6,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       1,
+       1
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N091",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "百万円",
+         "state": "UNVERIFIABLE",
+         "reason": "no_subject",
+         "pointers": [],
+         "recomputed": null
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N091",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "千円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_element",
+         "pointers": [],
+         "recomputed": null
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       1000000.0,
+       1000000.0
+      ],
+      "value×倍率(無改変, 注入後)": [
+       1237000000.0,
+       1237000000.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       -1237000000.0,
+       -1237000000.0
+      ],
+      "注入後 value×倍率 / fact": -1.0,
+      "無改変 value×倍率 / fact": -1.0
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    }
+   }
+  },
+  {
+   "doc": "S100YW7F",
+   "id": "S100YW7F-T2-36",
+   "元の字": "百万円",
+   "後の字": "億円",
+   "元の token の span(材料の本文)": [
+    425,
+    428
+   ],
+   "digits_unchanged": "1,149",
+   "基準の claim": "N024",
+   "結果": {
+    "P22": [
+     "GROUNDED",
+     null
+    ],
+    "P23": [
+     "GROUNDED",
+     null
+    ],
+    "P24": [
+     "GROUNDED",
+     null
+    ],
+    "P25": [
+     "GROUNDED",
+     null
+    ],
+    "P26": [
+     "GROUNDED",
+     null
+    ],
+    "P27": [
+     "GROUNDED",
+     null
+    ]
+   },
+   "profile": {
+    "P22": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,149",
+      "文の番号": 47,
+      "文の中の位置": 37,
+      "claim": {
+       "id": "N024",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1149.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "売上高は308,496百万円(前期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1149000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,149",
+      "文の番号": 47,
+      "文の中の位置": 37,
+      "claim": {
+       "id": "N024",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1149.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "売上高は308,496百万円(前期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1149000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 27,
+      "文の中で最初に違う位置": 6,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       1,
+       1
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N014",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1149.0,
+         "unit": "百万円",
+         "state": "UNVERIFIABLE",
+         "reason": "no_subject",
+         "pointers": [],
+         "recomputed": null
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N014",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1149.0,
+         "unit": "億円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_element",
+         "pointers": [],
+         "recomputed": null
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       1000000.0,
+       1000000.0
+      ],
+      "value×倍率(無改変, 注入後)": [
+       1149000000.0,
+       1149000000.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       -1149000000.0,
+       -1149000000.0
+      ],
+      "注入後 value×倍率 / fact": -1.0,
+      "無改変 value×倍率 / fact": -1.0
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    },
+    "P26": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,149",
+      "文の番号": 47,
+      "文の中の位置": 37,
+      "claim": {
+       "id": "N024",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1149.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "売上高は308,496百万円(前期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1149000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,149",
+      "文の番号": 47,
+      "文の中の位置": 37,
+      "claim": {
+       "id": "N024",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1149.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "売上高は308,496百万円(前期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1149000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 27,
+      "文の中で最初に違う位置": 6,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       1,
+       1
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N014",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1149.0,
+         "unit": "百万円",
+         "state": "UNVERIFIABLE",
+         "reason": "no_subject",
+         "pointers": [],
+         "recomputed": null
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N014",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1149.0,
+         "unit": "億円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_element",
+         "pointers": [],
+         "recomputed": null
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       1000000.0,
+       1000000.0
+      ],
+      "value×倍率(無改変, 注入後)": [
+       1149000000.0,
+       1149000000.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       -1149000000.0,
+       -1149000000.0
+      ],
+      "注入後 value×倍率 / fact": -1.0,
+      "無改変 value×倍率 / fact": -1.0
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    },
+    "P27": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,149",
+      "文の番号": 47,
+      "文の中の位置": 37,
+      "claim": {
+       "id": "N024",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1149.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "売上高は308,496百万円(前期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1149000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,149",
+      "文の番号": 47,
+      "文の中の位置": 37,
+      "claim": {
+       "id": "N024",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1149.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "売上高は308,496百万円(前期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1149000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1149000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 27,
+      "文の中で最初に違う位置": 6,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       1,
+       1
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N014",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1149.0,
+         "unit": "百万円",
+         "state": "UNVERIFIABLE",
+         "reason": "no_subject",
+         "pointers": [],
+         "recomputed": null
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N014",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1149.0,
+         "unit": "億円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_element",
+         "pointers": [],
+         "recomputed": null
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       1000000.0,
+       1000000.0
+      ],
+      "value×倍率(無改変, 注入後)": [
+       1149000000.0,
+       1149000000.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       -1149000000.0,
+       -1149000000.0
+      ],
+      "注入後 value×倍率 / fact": -1.0,
+      "無改変 value×倍率 / fact": -1.0
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    }
+   }
+  },
+  {
+   "doc": "S100YW7F",
+   "id": "S100YW7F-T2-39",
+   "元の字": "百万円",
+   "後の字": "円",
+   "元の token の span(材料の本文)": [
+    414,
+    417
+   ],
+   "digits_unchanged": "1,237",
+   "基準の claim": "N025",
+   "結果": {
+    "P22": [
+     "GROUNDED",
+     null
+    ],
+    "P23": [
+     "GROUNDED",
+     null
+    ],
+    "P24": [
+     "GROUNDED",
+     null
+    ],
+    "P25": [
+     "GROUNDED",
+     null
+    ],
+    "P26": [
+     "GROUNDED",
+     null
+    ],
+    "P27": [
+     "GROUNDED",
+     null
+    ]
+   },
+   "profile": {
+    "P22": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値と字",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 26,
+      "文の中で最初に違う位置": 6,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       1,
+       1
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N013",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "百万円",
+         "state": "UNVERIFIABLE",
+         "reason": "no_subject",
+         "pointers": [],
+         "recomputed": null
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N013",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_element",
+         "pointers": [],
+         "recomputed": null
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": true,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       1000000.0,
+       1000000.0
+      ],
+      "value×倍率(無改変, 注入後)": [
+       1237000000.0,
+       1237000000.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       -1237000000.0,
+       -1237000000.0
+      ],
+      "注入後 value×倍率 / fact": -1.0,
+      "無改変 value×倍率 / fact": -1.0
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    },
+    "P26": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値と字",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 26,
+      "文の中で最初に違う位置": 6,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       1,
+       1
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N013",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "百万円",
+         "state": "UNVERIFIABLE",
+         "reason": "no_subject",
+         "pointers": [],
+         "recomputed": null
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N013",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_element",
+         "pointers": [],
+         "recomputed": null
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": true,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       1000000.0,
+       1000000.0
+      ],
+      "value×倍率(無改変, 注入後)": [
+       1237000000.0,
+       1237000000.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       -1237000000.0,
+       -1237000000.0
+      ],
+      "注入後 value×倍率 / fact": -1.0,
+      "無改変 value×倍率 / fact": -1.0
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    },
+    "P27": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値と字",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": true,
+      "claim の数の字": "1,237",
+      "文の番号": 47,
+      "文の中の位置": 53,
+      "claim": {
+       "id": "N025",
+       "kind": "num",
+       "form": "direct_value",
+       "subject": "営業損失",
+       "value": 1237.0,
+       "unit": "百万円",
+       "word": null,
+       "span": "期比0.2%減)、営業損失は1,149百万円(前期は営業損失1,237百万円)、経常利益は138",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": -1237000000.0
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         },
+         {
+          "name": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-6",
+          "value": -1237000000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 26,
+      "文の中で最初に違う位置": 6,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       1,
+       1
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N013",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "百万円",
+         "state": "UNVERIFIABLE",
+         "reason": "no_subject",
+         "pointers": [],
+         "recomputed": null
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N013",
+         "pos": 0,
+         "kind": "num",
+         "form": "direct_value",
+         "value": -1237.0,
+         "unit": "円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_element",
+         "pointers": [],
+         "recomputed": null
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": true,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       1000000.0,
+       1000000.0
+      ],
+      "value×倍率(無改変, 注入後)": [
+       1237000000.0,
+       1237000000.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       -1237000000.0,
+       -1237000000.0
+      ],
+      "注入後 value×倍率 / fact": -1.0,
+      "無改変 value×倍率 / fact": -1.0
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    }
+   }
+  },
+  {
+   "doc": "S100YYH7",
+   "id": "S100YYH7-T2-07",
+   "元の字": "百万円",
+   "後の字": "兆円",
+   "元の token の span(材料の本文)": [
+    2322,
+    2325
+   ],
+   "digits_unchanged": "12",
+   "基準の claim": "N069",
+   "結果": {
+    "P22": [
+     "GROUNDED",
+     null
+    ],
+    "P23": [
+     "GROUNDED",
+     null
+    ],
+    "P24": [
+     "GROUNDED",
+     null
+    ],
+    "P25": [
+     "GROUNDED",
+     null
+    ],
+    "P26": [
+     "GROUNDED",
+     null
+    ],
+    "P27": [
+     "GROUNDED",
+     null
+    ]
+   },
+   "profile": {
+    "P22": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "12.0",
+      "文の番号": 112,
+      "文の中の位置": 18,
+      "claim": {
+       "id": "N069",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上原価",
+       "value": 12.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上原価は、2,491百万円(前期比12.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 11.96
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2491048000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2225016000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "12.0",
+      "文の番号": 112,
+      "文の中の位置": 18,
+      "claim": {
+       "id": "N069",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上原価",
+       "value": 12.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上原価は、2,491百万円(前期比12.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 11.96
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2491048000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2225016000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 33,
+      "文の中で最初に違う位置": 42,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       4,
+       4
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N017",
+         "pos": 17,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 431000000.0,
+         "unit": "円",
+         "state": "VALUE_MISMATCH",
+         "reason": null,
+         "pointers": [
+          "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+         ],
+         "recomputed": 4047064000.0
+        },
+        {
+         "id": "N018",
+         "pos": 27,
+         "kind": "num",
+         "form": "derived_value",
+         "value": 22.4,
+         "unit": "%",
+         "state": "VALUE_MISMATCH",
+         "reason": null,
+         "pointers": [
+          "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+          "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+         ],
+         "recomputed": 17.24
+        },
+        {
+         "id": "N019",
+         "pos": 40,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 12000000.0,
+         "unit": "円",
+         "state": "VALUE_MISMATCH",
+         "reason": null,
+         "pointers": [
+          "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+         ],
+         "recomputed": 101734000.0
+        },
+        {
+         "id": "N020",
+         "pos": 53,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 107000000.0,
+         "unit": "円",
+         "state": "VALUE_MISMATCH",
+         "reason": null,
+         "pointers": [
+          "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+         ],
+         "recomputed": 101734000.0
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N017",
+         "pos": 17,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 431000000.0,
+         "unit": "円",
+         "state": "VALUE_MISMATCH",
+         "reason": null,
+         "pointers": [
+          "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+         ],
+         "recomputed": 4047064000.0
+        },
+        {
+         "id": "N018",
+         "pos": 27,
+         "kind": "num",
+         "form": "derived_value",
+         "value": 22.4,
+         "unit": "%",
+         "state": "VALUE_MISMATCH",
+         "reason": null,
+         "pointers": [
+          "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+          "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+         ],
+         "recomputed": 17.24
+        },
+        {
+         "id": "N019",
+         "pos": 40,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 12000000000000.0,
+         "unit": "円",
+         "state": "VALUE_MISMATCH",
+         "reason": null,
+         "pointers": [
+          "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+         ],
+         "recomputed": 101734000.0
+        },
+        {
+         "id": "N020",
+         "pos": 52,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 107000000.0,
+         "unit": "円",
+         "state": "VALUE_MISMATCH",
+         "reason": null,
+         "pointers": [
+          "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+         ],
+         "recomputed": 101734000.0
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       null,
+       null
+      ],
+      "value×倍率(無改変, 注入後)": [
+       12.0,
+       12.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       2491048000.0,
+       2491048000.0
+      ],
+      "注入後 value×倍率 / fact": 4.817249607394157e-09,
+      "無改変 value×倍率 / fact": 4.817249607394157e-09
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    },
+    "P26": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "12.0",
+      "文の番号": 112,
+      "文の中の位置": 18,
+      "claim": {
+       "id": "N069",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上原価",
+       "value": 12.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上原価は、2,491百万円(前期比12.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 11.96
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2491048000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2225016000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "12.0",
+      "文の番号": 112,
+      "文の中の位置": 18,
+      "claim": {
+       "id": "N069",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上原価",
+       "value": 12.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上原価は、2,491百万円(前期比12.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 11.96
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2491048000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2225016000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 33,
+      "文の中で最初に違う位置": 42,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       4,
+       4
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N017",
+         "pos": 17,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 431000000.0,
+         "unit": "円",
+         "state": "UNVERIFIABLE",
+         "reason": "other_frame",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N018",
+         "pos": 27,
+         "kind": "num",
+         "form": "derived_value",
+         "value": 22.4,
+         "unit": "%",
+         "state": "UNVERIFIABLE",
+         "reason": "other_frame",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N019",
+         "pos": 40,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 12000000.0,
+         "unit": "円",
+         "state": "UNVERIFIABLE",
+         "reason": "other_frame",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N020",
+         "pos": 53,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 107000000.0,
+         "unit": "円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_same_value",
+         "pointers": [],
+         "recomputed": null
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N017",
+         "pos": 17,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 431000000.0,
+         "unit": "円",
+         "state": "UNVERIFIABLE",
+         "reason": "other_frame",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N018",
+         "pos": 27,
+         "kind": "num",
+         "form": "derived_value",
+         "value": 22.4,
+         "unit": "%",
+         "state": "UNVERIFIABLE",
+         "reason": "other_frame",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N019",
+         "pos": 40,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 12000000000000.0,
+         "unit": "円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_same_value",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N020",
+         "pos": 52,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 107000000.0,
+         "unit": "円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_same_value",
+         "pointers": [],
+         "recomputed": null
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       null,
+       null
+      ],
+      "value×倍率(無改変, 注入後)": [
+       12.0,
+       12.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       2491048000.0,
+       2491048000.0
+      ],
+      "注入後 value×倍率 / fact": 4.817249607394157e-09,
+      "無改変 value×倍率 / fact": 4.817249607394157e-09
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    },
+    "P27": {
+     "無改変": {
+      "対応の付け方": "値と字",
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "12.0",
+      "文の番号": 112,
+      "文の中の位置": 18,
+      "claim": {
+       "id": "N069",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上原価",
+       "value": 12.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上原価は、2,491百万円(前期比12.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 11.96
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2491048000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2225016000.0
+         }
+        ]
+       }
+      ]
+     },
+     "注入後": {
+      "対応の付け方": "値だけ",
+      "claim_for と同じ": true,
+      "digits_unchanged が claim の数の字と完全一致": false,
+      "claim の数の字": "12.0",
+      "文の番号": 112,
+      "文の中の位置": 18,
+      "claim": {
+       "id": "N069",
+       "kind": "num",
+       "form": "derived_value",
+       "subject": "売上原価",
+       "value": 12.0,
+       "unit": "%",
+       "word": null,
+       "span": "売上原価は、2,491百万円(前期比12.0%増)となりました。",
+       "state": "GROUNDED",
+       "pointers": [
+        "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration"
+       ],
+       "reason": null,
+       "recomputed": 11.96
+      },
+      "fact": [
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "CurrentYearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2491048000.0
+         }
+        ]
+       },
+       {
+        "pointer": "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration",
+        "facts": [
+         {
+          "name": "jppfs_cor:CostOfSales",
+          "context": "Prior1YearDuration",
+          "unit": "JPY",
+          "decimals": "-3",
+          "value": 2225016000.0
+         }
+        ]
+       }
+      ]
+     },
+     "token": {
+      "差し替えた token がある文の番号": 33,
+      "文の中で最初に違う位置": 42,
+      "token の位置を文に持つ claim の数(無改変, 注入後)": [
+       4,
+       4
+      ],
+      "その文の claim": {
+       "無改変": [
+        {
+         "id": "N017",
+         "pos": 17,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 431000000.0,
+         "unit": "円",
+         "state": "UNVERIFIABLE",
+         "reason": "other_frame",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N018",
+         "pos": 27,
+         "kind": "num",
+         "form": "derived_value",
+         "value": 22.4,
+         "unit": "%",
+         "state": "UNVERIFIABLE",
+         "reason": "other_frame",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N019",
+         "pos": 40,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 12000000.0,
+         "unit": "円",
+         "state": "UNVERIFIABLE",
+         "reason": "other_frame",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N020",
+         "pos": 53,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 107000000.0,
+         "unit": "円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_same_value",
+         "pointers": [],
+         "recomputed": null
+        }
+       ],
+       "注入後": [
+        {
+         "id": "N017",
+         "pos": 17,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 431000000.0,
+         "unit": "円",
+         "state": "UNVERIFIABLE",
+         "reason": "other_frame",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N018",
+         "pos": 27,
+         "kind": "num",
+         "form": "derived_value",
+         "value": 22.4,
+         "unit": "%",
+         "state": "UNVERIFIABLE",
+         "reason": "other_frame",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N019",
+         "pos": 40,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 12000000000000.0,
+         "unit": "円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_same_value",
+         "pointers": [],
+         "recomputed": null
+        },
+        {
+         "id": "N020",
+         "pos": 52,
+         "kind": "num",
+         "form": "direct_value",
+         "value": 107000000.0,
+         "unit": "円",
+         "state": "POINTER_NOT_FOUND",
+         "reason": "no_same_value",
+         "pointers": [],
+         "recomputed": null
+        }
+       ]
+      }
+     },
+     "比較": {
+      "pointers が同じ": true,
+      "unit が変わった": false,
+      "value が同じ": true,
+      "recomputed が同じ": true,
+      "state が同じ": true,
+      "同じ claim id": true,
+      "後の字が注入後の span に在る(字の包含)": false,
+      "元の token の位置が無改変の claim の文の中に在る": false,
+      "倍率(無改変, 注入後)": [
+       null,
+       null
+      ],
+      "value×倍率(無改変, 注入後)": [
+       12.0,
+       12.0
+      ],
+      "fact の値(先頭)(無改変, 注入後)": [
+       2491048000.0,
+       2491048000.0
+      ],
+      "注入後 value×倍率 / fact": 4.817249607394157e-09,
+      "無改変 value×倍率 / fact": 4.817249607394157e-09
+     },
+     "fact が 0": false,
+     "分類": "(ウ-a)"
+    }
+   }
+  }
+ ],
+ "cache": {
+  "開始": {
+   "edinet": 281,
+   "edinet-fresh-2026-10-21": 40
+  },
+  "終了": {
+   "edinet": 281,
+   "edinet-fresh-2026-10-21": 40
+  }
+ },
+ "limits": [
+  "5 行・3 書類・4 claim の観測。T2_UNIT 263 行・注入 741 回・Core 全体の振る舞いを断定しない。",
+  "新しい標本 30 書類の 741 回だけ。67 書類側の属性注入とは別の種・別の作り方。",
+  "差し替えた token がある文は、無改変と差し替え後の engine の文の一覧を比べ、違う文が 1 つのときだけ決める(材料の本文から文を探し直さない)。",
+  "分類は欄から機械で決まる型で、意味(なぜそうなるか)は文書の仮説の節。比べる側の分岐(recipes・resolve・comparators)はこの便では読んでいない。",
+  "『その文の claim』は封にない欄(token の文に在る claim の state を無改変と差し替え後で並べたもの)。判定には使わない。"
+ ],
+ "key_leaks": []
+}

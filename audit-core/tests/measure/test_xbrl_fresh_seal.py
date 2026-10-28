@@ -119,6 +119,7 @@ def is_roster(path):
 # 結果の門は軽い走らせ直しの書類 1 本(S100YXFQ)の docID を字で持つ。どれも draw の commit(14cdd21)より後に足した file で、前例と同じ扱い(引きは動かさない)。
 # 2026-10-27 追記(P27 の段 2): 新しい記録 3 つ(97 書類の後退の測定 regress97、調整用 10 社の再現の判定 tune_p27 と注入 tune_p27_inject)は書類の docID を名指す。前例と同じ扱い(引きは動かさない)。
 # 2026-10-28 追記(既定を P26 -> P27 に切り替える 段 2): 新しい記録 default_p27_2026-10-28.json(97 書類の docID を持つ)と結果の門・測定の script(軽い走らせ直しの書類の docID を字で持つ。script は docstring の使い方の行)。前例(917157c の 3 file)と同じ扱い(引きは動かさない)。
+# 2026-10-28 追記(注入 T2 で通した 5 行の診断): 新しい記録 t2_pass_diag_2026-10-28.json(通した 5 行が載る 3 書類の docID を持つ)と、測定の script・門(docstring の使い方の行に docID を字で持つ)。封 docs/XBRL_T2_PASS_DIAG_SEAL_2026-10-28.md の §5。前例(917157c の 3 file、default_p27 の 3 file)と同じ扱い(引きは動かさない)。封と診断の文書は docID を書かない(門 (h) が見る)。
 LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixtures/xbrl/p26_2026-10-21.json",
                       "fixtures/xbrl/default_p26_2026-10-23.json", "measure/xbrl_default_p26_2026-10-23.py", "tests/measure/test_xbrl_default_p26_result.py",
                       "docs/XBRL_P27_SAMPLE_SEAL_2026-10-27.md",
@@ -132,7 +133,9 @@ LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixt
                       "fixtures/xbrl/p27/eval_readings_2026-10-27.json", "docs/XBRL_P27_RESULT_2026-10-27.md",
                       "tests/measure/test_xbrl_p27_result.py",
                       "fixtures/xbrl/default_p27_2026-10-28.json", "tests/measure/test_xbrl_default_p27_result.py",
-                      "measure/xbrl_default_p27_2026-10-28.py")
+                      "measure/xbrl_default_p27_2026-10-28.py",
+                      "fixtures/xbrl/t2_pass_diag_2026-10-28.json", "measure/xbrl_t2_pass_diag_2026-10-28.py",
+                      "tests/measure/test_xbrl_t2_pass_diag.py")
 
 
 def drop_later_naming_files(named):
