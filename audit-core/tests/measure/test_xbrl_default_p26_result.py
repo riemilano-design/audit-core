@@ -64,6 +64,9 @@ FACTS_ROWS_2026_10_28 = tuple([u"L-%d" % n for n in range(32, 39)] + [u"D-%d" % 
 # 2026-10-29 の注記: 同じ宣言された遷移の 2 つめ。2026-10-29 の便(総点検・評価用の確かめ・止めた理由の診断)で台帳に足した行。上の 2026-10-28 の遷移と同じ規則で、
 # 下の ID の行が**全部**在るか**1 つも無い**かのどちらか(一部だけなら赤)。全部在るとき、P22・P26 の字は「その ID の行」にも在ってよい。
 FACTS_ROWS_2026_10_29 = (u"L-39", u"L-40", u"D-27", u"D-28", u"H-15", u"P-22", u"P-23", u"P-24")
+# 2026-10-29 の注記(2): 宣言された遷移の 3 つめ。同じ日の cd8 の系統の行 → claim の位置での診断(封 5f3ae0a → 診断 fb6f268)で台帳に足した行。上の 2 つと同じ規則で、
+# 下の ID の行が**全部**在るか**1 つも無い**かのどちらか(一部だけなら赤)。H-15 は上の 2026-10-29 の組に居る(状態の字を直しただけ)ので、この組には入れない。
+FACTS_ROWS_2026_10_29B = (u"L-41", u"D-29", u"P-25")
 STEP_NAMES = (u"S-1", u"S-2", u"S-3", u"S-4", u"S-5", u"S-6", u"S-7", u"S-8", u"S-9", u"S-10", u"S-11", u"S-12")
 
 #: **字で留める**(測った事実。定数から作らない)。変えたら記録も文書も作り直す。
@@ -738,7 +741,9 @@ class RecordTest(unittest.TestCase):
             self.assertEqual(sorted(present), sorted(FACTS_ROWS_2026_10_28), u"2026-10-28 の便の行が一部だけ在る(中途の遷移)")
             present_29 = [i for i in FACTS_ROWS_2026_10_29 if any(l.startswith(u"| %s |" % i) for l in lines)]
             self.assertIn(len(present_29), (0, len(FACTS_ROWS_2026_10_29)), u"2026-10-29 の便の行が一部だけ在る(中途の遷移)")
-            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29))
+            present_29b = [i for i in FACTS_ROWS_2026_10_29B if any(l.startswith(u"| %s |" % i) for l in lines)]
+            self.assertIn(len(present_29b), (0, len(FACTS_ROWS_2026_10_29B)), u"2026-10-29 の便(2)の行が一部だけ在る(中途の遷移)")
+            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b))
             stray = [l[:60] for l in lines if (u"P22" in l or u"P26" in l) and not l.startswith(row_heads) and u"2026-10-28" not in l]
             self.assertEqual(stray, [], u"遷移の外の行に P22・P26 の字がある")
         n = 0
