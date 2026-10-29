@@ -13,6 +13,10 @@ u"""注入の仕掛け(測定の harness)の総点検の門 ― 封 docs/XBRL_IN
 
 **(f) は、文書・門のどれかが commit される前は赤になる**(追跡されていない file には『足した commit』が無い)。skip にしない。
 **変数名について**: 過去の門が tests/measure の行頭の名前を数えるので、この門はそれらを行頭に置かない。
+**2026-10-29 追記(門の列挙を測った時点の木に縛る)**: (a)(b) の列挙(規準の 39 file・規準の外の副産物の 6 file・使う側の本文)は、**いまの木でなく封の commit ``365b468`` の木**(``git ls-tree -r`` と ``git show``)に当てて文書の表と照らす。
+いまの木で数えると、``measure/`` に file を足すたびに赤くなる(測った時点の値をいまの木で縛る型。人が直さないと古くなる)。文書の表と記録の数は測った時点の値のまま書き換えない。``git`` が使えない写し(履歴の無い写し)では SKIP を印字して省く
+(前例 ``test_xbrl_default_p27_result.py``・``test_xbrl_default_p26_result.py`` の test_8)。**365b468 より後に足された(または変わった)``measure/**/*.py`` のうち、いまの木で規準か副産物の検査に当たる file** は、
+この file の宣言 ``LATER_HARNESS_FILES``(path・役・届いたことの確かめ・根拠の字・足した日付)に載っていなければ赤(生きた門 (h))。宣言に在るのに当たらない・存在しない file も赤(古い宣言を残さない)。
 この file は docID の字を持たない(記録から読む)。判断(仕掛けの役・確かめの有無・台帳の行の読み)は文書の表にあり、この門は語彙・実在・内部の整合・機械で数えた部分を見る。判断そのものは監査が code から読み直す。
 """
 import ast
@@ -70,6 +74,58 @@ def jtext(p):
 
 def jload(p):
     return json.loads(jtext(p))
+
+
+#: 門 (a)(b) の列挙を縛る木(封の commit)。いまの木の ``measure/**/*.py`` は (h) だけが見る。
+PIN_TREE = "365b468"
+_PINNED = {}
+
+
+def pinned_measure():
+    u"""封の commit の木の ``measure/**/*.py``(OrderedDict {measure/ からの相対 path: 本文})。``git`` が使えない・commit が無い写しでは None。"""
+    if "v" in _PINNED:
+        return _PINNED["v"]
+    out = None
+    ls = subprocess.run(["git", "-C", REPO, "ls-tree", "-r", "--name-only", PIN_TREE, "--", PREFIX + "measure"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if ls.returncode == 0 and ls.stdout.strip():
+        out = collections.OrderedDict()
+        for name in sorted(ls.stdout.decode("utf-8").splitlines()):
+            if not name.endswith(".py"):
+                continue
+            r = subprocess.run(["git", "-C", REPO, "show", "%s:%s" % (PIN_TREE, name)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            if r.returncode != 0:
+                out = None
+                break
+            out[name[len(PREFIX):]] = r.stdout.decode("utf-8").replace(u"\r\n", u"\n")
+    _PINNED["v"] = out
+    return out
+
+
+def live_measure_texts(root):
+    u"""いまの木の ``measure/**/*.py``(OrderedDict {相対 path: 本文})。"""
+    out = collections.OrderedDict()
+    for p in sorted(glob.glob(os.path.join(root, "measure", "**", "*.py"), recursive=True)):
+        out[os.path.relpath(p, root)] = jtext(p)
+    return out
+
+
+def measure_texts(root):
+    u"""(a)(b) が数える ``measure/**/*.py``。``root`` がこの repo の audit-core なら封の commit の木、それ以外(偽の木)はそのディスク。"""
+    if os.path.abspath(root) == os.path.abspath(ROOT):
+        pinned = pinned_measure()
+        if pinned is None:
+            raise unittest.SkipTest(u"git ls-tree %s が失敗(履歴の無い写し)。列挙の比べを省く" % PIN_TREE)
+        return pinned
+    return live_measure_texts(root)
+
+
+def file_text(root, rel):
+    u"""文書が名指す file の本文。``measure/`` の file は封の commit の木の blob(無ければいまの木)、それ以外はいまの木。"""
+    if rel.startswith("measure/") and os.path.abspath(root) == os.path.abspath(ROOT):
+        pinned = pinned_measure()
+        if pinned is not None and rel in pinned:
+            return pinned[rel]
+    return jtext(os.path.join(root, rel))
 
 
 def cut(cell):
@@ -168,11 +224,9 @@ def seal_criterion(seal):
 EXTRA_MARKS = (u"注入",)
 
 
-def enumerate_measure(root, crit, extra=None):
-    u"""(a) 規準に当たる file の列 [(rel, 行数, [当たった字], 名か)]。extra = {rel: text}(偽の file を足す試験用)。"""
-    texts = collections.OrderedDict()
-    for p in sorted(glob.glob(os.path.join(root, "measure", "**", "*.py"), recursive=True)):
-        texts[os.path.relpath(p, root)] = jtext(p)
+def enumerate_measure(root, crit, extra=None, texts=None):
+    u"""(a) 規準に当たる file の列 [(rel, 行数, [当たった字], 名か)]。extra = {rel: text}(偽の file を足す試験用)。texts を省くと封の commit の木(``measure_texts``)。"""
+    texts = collections.OrderedDict(measure_texts(root) if texts is None else texts)
     for rel, t in (extra or {}).items():
         texts[rel] = t
     out = []
@@ -185,16 +239,18 @@ def enumerate_measure(root, crit, extra=None):
     return out, len(texts)
 
 
-def outside_criterion(root, crit, extra=None):
-    u"""§6-4 の 6 の副産物の検査: 規準に当たらず、検査の呼び出しを持ち、本文の差し替えの字を持つ file。"""
-    inc = set(r[0] for r in enumerate_measure(root, crit, extra)[0])
+def outside_criterion(root, crit, extra=None, texts=None):
+    u"""§6-4 の 6 の副産物の検査: 規準に当たらず、検査の呼び出しを持ち、本文の差し替えの字を持つ file。texts を省くと封の commit の木。"""
+    texts = collections.OrderedDict(measure_texts(root) if texts is None else texts)
+    for rel, t in (extra or {}).items():
+        texts[rel] = t
+    inc = set(r[0] for r in enumerate_measure(root, crit, None, texts)[0])
     marks = list(crit["marks"]) + list(EXTRA_MARKS)
     out = []
-    for p in sorted(glob.glob(os.path.join(root, "measure", "**", "*.py"), recursive=True)):
-        rel = os.path.relpath(p, root)
+    for rel in sorted(texts):
         if rel in inc:
             continue
-        t = jtext(p)
+        t = texts[rel]
         c = [x for x in crit["calls"] if x in t]
         m = [x for x in marks if x in t]
         if c and m:
@@ -218,10 +274,11 @@ COPY_RE = re.compile(r"\[u?\"数の字面\"\] in")
 def mapping_copies(root):
     u"""cd8 の行 → claim の対応付け(値が許容差の内側 かつ 数の字面が span に在る)を持つ measure の file。"""
     out = []
-    for p in sorted(glob.glob(os.path.join(root, "measure", "**", "*.py"), recursive=True)):
-        t = jtext(p)
+    texts = measure_texts(root)
+    for rel in sorted(texts):
+        t = texts[rel]
         if COPY_RE.search(t) and u"A1.TOL" in t:
-            out.append(os.path.relpath(p, root))
+            out.append(rel)
     return out
 
 
@@ -761,9 +818,9 @@ def check_a(J, seal, doc, root=ROOT, extra=None):
     return out
 
 
-def func_source(path, name):
-    u"""file の中の関数 name(どの深さでも)の字。無ければ None。"""
-    src = jtext(path)
+def func_source(path, name, src=None):
+    u"""file の中の関数 name(どの深さでも)の字。無ければ None。src を渡すとその本文(封の commit の木の blob など)から。"""
+    src = jtext(path) if src is None else src
     tree = ast.parse(src)
     lines = src.split(u"\n")
     for node in ast.walk(tree):
@@ -795,7 +852,7 @@ def check_b(R, J, root=ROOT):
         if not m["funcs"]:
             out.append(u"%s: 関数名が空" % mid)
         for fn in m["funcs"]:
-            if func_source(path, fn) is None:
+            if func_source(path, fn, file_text(root, m["file"])) is None:
                 out.append(u"%s: 関数 %s が %s に無い" % (mid, fn, m["file"]))
         # 根拠の字
         e = ev.get(mid)
@@ -804,7 +861,7 @@ def check_b(R, J, root=ROOT):
         else:
             if e["file"] != m["file"] or e["func"] not in m["funcs"]:
                 out.append(u"%s: 根拠の file・関数が仕掛けの表と違う" % mid)
-            src = func_source(path, e["func"])
+            src = func_source(path, e["func"], file_text(root, m["file"]))
             if src is None or e["quote"].strip() not in src:
                 out.append(u"%s: 根拠の字が関数 %s の中に無い" % (mid, e["func"]))
             if u"|" in e["quote"] or u"`" in e["quote"]:
@@ -829,7 +886,7 @@ def check_b(R, J, root=ROOT):
         for u in r["users"]:
             p = os.path.join(root, u)
             if os.path.exists(p) and os.path.basename(u) != os.path.basename(m["file"]):
-                t = jtext(p)
+                t = file_text(root, u)
                 if base not in t and not any(x in t for x in recnames):
                     out.append(u"%s: 使う側 %s が仕掛けの file も記録も本文に持たない" % (mid, u))
         # 『記録に残る届かなかった行』の K は実在する
@@ -862,6 +919,60 @@ def check_b(R, J, root=ROOT):
     for rel in J["outside"]:
         if not os.path.exists(os.path.join(root, rel)):
             out.append(u"規準の外の表の file が無い: %s" % rel)
+    return out
+
+
+#: 365b468 より後に足された(または変わった)``measure/**/*.py`` のうち、いまの木で規準(封 §1-1)か副産物の検査(封 §6-4 の 6)に当たる file の宣言。
+#: (path, 役, 届いたことの確かめ, 根拠の字を持つ関数, 根拠の字(その関数の中の 1 行), 足した日付)。役は VOC_ROLE、確かめは VOC_CHECK の語。
+#: 宣言に無い file が在れば赤、宣言に在るのに当たらない・存在しない file も赤。止めた理由の script はこの便では宣言しない(その便で足す)。
+LATER_HARNESS_FILES = (
+    ("measure/xbrl_p27_inject_reach_2026-10-29.py", u"仕掛け持ち + 使う側", u"有", "work_doc", u"reached = bool(tidx is not None and si == tidx)", "2026-10-29"),
+)
+LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def later_hits(root, crit, extra=None):
+    u"""封の commit の木に無い・本文が違う file のうち、**いまの木**で規準か副産物の検査に当たるもの。(OrderedDict {rel: 本文}, [rel])。extra = 偽の file を足す試験用。"""
+    pinned = measure_texts(root)
+    live = live_measure_texts(root)
+    for rel, tx in (extra or {}).items():
+        live[rel] = tx
+    hit = set(r[0] for r in enumerate_measure(root, crit, None, live)[0]) | set(r[0] for r in outside_criterion(root, crit, None, live))
+    return live, sorted(rel for rel in hit if pinned.get(rel) != live[rel])
+
+
+def check_later(root, crit, decl=None, extra=None):
+    u"""(h) 後から足した file の宣言。問題の列。"""
+    decl = LATER_HARNESS_FILES if decl is None else decl
+    live, later = later_hits(root, crit, extra)
+    out = []
+    seen = collections.Counter(d[0] for d in decl)
+    for rel in later:
+        if rel not in seen:
+            out.append(u"宣言が無い: 封の commit より後に足された・変わった file が規準か副産物の検査に当たる: %s" % rel)
+    for d in decl:
+        if len(d) != 6:
+            out.append(u"宣言の欄が 6 つでない: %r" % (d,))
+            continue
+        rel, role, chk, fn, quote, day = d
+        if seen[rel] > 1:
+            out.append(u"同じ path が 2 回宣言されている: %s" % rel)
+        if rel not in live:
+            out.append(u"宣言に在るのに file が無い(古い宣言): %s" % rel)
+            continue
+        if rel not in later:
+            out.append(u"宣言に在るのに、後から足された・変わった file で規準にも副産物の検査にも当たらない(古い宣言): %s" % rel)
+        if role not in VOC_ROLE:
+            out.append(u"%s: 役が決まった語でない: %s" % (rel, role))
+        if chk not in VOC_CHECK:
+            out.append(u"%s: 届いたことの確かめが決まった語でない: %s" % (rel, chk))
+        if not LATER_DATE.match(day) or day < "2026-10-29":
+            out.append(u"%s: 足した日付が YYYY-MM-DD でないか封の日(2026-10-29)より前: %s" % (rel, day))
+        src = func_source(rel, fn, live[rel])
+        if src is None:
+            out.append(u"%s: 根拠の関数 %s が file に無い" % (rel, fn))
+        elif not quote.strip() or quote.strip() not in src:
+            out.append(u"%s: 根拠の字が関数 %s の中に無い" % (rel, fn))
     return out
 
 
@@ -1089,6 +1200,9 @@ def build(base, steps):
 class Base(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        if pinned_measure() is None:
+            print(u"SKIP: git ls-tree %s が失敗(履歴の無い写し)。列挙の比べを省く" % PIN_TREE)
+            raise unittest.SkipTest(u"履歴の無い写し")
         cls.R = Recs()
         cls.seal = jtext(SEAL)
         cls.doc = jtext(DOC)
@@ -1119,6 +1233,27 @@ class EnumerationTest(Base):
         for rel, d in self.J["outside"].items():
             self.assertTrue(os.path.exists(os.path.join(ROOT, rel)), rel)
             self.assertNotIn(rel, self.J["files"])      # 規準の外の file は 39 の表に入れない
+
+
+class LaterFilesTest(Base):
+    u"""(h) 封の commit より後に足された file の宣言(生きた門)。(a)(b) は 365b468 の木に縛り、後から足した file はここで扱う。"""
+
+    def test_h_1_every_later_file_that_meets_the_criterion_is_declared_and_no_declaration_is_stale(self):
+        self.assertEqual(check_later(ROOT, self.crit), [])
+
+    def test_h_2_the_enumeration_is_the_commit_tree_not_the_working_tree(self):
+        pinned = pinned_measure()
+        ls = subprocess.run(["git", "-C", REPO, "ls-tree", "-r", "--name-only", PIN_TREE, "--", PREFIX + "measure"], stdout=subprocess.PIPE)
+        self.assertEqual(sorted(pinned), sorted(n[len(PREFIX):] for n in ls.stdout.decode("utf-8").splitlines() if n.endswith(".py")))
+        self.assertEqual(len(pinned), 179)                                     # 封 §0-4 の『measure/**/*.py の 179 file』
+        self.assertEqual(list(enumerate_measure(ROOT, self.crit)[0]), enumerate_measure(ROOT, self.crit, None, pinned)[0])
+        self.assertEqual(enumerate_measure(ROOT, self.crit)[1], 179)
+
+    def test_h_3_the_declared_files_are_in_the_working_tree_and_not_in_the_commit_tree(self):
+        pinned = pinned_measure()
+        for d in LATER_HARNESS_FILES:
+            self.assertTrue(os.path.exists(os.path.join(ROOT, d[0])), d[0])
+            self.assertNotIn(d[0], pinned, d[0])                               # この便の宣言は新しい file だけ(変わった file はまだ無い)
 
 
 class RecordsAndJudgmentTest(Base):
@@ -1297,6 +1432,47 @@ class FalseRecordsAreRedTest(Base):
         fake = {"measure/zz_inject_only_name.py": u"pass\n"}
         self.assertNotEqual(check_a(self.J, self.seal, self.doc, extra=fake), [])
         self.assertNotEqual(check_c(self.R, self.J, self.seal, self.doc, extra=fake), [])
+
+    def test_g_5b_a_later_file_without_a_declaration_or_a_stale_declaration_turns_h_red(self):
+        self.assertEqual(check_later(ROOT, self.crit), [])
+        # 規準(本文の字)に当たる偽の file・規準(file 名)に当たる偽の file・副産物の検査(呼び出し + 差し替えの字)に当たる偽の file を、宣言なしで足す
+        for name, text in (("measure/zz_later_probe.py", u"import x\nx.apply_edits(1)\n"),
+                           ("measure/zz_later_inject_name.py", u"pass\n"),
+                           ("measure/zz_later_stop_like.py", u"verify_document(1)\ntext.replace(1, 2)\n")):
+            self.assertNotEqual(check_later(ROOT, self.crit, extra={name: text}), [], name)
+            # 宣言すれば緑(宣言の欄が合っていれば)
+            decl = LATER_HARNESS_FILES + ((name, u"仕掛け持ち", u"無", "f", u"x = 1", "2026-10-30"),)
+            ok = {name: u"def f():\n    x = 1\n" + text}
+            self.assertEqual(check_later(ROOT, self.crit, decl=decl, extra=ok), [], name)
+        # 規準にも副産物の検査にも当たらない偽の file は宣言不要(足しても緑)
+        self.assertEqual(check_later(ROOT, self.crit, extra={"measure/zz_plain.py": u"pass\n"}), [])
+        # 古い宣言: 存在しない path・当たらない file(封の commit の木に在る file で変わっていない)・宣言の重複
+        for bad in ((("measure/zz_not_there.py", u"仕掛け持ち", u"有", "f", u"x", "2026-10-30"),),
+                    (("measure/xbrl_fresh_2026-10-21.py", u"仕掛け持ち", u"有", "inject_doc", u"x", "2026-10-30"),),
+                    (LATER_HARNESS_FILES[0], LATER_HARNESS_FILES[0])):
+            self.assertNotEqual(check_later(ROOT, self.crit, decl=LATER_HARNESS_FILES + bad), [], bad)
+        # 宣言を消す
+        self.assertNotEqual(check_later(ROOT, self.crit, decl=()), [])
+
+    def test_g_5c_a_declaration_with_a_wrong_word_or_evidence_turns_h_red(self):
+        rel, role, chk, fn, quote, day = LATER_HARNESS_FILES[0]
+        for d in ((rel, u"たぶん仕掛け", chk, fn, quote, day), (rel, role, u"たぶん有", fn, quote, day), (rel, role, chk, "no_such_function", quote, day),
+                  (rel, role, chk, fn, quote + u" # この字は file に無い", day), (rel, role, chk, fn, u"", day), (rel, role, chk, fn, quote, "2026-10-28"),
+                  (rel, role, chk, fn, quote, "10/29"), (rel, role, chk, fn, quote)):
+            self.assertNotEqual(check_later(ROOT, self.crit, decl=(d,)), [], d)
+        # 根拠の字は『その関数の中』: file の別の関数の字では足りない
+        self.assertNotEqual(check_later(ROOT, self.crit, decl=((rel, role, chk, "branch", quote, day),)), [])
+
+    def test_g_5d_the_commit_tree_binding_keeps_a_and_b_green_when_a_file_is_added_and_red_when_the_document_table_changes(self):
+        # いまの木に規準に当たる file を足しても (a) は変わらない(縛っている)が、列挙には効く(extra で足すと赤 = test_g_5)
+        live, later = later_hits(ROOT, self.crit)
+        self.assertIn(LATER_HARNESS_FILES[0][0], later)
+        self.assertNotIn(LATER_HARNESS_FILES[0][0], [r[0] for r in enumerate_measure(ROOT, self.crit)[0]])
+        self.assertEqual(check_a(self.J, self.seal, self.doc), [])
+        # 文書の表の 1 字を変えると、縛った列挙でも (a) が赤(元の門の効きが残る)
+        doc = self.doc.replace(u"| 仕掛け持ち |", u"| 仕掛け待ち |", 1)
+        self.assertNotEqual(doc, self.doc)
+        self.assertNotEqual(check_a(parse_judgments(doc), self.seal, doc), [])
 
     def test_g_6_a_wrong_function_name_or_quote_turns_b_red(self):
         blk = BLOCK_RE.search(self.doc[self.doc.index(u"<!-- 門:start mech -->"):]).group(2)

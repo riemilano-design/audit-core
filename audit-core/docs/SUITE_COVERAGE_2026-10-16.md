@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **237 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **238 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 171 |
+| `tests/measure` | 172 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -179,6 +179,9 @@ P27 段 2 の評価用の結果の門(結果文書 `docs/XBRL_P27_RESULT_2026-10
 
 **2026-10-29 に +1**(`tests/measure/test_xbrl_inject_harness_review.py`。
 注入の仕掛け(測定の harness)の総点検の門(封 `docs/XBRL_INJECT_HARNESS_REVIEW_SEAL_2026-10-29.md` §5-2 の (a)〜(g)。点検の文書 `docs/XBRL_INJECT_HARNESS_REVIEW_2026-10-29.md` の表を、規準で列挙し直した file・既存の記録・文書の判断の表から作り直す・予測 H-1〜H-16 の当否を封の字から求める・台帳の行を規準で選び直す・封の commit が文書・門より前)。236 → 237(`tests/measure` 170 → 171)。新しい記録 file も script も無い。
+
+**2026-10-29 に +1**(`tests/measure/test_xbrl_p27_inject_reach.py`。
+評価用・調整用 P27 の注入で「差し替えが基準の claim に届いたか」を数える診断の門(封 `docs/XBRL_P27_INJECT_REACH_SEAL_2026-10-29.md` §5-2 の (a)〜(j)。診断の文書 `docs/XBRL_P27_INJECT_REACH_DIAG_2026-10-29.md` の表を記録 `fixtures/xbrl/p27/inject_reach_2026-10-29.json` から作り直す・予測 IR-1〜IR-14 の当否を封の字から求める・分類を別の書き方で求め直す・包みの門(作り物の backend)・封の commit が script・記録・文書・門より前・読んだ入力の sha256)。237 → 238(`tests/measure` 171 → 172)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
