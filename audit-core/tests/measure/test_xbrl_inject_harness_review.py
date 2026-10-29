@@ -924,9 +924,10 @@ def check_b(R, J, root=ROOT):
 
 #: 365b468 より後に足された(または変わった)``measure/**/*.py`` のうち、いまの木で規準(封 §1-1)か副産物の検査(封 §6-4 の 6)に当たる file の宣言。
 #: (path, 役, 届いたことの確かめ, 根拠の字を持つ関数, 根拠の字(その関数の中の 1 行), 足した日付)。役は VOC_ROLE、確かめは VOC_CHECK の語。
-#: 宣言に無い file が在れば赤、宣言に在るのに当たらない・存在しない file も赤。止めた理由の script はこの便では宣言しない(その便で足す)。
+#: 宣言に無い file が在れば赤、宣言に在るのに当たらない・存在しない file も赤。止めた理由の script は 2026-10-29 の重ね直しで宣言した(下の 2 行目)。
 LATER_HARNESS_FILES = (
     ("measure/xbrl_p27_inject_reach_2026-10-29.py", u"仕掛け持ち + 使う側", u"有", "work_doc", u"reached = bool(tidx is not None and si == tidx)", "2026-10-29"),
+    ("measure/xbrl_stop_reason_2026-10-29.py", u"使う側", u"有", "work", u"r = RE.work_doc(a)", "2026-10-29"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 

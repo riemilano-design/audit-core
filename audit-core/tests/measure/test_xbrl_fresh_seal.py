@@ -122,6 +122,7 @@ def is_roster(path):
 # 2026-10-28 追記(注入 T2 で通した 5 行の診断): 新しい記録 t2_pass_diag_2026-10-28.json(通した 5 行が載る 3 書類の docID を持つ)と、測定の script・門(docstring の使い方の行に docID を字で持つ)。封 docs/XBRL_T2_PASS_DIAG_SEAL_2026-10-28.md の §5。前例(917157c の 3 file、default_p27 の 3 file)と同じ扱い(引きは動かさない)。封と診断の文書は docID を書かない(門 (h) が見る)。
 # 2026-10-28 追記(注入 741 行の全部で「差し替えが基準の claim に届いたか」を数える診断): 新しい記録 inject_reach_2026-10-28.json(30 書類の docID を持つ)と、測定の script・門(script は docstring の使い方の行に docID を字で持つ。門は docID を持たないが、前の便と同じ 3 つ組で宣言する)。封 docs/XBRL_INJECT_REACH_DIAG_SEAL_2026-10-28.md の §5。前例(fbdcaaa の 3 file)と同じ扱い(引きは動かさない)。封と診断の文書は docID を書かない(門 (h) が見る)。
 # 2026-10-29 追記(評価用・調整用 P27 の注入で「差し替えが基準の claim に届いたか」を数える診断): 新しい記録 p27/inject_reach_2026-10-29.json(評価用 10 書類・調整用 10 書類の docID を持つ)と、測定の script・門(script と門は docID を字で持たないが、前の便と同じ 3 つ組で宣言する)。封 docs/XBRL_P27_INJECT_REACH_SEAL_2026-10-29.md の §5。前例(inject_reach_2026-10-28 の 3 file)と同じ扱い(引きは動かさない)。封と診断の文書は docID を書かない(門 (h) が見る)。
+# 2026-10-29 追記(注入 741 行で「止めた理由」と「名指し」を分類し、P27E を同じ 741 行で測る診断): 新しい記録 stop_reason_2026-10-29.json(30 書類の docID を持つ)と、測定の script・門(script は docstring に docID を持たない。門も持たないが、前の便と同じ 3 つ組で宣言する)。封 docs/XBRL_STOP_REASON_DIAG_SEAL_2026-10-29.md の §5。前例(a7ceb29 の 3 file)と同じ扱い(引きは動かさない)。封と診断の文書は docID を書かない(門 (h) が見る)。
 LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixtures/xbrl/p26_2026-10-21.json",
                       "fixtures/xbrl/default_p26_2026-10-23.json", "measure/xbrl_default_p26_2026-10-23.py", "tests/measure/test_xbrl_default_p26_result.py",
                       "docs/XBRL_P27_SAMPLE_SEAL_2026-10-27.md",
@@ -141,7 +142,9 @@ LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixt
                       "fixtures/xbrl/inject_reach_2026-10-28.json", "measure/xbrl_inject_reach_2026-10-28.py",
                       "tests/measure/test_xbrl_inject_reach.py",
                       "fixtures/xbrl/p27/inject_reach_2026-10-29.json", "measure/xbrl_p27_inject_reach_2026-10-29.py",
-                      "tests/measure/test_xbrl_p27_inject_reach.py")
+                      "tests/measure/test_xbrl_p27_inject_reach.py",
+                      "fixtures/xbrl/stop_reason_2026-10-29.json", "measure/xbrl_stop_reason_2026-10-29.py",
+                      "tests/measure/test_xbrl_stop_reason.py")
 
 
 def drop_later_naming_files(named):
