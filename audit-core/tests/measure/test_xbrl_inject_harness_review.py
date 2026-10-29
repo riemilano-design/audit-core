@@ -926,10 +926,12 @@ def check_b(R, J, root=ROOT):
 #: (path, 役, 届いたことの確かめ, 根拠の字を持つ関数, 根拠の字(その関数の中の 1 行), 足した日付)。役は VOC_ROLE、確かめは VOC_CHECK の語。
 #: 宣言に無い file が在れば赤、宣言に在るのに当たらない・存在しない file も赤。止めた理由の script は 2026-10-29 の重ね直しで宣言した(下の 2 行目)。
 #: cd8 の系統の「行 -> claim」を位置で引き直す script は 2026-10-29 に宣言した(下の 3 行目。位置で引く対応付けを自分で持つ仕掛けで、M-05・M-03・M-16 の関数を使う)。
+#: 「名指さなかった fact」を raw から拾う script は 2026-10-29 に宣言した(下の 4 行目。止めた理由の script の RE.work_doc を呼ぶ使う側で、verify_raw の包みは返り値を変えない)。
 LATER_HARNESS_FILES = (
     ("measure/xbrl_p27_inject_reach_2026-10-29.py", u"仕掛け持ち + 使う側", u"有", "work_doc", u"reached = bool(tidx is not None and si == tidx)", "2026-10-29"),
     ("measure/xbrl_stop_reason_2026-10-29.py", u"使う側", u"有", "work", u"r = RE.work_doc(a)", "2026-10-29"),
     ("measure/xbrl_cd8_rowclaim_reach_2026-10-29.py", u"仕掛け持ち + 使う側", u"有", "claim_at", u"if pos < b2 and a2 < e:", "2026-10-29"),
+    ("measure/xbrl_unnamed_fact_2026-10-29.py", u"使う側", u"有", "run_doc", u"r = RE.work_doc(a)", "2026-10-29"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 

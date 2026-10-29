@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **240 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **241 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 174 |
+| `tests/measure` | 175 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -188,6 +188,9 @@ P27 段 2 の評価用の結果の門(結果文書 `docs/XBRL_P27_RESULT_2026-10
 
 **2026-10-29 に +1**(`tests/measure/test_xbrl_cd8_rowclaim_reach.py`。
 cd8 の系統の「行 → claim」(値と字の最初の 1 件)を位置で引き直して行ごとに数える診断の門(封 `docs/XBRL_CD8_ROWCLAIM_REACH_SEAL_2026-10-29.md` §5 の (a)〜(k)。診断の文書 `docs/XBRL_CD8_ROWCLAIM_REACH_DIAG_2026-10-29.md` の表を記録 `fixtures/xbrl/cd8/rowclaim_reach_2026-10-29.json` から作り直す・予測 CR-1〜CR-25 の当否を封の字から求める・分類と判定が変わるを別の書き方で求め直す・数え直しと台帳の行の語を別の実装で求め直す・位置の規則の作り物の入力での振る舞い・封の commit が script・記録・文書・門より前・読んだ記録の sha256)。239 → 240(`tests/measure` 173 → 174)。
+
+**2026-10-29 に +1**(`tests/measure/test_xbrl_unnamed_fact.py`。
+P27 が「証拠が無く名指さない」で止めた行で、engine が内側に持つ「名指さなかった fact」は原本の fact かを数える診断の門(封 `docs/XBRL_UNNAMED_FACT_DIAG_SEAL_2026-10-29.md` §5-2 の (a)〜(j)。診断の文書 `docs/XBRL_UNNAMED_FACT_DIAG_2026-10-29.md` の表を記録 `fixtures/xbrl/unnamed_fact_2026-10-29.json` から作り直す・予測 UF-1〜UF-14 の当否を封の字から求める・一致の語と比の帯と 10 の冪を別の書き方で求め直す・包みの門(作り物の RE・LB で返り値を変えず戻せなければ止まる)・封の commit が script・記録・文書・門より前・読んだ入力の sha256)。240 → 241(`tests/measure` 174 → 175)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
