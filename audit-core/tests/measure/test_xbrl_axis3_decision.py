@@ -92,6 +92,7 @@ LATER_ENGINE_COMMITS = {
     "917157c": "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md",         # P26 段 2 ― 既定 P22 -> P26(vocabulary.py +4/−1。宣言 2026-10-27)
     "b2c3f56": "docs/XBRL_P27_SEAL_2026-10-27.md",                 # P27 段 2 E ― engine(P27・P27E の旗、既定は P26 のまま。宣言 2026-10-27)
     "6a34db5": "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md",         # P27 の段 2 ― 既定 P26 -> P27(vocabulary.py +5/−1・verify_document.py の docstring +1/−1。宣言 2026-10-28)
+    "cb8612f": "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md",   # 候補の欄 candidate ― engine(vocabulary.py +5: 旗と P27C、verify_document.py +11/−1: 13 欄目、report_customer.py +22/−1: 案 A。既定は P27 のまま。人間の承認 db68a2c。宣言 2026-10-30)
 }
 
 
