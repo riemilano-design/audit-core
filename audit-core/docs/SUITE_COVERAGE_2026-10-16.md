@@ -15,7 +15,7 @@
 
 | 漏れていた場所 | file | 本数 | なぜ |
 |---|---|---|---|
-| `tests/measure` | 178 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
+| `tests/measure` | 179 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
 | `measure/tests` | 1 | 96 | `measure/` が package でないので**丸ごと飛ぶ** |
 
 `tests/measure` は `-s tests/measure` で毎回別に走らせていたので**測り落としは無かった**。
@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **244 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **245 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -200,6 +200,9 @@ P27 が「証拠が無く名指さない」で止めた行で、engine が内側
 
 **2026-10-30 に +1**(`tests/measure/test_xbrl_candidate_eyes.py`。
 候補の欄 `candidate` の正しさを、読み手の席(subagent)が無改変の 10 行で 1 回だけ見た便の門(封 `docs/XBRL_CANDIDATE_EYES_SEAL_2026-10-30.md` §5 の 6。結果の文書 `docs/XBRL_CANDIDATE_EYES_2026-10-30.md` の表を記録 `fixtures/xbrl/candidate_eyes_2026-10-30.json` から作り直す・E-1〜E-9 の当否を封の字と記録から求める・多数決と全員一致と集計を席ごとの読みから別実装で数え直す・指示文の定数が封の blockquote と同じ・10 行の選び方を記録から求め直す・実装と封の commit が記録より前・門の変異)。243 → 244(`tests/measure` 177 → 178)。
+
+**2026-10-30 に +1**(`tests/measure/test_xbrl_delta_naming.py`。
+候補の要素の「当期末 − 前期末」が文中の金額と一致するかを、無改変の対象行で機械で測った便の門(封 `docs/XBRL_DELTA_NAMING_DIAG_SEAL_2026-10-30.md` §5 の 5 と追記 2。結果の文書 `docs/XBRL_DELTA_NAMING_DIAG_2026-10-30.md` の表を記録 `fixtures/xbrl/delta_naming_2026-10-30.json` から作り直す・D-1〜D-12 の当否を封の字と記録から求める・段と型と対照の段と集計(全体・探索・検証)を行の値から別実装で数え直す・探索の行の数が封 §6 の数と一致する・語の一覧と帯が封の字と script の定数で同じ・実装と封と封への追記の commit が記録より前・門の変異)。244 → 245(`tests/measure` 178 → 179)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
