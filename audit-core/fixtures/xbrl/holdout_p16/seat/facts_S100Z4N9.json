@@ -1,0 +1,7485 @@
+[
+ {
+  "要素": "jpdei_cor:NumberOfSubmissionDEI",
+  "context": "FilingDateInstant",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+  "context": "Prior4YearDuration",
+  "値": 12668441000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+  "context": "Prior3YearDuration",
+  "値": 13418471000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+  "context": "Prior2YearDuration",
+  "値": 13694050000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+  "context": "Prior1YearDuration",
+  "値": 12887524000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+  "context": "CurrentYearDuration",
+  "値": 11804911000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+  "context": "Prior4YearDuration",
+  "値": 346170000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+  "context": "Prior3YearDuration",
+  "値": 510498000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+  "context": "Prior2YearDuration",
+  "値": 607309000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+  "context": "Prior1YearDuration",
+  "値": 474675000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+  "context": "CurrentYearDuration",
+  "値": -639811000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+  "context": "Prior4YearDuration",
+  "値": 130680000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+  "context": "Prior3YearDuration",
+  "値": 239921000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+  "context": "Prior2YearDuration",
+  "値": 338335000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+  "context": "Prior1YearDuration",
+  "値": 345951000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+  "context": "CurrentYearDuration",
+  "値": -711406000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults",
+  "context": "Prior4YearDuration",
+  "値": 128472000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults",
+  "context": "Prior3YearDuration",
+  "値": 240789000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults",
+  "context": "Prior2YearDuration",
+  "値": 340036000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults",
+  "context": "Prior1YearDuration",
+  "値": 344996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults",
+  "context": "CurrentYearDuration",
+  "値": -707824000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+  "context": "Prior4YearInstant",
+  "値": 398965000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+  "context": "Prior3YearInstant",
+  "値": 622546000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+  "context": "Prior2YearInstant",
+  "値": 915155000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+  "context": "Prior1YearInstant",
+  "値": 1217855000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+  "context": "CurrentYearInstant",
+  "値": 453994000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+  "context": "Prior4YearInstant",
+  "値": 8563544000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+  "context": "Prior3YearInstant",
+  "値": 9431980000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+  "context": "Prior2YearInstant",
+  "値": 8837815000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+  "context": "Prior1YearInstant",
+  "値": 8730954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+  "context": "CurrentYearInstant",
+  "値": 10232043000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+  "context": "Prior4YearInstant",
+  "値": 108.43,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+  "context": "Prior3YearInstant",
+  "値": 166.31,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+  "context": "Prior2YearInstant",
+  "値": 240.86,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+  "context": "Prior1YearInstant",
+  "値": 317.76,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+  "context": "CurrentYearInstant",
+  "値": 117.27,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults",
+  "context": "Prior4YearDuration",
+  "値": 34.32,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults",
+  "context": "Prior3YearDuration",
+  "値": 64.47,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults",
+  "context": "Prior2YearDuration",
+  "値": 89.55,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults",
+  "context": "Prior1YearDuration",
+  "値": 90.55,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults",
+  "context": "CurrentYearDuration",
+  "値": -184.53,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+  "context": "Prior4YearInstant",
+  "値": 0.047,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+  "context": "Prior3YearInstant",
+  "値": 0.066,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+  "context": "Prior2YearInstant",
+  "値": 0.104,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+  "context": "Prior1YearInstant",
+  "値": 0.139,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+  "context": "CurrentYearInstant",
+  "値": 0.044,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+  "context": "Prior4YearDuration",
+  "値": 0.233,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+  "context": "Prior3YearDuration",
+  "値": 0.47,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+  "context": "Prior2YearDuration",
+  "値": 0.44,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+  "context": "Prior1YearDuration",
+  "値": 0.324,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+  "context": "CurrentYearDuration",
+  "値": -0.851,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults",
+  "context": "Prior4YearDuration",
+  "値": 9.1,
+  "単位": "pure",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults",
+  "context": "Prior3YearDuration",
+  "値": 5.4,
+  "単位": "pure",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults",
+  "context": "Prior2YearDuration",
+  "値": 8.9,
+  "単位": "pure",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults",
+  "context": "Prior1YearDuration",
+  "値": 10.8,
+  "単位": "pure",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+  "context": "Prior4YearDuration",
+  "値": 419670000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+  "context": "Prior3YearDuration",
+  "値": 999954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+  "context": "Prior2YearDuration",
+  "値": 1698334000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+  "context": "Prior1YearDuration",
+  "値": -737785000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+  "context": "CurrentYearDuration",
+  "値": -259597000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+  "context": "Prior4YearDuration",
+  "値": -144325000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+  "context": "Prior3YearDuration",
+  "値": -281196000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+  "context": "Prior2YearDuration",
+  "値": -137881000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+  "context": "Prior1YearDuration",
+  "値": -225524000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+  "context": "CurrentYearDuration",
+  "値": -345731000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+  "context": "Prior4YearDuration",
+  "値": -348414000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+  "context": "Prior3YearDuration",
+  "値": -56895000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+  "context": "Prior2YearDuration",
+  "値": -1627783000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+  "context": "Prior1YearDuration",
+  "値": -64115000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+  "context": "CurrentYearDuration",
+  "値": 908092000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+  "context": "Prior4YearInstant",
+  "値": 2144713000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+  "context": "Prior3YearInstant",
+  "値": 2806575000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+  "context": "Prior2YearInstant",
+  "値": 2739244000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+  "context": "Prior1YearInstant",
+  "値": 1711817000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+  "context": "CurrentYearInstant",
+  "値": 2014581000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "Prior4YearInstant",
+  "値": 190.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "Prior3YearInstant",
+  "値": 171.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "Prior2YearInstant",
+  "値": 183.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "Prior1YearInstant",
+  "値": 196.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant",
+  "値": 200.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "Prior4YearInstant",
+  "値": 389.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "Prior3YearInstant",
+  "値": 351.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "Prior2YearInstant",
+  "値": 347.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "Prior1YearInstant",
+  "値": 331.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant",
+  "値": 326.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:OperatingRevenue1SummaryOfBusinessResults",
+  "context": "Prior4YearDuration_NonConsolidatedMember",
+  "値": 507131000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OperatingRevenue1SummaryOfBusinessResults",
+  "context": "Prior3YearDuration_NonConsolidatedMember",
+  "値": 677800000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OperatingRevenue1SummaryOfBusinessResults",
+  "context": "Prior2YearDuration_NonConsolidatedMember",
+  "値": 835480000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OperatingRevenue1SummaryOfBusinessResults",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 660000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OperatingRevenue1SummaryOfBusinessResults",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 669600000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+  "context": "Prior4YearDuration_NonConsolidatedMember",
+  "値": 130371000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+  "context": "Prior3YearDuration_NonConsolidatedMember",
+  "値": 281869000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+  "context": "Prior2YearDuration_NonConsolidatedMember",
+  "値": 373988000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 132615000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 168197000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+  "context": "Prior4YearDuration_NonConsolidatedMember",
+  "値": -31682000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+  "context": "Prior3YearDuration_NonConsolidatedMember",
+  "値": 174833000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+  "context": "Prior2YearDuration_NonConsolidatedMember",
+  "値": 273770000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 165019000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": -535826000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CapitalStockSummaryOfBusinessResults",
+  "context": "Prior4YearInstant_NonConsolidatedMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CapitalStockSummaryOfBusinessResults",
+  "context": "Prior3YearInstant_NonConsolidatedMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CapitalStockSummaryOfBusinessResults",
+  "context": "Prior2YearInstant_NonConsolidatedMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CapitalStockSummaryOfBusinessResults",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CapitalStockSummaryOfBusinessResults",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalNumberOfIssuedSharesSummaryOfBusinessResults",
+  "context": "Prior4YearInstant_NonConsolidatedMember",
+  "値": 5204500.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:TotalNumberOfIssuedSharesSummaryOfBusinessResults",
+  "context": "Prior3YearInstant_NonConsolidatedMember",
+  "値": 5204500.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:TotalNumberOfIssuedSharesSummaryOfBusinessResults",
+  "context": "Prior2YearInstant_NonConsolidatedMember",
+  "値": 5204500.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:TotalNumberOfIssuedSharesSummaryOfBusinessResults",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 5204500.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:TotalNumberOfIssuedSharesSummaryOfBusinessResults",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 5204500.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+  "context": "Prior4YearInstant_NonConsolidatedMember",
+  "値": 919290000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+  "context": "Prior3YearInstant_NonConsolidatedMember",
+  "値": 1077504000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+  "context": "Prior2YearInstant_NonConsolidatedMember",
+  "値": 1305182000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1427229000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 839308000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+  "context": "Prior4YearInstant_NonConsolidatedMember",
+  "値": 3932948000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+  "context": "Prior3YearInstant_NonConsolidatedMember",
+  "値": 3839477000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+  "context": "Prior2YearInstant_NonConsolidatedMember",
+  "値": 3787118000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 3870480000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 3870426000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+  "context": "Prior4YearInstant_NonConsolidatedMember",
+  "値": 249.84,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+  "context": "Prior3YearInstant_NonConsolidatedMember",
+  "値": 287.85,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+  "context": "Prior2YearInstant_NonConsolidatedMember",
+  "値": 343.51,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 372.39,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 216.8,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults",
+  "context": "Prior4YearDuration_NonConsolidatedMember",
+  "値": 10.0,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults",
+  "context": "Prior3YearDuration_NonConsolidatedMember",
+  "値": 15.0,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults",
+  "context": "Prior2YearDuration_NonConsolidatedMember",
+  "値": 16.0,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 19.0,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 18.0,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:InterimDividendPaidPerShareSummaryOfBusinessResults",
+  "context": "Prior4YearDuration_NonConsolidatedMember",
+  "値": 5.0,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:InterimDividendPaidPerShareSummaryOfBusinessResults",
+  "context": "Prior3YearDuration_NonConsolidatedMember",
+  "値": 5.0,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:InterimDividendPaidPerShareSummaryOfBusinessResults",
+  "context": "Prior2YearDuration_NonConsolidatedMember",
+  "値": 8.0,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:InterimDividendPaidPerShareSummaryOfBusinessResults",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 8.0,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:InterimDividendPaidPerShareSummaryOfBusinessResults",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 9.0,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults",
+  "context": "Prior4YearDuration_NonConsolidatedMember",
+  "値": -8.32,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults",
+  "context": "Prior3YearDuration_NonConsolidatedMember",
+  "値": 46.98,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults",
+  "context": "Prior2YearDuration_NonConsolidatedMember",
+  "値": 72.46,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 43.19,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": -138.99,
+  "単位": "JPYPerShares",
+  "decimals": "2"
+ },
+ {
+  "要素": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+  "context": "Prior4YearInstant_NonConsolidatedMember",
+  "値": 0.234,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+  "context": "Prior3YearInstant_NonConsolidatedMember",
+  "値": 0.281,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+  "context": "Prior2YearInstant_NonConsolidatedMember",
+  "値": 0.345,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 0.369,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 0.217,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+  "context": "Prior4YearDuration_NonConsolidatedMember",
+  "値": -0.027,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+  "context": "Prior3YearDuration_NonConsolidatedMember",
+  "値": 0.175,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+  "context": "Prior2YearDuration_NonConsolidatedMember",
+  "値": 0.23,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 0.121,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": -0.473,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults",
+  "context": "Prior3YearDuration_NonConsolidatedMember",
+  "値": 7.4,
+  "単位": "pure",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults",
+  "context": "Prior2YearDuration_NonConsolidatedMember",
+  "値": 11.0,
+  "単位": "pure",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 22.5,
+  "単位": "pure",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:PayoutRatioSummaryOfBusinessResults",
+  "context": "Prior3YearDuration_NonConsolidatedMember",
+  "値": 0.319,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:PayoutRatioSummaryOfBusinessResults",
+  "context": "Prior2YearDuration_NonConsolidatedMember",
+  "値": 0.221,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:PayoutRatioSummaryOfBusinessResults",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 0.44,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "Prior4YearInstant_NonConsolidatedMember",
+  "値": 5.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "Prior3YearInstant_NonConsolidatedMember",
+  "値": 7.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "Prior2YearInstant_NonConsolidatedMember",
+  "値": 23.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 24.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 25.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "Prior4YearInstant_NonConsolidatedMember",
+  "値": 2.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "Prior2YearInstant_NonConsolidatedMember",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:TotalShareholderReturn",
+  "context": "Prior4YearInstant_NonConsolidatedMember",
+  "値": 0.88,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalShareholderReturn",
+  "context": "Prior3YearInstant_NonConsolidatedMember",
+  "値": 1.022,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalShareholderReturn",
+  "context": "Prior2YearInstant_NonConsolidatedMember",
+  "値": 2.298,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalShareholderReturn",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 2.825,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalShareholderReturn",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 2.593,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalReturnOnSharePriceIndex",
+  "context": "Prior4YearInstant_NonConsolidatedMember",
+  "値": 0.986,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalReturnOnSharePriceIndex",
+  "context": "Prior3YearInstant_NonConsolidatedMember",
+  "値": 1.239,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalReturnOnSharePriceIndex",
+  "context": "Prior2YearInstant_NonConsolidatedMember",
+  "値": 1.556,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalReturnOnSharePriceIndex",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1.62,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalReturnOnSharePriceIndex",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 2.321,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:TargetsDescriptionOfMetricsRelatedToPolicyOnDevelopmentOfHumanResourcesAndInternalEnvironmentAndTargetsAndPerformanceUsingSuchMetrics",
+  "context": "CurrentYearInstant_Row1Member",
+  "値": 30.0,
+  "単位": "pure",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:PerformanceDescriptionOfMetricsRelatedToPolicyOnDevelopmentOfHumanResourcesAndInternalEnvironmentAndTargetsAndPerformanceUsingSuchMetrics",
+  "context": "CurrentYearInstant_Row1Member",
+  "値": 8.1,
+  "単位": "pure",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+  "context": "CurrentYearDuration",
+  "値": 580338000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 440662000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 49862000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 1839000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 47135000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+  "context": "CurrentYearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 40838000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfIssuedSharesAsOfFiscalYearEndIssuedSharesTotalNumberOfSharesEtc",
+  "context": "FilingDateInstant_OrdinaryShareMember",
+  "値": 5204500.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfIssuedSharesAsOfFilingDateIssuedSharesTotalNumberOfSharesEtc",
+  "context": "FilingDateInstant_OrdinaryShareMember",
+  "値": 5204500.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfIssuedSharesAsOfFiscalYearEndIssuedSharesTotalNumberOfSharesEtc",
+  "context": "FilingDateInstant",
+  "値": 5204500.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfIssuedSharesAsOfFilingDateIssuedSharesTotalNumberOfSharesEtc",
+  "context": "FilingDateInstant",
+  "値": 5204500.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesConstitutingOneUnit",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 100.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfShareholdersFinancialInstitutions",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfShareholdersFinancialServiceProviders",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 8.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfShareholdersOtherCorporations",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 41.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfShareholdersForeignInvestorsOtherThanIndividuals",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 9.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfShareholdersForeignIndividualInvestors",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 9.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfShareholdersIndividualsAndOthers",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 5846.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfShareholdersTotal",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 5914.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldNumberOfUnitsFinancialInstitutions",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 2823.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldNumberOfUnitsFinancialServiceProviders",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 62.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldNumberOfUnitsOtherCorporations",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 1628.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldNumberOfUnitsForeignInvestorsOtherThanIndividuals",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 103.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldNumberOfUnitsForeignIndividualInvestors",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 31.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldNumberOfUnitsIndividualsAndOthers",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 47348.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldNumberOfUnitsTotal",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 51995.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldSharesLessThanOneUnit",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 5000.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:PercentageOfShareholdingsFinancialInstitutions",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 0.0543,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:PercentageOfShareholdingsFinancialServiceProviders",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 0.0012,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:PercentageOfShareholdingsOtherCorporations",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 0.0313,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:PercentageOfShareholdingsForeignersOtherThanIndividuals",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 0.002,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:PercentageOfShareholdingsForeignIndividuals",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 0.0006,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:PercentageOfShareholdingsIndividualsAndOthers",
+  "context": "CurrentYearInstant_OrdinaryShareMember",
+  "値": 0.9106,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeld",
+  "context": "CurrentYearInstant_No1MajorShareholdersMember",
+  "値": 407800.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatio",
+  "context": "CurrentYearInstant_No1MajorShareholdersMember",
+  "値": 0.0982,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeld",
+  "context": "CurrentYearInstant_No2MajorShareholdersMember",
+  "値": 350700.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatio",
+  "context": "CurrentYearInstant_No2MajorShareholdersMember",
+  "値": 0.0844,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeld",
+  "context": "CurrentYearInstant_No3MajorShareholdersMember",
+  "値": 282320.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatio",
+  "context": "CurrentYearInstant_No3MajorShareholdersMember",
+  "値": 0.068,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeld",
+  "context": "CurrentYearInstant_No4MajorShareholdersMember",
+  "値": 169700.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatio",
+  "context": "CurrentYearInstant_No4MajorShareholdersMember",
+  "値": 0.0409,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeld",
+  "context": "CurrentYearInstant_No5MajorShareholdersMember",
+  "値": 120700.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatio",
+  "context": "CurrentYearInstant_No5MajorShareholdersMember",
+  "値": 0.0291,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeld",
+  "context": "CurrentYearInstant_No6MajorShareholdersMember",
+  "値": 93830.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatio",
+  "context": "CurrentYearInstant_No6MajorShareholdersMember",
+  "値": 0.0226,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeld",
+  "context": "CurrentYearInstant_No7MajorShareholdersMember",
+  "値": 88834.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatio",
+  "context": "CurrentYearInstant_No7MajorShareholdersMember",
+  "値": 0.0214,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeld",
+  "context": "CurrentYearInstant_No8MajorShareholdersMember",
+  "値": 75800.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatio",
+  "context": "CurrentYearInstant_No8MajorShareholdersMember",
+  "値": 0.0182,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeld",
+  "context": "CurrentYearInstant_No9MajorShareholdersMember",
+  "値": 63000.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatio",
+  "context": "CurrentYearInstant_No9MajorShareholdersMember",
+  "値": 0.0152,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeld",
+  "context": "CurrentYearInstant_No10MajorShareholdersMember",
+  "値": 42946.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatio",
+  "context": "CurrentYearInstant_No10MajorShareholdersMember",
+  "値": 0.0103,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeld",
+  "context": "CurrentYearInstant",
+  "値": 1695630.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatio",
+  "context": "CurrentYearInstant",
+  "値": 0.4082,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesIssuedSharesVotingRights",
+  "context": "CurrentYearInstant_OrdinarySharesSharesWithFullVotingRightsTreasurySharesEtcMember",
+  "値": 1050900.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesIssuedSharesVotingRights",
+  "context": "CurrentYearInstant_OrdinarySharesSharesWithFullVotingRightsOtherMember",
+  "値": 4148600.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfVotingRightsIssuedSharesVotingRights",
+  "context": "CurrentYearInstant_OrdinarySharesSharesWithFullVotingRightsOtherMember",
+  "値": 41486.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesIssuedSharesVotingRights",
+  "context": "CurrentYearInstant_OrdinarySharesSharesLessThanOneUnitMember",
+  "値": 5000.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesIssuedSharesVotingRights",
+  "context": "CurrentYearInstant",
+  "値": 5204500.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfVotingRightsIssuedSharesVotingRights",
+  "context": "CurrentYearInstant",
+  "値": 41486.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldInOwnNameTreasurySharesEtc",
+  "context": "CurrentYearInstant_Row1Member",
+  "値": 1050900.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:TotalNumberOfSharesHeldTreasurySharesEtc",
+  "context": "CurrentYearInstant_Row1Member",
+  "値": 1050900.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatioTreasurySharesEtc",
+  "context": "CurrentYearInstant_Row1Member",
+  "値": 0.2019,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldInOwnNameTreasurySharesEtc",
+  "context": "CurrentYearInstant",
+  "値": 1050900.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:TotalNumberOfSharesHeldTreasurySharesEtc",
+  "context": "CurrentYearInstant",
+  "値": 1050900.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:ShareholdingRatioTreasurySharesEtc",
+  "context": "CurrentYearInstant",
+  "値": 0.2019,
+  "単位": "pure",
+  "decimals": "4"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAmountOfDividendsDividendsOfSurplus",
+  "context": "FilingDateInstant_Row1Member",
+  "値": 37382000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DividendPerShareDividendsOfSurplus",
+  "context": "FilingDateInstant_Row1Member",
+  "値": 9.0,
+  "単位": "JPYPerShares",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAmountOfDividendsDividendsOfSurplus",
+  "context": "FilingDateInstant_Row2Member",
+  "値": 37381000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DividendPerShareDividendsOfSurplus",
+  "context": "FilingDateInstant_Row2Member",
+  "値": 9.0,
+  "単位": "JPYPerShares",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfMaleDirectorsAndOtherOfficers",
+  "context": "FilingDateInstant",
+  "値": 7.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfFemaleDirectorsAndOtherOfficers",
+  "context": "FilingDateInstant",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:RatioOfFemaleDirectorsAndOtherOfficers",
+  "context": "FilingDateInstant",
+  "値": 0.125,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldOrdinarySharesInformationAboutDirectorsAndCorporateAuditors",
+  "context": "FilingDateInstant",
+  "値": 204754.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfMaleDirectorsAndOtherOfficersProposal",
+  "context": "FilingDateInstant",
+  "値": 8.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfFemaleDirectorsAndOtherOfficersProposal",
+  "context": "FilingDateInstant",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:RatioOfFemaleDirectorsAndOtherOfficersProposal",
+  "context": "FilingDateInstant",
+  "値": 0.111,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldOrdinarySharesInformationAboutDirectorsAndCorporateAuditorsProposal",
+  "context": "FilingDateInstant",
+  "値": 204754.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AuditFeesReportingCompany",
+  "context": "Prior1YearDuration",
+  "値": 27800000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:AuditFeesReportingCompany",
+  "context": "CurrentYearDuration",
+  "値": 28800000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:AuditFeesTotal",
+  "context": "Prior1YearDuration",
+  "値": 27800000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:AuditFeesTotal",
+  "context": "CurrentYearDuration",
+  "値": 28800000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAmountOfRemunerationEtcRemunerationEtcByCategoryOfDirectorsAndOtherOfficers",
+  "context": "CurrentYearDuration_DirectorsExcludingOutsideDirectorsMember",
+  "値": 90637000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:FixedRemunerationRemunerationByCategoryOfDirectorsAndOtherOfficers",
+  "context": "CurrentYearDuration_DirectorsExcludingOutsideDirectorsMember",
+  "値": 80400000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NonMonetaryRemunerationRemunerationByCategoryOfDirectorsAndOtherOfficers",
+  "context": "CurrentYearDuration_DirectorsExcludingOutsideDirectorsMember",
+  "値": 10237000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfDirectorsAndOtherOfficersRemunerationEtcByCategoryOfDirectorsAndOtherOfficers",
+  "context": "CurrentYearDuration_DirectorsExcludingOutsideDirectorsMember",
+  "値": 4.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:TotalAmountOfRemunerationEtcRemunerationEtcByCategoryOfDirectorsAndOtherOfficers",
+  "context": "CurrentYearDuration_OutsideDirectorsAndOtherOfficersMember",
+  "値": 17800000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:FixedRemunerationRemunerationByCategoryOfDirectorsAndOtherOfficers",
+  "context": "CurrentYearDuration_OutsideDirectorsAndOtherOfficersMember",
+  "値": 17800000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfDirectorsAndOtherOfficersRemunerationEtcByCategoryOfDirectorsAndOtherOfficers",
+  "context": "CurrentYearDuration_OutsideDirectorsAndOtherOfficersMember",
+  "値": 6.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfIssuesSharesNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentReportingCompany",
+  "context": "CurrentYearInstant",
+  "値": 3.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:CarryingAmountSharesNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentReportingCompany",
+  "context": "CurrentYearInstant",
+  "値": 120000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfIssuesSharesOtherThanThoseNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentReportingCompany",
+  "context": "CurrentYearInstant",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:CarryingAmountSharesOtherThanThoseNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentReportingCompany",
+  "context": "CurrentYearInstant",
+  "値": 25000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldDetailsOfSpecifiedInvestmentEquitySecuritiesHeldForPurposesOtherThanPureInvestmentReportingCompany",
+  "context": "CurrentYearInstant_Row1Member",
+  "値": 100.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfSharesHeldDetailsOfSpecifiedInvestmentEquitySecuritiesHeldForPurposesOtherThanPureInvestmentReportingCompany",
+  "context": "Prior1YearInstant_Row1Member",
+  "値": 100.0,
+  "単位": "shares",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:BookValueDetailsOfSpecifiedInvestmentEquitySecuritiesHeldForPurposesOtherThanPureInvestmentReportingCompany",
+  "context": "CurrentYearInstant_Row1Member",
+  "値": 25000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:BookValueDetailsOfSpecifiedInvestmentEquitySecuritiesHeldForPurposesOtherThanPureInvestmentReportingCompany",
+  "context": "Prior1YearInstant_Row1Member",
+  "値": 26000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 91.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 234.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 9.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 2.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 5.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 9.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 17.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 44.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 87.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant_CorporateSharedMember",
+  "値": 25.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant_CorporateSharedMember",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant",
+  "値": 200.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant",
+  "値": 326.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 25.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageAgeYearsInformationAboutReportingCompanyInformationAboutEmployees",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 34.6,
+  "単位": "pure",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:AverageLengthOfServiceYearsInformationAboutReportingCompanyInformationAboutEmployees",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 7.2,
+  "単位": "pure",
+  "decimals": "1"
+ },
+ {
+  "要素": "jpcrp_cor:AverageAnnualSalaryInformationAboutReportingCompanyInformationAboutEmployees",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 5055000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp030000-asr_E27464-000:ChangeFromPreviousFiscalYearInAverageAnnualSalaryInformationAboutReportingCompanyInformationAboutEmployees",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": -0.005,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant_NonConsolidatedMember_CorporateSharedMember",
+  "値": 25.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant_NonConsolidatedMember_CorporateSharedMember",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfEmployees",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 25.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:AllEmployeesRatioOfMaleEmployeesTakingChildcareLeaveMetricsOfConsolidatedSubsidiaries",
+  "context": "CurrentYearInstant_Row1Member",
+  "値": 1.0,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:AllEmployeesDifferencesInWagesBetweenMaleAndFemaleEmployeesMetricsOfConsolidatedSubsidiaries",
+  "context": "CurrentYearInstant_Row1Member",
+  "値": 1.057,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:RegularEmployeesDifferencesInWagesBetweenMaleAndFemaleEmployeesMetricsOfConsolidatedSubsidiaries",
+  "context": "CurrentYearInstant_Row1Member",
+  "値": 0.778,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jpcrp_cor:NonRegularEmployeesDifferencesInWagesBetweenMaleAndFemaleEmployeesMetricsOfConsolidatedSubsidiaries",
+  "context": "CurrentYearInstant_Row1Member",
+  "値": 0.96,
+  "単位": "pure",
+  "decimals": "3"
+ },
+ {
+  "要素": "jppfs_cor:CashAndDeposits",
+  "context": "Prior1YearInstant",
+  "値": 1738317000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CashAndDeposits",
+  "context": "CurrentYearInstant",
+  "値": 2041081000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NotesReceivableTrade",
+  "context": "Prior1YearInstant",
+  "値": 264000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NotesReceivableTrade",
+  "context": "CurrentYearInstant",
+  "値": 118000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccountsReceivableTrade",
+  "context": "Prior1YearInstant",
+  "値": 247461000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccountsReceivableTrade",
+  "context": "CurrentYearInstant",
+  "値": 274887000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RealEstateForSale",
+  "context": "Prior1YearInstant",
+  "値": 823691000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RealEstateForSale",
+  "context": "CurrentYearInstant",
+  "値": 2287197000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RealEstateForSaleInProcess",
+  "context": "Prior1YearInstant",
+  "値": 1550832000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RealEstateForSaleInProcess",
+  "context": "CurrentYearInstant",
+  "値": 1371750000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:MerchandiseAndFinishedGoods",
+  "context": "Prior1YearInstant",
+  "値": 39413000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:MerchandiseAndFinishedGoods",
+  "context": "CurrentYearInstant",
+  "値": 35048000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:WorkInProcess",
+  "context": "Prior1YearInstant",
+  "値": 47484000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:WorkInProcess",
+  "context": "CurrentYearInstant",
+  "値": 46995000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RawMaterialsAndSupplies",
+  "context": "Prior1YearInstant",
+  "値": 90380000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RawMaterialsAndSupplies",
+  "context": "CurrentYearInstant",
+  "値": 133997000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingLoansCA",
+  "context": "Prior1YearInstant",
+  "値": 824947000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingLoansCA",
+  "context": "CurrentYearInstant",
+  "値": 1100000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PrepaidExpenses",
+  "context": "Prior1YearInstant",
+  "値": 466295000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PrepaidExpenses",
+  "context": "CurrentYearInstant",
+  "値": 492556000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherCA",
+  "context": "Prior1YearInstant",
+  "値": 136061000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherCA",
+  "context": "CurrentYearInstant",
+  "値": 257680000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AllowanceForDoubtfulAccountsCA",
+  "context": "Prior1YearInstant",
+  "値": -293642000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AllowanceForDoubtfulAccountsCA",
+  "context": "CurrentYearInstant",
+  "値": -993151000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentAssets",
+  "context": "Prior1YearInstant",
+  "値": 5671507000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentAssets",
+  "context": "CurrentYearInstant",
+  "値": 7048162000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:BuildingsAndStructures",
+  "context": "Prior1YearInstant",
+  "値": 2330709000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:BuildingsAndStructures",
+  "context": "CurrentYearInstant",
+  "値": 2400994000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccumulatedDepreciationBuildingsAndStructures",
+  "context": "Prior1YearInstant",
+  "値": -1373405000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccumulatedDepreciationBuildingsAndStructures",
+  "context": "CurrentYearInstant",
+  "値": -1486826000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:BuildingsAndStructuresNet",
+  "context": "Prior1YearInstant",
+  "値": 957304000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:BuildingsAndStructuresNet",
+  "context": "CurrentYearInstant",
+  "値": 914168000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:MachineryEquipmentAndVehicles",
+  "context": "Prior1YearInstant",
+  "値": 232443000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:MachineryEquipmentAndVehicles",
+  "context": "CurrentYearInstant",
+  "値": 270523000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccumulatedDepreciationMachineryEquipmentAndVehicles",
+  "context": "Prior1YearInstant",
+  "値": -154414000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccumulatedDepreciationMachineryEquipmentAndVehicles",
+  "context": "CurrentYearInstant",
+  "値": -163585000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:MachineryEquipmentAndVehiclesNet",
+  "context": "Prior1YearInstant",
+  "値": 78028000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:MachineryEquipmentAndVehiclesNet",
+  "context": "CurrentYearInstant",
+  "値": 106937000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Land",
+  "context": "Prior1YearInstant",
+  "値": 738302000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Land",
+  "context": "CurrentYearInstant",
+  "値": 798424000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LeaseAssetsPPE",
+  "context": "Prior1YearInstant",
+  "値": 674407000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LeaseAssetsPPE",
+  "context": "CurrentYearInstant",
+  "値": 752020000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccumulatedDepreciationLeaseAssetsPPE",
+  "context": "Prior1YearInstant",
+  "値": -308837000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccumulatedDepreciationLeaseAssetsPPE",
+  "context": "CurrentYearInstant",
+  "値": -306900000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LeaseAssetsNetPPE",
+  "context": "Prior1YearInstant",
+  "値": 365569000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LeaseAssetsNetPPE",
+  "context": "CurrentYearInstant",
+  "値": 445120000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ConstructionInProgress",
+  "context": "Prior1YearInstant",
+  "値": 8069000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ConstructionInProgress",
+  "context": "CurrentYearInstant",
+  "値": 2509000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherPPE",
+  "context": "Prior1YearInstant",
+  "値": 521335000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherPPE",
+  "context": "CurrentYearInstant",
+  "値": 556939000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccumulatedDepreciationOtherPPE",
+  "context": "Prior1YearInstant",
+  "値": -417152000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccumulatedDepreciationOtherPPE",
+  "context": "CurrentYearInstant",
+  "値": -429290000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNetPPE",
+  "context": "Prior1YearInstant",
+  "値": 104183000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNetPPE",
+  "context": "CurrentYearInstant",
+  "値": 127648000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PropertyPlantAndEquipment",
+  "context": "Prior1YearInstant",
+  "値": 2251457000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PropertyPlantAndEquipment",
+  "context": "CurrentYearInstant",
+  "値": 2394808000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherIA",
+  "context": "Prior1YearInstant",
+  "値": 26205000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherIA",
+  "context": "CurrentYearInstant",
+  "値": 13642000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IntangibleAssets",
+  "context": "Prior1YearInstant",
+  "値": 26205000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IntangibleAssets",
+  "context": "CurrentYearInstant",
+  "値": 13642000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InvestmentSecurities",
+  "context": "Prior1YearInstant",
+  "値": 54472000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InvestmentSecurities",
+  "context": "CurrentYearInstant",
+  "値": 38692000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LongTermLoansReceivable",
+  "context": "Prior1YearInstant",
+  "値": 26785000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LongTermLoansReceivable",
+  "context": "CurrentYearInstant",
+  "値": 21470000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LeaseAndGuaranteeDeposits",
+  "context": "Prior1YearInstant",
+  "値": 403531000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LeaseAndGuaranteeDeposits",
+  "context": "CurrentYearInstant",
+  "値": 410141000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DeferredTaxAssets",
+  "context": "Prior1YearInstant",
+  "値": 186560000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DeferredTaxAssets",
+  "context": "CurrentYearInstant",
+  "値": 207455000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherIOA",
+  "context": "Prior1YearInstant",
+  "値": 110433000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherIOA",
+  "context": "CurrentYearInstant",
+  "値": 97669000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InvestmentsAndOtherAssets",
+  "context": "Prior1YearInstant",
+  "値": 781783000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InvestmentsAndOtherAssets",
+  "context": "CurrentYearInstant",
+  "値": 775430000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NoncurrentAssets",
+  "context": "Prior1YearInstant",
+  "値": 3059446000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NoncurrentAssets",
+  "context": "CurrentYearInstant",
+  "値": 3183881000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant",
+  "値": 8730954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant",
+  "値": 10232043000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccountsPayableTrade",
+  "context": "Prior1YearInstant",
+  "値": 745256000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccountsPayableTrade",
+  "context": "CurrentYearInstant",
+  "値": 1599050000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ShortTermLoansPayable",
+  "context": "Prior1YearInstant",
+  "値": 1499000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ShortTermLoansPayable",
+  "context": "CurrentYearInstant",
+  "値": 3195000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+  "context": "Prior1YearInstant",
+  "値": 836735000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+  "context": "CurrentYearInstant",
+  "値": 1267746000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentPortionOfBonds",
+  "context": "Prior1YearInstant",
+  "値": 300000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LeaseObligationsCL",
+  "context": "Prior1YearInstant",
+  "値": 132355000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LeaseObligationsCL",
+  "context": "CurrentYearInstant",
+  "値": 160081000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesPayable",
+  "context": "Prior1YearInstant",
+  "値": 60927000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesPayable",
+  "context": "CurrentYearInstant",
+  "値": 47224000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AssetRetirementObligationsCL",
+  "context": "CurrentYearInstant",
+  "値": 12900000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareholderBenefitProgramCL",
+  "context": "Prior1YearInstant",
+  "値": 29190000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareholderBenefitProgramCL",
+  "context": "CurrentYearInstant",
+  "値": 34333000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ContractLiabilities",
+  "context": "Prior1YearInstant",
+  "値": 130805000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ContractLiabilities",
+  "context": "CurrentYearInstant",
+  "値": 158851000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherCL",
+  "context": "Prior1YearInstant",
+  "値": 560556000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherCL",
+  "context": "CurrentYearInstant",
+  "値": 703360000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentLiabilities",
+  "context": "Prior1YearInstant",
+  "値": 4294826000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentLiabilities",
+  "context": "CurrentYearInstant",
+  "値": 7178548000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:BondsPayable",
+  "context": "Prior1YearInstant",
+  "値": 100000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:BondsPayable",
+  "context": "CurrentYearInstant",
+  "値": 100000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LongTermLoansPayable",
+  "context": "Prior1YearInstant",
+  "値": 2259053000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LongTermLoansPayable",
+  "context": "CurrentYearInstant",
+  "値": 1586179000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LeaseObligationsNCL",
+  "context": "Prior1YearInstant",
+  "値": 291363000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LeaseObligationsNCL",
+  "context": "CurrentYearInstant",
+  "値": 352345000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DeferredTaxLiabilities",
+  "context": "Prior1YearInstant",
+  "値": 425000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DeferredTaxLiabilities",
+  "context": "CurrentYearInstant",
+  "値": 82000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetDefinedBenefitLiability",
+  "context": "Prior1YearInstant",
+  "値": 119047000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetDefinedBenefitLiability",
+  "context": "CurrentYearInstant",
+  "値": 120167000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareBasedRemunerationNCL",
+  "context": "Prior1YearInstant",
+  "値": 28786000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareBasedRemunerationNCL",
+  "context": "CurrentYearInstant",
+  "値": 27734000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AssetRetirementObligationsNCL",
+  "context": "Prior1YearInstant",
+  "値": 217124000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AssetRetirementObligationsNCL",
+  "context": "CurrentYearInstant",
+  "値": 214831000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNCL",
+  "context": "Prior1YearInstant",
+  "値": 202471000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNCL",
+  "context": "CurrentYearInstant",
+  "値": 198160000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NoncurrentLiabilities",
+  "context": "Prior1YearInstant",
+  "値": 3218271000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NoncurrentLiabilities",
+  "context": "CurrentYearInstant",
+  "値": 2599500000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Liabilities",
+  "context": "Prior1YearInstant",
+  "値": 7513098000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Liabilities",
+  "context": "CurrentYearInstant",
+  "値": 9778049000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CapitalStock",
+  "context": "Prior1YearInstant",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CapitalStock",
+  "context": "CurrentYearInstant",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CapitalSurplus",
+  "context": "Prior1YearInstant",
+  "値": 220914000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CapitalSurplus",
+  "context": "CurrentYearInstant",
+  "値": 233456000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RetainedEarnings",
+  "context": "Prior1YearInstant",
+  "値": 1096784000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RetainedEarnings",
+  "context": "CurrentYearInstant",
+  "値": 302581000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TreasuryStock",
+  "context": "Prior1YearInstant",
+  "値": -521213000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TreasuryStock",
+  "context": "CurrentYearInstant",
+  "値": -506996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ShareholdersEquity",
+  "context": "Prior1YearInstant",
+  "値": 1219481000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ShareholdersEquity",
+  "context": "CurrentYearInstant",
+  "値": 452038000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities",
+  "context": "Prior1YearInstant",
+  "値": -1625000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities",
+  "context": "CurrentYearInstant",
+  "値": 1955000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ValuationAndTranslationAdjustments",
+  "context": "Prior1YearInstant",
+  "値": -1625000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ValuationAndTranslationAdjustments",
+  "context": "CurrentYearInstant",
+  "値": 1955000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant",
+  "値": 1217855000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant",
+  "値": 453994000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LiabilitiesAndNetAssets",
+  "context": "Prior1YearInstant",
+  "値": 8730954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LiabilitiesAndNetAssets",
+  "context": "CurrentYearInstant",
+  "値": 10232043000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "Prior1YearDuration",
+  "値": 12887524000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "CurrentYearDuration",
+  "値": 11804911000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CostOfSales",
+  "context": "Prior1YearDuration",
+  "値": 10374487000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CostOfSales",
+  "context": "CurrentYearDuration",
+  "値": 9569823000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:GrossProfit",
+  "context": "Prior1YearDuration",
+  "値": 2513037000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:GrossProfit",
+  "context": "CurrentYearDuration",
+  "値": 2235088000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+  "context": "Prior1YearDuration",
+  "値": 1983060000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+  "context": "CurrentYearDuration",
+  "値": 2756422000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration",
+  "値": 529976000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration",
+  "値": -521333000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestIncomeNOI",
+  "context": "Prior1YearDuration",
+  "値": 2374000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestIncomeNOI",
+  "context": "CurrentYearDuration",
+  "値": 4309000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsIncomeNOI",
+  "context": "Prior1YearDuration",
+  "値": 1382000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsIncomeNOI",
+  "context": "CurrentYearDuration",
+  "値": 3332000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:GainOnSalesOfInvestmentSecuritiesNOI",
+  "context": "Prior1YearDuration",
+  "値": 1512000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:GainOnSalesOfInvestmentSecuritiesNOI",
+  "context": "CurrentYearDuration",
+  "値": 696000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InsuranceIncomeNOI",
+  "context": "Prior1YearDuration",
+  "値": 3335000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InsuranceIncomeNOI",
+  "context": "CurrentYearDuration",
+  "値": 11337000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNOI",
+  "context": "Prior1YearDuration",
+  "値": 61645000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNOI",
+  "context": "CurrentYearDuration",
+  "値": 20629000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NonOperatingIncome",
+  "context": "Prior1YearDuration",
+  "値": 70250000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NonOperatingIncome",
+  "context": "CurrentYearDuration",
+  "値": 40305000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestExpensesNOE",
+  "context": "Prior1YearDuration",
+  "値": 94332000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestExpensesNOE",
+  "context": "CurrentYearDuration",
+  "値": 138206000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNOE",
+  "context": "Prior1YearDuration",
+  "値": 31219000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNOE",
+  "context": "CurrentYearDuration",
+  "値": 20576000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NonOperatingExpenses",
+  "context": "Prior1YearDuration",
+  "値": 125551000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NonOperatingExpenses",
+  "context": "CurrentYearDuration",
+  "値": 158783000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OrdinaryIncome",
+  "context": "Prior1YearDuration",
+  "値": 474675000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OrdinaryIncome",
+  "context": "CurrentYearDuration",
+  "値": -639811000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "Prior1YearDuration",
+  "値": 17253000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "CurrentYearDuration",
+  "値": 24898000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LossOnRetirementOfNoncurrentAssetsEL",
+  "context": "CurrentYearDuration",
+  "値": 8000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ExtraordinaryLoss",
+  "context": "Prior1YearDuration",
+  "値": 17253000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ExtraordinaryLoss",
+  "context": "CurrentYearDuration",
+  "値": 32898000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+  "context": "Prior1YearDuration",
+  "値": 457422000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+  "context": "CurrentYearDuration",
+  "値": -672709000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesCurrent",
+  "context": "Prior1YearDuration",
+  "値": 123455000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesCurrent",
+  "context": "CurrentYearDuration",
+  "値": 61540000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesDeferred",
+  "context": "Prior1YearDuration",
+  "値": -11984000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesDeferred",
+  "context": "CurrentYearDuration",
+  "値": -22843000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxes",
+  "context": "Prior1YearDuration",
+  "値": 111470000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxes",
+  "context": "CurrentYearDuration",
+  "値": 38696000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "Prior1YearDuration",
+  "値": 345951000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "CurrentYearDuration",
+  "値": -711406000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+  "context": "Prior1YearDuration",
+  "値": 345951000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+  "context": "CurrentYearDuration",
+  "値": -711406000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "Prior1YearDuration",
+  "値": 345951000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "CurrentYearDuration",
+  "値": -711406000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecuritiesNetOfTaxOCI",
+  "context": "Prior1YearDuration",
+  "値": -954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecuritiesNetOfTaxOCI",
+  "context": "CurrentYearDuration",
+  "値": 3581000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherComprehensiveIncome",
+  "context": "Prior1YearDuration",
+  "値": -954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherComprehensiveIncome",
+  "context": "CurrentYearDuration",
+  "値": 3581000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ComprehensiveIncome",
+  "context": "Prior1YearDuration",
+  "値": 344996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ComprehensiveIncome",
+  "context": "CurrentYearDuration",
+  "値": -707824000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent",
+  "context": "Prior1YearDuration",
+  "値": 344996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent",
+  "context": "CurrentYearDuration",
+  "値": -707824000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_CapitalStockMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_CapitalSurplusMember",
+  "値": 210000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_RetainedEarningsMember",
+  "値": 816673000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_TreasuryStockMember",
+  "値": -533844000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_ShareholdersEquityMember",
+  "値": 915826000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": -670000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_ValuationAndTranslationAdjustmentsMember",
+  "値": -670000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant",
+  "値": 915155000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "Prior1YearDuration_RetainedEarningsMember",
+  "値": -65841000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "Prior1YearDuration_ShareholdersEquityMember",
+  "値": -65841000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "Prior1YearDuration",
+  "値": -65841000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+  "context": "Prior1YearDuration_RetainedEarningsMember",
+  "値": 345951000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+  "context": "Prior1YearDuration_ShareholdersEquityMember",
+  "値": 345951000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+  "context": "Prior1YearDuration",
+  "値": 345951000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "Prior1YearDuration_CapitalSurplusMember",
+  "値": 10913000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "Prior1YearDuration_TreasuryStockMember",
+  "値": 12631000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "Prior1YearDuration_ShareholdersEquityMember",
+  "値": 23545000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "Prior1YearDuration",
+  "値": 23545000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "Prior1YearDuration_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": -954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "Prior1YearDuration_ValuationAndTranslationAdjustmentsMember",
+  "値": -954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "Prior1YearDuration",
+  "値": -954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_CapitalSurplusMember",
+  "値": 10913000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_RetainedEarningsMember",
+  "値": 280110000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_TreasuryStockMember",
+  "値": 12631000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_ShareholdersEquityMember",
+  "値": 303655000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": -954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_ValuationAndTranslationAdjustmentsMember",
+  "値": -954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration",
+  "値": 302700000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_CapitalStockMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_CapitalSurplusMember",
+  "値": 220914000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_RetainedEarningsMember",
+  "値": 1096784000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_TreasuryStockMember",
+  "値": -521213000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_ShareholdersEquityMember",
+  "値": 1219481000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": -1625000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_ValuationAndTranslationAdjustmentsMember",
+  "値": -1625000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant",
+  "値": 1217855000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_CapitalStockMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_CapitalSurplusMember",
+  "値": 220914000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_RetainedEarningsMember",
+  "値": 1096784000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_TreasuryStockMember",
+  "値": -521213000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_ShareholdersEquityMember",
+  "値": 1219481000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": -1625000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_ValuationAndTranslationAdjustmentsMember",
+  "値": -1625000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant",
+  "値": 1217855000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "CurrentYearDuration_RetainedEarningsMember",
+  "値": -82796000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "CurrentYearDuration_ShareholdersEquityMember",
+  "値": -82796000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "CurrentYearDuration",
+  "値": -82796000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+  "context": "CurrentYearDuration_RetainedEarningsMember",
+  "値": -711406000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+  "context": "CurrentYearDuration_ShareholdersEquityMember",
+  "値": -711406000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+  "context": "CurrentYearDuration",
+  "値": -711406000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "CurrentYearDuration_CapitalSurplusMember",
+  "値": 12542000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "CurrentYearDuration_TreasuryStockMember",
+  "値": 14216000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "CurrentYearDuration_ShareholdersEquityMember",
+  "値": 26759000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "CurrentYearDuration",
+  "値": 26759000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "CurrentYearDuration_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": 3581000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "CurrentYearDuration_ValuationAndTranslationAdjustmentsMember",
+  "値": 3581000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "CurrentYearDuration",
+  "値": 3581000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_CapitalSurplusMember",
+  "値": 12542000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_RetainedEarningsMember",
+  "値": -794202000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_TreasuryStockMember",
+  "値": 14216000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_ShareholdersEquityMember",
+  "値": -767443000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": 3581000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_ValuationAndTranslationAdjustmentsMember",
+  "値": 3581000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration",
+  "値": -763861000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_CapitalStockMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_CapitalSurplusMember",
+  "値": 233456000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_RetainedEarningsMember",
+  "値": 302581000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_TreasuryStockMember",
+  "値": -506996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_ShareholdersEquityMember",
+  "値": 452038000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": 1955000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_ValuationAndTranslationAdjustmentsMember",
+  "値": 1955000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant",
+  "値": 453994000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+  "context": "Prior1YearDuration",
+  "値": 457422000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+  "context": "CurrentYearDuration",
+  "値": -672709000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DepreciationAndAmortizationOpeCF",
+  "context": "Prior1YearDuration",
+  "値": 374878000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DepreciationAndAmortizationOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 425020000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossOpeCF",
+  "context": "Prior1YearDuration",
+  "値": 17253000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 24898000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF",
+  "context": "Prior1YearDuration",
+  "値": -87950000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 699508000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncreaseDecreaseInProvisionForShareBasedRemunerationOpeCF",
+  "context": "Prior1YearDuration",
+  "値": 1634000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncreaseDecreaseInProvisionForShareBasedRemunerationOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 63000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncreaseDecreaseInProvisionForShareholderBenefitProgramOpeCF",
+  "context": "Prior1YearDuration",
+  "値": 29190000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncreaseDecreaseInProvisionForShareholderBenefitProgramOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 5143000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF",
+  "context": "Prior1YearDuration",
+  "値": 9359000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 1120000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestAndDividendsIncomeOpeCF",
+  "context": "Prior1YearDuration",
+  "値": -2374000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestAndDividendsIncomeOpeCF",
+  "context": "CurrentYearDuration",
+  "値": -7641000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestExpensesOpeCF",
+  "context": "Prior1YearDuration",
+  "値": 89384000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestExpensesOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 134232000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestOnBondsOpeCF",
+  "context": "Prior1YearDuration",
+  "値": 4948000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestOnBondsOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 3974000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LossGainOnSalesOfInvestmentSecuritiesOpeCF",
+  "context": "Prior1YearDuration",
+  "値": -1512000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LossGainOnSalesOfInvestmentSecuritiesOpeCF",
+  "context": "CurrentYearDuration",
+  "値": -696000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LossOnRetirementOfPropertyPlantAndEquipmentOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 8000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+  "context": "Prior1YearDuration",
+  "値": -6076000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+  "context": "CurrentYearDuration",
+  "値": -27280000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DecreaseIncreaseInInventoriesOpeCF",
+  "context": "Prior1YearDuration",
+  "値": -477361000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DecreaseIncreaseInInventoriesOpeCF",
+  "context": "CurrentYearDuration",
+  "値": -1323185000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+  "context": "Prior1YearDuration",
+  "値": -487945000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 853794000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DecreaseIncreaseInOperatingLoansReceivableOpeCF",
+  "context": "Prior1YearDuration",
+  "値": -192261000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DecreaseIncreaseInOperatingLoansReceivableOpeCF",
+  "context": "CurrentYearDuration",
+  "値": -275052000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp030000-asr_E27464-000:TransferFromPropertyPlantAndEquipmentToInventoriesOpeCF",
+  "context": "Prior1YearDuration",
+  "値": 32820000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp030000-asr_E27464-000:TransferFromPropertyPlantAndEquipmentToInventoriesOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 4120000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNetOpeCF",
+  "context": "Prior1YearDuration",
+  "値": -190798000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNetOpeCF",
+  "context": "CurrentYearDuration",
+  "値": 70695000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:SubtotalOpeCF",
+  "context": "Prior1YearDuration",
+  "値": -429387000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:SubtotalOpeCF",
+  "context": "CurrentYearDuration",
+  "値": -75995000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestAndDividendsIncomeReceivedOpeCFInvCF",
+  "context": "Prior1YearDuration",
+  "値": 2374000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestAndDividendsIncomeReceivedOpeCFInvCF",
+  "context": "CurrentYearDuration",
+  "値": 4310000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestExpensesPaidOpeCFFinCF",
+  "context": "Prior1YearDuration",
+  "値": -98079000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestExpensesPaidOpeCFFinCF",
+  "context": "CurrentYearDuration",
+  "値": -137965000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesPaidOpeCF",
+  "context": "Prior1YearDuration",
+  "値": -212692000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesPaidOpeCF",
+  "context": "CurrentYearDuration",
+  "値": -49947000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+  "context": "Prior1YearDuration",
+  "値": -737785000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+  "context": "CurrentYearDuration",
+  "値": -259597000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PaymentsIntoTimeDepositsInvCF",
+  "context": "Prior1YearDuration",
+  "値": -4000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProceedsFromWithdrawalOfTimeDepositsInvCF",
+  "context": "Prior1YearDuration",
+  "値": 49917000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF",
+  "context": "Prior1YearDuration",
+  "値": -278486000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF",
+  "context": "CurrentYearDuration",
+  "値": -348590000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PurchaseOfIntangibleAssetsInvCF",
+  "context": "Prior1YearDuration",
+  "値": -7198000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PurchaseOfIntangibleAssetsInvCF",
+  "context": "CurrentYearDuration",
+  "値": -1080000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProceedsFromSalesOfPropertyPlantAndEquipmentInvCF",
+  "context": "CurrentYearDuration",
+  "値": 5125000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PurchaseOfInvestmentSecuritiesInvCF",
+  "context": "Prior1YearDuration",
+  "値": -11739000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PurchaseOfInvestmentSecuritiesInvCF",
+  "context": "CurrentYearDuration",
+  "値": -2812000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProceedsFromSalesOfInvestmentSecuritiesInvCF",
+  "context": "Prior1YearDuration",
+  "値": 27226000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProceedsFromSalesOfInvestmentSecuritiesInvCF",
+  "context": "CurrentYearDuration",
+  "値": 24306000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PaymentsOfLoansReceivableInvCF",
+  "context": "Prior1YearDuration",
+  "値": -3200000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CollectionOfLoansReceivableInvCF",
+  "context": "Prior1YearDuration",
+  "値": 2080000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CollectionOfLoansReceivableInvCF",
+  "context": "CurrentYearDuration",
+  "値": 5460000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PaymentsForLeaseDepositsInvCF",
+  "context": "Prior1YearDuration",
+  "値": -32219000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PaymentsForLeaseDepositsInvCF",
+  "context": "CurrentYearDuration",
+  "値": -33927000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CollectionOfLeaseDepositsInvCF",
+  "context": "Prior1YearDuration",
+  "値": 58731000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CollectionOfLeaseDepositsInvCF",
+  "context": "CurrentYearDuration",
+  "値": 25334000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PaymentsForAssetRetirementObligationsInvCF",
+  "context": "Prior1YearDuration",
+  "値": -17981000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PaymentsForAssetRetirementObligationsInvCF",
+  "context": "CurrentYearDuration",
+  "値": -15046000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNetInvCF",
+  "context": "Prior1YearDuration",
+  "値": -8656000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNetInvCF",
+  "context": "CurrentYearDuration",
+  "値": -4500000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+  "context": "Prior1YearDuration",
+  "値": -225524000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+  "context": "CurrentYearDuration",
+  "値": -345731000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetIncreaseDecreaseInShortTermLoansPayableFinCF",
+  "context": "Prior1YearDuration",
+  "値": -67000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetIncreaseDecreaseInShortTermLoansPayableFinCF",
+  "context": "CurrentYearDuration",
+  "値": 1696000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProceedsFromLongTermLoansPayableFinCF",
+  "context": "Prior1YearDuration",
+  "値": 1507000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProceedsFromLongTermLoansPayableFinCF",
+  "context": "CurrentYearDuration",
+  "値": 1175000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RepaymentOfLongTermLoansPayableFinCF",
+  "context": "Prior1YearDuration",
+  "値": -1300348000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RepaymentOfLongTermLoansPayableFinCF",
+  "context": "CurrentYearDuration",
+  "値": -1416863000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RedemptionOfBondsFinCF",
+  "context": "CurrentYearDuration",
+  "値": -300000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RepaymentsOfLeaseObligationsFinCF",
+  "context": "Prior1YearDuration",
+  "値": -138001000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RepaymentsOfLeaseObligationsFinCF",
+  "context": "CurrentYearDuration",
+  "値": -163300000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CashDividendsPaidFinCF",
+  "context": "Prior1YearDuration",
+  "値": -65766000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CashDividendsPaidFinCF",
+  "context": "CurrentYearDuration",
+  "値": -82690000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNetFinCF",
+  "context": "CurrentYearDuration",
+  "値": -54000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+  "context": "Prior1YearDuration",
+  "値": -64115000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+  "context": "CurrentYearDuration",
+  "値": 908092000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+  "context": "Prior1YearDuration",
+  "値": -1027426000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+  "context": "CurrentYearDuration",
+  "値": 302764000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CashAndCashEquivalents",
+  "context": "Prior2YearInstant",
+  "値": 2739244000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CashAndCashEquivalents",
+  "context": "Prior1YearInstant",
+  "値": 1711817000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CashAndCashEquivalents",
+  "context": "Prior1YearInstant",
+  "値": 1711817000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CashAndCashEquivalents",
+  "context": "CurrentYearInstant",
+  "値": 2014581000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:NumberOfConsolidatedSubsidiaries",
+  "context": "CurrentYearInstant",
+  "値": 10.0,
+  "単位": "pure",
+  "decimals": "0"
+ },
+ {
+  "要素": "jpcrp_cor:WriteDownsOfInventories",
+  "context": "Prior1YearDuration",
+  "値": 1328000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:WriteDownsOfInventories",
+  "context": "CurrentYearDuration",
+  "値": 16308000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:SalariesAndAllowancesSGA",
+  "context": "Prior1YearDuration",
+  "値": 482574000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:SalariesAndAllowancesSGA",
+  "context": "CurrentYearDuration",
+  "値": 482062000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CommissionFeeSGA",
+  "context": "Prior1YearDuration",
+  "値": 388606000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CommissionFeeSGA",
+  "context": "CurrentYearDuration",
+  "値": 326773000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DirectorsCompensationsSGA",
+  "context": "Prior1YearDuration",
+  "値": 234059000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DirectorsCompensationsSGA",
+  "context": "CurrentYearDuration",
+  "値": 244691000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RetirementBenefitExpensesSGA",
+  "context": "Prior1YearDuration",
+  "値": 10481000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RetirementBenefitExpensesSGA",
+  "context": "CurrentYearDuration",
+  "値": 10069000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareBasedRemunerationSGA",
+  "context": "Prior1YearDuration",
+  "値": 2582000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareBasedRemunerationSGA",
+  "context": "CurrentYearDuration",
+  "値": 3322000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsSGA",
+  "context": "Prior1YearDuration",
+  "値": -87950000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsSGA",
+  "context": "CurrentYearDuration",
+  "値": 699508000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareholderBenefitProgramSGA",
+  "context": "Prior1YearDuration",
+  "値": 29190000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareholderBenefitProgramSGA",
+  "context": "CurrentYearDuration",
+  "値": 34333000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 7002314000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 3485679000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 618920000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 277342000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 502068000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "Prior1YearDuration_ReportableSegmentsMember",
+  "値": 11886326000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 2067000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 23115000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 24215000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "Prior1YearDuration_ReportableSegmentsMember",
+  "値": 49397000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 7004381000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 3508794000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 643136000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 277342000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 502068000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "Prior1YearDuration_ReportableSegmentsMember",
+  "値": 11935723000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 263026000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 124763000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 37881000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 83351000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 27398000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration_ReportableSegmentsMember",
+  "値": 536421000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 1498674000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 2788085000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 179932000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 949649000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 357557000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant_ReportableSegmentsMember",
+  "値": 5773900000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 207971000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 65362000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 4777000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 21134000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 19749000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "Prior1YearDuration_ReportableSegmentsMember",
+  "値": 318995000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 17253000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "Prior1YearDuration_ReportableSegmentsMember",
+  "値": 17253000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 418246000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 78737000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 454000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 4535000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 56739000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "Prior1YearDuration_ReportableSegmentsMember",
+  "値": 558713000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "Prior1YearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 1001198000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "Prior1YearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 12887524000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "Prior1YearDuration",
+  "値": 12887524000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "Prior1YearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 104835000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "Prior1YearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 154233000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "Prior1YearDuration_ReconcilingItemsMember",
+  "値": -154233000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "Prior1YearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 1106034000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "Prior1YearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 13041758000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "Prior1YearDuration_ReconcilingItemsMember",
+  "値": -154233000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "Prior1YearDuration",
+  "値": 12887524000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 6023000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 542444000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration_ReconcilingItemsMember",
+  "値": -12467000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration",
+  "値": 529976000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 536232000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant_TotalOfReportableSegmentsAndOthersMember",
+  "値": 6310132000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant_ReconcilingItemsMember",
+  "値": 2420821000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant",
+  "値": 8730954000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "Prior1YearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 46586000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "Prior1YearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 365582000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "Prior1YearDuration_ReconcilingItemsMember",
+  "値": 9296000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "Prior1YearDuration",
+  "値": 374878000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "Prior1YearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 17253000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "Prior1YearDuration",
+  "値": 17253000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "Prior1YearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 30469000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "Prior1YearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 589183000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "Prior1YearDuration_ReconcilingItemsMember",
+  "値": 1189000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "Prior1YearDuration",
+  "値": 590372000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 7056648000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 2523449000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 525423000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 259831000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 392735000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "CurrentYearDuration_ReportableSegmentsMember",
+  "値": 10758088000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 50006000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 24508000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 24394000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "CurrentYearDuration_ReportableSegmentsMember",
+  "値": 98908000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 7106655000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 2547957000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 549817000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 259831000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 392735000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "CurrentYearDuration_ReportableSegmentsMember",
+  "値": 10856997000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 294099000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": -135305000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 25666000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": -715890000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": -38212000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration_ReportableSegmentsMember",
+  "値": -569643000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 1767037000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 4266758000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 65920000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 504743000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 412146000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant_ReportableSegmentsMember",
+  "値": 7016607000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 264292000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 61933000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 5029000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+  "値": 19377000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 21105000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "CurrentYearDuration_ReportableSegmentsMember",
+  "値": 371738000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 24898000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "CurrentYearDuration_ReportableSegmentsMember",
+  "値": 24898000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 461220000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+  "値": 38528000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+  "値": 1839000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+  "値": 47135000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "CurrentYearDuration_ReportableSegmentsMember",
+  "値": 548723000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "CurrentYearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 1046823000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 11804911000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+  "context": "CurrentYearDuration",
+  "値": 11804911000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "CurrentYearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 111794000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 210703000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:TransactionsWithOtherSegments",
+  "context": "CurrentYearDuration_ReconcilingItemsMember",
+  "値": -210703000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "CurrentYearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 1158618000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 12015615000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "CurrentYearDuration_ReconcilingItemsMember",
+  "値": -210703000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetSales",
+  "context": "CurrentYearDuration",
+  "値": 11804911000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 29431000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": -540211000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration_ReconcilingItemsMember",
+  "値": 18877000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration",
+  "値": -521333000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 536006000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant_TotalOfReportableSegmentsAndOthersMember",
+  "値": 7552613000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant_ReconcilingItemsMember",
+  "値": 2679429000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant",
+  "値": 10232043000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "CurrentYearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 43851000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 415590000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "CurrentYearDuration_ReconcilingItemsMember",
+  "値": 9430000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:DepreciationSegmentInformation",
+  "context": "CurrentYearDuration",
+  "値": 425020000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 24898000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "CurrentYearDuration",
+  "値": 24898000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "CurrentYearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember",
+  "値": 38086000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember",
+  "値": 586809000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "CurrentYearDuration_ReconcilingItemsMember",
+  "値": 17761000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+  "context": "CurrentYearDuration",
+  "値": 604571000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 17253000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "Prior1YearDuration",
+  "値": 17253000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+  "値": 24898000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ImpairmentLossEL",
+  "context": "CurrentYearDuration",
+  "値": 24898000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CashAndDeposits",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 692073000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CashAndDeposits",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 712056000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ShortTermLoansReceivable",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 612190000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ShortTermLoansReceivable",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 490488000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherCA",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 27213000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherCA",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 28552000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AllowanceForDoubtfulAccountsCA",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": -31598000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AllowanceForDoubtfulAccountsCA",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": -5000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1299879000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 1226097000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:BuildingsNet",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 57252000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:BuildingsNet",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 53986000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Structures",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 3404000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Structures",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 3159000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ToolsFurnitureAndFixturesNet",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 3753000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ToolsFurnitureAndFixturesNet",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 4200000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Land",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 127066000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Land",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 127066000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherPPE",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 0.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherPPE",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 0.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PropertyPlantAndEquipment",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 191476000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:PropertyPlantAndEquipment",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 188412000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherIA",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 4901000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherIA",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 2441000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IntangibleAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 4901000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IntangibleAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 2441000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InvestmentSecurities",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 51356000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InvestmentSecurities",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 38547000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:StocksOfSubsidiariesAndAffiliates",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1233688000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:StocksOfSubsidiariesAndAffiliates",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 1243688000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InvestmentsInCapital",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 10000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InvestmentsInCapital",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 10000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LongTermLoansReceivable",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1837855000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LongTermLoansReceivable",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 2007525000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DeferredTaxAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 32915000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DeferredTaxAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 27150000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherIOA",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 11713000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherIOA",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 10118000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AllowanceForDoubtfulAccountsIOAByGroup",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": -793316000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AllowanceForDoubtfulAccountsIOAByGroup",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": -873566000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InvestmentsAndOtherAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 2374222000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InvestmentsAndOtherAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 2453474000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NoncurrentAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 2570601000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NoncurrentAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 2644329000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 3870480000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Assets",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 3870426000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ShortTermLoansPayable",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1300000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ShortTermLoansPayable",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 2000000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 133532000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 145616000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentPortionOfBonds",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 300000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccountsPayableOther",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 25614000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:AccountsPayableOther",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 36193000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesPayable",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 8353000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesPayable",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 3427000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareholderBenefitProgramCL",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 29740000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareholderBenefitProgramCL",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 35000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherCL",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 20546000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherCL",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 25767000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentLiabilities",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1817785000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CurrentLiabilities",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 2246005000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:BondsPayable",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 100000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:BondsPayable",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 100000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LongTermLoansPayable",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 283699000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LongTermLoansPayable",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 462247000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForRetirementBenefits",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 13918000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForRetirementBenefits",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 14144000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareBasedRemunerationNCL",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 2895000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareBasedRemunerationNCL",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 3069000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForLossOnGuarantees",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 212637000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForLossOnGuarantees",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 189423000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNCL",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 12316000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNCL",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 16227000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NoncurrentLiabilities",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 625465000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NoncurrentLiabilities",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 785112000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Liabilities",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 2443251000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:Liabilities",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 3031117000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CapitalStock",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CapitalStock",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LegalCapitalSurplus",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 109435000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LegalCapitalSurplus",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 109435000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherCapitalSurplus",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 447977000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherCapitalSurplus",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 461663000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CapitalSurplus",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 557412000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CapitalSurplus",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 571098000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RetainedEarningsBroughtForward",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 920821000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RetainedEarningsBroughtForward",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 302198000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RetainedEarnings",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 920821000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RetainedEarnings",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 302198000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TreasuryStock",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": -471997000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TreasuryStock",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": -458924000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ShareholdersEquity",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1429232000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ShareholdersEquity",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 837369000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": -2003000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 1939000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ValuationAndTranslationAdjustments",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": -2003000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ValuationAndTranslationAdjustments",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 1939000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1427229000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 839308000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LiabilitiesAndNetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 3870480000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LiabilitiesAndNetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 3870426000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingRevenue1",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 660000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingRevenue1",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 669600000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 529657000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 505354000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 130343000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OperatingIncome",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 164245000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestAndDividendsIncomeNOI",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 21121000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestAndDividendsIncomeNOI",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 36508000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:GainOnSalesOfInvestmentSecuritiesNOI",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 908000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:GainOnSalesOfInvestmentSecuritiesNOI",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 151000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNOI",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 1530000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNOI",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 272000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NonOperatingIncome",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 23560000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NonOperatingIncome",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 36932000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestExpensesNOE",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 16327000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestExpensesNOE",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 28395000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestOnBondsNOE",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 4948000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:InterestOnBondsNOE",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 3974000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNOE",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 13000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OtherNOE",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 610000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NonOperatingExpenses",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 21288000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NonOperatingExpenses",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 32980000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OrdinaryIncome",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 132615000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:OrdinaryIncome",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 168197000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ReversalOfAllowanceForDoubtfulAccountsEI",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 41445000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ReversalOfProvisionForLossOnGuaranteesEI",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 43129000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ReversalOfProvisionForLossOnGuaranteesEI",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 23213000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ExtraordinaryIncome",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 84574000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ExtraordinaryIncome",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 23213000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:LossOnValuationOfStocksOfSubsidiariesAndAffiliatesEL",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 90000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsEL",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 15828000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsEL",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 613651000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForLossOnGuaranteesEL",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 26075000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ExtraordinaryLoss",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 41903000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ExtraordinaryLoss",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 703651000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 175285000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": -512240000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesCurrent",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 14719000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesCurrent",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 19622000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesDeferred",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": -4453000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxesDeferred",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 3963000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxes",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 10266000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:IncomeTaxes",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 23585000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 165019000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": -535826000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_NonConsolidatedMember_CapitalStockMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_NonConsolidatedMember_LegalCapitalSurplusMember",
+  "値": 109435000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_NonConsolidatedMember_OtherCapitalSurplusMember",
+  "値": 435830000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_NonConsolidatedMember_CapitalSurplusMember",
+  "値": 545266000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+  "値": 821642000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_NonConsolidatedMember_RetainedEarningsMember",
+  "値": 821642000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_NonConsolidatedMember_TreasuryStockMember",
+  "値": -483396000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": 1306509000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+  "値": -65841000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsMember",
+  "値": -65841000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "Prior1YearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": -65841000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+  "値": 165019000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsMember",
+  "値": 165019000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "Prior1YearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": 165019000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "Prior1YearDuration_NonConsolidatedMember_OtherCapitalSurplusMember",
+  "値": 12146000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "Prior1YearDuration_NonConsolidatedMember_CapitalSurplusMember",
+  "値": 12146000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "Prior1YearDuration_NonConsolidatedMember_TreasuryStockMember",
+  "値": 11398000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "Prior1YearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": 23545000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_NonConsolidatedMember_OtherCapitalSurplusMember",
+  "値": 12146000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_NonConsolidatedMember_CapitalSurplusMember",
+  "値": 12146000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+  "値": 99178000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsMember",
+  "値": 99178000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_NonConsolidatedMember_TreasuryStockMember",
+  "値": 11398000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": 122723000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_CapitalStockMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_LegalCapitalSurplusMember",
+  "値": 109435000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_OtherCapitalSurplusMember",
+  "値": 447977000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_CapitalSurplusMember",
+  "値": 557412000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+  "値": 920821000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_RetainedEarningsMember",
+  "値": 920821000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_TreasuryStockMember",
+  "値": -471997000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": 1429232000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_NonConsolidatedMember_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": -1327000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_NonConsolidatedMember_ValuationAndTranslationAdjustmentsMember",
+  "値": -1327000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior2YearInstant_NonConsolidatedMember",
+  "値": 1305182000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": -65841000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 165019000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 23545000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "Prior1YearDuration_NonConsolidatedMember_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": -676000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "Prior1YearDuration_NonConsolidatedMember_ValuationAndTranslationAdjustmentsMember",
+  "値": -676000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": -676000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_NonConsolidatedMember_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": -676000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_NonConsolidatedMember_ValuationAndTranslationAdjustmentsMember",
+  "値": -676000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 122047000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": -2003000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_ValuationAndTranslationAdjustmentsMember",
+  "値": -2003000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1427229000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_CapitalStockMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_LegalCapitalSurplusMember",
+  "値": 109435000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_OtherCapitalSurplusMember",
+  "値": 447977000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_CapitalSurplusMember",
+  "値": 557412000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+  "値": 920821000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_RetainedEarningsMember",
+  "値": 920821000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_TreasuryStockMember",
+  "値": -471997000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": 1429232000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+  "値": -82796000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsMember",
+  "値": -82796000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": -82796000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+  "値": -535826000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsMember",
+  "値": -535826000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": -535826000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "CurrentYearDuration_NonConsolidatedMember_OtherCapitalSurplusMember",
+  "値": 13685000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "CurrentYearDuration_NonConsolidatedMember_CapitalSurplusMember",
+  "値": 13685000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "CurrentYearDuration_NonConsolidatedMember_TreasuryStockMember",
+  "値": 13073000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": 26759000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_NonConsolidatedMember_OtherCapitalSurplusMember",
+  "値": 13685000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_NonConsolidatedMember_CapitalSurplusMember",
+  "値": 13685000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+  "値": -618622000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsMember",
+  "値": -618622000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_NonConsolidatedMember_TreasuryStockMember",
+  "値": 13073000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": -591863000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember_CapitalStockMember",
+  "値": 422996000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember_LegalCapitalSurplusMember",
+  "値": 109435000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember_OtherCapitalSurplusMember",
+  "値": 461663000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember_CapitalSurplusMember",
+  "値": 571098000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+  "値": 302198000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember_RetainedEarningsMember",
+  "値": 302198000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember_TreasuryStockMember",
+  "値": -458924000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember_ShareholdersEquityMember",
+  "値": 837369000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": -2003000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember_ValuationAndTranslationAdjustmentsMember",
+  "値": -2003000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "Prior1YearInstant_NonConsolidatedMember",
+  "値": 1427229000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DividendsFromSurplus",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": -82796000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProfitLoss",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": -535826000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DisposalOfTreasuryStock",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 26759000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "CurrentYearDuration_NonConsolidatedMember_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": 3942000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "CurrentYearDuration_NonConsolidatedMember_ValuationAndTranslationAdjustmentsMember",
+  "値": 3942000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 3942000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_NonConsolidatedMember_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": 3942000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_NonConsolidatedMember_ValuationAndTranslationAdjustmentsMember",
+  "値": 3942000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": -587920000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+  "値": 1939000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember_ValuationAndTranslationAdjustmentsMember",
+  "値": 1939000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:NetAssets",
+  "context": "CurrentYearInstant_NonConsolidatedMember",
+  "値": 839308000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DirectorsCompensationsSGA",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 106192000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DirectorsCompensationsSGA",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 108437000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:SalariesINSNonlife",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 97911000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jpcrp_cor:SalariesINSNonlife",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 98042000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CommissionFeeSGA",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 109331000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:CommissionFeeSGA",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 99283000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DepreciationSGA",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 8880000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:DepreciationSGA",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 8276000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RetirementBenefitExpensesSGA",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 2259000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:RetirementBenefitExpensesSGA",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 1844000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareBasedRemunerationSGA",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 681000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareBasedRemunerationSGA",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 348000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareholderBenefitProgramSGA",
+  "context": "Prior1YearDuration_NonConsolidatedMember",
+  "値": 29740000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ },
+ {
+  "要素": "jppfs_cor:ProvisionForShareholderBenefitProgramSGA",
+  "context": "CurrentYearDuration_NonConsolidatedMember",
+  "値": 35000000.0,
+  "単位": "JPY",
+  "decimals": "-3"
+ }
+]

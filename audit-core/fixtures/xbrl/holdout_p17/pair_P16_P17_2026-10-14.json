@@ -1,0 +1,293 @@
+{
+ "docs": [
+  "S100YYQX",
+  "S100Z3LJ",
+  "S100Z3IZ",
+  "S100Z3H2",
+  "S100YXLE",
+  "S100Z3L6"
+ ],
+ "totals": {
+  "claims_P16": 742,
+  "claims_P17": 742,
+  "common": 712,
+  "only_P17": 16,
+  "only_P16": 16,
+  "broke": 0,
+  "gained": 2,
+  "dup_key_P16": 14,
+  "dup_key_P17": 14
+ },
+ "all_rows": {
+  "P16": {
+   "claims": 742,
+   "grounded": 287,
+   "stopped": 368,
+   "grounded_pct": 38.679245283018865,
+   "stopped_pct": 49.59568733153639
+  },
+  "P17": {
+   "claims": 742,
+   "grounded": 293,
+   "stopped": 368,
+   "grounded_pct": 39.487870619946094,
+   "stopped_pct": 49.59568733153639
+  }
+ },
+ "common_rows": {
+  "n": 712,
+  "P16": {
+   "grounded": 286,
+   "stopped": 344,
+   "grounded_pct": 40.168539325842694,
+   "stopped_pct": 48.31460674157304
+  },
+  "P17": {
+   "grounded": 288,
+   "stopped": 344,
+   "grounded_pct": 40.449438202247194,
+   "stopped_pct": 48.31460674157304
+  }
+ },
+ "A1_broke": 0,
+ "A1_gained_for_reference": 2,
+ "A2_grounded_diff_all": 6,
+ "A2_grounded_diff_common": 2,
+ "A3_stopped_pct_drop_all": 0.0,
+ "A3_stopped_pct_drop_common": 0.0,
+ "per_doc": [
+  {
+   "doc": "S100YYQX",
+   "claims_P16": 110,
+   "claims_P17": 110,
+   "dup_key_P16": 0,
+   "dup_key_P17": 0,
+   "states_P16_all": {
+    "GROUNDED": 44,
+    "POINTER_NOT_FOUND": 9,
+    "UNVERIFIABLE": 16,
+    "VALUE_MISMATCH": 41
+   },
+   "states_P17_all": {
+    "GROUNDED": 46,
+    "POINTER_NOT_FOUND": 9,
+    "UNVERIFIABLE": 16,
+    "VALUE_MISMATCH": 39
+   },
+   "common": 109,
+   "only_P16": 1,
+   "only_P17": 1,
+   "common_states_P16": {
+    "GROUNDED": 44,
+    "VALUE_MISMATCH": 40,
+    "POINTER_NOT_FOUND": 9,
+    "UNVERIFIABLE": 16
+   },
+   "common_states_P17": {
+    "GROUNDED": 46,
+    "POINTER_NOT_FOUND": 9,
+    "UNVERIFIABLE": 16,
+    "VALUE_MISMATCH": 38
+   },
+   "only_P17_states": {
+    "VALUE_MISMATCH": 1
+   },
+   "only_P16_states": {
+    "VALUE_MISMATCH": 1
+   },
+   "broke": 0,
+   "gained": 2,
+   "broke_rows": []
+  },
+  {
+   "doc": "S100Z3LJ",
+   "claims_P16": 128,
+   "claims_P17": 128,
+   "dup_key_P16": 0,
+   "dup_key_P17": 0,
+   "states_P16_all": {
+    "POINTER_NOT_FOUND": 105,
+    "UNVERIFIABLE": 23
+   },
+   "states_P17_all": {
+    "POINTER_NOT_FOUND": 105,
+    "UNVERIFIABLE": 23
+   },
+   "common": 128,
+   "only_P16": 0,
+   "only_P17": 0,
+   "common_states_P16": {
+    "POINTER_NOT_FOUND": 105,
+    "UNVERIFIABLE": 23
+   },
+   "common_states_P17": {
+    "POINTER_NOT_FOUND": 105,
+    "UNVERIFIABLE": 23
+   },
+   "only_P17_states": {},
+   "only_P16_states": {},
+   "broke": 0,
+   "gained": 0,
+   "broke_rows": []
+  },
+  {
+   "doc": "S100Z3IZ",
+   "claims_P16": 121,
+   "claims_P17": 121,
+   "dup_key_P16": 0,
+   "dup_key_P17": 0,
+   "states_P16_all": {
+    "GROUNDED": 97,
+    "UNVERIFIABLE": 5,
+    "VALUE_MISMATCH": 19
+   },
+   "states_P17_all": {
+    "GROUNDED": 99,
+    "UNVERIFIABLE": 5,
+    "VALUE_MISMATCH": 17
+   },
+   "common": 119,
+   "only_P16": 2,
+   "only_P17": 2,
+   "common_states_P16": {
+    "VALUE_MISMATCH": 17,
+    "GROUNDED": 97,
+    "UNVERIFIABLE": 5
+   },
+   "common_states_P17": {
+    "VALUE_MISMATCH": 17,
+    "GROUNDED": 97,
+    "UNVERIFIABLE": 5
+   },
+   "only_P17_states": {
+    "GROUNDED": 2
+   },
+   "only_P16_states": {
+    "VALUE_MISMATCH": 2
+   },
+   "broke": 0,
+   "gained": 0,
+   "broke_rows": []
+  },
+  {
+   "doc": "S100Z3H2",
+   "claims_P16": 167,
+   "claims_P17": 167,
+   "dup_key_P16": 0,
+   "dup_key_P17": 0,
+   "states_P16_all": {
+    "GROUNDED": 106,
+    "POINTER_NOT_FOUND": 31,
+    "UNVERIFIABLE": 15,
+    "VALUE_MISMATCH": 15
+   },
+   "states_P17_all": {
+    "GROUNDED": 106,
+    "POINTER_NOT_FOUND": 31,
+    "UNVERIFIABLE": 15,
+    "VALUE_MISMATCH": 15
+   },
+   "common": 167,
+   "only_P16": 0,
+   "only_P17": 0,
+   "common_states_P16": {
+    "GROUNDED": 106,
+    "POINTER_NOT_FOUND": 31,
+    "UNVERIFIABLE": 15,
+    "VALUE_MISMATCH": 15
+   },
+   "common_states_P17": {
+    "GROUNDED": 106,
+    "POINTER_NOT_FOUND": 31,
+    "UNVERIFIABLE": 15,
+    "VALUE_MISMATCH": 15
+   },
+   "only_P17_states": {},
+   "only_P16_states": {},
+   "broke": 0,
+   "gained": 0,
+   "broke_rows": []
+  },
+  {
+   "doc": "S100YXLE",
+   "claims_P16": 121,
+   "claims_P17": 121,
+   "dup_key_P16": 14,
+   "dup_key_P17": 14,
+   "states_P16_all": {
+    "POINTER_NOT_FOUND": 108,
+    "UNVERIFIABLE": 13
+   },
+   "states_P17_all": {
+    "POINTER_NOT_FOUND": 108,
+    "UNVERIFIABLE": 13
+   },
+   "common": 101,
+   "only_P16": 6,
+   "only_P17": 6,
+   "common_states_P16": {
+    "POINTER_NOT_FOUND": 90,
+    "UNVERIFIABLE": 11
+   },
+   "common_states_P17": {
+    "POINTER_NOT_FOUND": 90,
+    "UNVERIFIABLE": 11
+   },
+   "only_P17_states": {
+    "POINTER_NOT_FOUND": 6
+   },
+   "only_P16_states": {
+    "POINTER_NOT_FOUND": 6
+   },
+   "broke": 0,
+   "gained": 0,
+   "broke_rows": []
+  },
+  {
+   "doc": "S100Z3L6",
+   "claims_P16": 95,
+   "claims_P17": 95,
+   "dup_key_P16": 0,
+   "dup_key_P17": 0,
+   "states_P16_all": {
+    "GROUNDED": 40,
+    "POINTER_NOT_FOUND": 22,
+    "UNVERIFIABLE": 21,
+    "VALUE_MISMATCH": 12
+   },
+   "states_P17_all": {
+    "GROUNDED": 42,
+    "POINTER_NOT_FOUND": 22,
+    "UNVERIFIABLE": 21,
+    "VALUE_MISMATCH": 10
+   },
+   "common": 88,
+   "only_P16": 7,
+   "only_P17": 7,
+   "common_states_P16": {
+    "GROUNDED": 39,
+    "UNVERIFIABLE": 21,
+    "VALUE_MISMATCH": 10,
+    "POINTER_NOT_FOUND": 18
+   },
+   "common_states_P17": {
+    "GROUNDED": 39,
+    "UNVERIFIABLE": 21,
+    "VALUE_MISMATCH": 10,
+    "POINTER_NOT_FOUND": 18
+   },
+   "only_P17_states": {
+    "POINTER_NOT_FOUND": 4,
+    "GROUNDED": 3
+   },
+   "only_P16_states": {
+    "POINTER_NOT_FOUND": 4,
+    "VALUE_MISMATCH": 2,
+    "GROUNDED": 1
+   },
+   "broke": 0,
+   "gained": 0,
+   "broke_rows": []
+  }
+ ]
+}

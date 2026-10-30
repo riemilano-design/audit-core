@@ -1,0 +1,127 @@
+{
+ "seal": "docs/DOMAIN1_POC_C_SEAL_2026-10-17.md",
+ "step": "封 §9 の 2。**生成より先に commit する。費用 0 USD**",
+ "engine_sha": {
+  "sheet_m5_engine_2026-10-15.py": "6eb5723ef518e1b4",
+  "sheet_m7_engine_2026-10-15.py": "4574c3ea013d05a1",
+  "sheet_parent_backing_2026-10-16.py": "8e387958c69398e8",
+  "sheet_sainyuu_engine_2026-10-16.py": "3a70b599672832d3",
+  "sheet_sainyuu_p1_2026-10-16.py": "91b15e0f7eaa5442",
+  "sheet_sainyuu_p2_2026-10-16.py": "671c7dd81cea0ffe"
+ },
+ "min_independent": 3,
+ "証拠の出どころ": "fixtures/sheet/m11_binds_2026-10-16.json の `binds_new`(**段 11 の B。索引 4,209 行**)",
+ "**B′(抜粋 76 行)は使っていない**": true,
+ "再現が段 11 の記録と一致": true,
+ "索引の行": 4209,
+ "主張の数": 35,
+ "状態の内訳": {
+  "UNVERIFIABLE": 18,
+  "GROUNDED": 16,
+  "VALUE_MISMATCH": 1
+ },
+ "鍵を並べた件": {
+  "件数": 12,
+  "ids": [
+   "R018",
+   "R021",
+   "R022",
+   "R023",
+   "R024",
+   "R025",
+   "R026",
+   "R027",
+   "R028",
+   "R029",
+   "R030",
+   "R034"
+  ]
+ },
+ "鍵を並べなかった件(上限 8 通り超え)": {
+  "件数": 6,
+  "ids": [
+   "R001",
+   "R019",
+   "R020",
+   "R031",
+   "R032",
+   "R033"
+  ]
+ },
+ "上限": 8,
+ "(C) の指示": "(C) 参考情報。同じ表を機械で照合した道具が、金額 1 件ごとに出した情報です。\n正しいとは保証されていません。使っても、無視してもかまいません。\n(A) と (B) だけで答えてもかまいません。",
+ "指示の出どころ": "**封 §2-4 から機械で取り出した**(手で写していない)",
+ "banned_checked": [
+  "GROUNDED",
+  "VALUE_MISMATCH",
+  "UNVERIFIABLE",
+  "POINTER_NOT_FOUND",
+  "pointer",
+  "R-1",
+  "R-3",
+  "R-4",
+  "range_identified",
+  "value_match",
+  "封",
+  "合格",
+  "不合格",
+  "engine",
+  "照合結果",
+  "判定結果",
+  "正解",
+  "未確認",
+  "別名",
+  "独立した裏づけ",
+  "誤受理",
+  "agree_",
+  "保留にする",
+  "③",
+  "発火",
+  "A-1",
+  "A-3",
+  "X-2"
+ ],
+ "足していないもの": [
+  "正解集合",
+  "別枠",
+  "G-独立-1〜4",
+  "採点の規則",
+  "封の内容",
+  "A の答え",
+  "B の採点結果",
+  "候補範囲実験の結果",
+  "Core の判定が正しいかどうか",
+  "段 3〜段 11 の結果"
+ ],
+ "注": "**候補は索引 4,209 行から来るので、抜粋 76 行の外の行も出る。**だから C の入力は「A と同じ資料」ではなく「**A の資料 + Core の証拠**」である(封 §2-3・§8 の 2)",
+ "files": [
+  {
+   "seat": "seat1",
+   "path": "/private/tmp/claude-501/-Users-midoriko-Desktop-sgogi-coach/9b3d86ea-ed3b-407c-837e-4c2262a5b8e1/scratchpad/poc_c/poc_c_seat1/task.txt",
+   "model": "claude-sonnet-4-5",
+   "order": "そのまま",
+   "A の字数": 10772,
+   "C の字数": 20300,
+   "足した字数": 9528,
+   "A が接頭": true,
+   "A の sha256": "266d352b8802e29b16350c60e8812cca7497b26f90d9dea6d92fd0bba5639705",
+   "C の sha256": "595a100030676f388df957cd9170b1e6e689259c6d580bf8cd9b01a5f58c743d",
+   "先頭の id": "R001",
+   "末尾の id": "R035"
+  },
+  {
+   "seat": "seat2",
+   "path": "/private/tmp/claude-501/-Users-midoriko-Desktop-sgogi-coach/9b3d86ea-ed3b-407c-837e-4c2262a5b8e1/scratchpad/poc_c/poc_c_seat2/task.txt",
+   "model": "claude-haiku-4-5",
+   "order": "逆順",
+   "A の字数": 10772,
+   "C の字数": 20300,
+   "足した字数": 9528,
+   "A が接頭": true,
+   "A の sha256": "8ee6697eebf38b145e97e0217edace7e1fb8fcd3768c8f6749d7e3a9c666df42",
+   "C の sha256": "bff195dfe6c82d3831705471c38e5a6e6142d9b88f3148b00bc749d7871e2368",
+   "先頭の id": "R035",
+   "末尾の id": "R001"
+  }
+ ]
+}

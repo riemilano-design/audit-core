@@ -1,0 +1,109 @@
+{
+ "thresholds": {
+  "RS1_E1_over_L_min": 0.5,
+  "RS2_E2_over_G_max": 0.1,
+  "RS3_E3_over_L_max": 0.4,
+  "N1_E1_over_L_min": 0.5,
+  "N2_E2_over_G_max": 0.1,
+  "N3_max": 0
+ },
+ "k": 2,
+ "A": [],
+ "B": [
+  "S100Z40G",
+  "S100YYIA"
+ ],
+ "labels_sha256": "cd7bb7e053048b093ca31ce1cdd2362c539811542d9c897bce579c5fd7da3246",
+ "A_P16": {
+  "L": 0,
+  "G": 0,
+  "E1_strict": 0,
+  "E2_strict": 0,
+  "E2_v0": 0,
+  "E3": 0,
+  "MISSING": 0
+ },
+ "A_P20": {
+  "L": 0,
+  "G": 0,
+  "E1_strict": 0,
+  "E2_strict": 0,
+  "E2_v0": 0,
+  "E3": 0,
+  "MISSING": 0
+ },
+ "Q1": {
+  "L_A": 0,
+  "L_A_ok": false,
+  "RS1": {
+   "value": 0.0,
+   "pass": false
+  },
+  "RS2": {
+   "value": 0.0,
+   "pass": true
+  },
+  "RS3": {
+   "value": 0.0,
+   "pass": true
+  },
+  "judgement": "判定不能(L_A < 100)"
+ },
+ "B_P20": {
+  "L": 147,
+  "G": 94,
+  "E1_strict": 89,
+  "E2_strict": 5,
+  "E2_v0": 5,
+  "E3": 53,
+  "MISSING": 0,
+  "S100Z40G": {
+   "L": 70,
+   "G": 38,
+   "E1_strict": 35,
+   "E2_strict": 3,
+   "E2_v0": 3,
+   "E3": 32,
+   "MISSING": 0
+  },
+  "S100YYIA": {
+   "L": 77,
+   "G": 56,
+   "E1_strict": 54,
+   "E2_strict": 2,
+   "E2_v0": 2,
+   "E3": 21,
+   "MISSING": 0
+  }
+ },
+ "B_P16": {
+  "L": 147,
+  "G": 0,
+  "E1_strict": 0,
+  "E2_strict": 0,
+  "E2_v0": 0,
+  "E3": 147,
+  "MISSING": 0
+ },
+ "Q2": {
+  "L_B": 147,
+  "L_B_ok": true,
+  "N1": {
+   "value": 0.6054,
+   "pass": true
+  },
+  "N2": {
+   "value": 0.0532,
+   "pass": true
+  },
+  "N3": {
+   "E2_member": 0,
+   "U_absent": 0,
+   "value": 0,
+   "pass": true,
+   "rows": []
+  },
+  "P16_on_B_grounded(構造上 0 のはず)": 0,
+  "judgement_N1_N2": "通過"
+ }
+}

@@ -1,0 +1,66 @@
+{
+ "seal": "docs/XBRL_GENERALITY_SEAL_2026-10-20.md",
+ "step": "**汎化 C の封 §6 の段 B。取得。費用 0 USD(EDINET は無料)**",
+ "鍵": {
+  "環境変数の名前": "EDINET_API_KEY",
+  "値": "**読まない・印字しない・記録しない**"
+ },
+ "取得した書類": [
+  {
+   "docID": "S100Z0OS",
+   "bytes": 471363,
+   "sha256": "f646974b4447f633f41d844333681f2bf71ae77558693786d3edd8dd76b3987f",
+   "cache": "~/.cache/audit-core/edinet/S100Z0OS.zip"
+  },
+  {
+   "docID": "S100YYN7",
+   "bytes": 1867624,
+   "sha256": "646d95e04a253fc996dd17a231905ecb662686bd5c77f1c7730f51161c59e75a",
+   "cache": "~/.cache/audit-core/edinet/S100YYN7.zip"
+  },
+  {
+   "docID": "S100YYT8",
+   "bytes": 1122574,
+   "sha256": "e8c2c6cfc2079b24938e78c702559d5ac9b339d06d775cfd542ecb0143ce93d0",
+   "cache": "~/.cache/audit-core/edinet/S100YYT8.zip"
+  },
+  {
+   "docID": "S100Z42X",
+   "bytes": 596387,
+   "sha256": "c9337c162e23e2808f73cb0318cfd96e36c25915cc6aaaa8a9eccc974557bbbc",
+   "cache": "~/.cache/audit-core/edinet/S100Z42X.zip"
+  },
+  {
+   "docID": "S100YYT4",
+   "bytes": 598389,
+   "sha256": "861de89d99d2463f9c2230fdbf596c1e75eba5a59096efe969d72cdb3f272828",
+   "cache": "~/.cache/audit-core/edinet/S100YYT4.zip"
+  },
+  {
+   "docID": "S100Z4GF",
+   "bytes": 983056,
+   "sha256": "778a6a113f4ee1e2fc40b64375e55273cd38a15906271e08bd95415cf49d4a9e",
+   "cache": "~/.cache/audit-core/edinet/S100Z4GF.zip"
+  },
+  {
+   "docID": "S100Z4J8",
+   "bytes": 390810,
+   "sha256": "2de15610c9b207fdb286035fb76b30c1ac88d6ad16e8356a3517bb99ae453214",
+   "cache": "~/.cache/audit-core/edinet/S100Z4J8.zip"
+  },
+  {
+   "docID": "S100YYUD",
+   "bytes": 586598,
+   "sha256": "944ed61c7b78dc48722f34796f520d6dbc86bbeaaf82a151913f0840133ffcd4",
+   "cache": "~/.cache/audit-core/edinet/S100YYUD.zip"
+  }
+ ],
+ "合計バイト": 6616801,
+ "取得した時刻(UTC)": "2026-10-19T18:39:16.349345Z",
+ "置いた場所": "**`~/.cache/audit-core/edinet/` だけ。repo に生 ZIP は入れない**",
+ "**1 度しか開かない**": "封 `HOLDOUT_SPLIT_SEAL_2026-10-14` の守ること 4。この 8 件は C0 のあと使用済みへ移る",
+ "limits": [
+  "**取得しただけである。**本文も fact も 1 件も読んでいない",
+  "**席は 1 回も呼んでいない**"
+ ]
+}

@@ -1,0 +1,487 @@
+{
+ "S100Z46V:H-001": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+  ],
+  "subject": "負債合計",
+  "span": "当連結会計年度末における負債合計は、1,822,349千円となりました。",
+  "reason": null
+ },
+ "S100Z46V:H-002": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "顧客売上高4,415,940千円、リカーリング顧客売上高比率90.5%、リカーリング顧客数",
+  "reason": "no_element(ratio without fact)"
+ },
+ "S100Z46V:H-003": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "投資活動に使用した資金は599,341千円となりました。",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z46V:H-004": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+  ],
+  "subject": "法人税等の支払額",
+  "span": "530千円、契約負債の減少19,158千円、法人税等の支払額131,274千円による資金の減少が生",
+  "reason": null
+ },
+ "S100Z46V:H-005": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+  ],
+  "subject": "長期借入金",
+  "span": "固定負債は、長期借入金587,500千円であります。",
+  "reason": null
+ },
+ "S100Z46V:H-006": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "営業活動により得られた資金は327,743千円となりました。",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z46V:H-007": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "財務活動により得られた資金は741,519千円となりました。",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z46V:H-008": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+  ],
+  "subject": "利益剰余金",
+  "span": "9,269千円、資本剰余金1,433,301千円、利益剰余金883,153千円であります。",
+  "reason": null
+ },
+ "S100Z46V:H-009": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+  ],
+  "subject": "資産合計",
+  "span": "当連結会計年度末における資産合計は、4,188,155千円となりました。",
+  "reason": null
+ },
+ "S100Z46V:H-010": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "敷金及び保証金の差入による支出",
+  "span": "、敷金及び保証金の差入による支出52,272千円による資金の減少が生じたこ",
+  "reason": "no_element(no prior for text)"
+ },
+ "S100Z46V:H-011": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "帰属する当期純利益330,138千円、リカーリング顧客売上高4,415,940千円、リカーリング顧客売",
+  "reason": null
+ },
+ "S100Z46V:H-012": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant"
+  ],
+  "subject": "1年内返済予定の長期借入金",
+  "span": "内訳は、買掛金591,636千円、1年内返済予定の長期借入金150,000千円、未払法人税等80,",
+  "reason": null
+ },
+ "S100Z46V:H-013": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+  ],
+  "subject": "経常利益",
+  "span": "879,542千円、営業利益は424,591千円、経常利益は432,920千円、親会社株主に帰属す",
+  "reason": null
+ },
+ "S100Z46V:H-014": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CapitalStock@CurrentYearInstant"
+  ],
+  "subject": "資本金",
+  "span": "主な内訳は、資本金49,269千円、資本剰余金1,43",
+  "reason": null
+ },
+ "S100Z46V:H-015": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "法人税等の支払額",
+  "span": ",158千円、法人税等の支払額131,274千円による資金の減少が生じたこ",
+  "reason": "no_element(no prior for text)"
+ },
+ "S100Z46V:H-016": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "subject": "仕入債務",
+  "span": "、税金等調整前当期純利益の計上432,920千円、仕入債務の増加220,4",
+  "reason": null
+ },
+ "S100Z46V:H-017": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant"
+  ],
+  "subject": "未払法人税等",
+  "span": "、1年内返済予定の長期借入金150,000千円、未払法人税等80,912千円、契約負債76,98",
+  "reason": null
+ },
+ "S100Z46V:H-018": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IntangibleAssets@CurrentYearInstant"
+  ],
+  "subject": "無形固定資産",
+  "span": "無形固定資産は620,638千円であり、主な内訳は、",
+  "reason": null
+ },
+ "S100Z46V:H-019": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "先別の販売実績のうち、当該販売実績の総販売実績に対する割合が10%未満の相手先につきま",
+  "reason": "no_subject"
+ },
+ "S100Z46V:H-020": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "5%、リカーリング顧客数176社、リカーリング顧客平均売上高25,090千円、NRR120.0%",
+  "reason": null
+ },
+ "S100Z46V:H-021": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DeferredTaxAssets@CurrentYearInstant"
+  ],
+  "subject": "繰延税金資産",
+  "span": "他の資産は283,538千円であり、主な内訳は、繰延税金資産164,775千円、投資有価証券50,",
+  "reason": null
+ },
+ "S100Z46V:H-022": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Goodwill@CurrentYearInstant"
+  ],
+  "subject": "のれん",
+  "span": "無形固定資産は620,638千円であり、主な内訳は、のれん497,003千円、ソフトウエア仮勘定",
+  "reason": null
+ },
+ "S100Z46V:H-023": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "会計年度の業績は、売上高は4,879,542千円、営業利益は424,591千円、経常利益は432,",
+  "reason": null
+ },
+ "S100Z46V:H-024": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProceedsFromLongTermLoansPayableFinCF@CurrentYearDuration"
+  ],
+  "subject": "長期借入れによる収入",
+  "span": "これは主に、長期借入れによる収入750,000千円、新株予約権の行使に",
+  "reason": null
+ },
+ "S100Z46V:H-025": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "契約資産",
+  "span": "5千円による資金の増加があったものの、売上債権及び契約資産の増加122,5",
+  "reason": "no_element(no prior for text)"
+ },
+ "S100Z46V:H-026": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant"
+  ],
+  "subject": "投資有価証券",
+  "span": "り、主な内訳は、繰延税金資産164,775千円、投資有価証券50,000千円であります。",
+  "reason": null
+ },
+ "S100Z46V:H-027": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Inventories@CurrentYearInstant"
+  ],
+  "subject": "棚卸資産",
+  "span": ",594千円、売掛金及び契約資産812,829千円、棚卸資産35,581千円であります。",
+  "reason": null
+ },
+ "S100Z46V:H-028": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+  ],
+  "subject": "仕入債務",
+  "span": "金等調整前当期純利益の計上432,920千円、仕入債務の増加220,445千円による資金の増加があ",
+  "reason": null
+ },
+ "S100Z46V:H-029": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfInvestmentsInSubsidiariesResultingInChangeInScopeOfConsolidationInvCF@CurrentYearDuration"
+  ],
+  "subject": "連結の範囲の変更を伴う子会社株式の取得による支出",
+  "span": "これは、連結の範囲の変更を伴う子会社株式の取得による支出434,044千円、無形固定資産の取得",
+  "reason": null
+ },
+ "S100Z46V:H-030": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:AccountsReceivableTradeAndContractAssets@CurrentYearInstant"
+  ],
+  "subject": "売掛金及び契約資産",
+  "span": "訳は、現金及び預金2,301,594千円、売掛金及び契約資産812,829千円、棚卸資産35,58",
+  "reason": null
+ },
+ "S100Z46V:H-031": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:RepaymentOfLongTermLoansPayableFinCF@CurrentYearDuration"
+  ],
+  "subject": "長期借入金の返済による支出",
+  "span": "収入3,582千円があったものの、長期借入金の返済による支出12,500千円が生じたことによるも",
+  "reason": null
+ },
+ "S100Z46V:H-032": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant"
+  ],
+  "subject": "買掛金",
+  "span": "流動負債は1,234,849千円であり、主な内訳は、買掛金591,636千円、1年内返済予定の長",
+  "reason": null
+ },
+ "S100Z46V:H-033": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "供を開始するなど、パートナー企業との協業を推進し、提供価値の拡大に取り組み",
+  "reason": "no_subject"
+ },
+ "S100Z46V:H-034": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+  ],
+  "subject": "流動負債",
+  "span": "流動負債は1,234,849千円であり、主な内訳は、",
+  "reason": null
+ },
+ "S100Z46V:H-035": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant"
+  ],
+  "subject": "資本剰余金",
+  "span": "主な内訳は、資本金49,269千円、資本剰余金1,433,301千円、利益剰余金883,",
+  "reason": null
+ },
+ "S100Z46V:H-036": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上の取り組みの結果、当連結会計年度の業績は、売上高は4,879,542千円、営業利益は424,",
+  "reason": null
+ },
+ "S100Z46V:H-037": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF@CurrentYearDuration"
+  ],
+  "subject": "契約負債",
+  "span": "売上債権及び契約資産の増加122,530千円、契約負債の減少19,158千円、法人税等の支払額1",
+  "reason": null
+ },
+ "S100Z46V:H-038": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+  ],
+  "subject": "流動資産",
+  "span": "流動資産は3,283,977千円であり、主な内訳は、",
+  "reason": null
+ },
+ "S100Z46V:H-039": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "経常利益は432,920千円、親会社株主に帰属する当期純利益330,138千円、リカーリング顧客売",
+  "reason": null
+ },
+ "S100Z46V:H-040": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:SoftwareInProgress@CurrentYearInstant"
+  ],
+  "subject": "ソフトウエア仮勘定",
+  "span": "り、主な内訳は、のれん497,003千円、ソフトウエア仮勘定115,737千円であります。",
+  "reason": null
+ },
+ "S100Z46V:H-041": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "subject": "仕入債務",
+  "span": "2,920千円、仕入債務の増加220,445千円による資金の増加があったも",
+  "reason": null
+ },
+ "S100Z46V:H-042": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant"
+  ],
+  "subject": "固定資産合計",
+  "span": "固定資産合計は、904,177千円となりました。",
+  "reason": null
+ },
+ "S100Z46V:H-043": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:EffectOfExchangeRateChangeOnCashAndCashEquivalents@CurrentYearDuration"
+  ],
+  "subject": "現金及び現金同等物に係る換算差額",
+  "span": "及び現金同等物に係る換算差額155千円の資金増を含めた結果、2,301,594千円となりました。",
+  "reason": null
+ },
+ "S100Z46V:H-044": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant"
+  ],
+  "subject": "契約資産",
+  "span": "円による資金の増加があったものの、売上債権及び契約資産の増加122,530千円、契約負債の減少19",
+  "reason": null
+ },
+ "S100Z46V:H-045": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "円、リカーリング顧客売上高比率90.5%、リカーリング顧客数176社、リカーリング顧客平",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z46V:H-046": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+  ],
+  "subject": "現金及び預金",
+  "span": "資産は3,283,977千円であり、主な内訳は、現金及び預金2,301,594千円、売掛金及び契約資産",
+  "reason": null
+ },
+ "S100Z46V:H-047": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+  ],
+  "subject": "純資産合計",
+  "span": "当連結会計年度末における純資産合計は、2,365,805千円となりました。",
+  "reason": null
+ },
+ "S100Z46V:H-048": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:InvestmentsAndOtherAssets@CurrentYearInstant"
+  ],
+  "subject": "投資その他の資産",
+  "span": "投資その他の資産は283,538千円であり、主な内訳は、",
+  "reason": null
+ },
+ "S100Z46V:H-049": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "subject": "契約負債",
+  "span": "の、売上債権及び契約資産の増加122,530千円、契約負債の減少19,15",
+  "reason": null
+ },
+ "S100Z46V:H-050": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant"
+  ],
+  "subject": "契約負債",
+  "span": "金150,000千円、未払法人税等80,912千円、契約負債76,981千円であります。",
+  "reason": null
+ },
+ "S100Z46V:H-051": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PaymentsForLeaseAndGuaranteeDepositsInvCF@CurrentYearDuration"
+  ],
+  "subject": "敷金及び保証金の差入による支出",
+  "span": "による支出113,025千円、敷金及び保証金の差入による支出52,272千円による資金の減少が生",
+  "reason": null
+ },
+ "S100Z46V:H-052": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+  ],
+  "subject": "無形固定資産の取得による支出",
+  "span": "得による支出434,044千円、無形固定資産の取得による支出113,025千円、敷金及び保証金の差",
+  "reason": null
+ },
+ "S100Z46V:H-053": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:EffectOfExchangeRateChangeOnCashAndCashEquivalents@CurrentYearDuration"
+  ],
+  "subject": "現金及び現金同等物に係る換算差額",
+  "span": "「資金」という。)の残高は、現金及び現金同等物に係る換算差額155千円の資金増を含めた結果",
+  "reason": null
+ },
+ "S100Z46V:H-054": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+  ],
+  "subject": "税金等調整前当期純利益",
+  "span": "これは主に、税金等調整前当期純利益の計上432,920千円、仕入債務の増加22",
+  "reason": null
+ },
+ "S100Z46V:H-055": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DisposalOfTreasuryStock@CurrentYearDuration"
+  ],
+  "subject": "自己株式の処分",
+  "span": ",000千円、新株予約権の行使による自己株式の処分による収入3,582千円があったものの、長期",
+  "reason": null
+ },
+ "S100Z46V:H-056": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "176社、リカーリング顧客平均売上高25,090千円、NRR120.0%となりました。",
+  "reason": "no_element(ratio without fact)"
+ }
+}

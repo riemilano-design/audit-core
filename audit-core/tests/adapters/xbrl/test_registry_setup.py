@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """C-1d §G (extended by Core 接続 C-1g §1-5 and C-1h §3.4-c, 2026-10-06):
 unit tests for ``adapters/xbrl/registry_setup.py``'s ``register_all`` --
-the 28 registrations (2 schemes + 9 comparators + 4 normalizations + 13
+the 29 registrations (2 schemes + 9 comparators + 4 normalizations + 14
 reasons; C-1d's 21 plus C-1g's 2 P6-only comparators and 1 P6-only
 reason, plus C-1h's 1 P7-only comparator and 3 P7-only reasons) and the
 two states a duplicate registration must raise in (``builtin`` is
@@ -85,6 +85,8 @@ class RegisterAllTest(unittest.TestCase):
             "no_element(point without prior phrase)",
             "no_element(text needs money fact)",
             "no_element(no prior for text)",
+            # XBRL 直し §1b(2026-10-08、profile P8 のみ)。
+            "no_element(no prior2 for prior-year diff)",
         )
         unverifiable = (
             "no_subject",
@@ -94,7 +96,7 @@ class RegisterAllTest(unittest.TestCase):
             "prior is 0",
             "target_or_plan",
         )
-        self.assertEqual(len(pointer_not_found) + len(unverifiable), 13)
+        self.assertEqual(len(pointer_not_found) + len(unverifiable), 14)
         for name in pointer_not_found:
             self.assertEqual(self.registry.reason_state(name), core.State.POINTER_NOT_FOUND)
         for name in unverifiable:
@@ -105,12 +107,19 @@ class RegisterAllTest(unittest.TestCase):
         数える(RS モジュールの private なタプルの長さと一致することを確認)。
         """
 
-        self.assertEqual(len(RS._COMPARATORS), 9)
+        # 主語の規則の直し A1(2026-10-08)で比較器が 1 つ増えて 10。
+        # 理由コードは増やさない(金額が合わなければ既存の VALUE_MISMATCH)。
+        self.assertEqual(len(RS._COMPARATORS), 10)
         self.assertEqual(len(RS._NORMALIZATIONS), 4)
-        self.assertEqual(len(RS._POINTER_NOT_FOUND_REASONS), 7)
-        self.assertEqual(len(RS._UNVERIFIABLE_REASONS), 6)
+        # 2026-10-21 P25 の段 1: 理由 no_same_value を足して 9(封 XBRL_LASTBRANCH_SEAL_2026-10-21)
+        # 2026-10-22 P26 の段 1: 理由 other_concept を足して 10(封 XBRL_P26_SEAL_2026-10-21)
+        self.assertEqual(len(RS._POINTER_NOT_FOUND_REASONS), 10)
+        # 2026-10-21 P24 の段 1: 理由 other_frame を足して 7(封 XBRL_VOCAB_SEAL_2026-10-21)
+        # 2026-10-22 P26 の段 1: 理由 direction_on_cause_item・rounded_diff_within_double_band を足して 9(封 XBRL_P26_SEAL_2026-10-21)
+        # 2026-10-27 P27 の段 2: 理由 per_unit_counter を足して 10(封 XBRL_P27_SEAL_2026-10-27)
+        self.assertEqual(len(RS._UNVERIFIABLE_REASONS), 10)
         total = 2 + len(RS._COMPARATORS) + len(RS._NORMALIZATIONS) + len(RS._POINTER_NOT_FOUND_REASONS) + len(RS._UNVERIFIABLE_REASONS)
-        self.assertEqual(total, 28)
+        self.assertEqual(total, 36)
 
     def test_registering_a_reason_twice_raises(self):
         with self.assertRaises(ValueError):

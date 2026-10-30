@@ -1,0 +1,600 @@
+{
+ "step": "**① のうち私が機械で確かめられる部分。0 USD・通信なし**",
+ "**課金の記録は私から見えない**": "見えるのは repo の記録だけ。**モデル名・実請求額・入出力の単価は人間が課金の画面で確かめる必要が在る**",
+ "数えた file": 423,
+ "内訳": {
+  "トークンの記録が在る file": 17,
+  "入出力の内訳が在る file": 1,
+  "合計だけの file": 15,
+  "実請求額が在る file": 0
+ },
+ "**判定**": "**内訳が在る file が 1 件**",
+ "**だから**": "**前便の 2.94 USD は仮定のままである。****推定を実測として扱わない**(人間の指示)",
+ "記録ごと": [
+  {
+   "file": "fixtures/kokkai/out_injected_2026-10-14.json",
+   "model": [],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/checks[2]/detail/tokens",
+    "/checks[5]/detail/tokens",
+    "/checks[14]/detail/tokens",
+    "/checks[19]/detail/tokens",
+    "/checks[22]/detail/tokens",
+    "/checks[25]/detail/tokens",
+    "/checks[28]/detail/tokens",
+    "/checks[31]/detail/tokens",
+    "/checks[34]/detail/tokens",
+    "/checks[39]/detail/tokens",
+    "/checks[42]/detail/tokens",
+    "/checks[49]/detail/tokens",
+    "/checks[54]/detail/tokens",
+    "/checks[57]/detail/tokens",
+    "/checks[60]/detail/tokens",
+    "/checks[63]/detail/tokens",
+    "/checks[68]/detail/tokens",
+    "/checks[71]/detail/tokens",
+    "/checks[74]/detail/tokens",
+    "/checks[77]/detail/tokens",
+    "/checks[80]/detail/tokens",
+    "/checks[85]/detail/tokens",
+    "/checks[90]/detail/tokens",
+    "/checks[97]/detail/tokens",
+    "/checks[100]/detail/tokens"
+   ],
+   "合計の値": [
+    13,
+    10,
+    14,
+    3,
+    28,
+    6,
+    9,
+    3,
+    17,
+    5,
+    4,
+    7,
+    4,
+    10,
+    10,
+    9,
+    1,
+    0,
+    8,
+    6,
+    0,
+    8,
+    2,
+    8,
+    10
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/kokkai/out_injected_round1material_engine2_2026-10-14.json",
+   "model": [],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/checks[2]/detail/tokens",
+    "/checks[5]/detail/tokens",
+    "/checks[14]/detail/tokens",
+    "/checks[19]/detail/tokens",
+    "/checks[22]/detail/tokens",
+    "/checks[25]/detail/tokens",
+    "/checks[28]/detail/tokens",
+    "/checks[31]/detail/tokens",
+    "/checks[34]/detail/tokens",
+    "/checks[39]/detail/tokens",
+    "/checks[42]/detail/tokens",
+    "/checks[49]/detail/tokens",
+    "/checks[54]/detail/tokens",
+    "/checks[57]/detail/tokens",
+    "/checks[60]/detail/tokens",
+    "/checks[63]/detail/tokens",
+    "/checks[68]/detail/tokens",
+    "/checks[71]/detail/tokens",
+    "/checks[74]/detail/tokens",
+    "/checks[77]/detail/tokens",
+    "/checks[80]/detail/tokens",
+    "/checks[85]/detail/tokens",
+    "/checks[90]/detail/tokens",
+    "/checks[97]/detail/tokens",
+    "/checks[100]/detail/tokens"
+   ],
+   "合計の値": [
+    13,
+    10,
+    14,
+    3,
+    28,
+    6,
+    9,
+    3,
+    17,
+    5,
+    4,
+    7,
+    5,
+    10,
+    10,
+    12,
+    1,
+    0,
+    8,
+    6,
+    0,
+    8,
+    3,
+    10,
+    10
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/kokkai/out_injected_round2_2026-10-14.json",
+   "model": [],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/checks[4]/detail/tokens",
+    "/checks[7]/detail/tokens",
+    "/checks[16]/detail/tokens",
+    "/checks[19]/detail/tokens",
+    "/checks[24]/detail/tokens",
+    "/checks[27]/detail/tokens",
+    "/checks[34]/detail/tokens",
+    "/checks[37]/detail/tokens",
+    "/checks[40]/detail/tokens",
+    "/checks[47]/detail/tokens",
+    "/checks[50]/detail/tokens",
+    "/checks[53]/detail/tokens",
+    "/checks[56]/detail/tokens",
+    "/checks[59]/detail/tokens",
+    "/checks[62]/detail/tokens",
+    "/checks[65]/detail/tokens",
+    "/checks[68]/detail/tokens",
+    "/checks[71]/detail/tokens",
+    "/checks[74]/detail/tokens",
+    "/checks[77]/detail/tokens",
+    "/checks[82]/detail/tokens",
+    "/checks[89]/detail/tokens",
+    "/checks[92]/detail/tokens",
+    "/checks[97]/detail/tokens"
+   ],
+   "合計の値": [
+    13,
+    8,
+    6,
+    6,
+    4,
+    6,
+    8,
+    9,
+    1,
+    8,
+    6,
+    8,
+    8,
+    6,
+    0,
+    8,
+    8,
+    12,
+    4,
+    12,
+    4,
+    5,
+    14,
+    1
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/kokkai/out_seat_2026-10-14.json",
+   "model": [],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/checks[2]/detail/tokens",
+    "/checks[5]/detail/tokens",
+    "/checks[14]/detail/tokens",
+    "/checks[19]/detail/tokens",
+    "/checks[22]/detail/tokens",
+    "/checks[25]/detail/tokens",
+    "/checks[28]/detail/tokens",
+    "/checks[31]/detail/tokens",
+    "/checks[34]/detail/tokens",
+    "/checks[39]/detail/tokens",
+    "/checks[42]/detail/tokens",
+    "/checks[49]/detail/tokens",
+    "/checks[54]/detail/tokens",
+    "/checks[57]/detail/tokens",
+    "/checks[60]/detail/tokens",
+    "/checks[63]/detail/tokens",
+    "/checks[68]/detail/tokens",
+    "/checks[71]/detail/tokens",
+    "/checks[74]/detail/tokens",
+    "/checks[77]/detail/tokens",
+    "/checks[80]/detail/tokens",
+    "/checks[85]/detail/tokens",
+    "/checks[90]/detail/tokens",
+    "/checks[97]/detail/tokens",
+    "/checks[100]/detail/tokens"
+   ],
+   "合計の値": [
+    13,
+    10,
+    14,
+    3,
+    28,
+    6,
+    9,
+    3,
+    17,
+    5,
+    4,
+    7,
+    4,
+    10,
+    10,
+    9,
+    1,
+    18,
+    8,
+    6,
+    13,
+    18,
+    2,
+    8,
+    10
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/kokkai/out_seat_round1material_engine2_2026-10-14.json",
+   "model": [],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/checks[2]/detail/tokens",
+    "/checks[5]/detail/tokens",
+    "/checks[14]/detail/tokens",
+    "/checks[19]/detail/tokens",
+    "/checks[22]/detail/tokens",
+    "/checks[25]/detail/tokens",
+    "/checks[28]/detail/tokens",
+    "/checks[31]/detail/tokens",
+    "/checks[34]/detail/tokens",
+    "/checks[39]/detail/tokens",
+    "/checks[42]/detail/tokens",
+    "/checks[49]/detail/tokens",
+    "/checks[54]/detail/tokens",
+    "/checks[57]/detail/tokens",
+    "/checks[60]/detail/tokens",
+    "/checks[63]/detail/tokens",
+    "/checks[68]/detail/tokens",
+    "/checks[71]/detail/tokens",
+    "/checks[74]/detail/tokens",
+    "/checks[77]/detail/tokens",
+    "/checks[80]/detail/tokens",
+    "/checks[85]/detail/tokens",
+    "/checks[90]/detail/tokens",
+    "/checks[97]/detail/tokens",
+    "/checks[100]/detail/tokens"
+   ],
+   "合計の値": [
+    13,
+    10,
+    14,
+    3,
+    28,
+    6,
+    9,
+    3,
+    17,
+    5,
+    4,
+    7,
+    5,
+    10,
+    10,
+    12,
+    1,
+    18,
+    8,
+    6,
+    13,
+    18,
+    3,
+    10,
+    10
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/kokkai/out_seat_round2_2026-10-14.json",
+   "model": [],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/checks[4]/detail/tokens",
+    "/checks[7]/detail/tokens",
+    "/checks[16]/detail/tokens",
+    "/checks[19]/detail/tokens",
+    "/checks[24]/detail/tokens",
+    "/checks[27]/detail/tokens",
+    "/checks[34]/detail/tokens",
+    "/checks[37]/detail/tokens",
+    "/checks[40]/detail/tokens",
+    "/checks[47]/detail/tokens",
+    "/checks[50]/detail/tokens",
+    "/checks[53]/detail/tokens",
+    "/checks[56]/detail/tokens",
+    "/checks[59]/detail/tokens",
+    "/checks[62]/detail/tokens",
+    "/checks[65]/detail/tokens",
+    "/checks[68]/detail/tokens",
+    "/checks[71]/detail/tokens",
+    "/checks[74]/detail/tokens",
+    "/checks[77]/detail/tokens",
+    "/checks[82]/detail/tokens",
+    "/checks[89]/detail/tokens",
+    "/checks[92]/detail/tokens",
+    "/checks[97]/detail/tokens"
+   ],
+   "合計の値": [
+    13,
+    13,
+    6,
+    6,
+    4,
+    6,
+    8,
+    9,
+    12,
+    8,
+    6,
+    8,
+    8,
+    6,
+    8,
+    8,
+    8,
+    12,
+    4,
+    12,
+    4,
+    5,
+    14,
+    1
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/sheet/errdet_answers_seat1_2026-10-17.json",
+   "model": [
+    "claude-sonnet-4-5"
+   ],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/費用/使ったトークン(実測)"
+   ],
+   "合計の値": [
+    101111
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/sheet/errdet_answers_seat2_2026-10-17.json",
+   "model": [
+    "claude-haiku-4-5"
+   ],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/費用/使ったトークン(実測)"
+   ],
+   "合計の値": [
+    70493
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/sheet/errdet_material_2026-10-17.json",
+   "model": [
+    "claude-haiku-4-5",
+    "claude-sonnet-4-5"
+   ],
+   "入力の欄": [
+    [
+     "/**A と C は同じ材料・同じ生成を共有する(入力差ゼロ)**",
+     true
+    ]
+   ],
+   "出力の欄": [],
+   "合計の欄": [],
+   "合計の値": [],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/sheet/errdet_score_2026-10-17.json",
+   "model": [
+    "claude-haiku-4-5",
+    "claude-sonnet-4-5"
+   ],
+   "入力の欄": [
+    [
+     "/**A と C は同じ生成を共有する(入力差ゼロ)**",
+     true
+    ]
+   ],
+   "出力の欄": [],
+   "合計の欄": [
+    "/費用/席ごと/seat1/費用/使ったトークン(実測)",
+    "/費用/席ごと/seat2/費用/使ったトークン(実測)"
+   ],
+   "合計の値": [
+    101111,
+    70493
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/sheet/m11_report_2026-10-16.json",
+   "model": [
+    "claude-sonnet-4-5(Agent, subagent_type=general-purpose, model=sonnet)"
+   ],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/cost/使ったトークン(実測)"
+   ],
+   "合計の値": [
+    82529
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/sheet/poc_c_answers_seat1_2026-10-17.json",
+   "model": [
+    "claude-sonnet-4-5"
+   ],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/費用/使ったトークン(実測)"
+   ],
+   "合計の値": [
+    103778
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/sheet/poc_c_answers_seat2_2026-10-17.json",
+   "model": [
+    "claude-haiku-4-5"
+   ],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/費用/使ったトークン(実測)"
+   ],
+   "合計の値": [
+    80562
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/sheet/poc_c_score_2026-10-17.json",
+   "model": [
+    "claude-haiku-4-5",
+    "claude-sonnet-4-5"
+   ],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/費用/席ごと/seat1/費用/使ったトークン(実測)",
+    "/費用/席ごと/seat2/費用/使ったトークン(実測)"
+   ],
+   "合計の値": [
+    103778,
+    80562
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/xbrl/ai_prose_generation_meta_2026-10-09.json",
+   "model": [
+    "claude-opus-5"
+   ],
+   "入力の欄": [
+    [
+     "/input_tokens",
+     22490
+    ]
+   ],
+   "出力の欄": [
+    [
+     "/max_output_tokens",
+     6000
+    ],
+    [
+     "/output_tokens",
+     6000
+    ]
+   ],
+   "合計の欄": [
+    "/max_output_tokens",
+    "/input_tokens",
+    "/output_tokens"
+   ],
+   "合計の値": [
+    6000,
+    22490,
+    6000
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/xbrl/cd8/cost_breakdown_2026-10-17.json",
+   "model": [
+    "sonnet(封 §4 のとおり 1 席)"
+   ],
+   "入力の欄": [
+    [
+     "/4 削って効くのはどれか[0]/USD(入力が出力の 1/5 **仮定**)",
+     2.94
+    ],
+    [
+     "/4 削って効くのはどれか[1]/USD(入力が出力の 1/5 **仮定**)",
+     0.73
+    ],
+    [
+     "/4 削って効くのはどれか[2]/USD(入力が出力の 1/5 **仮定**)",
+     2.68
+    ],
+    [
+     "/4 削って効くのはどれか[3]/USD(入力が出力の 1/5 **仮定**)",
+     0.67
+    ],
+    [
+     "/4 削って効くのはどれか[4]/USD(入力が出力の 1/5 **仮定**)",
+     1.16
+    ]
+   ],
+   "出力の欄": [],
+   "合計の欄": [
+    "/2 1 便のトークンの分け方/過去の 2 点[0]/トークン(実測)",
+    "/2 1 便のトークンの分け方/過去の 2 点[1]/トークン(実測)"
+   ],
+   "合計の値": [
+    101111,
+    103778
+   ],
+   "請求額の欄": []
+  },
+  {
+   "file": "fixtures/xbrl/cd8/dryrun_2026-10-17.json",
+   "model": [],
+   "入力の欄": [],
+   "出力の欄": [],
+   "合計の欄": [
+    "/費用の実測見積もり/過去の席の実測(記録から読んだ)[0]/トークン(実測)",
+    "/費用の実測見積もり/過去の席の実測(記録から読んだ)[1]/トークン(実測)",
+    "/費用の実測見積もり/過去の席の実測(記録から読んだ)[2]/トークン(実測)",
+    "/費用の実測見積もり/過去の席の実測(記録から読んだ)[3]/トークン(実測)"
+   ],
+   "合計の値": [
+    101111,
+    70493,
+    103778,
+    80562
+   ],
+   "請求額の欄": []
+  }
+ ]
+}

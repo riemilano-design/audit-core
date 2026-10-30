@@ -6,3 +6,6 @@ build/
 .env
 .env.local
 scripts/playtest/out/
+
+# 論文 PDF(181MB)。研究ノートと測定材料(e2_labels 等)は追跡する
+docs/research/papers/

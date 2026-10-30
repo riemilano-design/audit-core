@@ -1,0 +1,248 @@
+{
+ "auditor": "独立 再監査 A 席(2026-10-12)",
+ "material_sha256": "da45f007baf5c75fbf0d64e7846e78044a6de2b01149f0d4a18969cc07d1543e",
+ "zip_sha256": "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799",
+ "saw_existing_labels": false,
+ "saw_engine_states": false,
+ "basis": "audit-core/fixtures/xbrl/ai_prose_instance_2026-10-09.zip を bytes で読み、adapters.xbrl.instance.load_instance で fact 863 件・context 162 件を取得(labels_from_zip は names 引数が必須で、呼んでも日本語ラベルは 0 件しか返らなかったため、科目は要素名と文脈で同定した)。当期 = CurrentYearDuration 2025-07-01〜2026-06-30 / CurrentYearInstant 2026-06-30、前期 = Prior1YearDuration 2024-07-01〜2025-06-30 / Prior1YearInstant 2025-06-30。member 無しの連結 context の fact を既定とし、NonConsolidatedMember 付きは使っていない。文脈確認のため ai_prose_2026-10-09.txt(sha256 898ff5c54d94c746118cc997dd360c497702386b25d461924bbc4290edc26bbb)を読んだ。",
+ "rows": 33,
+ "labels": [
+  {
+   "id": "N012",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults / Prior1YearInstant(2025-06-30) / 0.606 / decimals=3 / unit=pure。0.606 = 60.6% で文の「前期末60.6%」と一致。単位は fact が pure(比率)、文が % なので 100 倍の表記換算を当てた。",
+   "誤りの型": null
+  },
+  {
+   "id": "N039",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:NumberOfEmployees / Prior1YearInstant(2025-06-30) / 1447 / decimals=0 / unit=pure。文の「前期末1,447名」と**完全一致**(丸めも換算も不要)。期も前期末で一致。",
+   "誤りの型": null
+  },
+  {
+   "id": "N040",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:AverageNumberOfTemporaryWorkers / CurrentYearInstant(2026-06-30) / 409 / decimals=0 / unit=pure。文の「臨時従業員は年間平均409名」と**完全一致**。",
+   "誤りの型": null
+  },
+  {
+   "id": "N041",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:AverageNumberOfTemporaryWorkers / Prior1YearInstant(2025-06-30) / 393 / decimals=0 / unit=pure。文の「(同393名)」=前期の年間平均と**完全一致**。",
+   "誤りの型": null
+  },
+  {
+   "id": "N113",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults / Prior1YearDuration(2024-07-01〜2025-06-30) / 0.133 / decimals=3 / unit=pure。0.133 = 13.3% で文の「前期13.3%」と一致。pure→% の表記換算を当てた。",
+   "誤りの型": null
+  },
+  {
+   "id": "N114",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:ComprehensiveIncome(同値で jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults)/ CurrentYearDuration(2025-07-01〜2026-06-30) / 2,256,683,000 / decimals=-3 / unit=JPY。百万円未満を**切り捨て**ると 2,256 百万円で文と一致(四捨五入なら 2,257 になるので、この書類は切り捨て。例: 945,793,000→945、11,334,658,000→11,334 も切り捨て)。",
+   "誤りの型": null
+  },
+  {
+   "id": "N115",
+   "札": "真",
+   "確信": "高",
+   "根拠": "同科目 / Prior1YearDuration(2024-07-01〜2025-06-30) / 2,451,498,000 / decimals=-3 / unit=JPY。切り捨てで 2,451 百万円、文の「(前期2,451百万円)」と一致。",
+   "誤りの型": null
+  },
+  {
+   "id": "N116",
+   "札": "真",
+   "確信": "高",
+   "根拠": "導出(当期/前期の差): ComprehensiveIncome 2,451,498,000(Prior1YearDuration)− 2,256,683,000(CurrentYearDuration)= 194,815,000。百万円未満を切り捨てて 194 百万円で文と一致(材料の 数=194,000,000 円 は「194百万円」の機械換算なので、生の値 194,815,000 とは 815,000 の表記差がある)。併記の 7.9% も 194,815/2,451,498=7.947% の切り捨てで整合。",
+   "誤りの型": null
+  },
+  {
+   "id": "N124",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecuritiesNetOfTaxOCI / Prior1YearDuration / 62,235,000 / decimals=-3 / unit=JPY。切り捨てで 62 百万円、文の「その他有価証券評価差額金…(同62百万円)」と一致。科目はその他の包括利益(フロー)で、純資産の累計額(414,441,000)ではない方を引いた。",
+   "誤りの型": null
+  },
+  {
+   "id": "N125",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:ForeignCurrencyTranslationAdjustmentNetOfTaxOCI / CurrentYearDuration / 2,918,000 / decimals=-3 / unit=JPY。切り捨てで 2 百万円、文の「為替換算調整勘定2百万円」と一致(四捨五入なら 3 になる。この書類は切り捨て)。累計額 △16,146,000 ではなく当期のフローを引いた。",
+   "誤りの型": null
+  },
+  {
+   "id": "N126",
+   "札": "真",
+   "確信": "高",
+   "根拠": "同科目 / Prior1YearDuration / −3,621,000 / decimals=-3 / unit=JPY。切り捨て(絶対値)で △3 百万円、文の「(同△3百万円)」と符号・値ともに一致。",
+   "誤りの型": null
+  },
+  {
+   "id": "N127",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:DeferredGainsOrLossesOnHedgesNetOfTaxOCI / CurrentYearDuration / 4,992,000 / decimals=-3 / unit=JPY。切り捨てで 4 百万円、文の「繰延ヘッジ損益4百万円」と一致(四捨五入なら 5)。",
+   "誤りの型": null
+  },
+  {
+   "id": "N173",
+   "札": "真",
+   "確信": "中",
+   "根拠": "jpcrp_cor:TotalAcquisitionCostForIncreasedSharesSharesOtherThanThoseNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentLargestHoldingCompany / CurrentYearDuration / 3,000,000 / decimals=-6 / unit=JPY。文の「追加取得(取得額3百万円)」と**完全一致**。確信を中にしたのは科目の範囲: この fact は政策保有株式(純投資目的以外)の**最大保有会社**の増加取得額で、連結の投資有価証券取得額そのものではない。値が一致する他の候補 fact は見当たらなかった。",
+   "誤りの型": null
+  },
+  {
+   "id": "N211",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:AssetRetirementObligationsNCL / CurrentYearInstant(2026-06-30) / 215,469,000 / decimals=-3 / unit=JPY。切り捨てで 215 百万円、文の「資産除去債務215百万円」と一致。",
+   "誤りの型": null
+  },
+  {
+   "id": "N212",
+   "札": "真",
+   "確信": "高",
+   "根拠": "同科目 / Prior1YearInstant(2025-06-30) / 198,269,000 / decimals=-3 / unit=JPY。切り捨てで 198 百万円、文の「(同198百万円)」と一致。期も前期末で一致。",
+   "誤りの型": null
+  },
+  {
+   "id": "N213",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:OtherNCL(固定負債のその他)/ CurrentYearInstant / 242,590,000 / decimals=-3 / unit=JPY。切り捨てで 242 百万円、文の「その他242百万円」と一致。文脈が固定負債の内訳なので OtherCL(1,460,138,000)ではなく OtherNCL を引いた。",
+   "誤りの型": null
+  },
+  {
+   "id": "N220",
+   "札": "真",
+   "確信": "高",
+   "根拠": "導出(合計): CurrentPortionOfLongTermLoansPayable 332,864,000 + LongTermLoansPayable 510,637,000(いずれも Prior1YearInstant 2025-06-30 / decimals=-3 / JPY)= 843,501,000。切り捨てで 843 百万円、文の「(前期末843百万円)」と一致。",
+   "誤りの型": null
+  },
+  {
+   "id": "N221",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:CashAndDeposits / CurrentYearInstant(2026-06-30) / 2,605,950,000 / decimals=-3 / unit=JPY。切り捨てで 2,605 百万円、文の「現預金2,605百万円」と一致(現金及び現金同等物 2,605,950,000 も同値)。",
+   "誤りの型": null
+  },
+  {
+   "id": "N250",
+   "札": "真",
+   "確信": "高",
+   "根拠": "導出(当期/前期の差): jppfs_cor:RetainedEarnings 10,510,398,000(CurrentYearInstant)− 10,217,485,000(Prior1YearInstant)= 292,913,000。切り捨てで 292 百万円、文の「292百万円の増加」と一致。文中の他の 2 数も整合(当期純利益 ProfitLossAttributableToOwnersOfParent 945,793,000→945、DividendsFromSurplus −652,881,000→剰余金の配当652)。",
+   "誤りの型": null
+  },
+  {
+   "id": "N252",
+   "札": "真",
+   "確信": "高",
+   "根拠": "N012 と同じ fact: EquityToAssetRatioSummaryOfBusinessResults / Prior1YearInstant / 0.606 / decimals=3 / pure = 60.6%。文の「(前期末60.6%)」と一致。併記の 1.1 ポイントも 0.617−0.606 と整合。",
+   "誤りの型": null
+  },
+  {
+   "id": "N255",
+   "札": "真",
+   "確信": "中",
+   "根拠": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults / CurrentYearInstant(2026-06-30) / 2096.83 / decimals=2 / unit=JPYPerShares。文の「1株当たり純資産額は2,096円83銭」は 2096.83 と**完全一致**。確信を中にしたのは、材料の 数=2096・単位=円 が「円83銭」の銭を切り離した機械の窓の産物で、2096 単体では fact の 2096.83 と 0.83 ずれること(文の主張としては一致、抽出値としては不一致)。",
+   "誤りの型": null
+  },
+  {
+   "id": "N256",
+   "札": "真",
+   "確信": "中",
+   "根拠": "同科目 / Prior1YearInstant(2025-06-30) / 1897.74 / decimals=2 / unit=JPYPerShares。文の「(同1,897円74銭)」は 1897.74 と**完全一致**。確信を中にした理由は N255 と同じ(銭の切り離し)。",
+   "誤りの型": null
+  },
+  {
+   "id": "N257",
+   "札": "真",
+   "確信": "高",
+   "根拠": "導出(当期/前期の差): NetAssetsPerShare 2096.83 − 1897.74 = 199.09。円単位に丸めて 199 円(切り捨ても四捨五入も 199)で文の「199円増加」と一致。",
+   "誤りの型": null
+  },
+  {
+   "id": "N266",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:AmortizationOfGoodwillOpeCF / CurrentYearDuration / 53,256,000 / decimals=-3 / unit=JPY。切り捨てで 53 百万円、文の「のれん償却額53百万円」と一致。貸借対照表のれん残高の減少(213,025,000→159,768,000 = 53,257,000)とも整合。",
+   "誤りの型": null
+  },
+  {
+   "id": "N283",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF / CurrentYearDuration / −802,686,000 / decimals=-3 / unit=JPY。絶対値を切り捨てて 802 百万円。fact は『売上債権の減少(増加)』科目なので負=売上債権の増加で、文の「当期は802百万円増加」と向きも一致(材料の 数=+802,000,000 は符号を落とした抽出値)。BS 側 2,556,498,000−1,751,723,000=804,775,000 とは科目が別(CF は貸倒等の調整後)。",
+   "誤りの型": null
+  },
+  {
+   "id": "N290",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:OtherNetInvCF / CurrentYearDuration / +47,439,000 / decimals=-3 / unit=JPY。切り捨てで 47 百万円、符号は正=収入で文の「その他47百万円の収入」と一致。",
+   "誤りの型": null
+  },
+  {
+   "id": "N292",
+   "札": "真",
+   "確信": "中",
+   "根拠": "導出(合計): PurchaseOfPropertyPlantAndEquipmentInvCF −400,837,000 + PurchaseOfIntangibleAssetsInvCF −52,919,000(いずれも Prior1YearDuration / decimals=-3 / JPY)= −453,756,000。絶対値を切り捨てて 453 百万円で文の「前期(設備投資関連453百万円)」と一致。確信を中にしたのは「設備投資関連」の定義が文に無く、前期は CapitalExpenditures… の fact が存在しない(当期のみ 341,000,000)ため、当期側 341 と前期側 453 が別基準の数で並んでいること。",
+   "誤りの型": null
+  },
+  {
+   "id": "N293",
+   "札": "真",
+   "確信": "高",
+   "根拠": "導出(差): NetCashProvidedByUsedInOperatingActivities 1,032,971,000 + NetCashProvidedByUsedInInvestmentActivities(−259,037,000)= 773,934,000(いずれも CurrentYearDuration / decimals=-3 / JPY)。切り捨てで 773 百万円、符号は正で文の「773百万円のプラス」と一致。",
+   "誤りの型": null
+  },
+  {
+   "id": "N294",
+   "札": "真",
+   "確信": "高",
+   "根拠": "導出(差): 同 2 科目の Prior1YearDuration 3,029,245,000 +(−506,793,000)= 2,522,452,000。切り捨てで 2,522 百万円、文の「(前期2,522百万円のプラス)」と一致。",
+   "誤りの型": null
+  },
+  {
+   "id": "N299",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:OtherNetFinCF / CurrentYearDuration / −7,981,000 / decimals=-3 / unit=JPY。絶対値を切り捨てて 7 百万円(四捨五入なら 8)、符号は負=支出で文の「その他7百万円の支出」と一致(材料の 数=+7,000,000 は符号を落とした抽出値)。",
+   "誤りの型": null
+  },
+  {
+   "id": "T017",
+   "札": "判定不能",
+   "確信": "中",
+   "根拠": "材料の 数 が null で、文「増収にもかかわらず売上総利益が減少した背景には、売上原価の増加があります」に数が 1 つも現れないため、**突き合わせる数が無い**。参考までに文が述べる 3 つの向きはいずれも fact と一致する: NetSales 36,975,577,000→38,064,274,000(増)、GrossProfit 12,018,937,000→11,334,658,000(減)、CostOfSales 24,956,639,000→26,729,616,000(増)(Prior1YearDuration→CurrentYearDuration / decimals=-3 / JPY)。ただし「背景には」という因果は fact から確かめられないので、真とも偽とも付けない。",
+   "誤りの型": null
+  },
+  {
+   "id": "T085",
+   "札": "真",
+   "確信": "中",
+   "根拠": "材料の 数 は null だが、文「5百万円の計上と剰余金の配当652百万円により292百万円の増加にとどまり」に含まれる数はすべて fact と整合する: 剰余金の配当 = jppfs_cor:DividendsFromSurplus / CurrentYearDuration / −652,881,000 / decimals=-3 / JPY → 切り捨て 652 百万円。292百万円の増加 = RetainedEarnings 10,510,398,000 − 10,217,485,000 = 292,913,000 → 切り捨て 292 百万円。先頭の「5百万円」は窓で切れた「945百万円」の断片で、ProfitLossAttributableToOwnersOfParent / CurrentYearDuration / 945,793,000 → 切り捨て 945 百万円(本文 131 行目で確認)。確信を中にしたのは、数が null で主張が 1 つに束ねられておらず、先頭の断片が単体では fact と一致しないこと。",
+   "誤りの型": null
+  },
+  {
+   "id": "T103",
+   "札": "真",
+   "確信": "中",
+   "根拠": "材料の 数 は null だが、文「へと938百万円拡大したこと、3前期は売上債権が209百万円減少したのに対」の数はいずれも fact と整合する: 938 = IncreaseDecreaseInNetDefinedBenefitAssetOpeCF の −1,828,838,000(CurrentYearDuration)と −890,115,000(Prior1YearDuration)の差 938,723,000 → 切り捨て 938 百万円。209 = DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF / Prior1YearDuration / +209,659,000(正=売上債権の減少)→ 切り捨て 209 百万円で「前期は…209百万円減少」と向きも一致。文中の「3」は③の箇条番号であって量ではない(数の主張として数えていない)。確信を中にしたのは数が null で主張が束ねられていないこと。",
+   "誤りの型": null
+  }
+ ],
+ "counts": {
+  "真": 32,
+  "偽": 0,
+  "判定不能": 1
+ },
+ "notes": "(1) **材料の漏れ**: reaudit_A_material_2026-10-12.json 自身の note 欄に「真 × VALUE_MISMATCH 33 件全件の再監査」と書かれており、読んだ時点で本線の札(真)と engine の状態名(VALUE_MISMATCH)が目に入った。指示された材料を読んだ結果なので隠さず書く。個別の reason・pointer・分類は見ていないし、33 行の個々の判定は fact だけで付けた。禁止ファイル(既存の札 JSON・stop_cause 系・結果 JSON・AI_PROSE_*/STOP_CAUSE_* 文書・git の差分)は一切開いていない。 (2) **偽 0 件を作った私の絞り込み**: 真 32 件は、札の定義が認める『書き方の丸め』と単位の表記換算を当てた結果である。材料の 数 と fact の値が**そのままの桁で完全一致したのは 30 件の N 行のうち 4 件だけ**(N039 1447・N040 409・N041 393・N173 3,000,000)。残り 26 件は (a) 百万円未満の切り捨て(18 件: N114 N115 N116 N124 N125 N126 N127 N211 N212 N213 N220 N250 N266 N283 N290 N292 N293 N299)、(b) pure↔% の 100 倍換算(3 件: N012 N113 N252)、(c) 百万円↔円 の 10^6 換算(4 件: N114 N115 N221 N294 ― (a) と重複)、(d) 円83銭 の銭を切り離した抽出(2 件: N255 N256)、(e) CF の符号規約(負=増加/支出)の読み替え(2 件: N283 N299)、のいずれかを当てて初めて一致する。桁・単位・符号を字面どおり突き合わせる計器なら、この 26 件はすべて不一致として出る。『偽 0』はその許容の上にしか立っていない。 (3) 丸めの向きは一貫して**切り捨て**だった。四捨五入なら 194→195・2→3・4→5・7→8・292→293・773→774・843→844 等になり、書類はすべて切り捨て側を書いている(2,256,683,000→2,256、945,793,000→945 でも確認)。もし本書類の規約が四捨五入だと別に決まっているなら、N116 N125 N127 N250 N283 N290 N292 N293 N299 など 9 件前後は偽に転じる。この分岐は私が決められないので明記する。 (4) 迷った点: T 行 3 件は 数 が null で、主張が 1 つの数に束ねられていない。T085・T103 は文中の数を全部引いて整合したので真、T017 は数が 1 つも無いので判定不能にした(向きは 3 つとも fact と一致するが因果は確かめられない)。N173 は値が完全一致する一方で科目の範囲(最大保有会社の政策保有株式 vs 連結の投資有価証券)がずれており、N292 は「設備投資関連」の定義が文に無く前期側だけ CF からの導出になっている。この 2 件は確信を中にした。 (5) 材料の限界: 33 行には engine の pointer が無いので、どの fact を引くかは私が選んだ。値が一致する fact が複数ありうる行(N213 の OtherNCL/OtherCL、N124 のフロー/累計額、N125 のフロー/累計額)は文脈(固定負債の内訳・その他の包括利益の内訳)で選び、その判断を根拠欄に書いた。"
+}

@@ -1,0 +1,318 @@
+{
+  "issueID": "122105261X01220260330",
+  "checked_by": "AI の席(確認)",
+  "rows": [
+    {
+      "id": "K-001",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「八兆五千六百四十一億円」= 8,564,100,000,000 円。合計でなく本文の数そのもの"
+    },
+    {
+      "id": "K-002",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-003",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-004",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-005",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-006",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "quote は本文「先週末、一年八か月ぶりに円相場は一ドル百六十円台となりました」の一部。number は本文「現状〇・七五％の政策金利」と一致"
+    },
+    {
+      "id": "K-007",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-008",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-009",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「四千百億円」= 410,000,000,000 円。text の「全てＥ評価」は本文「評価可能な項目は全てＥランク」の言い換え"
+    },
+    {
+      "id": "K-010",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-011",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-012",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-013",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-014",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-015",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "quote は本文「今、たしか今日時点では三十六か国まで参加国が拡大していると考えておりますが」の一部"
+    },
+    {
+      "id": "K-016",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "quote は本文「三月に入っても二回電話会談を行っておりますが」の一部"
+    },
+    {
+      "id": "K-017",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-018",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-019",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-020",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": "quote は本文「あるいは歳出予算に係る項を新設するといった修正は一度も行われていないということは事実でございます」の一部"
+    },
+    {
+      "id": "K-021",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-022",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-023",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-024",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文は「輸入量の約八割」。「八割」を 80 ％ と書いたもので意味は同じ(表記の揺れ)"
+    },
+    {
+      "id": "K-025",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-026",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "quote は本文「…小規模な経営体であることから」の一部"
+    },
+    {
+      "id": "K-027",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-028",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「八十三名」を unit「人」で書いたもの。意味は同じ(名→人)"
+    },
+    {
+      "id": "K-029",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-030",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-031",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-032",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「約四百八十億円」= 48,000,000,000 円(「約」は number.text に無いが値は本文の数そのもの)"
+    },
+    {
+      "id": "K-033",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-034",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-035",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-036",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-037",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-038",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「訓練移転経費約五十五億円」= 5,500,000,000 円"
+    },
+    {
+      "id": "K-039",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+ "seal": "docs/DEFECT_A_EVAL_SEAL_2026-10-14.md",
+ "opened_at": "2026-10-14T19:57:05+09:00",
+ "engine_commit": "9ef19a8",
+ "how": "measure/defect_a_fetch_2026-10-14.py を 1 回実行(鍵は環境変数 EDINET_API_KEY の名前だけ。値は記録しない)",
+ "docs": [
+  "S100Z448",
+  "S100Z492",
+  "S100YYS4",
+  "S100YZ31",
+  "S100Z48T",
+  "S100Z5DN",
+  "S100YYDI",
+  "S100YYK8"
+ ],
+ "fetch_log": [
+  {
+   "docID": "S100Z448",
+   "result": "fetched"
+  },
+  {
+   "docID": "S100Z492",
+   "result": "fetched"
+  },
+  {
+   "docID": "S100YYS4",
+   "result": "fetched"
+  },
+  {
+   "docID": "S100YZ31",
+   "result": "fetched"
+  },
+  {
+   "docID": "S100Z48T",
+   "result": "fetched"
+  },
+  {
+   "docID": "S100Z5DN",
+   "result": "fetched"
+  },
+  {
+   "docID": "S100YYDI",
+   "result": "fetched"
+  },
+  {
+   "docID": "S100YYK8",
+   "result": "fetched"
+  }
+ ],
+ "zip_sha256": {
+  "S100Z448": "ab1cb84c0f983f8527accda1e6b7a2219f2950082090c4f1bcb2326ca42bb873",
+  "S100Z492": "eab8422ec94cf9ed7f5ccc9d8eb43fa548ad5abe4d9899223f060f4a4de84396",
+  "S100YYS4": "02fcaa9a52e52943108f905abc115daea2243eba97bfdc5f56f51f783fe792de",
+  "S100YZ31": "7365ffce12ee1cb1514b83e52a30aa4c004bbd94077d42146a376d6f096ba06d",
+  "S100Z48T": "3aad9a94337487665f23b2066612ca3cf7ece7b596b47a6885e5975d4a00c9b2",
+  "S100Z5DN": "2b988d6b20de5de7b7eae20d28f5085117c553331ac1b979576de60fa4208114",
+  "S100YYDI": "430ae0aec4807aa73b35b8409a8075b37b9487357d129b10bc1194905f87c753",
+  "S100YYK8": "512b316c0739e2cb83c465ec7ffae4474efebf4ffbc234a70270346cf1e1caad"
+ },
+ "present": 8
+}

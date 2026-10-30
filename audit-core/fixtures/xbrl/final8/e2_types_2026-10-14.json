@@ -1,0 +1,911 @@
+{
+ "profile": "P16",
+ "total": 38,
+ "counts": {
+  "A 同値類 v0 では一致(要素名の別名)": 6,
+  "B 要素は同じ・member が違う(対象の取り違え)": 4,
+  "C 要素は同じ・期間が違う": 0,
+  "D 期間は同じ・要素が違う": 19,
+  "E 結んだ fact の数が違う(形の取り違え)": 7,
+  "F その他(要素も期間も違う)": 2
+ },
+ "per_doc": {
+  "S100Z38F|A": 1,
+  "S100Z38F|B": 2,
+  "S100Z38F|D": 1,
+  "S100Z38F|E": 2,
+  "S100Z3CI|D": 4,
+  "S100Z3CI|E": 1,
+  "S100Z3DU|E": 1,
+  "S100Z40H|B": 2,
+  "S100Z40H|D": 3,
+  "S100Z40H|E": 1,
+  "S100Z461|D": 2,
+  "S100Z46V|D": 2,
+  "S100Z4LC|D": 2,
+  "S100Z4LC|F": 2,
+  "S100Z4R8|A": 5,
+  "S100Z4R8|D": 5,
+  "S100Z4R8|E": 2
+ },
+ "rows": [
+  {
+   "id": "S100Z4LC:H-017",
+   "kind": "D",
+   "arm": [
+    [
+     "DecreaseIncreaseInAdvancePaymentsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "DecreaseIncreaseInInventoriesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z4LC:H-031",
+   "kind": "D",
+   "arm": [
+    [
+     "IncreaseDecreaseInDepositsReceivedOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "DecreaseIncreaseInAdvancePaymentsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z4LC:H-055",
+   "kind": "F",
+   "arm": [
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "IncreaseDecreaseInProvisionForLossOnOrderReceivedOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z4LC:H-092",
+   "kind": "F",
+   "arm": [
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "IncreaseDecreaseInProvisionForLossOnOrderReceivedOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z40H:H-019",
+   "kind": "B",
+   "arm": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z40H:H-024",
+   "kind": "D",
+   "arm": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z40H:H-053",
+   "kind": "D",
+   "arm": [
+    [
+     "GainOnSalesOfNoncurrentAssetsEI",
+     "CurrentYearDuration"
+    ],
+    [
+     "GainOnSalesOfNoncurrentAssetsEI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "ExtraordinaryIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "ExtraordinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z40H:H-055",
+   "kind": "D",
+   "arm": [
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z40H:H-069",
+   "kind": "E",
+   "arm": [
+    [
+     "DepreciationAndAmortizationOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "DepreciationAndAmortizationOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "DecreaseIncreaseInInventoriesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z40H:H-074",
+   "kind": "B",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+    ]
+   ],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z46V:H-041",
+   "kind": "D",
+   "arm": [
+    [
+     "IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z46V:H-055",
+   "kind": "D",
+   "arm": [
+    [
+     "DisposalOfTreasuryStock",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "ProceedsFromDisposalOfTreasurySharesFromExerciseOfShareAcquisitionRightsFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z38F:H-010",
+   "kind": "E",
+   "arm": [
+    [
+     "CapitalSurplus",
+     "CurrentYearInstant"
+    ],
+    [
+     "CapitalSurplus",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "RetirementOfTreasuryStock",
+     "CurrentYearDuration_CapitalSurplusMember"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z38F:H-029",
+   "kind": "D",
+   "arm": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "CashDividendsPaidFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z38F:H-048",
+   "kind": "A",
+   "arm": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z38F:H-052",
+   "kind": "B",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember"
+    ]
+   ],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05663-000ConsolidatedFinancialDisclosureBusinessReportableSegmentMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05663-000ConsolidatedFinancialDisclosureBusinessReportableSegmentMember"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z38F:H-078",
+   "kind": "E",
+   "arm": [
+    [
+     "ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "DecreaseIncreaseInAccountsReceivableTradeAndContractAssetsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z38F:H-081",
+   "kind": "B",
+   "arm": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05663-000ConsolidatedFinancialDisclosureBusinessReportableSegmentMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E05663-000ConsolidatedFinancialDisclosureBusinessReportableSegmentMember"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z3DU:H-055",
+   "kind": "E",
+   "arm": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z4R8:H-006",
+   "kind": "A",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z4R8:H-009",
+   "kind": "D",
+   "arm": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "AccountsPayableTrade",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccountsPayableTrade",
+     "Prior1YearInstant"
+    ],
+    [
+     "OtherCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z4R8:H-010",
+   "kind": "A",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z4R8:H-021",
+   "kind": "D",
+   "arm": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ],
+    [
+     "MachineryEquipmentAndVehiclesNet",
+     "CurrentYearInstant"
+    ],
+    [
+     "MachineryEquipmentAndVehiclesNet",
+     "Prior1YearInstant"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z4R8:H-037",
+   "kind": "D",
+   "arm": [
+    [
+     "LeaseReceivablesAndInvestmentAssetsCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseReceivablesAndInvestmentAssetsCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndDeposits",
+     "Prior1YearInstant"
+    ],
+    [
+     "LeaseReceivablesAndInvestmentAssetsCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseReceivablesAndInvestmentAssetsCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z4R8:H-044",
+   "kind": "A",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z4R8:H-047",
+   "kind": "D",
+   "arm": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ],
+    [
+     "RetainedEarnings",
+     "Prior1YearInstant"
+    ],
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z4R8:H-057",
+   "kind": "A",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z4R8:H-067",
+   "kind": "E",
+   "arm": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z4R8:H-068",
+   "kind": "E",
+   "arm": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z4R8:H-071",
+   "kind": "A",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z4R8:H-072",
+   "kind": "D",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E04189-000PhysicalDistributionReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E04189-000PhysicalDistributionReportableSegmentsMember"
+    ]
+   ],
+   "label": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E04189-000PhysicalDistributionReportableSegmentsMember"
+    ],
+    [
+     "RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E04189-000PhysicalDistributionReportableSegmentsMember"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z3CI:H-018",
+   "kind": "D",
+   "arm": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z3CI:H-042",
+   "kind": "D",
+   "arm": [
+    [
+     "IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "IncreaseDecreaseInProvisionForBonusesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z3CI:H-043",
+   "kind": "D",
+   "arm": [
+    [
+     "IncreaseDecreaseInProvisionForBonusesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "DepreciationAndAmortizationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z3CI:H-047",
+   "kind": "D",
+   "arm": [
+    [
+     "IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "DecreaseIncreaseInInventoriesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z3CI:H-077",
+   "kind": "E",
+   "arm": [
+    [
+     "NetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration"
+    ]
+   ],
+   "direction": false
+  },
+  {
+   "id": "S100Z461:H-007",
+   "kind": "D",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ]
+   ],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ]
+   ],
+   "direction": true
+  },
+  {
+   "id": "S100Z461:H-030",
+   "kind": "D",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ]
+   ],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ]
+   ],
+   "direction": true
+  }
+ ]
+}

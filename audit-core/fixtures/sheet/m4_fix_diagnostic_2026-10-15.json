@@ -1,0 +1,939 @@
+{
+ "purpose": "直した engine を今回の 24 件に当てた**診断**。性能の証拠ではない",
+ "not_performance_evidence": true,
+ "human_instruction": "同じ 24 件で改善を確認して、それを新しい性能の証拠にすることは認めない(2026-10-15)",
+ "seal": "docs/DOMAIN1_FIX_PREDICTION_SEAL_2026-10-15.md",
+ "engine": "measure/sheet_m4_engine_fix_2026-10-15.py",
+ "frozen_engine_untouched": "measure/sheet_m4_engine_2026-10-15.py",
+ "applied_times": 1,
+ "labels": "凍結したものをそのまま使った(取り直していない)",
+ "prediction_hits": 23,
+ "prediction_misses": 1,
+ "counts": {
+  "動いた": 14,
+  "動かない": 10,
+  "GROUNDED から保留へ": 4,
+  "未接続から正しい接続へ": 7,
+  "保留から誤受理へ": 2,
+  "GROUNDED のまま根拠が差し替わった": 0,
+  "残る誤受理": 3
+ },
+ "verdicts": {
+  "根拠なし/判定不能なのに接続した": 3,
+  "正しい接続": 17,
+  "結べなかった(誤接続ではない)": 2,
+  "正しく保留": 2
+ },
+ "alias": {
+  "table": {
+   "東京都と場会計": {
+    "canonical": "と場会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都と場会計",
+      "と場会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都一般会計": {
+    "canonical": "一般会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都一般会計",
+      "一般会計"
+     ],
+     "一致した款と列": 36,
+     "食い違い": 0
+    }
+   },
+   "東京都中小企業設備導入等資金会計": {
+    "canonical": "中小企業設備導入等資金会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都中小企業設備導入等資金会計",
+      "中小企業設備導入等資金会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都公債費会計": {
+    "canonical": "公債費会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都公債費会計",
+      "公債費会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都国民健康保険事業会計": {
+    "canonical": "国民健康保険事業会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都国民健康保険事業会計",
+      "国民健康保険事業会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都地方消費税清算会計": {
+    "canonical": "地方消費税清算会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都地方消費税清算会計",
+      "地方消費税清算会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都地方独立行政法人東京都立病院機構貸付等事業会計 ": {
+    "canonical": "地方独立行政法人東京都立病院機構貸付等事業会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都地方独立行政法人東京都立病院機構貸付等事業会計 ",
+      "地方独立行政法人東京都立病院機構貸付等事業会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都小笠原諸島生活再建資金会計": {
+    "canonical": "小笠原諸島生活再建資金会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都小笠原諸島生活再建資金会計",
+      "小笠原諸島生活再建資金会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都工業用水道事業清算会計": {
+    "canonical": "工業用水道事業清算会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都工業用水道事業清算会計",
+      "工業用水道事業清算会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都心身障害者扶養年金会計": {
+    "canonical": "心身障害者扶養年金会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都心身障害者扶養年金会計",
+      "心身障害者扶養年金会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都林業・木材産業改善資金助成会計": {
+    "canonical": "林業・木材産業改善資金助成会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都林業・木材産業改善資金助成会計",
+      "林業・木材産業改善資金助成会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都母子父子福祉貸付資金会計": {
+    "canonical": "母子父子福祉貸付資金会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都母子父子福祉貸付資金会計",
+      "母子父子福祉貸付資金会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都沿岸漁業改善資金助成会計": {
+    "canonical": "沿岸漁業改善資金助成会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都沿岸漁業改善資金助成会計",
+      "沿岸漁業改善資金助成会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都特別区財政調整会計": {
+    "canonical": "特別区財政調整会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都特別区財政調整会計",
+      "特別区財政調整会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都用地会計": {
+    "canonical": "用地会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都用地会計",
+      "用地会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都臨海都市基盤整備事業会計": {
+    "canonical": "臨海都市基盤整備事業会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都臨海都市基盤整備事業会計",
+      "臨海都市基盤整備事業会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都都営住宅等事業会計": {
+    "canonical": "都営住宅等事業会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都都営住宅等事業会計",
+      "都営住宅等事業会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   },
+   "東京都都営住宅等保証金会計": {
+    "canonical": "都営住宅等保証金会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都都営住宅等保証金会計",
+      "都営住宅等保証金会計"
+     ],
+     "一致した款と列": 4,
+     "食い違い": 0
+    }
+   },
+   "東京都都市開発資金会計": {
+    "canonical": "都市開発資金会計",
+    "evidence": {
+     "接尾一致": [
+      "東京都都市開発資金会計",
+      "都市開発資金会計"
+     ],
+     "一致した款と列": 2,
+     "食い違い": 0
+    }
+   }
+  },
+  "unconfirmed": [],
+  "canonical": [
+   "と場会計",
+   "一般会計",
+   "中小企業設備導入等資金会計",
+   "公債費会計",
+   "合計",
+   "国民健康保険事業会計",
+   "地方消費税清算会計",
+   "地方独立行政法人東京都立病院機構貸付等事業会計",
+   "小笠原諸島生活再建資金会計",
+   "工業用水道事業清算会計",
+   "心身障害者扶養年金会計",
+   "林業・木材産業改善資金助成会計",
+   "母子父子福祉貸付資金会計",
+   "沿岸漁業改善資金助成会計",
+   "特別区財政調整会計",
+   "用地会計",
+   "臨海都市基盤整備事業会計",
+   "都営住宅等事業会計",
+   "都営住宅等保証金会計",
+   "都市開発資金会計"
+  ],
+  "fan_in": {}
+ },
+ "column_cues": 53,
+ "claims_total": 24,
+ "unmatched": [],
+ "rows": [
+  {
+   "id": "R001",
+   "new_claim_id": "R001",
+   "before": "根拠なし/判定不能なのに接続した",
+   "predicted": "根拠なし/判定不能なのに接続した",
+   "after": "根拠なし/判定不能なのに接続した",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!D66",
+   "hold_reason": null,
+   "subject": "合計",
+   "column": "歳入決算額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "合計",
+     "会計",
+     "",
+     "歳入決算額"
+    ]
+   ],
+   "moved": false,
+   "pointer_changed": false
+  },
+  {
+   "id": "R002",
+   "new_claim_id": "R002",
+   "before": "正しく保留",
+   "predicted": "根拠なし/判定不能なのに接続した",
+   "after": "根拠なし/判定不能なのに接続した",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!E66",
+   "hold_reason": null,
+   "subject": "合計",
+   "column": "歳出決算額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "合計",
+     "会計",
+     "",
+     "歳出決算額"
+    ]
+   ],
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R003",
+   "new_claim_id": "R003",
+   "before": "正しく保留",
+   "predicted": "根拠なし/判定不能なのに接続した",
+   "after": "根拠なし/判定不能なのに接続した",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!G66",
+   "hold_reason": null,
+   "subject": "合計",
+   "column": "差額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "合計",
+     "会計",
+     "",
+     "差額"
+    ]
+   ],
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R004",
+   "new_claim_id": "R004",
+   "before": "正しい接続",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!D9",
+   "hold_reason": null,
+   "subject": "一般会計",
+   "column": "歳入決算額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "一般会計",
+     "会計",
+     "",
+     "歳入決算額"
+    ]
+   ],
+   "moved": false,
+   "pointer_changed": false
+  },
+  {
+   "id": "R005",
+   "new_claim_id": "R005",
+   "before": "結べなかった(誤接続ではない)",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!E9",
+   "hold_reason": null,
+   "subject": "一般会計",
+   "column": "歳出決算額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "一般会計",
+     "会計",
+     "",
+     "歳出決算額"
+    ]
+   ],
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R006",
+   "new_claim_id": "R006",
+   "before": "結べなかった(誤接続ではない)",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!G9",
+   "hold_reason": null,
+   "subject": "一般会計",
+   "column": "差額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "一般会計",
+     "会計",
+     "",
+     "差額"
+    ]
+   ],
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R007",
+   "new_claim_id": "R007",
+   "before": "正しい接続",
+   "predicted": "正しい接続",
+   "after": "結べなかった(誤接続ではない)",
+   "prediction_hit": false,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "4 欄が一意でない(2 通り。値で選ばない)",
+   "subject": "諸支出金",
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "candidates": 3,
+   "distinct_keys": 2,
+   "duplicates": null,
+   "engine_key": null,
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R008",
+   "new_claim_id": "R008",
+   "before": "正しい接続",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E114",
+   "hold_reason": null,
+   "subject": "福祉費",
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "candidates": 2,
+   "distinct_keys": null,
+   "duplicates": 2,
+   "engine_key": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "福祉費",
+     "支出済額"
+    ]
+   ],
+   "moved": false,
+   "pointer_changed": false
+  },
+  {
+   "id": "R009",
+   "new_claim_id": "R009",
+   "before": "正しい接続",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D114",
+   "hold_reason": null,
+   "subject": "福祉費",
+   "column": "予算現額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "福祉費",
+     "予算現額"
+    ]
+   ],
+   "moved": false,
+   "pointer_changed": false
+  },
+  {
+   "id": "R010",
+   "new_claim_id": "R010",
+   "before": "結べなかった(誤接続ではない)",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G114",
+   "hold_reason": null,
+   "subject": "福祉費",
+   "column": "不用額",
+   "column_ambiguous": null,
+   "candidates": 2,
+   "distinct_keys": null,
+   "duplicates": 2,
+   "engine_key": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "福祉費",
+     "不用額"
+    ]
+   ],
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R011",
+   "new_claim_id": "R011",
+   "before": "結べなかった(誤接続ではない)",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E209",
+   "hold_reason": null,
+   "subject": "教育費",
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "candidates": 2,
+   "distinct_keys": null,
+   "duplicates": 2,
+   "engine_key": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "教育費",
+     "支出済額"
+    ]
+   ],
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R012",
+   "new_claim_id": "R012",
+   "before": "結べなかった(誤接続ではない)",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E253",
+   "hold_reason": null,
+   "subject": "警察費",
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "candidates": 2,
+   "distinct_keys": null,
+   "duplicates": 2,
+   "engine_key": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "警察費",
+     "支出済額"
+    ]
+   ],
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R013",
+   "new_claim_id": "R013",
+   "before": "結べなかった(誤接続ではない)",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E159",
+   "hold_reason": null,
+   "subject": "産業労働費",
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "candidates": 2,
+   "distinct_keys": null,
+   "duplicates": 2,
+   "engine_key": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "産業労働費",
+     "支出済額"
+    ]
+   ],
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R014",
+   "new_claim_id": "R014",
+   "before": "結べなかった(誤接続ではない)",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E182",
+   "hold_reason": null,
+   "subject": "土木費",
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "candidates": 2,
+   "distinct_keys": null,
+   "duplicates": 2,
+   "engine_key": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "土木費",
+     "支出済額"
+    ]
+   ],
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R015",
+   "new_claim_id": "R015",
+   "before": "誤接続",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:事項別明細!R1113",
+   "hold_reason": null,
+   "subject": "自治振興費",
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "自治振興費",
+     "支出済額"
+    ]
+   ],
+   "moved": true,
+   "pointer_changed": false
+  },
+  {
+   "id": "R016",
+   "new_claim_id": "R016",
+   "before": "誤接続",
+   "predicted": "結べなかった(誤接続ではない)",
+   "after": "結べなかった(誤接続ではない)",
+   "prediction_hit": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "4 欄が一意でない(7 通り。値で選ばない)",
+   "subject": "管理費",
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "candidates": 61,
+   "distinct_keys": 7,
+   "duplicates": null,
+   "engine_key": null,
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R017",
+   "new_claim_id": "R017",
+   "before": "正しい接続",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!D15",
+   "hold_reason": null,
+   "subject": "地方消費税清算会計",
+   "column": "歳入決算額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "地方消費税清算会計",
+     "会計",
+     "",
+     "歳入決算額"
+    ]
+   ],
+   "moved": false,
+   "pointer_changed": false
+  },
+  {
+   "id": "R018",
+   "new_claim_id": "R018",
+   "before": "正しい接続",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!E15",
+   "hold_reason": null,
+   "subject": "地方消費税清算会計",
+   "column": "歳出決算額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "地方消費税清算会計",
+     "会計",
+     "",
+     "歳出決算額"
+    ]
+   ],
+   "moved": false,
+   "pointer_changed": false
+  },
+  {
+   "id": "R019",
+   "new_claim_id": "R019",
+   "before": "正しい接続",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!G15",
+   "hold_reason": null,
+   "subject": "地方消費税清算会計",
+   "column": "差額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "地方消費税清算会計",
+     "会計",
+     "",
+     "差額"
+    ]
+   ],
+   "moved": false,
+   "pointer_changed": false
+  },
+  {
+   "id": "R020",
+   "new_claim_id": "R020",
+   "before": "正しい接続",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!D21",
+   "hold_reason": null,
+   "subject": "国民健康保険事業会計",
+   "column": "歳入決算額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "国民健康保険事業会計",
+     "会計",
+     "",
+     "歳入決算額"
+    ]
+   ],
+   "moved": false,
+   "pointer_changed": false
+  },
+  {
+   "id": "R021",
+   "new_claim_id": "R021",
+   "before": "正しい接続",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!E21",
+   "hold_reason": null,
+   "subject": "国民健康保険事業会計",
+   "column": "歳出決算額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "国民健康保険事業会計",
+     "会計",
+     "",
+     "歳出決算額"
+    ]
+   ],
+   "moved": false,
+   "pointer_changed": false
+  },
+  {
+   "id": "R022",
+   "new_claim_id": "R022",
+   "before": "正しい接続",
+   "predicted": "正しい接続",
+   "after": "正しい接続",
+   "prediction_hit": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:総括!G21",
+   "hold_reason": null,
+   "subject": "国民健康保険事業会計",
+   "column": "差額",
+   "column_ambiguous": null,
+   "candidates": 1,
+   "distinct_keys": null,
+   "duplicates": 1,
+   "engine_key": [
+    "label",
+    [
+     "国民健康保険事業会計",
+     "会計",
+     "",
+     "差額"
+    ]
+   ],
+   "moved": false,
+   "pointer_changed": false
+  },
+  {
+   "id": "R023",
+   "new_claim_id": "R023",
+   "before": "根拠なし/判定不能なのに接続した",
+   "predicted": "正しく保留",
+   "after": "正しく保留",
+   "prediction_hit": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列の手がかりが 2 つ以上: 歳入決算額・歳出決算額",
+   "subject": "公債費会計",
+   "column": null,
+   "column_ambiguous": [
+    "歳入決算額",
+    "歳出決算額"
+   ],
+   "candidates": 0,
+   "distinct_keys": null,
+   "duplicates": null,
+   "engine_key": null,
+   "moved": true,
+   "pointer_changed": true
+  },
+  {
+   "id": "R024",
+   "new_claim_id": "R024",
+   "before": "根拠なし/判定不能なのに接続した",
+   "predicted": "正しく保留",
+   "after": "正しく保留",
+   "prediction_hit": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列の手がかりが 2 つ以上: 歳入決算額・歳出決算額",
+   "subject": "特別区財政調整会計",
+   "column": null,
+   "column_ambiguous": [
+    "歳入決算額",
+    "歳出決算額"
+   ],
+   "candidates": 0,
+   "distinct_keys": null,
+   "duplicates": null,
+   "engine_key": null,
+   "moved": true,
+   "pointer_changed": true
+  }
+ ]
+}

@@ -1,3 +1,4 @@
 # 材料の ZIP は repo に置かない(置き場は ~/.cache/audit-core/edinet/)
 *.zip
+!fixtures/xbrl/ai_prose_instance_2026-10-09.zip
 __pycache__/

@@ -1,0 +1,39 @@
+diff --git a/audit-core/adapters/xbrl/recipes.py b/audit-core/adapters/xbrl/recipes.py
+index fca4e12..28102ef 100644
+--- a/audit-core/adapters/xbrl/recipes.py
++++ b/audit-core/adapters/xbrl/recipes.py
+@@ -223,6 +223,25 @@ def _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num,
+     claim["result"] = "GROUNDED" if abs(recomputed - claim["value"]) <= tol else "VALUE_MISMATCH"
+ 
+ 
++def _derived_diff_match(diff, target, scale):
++    """差の枝だけで使う照合(封 docs/DEFECT_A_EVAL_SEAL_2026-10-14.md §1)。
++
++    文中の「増減額」を当てる相手は、丸めて開示された水準 2 件の差である。
++    切り捨ての誤差が同じ向きに 2 回たまるので、**書かれた桁で最大 2 単位**ずれる。
++    ``V.match_value`` の切り捨ての帯は 1 単位なので、そのままでは境界で落ちる
++    (実測: 該当 26 件すべてが「ちょうど +1 単位」。docs/DEFECT_A_FIX_DESIGN_2026-10-14.md §1)。
++    **この枝に限って**切り捨ての帯を 2 単位にする。
++
++    触らないもの: ``round`` の帯(``|v - t| <= scale/2``)、水準 1 件を当てる枝、
++    比率の枝、方向の主張の判定、要素・期間・単位・集計範囲の絞り。
++    符号は ``V.match_value`` と同じく(そのまま・絶対値)の 2 通りを見る。
++    """
++    for lo, hi in ((diff, target), (abs(diff), abs(target))):
++        if 0 <= lo - hi < 2 * scale:
++            return "truncate(2x)"
++    return None
++
++
+ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
+                         profile=None, rounding=None):
+     scale = prec if unit == "円" else V.UNIT_SCALE[unit]
+@@ -284,6 +303,8 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
+                 fa, fb = ctx(pa), ctx(pb)
+                 if fa and fb:
+                     how = V.match_value(fa["value"] - fb["value"], target, scale, rounding, mag_trunc)
++                    if not how:
++                        how = _derived_diff_match(fa["value"] - fb["value"], target, scale)
+                     if how:
+                         found = (fa, fb, how)
+                         break

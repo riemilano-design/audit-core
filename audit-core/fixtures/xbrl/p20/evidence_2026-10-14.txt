@@ -1,0 +1,21 @@
+=== HEAD(この run の間は 1 commit もしない) ===
+bf96cdb test(証跡): HEAD の値を字で固定するのをやめる(撮り直しが終わらなくなる)
+=== status(前) ===
+
+=== 1) pytest(path 指定なし = measure/tests も含む) ===
+........................................................................ [ 93%]
+.......................................................................  [100%]
+1151 passed in 1132.77s (0:18:52)
+
+=== 2) unittest discover -s tests -t . ===
+Ran 1041 tests in 1111.512s
+OK
+
+=== 3) 変異 89 本 ===
+Ran 5 tests in 1068.302s
+OK
+predicted == actual: 88 本 / 外れ: 1 本 (X-R7b-label-subjects-placed-before-the-hand-vocabulary)
+
+=== status(後) ===
+=== HEAD(後) ===
+bf96cdb test(証跡): HEAD の値を字で固定するのをやめる(撮り直しが終わらなくなる)

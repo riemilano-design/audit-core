@@ -1,0 +1,75 @@
+{
+ "k": 2,
+ "docs": {
+  "S100Z40G": {
+   "group": "B",
+   "claims": 111,
+   "P16": {
+    "states": {
+     "POINTER_NOT_FOUND": 90,
+     "UNVERIFIABLE": 21
+    },
+    "grounded_pct": 0.0,
+    "document_unverifiable": true
+   },
+   "P20": {
+    "states": {
+     "POINTER_NOT_FOUND": 17,
+     "UNVERIFIABLE": 26,
+     "VALUE_MISMATCH": 20,
+     "GROUNDED": 48
+    },
+    "grounded_pct": 43.2,
+    "document_unverifiable": false
+   }
+  },
+  "S100YYIA": {
+   "group": "B",
+   "claims": 139,
+   "P16": {
+    "states": {
+     "POINTER_NOT_FOUND": 126,
+     "UNVERIFIABLE": 13
+    },
+    "grounded_pct": 0.0,
+    "document_unverifiable": true
+   },
+   "P20": {
+    "states": {
+     "GROUNDED": 89,
+     "VALUE_MISMATCH": 32,
+     "UNVERIFIABLE": 18
+    },
+    "grounded_pct": 64.0,
+    "document_unverifiable": false
+   }
+  }
+ },
+ "N0": {},
+ "R": {
+  "P16": {
+   "claims": 250,
+   "grounded": 0,
+   "grounded_pct": 0.0,
+   "states": {
+    "POINTER_NOT_FOUND": 216,
+    "UNVERIFIABLE": 34
+   }
+  },
+  "P20": {
+   "claims": 250,
+   "grounded": 137,
+   "grounded_pct": 54.8,
+   "states": {
+    "POINTER_NOT_FOUND": 17,
+    "UNVERIFIABLE": 44,
+    "VALUE_MISMATCH": 52,
+    "GROUNDED": 137
+   }
+  }
+ },
+ "N0_total": {
+  "changed_by_id": 0,
+  "unpaired_by_content_key": 0
+ }
+}

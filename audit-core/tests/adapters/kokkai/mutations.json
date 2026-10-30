@@ -1,0 +1,106 @@
+[
+  {
+    "id": "K-R1-quote-always-found",
+    "file": "comparators.py",
+    "old": "    found = quote != \"\" and quote in speech\n",
+    "new": "    found = quote != \"\"\n",
+    "predicted": "red",
+    "note": "引用が常に「在る」になる。test_comparators::test_one_changed_character_is_not_found が赤。"
+  },
+  {
+    "id": "K-R2-empty-speaker-matches",
+    "file": "comparators.py",
+    "old": "    return core.Comparison(match=(expected != \"\" and expected == actual), recomputed=None,\n",
+    "new": "    return core.Comparison(match=(expected == actual), recomputed=None,\n",
+    "predicted": "red",
+    "note": "空の発言者同士が一致する。test_comparators::test_empty_expected_never_matches が赤。"
+  },
+  {
+    "id": "K-R3-number-ignores-unit",
+    "file": "comparators.py",
+    "old": "        if claim.value is not None and _same_value(value, claim.value) and tunit == unit:\n",
+    "new": "        if claim.value is not None and _same_value(value, claim.value):\n",
+    "predicted": "red",
+    "note": "単位を見ない。test_comparators::test_value_present_but_unit_differs_does_not_match が赤。"
+  },
+  {
+    "id": "K-R4-trillion-off-by-ten",
+    "file": "numerals.py",
+    "old": "_BIG = {\"万\": 10 ** 4, \"億\": 10 ** 8, \"兆\": 10 ** 12}\n",
+    "new": "_BIG = {\"万\": 10 ** 4, \"億\": 10 ** 8, \"兆\": 10 ** 11}\n",
+    "predicted": "red",
+    "note": "兆が 10 倍ずれる。test_numerals::test_decimal_with_and_without_big_unit と test_comparators の 一・一兆円 が赤。"
+  },
+  {
+    "id": "K-R5-bool-order-accepted",
+    "file": "recipes.py",
+    "old": "        if not isinstance(order, int) or isinstance(order, bool):\n",
+    "new": "        if not isinstance(order, int):\n",
+    "predicted": "red",
+    "note": "True を発言番号 1 として受ける。test_recipes::test_non_int_order_is_unverifiable が赤。"
+  },
+  {
+    "id": "K-R6-fold-vm-before-pnf",
+    "file": "verify_meeting.py",
+    "old": "_FOLD_ORDER = (\"POINTER_NOT_FOUND\", \"VALUE_MISMATCH\", \"UNVERIFIABLE\")\n",
+    "new": "_FOLD_ORDER = (\"VALUE_MISMATCH\", \"POINTER_NOT_FOUND\", \"UNVERIFIABLE\")\n",
+    "predicted": "red",
+    "note": "畳む順が規則の字と違う。test_verify_meeting::test_fold_order_is_pnf_over_vm_over_unv が赤。"
+  },
+  {
+    "id": "K-R7-resolver-ignores-issue",
+    "file": "resolve.py",
+    "old": "        if issue != issue_id:\n            return None\n",
+    "new": "        if False:\n            return None\n",
+    "predicted": "red",
+    "note": "別の会議の pointer を解決する。test_resolve::test_other_issue_is_none が赤。"
+  },
+  {
+    "id": "K-G1-depth-string",
+    "file": "comparators.py",
+    "old": "                           depth=\"value_match\", detail={\"expected\": expected, \"actual\": actual})\n",
+    "new": "                           depth=\"value_match_\", detail={\"expected\": expected, \"actual\": actual})\n",
+    "predicted": "green",
+    "note": "depth の字は試験が見ていない(等価ではないが観測されない)。緑の予測。"
+  },
+  {
+    "id": "K-G2-float-equivalent",
+    "file": "numerals.py",
+    "old": "    return None if v is None else float(v)\n",
+    "new": "    return None if v is None else v * 1.0\n",
+    "predicted": "green",
+    "note": "等価な変異(float(v) と v*1.0)。緑の予測。"
+  },
+  {
+    "id": "K-R8-wari-conversion-dropped",
+    "file": "numerals.py",
+    "old": "UNIT_CONVERSIONS = {\"割\": (\"％\", 10.0)}\n",
+    "new": "UNIT_CONVERSIONS = {}\n",
+    "predicted": "red",
+    "note": "2 回目 U2: 割→％ の換算を消す。test_numerals::test_u2_wari_is_also_percent と test_comparators::test_eighty_percent_matches_hachiwari が赤。"
+  },
+  {
+    "id": "K-R9-mei-alias-dropped",
+    "file": "numerals.py",
+    "old": "                \"名\": \"人\"}\n",
+    "new": "                }\n",
+    "predicted": "red",
+    "note": "2 回目 U2: 名→人 の別名を消す。test_numerals::test_u2_mei_is_hito が赤。"
+  },
+  {
+    "id": "K-R10-ship-unit-dropped",
+    "file": "numerals.py",
+    "old": "         \"隻\", \"時間\", \"基\",",
+    "new": "         \"時間\", \"基\",",
+    "predicted": "red",
+    "note": "2 回目 U1: 隻 を一覧から消す。test_numerals::test_u1_units_from_round1_holes と test_comparators::test_forty_five_ships が赤。"
+  },
+  {
+    "id": "K-R11-unit-order-not-longest-first",
+    "file": "numerals.py",
+    "old": "_UNIT_RE = \"|\".join(sorted((re.escape(u) for u in UNITS), key=len, reverse=True))\n",
+    "new": "_UNIT_RE = \"|\".join(sorted((re.escape(u) for u in UNITS), key=len))\n",
+    "predicted": "red",
+    "note": "監査の REVISE(2 回目): 単位の並びを短い順にすると接頭辞の単位(世帯/人/か月…)が先に当たる。test_numerals::LongestUnitWinsTest が赤。監査席の変異 1 本目はこの試験が無くて緑だった。"
+  }
+]

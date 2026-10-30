@@ -1,0 +1,50 @@
+{
+ "seal": "docs/DOMAIN1_FETCH_SEAL_2026-10-15.md",
+ "dataset": "令和６年度東京都各会計歳入歳出決算書及び東京都各会計歳入歳出決算附属書類等(東京都会計管理局、CC BY 4.0)",
+ "license": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/deed.ja)",
+ "source": "東京都オープンデータカタログサイト / 東京都会計管理局",
+ "opened_at": "2026-10-15T08:02:16+09:00",
+ "engine_commit": "ef5e19c",
+ "cache_dir": "~/.cache/audit-core/sheet",
+ "fetch_log": [
+  {
+   "name": "op20251218_06kessan_01_soukatu.xlsx",
+   "result": "fetched",
+   "last_modified": "Thu, 15 Jan 2026 02:59:25 GMT"
+  },
+  {
+   "name": "op20251218_06kessan_03_saisyutu.xlsx",
+   "result": "fetched",
+   "last_modified": "Thu, 15 Jan 2026 02:59:25 GMT"
+  },
+  {
+   "name": "op20251218_06kessan_05_jikoubetu_saisyutu.xlsx",
+   "result": "fetched",
+   "last_modified": "Thu, 15 Jan 2026 02:59:24 GMT"
+  }
+ ],
+ "files": {
+  "op20251218_06kessan_01_soukatu.xlsx": {
+   "label": "決算書 総括",
+   "sha256": "edbaeccfcf07617ce65e447e15e779679e9d594e1d51faeee94ac9ebdf005cc7",
+   "bytes": 14016,
+   "expected_bytes": 14016,
+   "url": "https://www.opendata.metro.tokyo.lg.jp/kaikeikanri/op20251218_06kessan_01_soukatu.xlsx"
+  },
+  "op20251218_06kessan_03_saisyutu.xlsx": {
+   "label": "決算書 歳出",
+   "sha256": "87b79489dfb6252e80b1b4fa1399e17a3b05ea5ae37655461e8108e48074a419",
+   "bytes": 90015,
+   "expected_bytes": 90015,
+   "url": "https://www.opendata.metro.tokyo.lg.jp/kaikeikanri/op20251218_06kessan_03_saisyutu.xlsx"
+  },
+  "op20251218_06kessan_05_jikoubetu_saisyutu.xlsx": {
+   "label": "事項別明細 歳出",
+   "sha256": "c19cce01e8ec100ad06889468a485cdba6a38b73ae952d0c39b96b15a5634de6",
+   "bytes": 2126397,
+   "expected_bytes": 2126397,
+   "url": "https://www.opendata.metro.tokyo.lg.jp/kaikeikanri/op20251218_06kessan_05_jikoubetu_saisyutu.xlsx"
+  }
+ },
+ "present": 3
+}

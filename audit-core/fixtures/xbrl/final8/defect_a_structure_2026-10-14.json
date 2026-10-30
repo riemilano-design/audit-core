@@ -1,0 +1,92 @@
+{
+ "purpose": "欠陥 A の共通構造と例外(設計のための数。合否の判定ではない)",
+ "profile": "P16",
+ "money_mismatch_rows": 110,
+ "diagnostic_count": 30,
+ "spec_count": 26,
+ "dropped_reasons": {
+  "S5 書かれた桁で差に一致しない": 2,
+  "S6 文が変化として述べていない": 2
+ },
+ "cue_counts": {
+  "compare": 14,
+  "after": 12
+ },
+ "spec_only": [],
+ "diagnostic_ids": [
+  "S100Z3CI:N018",
+  "S100Z3CI:N040",
+  "S100Z3CI:N042",
+  "S100Z3CI:N044",
+  "S100Z3CI:N045",
+  "S100Z3CI:N050",
+  "S100Z3CI:N051",
+  "S100Z3CI:N053",
+  "S100Z3CI:N055",
+  "S100Z3CI:N060",
+  "S100Z3CI:N061",
+  "S100Z3CI:N063",
+  "S100Z3CI:N066",
+  "S100Z3CI:N088",
+  "S100Z3DU:N018",
+  "S100Z3DU:N022",
+  "S100Z3DU:N027",
+  "S100Z3DU:N053",
+  "S100Z3DU:N057",
+  "S100Z3DU:N062",
+  "S100Z461:N015",
+  "S100Z4LC:N021",
+  "S100Z4LC:N022",
+  "S100Z4LC:N028",
+  "S100Z4LC:N032",
+  "S100Z4LC:N036",
+  "S100Z4LC:N061",
+  "S100Z4LC:N067",
+  "S100Z4LC:N075",
+  "S100Z4R8:N050"
+ ],
+ "spec_ids": [
+  "S100Z3CI:N018",
+  "S100Z3CI:N040",
+  "S100Z3CI:N042",
+  "S100Z3CI:N044",
+  "S100Z3CI:N045",
+  "S100Z3CI:N050",
+  "S100Z3CI:N051",
+  "S100Z3CI:N053",
+  "S100Z3CI:N055",
+  "S100Z3CI:N060",
+  "S100Z3CI:N061",
+  "S100Z3CI:N063",
+  "S100Z3CI:N066",
+  "S100Z3DU:N018",
+  "S100Z3DU:N022",
+  "S100Z3DU:N027",
+  "S100Z3DU:N053",
+  "S100Z3DU:N057",
+  "S100Z3DU:N062",
+  "S100Z461:N015",
+  "S100Z4LC:N021",
+  "S100Z4LC:N028",
+  "S100Z4LC:N036",
+  "S100Z4LC:N061",
+  "S100Z4LC:N067",
+  "S100Z4LC:N075"
+ ],
+ "offset_units": {
+  "+1.000": 26
+ },
+ "band_counts": {
+  "GROUNDED | 2 倍でも当たらない": 234,
+  "GROUNDED | 今も当たる": 61,
+  "None | 2 倍でも当たらない": 55,
+  "UNVERIFIABLE | 帯が決まらない": 4,
+  "VALUE_MISMATCH | 2 倍でも当たらない": 80,
+  "VALUE_MISMATCH | 両側 2 倍でだけ当たる": 1,
+  "VALUE_MISMATCH | 今も当たる": 1,
+  "VALUE_MISMATCH | 仕様(切り捨てだけ 2 倍)で当たる": 28
+ },
+ "scale_agreement": {
+  "claim_scale == 書かれた桁": 459
+ }
+}

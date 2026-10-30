@@ -1,0 +1,900 @@
+{
+ "Prior1YearDuration_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp_cor:TotalOfReportableSegmentsAndOthersMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp_cor:TotalOfReportableSegmentsAndOthersMember"
+  ]
+ },
+ "Prior1YearDuration_NonConsolidatedMember_UnallocatedAmountsAndEliminationMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp_cor:UnallocatedAmountsAndEliminationMember"
+  ]
+ },
+ "Prior3YearInstant_NonConsolidatedMember": {
+  "start": null,
+  "end": null,
+  "instant": "2023-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior3YearDuration_NonConsolidatedMember": {
+  "start": "2022-06-01",
+  "end": "2023-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:RetainedEarningsBroughtForwardMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_TreasuryStockMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:TreasuryStockMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E05641-000SolutionDivisionReportableSegmentsMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jpcrp030000-asr_E05641-000:SolutionDivisionReportableSegmentsMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember_jpcrp030000-asr_E05641-000SolutionDivisionReportableSegmentsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp030000-asr_E05641-000:SolutionDivisionReportableSegmentsMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_jpcrp030000-asr_E05641-000SolutionDivisionReportableSegmentsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp030000-asr_E05641-000:SolutionDivisionReportableSegmentsMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E05641-000SolutionDivisionReportableSegmentsMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jpcrp030000-asr_E05641-000:SolutionDivisionReportableSegmentsMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "FilingDateInstant_Row5Member": {
+  "start": null,
+  "end": null,
+  "instant": "2026-08-26",
+  "members": [
+   "jpcrp_cor:Row5Member"
+  ]
+ },
+ "Prior2YearInstant_NonConsolidatedMember_CapitalSurplusMember": {
+  "start": null,
+  "end": null,
+  "instant": "2024-05-31",
+  "members": [
+   "jppfs_cor:CapitalSurplusMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior2YearInstant_NonConsolidatedMember_LegalRetainedEarningsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2024-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:LegalRetainedEarningsMember"
+  ]
+ },
+ "Prior2YearInstant_NonConsolidatedMember_CapitalStockMember": {
+  "start": null,
+  "end": null,
+  "instant": "2024-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:CapitalStockMember"
+  ]
+ },
+ "Prior2YearInstant_NonConsolidatedMember_LegalCapitalSurplusMember": {
+  "start": null,
+  "end": null,
+  "instant": "2024-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:LegalCapitalSurplusMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_RetainedEarningsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:RetainedEarningsMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_LegalRetainedEarningsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:LegalRetainedEarningsMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_RetainedEarningsBroughtForwardMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:RetainedEarningsBroughtForwardMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_TreasuryStockMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:TreasuryStockMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearDuration_NonConsolidatedMember_CapitalStockMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:CapitalStockMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "FilingDateInstant": {
+  "start": null,
+  "end": null,
+  "instant": "2026-08-26",
+  "members": []
+ },
+ "CurrentYearInstant": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": []
+ },
+ "CurrentYearDuration": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": []
+ },
+ "Prior1YearInstant": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": []
+ },
+ "Prior1YearDuration": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": []
+ },
+ "Prior2YearInstant": {
+  "start": null,
+  "end": null,
+  "instant": "2024-05-31",
+  "members": []
+ },
+ "Prior2YearDuration": {
+  "start": "2023-06-01",
+  "end": "2024-05-31",
+  "instant": null,
+  "members": []
+ },
+ "Prior3YearInstant": {
+  "start": null,
+  "end": null,
+  "instant": "2023-05-31",
+  "members": []
+ },
+ "Prior3YearDuration": {
+  "start": "2022-06-01",
+  "end": "2023-05-31",
+  "instant": null,
+  "members": []
+ },
+ "Prior4YearInstant": {
+  "start": null,
+  "end": null,
+  "instant": "2022-05-31",
+  "members": []
+ },
+ "Prior4YearDuration": {
+  "start": "2021-06-01",
+  "end": "2022-05-31",
+  "instant": null,
+  "members": []
+ },
+ "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E05641-000SESDivisionReportableSegmentsMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jpcrp030000-asr_E05641-000:SESDivisionReportableSegmentsMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember_jpcrp030000-asr_E05641-000SESDivisionReportableSegmentsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp030000-asr_E05641-000:SESDivisionReportableSegmentsMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_jpcrp030000-asr_E05641-000SESDivisionReportableSegmentsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp030000-asr_E05641-000:SESDivisionReportableSegmentsMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E05641-000SESDivisionReportableSegmentsMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp030000-asr_E05641-000:SESDivisionReportableSegmentsMember"
+  ]
+ },
+ "Prior2YearInstant_NonConsolidatedMember_TreasuryStockMember": {
+  "start": null,
+  "end": null,
+  "instant": "2024-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:TreasuryStockMember"
+  ]
+ },
+ "Prior2YearInstant_NonConsolidatedMember_ShareholdersEquityMember": {
+  "start": null,
+  "end": null,
+  "instant": "2024-05-31",
+  "members": [
+   "jppfs_cor:ShareholdersEquityMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior2YearInstant_NonConsolidatedMember_RetainedEarningsBroughtForwardMember": {
+  "start": null,
+  "end": null,
+  "instant": "2024-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:RetainedEarningsBroughtForwardMember"
+  ]
+ },
+ "CurrentYearInstant_Row1Member": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:Row1Member"
+  ]
+ },
+ "CurrentYearInstant_Row2Member": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:Row2Member"
+  ]
+ },
+ "CurrentYearInstant_Row3Member": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:Row3Member"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_ReportableSegmentsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:ReportableSegmentsMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_CorporateSharedMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp_cor:CorporateSharedMember"
+  ]
+ },
+ "CurrentYearInstant_SharesLessThanOneUnitMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:SharesLessThanOneUnitMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember_CapitalStockMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:CapitalStockMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember_LegalCapitalSurplusMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:LegalCapitalSurplusMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "FilingDateInstant_Row2Member": {
+  "start": null,
+  "end": null,
+  "instant": "2026-08-26",
+  "members": [
+   "jpcrp_cor:Row2Member"
+  ]
+ },
+ "FilingDateInstant_Row3Member": {
+  "start": null,
+  "end": null,
+  "instant": "2026-08-26",
+  "members": [
+   "jpcrp_cor:Row3Member"
+  ]
+ },
+ "FilingDateInstant_Row4Member": {
+  "start": null,
+  "end": null,
+  "instant": "2026-08-26",
+  "members": [
+   "jpcrp_cor:Row4Member"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp_cor:TotalOfReportableSegmentsAndOthersMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp_cor:TotalOfReportableSegmentsAndOthersMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_UnallocatedAmountsAndEliminationMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jpcrp_cor:UnallocatedAmountsAndEliminationMember"
+  ]
+ },
+ "CurrentYearDuration_DirectorsExcludingOutsideDirectorsMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jpcrp_cor:DirectorsExcludingOutsideDirectorsMember"
+  ]
+ },
+ "CurrentYearDuration_CorporateAuditorsExcludingOutsideCorporateAuditorsMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jpcrp_cor:CorporateAuditorsExcludingOutsideCorporateAuditorsMember"
+  ]
+ },
+ "CurrentYearDuration_OutsideDirectorsAndOtherOfficersMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jpcrp_cor:OutsideDirectorsAndOtherOfficersMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember_CapitalSurplusMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:CapitalSurplusMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember_LegalRetainedEarningsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:LegalRetainedEarningsMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember_RetainedEarningsBroughtForwardMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:RetainedEarningsBroughtForwardMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember_RetainedEarningsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:RetainedEarningsMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember_TreasuryStockMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:TreasuryStockMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember_ShareholdersEquityMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:ShareholdersEquityMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_ShareholdersEquityMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:ShareholdersEquityMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_CapitalStockMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:CapitalStockMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_CapitalSurplusMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:CapitalSurplusMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember_LegalCapitalSurplusMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:LegalCapitalSurplusMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:RetainedEarningsMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_LegalRetainedEarningsMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:LegalRetainedEarningsMember"
+  ]
+ },
+ "Prior2YearInstant_NonConsolidatedMember_RetainedEarningsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2024-05-31",
+  "members": [
+   "jppfs_cor:RetainedEarningsMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "FilingDateInstant_OrdinaryShareMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-08-26",
+  "members": [
+   "jpcrp_cor:OrdinaryShareMember"
+  ]
+ },
+ "CurrentYearInstant_OrdinaryShareMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:OrdinaryShareMember"
+  ]
+ },
+ "CurrentYearInstant_SharesWithNoVotingRightsMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:SharesWithNoVotingRightsMember"
+  ]
+ },
+ "CurrentYearInstant_SharesWithRestrictedVotingRightsTreasurySharesEtcMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:SharesWithRestrictedVotingRightsTreasurySharesEtcMember"
+  ]
+ },
+ "CurrentYearInstant_SharesWithRestrictedVotingRightsOtherMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:SharesWithRestrictedVotingRightsOtherMember"
+  ]
+ },
+ "CurrentYearInstant_SharesWithFullVotingRightsTreasurySharesEtcMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:SharesWithFullVotingRightsTreasurySharesEtcMember"
+  ]
+ },
+ "CurrentYearInstant_OrdinarySharesSharesWithFullVotingRightsTreasurySharesEtcMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:OrdinarySharesSharesWithFullVotingRightsTreasurySharesEtcMember"
+  ]
+ },
+ "CurrentYearInstant_SharesWithFullVotingRightsOtherMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:SharesWithFullVotingRightsOtherMember"
+  ]
+ },
+ "CurrentYearInstant_OrdinarySharesSharesWithFullVotingRightsOtherMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:OrdinarySharesSharesWithFullVotingRightsOtherMember"
+  ]
+ },
+ "Prior1YearDuration_NonConsolidatedMember_CapitalSurplusMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:CapitalSurplusMember"
+  ]
+ },
+ "Prior1YearDuration_NonConsolidatedMember_LegalRetainedEarningsMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:LegalRetainedEarningsMember"
+  ]
+ },
+ "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:RetainedEarningsBroughtForwardMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:RetainedEarningsMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearDuration_NonConsolidatedMember_TreasuryStockMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:TreasuryStockMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearDuration_NonConsolidatedMember_ShareholdersEquityMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:ShareholdersEquityMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:ShareholdersEquityMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_CapitalStockMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:CapitalStockMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_CapitalSurplusMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:CapitalSurplusMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember_LegalCapitalSurplusMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:LegalCapitalSurplusMember",
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearDuration_NonConsolidatedMember_LegalCapitalSurplusMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember",
+   "jppfs_cor:LegalCapitalSurplusMember"
+  ]
+ },
+ "CurrentYearInstant_No1MajorShareholdersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:No1MajorShareholdersMember"
+  ]
+ },
+ "CurrentYearInstant_No2MajorShareholdersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:No2MajorShareholdersMember"
+  ]
+ },
+ "CurrentYearInstant_No3MajorShareholdersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:No3MajorShareholdersMember"
+  ]
+ },
+ "CurrentYearInstant_No4MajorShareholdersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:No4MajorShareholdersMember"
+  ]
+ },
+ "CurrentYearInstant_No5MajorShareholdersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:No5MajorShareholdersMember"
+  ]
+ },
+ "CurrentYearInstant_No6MajorShareholdersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:No6MajorShareholdersMember"
+  ]
+ },
+ "CurrentYearInstant_No7MajorShareholdersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:No7MajorShareholdersMember"
+  ]
+ },
+ "CurrentYearInstant_No8MajorShareholdersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:No8MajorShareholdersMember"
+  ]
+ },
+ "CurrentYearInstant_No9MajorShareholdersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:No9MajorShareholdersMember"
+  ]
+ },
+ "CurrentYearInstant_No10MajorShareholdersMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jpcrp_cor:No10MajorShareholdersMember"
+  ]
+ },
+ "Prior4YearInstant_NonConsolidatedMember": {
+  "start": null,
+  "end": null,
+  "instant": "2022-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior4YearDuration_NonConsolidatedMember": {
+  "start": "2021-06-01",
+  "end": "2022-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "CurrentYearInstant_NonConsolidatedMember": {
+  "start": null,
+  "end": null,
+  "instant": "2026-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "CurrentYearDuration_NonConsolidatedMember": {
+  "start": "2025-06-01",
+  "end": "2026-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearInstant_NonConsolidatedMember": {
+  "start": null,
+  "end": null,
+  "instant": "2025-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior1YearDuration_NonConsolidatedMember": {
+  "start": "2024-06-01",
+  "end": "2025-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior2YearInstant_NonConsolidatedMember": {
+  "start": null,
+  "end": null,
+  "instant": "2024-05-31",
+  "members": [
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "Prior2YearDuration_NonConsolidatedMember": {
+  "start": "2023-06-01",
+  "end": "2024-05-31",
+  "instant": null,
+  "members": [
+   "jppfs_cor:NonConsolidatedMember"
+  ]
+ },
+ "FilingDateInstant_Row1Member": {
+  "start": null,
+  "end": null,
+  "instant": "2026-08-26",
+  "members": [
+   "jpcrp_cor:Row1Member"
+  ]
+ }
+}

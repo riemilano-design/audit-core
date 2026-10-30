@@ -1,0 +1,2657 @@
+{
+ "判定者": "席1",
+ "読んだファイル": [
+  "material_S100Z3CI.json",
+  "facts_S100Z3CI.json",
+  "contexts_S100Z3CI.json",
+  "seat_instruction_2026-10-14.md"
+ ],
+ "行": [
+  {
+   "行の鍵": "H-001",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:ExtraordinaryLoss",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 51260000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:ExtraordinaryLoss[CurrentYearDuration] = 51260000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:ExtraordinaryLoss[CurrentYearDuration]の値(51260000円)は文中の数(51260.0千円=51260000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-002",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:WorkInProcess",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 1193898000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:WorkInProcess",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 774652000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:WorkInProcess: 当期(1193898000) - 前期(774652000) = 419246000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(仕掛品)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:WorkInProcessの差が文中の数(419246.0千円=419246000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-003",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:DeferredTaxAssets",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 1255129000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:DeferredTaxAssets",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 1405407000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:DeferredTaxAssets: 当期(1255129000) - 前期(1405407000) = -150278000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(繰延税金資産)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:DeferredTaxAssetsの差は-150278000円で、文中の数(-150277.0千円=-150277000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-004",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 18427753000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetSales[CurrentYearDuration] = 18427753000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NetSales[CurrentYearDuration]の値(18427753000円)は文中の数(18427753.0千円=18427753000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-005",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 996178000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:OperatingIncome[CurrentYearDuration] = 996178000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:OperatingIncome[CurrentYearDuration]の値(996178000円)は文中の数(996178.0千円=996178000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-006",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jpcrp030000-asr_E30164-000:AccountsReceivableTradeCA",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 2816357000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jpcrp030000-asr_E30164-000:AccountsReceivableTradeCA",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 2451243000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jpcrp030000-asr_E30164-000:AccountsReceivableTradeCA: 当期(2816357000) - 前期(2451243000) = 365114000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(売掛金)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjpcrp030000-asr_E30164-000:AccountsReceivableTradeCAの差が文中の数(365114.0千円=365114000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-007",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:Software",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 1589583000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:Software",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 1617827000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:Software: 当期(1589583000) - 前期(1617827000) = -28244000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(ソフトウエア)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:Softwareの差は-28244000円で、文中の数(-28243.0千円=-28243000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-008",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 119720000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 42720000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:CurrentPortionOfLongTermLoansPayable: 当期(119720000) - 前期(42720000) = 77000000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(1年以内返済予定の長期借入金)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:CurrentPortionOfLongTermLoansPayableの差が文中の数(77000.0千円=77000000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。"
+  },
+  {
+   "行の鍵": "H-009",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:OrdinaryIncome",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 1033196000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:OrdinaryIncome",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 419402000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:OrdinaryIncome[当期]1033196000 - jppfs_cor:OrdinaryIncome[前期]419402000) / jppfs_cor:OrdinaryIncome[前期]419402000 x100 = 146.350%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(経常利益)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると146.35%で、小数第1位に丸めると146.3%となり、文中の146.3%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-010",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:RetainedEarnings",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 5280638000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:RetainedEarnings",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 4663485000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:RetainedEarnings: 当期(5280638000) - 前期(4663485000) = 617153000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(利益剰余金)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:RetainedEarningsの差が文中の数(617153.0千円=617153000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-011",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": "",
+   "文が述べている単位": null,
+   "対象の範囲(文から読める範囲)": "(株)NOLTYプランナーズ及び(株)新寿堂の2社",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定不能の理由": "対象が文書に無い",
+   "判定の理由": "「2社が受注生産を行っている」という記述に対応する個別企業数のfactが元データに無い(連結子会社数3社のfactはあるが、受注生産を行う会社数という切り口のfactではない)。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-012",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 9284294000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 9405688000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:SellingGeneralAndAdministrativeExpenses[当期]9284294000 - jppfs_cor:SellingGeneralAndAdministrativeExpenses[前期]9405688000) / jppfs_cor:SellingGeneralAndAdministrativeExpenses[前期]9405688000 x100 = -1.291%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(販管費)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると-1.29%で、小数第1位に丸めると-1.3%となり、文中の-1.3%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-013",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NonOperatingExpenses",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 19087000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NonOperatingExpenses",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 12643000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:NonOperatingExpenses[当期]19087000 - jppfs_cor:NonOperatingExpenses[前期]12643000) / jppfs_cor:NonOperatingExpenses[前期]12643000 x100 = 50.969%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(営業外費用)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると50.97%で、小数第1位に丸めると51.0%となり、文中の51.0%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-014",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:Liabilities",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 7651955000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:Liabilities",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 7867229000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:Liabilities: 当期(7651955000) - 前期(7867229000) = -215274000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(負債合計)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:Liabilitiesの差は-215274000円で、文中の数(-215273.0千円=-215273000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-015",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jpcrp030000-asr_E30164-000:AccountsReceivableTradeCA",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 2816357000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jpcrp030000-asr_E30164-000:AccountsReceivableTradeCA",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 2451243000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jpcrp030000-asr_E30164-000:AccountsReceivableTradeCA: 当期(2816357000) - 前期(2451243000) = 365114000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(売掛金)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjpcrp030000-asr_E30164-000:AccountsReceivableTradeCAの差が文中の数(365114.0千円=365114000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-006と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-016",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 188924000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities[CurrentYearDuration] = 188924000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities[CurrentYearDuration]の値(188924000円)は文中の数(188924.0千円=188924000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-017",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:LongTermLoansPayable",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 156440000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:LongTermLoansPayable",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 276160000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:LongTermLoansPayable: 当期(156440000) - 前期(276160000) = -119720000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(長期借入金)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:LongTermLoansPayableの差が文中の数(-119720.0千円=-119720000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-018",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": -294434000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF[CurrentYearDuration] = -294434000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(退職給付に係る負債の減少額)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF[CurrentYearDuration]の値(-294434000円)は文中のこの位置の数(-294434.0千円=-294434000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。"
+  },
+  {
+   "行の鍵": "H-019",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:RentIncomeNOI",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 12609000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:RentIncomeNOI[CurrentYearDuration] = 12609000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:RentIncomeNOI[CurrentYearDuration]の値(12609000円)は文中の数(12609.0千円=12609000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-020",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": "",
+   "文が述べている単位": null,
+   "対象の範囲(文から読める範囲)": "学校向け",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定不能の理由": "対象が文書に無い",
+   "判定の理由": "「学校向け」の売上高という切り口のfactが元データに無い(学びのデザイン事業・時間<とき>デザイン事業のセグメント売上高はあるが、学校向け/法人向け/個人向け等の顧客区分別の売上高factは無い)。数値も記載されていない。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-021",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:Assets",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 12105074000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:Assets[CurrentYearInstant] = 12105074000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "context": "CurrentYearInstant"
+    }
+   ],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:Assets[CurrentYearInstant]の値(12105074000円)は文中の数(12105074.0千円=12105074000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-022",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:WorkInProcess",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 1193898000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:WorkInProcess",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 774652000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:WorkInProcess: 当期(1193898000) - 前期(774652000) = 419246000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(仕掛品)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:WorkInProcessの差が文中の数(419246.0千円=419246000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-002と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-023",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:IncomeTaxes",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 302141000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:IncomeTaxes[CurrentYearDuration] = 302141000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:IncomeTaxes[CurrentYearDuration]の値(302141000円)は文中の数(302141.0千円=302141000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-024",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 679803000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:ProfitLossAttributableToOwnersOfParent[CurrentYearDuration] = 679803000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:ProfitLossAttributableToOwnersOfParent[CurrentYearDuration]の値(679803000円)は文中の数(679803.0千円=679803000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-025",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:ImpairmentLossEL",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 19745000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:ImpairmentLossEL[CurrentYearDuration] = 19745000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:ImpairmentLossEL[CurrentYearDuration]の値(19745000円)は文中の数(19745.0千円=19745000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-026",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:OrdinaryIncome",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 1033196000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:OrdinaryIncome",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 419402000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:OrdinaryIncome[当期]1033196000 - jppfs_cor:OrdinaryIncome[前期]419402000) / jppfs_cor:OrdinaryIncome[前期]419402000 x100 = 146.350%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(経常利益)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると146.35%で、小数第1位に丸めると146.3%となり、文中の146.3%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-027",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 576072000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities[Prior1YearDuration] = 576072000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "context": "Prior1YearDuration"
+    }
+   ],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities[Prior1YearDuration]の値(576072000円)は文中の数(576072.0千円=576072000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-028",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 996178000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 399298000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:OperatingIncome[当期]996178000 - jppfs_cor:OperatingIncome[前期]399298000) / jppfs_cor:OperatingIncome[前期]399298000 x100 = 149.482%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(営業利益)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると149.48%で、小数第1位に丸めると149.5%となり、文中の149.5%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-029",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NoncurrentAssets",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 4813513000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NoncurrentAssets",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 4906324000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NoncurrentAssets: 当期(4813513000) - 前期(4906324000) = -92811000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(固定資産)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:NoncurrentAssetsの差が文中の数(-92811.0千円=-92811000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-070と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-030",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:PurchaseOfIntangibleAssetsInvCF",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": -531134000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:PurchaseOfIntangibleAssetsInvCF[CurrentYearDuration] = -531134000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:PurchaseOfIntangibleAssetsInvCF[CurrentYearDuration]の値(-531134000円)は文中の数(-531134.0千円=-531134000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-031",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:Software",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 1589583000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:Software",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 1617827000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:Software: 当期(1589583000) - 前期(1617827000) = -28244000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(ソフトウエア)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:Softwareの差は-28244000円で、文中の数(-28243.0千円=-28243000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-007と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-032",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:MachineryEquipmentAndVehiclesNet",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 74225000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:MachineryEquipmentAndVehiclesNet",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 66768000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:MachineryEquipmentAndVehiclesNet: 当期(74225000) - 前期(66768000) = 7457000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(機械装置及び運搬具)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:MachineryEquipmentAndVehiclesNetの差が文中の数(7457.0千円=7457000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-087と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-033",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": "",
+   "文が述べている単位": null,
+   "対象の範囲(文から読める範囲)": "法人向け",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定不能の理由": "対象が文書に無い",
+   "判定の理由": "「法人向け」の売上高という切り口のfactが元データに無い。数値も記載されていない(今後の取組みに関する記述)。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-034",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": "",
+   "文が述べている単位": null,
+   "対象の範囲(文から読める範囲)": "企業向け",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定不能の理由": "対象が文書に無い",
+   "判定の理由": "「企業向け」の売上高という切り口のfactが元データに無い。数値も記載されていない。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-035",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E30164-000LearningDesignSegmentReportableSegmentMember",
+     "期間": "CurrentYearDuration_jpcrp030000-asr_E30164-000LearningDesignSegmentReportableSegmentMember (2025-07-01~2026-06-30)",
+     "値": 10334926000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jpcrp_cor:RevenuesFromExternalCustomers[CurrentYearDuration_jpcrp030000-asr_E30164-000LearningDesignSegmentReportableSegmentMember] = 10334926000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "学びのデザイン事業",
+   "値は一致するか": "一致",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E30164-000LearningDesignSegmentReportableSegmentMember"
+    }
+   ],
+   "判定不能の理由": null,
+   "判定の理由": "jpcrp_cor:RevenuesFromExternalCustomers[CurrentYearDuration_jpcrp030000-asr_E30164-000LearningDesignSegmentReportableSegmentMember]の値(10334926000円)は文中の数(10334926.0千円=10334926000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-036",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": -629754000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities[CurrentYearDuration] = -629754000円(絶対値)",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities[CurrentYearDuration]の値(-629754000円)は文中の数(629754.0千円=629754000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-037",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 18427753000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetSales[CurrentYearDuration] = 18427753000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NetSales[CurrentYearDuration]の値(18427753000円)は文中の数(18427753.0千円=18427753000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-038",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:ProvisionForBonusesSGA",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 446773000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:ProvisionForBonusesSGA[CurrentYearDuration] = 446773000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:ProvisionForBonusesSGA[CurrentYearDuration]の値(446773000円)は文中の数(446773.0千円=446773000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-039",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NonOperatingIncome",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 56105000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NonOperatingIncome",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 32747000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:NonOperatingIncome[当期]56105000 - jppfs_cor:NonOperatingIncome[前期]32747000) / jppfs_cor:NonOperatingIncome[前期]32747000 x100 = 71.329%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(営業外収益)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると71.33%で、小数第1位に丸めると71.3%となり、文中の71.3%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-040",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 18427753000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 16924425000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:NetSales[当期]18427753000 - jppfs_cor:NetSales[前期]16924425000) / jppfs_cor:NetSales[前期]16924425000 x100 = 8.883%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(売上高)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると8.88%で、小数第1位に丸めると8.9%となり、文中の8.9%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-041",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:ShortTermLoansPayable",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 300000000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:ShortTermLoansPayable",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 100000000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:ShortTermLoansPayable: 当期(300000000) - 前期(100000000) = 200000000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(短期借入金)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:ShortTermLoansPayableの差が文中の数(200000.0千円=200000000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-073と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-042",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:IncreaseDecreaseInProvisionForBonusesOpeCF",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 3336000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:IncreaseDecreaseInProvisionForBonusesOpeCF[CurrentYearDuration] = 3336000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(賞与引当金の増加額)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:IncreaseDecreaseInProvisionForBonusesOpeCF[CurrentYearDuration]の値(3336000円)は文中のこの位置の数(3336.0千円=3336000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。"
+  },
+  {
+   "行の鍵": "H-043",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:DepreciationAndAmortizationOpeCF",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 642880000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:DepreciationAndAmortizationOpeCF[CurrentYearDuration] = 642880000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(減価償却費)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:DepreciationAndAmortizationOpeCF[CurrentYearDuration]の値(642880000円)は文中のこの位置の数(642880.0千円=642880000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。"
+  },
+  {
+   "行の鍵": "H-044",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:DeferredTaxAssets",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 1255129000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:DeferredTaxAssets",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 1405407000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:DeferredTaxAssets: 当期(1255129000) - 前期(1405407000) = -150278000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(繰延税金資産)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:DeferredTaxAssetsの差は-150278000円で、文中の数(-150277.0千円=-150277000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-003と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-045",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:SubcontractExpensesSGA",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 731815000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:SubcontractExpensesSGA[CurrentYearDuration] = 731815000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:SubcontractExpensesSGA[CurrentYearDuration]の値(731815000円)は文中の数(731815.0千円=731815000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-046",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NonOperatingExpenses",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 19087000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NonOperatingExpenses[CurrentYearDuration] = 19087000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NonOperatingExpenses[CurrentYearDuration]の値(19087000円)は文中の数(19087.0千円=19087000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-047",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:DecreaseIncreaseInInventoriesOpeCF",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": -419590000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:DecreaseIncreaseInInventoriesOpeCF[CurrentYearDuration] = -419590000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(棚卸資産の増加額)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:DecreaseIncreaseInInventoriesOpeCF[CurrentYearDuration]の値(-419590000円)は文中のこの位置の数(-419590.0千円=-419590000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。"
+  },
+  {
+   "行の鍵": "H-048",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 9284294000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:SellingGeneralAndAdministrativeExpenses[CurrentYearDuration] = 9284294000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:SellingGeneralAndAdministrativeExpenses[CurrentYearDuration]の値(9284294000円)は文中の数(9284294.0千円=9284294000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-049",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 18427753000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 16924425000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:NetSales[当期]18427753000 - jppfs_cor:NetSales[前期]16924425000) / jppfs_cor:NetSales[前期]16924425000 x100 = 8.883%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(売上高)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると8.88%で、小数第1位に丸めると8.9%となり、文中の8.9%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-050",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 7291560000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:CurrentAssets[CurrentYearInstant] = 7291560000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:CurrentAssets[CurrentYearInstant]の値(7291560000円)は文中の数(7291560.0千円=7291560000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-051",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:IncomeTaxes",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 127095000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:IncomeTaxes[Prior1YearDuration] = 127095000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:IncomeTaxes[Prior1YearDuration]の値(127095000円)は文中の数(127095.0千円=127095000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-052",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:GrossProfit",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 10280472000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:GrossProfit",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 9804987000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:GrossProfit[当期]10280472000 - jppfs_cor:GrossProfit[前期]9804987000) / jppfs_cor:GrossProfit[前期]9804987000 x100 = 4.849%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(売上総利益)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると4.85%で、小数第1位に丸めると4.8%となり、文中の4.8%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-053",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": -380642000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents[CurrentYearDuration] = -380642000円(絶対値)",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents[CurrentYearDuration]の値(-380642000円)は文中の数(380642.0千円=380642000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-054",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 981945000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:IncomeBeforeIncomeTaxes[CurrentYearDuration] = 981945000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:IncomeBeforeIncomeTaxes[CurrentYearDuration]の値(981945000円)は文中の数(981945.0千円=981945000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-055",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": -372447000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF[CurrentYearDuration] = -372447000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF[CurrentYearDuration]の値(-372447000円)は文中の数(-372447.0千円=-372447000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-056",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NonOperatingIncome",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 56105000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NonOperatingIncome[CurrentYearDuration] = 56105000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NonOperatingIncome[CurrentYearDuration]の値(56105000円)は文中の数(56105.0千円=56105000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-057",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember",
+     "期間": "CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember (2025-07-01~2026-06-30)",
+     "値": 469565000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember",
+     "期間": "Prior1YearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember (2024-07-01~2025-06-30)",
+     "値": 337503000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:OperatingIncome[当期]469565000 - jppfs_cor:OperatingIncome[前期]337503000) / jppfs_cor:OperatingIncome[前期]337503000 x100 = 39.129%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "時間<とき>デザイン事業(セグメント利益)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると39.13%で、小数第1位に丸めると39.1%となり、文中の39.1%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-058",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetDefinedBenefitLiability",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 2091237000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetDefinedBenefitLiability",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 2385672000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetDefinedBenefitLiability: 当期(2091237000) - 前期(2385672000) = -294435000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(退職給付に係る負債)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:NetDefinedBenefitLiabilityの差は-294435000円で、文中の数(-294434.0千円=-294434000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-059",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:ExtraordinaryLoss",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 51260000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:ExtraordinaryLoss",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 60094000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:ExtraordinaryLoss[当期]51260000 - jppfs_cor:ExtraordinaryLoss[前期]60094000) / jppfs_cor:ExtraordinaryLoss[前期]60094000 x100 = -14.700%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(特別損失)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると-14.70%で、小数第1位に丸めると-14.7%となり、文中の-14.7%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-060",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jpcrp030000-asr_E30164-000:IncomeFromRecylingNOI",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 15250000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jpcrp030000-asr_E30164-000:IncomeFromRecylingNOI[CurrentYearDuration] = 15250000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jpcrp030000-asr_E30164-000:IncomeFromRecylingNOI[CurrentYearDuration]の値(15250000円)は文中の数(15250.0千円=15250000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-061",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember",
+     "期間": "CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember (2025-07-01~2026-06-30)",
+     "値": 469565000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:OperatingIncome[CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember] = 469565000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "時間<とき>デザイン事業",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:OperatingIncome[CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember]の値(469565000円)は文中の数(469565.0千円=469565000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-062",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": -372447000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF[CurrentYearDuration] = -372447000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(売上債権の増加額)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF[CurrentYearDuration]の値(-372447000円)は文中のこの位置の数(-372447.0千円=-372447000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-055と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-063",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:Assets",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 12105074000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:Assets",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 11699925000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:Assets: 当期(12105074000) - 前期(11699925000) = 405149000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(資産合計)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:Assetsの差は405149000円で、文中の数(405148.0千円=405148000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-064",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:ProvisionForBonuses",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 493443000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:ProvisionForBonuses",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 490106000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:ProvisionForBonuses: 当期(493443000) - 前期(490106000) = 3337000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(賞与引当金)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:ProvisionForBonusesの差は3337000円で、文中の数(3336.0千円=3336000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-065",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": -724528000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities[Prior1YearDuration] = -724528000円(絶対値)",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities[Prior1YearDuration]の値(-724528000円)は文中の数(724528.0千円=724528000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-066",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetDefinedBenefitLiability",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 2091237000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetDefinedBenefitLiability",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 2385672000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetDefinedBenefitLiability: 当期(2091237000) - 前期(2385672000) = -294435000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(退職給付に係る負債)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:NetDefinedBenefitLiabilityの差は-294435000円で、文中の数(-294434.0千円=-294434000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-058と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-067",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:Liabilities",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 7651955000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:Liabilities[CurrentYearInstant] = 7651955000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:Liabilities[CurrentYearInstant]の値(7651955000円)は文中の数(7651955.0千円=7651955000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-068",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:RetainedEarnings",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 5280638000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:RetainedEarnings",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 4663485000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:RetainedEarnings: 当期(5280638000) - 前期(4663485000) = 617153000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(利益剰余金)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:RetainedEarningsの差が文中の数(617153.0千円=617153000円)と一致する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-010と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-069",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NoncurrentLiabilities",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 2546161000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NoncurrentLiabilities",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 2913284000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NoncurrentLiabilities: 当期(2546161000) - 前期(2913284000) = -367123000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(固定負債)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:NoncurrentLiabilitiesの差は-367123000円で、文中の数(-367122.0千円=-367122000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。"
+  },
+  {
+   "行の鍵": "H-070",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NoncurrentAssets",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 4813513000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NoncurrentAssets",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 4906324000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NoncurrentAssets: 当期(4813513000) - 前期(4906324000) = -92811000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(固定資産)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:NoncurrentAssetsの差が文中の数(-92811.0千円=-92811000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-071",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:CurrentLiabilities",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 5105793000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:CurrentLiabilities[CurrentYearInstant] = 5105793000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:CurrentLiabilities[CurrentYearInstant]の値(5105793000円)は文中の数(5105793.0千円=5105793000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-072",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:AccountsPayableOther",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 929189000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:AccountsPayableOther",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 951117000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:AccountsPayableOther: 当期(929189000) - 前期(951117000) = -21928000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(未払金)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:AccountsPayableOtherの差は-21928000円で、文中の数(-21927.0千円=-21927000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-099と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-073",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:ShortTermLoansPayable",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 300000000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:ShortTermLoansPayable",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 100000000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:ShortTermLoansPayable: 当期(300000000) - 前期(100000000) = 200000000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(短期借入金)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:ShortTermLoansPayableの差が文中の数(200000.0千円=200000000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-074",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": "",
+   "文が述べている単位": null,
+   "対象の範囲(文から読める範囲)": "単行本(新刊・既刊)",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定不能の理由": "対象が文書に無い",
+   "判定の理由": "「単行本の新刊販売・既刊販売」という切り口の売上高factが元データに無い。数値も記載されていない。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-075",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": -37459000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities[Prior1YearDuration] = -37459000円(絶対値)",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities[Prior1YearDuration]の値(-37459000円)は文中の数(37459.0千円=37459000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-076",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:CashAndCashEquivalents",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 2040490000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:CashAndCashEquivalents[CurrentYearInstant] = 2040490000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "context": "CurrentYearInstant"
+    }
+   ],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:CashAndCashEquivalents[CurrentYearInstant]の値(2040490000円)は文中の数(2040490.0千円=2040490000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-077",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 620422000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:TotalChangesOfItemsDuringThePeriod[CurrentYearDuration] = 620422000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:TotalChangesOfItemsDuringThePeriod[CurrentYearDuration]の値(620422000円)は文中の数(620422.0千円=620422000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-078",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CurrentLiabilities",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 5105793000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CurrentLiabilities",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 4953944000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:CurrentLiabilities: 当期(5105793000) - 前期(4953944000) = 151849000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(流動負債)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:CurrentLiabilitiesの差は151849000円で、文中の数(151848.0千円=151848000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。"
+  },
+  {
+   "行の鍵": "H-079",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 679803000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:ProfitLossAttributableToOwnersOfParent[CurrentYearDuration] = 679803000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:ProfitLossAttributableToOwnersOfParent[CurrentYearDuration]の値(679803000円)は文中の数(679803.0千円=679803000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-080",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:SalariesAndAllowancesSGA",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 2546148000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:SalariesAndAllowancesSGA[CurrentYearDuration] = 2546148000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:SalariesAndAllowancesSGA[CurrentYearDuration]の値(2546148000円)は文中の数(2546148.0千円=2546148000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-081",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:ProvisionForBonuses",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 493443000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:ProvisionForBonuses",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 490106000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:ProvisionForBonuses: 当期(493443000) - 前期(490106000) = 3337000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(賞与引当金)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:ProvisionForBonusesの差は3337000円で、文中の数(3336.0千円=3336000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-064と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-082",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:GrossProfit",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 10280472000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:GrossProfit[CurrentYearDuration] = 10280472000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:GrossProfit[CurrentYearDuration]の値(10280472000円)は文中の数(10280472.0千円=10280472000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-083",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 679803000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 232212000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:ProfitLossAttributableToOwnersOfParent[当期]679803000 - jppfs_cor:ProfitLossAttributableToOwnersOfParent[前期]232212000) / jppfs_cor:ProfitLossAttributableToOwnersOfParent[前期]232212000 x100 = 192.751%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(親会社株主に帰属する当期純利益)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると192.75%で、小数第1位に丸めると192.8%となり、文中の192.8%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-084",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CashAndDeposits",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 2070846000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CashAndDeposits",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 2450227000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:CashAndDeposits: 当期(2070846000) - 前期(2450227000) = -379381000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(現金及び預金)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:CashAndDepositsの差は-379381000円で、文中の数(-379380.0千円=-379380000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": "この行の「対象の数(文中の表記)」欄はnull(文中の方向を示す語の位置のみ)だが、同じ文の中に該当する数値が明記されているため、文全体から読み取れる数値を用いて判定した。他の行(同じ数値を対象とする行)と対象が重複している可能性がある。 (行H-088と同一の対象と考えられる)"
+  },
+  {
+   "行の鍵": "H-085",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 7291560000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CurrentAssets",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 6793600000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:CurrentAssets: 当期(7291560000) - 前期(6793600000) = 497960000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(流動資産)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:CurrentAssetsの差は497960000円で、文中の数(497959.0千円=497959000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-086",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": "",
+   "文が述べている単位": null,
+   "対象の範囲(文から読める範囲)": "個人学習型サービス",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定不能の理由": "対象が文書に無い",
+   "判定の理由": "「個人学習型サービス」という切り口の売上/販売のfactが元データに無い。数値も記載されていない。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-087",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:MachineryEquipmentAndVehiclesNet",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 74225000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:MachineryEquipmentAndVehiclesNet",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 66768000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:MachineryEquipmentAndVehiclesNet: 当期(74225000) - 前期(66768000) = 7457000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(機械装置及び運搬具)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:MachineryEquipmentAndVehiclesNetの差が文中の数(7457.0千円=7457000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-088",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CashAndDeposits",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 2070846000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CashAndDeposits",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 2450227000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:CashAndDeposits: 当期(2070846000) - 前期(2450227000) = -379381000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(現金及び預金)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:CashAndDepositsの差は-379381000円で、文中の数(-379380.0千円=-379380000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-089",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember",
+     "期間": "CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember (2025-07-01~2026-06-30)",
+     "値": 8092827000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetSales[CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember] = 8092827000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "時間<とき>デザイン事業",
+   "値は一致するか": "一致",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember"
+    }
+   ],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NetSales[CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember]の値(8092827000円)は文中の数(8092827.0千円=8092827000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-090",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": "",
+   "文が述べている単位": null,
+   "対象の範囲(文から読める範囲)": "共創学習型サービス",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定不能の理由": "対象が文書に無い",
+   "判定の理由": "「共創学習型サービス」「公開セミナーの1開催あたりの参加者数」という切り口のfactが元データに無い。数値も記載されていない(「1開催あたり」は数量ではない)。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-091",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": "",
+   "文が述べている単位": null,
+   "対象の範囲(文から読める範囲)": "一般消費者向け手帳関連商品",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定不能の理由": "対象が文書に無い",
+   "判定の理由": "「一般消費者向け手帳関連商品」という切り口の売上高factが元データに無い。数値も記載されていない。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-092",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetAssets",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 4453118000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:NetAssets[CurrentYearInstant] = 4453118000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:NetAssets[CurrentYearInstant]の値(4453118000円)は文中の数(4453118.0千円=4453118000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-093",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:IncomeTaxesPaidRefundOpeCF",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": -101781000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:IncomeTaxesPaidRefundOpeCF[CurrentYearDuration] = -101781000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:IncomeTaxesPaidRefundOpeCF[CurrentYearDuration]の値(-101781000円)は文中の数(-101781.0千円=-101781000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-094",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 981945000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:IncomeBeforeIncomeTaxes[CurrentYearDuration] = 981945000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:IncomeBeforeIncomeTaxes[CurrentYearDuration]の値(981945000円)は文中の数(981945.0千円=981945000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-095",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": 996178000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "Prior1YearDuration",
+     "期間": "Prior1YearDuration (2024-07-01~2025-06-30)",
+     "値": 399298000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:OperatingIncome[当期]996178000 - jppfs_cor:OperatingIncome[前期]399298000) / jppfs_cor:OperatingIncome[前期]399298000 x100 = 149.482%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "全社(営業利益)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると149.48%で、小数第1位に丸めると149.5%となり、文中の149.5%と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-096",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:RawMaterialsAndSupplies",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 169579000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:RawMaterialsAndSupplies",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 244904000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:RawMaterialsAndSupplies: 当期(169579000) - 前期(244904000) = -75325000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(原材料及び貯蔵品)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:RawMaterialsAndSuppliesの差は-75325000円で、文中の数(-75324.0千円=-75324000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-097",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:DecreaseInShortTermLoansPayableFinCF",
+     "context": "CurrentYearDuration",
+     "期間": "CurrentYearDuration (2025-07-01~2026-06-30)",
+     "値": -3400000000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:DecreaseInShortTermLoansPayableFinCF[CurrentYearDuration] = -3400000000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:DecreaseInShortTermLoansPayableFinCF[CurrentYearDuration]の値(-3400000000円)は文中の数(-3400000.0千円=-3400000000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-098",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E30164-000LearningDesignSegmentReportableSegmentMember",
+     "期間": "CurrentYearDuration_jpcrp030000-asr_E30164-000LearningDesignSegmentReportableSegmentMember (2025-07-01~2026-06-30)",
+     "値": 2179800000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:OperatingIncome[CurrentYearDuration_jpcrp030000-asr_E30164-000LearningDesignSegmentReportableSegmentMember] = 2179800000円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "学びのデザイン事業",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "jppfs_cor:OperatingIncome[CurrentYearDuration_jpcrp030000-asr_E30164-000LearningDesignSegmentReportableSegmentMember]の値(2179800000円)は文中の数(2179800.0千円=2179800000円)と一致する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-099",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:AccountsPayableOther",
+     "context": "CurrentYearInstant",
+     "期間": "CurrentYearInstant (2026-06-30 時点)",
+     "値": 929189000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:AccountsPayableOther",
+     "context": "Prior1YearInstant",
+     "期間": "Prior1YearInstant (2025-06-30 時点)",
+     "値": 951117000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "jppfs_cor:AccountsPayableOther: 当期(929189000) - 前期(951117000) = -21928000 円",
+   "文が述べている単位": "千円",
+   "対象の範囲(文から読める範囲)": "全社(未払金)",
+   "値は一致するか": "不一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "当期と前期のjppfs_cor:AccountsPayableOtherの差は-21928000円で、文中の数(-21927.0千円=-21927000円)と1000円(decimals=-3の最小単位1,000円)の差がある。各期の値がそれぞれ千円単位に丸められているため生じる差と考えられるが、ルールに従い別のfactを探さず不一致として記録する。",
+   "迷った点": ""
+  },
+  {
+   "行の鍵": "H-100",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember",
+     "期間": "CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember (2025-07-01~2026-06-30)",
+     "値": 8092827000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember",
+     "期間": "Prior1YearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember (2024-07-01~2025-06-30)",
+     "値": 6996634000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(jppfs_cor:NetSales[当期]8092827000 - jppfs_cor:NetSales[前期]6996634000) / jppfs_cor:NetSales[前期]6996634000 x100 = 15.667%",
+   "文が述べている単位": "%",
+   "対象の範囲(文から読める範囲)": "時間<とき>デザイン事業(売上高)",
+   "値は一致するか": "一致",
+   "同値の他の候補": [],
+   "判定不能の理由": null,
+   "判定の理由": "前年同期比の増減率を計算すると15.67%で、小数第1位に丸めると15.7%となり、文中の15.7%と一致する。",
+   "迷った点": ""
+  }
+ ]
+}

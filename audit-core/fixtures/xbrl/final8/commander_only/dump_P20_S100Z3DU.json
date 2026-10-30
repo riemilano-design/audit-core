@@ -1,0 +1,850 @@
+{
+ "S100Z3DU:H-001": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProceedsFromIssuanceOfBondsWithSubscriptionRightsToSharesFinCF@CurrentYearDuration"
+  ],
+  "subject": "新株予約権付社債の発行による収入",
+  "span": "これは主に、転換社債型新株予約権付社債の発行による収入3億円、新株予約権の行使に",
+  "reason": null
+ },
+ "S100Z3DU:H-002": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+  ],
+  "subject": "現金及び現金同等物",
+  "span": "「資金」という。)は、前連結会計年度末に比べ2百万円減少し、6億26百万円となりました。",
+  "reason": null
+ },
+ "S100Z3DU:H-003": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+  ],
+  "subject": "有形固定資産の取得による支出",
+  "span": "これは、主に有形固定資産の取得による支出71百万円、差入保証金の差入に",
+  "reason": null
+ },
+ "S100Z3DU:H-004": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+  ],
+  "subject": "純資産",
+  "span": "ける純資産の部は、前連結会計年度末に比べ2億57百万円減少し62百万円となりました。",
+  "reason": null
+ },
+ "S100Z3DU:H-005": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:BuildingsAndStructuresNet@CurrentYearInstant",
+   "xbrl:jppfs_cor:BuildingsAndStructuresNet@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "建物及び構築物(純額)",
+  "span": "差入保証金20百万円増加及び建物及び構築物(純額)66百万円減少によるもの",
+  "reason": null
+ },
+ "S100Z3DU:H-006": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+  ],
+  "subject": "経常損失",
+  "span": "は経常損失6億47百万円)、親会社株主に帰属する当期純損失は7億93百万円(前年同期は親会社株",
+  "reason": null
+ },
+ "S100Z3DU:H-007": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:SubscriptionRightsToShares@CurrentYearInstant"
+  ],
+  "subject": "新株予約権",
+  "span": "この主な要因は、1年内償還予定の転換社債型新株予約権付社債2億47百万円増加、未払金61百万",
+  "reason": null
+ },
+ "S100Z3DU:H-008": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+  ],
+  "subject": "負債",
+  "span": "末における負債は、前連結会計年度末に比べ2億59百万円増加し23億69百万円となりました。",
+  "reason": null
+ },
+ "S100Z3DU:H-009": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+  ],
+  "subject": "純資産",
+  "span": "当連結会計年度末における純資産の部は、前連結会計年度末に比べ2億57百万円減少し62百万円とな",
+  "reason": null
+ },
+ "S100Z3DU:H-010": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "短期借入金",
+  "span": "47百万円増加、未払金61百万円増加及び短期借入金78百万円減少によるもの",
+  "reason": null
+ },
+ "S100Z3DU:H-011": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "連結会計年度末における資産は、前連結会計年度末に比べ1百万円増加し24億3",
+  "reason": "no_subject"
+ },
+ "S100Z3DU:H-012": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "計年度末における資産は、前連結会計年度末に比べ1百万円増加し24億31百万円となりました。",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z3DU:H-013": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration"
+  ],
+  "subject": "財務活動の結果獲得した資金",
+  "span": "財務活動の結果獲得した資金は、6億93百万円(前年同期は8億22",
+  "reason": null
+ },
+ "S100Z3DU:H-014": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:ImpairmentLossEL@CurrentYearDuration"
+  ],
+  "subject": "減損損失",
+  "span": "減損損失137百万円を計上した一方、税金等調整前当期純損失を7億71百万円計上したことによるも",
+  "reason": null
+ },
+ "S100Z3DU:H-015": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "連結会計年度末における資産は、前連結会計年度末に比べ1百万円増加し24億3",
+  "reason": "no_subject"
+ },
+ "S100Z3DU:H-016": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "化している水産物の海外輸出の効果もあり、売上高はコロナ禍前を上回り堅調に推",
+  "reason": null
+ },
+ "S100Z3DU:H-017": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant",
+   "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "未払金",
+  "span": "換社債型新株予約権付社債2億47百万円増加、未払金61百万円増加及び短期借",
+  "reason": null
+ },
+ "S100Z3DU:H-018": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant",
+   "xbrl:jppfs_cor:AccountsReceivableTrade@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売掛金",
+  "span": "この主な要因は、売掛金27百万円増加、のれん1",
+  "reason": null
+ },
+ "S100Z3DU:H-019": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+  ],
+  "subject": "純資産",
+  "span": "当連結会計年度末における純資産の部は、前連結会計年度末に比べ2億57百万円減少し62百万円とな",
+  "reason": null
+ },
+ "S100Z3DU:H-020": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:ShareholdersEquity@CurrentYearInstant",
+   "xbrl:jppfs_cor:ShareholdersEquity@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "株主資本",
+  "span": "び第三者割当による新株式の発行により株主資本が5億43百万円増加したことに",
+  "reason": null
+ },
+ "S100Z3DU:H-021": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+  ],
+  "subject": "純資産",
+  "span": "ける純資産の部は、前連結会計年度末に比べ2億57百万円減少し62百万円となりました。",
+  "reason": null
+ },
+ "S100Z3DU:H-022": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:ShareholdersEquity@CurrentYearInstant",
+   "xbrl:jppfs_cor:ShareholdersEquity@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "株主資本",
+  "span": "び第三者割当による新株式の発行により株主資本が5億43百万円増加したことに",
+  "reason": null
+ },
+ "S100Z3DU:H-023": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant",
+   "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "未払金",
+  "span": "還予定の転換社債型新株予約権付社債2億47百万円増加、未払金61百万円増加及び短期借入金7",
+  "reason": null
+ },
+ "S100Z3DU:H-024": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProceedsFromIssuanceOfStockResultingFromExerciseOfSubscriptionRightsToSharesFinCF@CurrentYearDuration"
+  ],
+  "subject": "新株予約権の行使による株式の発行による収入",
+  "span": "による収入3億円、新株予約権の行使による株式の発行による収入2億44百万円、株式の発行による収",
+  "reason": null
+ },
+ "S100Z3DU:H-025": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "また、直営店7店舗、運営受託店2店舗、フランチャイズ店(",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z3DU:H-026": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:ShareholdersEquity@CurrentYearInstant"
+  ],
+  "subject": "株主資本",
+  "span": "予約権の行使及び第三者割当による新株式の発行により株主資本が5億43百万円増加したことによるも",
+  "reason": null
+ },
+ "S100Z3DU:H-027": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "純資産",
+  "span": "末における純資産の部は、前連結会計年度末に比べ2億57百万円減少し62百万",
+  "reason": null
+ },
+ "S100Z3DU:H-028": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PaymentsForGuaranteeDepositsInvCF@CurrentYearDuration"
+  ],
+  "subject": "差入保証金の差入による支出",
+  "span": "定資産の取得による支出71百万円、差入保証金の差入による支出64百万円があったことによるも",
+  "reason": null
+ },
+ "S100Z3DU:H-029": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GuaranteeDepositsIOA@CurrentYearInstant",
+   "xbrl:jppfs_cor:GuaranteeDepositsIOA@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "差入保証金",
+  "span": "金27百万円増加、のれん18百万円増加、差入保証金20百万円増加及び建物及",
+  "reason": null
+ },
+ "S100Z3DU:H-030": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+  ],
+  "subject": "経常損失",
+  "span": "また、経常損失は6億18百万円(前年同期は経常損失",
+  "reason": null
+ },
+ "S100Z3DU:H-031": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "この主な要因は、親会社株主に帰属する当期純損失7億93百万円、第3回無担保転換社",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z3DU:H-032": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant",
+   "xbrl:jppfs_cor:AccountsReceivableTrade@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売掛金",
+  "span": "この主な要因は、売掛金27百万円増加、のれん1",
+  "reason": null
+ },
+ "S100Z3DU:H-033": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:SubscriptionRightsToShares@CurrentYearInstant",
+   "xbrl:jppfs_cor:SubscriptionRightsToShares@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "新株予約権",
+  "span": "は、1年内償還予定の転換社債型新株予約権付社債2億47百万円増加、未払金6",
+  "reason": null
+ },
+ "S100Z3DU:H-034": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GuaranteeDepositsIOA@CurrentYearInstant",
+   "xbrl:jppfs_cor:GuaranteeDepositsIOA@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "差入保証金",
+  "span": "因は、売掛金27百万円増加、のれん18百万円増加、差入保証金20百万円増加及び建物及び構築",
+  "reason": null
+ },
+ "S100Z3DU:H-035": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "生したことから、営業損失は6億35百万円(前年同期は営業損失6億66百万円)となりました。",
+  "reason": null
+ },
+ "S100Z3DU:H-036": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "負債",
+  "span": "計年度末における負債は、前連結会計年度末に比べ2億59百万円増加し23億6",
+  "reason": null
+ },
+ "S100Z3DU:H-037": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "会社の事業転換コスト等が先行して発生したことから、営業損失は6億35百万円、経常損失は6億18",
+  "reason": null
+ },
+ "S100Z3DU:H-038": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Goodwill@CurrentYearInstant",
+   "xbrl:jppfs_cor:Goodwill@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "のれん",
+  "span": "この主な要因は、売掛金27百万円増加、のれん18百万円増加、差入保証金20",
+  "reason": null
+ },
+ "S100Z3DU:H-039": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "これにより当連結会計年度末における店舗数は、直営店57店舗(うち運営受託店15",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z3DU:H-040": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GuaranteeDepositsIOA@CurrentYearInstant",
+   "xbrl:jppfs_cor:GuaranteeDepositsIOA@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "差入保証金",
+  "span": "因は、売掛金27百万円増加、のれん18百万円増加、差入保証金20百万円増加及び建物及び構築",
+  "reason": null
+ },
+ "S100Z3DU:H-041": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "この主な要因は、親会社株主に帰属する当期純損失7億93百万円、第3回無担保転換社",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z3DU:H-042": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "短期借入金",
+  "span": "付社債2億47百万円増加、未払金61百万円増加及び短期借入金78百万円減少によるものであり",
+  "reason": null
+ },
+ "S100Z3DU:H-043": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "結会計年度末における店舗数は、直営店57店舗(うち運営受託店15店舗)、フランチャイズ店",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z3DU:H-044": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+  ],
+  "subject": "経常損失",
+  "span": "、経常損失は6億18百万円、親会社株主に帰属する当期純損失は7億93百万円となりました。",
+  "reason": null
+ },
+ "S100Z3DU:H-045": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "短期借入金",
+  "span": "47百万円増加、未払金61百万円増加及び短期借入金78百万円減少によるもの",
+  "reason": null
+ },
+ "S100Z3DU:H-046": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "営業活動の結果支出した資金は、5億35百万円(前年同期は5億85百万円の支出)となりました",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z3DU:H-047": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "計年度末における資産は、前連結会計年度末に比べ1百万円増加し24億31百万円となりました。",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z3DU:H-048": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上により、売上高105億70百万円(前年同期比9.2%増加)となりました。",
+  "reason": null
+ },
+ "S100Z3DU:H-049": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "会社の事業転換コスト等が先行して発生したことから、営業損失は6億35百万円(前年同期は営業損失",
+  "reason": null
+ },
+ "S100Z3DU:H-050": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+  ],
+  "subject": "経常損失",
+  "span": "行して発生したことから、営業損失は6億35百万円、経常損失は6億18百万円、親会社株主に帰属す",
+  "reason": null
+ },
+ "S100Z3DU:H-051": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:BuildingsAndStructuresNet@CurrentYearInstant",
+   "xbrl:jppfs_cor:BuildingsAndStructuresNet@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "建物及び構築物(純額)",
+  "span": "万円増加、差入保証金20百万円増加及び建物及び構築物(純額)66百万円減少によるものであり",
+  "reason": null
+ },
+ "S100Z3DU:H-052": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "純資産",
+  "span": "末における純資産の部は、前連結会計年度末に比べ2億57百万円減少し62百万",
+  "reason": null
+ },
+ "S100Z3DU:H-053": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ImpairmentLossEL@CurrentYearDuration"
+  ],
+  "subject": "減損損失",
+  "span": "これは主に減価償却費75百万円及び減損損失137百万円を計上した一方、税金",
+  "reason": null
+ },
+ "S100Z3DU:H-054": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:SubscriptionRightsToShares@CurrentYearInstant"
+  ],
+  "subject": "新株予約権",
+  "span": "この主な要因は、1年内償還予定の転換社債型新株予約権付社債2億47百万円増加、未払金61百万",
+  "reason": null
+ },
+ "S100Z3DU:H-055": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "現金及び現金同等物",
+  "span": "現金同等物(以下「資金」という。)は、前連結会計年度末に比べ2百万円減少し、6億26百万",
+  "reason": null
+ },
+ "S100Z3DU:H-056": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "また、直営店7店舗、運営受託店2店舗、",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z3DU:H-057": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "負債",
+  "span": "計年度末における負債は、前連結会計年度末に比べ2億59百万円増加し23億6",
+  "reason": null
+ },
+ "S100Z3DU:H-058": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@Prior1YearDuration"
+  ],
+  "subject": "財務活動の結果獲得した資金",
+  "span": "財務活動の結果獲得した資金は、6億93百万円(前年同期は8億22百万円の獲得)となりました",
+  "reason": null
+ },
+ "S100Z3DU:H-059": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+  ],
+  "subject": "経常損失",
+  "span": "失は7億93百万円(前年同期は親会社株主に帰属する当期純損失8億16百万円)となりました。",
+  "reason": null
+ },
+ "S100Z3DU:H-060": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "投資活動の結果支出した資金は1億60百万円(前年同期は52百万円の支出)となりました",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z3DU:H-061": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "営業活動の結果支出した資金は、5億35百万円(前年同期は5億85",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z3DU:H-062": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "店舗、運営受託店2店舗、フランチャイズ店(海外ライセンス店)1店舗を閉店いたしました。",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z3DU:H-063": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Goodwill@CurrentYearInstant",
+   "xbrl:jppfs_cor:Goodwill@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "のれん",
+  "span": "この主な要因は、売掛金27百万円増加、のれん18百万円増加、差入保証",
+  "reason": null
+ },
+ "S100Z3DU:H-064": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Goodwill@CurrentYearInstant",
+   "xbrl:jppfs_cor:Goodwill@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "のれん",
+  "span": "この主な要因は、売掛金27百万円増加、のれん18百万円増加、差入保証金20",
+  "reason": null
+ },
+ "S100Z3DU:H-065": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:BuildingsAndStructuresNet@CurrentYearInstant",
+   "xbrl:jppfs_cor:BuildingsAndStructuresNet@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "建物及び構築物(純額)",
+  "span": "万円増加、差入保証金20百万円増加及び建物及び構築物(純額)66百万円減少によるものであり",
+  "reason": null
+ },
+ "S100Z3DU:H-066": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "当連結会計年度末における資産は、前連結会計年度末に比べ1百万円増加し24億31百万",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z3DU:H-067": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant",
+   "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "未払金",
+  "span": "還予定の転換社債型新株予約権付社債2億47百万円増加、未払金61百万円増加及び短期借入金7",
+  "reason": null
+ },
+ "S100Z3DU:H-068": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "当連結会計年度末における資産は、前連結会計年度末に比べ1百万円増加し24億31百万",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z3DU:H-069": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "おける当社グループの経営成績は、売上高につきましては、売上高105億70百万円になりました。",
+  "reason": null
+ },
+ "S100Z3DU:H-070": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:SubscriptionRightsToShares@CurrentYearInstant",
+   "xbrl:jppfs_cor:SubscriptionRightsToShares@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "新株予約権",
+  "span": "は、1年内償還予定の転換社債型新株予約権付社債2億47百万円増加、未払金6",
+  "reason": null
+ },
+ "S100Z3DU:H-071": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProceedsFromIssuanceOfCommonStockFinCF@CurrentYearDuration"
+  ],
+  "subject": "株式の発行による収入",
+  "span": "よる株式の発行による収入2億44百万円、株式の発行による収入1億58百万円があったことによるも",
+  "reason": null
+ },
+ "S100Z3DU:H-072": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "短期借入金",
+  "span": "付社債2億47百万円増加、未払金61百万円増加及び短期借入金78百万円減少によるものであり",
+  "reason": null
+ },
+ "S100Z3DU:H-073": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "出退店につきましては、直営店12店舗を新規出店し、当期に",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z3DU:H-074": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上により、売上高105億70百万円(前年同期比9.2%",
+  "reason": null
+ },
+ "S100Z3DU:H-075": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+  ],
+  "subject": "負債",
+  "span": "当連結会計年度末における負債は、前連結会計年度末に比べ2億59百万円増加し23億69百万",
+  "reason": null
+ },
+ "S100Z3DU:H-076": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "受託店15店舗)、フランチャイズ店(運営委託店舗含む)は国内2店舗となりました。",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z3DU:H-077": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+  ],
+  "subject": "減価償却費",
+  "span": "これは主に減価償却費75百万円及び減損損失137百",
+  "reason": null
+ },
+ "S100Z3DU:H-078": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "現金及び現金同等物",
+  "span": "物(以下「資金」という。)は、前連結会計年度末に比べ2百万円減少し、6億2",
+  "reason": null
+ },
+ "S100Z3DU:H-079": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:ShareholdersEquity@CurrentYearInstant"
+  ],
+  "subject": "株主資本",
+  "span": "予約権の行使及び第三者割当による新株式の発行により株主資本が5億43百万円増加したことによるも",
+  "reason": null
+ },
+ "S100Z3DU:H-080": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "以上により、売上高105億70百万円(前年同期比9.2%増加)となりま",
+  "reason": null
+ },
+ "S100Z3DU:H-081": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant",
+   "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "未払金",
+  "span": "換社債型新株予約権付社債2億47百万円増加、未払金61百万円増加及び短期借",
+  "reason": null
+ },
+ "S100Z3DU:H-082": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+  ],
+  "subject": "経常損失",
+  "span": "また、経常損失は6億18百万円(前年同期は経常損失6億47百万円)、親会社株主に帰属",
+  "reason": null
+ },
+ "S100Z3DU:H-083": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+  ],
+  "subject": "負債",
+  "span": "末における負債は、前連結会計年度末に比べ2億59百万円増加し23億69百万円となりました。",
+  "reason": null
+ },
+ "S100Z3DU:H-084": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+  ],
+  "subject": "負債",
+  "span": "当連結会計年度末における負債は、前連結会計年度末に比べ2億59百万円増加し23億69百万",
+  "reason": null
+ },
+ "S100Z3DU:H-085": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "投資活動の結果支出した資金は1億60百万円(前年同期は52百万",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z3DU:H-086": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Goodwill@CurrentYearInstant",
+   "xbrl:jppfs_cor:Goodwill@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "のれん",
+  "span": "この主な要因は、売掛金27百万円増加、のれん18百万円増加、差入保証",
+  "reason": null
+ },
+ "S100Z3DU:H-087": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant"
+  ],
+  "subject": "売掛金",
+  "span": "この主な要因は、売掛金27百万円増加、のれん18百万",
+  "reason": null
+ },
+ "S100Z3DU:H-088": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:BuildingsAndStructuresNet@CurrentYearInstant",
+   "xbrl:jppfs_cor:BuildingsAndStructuresNet@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "建物及び構築物(純額)",
+  "span": "差入保証金20百万円増加及び建物及び構築物(純額)66百万円減少によるもの",
+  "reason": null
+ },
+ "S100Z3DU:H-089": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "活動の正常化が進み、賃上げの動きが広がる等、雇用・所得環境の改善を背景に個",
+  "reason": "no_subject"
+ },
+ "S100Z3DU:H-090": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GuaranteeDepositsIOA@CurrentYearInstant",
+   "xbrl:jppfs_cor:GuaranteeDepositsIOA@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "差入保証金",
+  "span": "金27百万円増加、のれん18百万円増加、差入保証金20百万円増加及び建物及",
+  "reason": null
+ },
+ "S100Z3DU:H-091": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant"
+  ],
+  "subject": "売掛金",
+  "span": "この主な要因は、売掛金27百万円増加、のれん18百万",
+  "reason": null
+ }
+}

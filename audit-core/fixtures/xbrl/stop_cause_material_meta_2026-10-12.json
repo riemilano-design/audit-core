@@ -1,0 +1,50 @@
+{
+ "identity": {
+  "head": "8c86a3e1c05c0ed88b65ea978517ba5ace57a669",
+  "profile": "P7",
+  "document": "S100Z4Q1",
+  "modified_zip_sha256": "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799",
+  "labels_sha256": "7eac1450c40c68e0a25bf7f56c32db4ee6dad226e55df7efdb8019764a71173b",
+  "claims_sha256": "c886a9e69353c677297341436f9777b779895054804adce1805f3d546dd4b579",
+  "seed": "e7dbf93",
+  "strata": {
+   "GROUNDED": 60,
+   "POINTER_NOT_FOUND": 13,
+   "UNVERIFIABLE": 27
+  },
+  "protected_surface_sha256": "490888d46d034ca9eaae8e4b4d01f494919abf21a8b057e87c835d25256d7116"
+ },
+ "counts": {
+  "真": 391,
+  "真_stopped": 214,
+  "GROUNDED": 177,
+  "VALUE_MISMATCH": 33,
+  "UNVERIFIABLE": 124,
+  "POINTER_NOT_FOUND": 57
+ },
+ "python": "3.9.6",
+ "sheets": {
+  "stop_cause_main_material_2026-10-12.json": {
+   "sha256": "a2eb562d1fa5ebcb2d8f6530af195fb75791038264e9a8ba3e0ff812a8ce8b21",
+   "rows": 214
+  },
+  "reaudit_A_material_2026-10-12.json": {
+   "sha256": "da45f007baf5c75fbf0d64e7846e78044a6de2b01149f0d4a18969cc07d1543e",
+   "rows": 33
+  },
+  "reaudit_B_material_2026-10-12.json": {
+   "sha256": "461542b91aa9645822a4f8460dab5e1e4077ef9cdb17c5b10c841d963aa4eb31",
+   "rows": 100
+  }
+ },
+ "reaudit_B_strata_counts": {
+  "GROUNDED": 60,
+  "POINTER_NOT_FOUND": 13,
+  "UNVERIFIABLE": 27
+ },
+ "excluded": {
+  "判定不能": 23,
+  "偽": 1,
+  "note": "分母は真 391。再監査の母集団も真 391"
+ }
+}

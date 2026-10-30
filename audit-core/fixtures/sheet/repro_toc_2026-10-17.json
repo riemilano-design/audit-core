@@ -1,0 +1,86 @@
+{
+ "seal": "docs/DOMAIN1_REPRO_SEAL_2026-10-17.md",
+ "source": "op20250114_05kessan_04_jikoubetu_sainyuu.xlsx",
+ "rule": "**`sheet_sainyuu_p1_2026-10-16.py` の `meisai_sainyuu()` をそのまま呼んだ。規則は変えていない**",
+ "toc_entries": 19,
+ "meisai_sainyuu": {
+  "toc": [
+   {
+    "sheet": "（１）",
+    "account": "東京都一般会計"
+   },
+   {
+    "sheet": "（２）",
+    "account": "東京都特別区財政調整会計"
+   },
+   {
+    "sheet": "（３）",
+    "account": "東京都地方消費税清算会計"
+   },
+   {
+    "sheet": "（４）",
+    "account": "東京都小笠原諸島生活再建資金会計"
+   },
+   {
+    "sheet": "（５）",
+    "account": "東京都国民健康保険事業会計"
+   },
+   {
+    "sheet": "（６）",
+    "account": "東京都母子父子福祉貸付資金会計"
+   },
+   {
+    "sheet": "（７）",
+    "account": "東京都心身障害者扶養年金会計"
+   },
+   {
+    "sheet": "（８）",
+    "account": "東京都地方独立行政法人東京都立病院機構貸付等事業会計 "
+   },
+   {
+    "sheet": "（９）",
+    "account": "東京都中小企業設備導入等資金会計"
+   },
+   {
+    "sheet": "（１０）",
+    "account": "東京都林業・木材産業改善資金助成会計"
+   },
+   {
+    "sheet": "（１１）",
+    "account": "東京都沿岸漁業改善資金助成会計"
+   },
+   {
+    "sheet": "（１２）",
+    "account": "東京都と場会計"
+   },
+   {
+    "sheet": "（１３）",
+    "account": "東京都都営住宅等事業会計"
+   },
+   {
+    "sheet": "（１４）",
+    "account": "東京都都営住宅等保証金会計"
+   },
+   {
+    "sheet": "（１５）",
+    "account": "東京都都市開発資金会計"
+   },
+   {
+    "sheet": "（１６）",
+    "account": "東京都用地会計"
+   },
+   {
+    "sheet": "（１７）",
+    "account": "東京都公債費会計"
+   },
+   {
+    "sheet": "（１８）",
+    "account": "東京都臨海都市基盤整備事業会計"
+   },
+   {
+    "sheet": "（１９）",
+    "account": "東京都工業用水道事業清算会計"
+   }
+  ]
+ }
+}

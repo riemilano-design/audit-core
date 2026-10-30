@@ -1,0 +1,5358 @@
+{
+ "step": "**既定の profile を P26 から P27 に切り替える(段 2)の測定。profile を省いた製品の経路が P27 を明示した経路と 1 byte も違わないか。0 USD・通信なし・engine は測る側から 1 行も変えない**",
+ "封": "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md",
+ "封の commit": "87f83fd6b09d6968dd1dd84fb0c6bd1c4dbf1b94",
+ "環境": {
+  "HEAD": "87f83fd6b09d6968dd1dd84fb0c6bd1c4dbf1b94",
+  "python": "3.9.6",
+  "DEFAULT_PROFILE": "P27",
+  "比べた profile": [
+   "省略(None = vocabulary.DEFAULT_PROFILE)",
+   "P27(明示)",
+   "P26(既定を実行中だけ P26 に戻した対照)"
+  ],
+  "engine の指紋": {
+   "adapter_xbrl_py_sha256": "92326a0f4dcefd21fae4393a611e4206ef174b19258ddadd0213117191e7b399",
+   "adapter_xbrl_py_files": 16,
+   "core_py_sha256": "34e836bb39762d5af831a9aa11d4ea095e73221beb5bd4510d3b234363a2a6e8",
+   "core_py_files": 4
+  },
+  "engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)": "49bcd3ac7c3bfdcdadf275a8829f14b21e45a4908c3e857872231412e2d3e41c",
+  "engine の file 数": 37,
+  "frozen_bundle の束ねた sha": "030455282c89661b4c0152498d76bc30314362b5896b15ab67a8886a6887b0f6",
+  "frozen_bundle の本数": 37,
+  "recipes.py の sha16": "52d645e713c53c1c",
+  "vocabulary.py の sha16": "514ebb8104451c07",
+  "verify_document.py の sha16": "c3791080ab5aef2f",
+  "鍵の名前の有無(値は読まない)": {
+   "ANTHROPIC_API_KEY": false,
+   "ANTHROPIC_AUTH_TOKEN": false,
+   "ANTHROPIC_BASE_URL": true,
+   "EDINET_API_KEY": false,
+   "OPENAI_API_KEY": false
+  },
+  "ラベル 2 file の sha256(起動時に照合)": {
+   "jppfs_2025-11-01_lab.xml": "bf56ea1585afe426b398a9053ec4de4dbeafc211a53675b5d6d19453e4e04bf4",
+   "jpcrp_2025-11-01_lab.xml": "df9c23764ec9a63cb65b5ef62e79a2907c590523797421442ea2a60e334cd684"
+  },
+  "費用": "0 USD",
+  "評価用・調整用の AI の文・DB の応答": "開いていない(この script は ~/.cache/audit-core/edinetdb-p27/ を読まない)",
+  "通信": "この script は urllib・socket・http を import しない。adapters は urllib を import するが接続は起きない"
+ },
+ "入力": {
+  "手元の 67 書類の sha256": {
+   "S100YMFV": "4a5982e7447d6e0614c6ad12e7c091d462ca61a0128c2ce2af957a8bdfe1d52c",
+   "S100YUHC": "cd212b810b33d07bd9723ed9518c299dcfaf88fc434f7026211206a9d5f6d450",
+   "S100YWGX": "11a87aa7ddda60db6d51910decfbf8a643621e520f582ba920ecece743604cec",
+   "S100YXF5": "2fea27f5328ec8fb528a08b681a747d6c4d43c8edb843507815db774179a9b1c",
+   "S100YXGH": "29b7eb0b24e579a5b2ae9ce664d58af2d1d3cd0ffe4aec23fd7a45bd7fc36cbf",
+   "S100YXLE": "906951be808f0ebbe406c2689b577b6f198d68d0677d84ff2a9d59e226793d20",
+   "S100YXMA": "511f1811cebc9bd7d72d069652effe99ebdb271ae99823c0115f89d697ae2726",
+   "S100YYDI": "430ae0aec4807aa73b35b8409a8075b37b9487357d129b10bc1194905f87c753",
+   "S100YYIA": "c37346d3285f33377d82e103a5192d496c85da7dada60754b1a7a0ee1968bf42",
+   "S100YYK8": "512b316c0739e2cb83c465ec7ffae4474efebf4ffbc234a70270346cf1e1caad",
+   "S100YYN7": "646d95e04a253fc996dd17a231905ecb662686bd5c77f1c7730f51161c59e75a",
+   "S100YYOS": "7993b5ff710ccd33dde89aa363438ef1c7b52f4e47d8af28ce841ee2bcac3bbd",
+   "S100YYQX": "a0313840d8ecc13e8470e34f54451a0207c5510ffd0a9c3860e50c9640a9cdf0",
+   "S100YYRG": "e1fdf292e146deb540a634b7c0bab060b19d29f08552f1276617a9e8309702fe",
+   "S100YYRV": "b4f42344bb48be29c047e7f9fd825b0b3f2e2ef8d62f84d29c534cd08ae2c52a",
+   "S100YYS4": "02fcaa9a52e52943108f905abc115daea2243eba97bfdc5f56f51f783fe792de",
+   "S100YYT4": "861de89d99d2463f9c2230fdbf596c1e75eba5a59096efe969d72cdb3f272828",
+   "S100YYT8": "e8c2c6cfc2079b24938e78c702559d5ac9b339d06d775cfd542ecb0143ce93d0",
+   "S100YYUD": "944ed61c7b78dc48722f34796f520d6dbc86bbeaaf82a151913f0840133ffcd4",
+   "S100YYVN": "20d381114819b7608f4113d37fcd8920357a5da05f37f4542aaf6b5b3e92198d",
+   "S100YZ31": "7365ffce12ee1cb1514b83e52a30aa4c004bbd94077d42146a376d6f096ba06d",
+   "S100YZ4E": "761f019f4c1533ba195b6622f34b42004f9536c078580135d4fec20dd5aa8ec5",
+   "S100YZ7E": "bd2fe7969c31528f9c1609c85cb2dd8bb26aad2469ee060e3227b7f9367353f3",
+   "S100YZCT": "b31651903185ef1afe2c8141b96646a947721b2333311a183d2f49348af7659e",
+   "S100YZEV": "1ca23bba5f21e83d0d8784dbb0f7ece069e59c43d9f81c192918223a90cf6f70",
+   "S100Z0OS": "f646974b4447f633f41d844333681f2bf71ae77558693786d3edd8dd76b3987f",
+   "S100Z1WR": "1d67d1910fa96fa0465206480400e99f7c9fb3c66c577171a833699ec3682278",
+   "S100Z35K": "53991c2cc3021f050fac8ff1f1c16a3b7f3c2c8cd1a923706977f0d1f4a403ed",
+   "S100Z37J": "74c51c983fe55d0bfbaf14e6c3a298a4aeb6ce0940c9acb9ab60f2ee37ade432",
+   "S100Z38F": "02358db58564bca3b19b58bb60b0cca0c01f2b8c305366a7ea1083ed1edd9d70",
+   "S100Z39P": "52ece970160e6d7e45d9d0d4aebbbe50094f726ab55db4a3ea1a409de3a5c1e9",
+   "S100Z3BW": "57a1433e56905297735294f5e48795e48eba1ccbe29e5ea54000d58bf3c80b7c",
+   "S100Z3CI": "35654a6bfa47e203c92c5bc33391bc48c68e792a29129996676ecfbf83da63b9",
+   "S100Z3CO": "45a71507465dbf9c1cbf82f23d378aca7a0330f78809c403ac23c82f9c7d8d06",
+   "S100Z3DU": "edb9a67e11131f7bc189fb071128a65eef328e515528056b0550a27e006db61f",
+   "S100Z3FB": "d029feb21328c92305dc4222722ea1ffd294b649e86a944b89ccfcb989f963b0",
+   "S100Z3H2": "946b4a8fa94cffe2120dff46be0df296adb2f7a60b42e769398bb7fbefcebd3b",
+   "S100Z3HP": "a3170c66ce46185f02e8f5274c9d4f646ef97b089d13e6f7f4e65539e8d69719",
+   "S100Z3IZ": "d3183747336ee1ab3fd80b2114046f3cf15e5130c2cddd7110132b644075e0bb",
+   "S100Z3JY": "5851a52ff80044bbb31f622f847461b1fccb5fc802a555dba868fd983372efbf",
+   "S100Z3L6": "8ecaed66f2f15d9251f3daf14ff53dd6e2c2d248db8fc691bf5bc63cfd73f12d",
+   "S100Z3LJ": "4876a2b52b30706b7c38ee925108dbb1eb8e5f3b8fd0dc33031aeb54349ef051",
+   "S100Z3PS": "55ab0bb442c1106cd119ecfc3c6ed1af5597d2e21b344bad938addfc034e2152",
+   "S100Z3V1": "79ae06b59b670e21bcd00883d58dc37399d06a5d27490e04d7bf75f6dd55cbf6",
+   "S100Z404": "81de2055f7dc51ded49fad1d19291bbc84c59c9a26a23e1b634b2f9b01ce24ac",
+   "S100Z40G": "4cfd8ff692f81692cf79f9acfc71af0265e161dd4852755e01d84ebdd934c322",
+   "S100Z40H": "566f171ee5e55dc2b12b7f84dd1c6c481642683b5feba49baa290fe830645c3e",
+   "S100Z42X": "c9337c162e23e2808f73cb0318cfd96e36c25915cc6aaaa8a9eccc974557bbbc",
+   "S100Z433": "7e033584d1c9975a93a07a4c337b403119581b96dd59c4bdfa056a17a03cba7f",
+   "S100Z448": "ab1cb84c0f983f8527accda1e6b7a2219f2950082090c4f1bcb2326ca42bb873",
+   "S100Z461": "b3d46992ceb5eb86b9bd230a1ab34d06bbf031fc9182d29cb211830afcd39b6d",
+   "S100Z46V": "ac0a65a02d908b0dbfd4a56cc46cf0eb5384ef5d7db7926b244ca7443b30c9f4",
+   "S100Z48T": "3aad9a94337487665f23b2066612ca3cf7ece7b596b47a6885e5975d4a00c9b2",
+   "S100Z492": "eab8422ec94cf9ed7f5ccc9d8eb43fa548ad5abe4d9899223f060f4a4de84396",
+   "S100Z4B6": "d617b6e1807c8aa6d2b1269f6b25ff57a6a71dbf683020f1859d2d4a04c02d26",
+   "S100Z4DE": "5f154b2a5ba081abe7495fabc2cf6aae795cf92b1ad02808954d2befe424aa43",
+   "S100Z4GF": "778a6a113f4ee1e2fc40b64375e55273cd38a15906271e08bd95415cf49d4a9e",
+   "S100Z4J8": "2de15610c9b207fdb286035fb76b30c1ac88d6ad16e8356a3517bb99ae453214",
+   "S100Z4LC": "13cf3587a467a0af3869d0ecaa8d8a921e4d9fcb881b6bf369a5734a4060714d",
+   "S100Z4N9": "9b695ec4541d08acbe57eb9b52e7378b61ab9d67f0d140e08bdaa62a0d0a1717",
+   "S100Z4PA": "e4d7621bd1f65b451037db3bde4c5cb23297e59a7f9ba830b3bfcf5b62f8b3c7",
+   "S100Z4Q1": "0731a291f10af5dd207e05d54df8e2b5dc34e79a84de94af1c1a5d4e207228f6",
+   "S100Z4R8": "b8bb37a7c8984f5bf7d7ac5761df502feea2fe35b00b3b3f25d4bd194e69b862",
+   "S100Z55N": "fa1db1d43ef6eac7f682b728128b6f13e32c130086e49f93aad60e4bfb4a2e37",
+   "S100Z5CH": "818194e233e7ceea8f3070289776425a8f314ed647310d917a180a5bf3d5d30e",
+   "S100Z5DN": "2b988d6b20de5de7b7eae20d28f5085117c553331ac1b979576de60fa4208114",
+   "S100Z6XO": "d94d447b6f8182d770179d58e60c03962ccb1f9a6251dff793239e8e4663ac85"
+  },
+  "新しい標本 30 書類の sha256": {
+   "S100YW7F": "73b4aa4f001455b07337ada7deb2ddfe0389969207760996985f44d22776c7a9",
+   "S100YX88": "c568596bb8402601e36071e78e0548175bde593cb8b238d473fa5aeb8cf67492",
+   "S100YXFQ": "2c9a642213a6ec03529c479f860bd2ae32c887061a512ceb6def15701927de9f",
+   "S100YXG0": "eff54e2257ada64e2a6137583fcff2dc06ca3e2e3837f2c7799d28b83500d495",
+   "S100YXXB": "f8b798f5e2b0d97bc1ab3af67d8ba672e081e2540c45c82c3313e4d0d70b127f",
+   "S100YXZQ": "69ab15ff52d16d2d28521b1e7d7cd185bbd36726cce5f46156cadc7880e091ff",
+   "S100YY3A": "5746323a56b68618499ed4539fe79826c0b1f17fc9b7c98579c529e2bb90ee8b",
+   "S100YYAI": "5f899f5f272d76de1425d1d4d2e625d23ee2ed19ba4eb9305e72082d26546e93",
+   "S100YYEO": "954acdde95c0aaea7e42d9728db36df432ecb06195ebd2bd602cbbc879b45c64",
+   "S100YYF5": "528e757682c7aad4876d92c444fa49323bab28c86077bdfa1eb061eccd3f1d77",
+   "S100YYFP": "2badc60ad94066994be333aec1c7ffa7d421834d0d351d8bce960d7e9f50445d",
+   "S100YYGF": "a2226149e6296710299338387f348c5c2a03011b42d683e6042f68d939765849",
+   "S100YYH7": "7753678234297a2b3a30b6214f65276f4a5e5b57fa34cc101a164a5a6b48cb9d",
+   "S100YYHK": "b5979477967f73f82c9339e12ab34d2d3c2f99bc04af35d945dc27773f01b967",
+   "S100YYIV": "22b46ebe8c80f1737e29c7af34cb64de9e9cc632f9d9e4bcc7997b667d55b5d4",
+   "S100YYKZ": "fde0c1366cdec471fae83af9adc2108b352e2743aa1e32d81c67f980f976ddff",
+   "S100YYMC": "ee96a4855753903df29c15328524e800f8c4fce55a0831c7ac963e354cd74e42",
+   "S100YYMP": "9053500dbc647070018e5b6f523b8b715246afe19b2eb77784bb900e7c176935",
+   "S100YYQN": "e08e430656361c7a6285ede8ec93f8e89bf9c9f8b39da69902fee9f4566a421c",
+   "S100YYQQ": "ab8fe631dbbff13db037b8c68c71b511d5c68f9d88b06d069e444e34a73ef1bc",
+   "S100YYSK": "cd8940d3d48997819dabfff2bca306d55b6323c928a3cfca247c8a8902bd9aae",
+   "S100YYUS": "6a7dbefaf93fc6c799d8eaad874d7a36c96e14813583daf522708d78e6782894",
+   "S100YYVJ": "54a5acf1823560cd8199d0387274e413ac6b756aafba4838abd52fc29f5be681",
+   "S100YYYH": "627f7c4b9d137a4dd7beb676e3383b90d5d37a8b2f3ed82e3f90df5a21977baf",
+   "S100YZ2B": "5a02794170d40c48f7636796cd7be350d79c5a7c07b5ce6aedb384024d4d7903",
+   "S100YZ4M": "d594dfb4ab9d2fdab1a497b9b42c6968a49cc5aa201f626346165ef675f79520",
+   "S100YZ57": "707252c0c80574c3309f9d2ed3145719b64f0e81f7c0a6210400e70019d4ac37",
+   "S100YZ9G": "39bc6a5ea3e1fac1391e3911c465bdda0717f6df961310f3dd41ae0dbb72df40",
+   "S100YZC8": "c6239bdb06b0e1396144369bfdf49b43a84d1fe997dcbc6f7930d85733eee97c",
+   "S100YZFP": "707f9623f7a3e424504f623f020036cf9b75ac55b460e9db48eabea5ef58fcb6"
+  },
+  "手元の 67 が P26 の記録の入力と同じ": true,
+  "新しい標本 30 が取得の記録の入力と同じ": true,
+  "regress97 の記録の sha256": "7c98ceea69a00841e6e9085f3ab802f634117a3e9d58243c1bb73feed02a2517",
+  "置き場": "~/.cache/audit-core/edinet/ と ~/.cache/audit-core/edinet-fresh-2026-10-21/(どちらも読むだけ。1 file も足さない)",
+  "試験の赤の入力 file の sha256": "5b3c3da82e0f9c4c102004430a1c455180703ae3fc6926afa343199364b04de5"
+ },
+ "cache の前後": {
+  "前": {
+   "edinet": {
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "edinet-fresh-2026-10-21": {
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   }
+  },
+  "後": {
+   "edinet": {
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "edinet-fresh-2026-10-21": {
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   }
+  },
+  "変化なし": true
+ },
+ "S1": {
+  "手元の 67": {
+   "書類": 67,
+   "claims": 7799,
+   "既定と P27 明示で違った書類": 0,
+   "対照(既定を実行中だけ P26 に戻す)で違った書類": 67,
+   "既定の 4 state": {
+    "GROUNDED": 4371,
+    "VALUE_MISMATCH": 433,
+    "UNVERIFIABLE": 1601,
+    "POINTER_NOT_FOUND": 1394
+   },
+   "P26 の 4 state": {
+    "GROUNDED": 4371,
+    "VALUE_MISMATCH": 433,
+    "UNVERIFIABLE": 1579,
+    "POINTER_NOT_FOUND": 1416
+   },
+   "既定と P26 で state の違う行": 28,
+   "state は同じで reason か pointer が違う行": 0,
+   "向き": {
+    "POINTER_NOT_FOUND → UNVERIFIABLE": 25,
+    "UNVERIFIABLE → POINTER_NOT_FOUND": 3
+   },
+   "GROUNDED を離れる行": 0,
+   "VALUE_MISMATCH に入る行": 0,
+   "新しい GROUNDED": 0,
+   "regress97 の P27 の 4 state と違う書類": [],
+   "regress97 の P27 の出力の sha256 と違う書類": [],
+   "regress97 の動いた行(P26 → P27)と同じ集合": true,
+   "regress97 に無い動いた行": 0,
+   "regress97 に在って今回に無い行": 0
+  },
+  "新しい標本 30": {
+   "書類": 30,
+   "claims": 3923,
+   "既定と P27 明示で違った書類": 0,
+   "対照(既定を実行中だけ P26 に戻す)で違った書類": 30,
+   "既定の 4 state": {
+    "GROUNDED": 2194,
+    "VALUE_MISMATCH": 250,
+    "UNVERIFIABLE": 787,
+    "POINTER_NOT_FOUND": 692
+   },
+   "P26 の 4 state": {
+    "GROUNDED": 2194,
+    "VALUE_MISMATCH": 250,
+    "UNVERIFIABLE": 774,
+    "POINTER_NOT_FOUND": 705
+   },
+   "既定と P26 で state の違う行": 15,
+   "state は同じで reason か pointer が違う行": 0,
+   "向き": {
+    "POINTER_NOT_FOUND → UNVERIFIABLE": 14,
+    "UNVERIFIABLE → POINTER_NOT_FOUND": 1
+   },
+   "GROUNDED を離れる行": 0,
+   "VALUE_MISMATCH に入る行": 0,
+   "新しい GROUNDED": 0,
+   "regress97 の P27 の 4 state と違う書類": [],
+   "regress97 の P27 の出力の sha256 と違う書類": [],
+   "regress97 の動いた行(P26 → P27)と同じ集合": true,
+   "regress97 に無い動いた行": 0,
+   "regress97 に在って今回に無い行": 0
+  },
+  "書類別": [
+   {
+    "doc": "S100YMFV",
+    "標本": "手元の 67",
+    "zip の sha256": "4a5982e7447d6e0614c6ad12e7c091d462ca61a0128c2ce2af957a8bdfe1d52c",
+    "claims": 133,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "e8d94dd13eee63d15233120147550f5cbd66dc8136505a7ec9ac55ed024d09b7",
+    "既定の state": {
+     "GROUNDED": 83,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 35,
+     "VALUE_MISMATCH": 1
+    },
+    "P27 明示の state": {
+     "GROUNDED": 83,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 35,
+     "VALUE_MISMATCH": 1
+    },
+    "P26 の state": {
+     "GROUNDED": 83,
+     "POINTER_NOT_FOUND": 15,
+     "UNVERIFIABLE": 34,
+     "VALUE_MISMATCH": 1
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100YUHC",
+    "標本": "手元の 67",
+    "zip の sha256": "cd212b810b33d07bd9723ed9518c299dcfaf88fc434f7026211206a9d5f6d450",
+    "claims": 156,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "9766edda8e0f68a0a2b400938a1e0c15972259d53891942da63bf9f8f56f20e5",
+    "既定の state": {
+     "GROUNDED": 69,
+     "POINTER_NOT_FOUND": 40,
+     "UNVERIFIABLE": 38,
+     "VALUE_MISMATCH": 9
+    },
+    "P27 明示の state": {
+     "GROUNDED": 69,
+     "POINTER_NOT_FOUND": 40,
+     "UNVERIFIABLE": 38,
+     "VALUE_MISMATCH": 9
+    },
+    "P26 の state": {
+     "GROUNDED": 69,
+     "POINTER_NOT_FOUND": 42,
+     "UNVERIFIABLE": 36,
+     "VALUE_MISMATCH": 9
+    },
+    "state・reason・pointers のどれかが違う行の数": 2
+   },
+   {
+    "doc": "S100YWGX",
+    "標本": "手元の 67",
+    "zip の sha256": "11a87aa7ddda60db6d51910decfbf8a643621e520f582ba920ecece743604cec",
+    "claims": 141,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "a4ec0b14da14cfbba16ba08e3ddf440b53f608d340943551ed2a70a674d79519",
+    "既定の state": {
+     "GROUNDED": 55,
+     "POINTER_NOT_FOUND": 29,
+     "UNVERIFIABLE": 47,
+     "VALUE_MISMATCH": 10
+    },
+    "P27 明示の state": {
+     "GROUNDED": 55,
+     "POINTER_NOT_FOUND": 29,
+     "UNVERIFIABLE": 47,
+     "VALUE_MISMATCH": 10
+    },
+    "P26 の state": {
+     "GROUNDED": 55,
+     "POINTER_NOT_FOUND": 29,
+     "UNVERIFIABLE": 47,
+     "VALUE_MISMATCH": 10
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YXF5",
+    "標本": "手元の 67",
+    "zip の sha256": "2fea27f5328ec8fb528a08b681a747d6c4d43c8edb843507815db774179a9b1c",
+    "claims": 101,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "c207b268bc46f0e964c08e0cbb432a5a7bb7af3717424eb0af4c2fe1c88a7850",
+    "既定の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 32,
+     "UNVERIFIABLE": 14,
+     "VALUE_MISMATCH": 12
+    },
+    "P27 明示の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 32,
+     "UNVERIFIABLE": 14,
+     "VALUE_MISMATCH": 12
+    },
+    "P26 の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 32,
+     "UNVERIFIABLE": 14,
+     "VALUE_MISMATCH": 12
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YXGH",
+    "標本": "手元の 67",
+    "zip の sha256": "29b7eb0b24e579a5b2ae9ce664d58af2d1d3cd0ffe4aec23fd7a45bd7fc36cbf",
+    "claims": 129,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "876ea165708b4b6e98c23276d0e9bc1915e527ed10f8ce8df94be83e920efaa5",
+    "既定の state": {
+     "GROUNDED": 75,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 5
+    },
+    "P27 明示の state": {
+     "GROUNDED": 75,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 5
+    },
+    "P26 の state": {
+     "GROUNDED": 75,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 5
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YXLE",
+    "標本": "手元の 67",
+    "zip の sha256": "906951be808f0ebbe406c2689b577b6f198d68d0677d84ff2a9d59e226793d20",
+    "claims": 121,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "53672e683892c70d39e6a65796d45375ba6f4595d07767286824b58227eaac4b",
+    "既定の state": {
+     "GROUNDED": 63,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 11
+    },
+    "P27 明示の state": {
+     "GROUNDED": 63,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 11
+    },
+    "P26 の state": {
+     "GROUNDED": 63,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 11
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YXMA",
+    "標本": "手元の 67",
+    "zip の sha256": "511f1811cebc9bd7d72d069652effe99ebdb271ae99823c0115f89d697ae2726",
+    "claims": 119,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "76fbdd13789d1edb254c387540df3ef2cbb2bd593782264089b3c5656b8b71e2",
+    "既定の state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 25,
+     "UNVERIFIABLE": 24,
+     "VALUE_MISMATCH": 6
+    },
+    "P27 明示の state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 25,
+     "UNVERIFIABLE": 24,
+     "VALUE_MISMATCH": 6
+    },
+    "P26 の state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 25,
+     "UNVERIFIABLE": 24,
+     "VALUE_MISMATCH": 6
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYDI",
+    "標本": "手元の 67",
+    "zip の sha256": "430ae0aec4807aa73b35b8409a8075b37b9487357d129b10bc1194905f87c753",
+    "claims": 145,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "5499c481104f4535af67868b99afbaa2a4b2f3d2e9049cf5f4d78b253c6b77d7",
+    "既定の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 27,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 9
+    },
+    "P27 明示の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 27,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 9
+    },
+    "P26 の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 27,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 9
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYIA",
+    "標本": "手元の 67",
+    "zip の sha256": "c37346d3285f33377d82e103a5192d496c85da7dada60754b1a7a0ee1968bf42",
+    "claims": 139,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "85bc0b91b3df0c57a6ccb06fa69dcf99ca0ca42c58c7d39d5735930a338bb533",
+    "既定の state": {
+     "GROUNDED": 89,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 30,
+     "VALUE_MISMATCH": 7
+    },
+    "P27 明示の state": {
+     "GROUNDED": 89,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 30,
+     "VALUE_MISMATCH": 7
+    },
+    "P26 の state": {
+     "GROUNDED": 89,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 30,
+     "VALUE_MISMATCH": 7
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYK8",
+    "標本": "手元の 67",
+    "zip の sha256": "512b316c0739e2cb83c465ec7ffae4474efebf4ffbc234a70270346cf1e1caad",
+    "claims": 128,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "057a6801f77046d2b6af1a2d64d1f5fcf93ba528176426bcce6df338893eb61f",
+    "既定の state": {
+     "GROUNDED": 71,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 14
+    },
+    "P27 明示の state": {
+     "GROUNDED": 71,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 14
+    },
+    "P26 の state": {
+     "GROUNDED": 71,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 14
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYN7",
+    "標本": "手元の 67",
+    "zip の sha256": "646d95e04a253fc996dd17a231905ecb662686bd5c77f1c7730f51161c59e75a",
+    "claims": 152,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "1eeb1bac46e920de0db64377c96009af4d617c0e8ed34efee787244d13cfe70a",
+    "既定の state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 35,
+     "UNVERIFIABLE": 48,
+     "VALUE_MISMATCH": 12
+    },
+    "P27 明示の state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 35,
+     "UNVERIFIABLE": 48,
+     "VALUE_MISMATCH": 12
+    },
+    "P26 の state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 35,
+     "UNVERIFIABLE": 48,
+     "VALUE_MISMATCH": 12
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYOS",
+    "標本": "手元の 67",
+    "zip の sha256": "7993b5ff710ccd33dde89aa363438ef1c7b52f4e47d8af28ce841ee2bcac3bbd",
+    "claims": 81,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "531d3232c1282eacfb7296f8802b168c3951f9d5052bf21294739d6603b65356",
+    "既定の state": {
+     "GROUNDED": 29,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 9
+    },
+    "P27 明示の state": {
+     "GROUNDED": 29,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 9
+    },
+    "P26 の state": {
+     "GROUNDED": 29,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 9
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYQX",
+    "標本": "手元の 67",
+    "zip の sha256": "a0313840d8ecc13e8470e34f54451a0207c5510ffd0a9c3860e50c9640a9cdf0",
+    "claims": 110,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "50385307eb887e585864e89a1fb9cedbe9d0c65899adc8413eed1d31d545841d",
+    "既定の state": {
+     "GROUNDED": 44,
+     "POINTER_NOT_FOUND": 45,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 5
+    },
+    "P27 明示の state": {
+     "GROUNDED": 44,
+     "POINTER_NOT_FOUND": 45,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 5
+    },
+    "P26 の state": {
+     "GROUNDED": 44,
+     "POINTER_NOT_FOUND": 45,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 5
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYRG",
+    "標本": "手元の 67",
+    "zip の sha256": "e1fdf292e146deb540a634b7c0bab060b19d29f08552f1276617a9e8309702fe",
+    "claims": 96,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "f081b5fec26c069b02c1c6cebb5d2c474e250375a61132333e5e57de8f8f5baf",
+    "既定の state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 22,
+     "VALUE_MISMATCH": 12
+    },
+    "P27 明示の state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 22,
+     "VALUE_MISMATCH": 12
+    },
+    "P26 の state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 22,
+     "VALUE_MISMATCH": 12
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYRV",
+    "標本": "手元の 67",
+    "zip の sha256": "b4f42344bb48be29c047e7f9fd825b0b3f2e2ef8d62f84d29c534cd08ae2c52a",
+    "claims": 141,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "a3349a7abaa671b54f61a9191f4bba442a2afdd6f114f1b0b9b850d8a7290760",
+    "既定の state": {
+     "GROUNDED": 67,
+     "POINTER_NOT_FOUND": 28,
+     "UNVERIFIABLE": 38,
+     "VALUE_MISMATCH": 8
+    },
+    "P27 明示の state": {
+     "GROUNDED": 67,
+     "POINTER_NOT_FOUND": 28,
+     "UNVERIFIABLE": 38,
+     "VALUE_MISMATCH": 8
+    },
+    "P26 の state": {
+     "GROUNDED": 67,
+     "POINTER_NOT_FOUND": 28,
+     "UNVERIFIABLE": 38,
+     "VALUE_MISMATCH": 8
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYS4",
+    "標本": "手元の 67",
+    "zip の sha256": "02fcaa9a52e52943108f905abc115daea2243eba97bfdc5f56f51f783fe792de",
+    "claims": 116,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "b02c823771bd2b178a4c36a4679f7713e2061a0d6a2c8875810fab528455e38b",
+    "既定の state": {
+     "GROUNDED": 66,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 13
+    },
+    "P27 明示の state": {
+     "GROUNDED": 66,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 13
+    },
+    "P26 の state": {
+     "GROUNDED": 66,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 13
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYT4",
+    "標本": "手元の 67",
+    "zip の sha256": "861de89d99d2463f9c2230fdbf596c1e75eba5a59096efe969d72cdb3f272828",
+    "claims": 119,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "551c5cbaef190e56f1ad0af50108b7fb1f9d2e76cee2c48b94d17a42e78270b9",
+    "既定の state": {
+     "GROUNDED": 69,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 31,
+     "VALUE_MISMATCH": 5
+    },
+    "P27 明示の state": {
+     "GROUNDED": 69,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 31,
+     "VALUE_MISMATCH": 5
+    },
+    "P26 の state": {
+     "GROUNDED": 69,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 31,
+     "VALUE_MISMATCH": 5
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYT8",
+    "標本": "手元の 67",
+    "zip の sha256": "e8c2c6cfc2079b24938e78c702559d5ac9b339d06d775cfd542ecb0143ce93d0",
+    "claims": 153,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "a04a95f844ec0c339ecf698c0f06b1c5f1262563e6c871c0f94abf8d483b9a34",
+    "既定の state": {
+     "GROUNDED": 37,
+     "POINTER_NOT_FOUND": 92,
+     "UNVERIFIABLE": 24
+    },
+    "P27 明示の state": {
+     "GROUNDED": 37,
+     "POINTER_NOT_FOUND": 92,
+     "UNVERIFIABLE": 24
+    },
+    "P26 の state": {
+     "GROUNDED": 37,
+     "POINTER_NOT_FOUND": 92,
+     "UNVERIFIABLE": 24
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYUD",
+    "標本": "手元の 67",
+    "zip の sha256": "944ed61c7b78dc48722f34796f520d6dbc86bbeaaf82a151913f0840133ffcd4",
+    "claims": 67,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "acfec68c4e39ece7ada73411cdcafeba0f976ecc0abb4a86aeb6626b93263ee7",
+    "既定の state": {
+     "GROUNDED": 36,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 7
+    },
+    "P27 明示の state": {
+     "GROUNDED": 36,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 7
+    },
+    "P26 の state": {
+     "GROUNDED": 36,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 7
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYVN",
+    "標本": "手元の 67",
+    "zip の sha256": "20d381114819b7608f4113d37fcd8920357a5da05f37f4542aaf6b5b3e92198d",
+    "claims": 101,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "34d01596fee9f3b085bea2d11caae275056d243c6bdb56fa2d1ea7e379bb54b8",
+    "既定の state": {
+     "GROUNDED": 35,
+     "POINTER_NOT_FOUND": 23,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 15
+    },
+    "P27 明示の state": {
+     "GROUNDED": 35,
+     "POINTER_NOT_FOUND": 23,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 15
+    },
+    "P26 の state": {
+     "GROUNDED": 35,
+     "POINTER_NOT_FOUND": 23,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 15
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YZ31",
+    "標本": "手元の 67",
+    "zip の sha256": "7365ffce12ee1cb1514b83e52a30aa4c004bbd94077d42146a376d6f096ba06d",
+    "claims": 76,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "026b237dc57c19c528f6b100e8be150935470e8d09a6742aecac3ee3c1ca79ec",
+    "既定の state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 13,
+     "VALUE_MISMATCH": 1
+    },
+    "P27 明示の state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 13,
+     "VALUE_MISMATCH": 1
+    },
+    "P26 の state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 13,
+     "VALUE_MISMATCH": 1
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YZ4E",
+    "標本": "手元の 67",
+    "zip の sha256": "761f019f4c1533ba195b6622f34b42004f9536c078580135d4fec20dd5aa8ec5",
+    "claims": 98,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "2e6c3cda996979502cf3a2c66da556cd62554724d3d93877c3c6350adbb490a6",
+    "既定の state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 21
+    },
+    "P27 明示の state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 21
+    },
+    "P26 の state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 21
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YZ7E",
+    "標本": "手元の 67",
+    "zip の sha256": "bd2fe7969c31528f9c1609c85cb2dd8bb26aad2469ee060e3227b7f9367353f3",
+    "claims": 87,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "efc2db5ce94727d74f2afd925229d8bababa500a18fb1410c6ff85756b24d340",
+    "既定の state": {
+     "GROUNDED": 32,
+     "POINTER_NOT_FOUND": 34,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 2
+    },
+    "P27 明示の state": {
+     "GROUNDED": 32,
+     "POINTER_NOT_FOUND": 34,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 2
+    },
+    "P26 の state": {
+     "GROUNDED": 32,
+     "POINTER_NOT_FOUND": 34,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 2
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YZCT",
+    "標本": "手元の 67",
+    "zip の sha256": "b31651903185ef1afe2c8141b96646a947721b2333311a183d2f49348af7659e",
+    "claims": 158,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "d0a58e623b33be41bab8ef248c3feff56c2fd118d8621c6989be6b9710ddbcd6",
+    "既定の state": {
+     "GROUNDED": 74,
+     "POINTER_NOT_FOUND": 35,
+     "UNVERIFIABLE": 44,
+     "VALUE_MISMATCH": 5
+    },
+    "P27 明示の state": {
+     "GROUNDED": 74,
+     "POINTER_NOT_FOUND": 35,
+     "UNVERIFIABLE": 44,
+     "VALUE_MISMATCH": 5
+    },
+    "P26 の state": {
+     "GROUNDED": 74,
+     "POINTER_NOT_FOUND": 35,
+     "UNVERIFIABLE": 44,
+     "VALUE_MISMATCH": 5
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YZEV",
+    "標本": "手元の 67",
+    "zip の sha256": "1ca23bba5f21e83d0d8784dbb0f7ece069e59c43d9f81c192918223a90cf6f70",
+    "claims": 76,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "ce55209feed33838af804ebe8d5d5b46317f9733c8e4755d0d12c0e067033e82",
+    "既定の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 7,
+     "UNVERIFIABLE": 20,
+     "VALUE_MISMATCH": 6
+    },
+    "P27 明示の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 7,
+     "UNVERIFIABLE": 20,
+     "VALUE_MISMATCH": 6
+    },
+    "P26 の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 18,
+     "VALUE_MISMATCH": 6
+    },
+    "state・reason・pointers のどれかが違う行の数": 2
+   },
+   {
+    "doc": "S100Z0OS",
+    "標本": "手元の 67",
+    "zip の sha256": "f646974b4447f633f41d844333681f2bf71ae77558693786d3edd8dd76b3987f",
+    "claims": 105,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "7481309bd0f98263c8da68571bf163acf85f2e761b03cd52b0dd5c69715a7a65",
+    "既定の state": {
+     "GROUNDED": 54,
+     "POINTER_NOT_FOUND": 37,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 6
+    },
+    "P27 明示の state": {
+     "GROUNDED": 54,
+     "POINTER_NOT_FOUND": 37,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 6
+    },
+    "P26 の state": {
+     "GROUNDED": 54,
+     "POINTER_NOT_FOUND": 37,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 6
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z1WR",
+    "標本": "手元の 67",
+    "zip の sha256": "1d67d1910fa96fa0465206480400e99f7c9fb3c66c577171a833699ec3682278",
+    "claims": 91,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "cb2edbc6c210b32ac7821f0f8e0160d20e8c3333b1546f5a1c00c73d011012d9",
+    "既定の state": {
+     "GROUNDED": 55,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 10,
+     "VALUE_MISMATCH": 4
+    },
+    "P27 明示の state": {
+     "GROUNDED": 55,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 10,
+     "VALUE_MISMATCH": 4
+    },
+    "P26 の state": {
+     "GROUNDED": 55,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 10,
+     "VALUE_MISMATCH": 4
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z35K",
+    "標本": "手元の 67",
+    "zip の sha256": "53991c2cc3021f050fac8ff1f1c16a3b7f3c2c8cd1a923706977f0d1f4a403ed",
+    "claims": 133,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "11dd2d740e3e699e47d4bffadad25df65c22333e7f9847de11a9698217b1e405",
+    "既定の state": {
+     "GROUNDED": 24,
+     "POINTER_NOT_FOUND": 73,
+     "UNVERIFIABLE": 33,
+     "VALUE_MISMATCH": 3
+    },
+    "P27 明示の state": {
+     "GROUNDED": 24,
+     "POINTER_NOT_FOUND": 73,
+     "UNVERIFIABLE": 33,
+     "VALUE_MISMATCH": 3
+    },
+    "P26 の state": {
+     "GROUNDED": 24,
+     "POINTER_NOT_FOUND": 79,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 3
+    },
+    "state・reason・pointers のどれかが違う行の数": 6
+   },
+   {
+    "doc": "S100Z37J",
+    "標本": "手元の 67",
+    "zip の sha256": "74c51c983fe55d0bfbaf14e6c3a298a4aeb6ce0940c9acb9ab60f2ee37ade432",
+    "claims": 129,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "f46b5af013b2cd733e0a6f382a26414240c855922d1bb515193fe4b096d63282",
+    "既定の state": {
+     "GROUNDED": 87,
+     "POINTER_NOT_FOUND": 17,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 6
+    },
+    "P27 明示の state": {
+     "GROUNDED": 87,
+     "POINTER_NOT_FOUND": 17,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 6
+    },
+    "P26 の state": {
+     "GROUNDED": 87,
+     "POINTER_NOT_FOUND": 18,
+     "UNVERIFIABLE": 18,
+     "VALUE_MISMATCH": 6
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100Z38F",
+    "標本": "手元の 67",
+    "zip の sha256": "02358db58564bca3b19b58bb60b0cca0c01f2b8c305366a7ea1083ed1edd9d70",
+    "claims": 147,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "5b2fd657720930859908e08cb04ccded78cd16443dea58d472571b23391893b2",
+    "既定の state": {
+     "GROUNDED": 70,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 44,
+     "VALUE_MISMATCH": 11
+    },
+    "P27 明示の state": {
+     "GROUNDED": 70,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 44,
+     "VALUE_MISMATCH": 11
+    },
+    "P26 の state": {
+     "GROUNDED": 70,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 35,
+     "VALUE_MISMATCH": 11
+    },
+    "state・reason・pointers のどれかが違う行の数": 9
+   },
+   {
+    "doc": "S100Z39P",
+    "標本": "手元の 67",
+    "zip の sha256": "52ece970160e6d7e45d9d0d4aebbbe50094f726ab55db4a3ea1a409de3a5c1e9",
+    "claims": 103,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "6f088b616eddb6b86a70d543c74aa4b6df643f1c9b326b9df8cde94cbbd77e6d",
+    "既定の state": {
+     "GROUNDED": 79,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 2
+    },
+    "P27 明示の state": {
+     "GROUNDED": 79,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 2
+    },
+    "P26 の state": {
+     "GROUNDED": 79,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 2
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z3BW",
+    "標本": "手元の 67",
+    "zip の sha256": "57a1433e56905297735294f5e48795e48eba1ccbe29e5ea54000d58bf3c80b7c",
+    "claims": 145,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "af0e67ccc768f3f79508ecf2d320b8cbc74468ce396d2ee9c1f8c61c499ea20a",
+    "既定の state": {
+     "GROUNDED": 94,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 40,
+     "VALUE_MISMATCH": 3
+    },
+    "P27 明示の state": {
+     "GROUNDED": 94,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 40,
+     "VALUE_MISMATCH": 3
+    },
+    "P26 の state": {
+     "GROUNDED": 94,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 39,
+     "VALUE_MISMATCH": 3
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100Z3CI",
+    "標本": "手元の 67",
+    "zip の sha256": "35654a6bfa47e203c92c5bc33391bc48c68e792a29129996676ecfbf83da63b9",
+    "claims": 142,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "1703b1b9d3897fe74550723d84bb592ecf761bc30344116f710e70fac52b38d7",
+    "既定の state": {
+     "GROUNDED": 105,
+     "POINTER_NOT_FOUND": 7,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 5
+    },
+    "P27 明示の state": {
+     "GROUNDED": 105,
+     "POINTER_NOT_FOUND": 7,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 5
+    },
+    "P26 の state": {
+     "GROUNDED": 105,
+     "POINTER_NOT_FOUND": 7,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 5
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z3CO",
+    "標本": "手元の 67",
+    "zip の sha256": "45a71507465dbf9c1cbf82f23d378aca7a0330f78809c403ac23c82f9c7d8d06",
+    "claims": 143,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "b45b825bdc9095ee6207bfd384084f6d50f3c385d304cf0cece054ee19abea2a",
+    "既定の state": {
+     "GROUNDED": 85,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 33,
+     "VALUE_MISMATCH": 5
+    },
+    "P27 明示の state": {
+     "GROUNDED": 85,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 33,
+     "VALUE_MISMATCH": 5
+    },
+    "P26 の state": {
+     "GROUNDED": 85,
+     "POINTER_NOT_FOUND": 19,
+     "UNVERIFIABLE": 34,
+     "VALUE_MISMATCH": 5
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100Z3DU",
+    "標本": "手元の 67",
+    "zip の sha256": "edb9a67e11131f7bc189fb071128a65eef328e515528056b0550a27e006db61f",
+    "claims": 91,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "1545a0e6970151db66cf99d77ad53034e7e84397f4d667c18ca1d2268ab9dcdd",
+    "既定の state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 8
+    },
+    "P27 明示の state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 8
+    },
+    "P26 の state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 8
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z3FB",
+    "標本": "手元の 67",
+    "zip の sha256": "d029feb21328c92305dc4222722ea1ffd294b649e86a944b89ccfcb989f963b0",
+    "claims": 148,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "78fc1d65ffe34329f437afcacc4d8be658240aef4c68763741ef2b694dd66e24",
+    "既定の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 38,
+     "VALUE_MISMATCH": 5
+    },
+    "P27 明示の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 38,
+     "VALUE_MISMATCH": 5
+    },
+    "P26 の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 38,
+     "VALUE_MISMATCH": 5
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z3H2",
+    "標本": "手元の 67",
+    "zip の sha256": "946b4a8fa94cffe2120dff46be0df296adb2f7a60b42e769398bb7fbefcebd3b",
+    "claims": 167,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "f46f62324587c54265d3c265e62f94a6711c3e7fd87d3e2225f119ef62ec52c0",
+    "既定の state": {
+     "GROUNDED": 106,
+     "POINTER_NOT_FOUND": 36,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 6
+    },
+    "P27 明示の state": {
+     "GROUNDED": 106,
+     "POINTER_NOT_FOUND": 36,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 6
+    },
+    "P26 の state": {
+     "GROUNDED": 106,
+     "POINTER_NOT_FOUND": 36,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 6
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z3HP",
+    "標本": "手元の 67",
+    "zip の sha256": "a3170c66ce46185f02e8f5274c9d4f646ef97b089d13e6f7f4e65539e8d69719",
+    "claims": 62,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "eeb36f312dca65e2cec5653bb0d2bdb872db55fe3a74ff265c50d2e5eb1ffc12",
+    "既定の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 6
+    },
+    "P27 明示の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 6
+    },
+    "P26 の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 7,
+     "VALUE_MISMATCH": 6
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100Z3IZ",
+    "標本": "手元の 67",
+    "zip の sha256": "d3183747336ee1ab3fd80b2114046f3cf15e5130c2cddd7110132b644075e0bb",
+    "claims": 121,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "668b87b96a8f1632d1c72cb3f0a78338c55b1b363be472418b6897b55d098988",
+    "既定の state": {
+     "GROUNDED": 95,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 7,
+     "VALUE_MISMATCH": 9
+    },
+    "P27 明示の state": {
+     "GROUNDED": 95,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 7,
+     "VALUE_MISMATCH": 9
+    },
+    "P26 の state": {
+     "GROUNDED": 95,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 7,
+     "VALUE_MISMATCH": 9
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z3JY",
+    "標本": "手元の 67",
+    "zip の sha256": "5851a52ff80044bbb31f622f847461b1fccb5fc802a555dba868fd983372efbf",
+    "claims": 135,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "e2756cec326333305be493d77b290a2e4cd7f02414a8d3c68f7b30af22389be6",
+    "既定の state": {
+     "GROUNDED": 85,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 14,
+     "VALUE_MISMATCH": 15
+    },
+    "P27 明示の state": {
+     "GROUNDED": 85,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 14,
+     "VALUE_MISMATCH": 15
+    },
+    "P26 の state": {
+     "GROUNDED": 85,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 14,
+     "VALUE_MISMATCH": 15
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z3L6",
+    "標本": "手元の 67",
+    "zip の sha256": "8ecaed66f2f15d9251f3daf14ff53dd6e2c2d248db8fc691bf5bc63cfd73f12d",
+    "claims": 95,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "5ccc341748d81da479b0ed67539b1fa4572bb4cab81eb2e7e846c0ecded2f379",
+    "既定の state": {
+     "GROUNDED": 49,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 7
+    },
+    "P27 明示の state": {
+     "GROUNDED": 49,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 7
+    },
+    "P26 の state": {
+     "GROUNDED": 49,
+     "POINTER_NOT_FOUND": 25,
+     "UNVERIFIABLE": 14,
+     "VALUE_MISMATCH": 7
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100Z3LJ",
+    "標本": "手元の 67",
+    "zip の sha256": "4876a2b52b30706b7c38ee925108dbb1eb8e5f3b8fd0dc33031aeb54349ef051",
+    "claims": 128,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "502f396d404d168cb31bad116ea6f5ac33c50c1df113fe6539230aad7e81e65b",
+    "既定の state": {
+     "GROUNDED": 70,
+     "POINTER_NOT_FOUND": 32,
+     "UNVERIFIABLE": 24,
+     "VALUE_MISMATCH": 2
+    },
+    "P27 明示の state": {
+     "GROUNDED": 70,
+     "POINTER_NOT_FOUND": 32,
+     "UNVERIFIABLE": 24,
+     "VALUE_MISMATCH": 2
+    },
+    "P26 の state": {
+     "GROUNDED": 70,
+     "POINTER_NOT_FOUND": 32,
+     "UNVERIFIABLE": 24,
+     "VALUE_MISMATCH": 2
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z3PS",
+    "標本": "手元の 67",
+    "zip の sha256": "55ab0bb442c1106cd119ecfc3c6ed1af5597d2e21b344bad938addfc034e2152",
+    "claims": 93,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "628bacc8ce2f440352b2dd46c45a596dbe105fd663a2ba26615b0da75059823d",
+    "既定の state": {
+     "GROUNDED": 60,
+     "POINTER_NOT_FOUND": 2,
+     "UNVERIFIABLE": 29,
+     "VALUE_MISMATCH": 2
+    },
+    "P27 明示の state": {
+     "GROUNDED": 60,
+     "POINTER_NOT_FOUND": 2,
+     "UNVERIFIABLE": 29,
+     "VALUE_MISMATCH": 2
+    },
+    "P26 の state": {
+     "GROUNDED": 60,
+     "POINTER_NOT_FOUND": 2,
+     "UNVERIFIABLE": 29,
+     "VALUE_MISMATCH": 2
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z3V1",
+    "標本": "手元の 67",
+    "zip の sha256": "79ae06b59b670e21bcd00883d58dc37399d06a5d27490e04d7bf75f6dd55cbf6",
+    "claims": 109,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "e64a8d2ecdaae8ddf26dee49ac516674577cccd60903efc53e850b2898318199",
+    "既定の state": {
+     "GROUNDED": 58,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 41,
+     "VALUE_MISMATCH": 2
+    },
+    "P27 明示の state": {
+     "GROUNDED": 58,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 41,
+     "VALUE_MISMATCH": 2
+    },
+    "P26 の state": {
+     "GROUNDED": 58,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 41,
+     "VALUE_MISMATCH": 2
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z404",
+    "標本": "手元の 67",
+    "zip の sha256": "81de2055f7dc51ded49fad1d19291bbc84c59c9a26a23e1b634b2f9b01ce24ac",
+    "claims": 84,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "1aed65fc65cf4efe01d9786c6eac9b9728a51310ed4a6ed4157c40509bb730b8",
+    "既定の state": {
+     "GROUNDED": 44,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 33,
+     "VALUE_MISMATCH": 2
+    },
+    "P27 明示の state": {
+     "GROUNDED": 44,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 33,
+     "VALUE_MISMATCH": 2
+    },
+    "P26 の state": {
+     "GROUNDED": 44,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 33,
+     "VALUE_MISMATCH": 2
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z40G",
+    "標本": "手元の 67",
+    "zip の sha256": "4cfd8ff692f81692cf79f9acfc71af0265e161dd4852755e01d84ebdd934c322",
+    "claims": 111,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "01cea792b131ff98d089cb45efd70bc68176ed4e4001c6837453c2d0bbb18f05",
+    "既定の state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 8
+    },
+    "P27 明示の state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 8
+    },
+    "P26 の state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 8
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z40H",
+    "標本": "手元の 67",
+    "zip の sha256": "566f171ee5e55dc2b12b7f84dd1c6c481642683b5feba49baa290fe830645c3e",
+    "claims": 238,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "6f9f221d60f121b1eb6dfe701c3f4df94e4db1297572174bd2377de41bbae846",
+    "既定の state": {
+     "GROUNDED": 110,
+     "POINTER_NOT_FOUND": 37,
+     "UNVERIFIABLE": 60,
+     "VALUE_MISMATCH": 31
+    },
+    "P27 明示の state": {
+     "GROUNDED": 110,
+     "POINTER_NOT_FOUND": 37,
+     "UNVERIFIABLE": 60,
+     "VALUE_MISMATCH": 31
+    },
+    "P26 の state": {
+     "GROUNDED": 110,
+     "POINTER_NOT_FOUND": 37,
+     "UNVERIFIABLE": 60,
+     "VALUE_MISMATCH": 31
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z42X",
+    "標本": "手元の 67",
+    "zip の sha256": "c9337c162e23e2808f73cb0318cfd96e36c25915cc6aaaa8a9eccc974557bbbc",
+    "claims": 79,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "f08678c4f80123706725abe9d336a6044fe338c453f186e5c6fedf68ded5417c",
+    "既定の state": {
+     "GROUNDED": 59,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 10,
+     "VALUE_MISMATCH": 4
+    },
+    "P27 明示の state": {
+     "GROUNDED": 59,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 10,
+     "VALUE_MISMATCH": 4
+    },
+    "P26 の state": {
+     "GROUNDED": 59,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 10,
+     "VALUE_MISMATCH": 4
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z433",
+    "標本": "手元の 67",
+    "zip の sha256": "7e033584d1c9975a93a07a4c337b403119581b96dd59c4bdfa056a17a03cba7f",
+    "claims": 87,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "f423c6543d68cb9bc8ef06c88799ab97dfbc797eb4d397c6e526eab27e412f93",
+    "既定の state": {
+     "GROUNDED": 56,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 11,
+     "VALUE_MISMATCH": 6
+    },
+    "P27 明示の state": {
+     "GROUNDED": 56,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 11,
+     "VALUE_MISMATCH": 6
+    },
+    "P26 の state": {
+     "GROUNDED": 56,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 11,
+     "VALUE_MISMATCH": 6
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z448",
+    "標本": "手元の 67",
+    "zip の sha256": "ab1cb84c0f983f8527accda1e6b7a2219f2950082090c4f1bcb2326ca42bb873",
+    "claims": 55,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "840c841e690f22b42666a17e8a09a4a7f1151a8f4c7902eaef9e1bd96e6e13b2",
+    "既定の state": {
+     "GROUNDED": 35,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 5,
+     "VALUE_MISMATCH": 9
+    },
+    "P27 明示の state": {
+     "GROUNDED": 35,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 5,
+     "VALUE_MISMATCH": 9
+    },
+    "P26 の state": {
+     "GROUNDED": 35,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 5,
+     "VALUE_MISMATCH": 9
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z461",
+    "標本": "手元の 67",
+    "zip の sha256": "b3d46992ceb5eb86b9bd230a1ab34d06bbf031fc9182d29cb211830afcd39b6d",
+    "claims": 57,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "d77e2ed47612e0db5aadbeaf4032c30b11e48f42252a37e39fe96caa39ad5463",
+    "既定の state": {
+     "GROUNDED": 29,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 17,
+     "VALUE_MISMATCH": 3
+    },
+    "P27 明示の state": {
+     "GROUNDED": 29,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 17,
+     "VALUE_MISMATCH": 3
+    },
+    "P26 の state": {
+     "GROUNDED": 29,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 17,
+     "VALUE_MISMATCH": 3
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z46V",
+    "標本": "手元の 67",
+    "zip の sha256": "ac0a65a02d908b0dbfd4a56cc46cf0eb5384ef5d7db7926b244ca7443b30c9f4",
+    "claims": 56,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "e7e6b002aa22382adf8be73d572ca0c9b8e592822bfbf40ade5b373c80cd1afe",
+    "既定の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 3
+    },
+    "P27 明示の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 3
+    },
+    "P26 の state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 3
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z48T",
+    "標本": "手元の 67",
+    "zip の sha256": "3aad9a94337487665f23b2066612ca3cf7ece7b596b47a6885e5975d4a00c9b2",
+    "claims": 157,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "5da8bfb5186c6c862f1973421f37e854fb5b5141cc50535eb82fd23c9fd8b7a0",
+    "既定の state": {
+     "GROUNDED": 117,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 6
+    },
+    "P27 明示の state": {
+     "GROUNDED": 117,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 6
+    },
+    "P26 の state": {
+     "GROUNDED": 117,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 6
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z492",
+    "標本": "手元の 67",
+    "zip の sha256": "eab8422ec94cf9ed7f5ccc9d8eb43fa548ad5abe4d9899223f060f4a4de84396",
+    "claims": 59,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "bc07cbb6d9bb21556e18d7baf751ac4aeedb0b16381ec1d8e372725dccf5f674",
+    "既定の state": {
+     "GROUNDED": 34,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 17
+    },
+    "P27 明示の state": {
+     "GROUNDED": 34,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 17
+    },
+    "P26 の state": {
+     "GROUNDED": 34,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 17
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z4B6",
+    "標本": "手元の 67",
+    "zip の sha256": "d617b6e1807c8aa6d2b1269f6b25ff57a6a71dbf683020f1859d2d4a04c02d26",
+    "claims": 123,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "8076a3b17c689ba4e192ba7ffe3e000335460d3ebc735071b44ecf4995a4a1fa",
+    "既定の state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 27,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 4
+    },
+    "P27 明示の state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 27,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 4
+    },
+    "P26 の state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 27,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 4
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z4DE",
+    "標本": "手元の 67",
+    "zip の sha256": "5f154b2a5ba081abe7495fabc2cf6aae795cf92b1ad02808954d2befe424aa43",
+    "claims": 117,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "bf26d9612a0bbe09cd0dcaeff6121f7938f5135f64f32460b5ebdca0e4f55eb2",
+    "既定の state": {
+     "GROUNDED": 75,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 5
+    },
+    "P27 明示の state": {
+     "GROUNDED": 75,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 5
+    },
+    "P26 の state": {
+     "GROUNDED": 75,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 5
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z4GF",
+    "標本": "手元の 67",
+    "zip の sha256": "778a6a113f4ee1e2fc40b64375e55273cd38a15906271e08bd95415cf49d4a9e",
+    "claims": 128,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "d0fbd054799872e46a4cc106c30b6827c469e2ee6d92f1b4b668f74b76153d02",
+    "既定の state": {
+     "GROUNDED": 68,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 10
+    },
+    "P27 明示の state": {
+     "GROUNDED": 68,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 10
+    },
+    "P26 の state": {
+     "GROUNDED": 68,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 30,
+     "VALUE_MISMATCH": 10
+    },
+    "state・reason・pointers のどれかが違う行の数": 2
+   },
+   {
+    "doc": "S100Z4J8",
+    "標本": "手元の 67",
+    "zip の sha256": "2de15610c9b207fdb286035fb76b30c1ac88d6ad16e8356a3517bb99ae453214",
+    "claims": 110,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "a7a01723fe8753dd745a11a000d7b6857c7426e90e67dc1e0d0df1c368a026f2",
+    "既定の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 17
+    },
+    "P27 明示の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 17
+    },
+    "P26 の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 17
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z4LC",
+    "標本": "手元の 67",
+    "zip の sha256": "13cf3587a467a0af3869d0ecaa8d8a921e4d9fcb881b6bf369a5734a4060714d",
+    "claims": 114,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "9a114d42d5b578751dac9c033944a733b62ea5b879d7e913c5cda3cb2a56be29",
+    "既定の state": {
+     "GROUNDED": 78,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 1
+    },
+    "P27 明示の state": {
+     "GROUNDED": 78,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 1
+    },
+    "P26 の state": {
+     "GROUNDED": 78,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 1
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z4N9",
+    "標本": "手元の 67",
+    "zip の sha256": "9b695ec4541d08acbe57eb9b52e7378b61ab9d67f0d140e08bdaa62a0d0a1717",
+    "claims": 186,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "763e97600d51b46f9616995445bff2308259466597d901c5eedabcda20032daf",
+    "既定の state": {
+     "GROUNDED": 98,
+     "POINTER_NOT_FOUND": 29,
+     "UNVERIFIABLE": 42,
+     "VALUE_MISMATCH": 17
+    },
+    "P27 明示の state": {
+     "GROUNDED": 98,
+     "POINTER_NOT_FOUND": 29,
+     "UNVERIFIABLE": 42,
+     "VALUE_MISMATCH": 17
+    },
+    "P26 の state": {
+     "GROUNDED": 98,
+     "POINTER_NOT_FOUND": 29,
+     "UNVERIFIABLE": 42,
+     "VALUE_MISMATCH": 17
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z4PA",
+    "標本": "手元の 67",
+    "zip の sha256": "e4d7621bd1f65b451037db3bde4c5cb23297e59a7f9ba830b3bfcf5b62f8b3c7",
+    "claims": 125,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "bed0b95655327977739cb44f33741e8940d2f0557736d479869cfde76af52cb1",
+    "既定の state": {
+     "GROUNDED": 61,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 40,
+     "VALUE_MISMATCH": 3
+    },
+    "P27 明示の state": {
+     "GROUNDED": 61,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 40,
+     "VALUE_MISMATCH": 3
+    },
+    "P26 の state": {
+     "GROUNDED": 61,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 40,
+     "VALUE_MISMATCH": 3
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z4Q1",
+    "標本": "手元の 67",
+    "zip の sha256": "0731a291f10af5dd207e05d54df8e2b5dc34e79a84de94af1c1a5d4e207228f6",
+    "claims": 88,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "49d556c1eb0e9c3d35020eb0f4c92cdc605d546e32329390b37cb5efb8425c9d",
+    "既定の state": {
+     "GROUNDED": 77,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 4,
+     "VALUE_MISMATCH": 1
+    },
+    "P27 明示の state": {
+     "GROUNDED": 77,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 4,
+     "VALUE_MISMATCH": 1
+    },
+    "P26 の state": {
+     "GROUNDED": 77,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 4,
+     "VALUE_MISMATCH": 1
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z4R8",
+    "標本": "手元の 67",
+    "zip の sha256": "b8bb37a7c8984f5bf7d7ac5761df502feea2fe35b00b3b3f25d4bd194e69b862",
+    "claims": 79,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "d32c680391d8a86aec18a82f8dccbf991f71e02c8add1ba45efcadc4491c9ddb",
+    "既定の state": {
+     "GROUNDED": 58,
+     "POINTER_NOT_FOUND": 12,
+     "UNVERIFIABLE": 3,
+     "VALUE_MISMATCH": 6
+    },
+    "P27 明示の state": {
+     "GROUNDED": 58,
+     "POINTER_NOT_FOUND": 12,
+     "UNVERIFIABLE": 3,
+     "VALUE_MISMATCH": 6
+    },
+    "P26 の state": {
+     "GROUNDED": 58,
+     "POINTER_NOT_FOUND": 12,
+     "UNVERIFIABLE": 3,
+     "VALUE_MISMATCH": 6
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z55N",
+    "標本": "手元の 67",
+    "zip の sha256": "fa1db1d43ef6eac7f682b728128b6f13e32c130086e49f93aad60e4bfb4a2e37",
+    "claims": 121,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "70cec51c37d345f065a0203ada308cbe513c6a52d65a7d677499ff1049a4a537",
+    "既定の state": {
+     "GROUNDED": 88,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 9,
+     "VALUE_MISMATCH": 3
+    },
+    "P27 明示の state": {
+     "GROUNDED": 88,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 9,
+     "VALUE_MISMATCH": 3
+    },
+    "P26 の state": {
+     "GROUNDED": 88,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 9,
+     "VALUE_MISMATCH": 3
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z5CH",
+    "標本": "手元の 67",
+    "zip の sha256": "818194e233e7ceea8f3070289776425a8f314ed647310d917a180a5bf3d5d30e",
+    "claims": 107,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "8324066b0bcc8f291b74eaed2b778ad5a33b6e4ba9bec0a89ef5e40ff81a119b",
+    "既定の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 1
+    },
+    "P27 明示の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 1
+    },
+    "P26 の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 1
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z5DN",
+    "標本": "手元の 67",
+    "zip の sha256": "2b988d6b20de5de7b7eae20d28f5085117c553331ac1b979576de60fa4208114",
+    "claims": 126,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "6686d9d38593193944546b54c13456e697629207bbc77b82d67b71c861df0dda",
+    "既定の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 15,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 3
+    },
+    "P27 明示の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 15,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 3
+    },
+    "P26 の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 15,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 3
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100Z6XO",
+    "標本": "手元の 67",
+    "zip の sha256": "d94d447b6f8182d770179d58e60c03962ccb1f9a6251dff793239e8e4663ac85",
+    "claims": 162,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "b126a1b26a7de807338fd4cb0bb81085a5ba17b751c9c0aae29d65722d5d9f60",
+    "既定の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 33,
+     "UNVERIFIABLE": 30,
+     "VALUE_MISMATCH": 19
+    },
+    "P27 明示の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 33,
+     "UNVERIFIABLE": 30,
+     "VALUE_MISMATCH": 19
+    },
+    "P26 の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 34,
+     "UNVERIFIABLE": 29,
+     "VALUE_MISMATCH": 19
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100YXFQ",
+    "標本": "新しい標本 30",
+    "zip の sha256": "2c9a642213a6ec03529c479f860bd2ae32c887061a512ceb6def15701927de9f",
+    "claims": 139,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "3f6455ce7efae6283ea3fed45296ee95f807f4c3e3434771b3b4ae688cf9f86a",
+    "既定の state": {
+     "GROUNDED": 68,
+     "POINTER_NOT_FOUND": 27,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 17
+    },
+    "P27 明示の state": {
+     "GROUNDED": 68,
+     "POINTER_NOT_FOUND": 27,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 17
+    },
+    "P26 の state": {
+     "GROUNDED": 68,
+     "POINTER_NOT_FOUND": 27,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 17
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YZ4M",
+    "標本": "新しい標本 30",
+    "zip の sha256": "d594dfb4ab9d2fdab1a497b9b42c6968a49cc5aa201f626346165ef675f79520",
+    "claims": 159,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "a70c3dfbfbd2d8c8779b3959ab912faed6e121d7686bb8082332becabde0a616",
+    "既定の state": {
+     "GROUNDED": 94,
+     "POINTER_NOT_FOUND": 36,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 14
+    },
+    "P27 明示の state": {
+     "GROUNDED": 94,
+     "POINTER_NOT_FOUND": 36,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 14
+    },
+    "P26 の state": {
+     "GROUNDED": 94,
+     "POINTER_NOT_FOUND": 36,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 14
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYIV",
+    "標本": "新しい標本 30",
+    "zip の sha256": "22b46ebe8c80f1737e29c7af34cb64de9e9cc632f9d9e4bcc7997b667d55b5d4",
+    "claims": 97,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "89085bdf445fd4980e9eecdbaa6a336eeccc36edcec4ad35909974c5516b18cf",
+    "既定の state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 31,
+     "VALUE_MISMATCH": 1
+    },
+    "P27 明示の state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 31,
+     "VALUE_MISMATCH": 1
+    },
+    "P26 の state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 30,
+     "VALUE_MISMATCH": 1
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100YYHK",
+    "標本": "新しい標本 30",
+    "zip の sha256": "b5979477967f73f82c9339e12ab34d2d3c2f99bc04af35d945dc27773f01b967",
+    "claims": 217,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "c30b64bec63552a55076aeb887dc6779fe5ef13aa43a7d47761f2ddc27f60fee",
+    "既定の state": {
+     "GROUNDED": 124,
+     "POINTER_NOT_FOUND": 39,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 26
+    },
+    "P27 明示の state": {
+     "GROUNDED": 124,
+     "POINTER_NOT_FOUND": 39,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 26
+    },
+    "P26 の state": {
+     "GROUNDED": 124,
+     "POINTER_NOT_FOUND": 41,
+     "UNVERIFIABLE": 26,
+     "VALUE_MISMATCH": 26
+    },
+    "state・reason・pointers のどれかが違う行の数": 2
+   },
+   {
+    "doc": "S100YYGF",
+    "標本": "新しい標本 30",
+    "zip の sha256": "a2226149e6296710299338387f348c5c2a03011b42d683e6042f68d939765849",
+    "claims": 211,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "f758e5791049e86252b3b55e840a2026b567139f040671ef8bb1babaea218561",
+    "既定の state": {
+     "GROUNDED": 98,
+     "POINTER_NOT_FOUND": 33,
+     "UNVERIFIABLE": 56,
+     "VALUE_MISMATCH": 24
+    },
+    "P27 明示の state": {
+     "GROUNDED": 98,
+     "POINTER_NOT_FOUND": 33,
+     "UNVERIFIABLE": 56,
+     "VALUE_MISMATCH": 24
+    },
+    "P26 の state": {
+     "GROUNDED": 98,
+     "POINTER_NOT_FOUND": 34,
+     "UNVERIFIABLE": 55,
+     "VALUE_MISMATCH": 24
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100YYAI",
+    "標本": "新しい標本 30",
+    "zip の sha256": "5f899f5f272d76de1425d1d4d2e625d23ee2ed19ba4eb9305e72082d26546e93",
+    "claims": 119,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "3d1fab79e5d2987495ce1421dc589335c1b15e81a245f9bdc0bfbbf209703b2f",
+    "既定の state": {
+     "GROUNDED": 69,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 32,
+     "VALUE_MISMATCH": 7
+    },
+    "P27 明示の state": {
+     "GROUNDED": 69,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 32,
+     "VALUE_MISMATCH": 7
+    },
+    "P26 の state": {
+     "GROUNDED": 69,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 33,
+     "VALUE_MISMATCH": 7
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100YZ2B",
+    "標本": "新しい標本 30",
+    "zip の sha256": "5a02794170d40c48f7636796cd7be350d79c5a7c07b5ce6aedb384024d4d7903",
+    "claims": 122,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "281682b91886f4b375d14260febd8a71b5417f807737f7aa5494b4b04c44f711",
+    "既定の state": {
+     "GROUNDED": 65,
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 6
+    },
+    "P27 明示の state": {
+     "GROUNDED": 65,
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 6
+    },
+    "P26 の state": {
+     "GROUNDED": 65,
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 6
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YZFP",
+    "標本": "新しい標本 30",
+    "zip の sha256": "707f9623f7a3e424504f623f020036cf9b75ac55b460e9db48eabea5ef58fcb6",
+    "claims": 65,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "1e645f92246f422ede3bbad03043ea09e14756c27575eae18b598f891b58d25b",
+    "既定の state": {
+     "GROUNDED": 35,
+     "POINTER_NOT_FOUND": 15,
+     "UNVERIFIABLE": 15
+    },
+    "P27 明示の state": {
+     "GROUNDED": 35,
+     "POINTER_NOT_FOUND": 15,
+     "UNVERIFIABLE": 15
+    },
+    "P26 の state": {
+     "GROUNDED": 35,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 14
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100YYSK",
+    "標本": "新しい標本 30",
+    "zip の sha256": "cd8940d3d48997819dabfff2bca306d55b6323c928a3cfca247c8a8902bd9aae",
+    "claims": 114,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "0897861086d311f04281645ba01d3e1b2a98435f615b424b3e514fd199196ae2",
+    "既定の state": {
+     "GROUNDED": 84,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 2
+    },
+    "P27 明示の state": {
+     "GROUNDED": 84,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 2
+    },
+    "P26 の state": {
+     "GROUNDED": 84,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 2
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYMP",
+    "標本": "新しい標本 30",
+    "zip の sha256": "9053500dbc647070018e5b6f523b8b715246afe19b2eb77784bb900e7c176935",
+    "claims": 96,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "140479546c47a52772a759d95474432c87bb47ea5ddb6732a8fbe4bc09fea5d1",
+    "既定の state": {
+     "GROUNDED": 42,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 41,
+     "VALUE_MISMATCH": 3
+    },
+    "P27 明示の state": {
+     "GROUNDED": 42,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 41,
+     "VALUE_MISMATCH": 3
+    },
+    "P26 の state": {
+     "GROUNDED": 42,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 41,
+     "VALUE_MISMATCH": 3
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYKZ",
+    "標本": "新しい標本 30",
+    "zip の sha256": "fde0c1366cdec471fae83af9adc2108b352e2743aa1e32d81c67f980f976ddff",
+    "claims": 109,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "aedebde13404172ea1121cb95e9b60e7412f5f5e9f7c0e444a0f6496e0f460ec",
+    "既定の state": {
+     "GROUNDED": 72,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 3
+    },
+    "P27 明示の state": {
+     "GROUNDED": 72,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 3
+    },
+    "P26 の state": {
+     "GROUNDED": 72,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 3
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYUS",
+    "標本": "新しい標本 30",
+    "zip の sha256": "6a7dbefaf93fc6c799d8eaad874d7a36c96e14813583daf522708d78e6782894",
+    "claims": 51,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "b8ed4fe0cf657104696cf6b2846a683a524f57973da41e44c768bc4f3a39e572",
+    "既定の state": {
+     "GROUNDED": 34,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 11
+    },
+    "P27 明示の state": {
+     "GROUNDED": 34,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 11
+    },
+    "P26 の state": {
+     "GROUNDED": 34,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 11
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YZ57",
+    "標本": "新しい標本 30",
+    "zip の sha256": "707252c0c80574c3309f9d2ed3145719b64f0e81f7c0a6210400e70019d4ac37",
+    "claims": 119,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "c8045df99c819ebbdce268ba1947ec33674ef86dd445d04866f10e76c0a9722b",
+    "既定の state": {
+     "GROUNDED": 60,
+     "POINTER_NOT_FOUND": 23,
+     "UNVERIFIABLE": 21,
+     "VALUE_MISMATCH": 15
+    },
+    "P27 明示の state": {
+     "GROUNDED": 60,
+     "POINTER_NOT_FOUND": 23,
+     "UNVERIFIABLE": 21,
+     "VALUE_MISMATCH": 15
+    },
+    "P26 の state": {
+     "GROUNDED": 60,
+     "POINTER_NOT_FOUND": 23,
+     "UNVERIFIABLE": 21,
+     "VALUE_MISMATCH": 15
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYFP",
+    "標本": "新しい標本 30",
+    "zip の sha256": "2badc60ad94066994be333aec1c7ffa7d421834d0d351d8bce960d7e9f50445d",
+    "claims": 153,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "bf5650a9ec5671358e5c7e774326634cc9e15f088b188232d90d916cef651285",
+    "既定の state": {
+     "GROUNDED": 101,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 9
+    },
+    "P27 明示の state": {
+     "GROUNDED": 101,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 9
+    },
+    "P26 の state": {
+     "GROUNDED": 101,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 9
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YZ9G",
+    "標本": "新しい標本 30",
+    "zip の sha256": "39bc6a5ea3e1fac1391e3911c465bdda0717f6df961310f3dd41ae0dbb72df40",
+    "claims": 99,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "96f73f08ccb7754c8b0ffe36f0c5d0eed9a099c9fa286dd018a5c3231fc31a85",
+    "既定の state": {
+     "GROUNDED": 76,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 1
+    },
+    "P27 明示の state": {
+     "GROUNDED": 76,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 1
+    },
+    "P26 の state": {
+     "GROUNDED": 76,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 1
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYMC",
+    "標本": "新しい標本 30",
+    "zip の sha256": "ee96a4855753903df29c15328524e800f8c4fce55a0831c7ac963e354cd74e42",
+    "claims": 106,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "81a93d40ce4c4f563f2a0ba44cfe0cc74fab01e32b480bb4e8c857687bc7e486",
+    "既定の state": {
+     "GROUNDED": 71,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 5
+    },
+    "P27 明示の state": {
+     "GROUNDED": 71,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 5
+    },
+    "P26 の state": {
+     "GROUNDED": 71,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 5
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYEO",
+    "標本": "新しい標本 30",
+    "zip の sha256": "954acdde95c0aaea7e42d9728db36df432ecb06195ebd2bd602cbbc879b45c64",
+    "claims": 122,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "c902663bde7f1b395c8bdf01fd17f5feed0e56a0c16447547641ee34e8a4a081",
+    "既定の state": {
+     "GROUNDED": 66,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 31,
+     "VALUE_MISMATCH": 4
+    },
+    "P27 明示の state": {
+     "GROUNDED": 66,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 31,
+     "VALUE_MISMATCH": 4
+    },
+    "P26 の state": {
+     "GROUNDED": 66,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 31,
+     "VALUE_MISMATCH": 4
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YXXB",
+    "標本": "新しい標本 30",
+    "zip の sha256": "f8b798f5e2b0d97bc1ab3af67d8ba672e081e2540c45c82c3313e4d0d70b127f",
+    "claims": 139,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "d64e670255859ad7d95dacc8bd4df07fbc58a66c3ab6e4afe68399a3d9a40499",
+    "既定の state": {
+     "GROUNDED": 92,
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 17,
+     "VALUE_MISMATCH": 4
+    },
+    "P27 明示の state": {
+     "GROUNDED": 92,
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 17,
+     "VALUE_MISMATCH": 4
+    },
+    "P26 の state": {
+     "GROUNDED": 92,
+     "POINTER_NOT_FOUND": 28,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 4
+    },
+    "state・reason・pointers のどれかが違う行の数": 2
+   },
+   {
+    "doc": "S100YYVJ",
+    "標本": "新しい標本 30",
+    "zip の sha256": "54a5acf1823560cd8199d0387274e413ac6b756aafba4838abd52fc29f5be681",
+    "claims": 119,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "6249e0534b429bdcf444cabfad31d4dc4116360566b98f3a8803def5d57592ac",
+    "既定の state": {
+     "GROUNDED": 74,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 20,
+     "VALUE_MISMATCH": 5
+    },
+    "P27 明示の state": {
+     "GROUNDED": 74,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 20,
+     "VALUE_MISMATCH": 5
+    },
+    "P26 の state": {
+     "GROUNDED": 74,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 20,
+     "VALUE_MISMATCH": 5
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYQN",
+    "標本": "新しい標本 30",
+    "zip の sha256": "e08e430656361c7a6285ede8ec93f8e89bf9c9f8b39da69902fee9f4566a421c",
+    "claims": 141,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "e48058bb7052601a2d54a4b2357c10a5ae42b710865341b5ddf42be17fea544d",
+    "既定の state": {
+     "GROUNDED": 106,
+     "POINTER_NOT_FOUND": 19,
+     "UNVERIFIABLE": 9,
+     "VALUE_MISMATCH": 7
+    },
+    "P27 明示の state": {
+     "GROUNDED": 106,
+     "POINTER_NOT_FOUND": 19,
+     "UNVERIFIABLE": 9,
+     "VALUE_MISMATCH": 7
+    },
+    "P26 の state": {
+     "GROUNDED": 106,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 7
+    },
+    "state・reason・pointers のどれかが違う行の数": 1
+   },
+   {
+    "doc": "S100YZC8",
+    "標本": "新しい標本 30",
+    "zip の sha256": "c6239bdb06b0e1396144369bfdf49b43a84d1fe997dcbc6f7930d85733eee97c",
+    "claims": 71,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "42e7088cb049aaef2a409dccea0562414473bf45f137a3ed3fa6604355eb9822",
+    "既定の state": {
+     "GROUNDED": 39,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 2
+    },
+    "P27 明示の state": {
+     "GROUNDED": 39,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 2
+    },
+    "P26 の state": {
+     "GROUNDED": 39,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 2
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYYH",
+    "標本": "新しい標本 30",
+    "zip の sha256": "627f7c4b9d137a4dd7beb676e3383b90d5d37a8b2f3ed82e3f90df5a21977baf",
+    "claims": 138,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "de15f36b7cf2d98759f28fb76c57de08cb9b78f728f91e7ea1da83cb74b126a0",
+    "既定の state": {
+     "GROUNDED": 72,
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 37,
+     "VALUE_MISMATCH": 3
+    },
+    "P27 明示の state": {
+     "GROUNDED": 72,
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 37,
+     "VALUE_MISMATCH": 3
+    },
+    "P26 の state": {
+     "GROUNDED": 72,
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 37,
+     "VALUE_MISMATCH": 3
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYF5",
+    "標本": "新しい標本 30",
+    "zip の sha256": "528e757682c7aad4876d92c444fa49323bab28c86077bdfa1eb061eccd3f1d77",
+    "claims": 149,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "dc810149b2bae99a988f495063584291a6a189f17674e5246647391389d1baef",
+    "既定の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 36,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 18
+    },
+    "P27 明示の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 36,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 18
+    },
+    "P26 の state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 36,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 18
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YXG0",
+    "標本": "新しい標本 30",
+    "zip の sha256": "eff54e2257ada64e2a6137583fcff2dc06ca3e2e3837f2c7799d28b83500d495",
+    "claims": 122,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "9dd2ff450728b9db66d91893ef0b81131844da71a89d7409209c57ee9d35a2ad",
+    "既定の state": {
+     "GROUNDED": 62,
+     "POINTER_NOT_FOUND": 34,
+     "UNVERIFIABLE": 22,
+     "VALUE_MISMATCH": 4
+    },
+    "P27 明示の state": {
+     "GROUNDED": 62,
+     "POINTER_NOT_FOUND": 34,
+     "UNVERIFIABLE": 22,
+     "VALUE_MISMATCH": 4
+    },
+    "P26 の state": {
+     "GROUNDED": 62,
+     "POINTER_NOT_FOUND": 36,
+     "UNVERIFIABLE": 20,
+     "VALUE_MISMATCH": 4
+    },
+    "state・reason・pointers のどれかが違う行の数": 2
+   },
+   {
+    "doc": "S100YXZQ",
+    "標本": "新しい標本 30",
+    "zip の sha256": "69ab15ff52d16d2d28521b1e7d7cd185bbd36726cce5f46156cadc7880e091ff",
+    "claims": 124,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "07ab56c25cd208438dbf02b0f1f18eb761a140b8609ff5fd42ae101ac39eb14d",
+    "既定の state": {
+     "GROUNDED": 71,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 6
+    },
+    "P27 明示の state": {
+     "GROUNDED": 71,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 6
+    },
+    "P26 の state": {
+     "GROUNDED": 71,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 6
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YY3A",
+    "標本": "新しい標本 30",
+    "zip の sha256": "5746323a56b68618499ed4539fe79826c0b1f17fc9b7c98579c529e2bb90ee8b",
+    "claims": 137,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "2effb0adcc6a97b52308dd832dd995a07c1c619745d3fba172fe5341d1aa6040",
+    "既定の state": {
+     "GROUNDED": 79,
+     "POINTER_NOT_FOUND": 29,
+     "UNVERIFIABLE": 17,
+     "VALUE_MISMATCH": 12
+    },
+    "P27 明示の state": {
+     "GROUNDED": 79,
+     "POINTER_NOT_FOUND": 29,
+     "UNVERIFIABLE": 17,
+     "VALUE_MISMATCH": 12
+    },
+    "P26 の state": {
+     "GROUNDED": 79,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 12
+    },
+    "state・reason・pointers のどれかが違う行の数": 2
+   },
+   {
+    "doc": "S100YW7F",
+    "標本": "新しい標本 30",
+    "zip の sha256": "73b4aa4f001455b07337ada7deb2ddfe0389969207760996985f44d22776c7a9",
+    "claims": 279,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "733e8bab4c8ba479f83ed3e7754219a2172153a444a227de7f848410456240bd",
+    "既定の state": {
+     "GROUNDED": 65,
+     "POINTER_NOT_FOUND": 80,
+     "UNVERIFIABLE": 109,
+     "VALUE_MISMATCH": 25
+    },
+    "P27 明示の state": {
+     "GROUNDED": 65,
+     "POINTER_NOT_FOUND": 80,
+     "UNVERIFIABLE": 109,
+     "VALUE_MISMATCH": 25
+    },
+    "P26 の state": {
+     "GROUNDED": 65,
+     "POINTER_NOT_FOUND": 82,
+     "UNVERIFIABLE": 107,
+     "VALUE_MISMATCH": 25
+    },
+    "state・reason・pointers のどれかが違う行の数": 2
+   },
+   {
+    "doc": "S100YYH7",
+    "標本": "新しい標本 30",
+    "zip の sha256": "7753678234297a2b3a30b6214f65276f4a5e5b57fa34cc101a164a5a6b48cb9d",
+    "claims": 123,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "e260b9deae0a37f6febed4fb75f046fc8d5c5c8cef02cd6ff02ddc95af9eb04b",
+    "既定の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 29,
+     "VALUE_MISMATCH": 3
+    },
+    "P27 明示の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 29,
+     "VALUE_MISMATCH": 3
+    },
+    "P26 の state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 29,
+     "VALUE_MISMATCH": 3
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YYQQ",
+    "標本": "新しい標本 30",
+    "zip の sha256": "ab8fe631dbbff13db037b8c68c71b511d5c68f9d88b06d069e444e34a73ef1bc",
+    "claims": 135,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "22839549b1dc4d5d993cb09e3040f24903d21765861cbd69270086269247ba03",
+    "既定の state": {
+     "GROUNDED": 65,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 49,
+     "VALUE_MISMATCH": 7
+    },
+    "P27 明示の state": {
+     "GROUNDED": 65,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 49,
+     "VALUE_MISMATCH": 7
+    },
+    "P26 の state": {
+     "GROUNDED": 65,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 49,
+     "VALUE_MISMATCH": 7
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   },
+   {
+    "doc": "S100YX88",
+    "標本": "新しい標本 30",
+    "zip の sha256": "c568596bb8402601e36071e78e0548175bde593cb8b238d473fa5aeb8cf67492",
+    "claims": 148,
+    "既定と P27 明示が同じ byte": true,
+    "既定を P26 に戻した対照が既定と同じ byte": false,
+    "profile の欄": {
+     "既定": "P27",
+     "P27 明示": "P27",
+     "対照": "P26"
+    },
+    "既定の出力の sha256(engine の欄を除く)": "6cb945023951b13fc9e161c23ae9545e0d3ca695cc141f90e54bdf95190712a8",
+    "既定の state": {
+     "GROUNDED": 92,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 17,
+     "VALUE_MISMATCH": 17
+    },
+    "P27 明示の state": {
+     "GROUNDED": 92,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 17,
+     "VALUE_MISMATCH": 17
+    },
+    "P26 の state": {
+     "GROUNDED": 92,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 17,
+     "VALUE_MISMATCH": 17
+    },
+    "state・reason・pointers のどれかが違う行の数": 0
+   }
+  ]
+ },
+ "S2": {
+  "書類": 67,
+  "claims": 7799,
+  "既定と P27 明示で違った書類": 0,
+  "対照(既定を実行中だけ P26 に戻す)で違った書類": 67,
+  "既定の 4 state": {
+   "GROUNDED": 4371,
+   "VALUE_MISMATCH": 433,
+   "UNVERIFIABLE": 1601,
+   "POINTER_NOT_FOUND": 1394
+  },
+  "P26 の 4 state": {
+   "GROUNDED": 4371,
+   "VALUE_MISMATCH": 433,
+   "UNVERIFIABLE": 1579,
+   "POINTER_NOT_FOUND": 1416
+  },
+  "既定と P26 で state の違う行": 28,
+  "state は同じで reason か pointer が違う行": 0,
+  "向き": {
+   "POINTER_NOT_FOUND → UNVERIFIABLE": 25,
+   "UNVERIFIABLE → POINTER_NOT_FOUND": 3
+  },
+  "GROUNDED を離れる行": 0,
+  "VALUE_MISMATCH に入る行": 0,
+  "新しい GROUNDED": 0,
+  "regress97 の P27 の 4 state と違う書類": [],
+  "regress97 の P27 の出力の sha256 と違う書類": [],
+  "regress97 の動いた行(P26 → P27)と同じ集合": true,
+  "regress97 に無い動いた行": 0,
+  "regress97 に在って今回に無い行": 0,
+  "動いた行": [
+   {
+    "doc": "S100YMFV",
+    "id": "N082",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YUHC",
+    "id": "N003",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YUHC",
+    "id": "N020",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "N044",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "N050",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z35K",
+    "id": "N080",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "target_or_plan"
+    }
+   },
+   {
+    "doc": "S100Z35K",
+    "id": "N081",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_same_value"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "target_or_plan"
+    }
+   },
+   {
+    "doc": "S100Z35K",
+    "id": "N082",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "target_or_plan"
+    }
+   },
+   {
+    "doc": "S100Z35K",
+    "id": "N084",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "target_or_plan"
+    }
+   },
+   {
+    "doc": "S100Z35K",
+    "id": "N085",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_same_value"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "target_or_plan"
+    }
+   },
+   {
+    "doc": "S100Z35K",
+    "id": "N086",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "target_or_plan"
+    }
+   },
+   {
+    "doc": "S100Z37J",
+    "id": "N079",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z38F",
+    "id": "N002",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z38F",
+    "id": "N003",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z38F",
+    "id": "N011",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z38F",
+    "id": "N012",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z38F",
+    "id": "N014",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z38F",
+    "id": "N016",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z38F",
+    "id": "N017",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z38F",
+    "id": "N024",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "target_or_plan"
+    }
+   },
+   {
+    "doc": "S100Z38F",
+    "id": "N027",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z3BW",
+    "id": "N082",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z3CO",
+    "id": "N011",
+    "P26": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)"
+    },
+    "既定": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    }
+   },
+   {
+    "doc": "S100Z3HP",
+    "id": "N049",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z3L6",
+    "id": "N067",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100Z4GF",
+    "id": "N002",
+    "P26": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)"
+    },
+    "既定": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    }
+   },
+   {
+    "doc": "S100Z4GF",
+    "id": "N017",
+    "P26": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)"
+    },
+    "既定": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    }
+   },
+   {
+    "doc": "S100Z6XO",
+    "id": "N098",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_same_value"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "target_or_plan"
+    }
+   }
+  ]
+ },
+ "S3": {
+  "書類": 30,
+  "claims": 3923,
+  "既定と P27 明示で違った書類": 0,
+  "対照(既定を実行中だけ P26 に戻す)で違った書類": 30,
+  "既定の 4 state": {
+   "GROUNDED": 2194,
+   "VALUE_MISMATCH": 250,
+   "UNVERIFIABLE": 787,
+   "POINTER_NOT_FOUND": 692
+  },
+  "P26 の 4 state": {
+   "GROUNDED": 2194,
+   "VALUE_MISMATCH": 250,
+   "UNVERIFIABLE": 774,
+   "POINTER_NOT_FOUND": 705
+  },
+  "既定と P26 で state の違う行": 15,
+  "state は同じで reason か pointer が違う行": 0,
+  "向き": {
+   "POINTER_NOT_FOUND → UNVERIFIABLE": 14,
+   "UNVERIFIABLE → POINTER_NOT_FOUND": 1
+  },
+  "GROUNDED を離れる行": 0,
+  "VALUE_MISMATCH に入る行": 0,
+  "新しい GROUNDED": 0,
+  "regress97 の P27 の 4 state と違う書類": [],
+  "regress97 の P27 の出力の sha256 と違う書類": [],
+  "regress97 の動いた行(P26 → P27)と同じ集合": true,
+  "regress97 に無い動いた行": 0,
+  "regress97 に在って今回に無い行": 0,
+  "動いた行": [
+   {
+    "doc": "S100YYIV",
+    "id": "N049",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YYHK",
+    "id": "N044",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YYHK",
+    "id": "N126",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YYGF",
+    "id": "N115",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YYAI",
+    "id": "N002",
+    "P26": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)"
+    },
+    "既定": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    }
+   },
+   {
+    "doc": "S100YZFP",
+    "id": "N050",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_same_value"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "target_or_plan"
+    }
+   },
+   {
+    "doc": "S100YXXB",
+    "id": "N013",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YXXB",
+    "id": "N083",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YYQN",
+    "id": "N090",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YXG0",
+    "id": "N088",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YXG0",
+    "id": "N089",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YY3A",
+    "id": "N054",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YY3A",
+    "id": "N076",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YW7F",
+    "id": "N192",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(unit not in XBRL)"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "per_unit_counter"
+    }
+   },
+   {
+    "doc": "S100YW7F",
+    "id": "N193",
+    "P26": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element"
+    },
+    "既定": {
+     "state": "UNVERIFIABLE",
+     "reason": "target_or_plan"
+    }
+   }
+  ]
+ },
+ "S4": {
+  "profile": "P27",
+  "通した": {
+   "件": 2,
+   "分母": 243,
+   "率": 0.8,
+   "字": "2 / 243 = 0.8%"
+  },
+  "止めた": {
+   "件": 210,
+   "分母": 243,
+   "率": 86.4,
+   "字": "210 / 243 = 86.4%"
+  },
+  "止めた でも 通した でもない結果": {
+   "detected:POINTER_NOT_FOUND": 31
+  },
+  "通した の分け方": {
+   "丸めの帯の中(±1 最小単位)": {
+    "件": 1,
+    "うち率(単位が %)": 1,
+    "うち金額ほか(単位が % でない)": 0
+   },
+   "退化値(字は変わるが値が変わらない)": {
+    "件": 1,
+    "うち率(単位が %)": 0,
+    "うち金額ほか(単位が % でない)": 1
+   },
+   "帯の外(±1 最小単位より大きい)": {
+    "件": 0,
+    "うち率(単位が %)": 0,
+    "うち金額ほか(単位が % でない)": 0
+   }
+  },
+  "素の書類 claim": 412,
+  "素の書類の state の分布": {
+   "GROUNDED": 340,
+   "POINTER_NOT_FOUND": 25,
+   "UNVERIFIABLE": 33,
+   "VALUE_MISMATCH": 14
+  },
+  "土台の state の分布": {
+   "GROUNDED": 340,
+   "POINTER_NOT_FOUND": 25,
+   "UNVERIFIABLE": 33,
+   "VALUE_MISMATCH": 14
+  },
+  "注入の対象": 243,
+  "通した の一覧の (id, 型)": [
+   [
+    "N069",
+    "V2"
+   ],
+   [
+    "N096",
+    "V1"
+   ]
+  ],
+  "P26 の記録の 通した の一覧の (id, 型)": [
+   [
+    "N069",
+    "V2"
+   ],
+   [
+    "N096",
+    "V1"
+   ]
+  ],
+  "P26 の記録(ritual_2026-10-20_p26.json)と違う欄(所要秒・実行環境を除く)": [
+   "入力",
+   "注入",
+   "素の書類"
+  ],
+  "採り直した儀式の記録(ritual_2026-10-20.json)と違う欄(所要秒・実行環境を除く)": [],
+  "P26 の記録の通した": {
+   "件": 2,
+   "分母": 243,
+   "率": 0.8,
+   "字": "2 / 243 = 0.8%"
+  },
+  "P26 の記録の止めた": {
+   "件": 210,
+   "分母": 243,
+   "率": 86.4,
+   "字": "210 / 243 = 86.4%"
+  },
+  "P26 の記録のその他": {
+   "detected:POINTER_NOT_FOUND": 31
+  },
+  "P26 の記録の素の書類の state の分布": {
+   "GROUNDED": 340,
+   "POINTER_NOT_FOUND": 27,
+   "UNVERIFIABLE": 31,
+   "VALUE_MISMATCH": 14
+  }
+ },
+ "S5": {
+  "書類別": [
+   {
+    "doc": "S100YMFV",
+    "違う(節の件数)": 1,
+    "VALUE_MISMATCH(state)": 1,
+    "要確認(節の件数)": 24,
+    "一致(節の件数)": 83,
+    "対象外": 0,
+    "判断しない": 25,
+    "claims": 133
+   },
+   {
+    "doc": "S100YUHC",
+    "違う(節の件数)": 9,
+    "VALUE_MISMATCH(state)": 9,
+    "要確認(節の件数)": 39,
+    "一致(節の件数)": 69,
+    "対象外": 20,
+    "判断しない": 19,
+    "claims": 156
+   },
+   {
+    "doc": "S100YWGX",
+    "違う(節の件数)": 10,
+    "VALUE_MISMATCH(state)": 10,
+    "要確認(節の件数)": 32,
+    "一致(節の件数)": 55,
+    "対象外": 12,
+    "判断しない": 32,
+    "claims": 141
+   },
+   {
+    "doc": "S100YXF5",
+    "違う(節の件数)": 12,
+    "VALUE_MISMATCH(state)": 12,
+    "要確認(節の件数)": 18,
+    "一致(節の件数)": 43,
+    "対象外": 15,
+    "判断しない": 13,
+    "claims": 101
+   },
+   {
+    "doc": "S100YXGH",
+    "違う(節の件数)": 5,
+    "VALUE_MISMATCH(state)": 5,
+    "要確認(節の件数)": 29,
+    "一致(節の件数)": 75,
+    "対象外": 0,
+    "判断しない": 20,
+    "claims": 129
+   },
+   {
+    "doc": "S100YXLE",
+    "違う(節の件数)": 11,
+    "VALUE_MISMATCH(state)": 11,
+    "要確認(節の件数)": 34,
+    "一致(節の件数)": 63,
+    "対象外": 0,
+    "判断しない": 13,
+    "claims": 121
+   },
+   {
+    "doc": "S100YXMA",
+    "違う(節の件数)": 6,
+    "VALUE_MISMATCH(state)": 6,
+    "要確認(節の件数)": 34,
+    "一致(節の件数)": 64,
+    "対象外": 0,
+    "判断しない": 15,
+    "claims": 119
+   },
+   {
+    "doc": "S100YYDI",
+    "違う(節の件数)": 9,
+    "VALUE_MISMATCH(state)": 9,
+    "要確認(節の件数)": 27,
+    "一致(節の件数)": 81,
+    "対象外": 9,
+    "判断しない": 19,
+    "claims": 145
+   },
+   {
+    "doc": "S100YYIA",
+    "違う(節の件数)": 7,
+    "VALUE_MISMATCH(state)": 7,
+    "要確認(節の件数)": 30,
+    "一致(節の件数)": 89,
+    "対象外": 0,
+    "判断しない": 13,
+    "claims": 139
+   },
+   {
+    "doc": "S100YYK8",
+    "違う(節の件数)": 14,
+    "VALUE_MISMATCH(state)": 14,
+    "要確認(節の件数)": 27,
+    "一致(節の件数)": 71,
+    "対象外": 0,
+    "判断しない": 16,
+    "claims": 128
+   },
+   {
+    "doc": "S100YYN7",
+    "違う(節の件数)": 12,
+    "VALUE_MISMATCH(state)": 12,
+    "要確認(節の件数)": 50,
+    "一致(節の件数)": 57,
+    "対象外": 0,
+    "判断しない": 33,
+    "claims": 152
+   },
+   {
+    "doc": "S100YYOS",
+    "違う(節の件数)": 9,
+    "VALUE_MISMATCH(state)": 9,
+    "要確認(節の件数)": 29,
+    "一致(節の件数)": 29,
+    "対象外": 1,
+    "判断しない": 13,
+    "claims": 81
+   },
+   {
+    "doc": "S100YYQX",
+    "違う(節の件数)": 5,
+    "VALUE_MISMATCH(state)": 5,
+    "要確認(節の件数)": 46,
+    "一致(節の件数)": 44,
+    "対象外": 1,
+    "判断しない": 14,
+    "claims": 110
+   },
+   {
+    "doc": "S100YYRG",
+    "違う(節の件数)": 12,
+    "VALUE_MISMATCH(state)": 12,
+    "要確認(節の件数)": 16,
+    "一致(節の件数)": 51,
+    "対象外": 1,
+    "判断しない": 16,
+    "claims": 96
+   },
+   {
+    "doc": "S100YYRV",
+    "違う(節の件数)": 8,
+    "VALUE_MISMATCH(state)": 8,
+    "要確認(節の件数)": 47,
+    "一致(節の件数)": 67,
+    "対象外": 0,
+    "判断しない": 19,
+    "claims": 141
+   },
+   {
+    "doc": "S100YYS4",
+    "違う(節の件数)": 13,
+    "VALUE_MISMATCH(state)": 13,
+    "要確認(節の件数)": 27,
+    "一致(節の件数)": 66,
+    "対象外": 0,
+    "判断しない": 10,
+    "claims": 116
+   },
+   {
+    "doc": "S100YYT4",
+    "違う(節の件数)": 5,
+    "VALUE_MISMATCH(state)": 5,
+    "要確認(節の件数)": 22,
+    "一致(節の件数)": 69,
+    "対象外": 0,
+    "判断しない": 23,
+    "claims": 119
+   },
+   {
+    "doc": "S100YYT8",
+    "違う(節の件数)": 0,
+    "VALUE_MISMATCH(state)": 0,
+    "要確認(節の件数)": 89,
+    "一致(節の件数)": 37,
+    "対象外": 8,
+    "判断しない": 19,
+    "claims": 153
+   },
+   {
+    "doc": "S100YYUD",
+    "違う(節の件数)": 7,
+    "VALUE_MISMATCH(state)": 7,
+    "要確認(節の件数)": 13,
+    "一致(節の件数)": 36,
+    "対象外": 1,
+    "判断しない": 10,
+    "claims": 67
+   },
+   {
+    "doc": "S100YYVN",
+    "違う(節の件数)": 15,
+    "VALUE_MISMATCH(state)": 15,
+    "要確認(節の件数)": 25,
+    "一致(節の件数)": 35,
+    "対象外": 1,
+    "判断しない": 25,
+    "claims": 101
+   },
+   {
+    "doc": "S100YZ31",
+    "違う(節の件数)": 1,
+    "VALUE_MISMATCH(state)": 1,
+    "要確認(節の件数)": 15,
+    "一致(節の件数)": 51,
+    "対象外": 6,
+    "判断しない": 3,
+    "claims": 76
+   },
+   {
+    "doc": "S100YZ4E",
+    "違う(節の件数)": 0,
+    "VALUE_MISMATCH(state)": 0,
+    "要確認(節の件数)": 19,
+    "一致(節の件数)": 64,
+    "対象外": 0,
+    "判断しない": 15,
+    "claims": 98
+   },
+   {
+    "doc": "S100YZ7E",
+    "違う(節の件数)": 2,
+    "VALUE_MISMATCH(state)": 2,
+    "要確認(節の件数)": 35,
+    "一致(節の件数)": 32,
+    "対象外": 2,
+    "判断しない": 16,
+    "claims": 87
+   },
+   {
+    "doc": "S100YZCT",
+    "違う(節の件数)": 5,
+    "VALUE_MISMATCH(state)": 5,
+    "要確認(節の件数)": 54,
+    "一致(節の件数)": 74,
+    "対象外": 0,
+    "判断しない": 25,
+    "claims": 158
+   },
+   {
+    "doc": "S100YZEV",
+    "違う(節の件数)": 6,
+    "VALUE_MISMATCH(state)": 6,
+    "要確認(節の件数)": 19,
+    "一致(節の件数)": 43,
+    "対象外": 0,
+    "判断しない": 8,
+    "claims": 76
+   },
+   {
+    "doc": "S100Z0OS",
+    "違う(節の件数)": 6,
+    "VALUE_MISMATCH(state)": 6,
+    "要確認(節の件数)": 32,
+    "一致(節の件数)": 54,
+    "対象外": 11,
+    "判断しない": 2,
+    "claims": 105
+   },
+   {
+    "doc": "S100Z1WR",
+    "違う(節の件数)": 4,
+    "VALUE_MISMATCH(state)": 4,
+    "要確認(節の件数)": 15,
+    "一致(節の件数)": 55,
+    "対象外": 10,
+    "判断しない": 7,
+    "claims": 91
+   },
+   {
+    "doc": "S100Z35K",
+    "違う(節の件数)": 3,
+    "VALUE_MISMATCH(state)": 3,
+    "要確認(節の件数)": 72,
+    "一致(節の件数)": 24,
+    "対象外": 1,
+    "判断しない": 33,
+    "claims": 133
+   },
+   {
+    "doc": "S100Z37J",
+    "違う(節の件数)": 6,
+    "VALUE_MISMATCH(state)": 6,
+    "要確認(節の件数)": 19,
+    "一致(節の件数)": 87,
+    "対象外": 1,
+    "判断しない": 16,
+    "claims": 129
+   },
+   {
+    "doc": "S100Z38F",
+    "違う(節の件数)": 11,
+    "VALUE_MISMATCH(state)": 11,
+    "要確認(節の件数)": 40,
+    "一致(節の件数)": 70,
+    "対象外": 2,
+    "判断しない": 24,
+    "claims": 147
+   },
+   {
+    "doc": "S100Z39P",
+    "違う(節の件数)": 2,
+    "VALUE_MISMATCH(state)": 2,
+    "要確認(節の件数)": 6,
+    "一致(節の件数)": 79,
+    "対象外": 0,
+    "判断しない": 16,
+    "claims": 103
+   },
+   {
+    "doc": "S100Z3BW",
+    "違う(節の件数)": 3,
+    "VALUE_MISMATCH(state)": 3,
+    "要確認(節の件数)": 26,
+    "一致(節の件数)": 94,
+    "対象外": 0,
+    "判断しない": 22,
+    "claims": 145
+   },
+   {
+    "doc": "S100Z3CI",
+    "違う(節の件数)": 5,
+    "VALUE_MISMATCH(state)": 5,
+    "要確認(節の件数)": 19,
+    "一致(節の件数)": 105,
+    "対象外": 1,
+    "判断しない": 12,
+    "claims": 142
+   },
+   {
+    "doc": "S100Z3CO",
+    "違う(節の件数)": 5,
+    "VALUE_MISMATCH(state)": 5,
+    "要確認(節の件数)": 34,
+    "一致(節の件数)": 85,
+    "対象外": 0,
+    "判断しない": 19,
+    "claims": 143
+   },
+   {
+    "doc": "S100Z3DU",
+    "違う(節の件数)": 8,
+    "VALUE_MISMATCH(state)": 8,
+    "要確認(節の件数)": 16,
+    "一致(節の件数)": 57,
+    "対象外": 7,
+    "判断しない": 3,
+    "claims": 91
+   },
+   {
+    "doc": "S100Z3FB",
+    "違う(節の件数)": 5,
+    "VALUE_MISMATCH(state)": 5,
+    "要確認(節の件数)": 40,
+    "一致(節の件数)": 81,
+    "対象外": 0,
+    "判断しない": 22,
+    "claims": 148
+   },
+   {
+    "doc": "S100Z3H2",
+    "違う(節の件数)": 6,
+    "VALUE_MISMATCH(state)": 6,
+    "要確認(節の件数)": 40,
+    "一致(節の件数)": 106,
+    "対象外": 0,
+    "判断しない": 15,
+    "claims": 167
+   },
+   {
+    "doc": "S100Z3HP",
+    "違う(節の件数)": 6,
+    "VALUE_MISMATCH(state)": 6,
+    "要確認(節の件数)": 7,
+    "一致(節の件数)": 43,
+    "対象外": 0,
+    "判断しない": 6,
+    "claims": 62
+   },
+   {
+    "doc": "S100Z3IZ",
+    "違う(節の件数)": 9,
+    "VALUE_MISMATCH(state)": 9,
+    "要確認(節の件数)": 12,
+    "一致(節の件数)": 95,
+    "対象外": 0,
+    "判断しない": 5,
+    "claims": 121
+   },
+   {
+    "doc": "S100Z3JY",
+    "違う(節の件数)": 15,
+    "VALUE_MISMATCH(state)": 15,
+    "要確認(節の件数)": 26,
+    "一致(節の件数)": 85,
+    "対象外": 0,
+    "判断しない": 9,
+    "claims": 135
+   },
+   {
+    "doc": "S100Z3L6",
+    "違う(節の件数)": 7,
+    "VALUE_MISMATCH(state)": 7,
+    "要確認(節の件数)": 27,
+    "一致(節の件数)": 49,
+    "対象外": 0,
+    "判断しない": 12,
+    "claims": 95
+   },
+   {
+    "doc": "S100Z3LJ",
+    "違う(節の件数)": 2,
+    "VALUE_MISMATCH(state)": 2,
+    "要確認(節の件数)": 33,
+    "一致(節の件数)": 70,
+    "対象外": 0,
+    "判断しない": 23,
+    "claims": 128
+   },
+   {
+    "doc": "S100Z3PS",
+    "違う(節の件数)": 2,
+    "VALUE_MISMATCH(state)": 2,
+    "要確認(節の件数)": 8,
+    "一致(節の件数)": 60,
+    "対象外": 0,
+    "判断しない": 23,
+    "claims": 93
+   },
+   {
+    "doc": "S100Z3V1",
+    "違う(節の件数)": 2,
+    "VALUE_MISMATCH(state)": 2,
+    "要確認(節の件数)": 14,
+    "一致(節の件数)": 58,
+    "対象外": 0,
+    "判断しない": 35,
+    "claims": 109
+   },
+   {
+    "doc": "S100Z404",
+    "違う(節の件数)": 2,
+    "VALUE_MISMATCH(state)": 2,
+    "要確認(節の件数)": 20,
+    "一致(節の件数)": 44,
+    "対象外": 0,
+    "判断しない": 18,
+    "claims": 84
+   },
+   {
+    "doc": "S100Z40G",
+    "違う(節の件数)": 8,
+    "VALUE_MISMATCH(state)": 8,
+    "要確認(節の件数)": 30,
+    "一致(節の件数)": 51,
+    "対象外": 1,
+    "判断しない": 21,
+    "claims": 111
+   },
+   {
+    "doc": "S100Z40H",
+    "違う(節の件数)": 31,
+    "VALUE_MISMATCH(state)": 31,
+    "要確認(節の件数)": 40,
+    "一致(節の件数)": 110,
+    "対象外": 7,
+    "判断しない": 50,
+    "claims": 238
+   },
+   {
+    "doc": "S100Z42X",
+    "違う(節の件数)": 4,
+    "VALUE_MISMATCH(state)": 4,
+    "要確認(節の件数)": 6,
+    "一致(節の件数)": 59,
+    "対象外": 0,
+    "判断しない": 10,
+    "claims": 79
+   },
+   {
+    "doc": "S100Z433",
+    "違う(節の件数)": 6,
+    "VALUE_MISMATCH(state)": 6,
+    "要確認(節の件数)": 17,
+    "一致(節の件数)": 56,
+    "対象外": 2,
+    "判断しない": 6,
+    "claims": 87
+   },
+   {
+    "doc": "S100Z448",
+    "違う(節の件数)": 9,
+    "VALUE_MISMATCH(state)": 9,
+    "要確認(節の件数)": 6,
+    "一致(節の件数)": 35,
+    "対象外": 0,
+    "判断しない": 5,
+    "claims": 55
+   },
+   {
+    "doc": "S100Z461",
+    "違う(節の件数)": 3,
+    "VALUE_MISMATCH(state)": 3,
+    "要確認(節の件数)": 14,
+    "一致(節の件数)": 29,
+    "対象外": 0,
+    "判断しない": 11,
+    "claims": 57
+   },
+   {
+    "doc": "S100Z46V",
+    "違う(節の件数)": 0,
+    "VALUE_MISMATCH(state)": 0,
+    "要確認(節の件数)": 10,
+    "一致(節の件数)": 43,
+    "対象外": 1,
+    "判断しない": 2,
+    "claims": 56
+   },
+   {
+    "doc": "S100Z48T",
+    "違う(節の件数)": 6,
+    "VALUE_MISMATCH(state)": 6,
+    "要確認(節の件数)": 15,
+    "一致(節の件数)": 117,
+    "対象外": 0,
+    "判断しない": 19,
+    "claims": 157
+   },
+   {
+    "doc": "S100Z492",
+    "違う(節の件数)": 0,
+    "VALUE_MISMATCH(state)": 0,
+    "要確認(節の件数)": 8,
+    "一致(節の件数)": 34,
+    "対象外": 0,
+    "判断しない": 17,
+    "claims": 59
+   },
+   {
+    "doc": "S100Z4B6",
+    "違う(節の件数)": 4,
+    "VALUE_MISMATCH(state)": 4,
+    "要確認(節の件数)": 19,
+    "一致(節の件数)": 64,
+    "対象外": 15,
+    "判断しない": 21,
+    "claims": 123
+   },
+   {
+    "doc": "S100Z4DE",
+    "違う(節の件数)": 5,
+    "VALUE_MISMATCH(state)": 5,
+    "要確認(節の件数)": 25,
+    "一致(節の件数)": 75,
+    "対象外": 0,
+    "判断しない": 12,
+    "claims": 117
+   },
+   {
+    "doc": "S100Z4GF",
+    "違う(節の件数)": 10,
+    "VALUE_MISMATCH(state)": 10,
+    "要確認(節の件数)": 36,
+    "一致(節の件数)": 68,
+    "対象外": 0,
+    "判断しない": 14,
+    "claims": 128
+   },
+   {
+    "doc": "S100Z4J8",
+    "違う(節の件数)": 0,
+    "VALUE_MISMATCH(state)": 0,
+    "要確認(節の件数)": 16,
+    "一致(節の件数)": 80,
+    "対象外": 1,
+    "判断しない": 13,
+    "claims": 110
+   },
+   {
+    "doc": "S100Z4LC",
+    "違う(節の件数)": 1,
+    "VALUE_MISMATCH(state)": 1,
+    "要確認(節の件数)": 26,
+    "一致(節の件数)": 78,
+    "対象外": 0,
+    "判断しない": 9,
+    "claims": 114
+   },
+   {
+    "doc": "S100Z4N9",
+    "違う(節の件数)": 17,
+    "VALUE_MISMATCH(state)": 17,
+    "要確認(節の件数)": 48,
+    "一致(節の件数)": 98,
+    "対象外": 0,
+    "判断しない": 23,
+    "claims": 186
+   },
+   {
+    "doc": "S100Z4PA",
+    "違う(節の件数)": 3,
+    "VALUE_MISMATCH(state)": 3,
+    "要確認(節の件数)": 30,
+    "一致(節の件数)": 61,
+    "対象外": 1,
+    "判断しない": 30,
+    "claims": 125
+   },
+   {
+    "doc": "S100Z4Q1",
+    "違う(節の件数)": 1,
+    "VALUE_MISMATCH(state)": 1,
+    "要確認(節の件数)": 6,
+    "一致(節の件数)": 77,
+    "対象外": 0,
+    "判断しない": 4,
+    "claims": 88
+   },
+   {
+    "doc": "S100Z4R8",
+    "違う(節の件数)": 6,
+    "VALUE_MISMATCH(state)": 6,
+    "要確認(節の件数)": 12,
+    "一致(節の件数)": 58,
+    "対象外": 0,
+    "判断しない": 3,
+    "claims": 79
+   },
+   {
+    "doc": "S100Z55N",
+    "違う(節の件数)": 3,
+    "VALUE_MISMATCH(state)": 3,
+    "要確認(節の件数)": 23,
+    "一致(節の件数)": 88,
+    "対象外": 0,
+    "判断しない": 7,
+    "claims": 121
+   },
+   {
+    "doc": "S100Z5CH",
+    "違う(節の件数)": 1,
+    "VALUE_MISMATCH(state)": 1,
+    "要確認(節の件数)": 17,
+    "一致(節の件数)": 81,
+    "対象外": 0,
+    "判断しない": 8,
+    "claims": 107
+   },
+   {
+    "doc": "S100Z5DN",
+    "違う(節の件数)": 3,
+    "VALUE_MISMATCH(state)": 3,
+    "要確認(節の件数)": 25,
+    "一致(節の件数)": 80,
+    "対象外": 1,
+    "判断しない": 17,
+    "claims": 126
+   },
+   {
+    "doc": "S100Z6XO",
+    "違う(節の件数)": 19,
+    "VALUE_MISMATCH(state)": 19,
+    "要確認(節の件数)": 38,
+    "一致(節の件数)": 80,
+    "対象外": 6,
+    "判断しない": 19,
+    "claims": 162
+   }
+  ],
+  "違う": 433,
+  "要確認": 1773,
+  "対象外": 145,
+  "判断しない": 1077,
+  "一致": 4371,
+  "VALUE_MISMATCH(state)の合計": 433,
+  "総 claim": 7799,
+  "節の合計": 7799
+ },
+ "S6": {
+  "穴 B": {
+   "注入": 485,
+   "記録(P26 の欄)の行": 485,
+   "既定で通した": {
+    "件": 0,
+    "分母": 485,
+    "率": 0.0
+   },
+   "既定で止めた": 480,
+   "既定のその他": 5,
+   "既定の結果": {
+    "その他": 5,
+    "止めた": 480
+   },
+   "P26 明示(対照)で通した": {
+    "件": 0,
+    "分母": 485,
+    "率": 0.0
+   },
+   "P26 明示(対照)で止めた": 480,
+   "P26 明示の結果": {
+    "その他": 5,
+    "止めた": 480
+   },
+   "P26 の記録の P26 の欄と違った行": 0,
+   "違った行": [],
+   "P26 明示(対照)と違った行": 0
+  },
+  "段 2": {
+   "行": 192,
+   "注入": 64,
+   "記録(P26 の欄)の行": 192,
+   "全注入で Core 自身(既定)が GROUNDED": {
+    "件": 0,
+    "分母": 64,
+    "率": 0.0
+   },
+   "P26 の記録の P26 の欄と違った行": 0,
+   "違った行": []
+  }
+ },
+ "S7": {
+  "adapters/xbrl/vocabulary.py": {
+   "挿入": 5,
+   "削除": 1
+  },
+  "adapters/xbrl/verify_document.py": {
+   "挿入": 1,
+   "削除": 1
+  },
+  "adapters/xbrl/recipes.py": {
+   "挿入": 0,
+   "削除": 0
+  },
+  "adapters/xbrl/extract.py": {
+   "挿入": 0,
+   "削除": 0
+  },
+  "adapters/xbrl/registry_setup.py": {
+   "挿入": 0,
+   "削除": 0
+  },
+  "adapters/xbrl/report_customer.py": {
+   "挿入": 0,
+   "削除": 0
+  },
+  "adapters/xbrl/comparators.py": {
+   "挿入": 0,
+   "削除": 0
+  },
+  "adapters/xbrl/report.py": {
+   "挿入": 0,
+   "削除": 0
+  },
+  "adapters/xbrl/run.py": {
+   "挿入": 0,
+   "削除": 0
+  },
+  "core/": {
+   "差の行数": 0,
+   "status": ""
+  },
+  "adapters/xbrl の file 数": 16,
+  "vocabulary.py・verify_document.py 以外で封の commit から動いた file": [],
+  "vocabulary.py の削除された行(封の commit から)": [
+   "DEFAULT_PROFILE = \"P26\""
+  ],
+  "verify_document.py の削除された行(封の commit から)": [
+   "``--profile`` を省くと ``vocabulary.DEFAULT_PROFILE``(= P20。2026-10-14 の人間の決定)。"
+  ]
+ },
+ "S10": {
+  "README.md": {
+   "節に 通した の字": true,
+   "節に 止めた の字": true
+  },
+  "README.en.md": {
+   "節に 通した の字": true,
+   "節に 止めた の字": true
+  },
+  "README.md の いまの段 の行": {
+   "P27(2026-10-28、既定を P27)": 1,
+   "P26(2026-10-23、既定を P26)": 1,
+   "いまの段 の行の合計": 5
+  },
+  "docs/FACTS_FOR_BUYERS_2026-10-20.md": {
+   "P26 の字の数": 0,
+   "P27 の字の数": 0
+  }
+ },
+ "S11": {
+  "試験 file の数(ディスク上)": 234,
+  "覆われていない file": 0,
+  "覆いの記録の試験 file の数": 234
+ },
+ "S12": {
+  "判定の文": [
+   "判定(P27E): P27E を「外部の数の文に使う profile」として採用する。",
+   "判定(P27): P27 を「既定の候補」として記録する。"
+  ]
+ },
+ "試験の赤": {
+  "S8": {
+   "出どころ": "基準の木 = 封の commit(87f83fd)の木 + engine 2 file(vocabulary.py の 1 行と注記・verify_document.py の docstring の 1 行)のみ。試験・記録・文書は直す前。python3 -m pytest -q -rfEs -p no:cacheprovider。tests/measure と、tests/adapters/xbrl+tests/core+tests/golden+tests/fixtures+measure/tests の 2 回",
+   "tests/measure": {
+    "赤": 87,
+    "file": 31,
+    "ids": [
+     "tests/measure/test_xbrl_a_core_vs_grep_seal.py::FrozenTest::test_9_tools_have_not_moved",
+     "tests/measure/test_xbrl_axis3_decision.py::Axis3Test::test_9_the_engine_was_not_touched",
+     "tests/measure/test_xbrl_branch_a.py::BranchTest::test_3_the_profile_flags_are_read_from_the_code",
+     "tests/measure/test_xbrl_branch_a.py::PredictionTest::test_14_engine_files_are_untouched",
+     "tests/measure/test_xbrl_cd_seal.py::FrozenToolsTest::test_12_engine_and_tools_have_not_moved",
+     "tests/measure/test_xbrl_customer_report_fix_result.py::MutationTest::test_baseline_is_green",
+     "tests/measure/test_xbrl_customer_report_fix_result.py::RecordTest::test_5_module_and_untouched_files_are_the_ones_measured",
+     "tests/measure/test_xbrl_customer_report_fix_seal.py::SealTest::test_11_untouched_files_keep_their_sha",
+     "tests/measure/test_xbrl_customer_report_fix_seal.py::SealTest::test_12_engine_fingerprint_is_the_one_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_customer_report_fix_seal.py::SealTest::test_13_frozen_bundle_is_the_one_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_customer_report_result.py::MutationTest::test_baseline_is_green",
+     "tests/measure/test_xbrl_customer_report_result.py::RecordTest::test_5_module_and_untouched_files_are_the_ones_measured",
+     "tests/measure/test_xbrl_customer_report_seal.py::SealedStateTest::test_11_untouched_files_keep_their_sha",
+     "tests/measure/test_xbrl_customer_report_seal.py::SealedStateTest::test_12_engine_fingerprint_and_frozen_bundle_are_the_ones_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_default_p26_result.py::MutationTest::test_baseline_is_green",
+     "tests/measure/test_xbrl_default_p26_result.py::MutationTest::test_m14_a_wrong_engine_sha_is_red",
+     "tests/measure/test_xbrl_default_p26_result.py::RecordTest::test_5_engine_is_the_declared_after_value_and_the_default_is_p26",
+     "tests/measure/test_xbrl_default_p26_result.py::RerunTest::test_light_two_documents_match_the_record",
+     "tests/measure/test_xbrl_default_p26_seal.py::EngineAtBaseTest::test_19_adapters_file_set_and_the_fifteen_untouched_files",
+     "tests/measure/test_xbrl_default_p26_seal.py::EngineAtBaseTest::test_20_vocabulary_sha_and_default_are_the_ones_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_default_p26_seal.py::EngineAtBaseTest::test_21_fingerprint_and_frozen_bundle_are_the_ones_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_default_p26_seal.py::SealTest::test_7_hum_the_docstring_is_still_p20_in_the_actual_file",
+     "tests/measure/test_xbrl_fresh_result.py::MutationTest::test_baseline_is_green",
+     "tests/measure/test_xbrl_fresh_result.py::MutationTest::test_m21_a_wrong_engine_sha_is_red",
+     "tests/measure/test_xbrl_fresh_result.py::RecordTest::test_5_engine_is_the_one_measured_or_a_declared_transition",
+     "tests/measure/test_xbrl_fresh_result.py::RecordTest::test_6_core_untouched_default_unchanged_and_the_seal_not_edited",
+     "tests/measure/test_xbrl_lastbranch_result.py::MutationTest::test_baseline_is_green",
+     "tests/measure/test_xbrl_lastbranch_result.py::MutationTest::test_m20_a_wrong_engine_sha_is_red",
+     "tests/measure/test_xbrl_lastbranch_result.py::RecordTest::test_6_engine_is_the_one_measured_or_a_declared_transition",
+     "tests/measure/test_xbrl_lastbranch_result.py::RecordTest::test_8_core_is_untouched_and_default_is_p22_in_step_1",
+     "tests/measure/test_xbrl_lastbranch_seal.py::EngineAtSealTest::test_13_engine_sha_is_the_one_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_lastbranch_seal.py::EngineAtSealTest::test_14_new_flag_p25_and_no_same_value_exist_now_default_is_p22",
+     "tests/measure/test_xbrl_lastbranch_seal.py::SealTest::test_9_p24_flags_and_p25_base_are_unchanged",
+     "tests/measure/test_xbrl_naming_fix_result.py::NamingFixStep2Gate::test_14_default_profile_is_switched_with_a_dated_note_and_old_text_kept",
+     "tests/measure/test_xbrl_p20_result.py::DisciplineTest::test_11_engine_is_untouched",
+     "tests/measure/test_xbrl_p26_result.py::MutationTest::test_baseline_is_green",
+     "tests/measure/test_xbrl_p26_result.py::MutationTest::test_m17_a_wrong_engine_sha_is_red",
+     "tests/measure/test_xbrl_p26_result.py::RecordTest::test_6_engine_is_the_one_measured_or_a_declared_transition",
+     "tests/measure/test_xbrl_p26_result.py::RecordTest::test_8_core_and_the_untouched_files_are_untouched_and_default_is_p22_in_step_1",
+     "tests/measure/test_xbrl_p26_seal.py::EngineAtSealTest::test_11_untouched_files_keep_their_sha",
+     "tests/measure/test_xbrl_p26_seal.py::EngineAtSealTest::test_12_engine_sha_is_the_one_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_p26_seal.py::EngineAtSealTest::test_13_engine_fingerprint_is_the_one_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_p26_seal.py::EngineAtSealTest::test_14_frozen_bundle_is_the_one_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_p27_engine_result.py::GateMutationTest::test_m10_a_changed_cache_or_a_different_engine_or_script_is_red",
+     "tests/measure/test_xbrl_p27_engine_result.py::RegressRecordTest::test_7_clean_cache_engine_and_script",
+     "tests/measure/test_xbrl_p27_engine_result.py::TuneRecordTest::test_5_clean_cache_engine_and_script",
+     "tests/measure/test_xbrl_p27_result.py::TestPins::test_61_i_the_engine_fingerprint_in_the_records_is_the_engine_of_E",
+     "tests/measure/test_xbrl_p27_result.py::TestPins::test_65_the_p27_profiles_and_the_default_in_the_engine_are_the_sealed_ones",
+     "tests/measure/test_xbrl_p27_seal.py::EngineDiffTest::test_6_the_seal_commit_is_one_and_the_default_is_untouched",
+     "tests/measure/test_xbrl_p27_seal.py::EngineDiffTest::test_7_only_insertions_in_the_five_files",
+     "tests/measure/test_xbrl_p27_seal.py::EngineDiffTest::test_8_the_untouched_engine_files_and_core_are_byte_equal_to_the_seal_commit",
+     "tests/measure/test_xbrl_p27_seal.py::EngineDiffTest::test_9_the_five_sha16_are_the_seal_time_values_or_the_declared_transition",
+     "tests/measure/test_xbrl_p27_seal.py::GateMutationTest::test_m2_changing_a_constant_in_the_seal_text_is_red",
+     "tests/measure/test_xbrl_p27_seal.py::GateMutationTest::test_m5_a_deleted_line_or_an_outside_file_is_red",
+     "tests/measure/test_xbrl_p27_seal.py::SealTextTest::test_2_the_constants_in_the_seal_equal_the_engine",
+     "tests/measure/test_xbrl_p27_seal.py::SealTextTest::test_5_the_new_sha16_values_are_in_the_files_that_pin_them",
+     "tests/measure/test_xbrl_period_bind_result.py::MutationTest::test_ms6_stage2_default_note_mutations_are_red",
+     "tests/measure/test_xbrl_period_bind_result.py::RecordTest::test_13_stage2_default_note_and_pins",
+     "tests/measure/test_xbrl_period_bind_result.py::RecordTest::test_16_frozen_bundle_last_generation_is_the_working_tree_and_declares_step_2",
+     "tests/measure/test_xbrl_period_bind_result.py::RecordTest::test_8_engine_is_the_one_measured_or_a_declared_transition",
+     "tests/measure/test_xbrl_period_bind_result.py::RecordTest::test_9_core_is_untouched_and_default_is_p22_from_step_2",
+     "tests/measure/test_xbrl_period_bind_result.py::RerunTest::test_light_stage2_the_comparator_sees_a_wrong_default",
+     "tests/measure/test_xbrl_period_bind_seal.py::EngineAtSealTest::test_12_engine_sha_is_the_one_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_period_bind_seal.py::EngineAtSealTest::test_13_default_is_p22_from_step_2_and_p22_is_registered_with_the_flag",
+     "tests/measure/test_xbrl_pnf_diag.py::DisciplineTest::test_7_engine_files_are_untouched",
+     "tests/measure/test_xbrl_point_prior_result.py::DocTest::test_6_the_document_equals_what_the_record_says",
+     "tests/measure/test_xbrl_point_prior_result.py::DocTest::test_7_seal_and_engine_are_untouched_since_the_seal_commit",
+     "tests/measure/test_xbrl_point_prior_result.py::MutationTest::test_m0_the_genuine_samples_pass",
+     "tests/measure/test_xbrl_point_prior_result.py::RecordTest::test_3_judgments_recomputed_equal_the_script_and_the_record",
+     "tests/measure/test_xbrl_ritual_result.py::LabelTest::test_13_without_the_labels_the_ritual_stops_with_instructions",
+     "tests/measure/test_xbrl_ritual_result.py::LabelTest::test_14_labels_with_a_wrong_sha256_also_stop_with_instructions",
+     "tests/measure/test_xbrl_ritual_result.py::LabelTest::test_17_only_one_of_the_two_label_files_also_stops_with_instructions",
+     "tests/measure/test_xbrl_ritual_result.py::PredictionTest::test_8_judgments_recomputed_equal_the_document_table",
+     "tests/measure/test_xbrl_role_swap_result.py::DisciplineTest::test_11_engine_untouched",
+     "tests/measure/test_xbrl_rounding_result.py::MutationTest::test_baseline_is_green",
+     "tests/measure/test_xbrl_rounding_result.py::MutationTest::test_m16_a_wrong_engine_sha_is_red",
+     "tests/measure/test_xbrl_rounding_result.py::RecordTest::test_6_engine_is_the_one_measured_or_a_declared_transition",
+     "tests/measure/test_xbrl_rounding_result.py::RecordTest::test_8_core_is_untouched_and_default_is_p22_in_step_1",
+     "tests/measure/test_xbrl_rounding_seal.py::EngineAtSealTest::test_11_engine_sha_is_the_one_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_rounding_seal.py::EngineAtSealTest::test_12_flags_exist_default_is_p22_and_p23_is_p22_plus_the_two_flags",
+     "tests/measure/test_xbrl_verify_inventory.py::DisciplineTest::test_9_engine_untouched",
+     "tests/measure/test_xbrl_vocab_result.py::MutationTest::test_baseline_is_green",
+     "tests/measure/test_xbrl_vocab_result.py::MutationTest::test_m16_a_wrong_engine_sha_is_red",
+     "tests/measure/test_xbrl_vocab_result.py::RecordTest::test_6_engine_is_the_one_measured_or_a_declared_transition",
+     "tests/measure/test_xbrl_vocab_result.py::RecordTest::test_8_core_is_untouched_and_default_is_p22_in_step_1",
+     "tests/measure/test_xbrl_vocab_seal.py::EngineAtSealTest::test_13_engine_sha_is_the_one_at_the_seal_or_a_declared_transition",
+     "tests/measure/test_xbrl_vocab_seal.py::EngineAtSealTest::test_14_new_flags_p24_and_other_frame_exist_now_default_is_p22"
+    ]
+   },
+   "tests/adapters/xbrl": {
+    "赤": 16,
+    "file": 11,
+    "ids": [
+     "tests/adapters/xbrl/test_p17.py::ProfileShapeTest::test_default_profile_is_p26",
+     "tests/adapters/xbrl/test_p20.py::ProfileShapeTest::test_default_profile_is_p22",
+     "tests/adapters/xbrl/test_recipes_p21.py::FlagShapeTest::test_the_default_profile_was_p21_from_step_2_and_p22_since_period_bind_step_2_and_is_p26_since_default_p26_step_2",
+     "tests/adapters/xbrl/test_recipes_p22.py::FlagShapeTest::test_the_default_profile_was_p22_from_step_2_and_is_p26_since_default_p26_step_2",
+     "tests/adapters/xbrl/test_recipes_p23.py::FlagShapeTest::test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2",
+     "tests/adapters/xbrl/test_recipes_p24.py::FlagShapeTest::test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2",
+     "tests/adapters/xbrl/test_recipes_p25.py::FlagShapeTest::test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2",
+     "tests/adapters/xbrl/test_recipes_p26.py::FlagShapeTest::test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2",
+     "tests/adapters/xbrl/test_recipes_p27.py::FlagShapeTest::test_no_per_flag_profile_is_registered_and_the_default_is_still_p26",
+     "tests/adapters/xbrl/test_run.py::DefaultProfileTest::test_cli_without_profile_uses_the_default",
+     "tests/adapters/xbrl/test_run.py::DefaultProfileTest::test_default_profile_is_p26_literally",
+     "tests/adapters/xbrl/test_verify_entry.py::DocumentLevelRuleTest::test_the_two_documents_are_no_longer_flagged_under_the_default",
+     "tests/adapters/xbrl/test_verify_entry.py::OutputStabilityTest::test_cli_writes_the_same_bytes_as_the_library",
+     "tests/adapters/xbrl/test_verify_entry.py::OutputStabilityTest::test_one_documents_output_sha256_is_pinned_literally",
+     "tests/adapters/xbrl/test_verify_entry.py::SemanticMatchAgainstTheHoldoutMeasurementTest::test_the_default_p26_moves_the_recorded_rows_and_leaves_grounded_on_one_row",
+     "tests/adapters/xbrl/test_verify_entry.py::RobustnessTableTest::test_the_default_p26_stop_counts_of_the_fourteen_documents_are_pinned"
+    ]
+   },
+   "種類": {
+    "tests/measure/test_xbrl_a_core_vs_grep_seal.py::FrozenTest::test_9_tools_have_not_moved": "1",
+    "tests/measure/test_xbrl_axis3_decision.py::Axis3Test::test_9_the_engine_was_not_touched": "1",
+    "tests/measure/test_xbrl_branch_a.py::BranchTest::test_3_the_profile_flags_are_read_from_the_code": "2",
+    "tests/measure/test_xbrl_branch_a.py::PredictionTest::test_14_engine_files_are_untouched": "1",
+    "tests/measure/test_xbrl_cd_seal.py::FrozenToolsTest::test_12_engine_and_tools_have_not_moved": "1",
+    "tests/measure/test_xbrl_customer_report_fix_result.py::MutationTest::test_baseline_is_green": "4",
+    "tests/measure/test_xbrl_customer_report_fix_result.py::RecordTest::test_5_module_and_untouched_files_are_the_ones_measured": "1",
+    "tests/measure/test_xbrl_customer_report_fix_seal.py::SealTest::test_11_untouched_files_keep_their_sha": "1",
+    "tests/measure/test_xbrl_customer_report_fix_seal.py::SealTest::test_12_engine_fingerprint_is_the_one_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_customer_report_fix_seal.py::SealTest::test_13_frozen_bundle_is_the_one_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_customer_report_result.py::MutationTest::test_baseline_is_green": "4",
+    "tests/measure/test_xbrl_customer_report_result.py::RecordTest::test_5_module_and_untouched_files_are_the_ones_measured": "1",
+    "tests/measure/test_xbrl_customer_report_seal.py::SealedStateTest::test_11_untouched_files_keep_their_sha": "1",
+    "tests/measure/test_xbrl_customer_report_seal.py::SealedStateTest::test_12_engine_fingerprint_and_frozen_bundle_are_the_ones_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_default_p26_result.py::MutationTest::test_baseline_is_green": "4",
+    "tests/measure/test_xbrl_default_p26_result.py::MutationTest::test_m14_a_wrong_engine_sha_is_red": "4",
+    "tests/measure/test_xbrl_default_p26_result.py::RecordTest::test_5_engine_is_the_declared_after_value_and_the_default_is_p26": "1",
+    "tests/measure/test_xbrl_default_p26_result.py::RerunTest::test_light_two_documents_match_the_record": "3",
+    "tests/measure/test_xbrl_default_p26_seal.py::EngineAtBaseTest::test_19_adapters_file_set_and_the_fifteen_untouched_files": "1",
+    "tests/measure/test_xbrl_default_p26_seal.py::EngineAtBaseTest::test_20_vocabulary_sha_and_default_are_the_ones_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_default_p26_seal.py::EngineAtBaseTest::test_21_fingerprint_and_frozen_bundle_are_the_ones_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_default_p26_seal.py::SealTest::test_7_hum_the_docstring_is_still_p20_in_the_actual_file": "1",
+    "tests/measure/test_xbrl_fresh_result.py::MutationTest::test_baseline_is_green": "4",
+    "tests/measure/test_xbrl_fresh_result.py::MutationTest::test_m21_a_wrong_engine_sha_is_red": "4",
+    "tests/measure/test_xbrl_fresh_result.py::RecordTest::test_5_engine_is_the_one_measured_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_fresh_result.py::RecordTest::test_6_core_untouched_default_unchanged_and_the_seal_not_edited": "2",
+    "tests/measure/test_xbrl_lastbranch_result.py::MutationTest::test_baseline_is_green": "4",
+    "tests/measure/test_xbrl_lastbranch_result.py::MutationTest::test_m20_a_wrong_engine_sha_is_red": "4",
+    "tests/measure/test_xbrl_lastbranch_result.py::RecordTest::test_6_engine_is_the_one_measured_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_lastbranch_result.py::RecordTest::test_8_core_is_untouched_and_default_is_p22_in_step_1": "2",
+    "tests/measure/test_xbrl_lastbranch_seal.py::EngineAtSealTest::test_13_engine_sha_is_the_one_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_lastbranch_seal.py::EngineAtSealTest::test_14_new_flag_p25_and_no_same_value_exist_now_default_is_p22": "2",
+    "tests/measure/test_xbrl_lastbranch_seal.py::SealTest::test_9_p24_flags_and_p25_base_are_unchanged": "2",
+    "tests/measure/test_xbrl_naming_fix_result.py::NamingFixStep2Gate::test_14_default_profile_is_switched_with_a_dated_note_and_old_text_kept": "2",
+    "tests/measure/test_xbrl_p20_result.py::DisciplineTest::test_11_engine_is_untouched": "1",
+    "tests/measure/test_xbrl_p26_result.py::MutationTest::test_baseline_is_green": "4",
+    "tests/measure/test_xbrl_p26_result.py::MutationTest::test_m17_a_wrong_engine_sha_is_red": "4",
+    "tests/measure/test_xbrl_p26_result.py::RecordTest::test_6_engine_is_the_one_measured_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_p26_result.py::RecordTest::test_8_core_and_the_untouched_files_are_untouched_and_default_is_p22_in_step_1": "2",
+    "tests/measure/test_xbrl_p26_seal.py::EngineAtSealTest::test_11_untouched_files_keep_their_sha": "1",
+    "tests/measure/test_xbrl_p26_seal.py::EngineAtSealTest::test_12_engine_sha_is_the_one_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_p26_seal.py::EngineAtSealTest::test_13_engine_fingerprint_is_the_one_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_p26_seal.py::EngineAtSealTest::test_14_frozen_bundle_is_the_one_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_p27_engine_result.py::GateMutationTest::test_m10_a_changed_cache_or_a_different_engine_or_script_is_red": "4",
+    "tests/measure/test_xbrl_p27_engine_result.py::RegressRecordTest::test_7_clean_cache_engine_and_script": "1",
+    "tests/measure/test_xbrl_p27_engine_result.py::TuneRecordTest::test_5_clean_cache_engine_and_script": "1",
+    "tests/measure/test_xbrl_p27_result.py::TestPins::test_61_i_the_engine_fingerprint_in_the_records_is_the_engine_of_E": "1",
+    "tests/measure/test_xbrl_p27_result.py::TestPins::test_65_the_p27_profiles_and_the_default_in_the_engine_are_the_sealed_ones": "2",
+    "tests/measure/test_xbrl_p27_seal.py::EngineDiffTest::test_6_the_seal_commit_is_one_and_the_default_is_untouched": "2",
+    "tests/measure/test_xbrl_p27_seal.py::EngineDiffTest::test_7_only_insertions_in_the_five_files": "1",
+    "tests/measure/test_xbrl_p27_seal.py::EngineDiffTest::test_8_the_untouched_engine_files_and_core_are_byte_equal_to_the_seal_commit": "1",
+    "tests/measure/test_xbrl_p27_seal.py::EngineDiffTest::test_9_the_five_sha16_are_the_seal_time_values_or_the_declared_transition": "1",
+    "tests/measure/test_xbrl_p27_seal.py::GateMutationTest::test_m2_changing_a_constant_in_the_seal_text_is_red": "4",
+    "tests/measure/test_xbrl_p27_seal.py::GateMutationTest::test_m5_a_deleted_line_or_an_outside_file_is_red": "4",
+    "tests/measure/test_xbrl_p27_seal.py::SealTextTest::test_2_the_constants_in_the_seal_equal_the_engine": "2",
+    "tests/measure/test_xbrl_p27_seal.py::SealTextTest::test_5_the_new_sha16_values_are_in_the_files_that_pin_them": "1",
+    "tests/measure/test_xbrl_period_bind_result.py::MutationTest::test_ms6_stage2_default_note_mutations_are_red": "4",
+    "tests/measure/test_xbrl_period_bind_result.py::RecordTest::test_13_stage2_default_note_and_pins": "2",
+    "tests/measure/test_xbrl_period_bind_result.py::RecordTest::test_16_frozen_bundle_last_generation_is_the_working_tree_and_declares_step_2": "1",
+    "tests/measure/test_xbrl_period_bind_result.py::RecordTest::test_8_engine_is_the_one_measured_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_period_bind_result.py::RecordTest::test_9_core_is_untouched_and_default_is_p22_from_step_2": "2",
+    "tests/measure/test_xbrl_period_bind_result.py::RerunTest::test_light_stage2_the_comparator_sees_a_wrong_default": "3",
+    "tests/measure/test_xbrl_period_bind_seal.py::EngineAtSealTest::test_12_engine_sha_is_the_one_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_period_bind_seal.py::EngineAtSealTest::test_13_default_is_p22_from_step_2_and_p22_is_registered_with_the_flag": "2",
+    "tests/measure/test_xbrl_pnf_diag.py::DisciplineTest::test_7_engine_files_are_untouched": "1",
+    "tests/measure/test_xbrl_point_prior_result.py::DocTest::test_6_the_document_equals_what_the_record_says": "3",
+    "tests/measure/test_xbrl_point_prior_result.py::DocTest::test_7_seal_and_engine_are_untouched_since_the_seal_commit": "1",
+    "tests/measure/test_xbrl_point_prior_result.py::MutationTest::test_m0_the_genuine_samples_pass": "3",
+    "tests/measure/test_xbrl_point_prior_result.py::RecordTest::test_3_judgments_recomputed_equal_the_script_and_the_record": "3",
+    "tests/measure/test_xbrl_ritual_result.py::LabelTest::test_13_without_the_labels_the_ritual_stops_with_instructions": "3",
+    "tests/measure/test_xbrl_ritual_result.py::LabelTest::test_14_labels_with_a_wrong_sha256_also_stop_with_instructions": "3",
+    "tests/measure/test_xbrl_ritual_result.py::LabelTest::test_17_only_one_of_the_two_label_files_also_stops_with_instructions": "3",
+    "tests/measure/test_xbrl_ritual_result.py::PredictionTest::test_8_judgments_recomputed_equal_the_document_table": "3",
+    "tests/measure/test_xbrl_role_swap_result.py::DisciplineTest::test_11_engine_untouched": "1",
+    "tests/measure/test_xbrl_rounding_result.py::MutationTest::test_baseline_is_green": "4",
+    "tests/measure/test_xbrl_rounding_result.py::MutationTest::test_m16_a_wrong_engine_sha_is_red": "4",
+    "tests/measure/test_xbrl_rounding_result.py::RecordTest::test_6_engine_is_the_one_measured_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_rounding_result.py::RecordTest::test_8_core_is_untouched_and_default_is_p22_in_step_1": "2",
+    "tests/measure/test_xbrl_rounding_seal.py::EngineAtSealTest::test_11_engine_sha_is_the_one_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_rounding_seal.py::EngineAtSealTest::test_12_flags_exist_default_is_p22_and_p23_is_p22_plus_the_two_flags": "2",
+    "tests/measure/test_xbrl_verify_inventory.py::DisciplineTest::test_9_engine_untouched": "1",
+    "tests/measure/test_xbrl_vocab_result.py::MutationTest::test_baseline_is_green": "4",
+    "tests/measure/test_xbrl_vocab_result.py::MutationTest::test_m16_a_wrong_engine_sha_is_red": "4",
+    "tests/measure/test_xbrl_vocab_result.py::RecordTest::test_6_engine_is_the_one_measured_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_vocab_result.py::RecordTest::test_8_core_is_untouched_and_default_is_p22_in_step_1": "2",
+    "tests/measure/test_xbrl_vocab_seal.py::EngineAtSealTest::test_13_engine_sha_is_the_one_at_the_seal_or_a_declared_transition": "1",
+    "tests/measure/test_xbrl_vocab_seal.py::EngineAtSealTest::test_14_new_flags_p24_and_other_frame_exist_now_default_is_p22": "2",
+    "tests/adapters/xbrl/test_p17.py::ProfileShapeTest::test_default_profile_is_p26": "2",
+    "tests/adapters/xbrl/test_p20.py::ProfileShapeTest::test_default_profile_is_p22": "2",
+    "tests/adapters/xbrl/test_recipes_p21.py::FlagShapeTest::test_the_default_profile_was_p21_from_step_2_and_p22_since_period_bind_step_2_and_is_p26_since_default_p26_step_2": "2",
+    "tests/adapters/xbrl/test_recipes_p22.py::FlagShapeTest::test_the_default_profile_was_p22_from_step_2_and_is_p26_since_default_p26_step_2": "2",
+    "tests/adapters/xbrl/test_recipes_p23.py::FlagShapeTest::test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2": "2",
+    "tests/adapters/xbrl/test_recipes_p24.py::FlagShapeTest::test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2": "2",
+    "tests/adapters/xbrl/test_recipes_p25.py::FlagShapeTest::test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2": "2",
+    "tests/adapters/xbrl/test_recipes_p26.py::FlagShapeTest::test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2": "2",
+    "tests/adapters/xbrl/test_recipes_p27.py::FlagShapeTest::test_no_per_flag_profile_is_registered_and_the_default_is_still_p26": "2",
+    "tests/adapters/xbrl/test_run.py::DefaultProfileTest::test_cli_without_profile_uses_the_default": "2",
+    "tests/adapters/xbrl/test_run.py::DefaultProfileTest::test_default_profile_is_p26_literally": "2",
+    "tests/adapters/xbrl/test_verify_entry.py::DocumentLevelRuleTest::test_the_two_documents_are_no_longer_flagged_under_the_default": "2",
+    "tests/adapters/xbrl/test_verify_entry.py::OutputStabilityTest::test_cli_writes_the_same_bytes_as_the_library": "2",
+    "tests/adapters/xbrl/test_verify_entry.py::OutputStabilityTest::test_one_documents_output_sha256_is_pinned_literally": "2",
+    "tests/adapters/xbrl/test_verify_entry.py::SemanticMatchAgainstTheHoldoutMeasurementTest::test_the_default_p26_moves_the_recorded_rows_and_leaves_grounded_on_one_row": "2",
+    "tests/adapters/xbrl/test_verify_entry.py::RobustnessTableTest::test_the_default_p26_stop_counts_of_the_fourteen_documents_are_pinned": "2"
+   },
+   "P27 の門 5 本の赤": {
+    "test_xbrl_p27_result.py": 2,
+    "test_xbrl_p27_seal.py": 8,
+    "test_xbrl_p27_engine_result.py": 3,
+    "test_xbrl_p27_eval.py": 0,
+    "test_xbrl_p27_order.py": 0
+   },
+   "golden・fixtures・measure/tests・core の赤": 0,
+   "記録を書き換えないと緑にならない門": 0,
+   "人間の決定の字の門の赤": 0
+  },
+  "S9": {
+   "出どころ": "基準の木に環境変数を付けて 12 変数を走らせ、軽い門の赤(S8 の一覧)に無い赤を『増えた赤』と数えた",
+   "増えた赤": 7,
+   "増えた赤の id": [
+    "tests/measure/test_xbrl_customer_report_fix_result.py::RerunTest::test_heavy_everything_matches_the_record",
+    "tests/measure/test_xbrl_customer_report_result.py::RerunTest::test_heavy_everything_matches_the_record",
+    "tests/measure/test_xbrl_default_p26_result.py::RerunTest::test_heavy_everything_matches_the_record",
+    "tests/measure/test_xbrl_fresh_result.py::RerunTest::test_heavy_everything_matches_the_record",
+    "tests/measure/test_xbrl_period_bind_result.py::RerunTest::test_heavy_stage2_default_matches_the_record",
+    "tests/measure/test_xbrl_ritual_result.py::RerunHeavyTest::test_4_rerun_from_the_bundled_zip_equals_the_record",
+    "tests/measure/test_xbrl_ritual_result.py::RerunHeavyTest::test_6_rerun_time_is_inside_the_sealed_bound"
+   ],
+   "基準の木の走らせ": {
+    "AUDIT_CORE_PACKAGING": {
+     "rc": 0,
+     "赤": 0,
+     "増えた赤の id": []
+    },
+    "AUDIT_CORE_CUSTOMER_REPORT": {
+     "rc": 1,
+     "赤": 3,
+     "増えた赤の id": [
+      "tests/measure/test_xbrl_customer_report_result.py::RerunTest::test_heavy_everything_matches_the_record"
+     ]
+    },
+    "AUDIT_CORE_CUSTOMER_REPORT_FIX": {
+     "rc": 1,
+     "赤": 3,
+     "増えた赤の id": [
+      "tests/measure/test_xbrl_customer_report_fix_result.py::RerunTest::test_heavy_everything_matches_the_record"
+     ]
+    },
+    "AUDIT_CORE_POINT_PRIOR": {
+     "rc": 1,
+     "赤": 4,
+     "増えた赤の id": []
+    },
+    "AUDIT_CORE_DEFAULT_P26": {
+     "rc": 1,
+     "赤": 5,
+     "増えた赤の id": [
+      "tests/measure/test_xbrl_default_p26_result.py::RerunTest::test_heavy_everything_matches_the_record"
+     ]
+    },
+    "AUDIT_CORE_FRESH": {
+     "rc": 1,
+     "赤": 5,
+     "増えた赤の id": [
+      "tests/measure/test_xbrl_fresh_result.py::RerunTest::test_heavy_everything_matches_the_record"
+     ]
+    },
+    "AUDIT_CORE_ROUNDING": {
+     "rc": 1,
+     "赤": 6,
+     "増えた赤の id": []
+    },
+    "AUDIT_CORE_VOCAB": {
+     "rc": 1,
+     "赤": 4,
+     "増えた赤の id": []
+    },
+    "AUDIT_CORE_P26": {
+     "rc": 1,
+     "赤": 4,
+     "増えた赤の id": []
+    },
+    "AUDIT_CORE_PERIOD_BIND": {
+     "rc": 1,
+     "赤": 9,
+     "増えた赤の id": [
+      "tests/measure/test_xbrl_period_bind_result.py::RerunTest::test_heavy_stage2_default_matches_the_record"
+     ]
+    },
+    "AUDIT_CORE_LASTBRANCH": {
+     "rc": 1,
+     "赤": 4,
+     "増えた赤の id": []
+    },
+    "AUDIT_CORE_RITUAL": {
+     "rc": 1,
+     "赤": 6,
+     "増えた赤の id": [
+      "tests/measure/test_xbrl_ritual_result.py::RerunHeavyTest::test_4_rerun_from_the_bundled_zip_equals_the_record",
+      "tests/measure/test_xbrl_ritual_result.py::RerunHeavyTest::test_6_rerun_time_is_inside_the_sealed_bound"
+     ]
+    }
+   },
+   "実装の後": {
+    "場所": "使い捨ての clone(封の commit 87f83fd の上に凍結前の作業木を 1 回だけ commit した。本線の履歴に入れない)",
+    "赤": 0,
+    "赤の id": [],
+    "走らせ直し": {
+     "AUDIT_CORE_PACKAGING": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 29
+     },
+     "AUDIT_CORE_CUSTOMER_REPORT": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 119
+     },
+     "AUDIT_CORE_CUSTOMER_REPORT_FIX": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 225
+     },
+     "AUDIT_CORE_POINT_PRIOR": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 230
+     },
+     "AUDIT_CORE_DEFAULT_P26": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 529
+     },
+     "AUDIT_CORE_FRESH": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 9119
+     },
+     "AUDIT_CORE_ROUNDING": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 1761
+     },
+     "AUDIT_CORE_VOCAB": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 9793
+     },
+     "AUDIT_CORE_P26": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 9179
+     },
+     "AUDIT_CORE_PERIOD_BIND": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 721
+     },
+     "AUDIT_CORE_LASTBRANCH": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 917
+     },
+     "AUDIT_CORE_RITUAL": {
+      "赤": 0,
+      "赤の id": [],
+      "rc": 0,
+      "秒": 27
+     }
+    }
+   }
+  }
+ },
+ "所要秒": {
+  "S1〜S3": 57.8,
+  "S4": 23.0,
+  "S5": 14.3,
+  "S6": 96.0,
+  "全体": 191.5
+ },
+ "予測の判定": {
+  "S-1": {
+   "当たり": true
+  },
+  "S-2": {
+   "当たり": true
+  },
+  "S-3": {
+   "当たり": true
+  },
+  "S-4": {
+   "当たり": true
+  },
+  "S-5": {
+   "当たり": true
+  },
+  "S-6": {
+   "当たり": true
+  },
+  "S-7": {
+   "当たり": true
+  },
+  "S-8": {
+   "当たり": false
+  },
+  "S-9": {
+   "当たり": true
+  },
+  "S-10": {
+   "当たり": true
+  },
+  "S-11": {
+   "当たり": true
+  },
+  "S-12": {
+   "当たり": true
+  }
+ },
+ "limits": [
+  "S-8(試験の赤の数)・S-9(重い走らせ直し)は実装席が走らせた実測を人が書いた表(入力の file の sha256 を記録した)で、この script は測っていない",
+  "S-1 の対照は『既定を実行中だけ P26 に戻す』変異で、P26 を明示した経路と同じ出力になる(profile の欄が違う)",
+  "読み(正しい文かどうか)は測っていない。この測定は『既定の配線が P27 の明示と同じか』だけを見る",
+  "S-12 は評価用の結果の文書の判定の文を写すだけ。判定を求め直すのは結果の門(記録 4 つから別の関数で)"
+ ]
+}

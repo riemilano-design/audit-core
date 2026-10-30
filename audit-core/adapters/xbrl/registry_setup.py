@@ -3,13 +3,13 @@
 C-1h §3.4-c, 2026-10-06): registers this Adapter's schemes, comparators,
 normalizations and reasons on top of ``audit_core.Registry.default()``.
 
-28 registrations: 2 schemes (``xbrl``, ``formula`` -- ``builtin`` is
+29 registrations: 2 schemes (``xbrl``, ``formula`` -- ``builtin`` is
 already registered by ``Registry.default()`` and is *not* re-registered
 here) + 9 comparators (:mod:`comparators`; 6 from C-1d + 2 from C-1g's
 profile P6 + 1 from C-1h's profile P7) + 4 normalizations (the
 ``_match_value`` ladder's four ``how`` strings; unchanged -- P6's
 flow-sign branch of ``equals_within`` reuses the existing
-"round"/"truncate" names, see ``comparators.py``) + 13 reasons (7
+"round"/"truncate" names, see ``comparators.py``) + 14 reasons (7
 POINTER_NOT_FOUND + 6 UNVERIFIABLE; C-1d's 9, matching
 ``recipes.UNBOUND_REASON_STATE`` plus the count-free
 ``ambiguous(elements)``, plus C-1g's one new POINTER_NOT_FOUND reason
@@ -33,6 +33,9 @@ _COMPARATORS = (
     ("pct_change(cur,prior)", C.pct_change),
     ("diff(a-b) equals_within", C.diff_ab_equals_within),
     ("builtin:sign(cur-prior)==direction", C.builtin_sign_direction),
+    # A1(主語の規則の直し、人間の追加指示、2026-10-08): 符号 **と** 金額。
+    # 理由コードは増やさない(合わなければ既存の VALUE_MISMATCH)。
+    ("builtin:sign(cur-prior)==direction&amount", C.builtin_sign_direction_with_amount),
     # Core 接続 C-1g §1-2/§1-3(profile P6 のみが参照する)。
     ("builtin:flow_sign(cur)==direction", C.builtin_flow_sign_direction),
     ("diff(a-b)(pure*100)", C.diff_ab_pure100),
@@ -52,6 +55,14 @@ _POINTER_NOT_FOUND_REASONS = (
     # Core 接続 C-1h §1-3(profile P7 のみ)。
     "no_element(text needs money fact)",
     "no_element(no prior for text)",
+    # XBRL 直し §1b(人間の決定、2026-10-08、profile P8 のみ)。前々期の値が
+    # 無いときに代用せず止める理由。P1/P5F/P6/P7 はこの理由を作らないので、
+    # 登録簿に在ること自体は彼らに対して無害(既存の理由は 1 つも消していない)。
+    "no_element(no prior2 for prior-year diff)",
+    # P25 last_branch_names_only_if_evidence(封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md、profile P25 のみ): 最後の枝で証拠が無く名指さなかった数。名指した fact は provenance。
+    "no_same_value",
+    # P26 G1 concept_gate(封 docs/XBRL_P26_SEAL_2026-10-21.md): 当てた fact が文の項目と別の概念(1 株当たり・部分一致の前置き)で「違う」と言わなかった数。名指した fact は provenance。
+    "other_concept",
 )
 
 _UNVERIFIABLE_REASONS = (
@@ -62,6 +73,14 @@ _UNVERIFIABLE_REASONS = (
     "prior is 0",
     # Core 接続 C-1h §1-2(profile P7 のみ)。
     "target_or_plan",
+    # P24 frame_rebind(試作 v3、profile P24 のみ): 同じ要素の別の枠でだけ合った数。合った枠の context は provenance。
+    "other_frame",
+    # P26 G4 cause_item_direction(封 docs/XBRL_P26_SEAL_2026-10-21.md): 向きの語が主語でなく要因の項目にかかる形。名指していた fact と形は provenance。
+    "direction_on_cause_item",
+    # P26 G3 rounded_diff_hold(封 docs/XBRL_P26_SEAL_2026-10-21.md): 丸めた値の差が 2 倍の切り捨ての帯でだけ合う数。名指した対は provenance。
+    "rounded_diff_within_double_band",
+    # P27 C2 per_unit_counter(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-4): 「1人当たり」「1株当たり」の「1」。数の主張ではない。
+    "per_unit_counter",
 )
 
 

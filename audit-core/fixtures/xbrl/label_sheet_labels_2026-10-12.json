@@ -1,0 +1,454 @@
+{
+ "labeller": "独立 札付け席(2026-10-12, 2 回目の実施)",
+ "sheet_sha256": "3ed36652bd1869f0b252b5d6ab5ac20227488482113325dc4a77b02d3c62b3b6",
+ "zip_sha256": "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799",
+ "saw_other_labels": false,
+ "saw_machine_states": false,
+ "basis": "材料は 2 本だけ。(1) label_sheet_2026-10-12.json を全文読み(task・label_definitions・rounding_convention_from_the_document・required_output・constraints・claims 33 行)。(2) adapters.xbrl.instance.load_instance で ai_prose_instance_2026-10-09.zip(580,260 バイト)を読み、fact 863 件 / context 162 件 / textblock 122 件 / zip メンバ 43 件を得た。863 件すべてを要素名・context(instant または start..end)・dimension member・値・decimals・unit の TSV に書き出し、行ごとに grep で候補 fact を引いた。labels_from_zip(z, z.namelist()) は提出会社の拡張要素 15 件分の日本語ラベルしか返さず(fact 863 件のうちラベルが付いたのは 10 件)、標準タクソノミのラベルリンクは ZIP に含まれないため、科目の同定は要素名・context・dimension member・金額の整合で行った。文脈の確認に ai_prose_2026-10-09.txt(7,084 字)を読み、各行の窓がどの文のどの位置かを特定した。照合は Python の Decimal で機械的に行い(切り捨て = ROUND_DOWN、四捨五入 = ROUND_HALF_UP、表示桁は本文の最終桁 = 百万円 / 1 円 / 0.1%)、同じスクリプトで『数 ±1 表示桁』も当てて許容の広さを測った。コードもデータも 1 行も変更していない(git は status/ls-files のみ)。",
+ "rows": 33,
+ "labels": [
+  {
+   "id": "N012",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults / context Prior1YearInstant(2025-06-30)/ 値 0.606 / decimals 3 / unit pure。pure→% の 100 倍で 60.600%。行の数 60.6% と完全一致(丸め不要)。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": true,
+    "当てた単位換算": "pure→% 100 倍"
+   }
+  },
+  {
+   "id": "N039",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:NumberOfEmployees / Prior1YearInstant(2025-06-30)/ 1447 / decimals 0 / unit pure。行の数 1,447 名と整数で完全一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": true,
+    "当てた単位換算": "無し(pure の人数、1 名単位)"
+   }
+  },
+  {
+   "id": "N040",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:AverageNumberOfTemporaryWorkers / CurrentYearInstant(2026-06-30)/ 409 / decimals 0 / unit pure。行の数 409 名と整数で完全一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": true,
+    "当てた単位換算": "無し(pure の人数、1 名単位)"
+   }
+  },
+  {
+   "id": "N041",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:AverageNumberOfTemporaryWorkers / Prior1YearInstant(2025-06-30)/ 393 / decimals 0 / unit pure。文の『同393名』= 前期の年間平均。整数で完全一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": true,
+    "当てた単位換算": "無し(pure の人数、1 名単位)"
+   }
+  },
+  {
+   "id": "N113",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults / Prior1YearDuration(2024-07-01〜2025-06-30)/ 0.133 / decimals 3 / unit pure。×100 = 13.300%。行の数 13.3% と完全一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": true,
+    "当てた単位換算": "pure→% 100 倍"
+   }
+  },
+  {
+   "id": "N114",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults(同値 jppfs_cor:ComprehensiveIncome)/ CurrentYearDuration(2025-07-01〜2026-06-30)/ 2,256,683,000 円 / decimals -3 / unit JPY = 2,256.683 百万円。行の数 2,256 百万円は百万円の位で**切り捨てたとき一致**。四捨五入では 2,257 となり不一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "円→百万円 10^-6(fact は円、行の単位は百万円)"
+   }
+  },
+  {
+   "id": "N115",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults / Prior1YearDuration(2024-07-01〜2025-06-30)/ 2,451,498,000 円 / decimals -3 / unit JPY = 2,451.498 百万円。行の数 2,451 百万円は切り捨て・四捨五入のどちらでも一致(端数 0.498 < 0.5)。円単位では完全一致ではない。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "円→百万円 10^-6(fact は円、行の単位は百万円)"
+   }
+  },
+  {
+   "id": "N116",
+   "札": "真",
+   "確信": "高",
+   "根拠": "差の導出: ComprehensiveIncomeSummaryOfBusinessResults Prior1YearDuration 2,451,498,000 円 − CurrentYearDuration 2,256,683,000 円 = 194,815,000 円(= 194.815 百万円)。いずれも decimals -3 / unit JPY。行の数 194,000,000 円は百万円の位で**切り捨てたとき一致**、四捨五入では 195 百万円で不一致。向き(減少)も fact の大小関係と一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N124",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecuritiesNetOfTaxOCI / Prior1YearDuration(2024-07-01〜2025-06-30)/ 62,235,000 円 / decimals -3 / unit JPY = 62.235 百万円(同値の内訳 fact: NetChangesOfItemsOtherThanShareholdersEquity, context Prior1YearDuration_ValuationDifferenceOnAvailableForSaleSecuritiesMember)。行の数 62,000,000 円は切り捨て・四捨五入のどちらでも一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N125",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:ForeignCurrencyTranslationAdjustmentNetOfTaxOCI / CurrentYearDuration(2025-07-01〜2026-06-30)/ 2,918,000 円 / decimals -3 / unit JPY = 2.918 百万円。行の数 2,000,000 円は**切り捨てで一致**、四捨五入では 3 百万円で不一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N126",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:ForeignCurrencyTranslationAdjustmentNetOfTaxOCI / Prior1YearDuration(2024-07-01〜2025-06-30)/ -3,621,000 円 / decimals -3 / unit JPY = -3.621 百万円。行の数 -3,000,000 円(文の『△3百万円』)は**0 方向への切り捨てで一致**、絶対値の四捨五入では -4 百万円で不一致。符号は fact と一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N127",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:DeferredGainsOrLossesOnHedgesNetOfTaxOCI / CurrentYearDuration(2025-07-01〜2026-06-30)/ 4,992,000 円 / decimals -3 / unit JPY = 4.992 百万円(期末残高 jppfs_cor:DeferredGainsOrLossesOnHedges / CurrentYearInstant も同値)。行の数 4,000,000 円は**切り捨てで一致**、四捨五入では 5 百万円で不一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N173",
+   "札": "真",
+   "確信": "中",
+   "根拠": "jpcrp_cor:TotalAcquisitionCostForIncreasedSharesSharesOtherThanThoseNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentLargestHoldingCompany / CurrentYearDuration(2025-07-01〜2026-06-30)/ 3,000,000 円 / decimals -6 / unit JPY。行の数 3,000,000 円と完全一致(丸め不要)。確信を中にした理由: この fact は【株式の保有状況】の『株式数が増加した銘柄の取得価額の合計額(非上場株式以外・純投資目的以外・最大保有会社)』であり、文が言う連結貸借対照表の投資有価証券の追加取得額と範囲が完全に同じとは言えない。投資有価証券の取得による支出に当たる InvCF の fact はこのインスタンスに存在しない(PurchaseOf… は PPE・無形・自己株式のみ)。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": true,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N211",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:AssetRetirementObligationsNCL / CurrentYearInstant(2026-06-30)/ 215,469,000 円 / decimals -3 / unit JPY = 215.469 百万円。行の数 215,000,000 円は切り捨て・四捨五入のどちらでも一致。なお固定負債合計の増加額(2,629,286,000 − 2,413,522,000 = 215,764,000)も百万円の位では 215 になるが、文の窓(『資産除去債務215百万円(同198百万円)』)から科目は資産除去債務で特定でき、どちらの読みでも札は変わらない。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N212",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:AssetRetirementObligationsNCL / Prior1YearInstant(2025-06-30)/ 198,269,000 円 / decimals -3 / unit JPY = 198.269 百万円。行の数 198,000,000 円は切り捨て・四捨五入のどちらでも一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N213",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:OtherNCL / CurrentYearInstant(2026-06-30)/ 242,590,000 円 / decimals -3 / unit JPY = 242.590 百万円(固定負債のその他)。行の数 242,000,000 円は**切り捨てで一致**、四捨五入では 243 百万円で不一致。前期末 264,316,000 円とは一致しないので期は当期末で特定できる。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N220",
+   "札": "真",
+   "確信": "高",
+   "根拠": "合計の導出: jppfs_cor:CurrentPortionOfLongTermLoansPayable / Prior1YearInstant 332,864,000 円 + jppfs_cor:LongTermLoansPayable / Prior1YearInstant 510,637,000 円 = 843,501,000 円(= 843.501 百万円)。いずれも decimals -3 / unit JPY / 2025-06-30。行の数 843,000,000 円は**切り捨てで一致**、四捨五入では 844 百万円(端数 0.501)で不一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N221",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:CashAndDeposits / CurrentYearInstant(2026-06-30)/ 2,605,950,000 円 / decimals -3 / unit JPY = 2,605.950 百万円(jppfs_cor:CashAndCashEquivalents・jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults も同値)。行の数 2,605 百万円は**切り捨てで一致**、四捨五入では 2,606 で不一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "円→百万円 10^-6(fact は円、行の単位は百万円)"
+   }
+  },
+  {
+   "id": "N250",
+   "札": "真",
+   "確信": "高",
+   "根拠": "差の導出: jppfs_cor:RetainedEarnings / CurrentYearInstant(2026-06-30)10,510,398,000 円 − Prior1YearInstant(2025-06-30)10,217,485,000 円 = 292,913,000 円(= 292.913 百万円)。いずれも decimals -3 / unit JPY。行の数 292,000,000 円は**切り捨てで一致**、四捨五入では 293 百万円で不一致。向き(増加)も一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N252",
+   "札": "真",
+   "確信": "高",
+   "根拠": "N012 と同じ fact。jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults / Prior1YearInstant(2025-06-30)/ 0.606 / decimals 3 / unit pure → 60.600%。行の数 60.6% と完全一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": true,
+    "当てた単位換算": "pure→% 100 倍"
+   }
+  },
+  {
+   "id": "N255",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults / CurrentYearInstant(2026-06-30)/ 2,096.83 / decimals 2 / unit JPYPerShares。行の数は 2,096 円(機械が『2,096円83銭』から円の部分だけを取り出したもの)で、1 円の位の**切り捨てで一致**、四捨五入では 2,097 円で不一致。本文の表記『2,096円83銭』自体は fact と完全一致である点を併記する。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(JPYPerShares の円。丸めは 1 円の位で評価)"
+   }
+  },
+  {
+   "id": "N256",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults / Prior1YearInstant(2025-06-30)/ 1,897.74 / decimals 2 / unit JPYPerShares。行の数 1,897 円は**切り捨てで一致**、四捨五入では 1,898 円で不一致。本文の『1,897円74銭』は fact と完全一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(JPYPerShares の円。丸めは 1 円の位で評価)"
+   }
+  },
+  {
+   "id": "N257",
+   "札": "真",
+   "確信": "高",
+   "根拠": "差の導出: NetAssetsPerShareSummaryOfBusinessResults CurrentYearInstant 2,096.83 − Prior1YearInstant 1,897.74 = 199.09(decimals 2 / unit JPYPerShares)。行の数 199 円は切り捨て・四捨五入のどちらでも一致。向き(増加)も一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(JPYPerShares の円。丸めは 1 円の位で評価)"
+   }
+  },
+  {
+   "id": "N266",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:AmortizationOfGoodwillOpeCF / CurrentYearDuration(2025-07-01〜2026-06-30)/ 53,256,000 円 / decimals -3 / unit JPY = 53.256 百万円。行の数 53,000,000 円は切り捨て・四捨五入のどちらでも一致。前期も同額 53,256,000 円なので期の取り違えは起こり得ない。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N283",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF / CurrentYearDuration(2025-07-01〜2026-06-30)/ -802,686,000 円 / decimals -3 / unit JPY。要素名が Decrease(Increase) なので負値 = 売上債権の 802,686,000 円の増加。文の『当期は802百万円増加』と向きが一致し、絶対値 802.686 百万円は行の数 802,000,000 円と**切り捨てで一致**(四捨五入では 803 百万円)。なお貸借対照表の差(2,556,498,000 − 1,751,723,000 = 804,775,000)は 804 百万円で別の数であり、この行は CF の科目として読むと一致する。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N290",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:OtherNetInvCF / CurrentYearDuration(2025-07-01〜2026-06-30)/ +47,439,000 円 / decimals -3 / unit JPY = 47.439 百万円。正値 = 収入で、文の『その他47百万円の収入』と向きが一致。行の数 47,000,000 円は切り捨て・四捨五入のどちらでも一致。前期は -75,019,000 円なので期は特定できる。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N292",
+   "札": "真",
+   "確信": "中",
+   "根拠": "前期の設備投資関連の導出: jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF / Prior1YearDuration -400,837,000 円 + jppfs_cor:PurchaseOfIntangibleAssetsInvCF / Prior1YearDuration -52,919,000 円 = 絶対値 453,756,000 円(= 453.756 百万円、いずれも decimals -3 / unit JPY)。行の数 453,000,000 円は**切り捨てで一致**、四捨五入では 454 百万円で不一致。確信を中にした理由: 『設備投資関連』の定義が書類で一意でない。本文が当期について使う jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc / CurrentYearDuration は 341,000,000 円(decimals -6)で、当期の PPE+無形の取得支出合計(307,279,000 + 44,037,000 = 351,316,000)とは一致しない。すなわち 2 つの読みがあり、前期について後者(CapitalExpenditures 系)の fact はインスタンスに存在しない(Prior1YearDuration の当該要素なし)。前者の読みでは切り捨てで一致する。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N293",
+   "札": "真",
+   "確信": "高",
+   "根拠": "導出: jppfs_cor:NetCashProvidedByUsedInOperatingActivities / CurrentYearDuration 1,032,971,000 円 + jppfs_cor:NetCashProvidedByUsedInInvestmentActivities / CurrentYearDuration -259,037,000 円 = 773,934,000 円(= 773.934 百万円、いずれも decimals -3 / unit JPY)。行の数 773,000,000 円は**切り捨てで一致**、四捨五入では 774 百万円で不一致。向き(プラス)も一致。なお本文の字『投資活動によるキャッシュ・フローを差し引いた』を符号付きの投資 CF にそのまま当てると 1,292 百万円になるが、fact と一致するのは営業 CF と投資 CF の和(= 投資支出額を差し引いた通常の FCF)である。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "N294",
+   "札": "真",
+   "確信": "高",
+   "根拠": "導出: NetCashProvidedByUsedInOperatingActivities / Prior1YearDuration 3,029,245,000 円 + NetCashProvidedByUsedInInvestmentActivities / Prior1YearDuration -506,793,000 円 = 2,522,452,000 円(= 2,522.452 百万円、いずれも decimals -3 / unit JPY)。行の数 2,522 百万円は切り捨て・四捨五入のどちらでも一致。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": true,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "円→百万円 10^-6(fact は円、行の単位は百万円)"
+   }
+  },
+  {
+   "id": "N299",
+   "札": "真",
+   "確信": "高",
+   "根拠": "jppfs_cor:OtherNetFinCF / CurrentYearDuration(2025-07-01〜2026-06-30)/ -7,981,000 円 / decimals -3 / unit JPY。負値 = 支出で、文の『その他7百万円の支出』と向きが一致。絶対値 7.981 百万円は行の数 7,000,000 円と**切り捨てで一致**、四捨五入では 8 百万円で不一致。前期は -16,145,000 円なので期は特定できる。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": true,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(数・fact ともに円。丸めは百万円の位で評価)"
+   }
+  },
+  {
+   "id": "T017",
+   "札": "判定不能",
+   "確信": "高",
+   "根拠": "この行は 数 = null / 単位 = null で、照合すべき数が行に無い。文『増収にもかかわらず売上総利益が減少した背景には、売上原価の増加があります』は定性的な主張であり、label_definitions の『真』は『述べている数が fact と一致する』と定義されているため、数を持たないこの行には適用できない。参考(札の根拠には用いない): jppfs_cor:NetSales CurrentYearDuration 38,064,274,000 円 > Prior1YearDuration 36,975,577,000 円(増収)、jppfs_cor:GrossProfit 11,334,658,000 < 12,018,937,000(売上総利益の減少)、jppfs_cor:CostOfSales 26,729,616,000 > 24,956,639,000(売上原価の増加)。いずれも decimals -3 / unit JPY。向きは 3 つとも文と整合するが、数の主張ではないので札は判定不能とした。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": false,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(丸めが関係しない ― 照合すべき数が行に無い)"
+   }
+  },
+  {
+   "id": "T085",
+   "札": "判定不能",
+   "確信": "高",
+   "根拠": "数 = null / 単位 = null。文『5百万円の計上と剰余金の配当652百万円により292百万円の増加にとどまり』は機械の窓で先頭が切れており(『当期純利益94|5百万円』の途中)、どの数を主張として照合すべきかが行から決まらない。参考(札の根拠には用いない): jppfs_cor:DividendsFromSurplus / CurrentYearDuration -652,881,000 円(652.881 百万円、切り捨てで 652)、jppfs_cor:RetainedEarnings の当期末 10,510,398,000 − 前期末 10,217,485,000 = 292,913,000 円(切り捨てで 292)。いずれも decimals -3 / unit JPY。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": false,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(丸めが関係しない ― 照合すべき数が行に無い)"
+   }
+  },
+  {
+   "id": "T103",
+   "札": "判定不能",
+   "確信": "高",
+   "根拠": "数 = null / 単位 = null。文『へと938百万円拡大したこと、3前期は売上債権が209百万円減少したのに対』は前後が切れており、照合すべき数が行から一意に決まらない。参考(札の根拠には用いない): jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF 当期 -1,828,838,000 円・前期 -890,115,000 円 → 差 938,723,000 円(切り捨てで 938 百万円)、jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF / Prior1YearDuration +209,659,000 円(= 売上債権の減少 209.659 百万円、切り捨てで 209)。いずれも decimals -3 / unit JPY。",
+   "誤りの型": null,
+   "一致の様態": {
+    "切り捨てで一致": false,
+    "四捨五入で一致": false,
+    "丸め無しで完全一致": false,
+    "当てた単位換算": "無し(丸めが関係しない ― 照合すべき数が行に無い)"
+   }
+  }
+ ],
+ "counts": {
+  "真": 30,
+  "偽": 0,
+  "判定不能": 3
+ },
+ "rounding_tally": {
+  "切り捨てでのみ一致": 15,
+  "四捨五入でのみ一致": 0,
+  "どちらでも一致": 8,
+  "丸め無しで完全一致": 7,
+  "丸めが関係しない": 3
+ },
+ "self_check": "『偽 0 件』が自分の許容の広さの産物でないかを 4 つの検査で測った。(1) 丸めを一切許さない完全一致は 30 行中 7 行だけ(N012 N039 N040 N041 N113 N173 N252)。残り 23 行は『書き方の丸めは一致とみなす』という sheet の定義に依存して真になっている ― ここが許容の本体である。(2) 許容の幅を測るため、各行の数に ±1 表示桁(百万円の行なら ±1 百万円)を足して同じ照合に当てた。**両方の丸めを認める今の読みでは 15 行(N114 N116 N125 N126 N127 N213 N220 N221 N250 N255 N256 N283 N292 N293 N299)で『数 +1』も通ってしまう** ― これらの行の許容窓は 1 表示桁ではなく 2 表示桁ぶん広い。これは私の照合の弱さとして明記する。(3) 一方、切り捨てだけを規約に固定すると、±1 表示桁が通る行は 0 行になり、30 行すべてが 1 表示桁の窓に固定される。四捨五入だけを規約に固定すると、同じ 15 行が偽になり、かつ ±1 が通る行は 15 行に増える。つまり『偽 0 件』は切り捨て規約のもとでは厳しい照合の結果だが、四捨五入規約のもとでは 15 行が偽になる。書類に丸めの記載が無いため、どちらかを選ばず両方を報告した。(4) 方向の非対称性: 切り捨てでのみ一致が 15 行、四捨五入でのみ一致が 0 行。許容を広げたから 0 件になったのではなく、ずれは全行が同じ向き(fact の端数を 0 方向に落とす向き)に出ている。この非対称自体は規約の記載の代わりにはしないが、観測として記録する。なお偽を作りに行く検査として、各行について期(当期/前期)を入れ替えた fact でも照合してみたが、入れ替えると一致する行は無かった(例 N213 の前期末 264,316,000 円、N290 の前期 -75,019,000 円、N299 の前期 -16,145,000 円)ので、期の取り違えは起きていない。",
+ "notes": "迷った点と材料の限界。(a) N173: 行の数 3,000,000 円と完全一致する fact は 1 件だけ在るが、それは【株式の保有状況】の『株式数が増加した銘柄の取得価額の合計額(非上場株式以外・純投資目的以外・最大保有会社)』であり、文が言う投資有価証券の追加取得と範囲が同一とは言い切れない。投資有価証券の取得による支出に当たる InvCF の fact はこのインスタンスに無い。真にしたが確信は中。(b) N292: 『設備投資関連』の定義が書類で一意でない。前期の PPE 取得 + 無形取得 = 453,756,000 円(切り捨てで 453)では一致するが、本文が当期に使う jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc(当期 341,000,000 円)は当期の PPE+無形取得 351,316,000 円と一致しない別基準であり、その要素の前期 fact は存在しない。2 つの読みのうち 1 つで一致するので真にしたが確信は中。(c) T017 T085 T103 は 行の 数 が null で、label_definitions の『真』(述べている数が fact と一致する)が適用できないため判定不能にした。参考として窓の中の数を fact と突き合わせた結果は根拠欄に書いたが、札の根拠には使っていない。もし『文の内容が fact と整合するか』を問う意図の行であれば、T017 の 3 つの向き・T085 の 2 つの数・T103 の 2 つの数はいずれも fact と整合する(切り捨て)。この読み替えは私の判断では行わず、依頼者に返す。(d) N255 N256 は機械が『2,096円83銭』から円の部分だけを数にしているため、行の数としては切り捨て一致だが、本文の表記自体は fact と完全一致である。行の数と本文の表記で様態が変わる点を記録する。(e) N283 は貸借対照表の差(804,775,000 円)と CF の科目(802,686,000 円)という 2 つの近い数が本文に併存している。この行は窓の文(CF の説明)から CF の科目と特定でき、そちらと一致する。(f) N293 は本文の字『投資活動によるキャッシュ・フローを差し引いた』を符号付きの投資 CF に当てると 1,292 百万円になり一致しないが、通常の FCF(営業 CF + 投資 CF)として読むと 773.934 百万円で一致する。字の読みではなく通常の定義で一致と判定した。(g) 漏れの申告: 禁止された他席の札・機械の判定・差分は見ていない。ai_prose_labels_* / ai_prose_result_* / ai_prose_states_* / reaudit_A_* / reaudit_B_* / stop_cause_* / *_meta_* / audit-core/docs/ の該当文書 / rounding_convention_S100Z4Q1_2026-10-12.json(sheet が要約しているので開いていない)はいずれも開いていない。git は status と ls-files 相当のみで、log -p / show / diff は使っていない。参考にした audit-core/fixtures/xbrl/ai_prose_claims_2026-10-09.py は先頭 40 行(docstring と import と sys.path)だけを読み、判定に関する記述は含まれていなかった。この 40 行には『札を付ける監査に subject・bound・reason・pointer を見せない』という材料設計の説明が含まれていたが、他席の札や機械の判定結果そのものは含まれていない。"
+}

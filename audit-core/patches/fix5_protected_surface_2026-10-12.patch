@@ -1,0 +1,1792 @@
+diff --git a/audit-core/adapters/xbrl/comparators.py b/audit-core/adapters/xbrl/comparators.py
+index 3cbb5fd..8a7f648 100644
+--- a/audit-core/adapters/xbrl/comparators.py
++++ b/audit-core/adapters/xbrl/comparators.py
+@@ -37,7 +37,7 @@ do not guard against a zero denominator themselves.
+ import audit_core as core
+ 
+ 
+-def _match_value(fact_value, target, unit):
++def _match_value(fact_value, target, unit, mode=None):
+     """Copy of ``vocabulary.match_value`` / ``xbrl_probe.py: match_value``.
+ 
+     round    : |fact - target| <= unit/2
+@@ -45,13 +45,21 @@ def _match_value(fact_value, target, unit):
+     abs+...  : same two checks with both sides' sign dropped
+     Returns one of "round" / "truncate" / "abs+round" / "abs+truncate",
+     or ``None`` if neither check passes in either sign mode.
++
++    ``mode`` (XBRL 直し §2、人間の決定 2026-10-08) は省略可能。``None`` の
++    ときは写し元と同じ梯子(P1/P5F/P6/P7 はこちら)。``"round"`` /
++    ``"truncate"`` のときは**その 1 つだけ**を試す。値は
++    ``Contract.params["rounding"]`` で渡ってくる ― 書類単位で 1 つに決めた
++    丸め方を、組むときと検証するときの両方で同じものにするため。
++    ``vocabulary.match_value`` と同じ引数・同じ戻り値であることは
++    ``test_lineage`` が ``mode`` ごとに照合する。
+     """
+ 
+     for sign_mode, fv in (("", fact_value), ("abs", abs(fact_value))):
+         t = abs(target) if sign_mode else target
+-        if abs(fv - t) <= unit / 2:
++        if mode in (None, "round") and abs(fv - t) <= unit / 2:
+             return (sign_mode + "+round").strip("+")
+-        if 0 <= fv - t < unit:
++        if mode in (None, "truncate") and 0 <= fv - t < unit:
+             return (sign_mode + "+truncate").strip("+")
+     return None
+ 
+@@ -90,13 +98,13 @@ def equals_within(evidence, claim, contract):
+     claim_direction = params.get("claim_direction")
+     if flow_convention is not None and claim_direction is not None:
+         target_abs = abs(claim.value) * unit_scale
+-        how = _match_value(abs(fact.value), target_abs, claim_scale)
++        how = _match_value(abs(fact.value), target_abs, claim_scale, params.get("rounding"))
+         fact_sign = 0 if fact.value == 0 else (1 if fact.value > 0 else -1)
+         sign_ok = (fact_sign * flow_convention) == claim_direction
+         detail = {"normalization": how, "flow_convention": flow_convention, "claim_direction": claim_direction, "fact_sign": fact_sign}
+         return core.Comparison(match=(how is not None and sign_ok), recomputed=fact.value, depth="value_match", detail=detail)
+     target = claim.value * unit_scale
+-    how = _match_value(fact.value, target, claim_scale)
++    how = _match_value(fact.value, target, claim_scale, params.get("rounding"))
+     detail = {"normalization": how}
+     return core.Comparison(match=how is not None, recomputed=fact.value, depth="value_match", detail=detail)
+ 
+@@ -179,7 +187,7 @@ def diff_ab_equals_within(evidence, claim, contract):
+     a, b = evidence[0], evidence[1]
+     diff = a.value - b.value
+     target = claim.value * unit_scale
+-    how = _match_value(diff, target, claim_scale)
++    how = _match_value(diff, target, claim_scale, params.get("rounding"))
+     detail = {"normalization": how}
+     return core.Comparison(match=how is not None, recomputed=diff, depth="value_match", detail=detail)
+ 
+@@ -256,6 +264,34 @@ def builtin_sign_abs_diff_direction(evidence, claim, contract):
+     return core.Comparison(match=(direction == actual), recomputed=magnitude_diff, depth="value_match", detail=detail)
+ 
+ 
++def builtin_sign_direction_with_amount(evidence, claim, contract):
++    """A1(主語の規則の直し、人間の追加指示、2026-10-08)。
++    ``builtin:sign(cur-prior)==direction&amount``。
++
++    evidence = (cur, prior)。向きの判定は ``builtin_sign_direction`` と同じ
++    (差がちょうど 0 ならどちらの方向にも一致しない)。**そのうえで**、
++    Adapter が向きの語と同じ節から読んだ金額 (``claim.value``) を
++    ``|cur - prior|`` と照合する: ``_match_value(|diff|, |claim.value| *
++    unit_scale, claim_scale, rounding)``。
++
++    match = (向きが一致) **かつ** (金額が一致)。``recomputed`` は
++    ``builtin_sign_direction`` と同じ生の差。**この比較器は向きだけの
++    比較器より厳しい側にしか動かない** ― 向きが合っていても金額が合わなければ
++    一致しない。
++    """
++
++    params = contract.params or {}
++    direction = params["direction"]
++    cur, prior = evidence[0], evidence[1]
++    difference = cur.value - prior.value
++    sign_now = 0 if difference == 0 else (1 if difference > 0 else -1)
++    target_amount = abs(claim.value) * params["unit_scale"]
++    ladder = _match_value(abs(difference), target_amount, params["claim_scale"], params.get("rounding"))
++    detail = {"direction": direction, "actual": sign_now, "normalization": ladder}
++    agree = (sign_now == direction) and (ladder is not None)
++    return core.Comparison(match=agree, recomputed=difference, depth="value_match", detail=detail)
++
++
+ def diff_ab_pure100(evidence, claim, contract):
+     """Core 接続 C-1g §1-3 (``diff(a-b)(pure*100)``, profile P6 only, the
+     ``XP-3rd-1`` point-difference form). evidence = (a, b) -- the current
+diff --git a/audit-core/adapters/xbrl/extract.py b/audit-core/adapters/xbrl/extract.py
+index 9bd72b5..9174776 100644
+--- a/audit-core/adapters/xbrl/extract.py
++++ b/audit-core/adapters/xbrl/extract.py
+@@ -86,22 +86,179 @@ def _iter_numbers(s):
+         yield m.start(), m.end(), sign * num, unit, (V.UNIT_SCALE.get(unit) or 1.0)
+ 
+ 
+-def subject_of(sentence, pos, subjects):
++def subject_of(sentence, pos, subjects, skip=None):
+     """数の直前(同じ文)でいちばん近い主語。終わりの位置が最も右のものを取り、
+     同じなら長い語(「純資産合計」>「資産合計」)。道具の直し P-3。xbrl_probe.py: subject_of の写し
+     (差分は固定の SUBJECTS グローバルの代わりに引数で受け取るだけ)。
++
++    ``skip``(主語の規則の直し、人間の判断 1、2026-10-08)は
++    ``skip(sentence, i, word) -> bool`` の関数で、真を返した候補は**採らずに
++    次の候補へ進む。** 順位の付け方(終わりがいちばん右 → 長い語 → 一覧の
++    早い方)は**変えない** ― 変えるのは「その候補を採ってはいけない形」を
++    足すところだけである。
++
++    ``skip`` が ``None`` のとき、返す値は写し元と 1 つも変わらない
++    (P1〜P14 はすべて ``None``)。順位どおりに並べて先頭を採るのは、
++    写し元の「``end > best`` か(``end ==`` かつ長い)で置き換える」と同じ
++    勝ち方である ― 同じ終わり・同じ長さなら**一覧の早い方**が勝つ。
++    これは ``tests/adapters/xbrl/test_lineage.py`` が実物の 2 書類の全部の文で
++    写し元と照合しており、``test_extract.py`` が 4 書類 × P13 の語彙で
++    写し元の書き方そのものと照合する。
+     """
+ 
+     head = sentence[:pos]
+-    best = None
+-    for word, elems in subjects:
++    ranked = []
++    for order, (word, elems) in enumerate(subjects):
+         i = head.rfind(word)
+         if i < 0:
+             continue
+-        end = i + len(word)
+-        if best is None or end > best[0] or (end == best[0] and len(word) > len(best[1])):
+-            best = (end, word, elems)
+-    return (best[1], best[2]) if best else (None, None)
++        ranked.append((-(i + len(word)), -len(word), order, i, word, elems))
++    ranked.sort()
++    for (_e, _l, _o, i, word, elems) in ranked:
++        if skip is not None and skip(sentence, i, word):
++            continue
++        return (word, elems)
++    return (None, None)
++
++
++# ---------------------------------------------------------------------------
++# 主語の規則の直し(人間の判断 1、2026-10-08)― **採ってはいけない形**。
++# 広い規則(「は」が付く語を優先する)は 4 書類で測って却下した
++# (docs/XBRL_SUBJECT_RULE_PLAN_2026-10-08.md §0)。ここに在るのは
++# ``subject_of`` の順位を変えずに**候補を 2 つの形で拒否する**規則だけである。
++#
++# 字は字で書く(定数から土台を作らない)。
++# ---------------------------------------------------------------------------
++COORDINATORS = ("及び", "並びに")       # S1・S3 の並立の接続語
++CAUSE_SUFFIXES = ("による", "により")   # S1 の原因の言い方
++AGGREGATE_SUFFIXES = ("の合計", "の合計額")  # S3 の「合計」の言い方
++CLAUSE_BREAKS = "、。，（）()"           # 節の切れ目
++
++
++def clause_span(sentence, start, end):
++    """``sentence[start:end]`` を含む**節**の範囲 ``(左, 右)``。
++    節の切れ目は ``、。``・全角半角の丸括弧。文に区切りが無ければ文全体。
++
++    節に限るのは、**文に限ると列挙の文で他の項目の材料を拾う**からである。
++    """
++
++    left = 0
++    for k in range(start - 1, -1, -1):
++        if sentence[k] in CLAUSE_BREAKS:
++            left = k + 1
++            break
++    right = len(sentence)
++    for k in range(end, len(sentence)):
++        if sentence[k] in CLAUSE_BREAKS:
++            right = k
++            break
++    return left, right
++
++
++# 並立の成分かどうかを見るときに「ここで句が切れる」と見なす助詞。字で書く。
++# 「特別損失**は**固定資産除却損及び…」の「特別損失」を並立の成分に
++# 数えないために要る。
++PARTICLES = ("は", "が", "を", "に")
++
++
++def _is_coordinated(sentence, start, end):
++    """候補の語が並立の成分か。次のどちらかなら真。
++
++    (a) 並立の接続語に**直に**隣り合っている(前でも後ろでもよい)。
++    (b) 候補の終わりから節の終わりへ右に進んだとき、**最初に当たるのが
++        並立の接続語**である(助詞 ``は``/``が``/``を``/``に`` が先に来たら偽)。
++
++    (b) が要るのは、(a) だけだと**飛ばした語の部分文字列が残る**からである ―
++    「特別損失は固定資産除却損及び減損損失による25百万円」で
++    「減損損失」と「固定資産除却損」を飛ばしても、語彙に在る「固定資産」が
++    「固定資産除却損」の中に残り、「特別損失」より右で終わるので勝ってしまう
++    (**1 回目の実測でこれが起きた。** 封じた予測「N069 が GROUNDED」は
++    この穴で外れた)。(b) は「固定資産」の右が「除却損及び」= 助詞より先に
++    並立の接続語なので真になり、部分文字列も一緒に飛ぶ。
++
++    「特別損失」の右は ``は`` なので (b) は偽 ― **落ちない。**
++    """
++
++    for c in COORDINATORS:
++        if sentence[max(0, start - len(c)):start] == c:
++            return True
++        if sentence[end:end + len(c)] == c:
++            return True
++    _left, right = clause_span(sentence, start, end)
++    tail = sentence[end:right]
++    first = None
++    for token in COORDINATORS + PARTICLES:
++        i = tail.find(token)
++        if i < 0:
++            continue
++        if first is None or i < first[0]:
++            first = (i, token)
++    return first is not None and first[1] in COORDINATORS
++
++
++def skip_coordinated_cause(sentence, start, word):
++    """S1。候補が並立の成分で、その先(同じ節の中)に ``による``/``により`` が
++    在るなら採らない。名指しされているのは**原因の並び**であって、
++    その文の数の持ち主ではない。
++    """
++
++    end = start + len(word)
++    if not _is_coordinated(sentence, start, end):
++        return False
++    _left, right = clause_span(sentence, start, end)
++    tail = sentence[end:right]
++    return any(suffix in tail for suffix in CAUSE_SUFFIXES)
++
++
++def skip_part_of_aggregate(sentence, start, word):
++    """S3。候補が並立の成分で、その先(同じ節の中)に ``の合計``/``の合計額`` が
++    在るなら採らない。名指しされているのは**合計**であって成分ではない。
++    """
++
++    end = start + len(word)
++    if not _is_coordinated(sentence, start, end):
++        return False
++    _left, right = clause_span(sentence, start, end)
++    tail = sentence[end:right]
++    return any(suffix in tail for suffix in AGGREGATE_SUFFIXES)
++
++
++# S2(主語の規則の直し): 「<名詞>を増加/減少」。向きが掛かっているのは
++# **その目的語**である。節を跨がないように ``[^、。]`` で区切る。
++# 向きの語は字で書く(``DIRECTION_WORDS`` から土台を作らない ― この形を採る
++# のは「他動詞として使える向きの語」だけで、`拡大`・`伸び` は入れない)。
++DIRECTION_OBJECT_RE = re.compile(r"([^、。]{2,12})を(増加|減少|改善|悪化|押し上げ|押し下げ)")
++
++
++def direction_object(sentence, pos):
++    """S2。``sentence`` の ``pos`` から始まる向きの語が「<名詞>を」の形の
++    他動詞として使われていれば、その名詞。そうでなければ ``None``。
++    """
++
++    for m in DIRECTION_OBJECT_RE.finditer(sentence):
++        if m.start(2) == pos:
++            return m.group(1)
++    return None
++
++
++def subject_skip_for(profile):
++    """profile の 2 つのフラグから ``subject_of`` に渡す ``skip`` を作る。
++    どちらも偽なら ``None`` を返す ― **P1〜P14 はここで ``None`` になり、
++    ``subject_of`` の振る舞いが 1 つも変わらない。**
++    """
++
++    rules = []
++    if getattr(profile, "subject_skip_coordinated_cause", False):
++        rules.append(skip_coordinated_cause)
++    if getattr(profile, "subject_not_part_of_aggregate", False):
++        rules.append(skip_part_of_aggregate)
++    if not rules:
++        return None
++
++    def skip(sentence, start, word):
++        return any(rule(sentence, start, word) for rule in rules)
++
++    return skip
+ 
+ 
+ def own_sign_match(window, num):
+@@ -116,25 +273,72 @@ def own_sign_match(window, num):
+     return None
+ 
+ 
+-def paragraph_index(text, sentences):
+-    """凍結の文の切り方(re.split(r"(?<=。)|\\n"))と同じ列になることを確かめ
+-    ながら、文ごとの段落番号を作る。xbrl_probe3.py: paragraph_index の写し。
++# ---------------------------------------------------------------------------
++# XBRL 直し §4(人間の決定、2026-10-08): 括弧の中の句点では文を切らない。
++# ``profile.paren_sentence`` が真のときだけ使う(P1/P5F/P6/P7 は偽で、
++# 凍結の切り方 ``re.split(r"(?<=。)|\n")`` のまま 1 文字も変わらない)。
++# 開き括弧・閉じ括弧の字は字で書く(定数から土台を作らない)。
++# ---------------------------------------------------------------------------
++PAREN_OPEN = "(（"
++PAREN_CLOSE = ")）"
++
++
++def split_after_kuten_outside_parens(line, paren_open=PAREN_OPEN, paren_close=PAREN_CLOSE):
++    """1 行を 。 の直後で切る。ただし丸括弧の中の 。 では切らない。
++
++    「(以下「資金」という。)は、…減少し、26 億 5 百万円となりました。」が
++    2 つに切れて主語を失うのを防ぐのが目的(``N043``/``T025``)。
++    閉じ括弧が余っていても深さは 0 より下げない(壊れた括弧で全体が
++    1 文に潰れないため)。
++    """
++
++    out, depth, start = [], 0, 0
++    for i, ch in enumerate(line):
++        if ch in paren_open:
++            depth += 1
++        elif ch in paren_close:
++            depth = depth - 1 if depth > 0 else 0
++        elif ch == "。" and depth == 0:
++            out.append(line[start:i + 1])
++            start = i + 1
++    out.append(line[start:])
++    return out
++
++
++def _split_lines(text, paren_aware):
++    """段落(``\n`` で切った 1 行)ごとの文の列。段落の番号を数えるのと
++    文の列を作るのが同じ 1 か所から出るようにしておく。
+     """
+ 
+-    paras, check = [], []
+     for pi, para in enumerate(text.split("\n")):
+-        for s in re.split(r"(?<=。)", para):
++        pieces = split_after_kuten_outside_parens(para) if paren_aware else re.split(r"(?<=。)", para)
++        for s in pieces:
+             if s and s.strip():
+-                paras.append(pi)
+-                check.append(unicodedata.normalize("NFKC", s.strip()))
+-    assert check == sentences, "paragraph split diverged from frozen sentence split"
++                yield pi, unicodedata.normalize("NFKC", s.strip())
++
++
++def paragraph_index(text, sentences, paren_aware=False):
++    """文の切り方(``paren_aware`` が偽なら凍結の ``re.split(r"(?<=。)|\\n")``)
++    と同じ列になることを確かめながら、文ごとの段落番号を作る。
++    xbrl_probe3.py: paragraph_index の写し(``paren_aware`` の枝だけが新しい)。
++    """
++
++    paras, check = [], []
++    for pi, s in _split_lines(text, paren_aware):
++        paras.append(pi)
++        check.append(s)
++    assert check == sentences, "paragraph split diverged from the sentence split"
+     return paras
+ 
+ 
+-def split_sentences(text):
+-    """xbrl_probe.py main(): NFKC + 文の切り方(re.split(r"(?<=。)|\\n"))の写し。"""
++def split_sentences(text, paren_aware=False):
++    """xbrl_probe.py main(): NFKC + 文の切り方(``re.split(r"(?<=。)|\\n")``)の
++    写し。``paren_aware`` が真のときだけ、丸括弧の中の 。 では切らない(§4)。
++    """
+ 
+-    return [unicodedata.normalize("NFKC", s.strip()) for s in re.split(r"(?<=。)|\n", text) if s and s.strip()]
++    if not paren_aware:
++        return [unicodedata.normalize("NFKC", s.strip()) for s in re.split(r"(?<=。)|\n", text) if s and s.strip()]
++    return [s for _pi, s in _split_lines(text, True)]
+ 
+ 
+ def build_registry(members, id2label, text, run3, registry_path=None):
+diff --git a/audit-core/adapters/xbrl/instance.py b/audit-core/adapters/xbrl/instance.py
+index ead2d8b..5d17fef 100644
+--- a/audit-core/adapters/xbrl/instance.py
++++ b/audit-core/adapters/xbrl/instance.py
+@@ -11,9 +11,12 @@ originals; compared against them value-for-value by
+ ``tests/adapters/xbrl/test_lineage.py``.
+ """
+ 
++import hashlib
+ import html
+ import io
++import os
+ import re
++import unicodedata
+ import zipfile
+ import xml.etree.ElementTree as ET
+ from html.parser import HTMLParser
+@@ -237,3 +240,247 @@ def select_mdna(textblocks):
+     if name is None:
+         name = next((n for n in textblocks if "AnalysisOfFinancialPosition" in n or "OverviewOfBusinessResults" in n), None)
+     return name
++
++
++# ---------------------------------------------------------------------------
++# XBRL 直し §7(人間の指示、2026-10-08): 書類自身のインライン XBRL から
++# 「日本語の勘定科目名 → 要素の局所名」を取る。``profile.label_vocabulary`` が
++# 真のときだけ使う。
++#
++# 財務諸表は ``*_ixbrl.htm``(インライン XBRL)で、表の 1 つの ``<tr>`` の中に
++# 日本語の科目名(テキストの ``<td>``)とその行の数値に付いた要素名
++# (``<ix:nonFraction name="jppfs_cor:Assets">``)が並んでいる。**順番の推測では
++# なく同じ行に在ること**で対にする(行をまたいだ対応づけはしない)。
++#
++# 標準タクソノミ(jppfs/jpcrp)の日本語ラベルは書類の ZIP には入っていない
++# (ZIP に在るのは会社拡張の ``_lab.xml`` だけ)。それを使うには
++# ``disclosure.edinet-fsa.go.jp`` からの取得が要る ― この関数は取得しない。
++# 経緯は docs/XBRL_LABEL_VOCAB_PLAN_2026-10-08.md §1-2。
++# ---------------------------------------------------------------------------
++_TR_RE = re.compile(r"<tr[\s>].*?</tr>", re.S | re.I)
++_TD_SPLIT_RE = re.compile(r"</td>", re.I)
++_IX_NAME_RE = re.compile(r'<ix:non(?:Fraction|Numeric)[^>]*\bname="([^"]+)"', re.I)
++_TAG_RE = re.compile(r"<[^>]+>")
++_NUMERIC_ONLY_RE = re.compile(r"^[\d,.\-△▲%()−\s]+$")
++
++# 除く名前(字で書く)。勘定科目を一意に指さない語と、表紙の項目。
++LABEL_MIN_LEN = 3
++LABEL_DENY = ("その他", "合計", "小計", "計", "区分", "千円", "百万円", "円",
++              "前連結会計年度", "当連結会計年度", "前事業年度", "当事業年度")
++
++
++def _row_label(row):
++    """``<tr>`` の中の、勘定科目名として読めるテキスト。
++    数字だけ・空のセルは捨て、**最初の読めるセル**を採る(科目名は行の左端に
++    在るため)。1 文字のセルが先頭に来ることがあるので、2 文字未満なら次を見る。
++    """
++
++    for cell in _TD_SPLIT_RE.split(row):
++        # 実体参照を先に戻す ― この書類の HTML は空のセルに ``&#160;`` を
++        # **文字列のまま**置いており、戻さずにタグだけ外すと "&#160;" という
++        # 6 文字が科目名として拾われる(最初の実装がこれで 1 社目の名前を
++        # 226 → 105 に落としていた。2 社目・3 社目は本物の nbsp 文字なので
++        # 落ちず、1 書類だけで測っていたら気づかない型の誤りだった)。
++        text = html.unescape(_TAG_RE.sub("", cell))
++        text = re.sub(r"\s+", "", text.replace("\u00a0", " "))
++        if not text or _NUMERIC_ONLY_RE.match(text) or len(text) < 2:
++            continue
++        return text
++    return None
++
++
++# ---------------------------------------------------------------------------
++# XBRL 直し §7a(人間の判断、2026-10-08): ラベルを**計算書の行から来たものだけ**に
++# 限る。原因が分かっている悪化 2 件のうち 1 件(2 社目 T009 の主語が 売上高 →
++# 美容室支援事業(セグメント名)に移った)を消すため。
++#
++# 4 つの規則を測って比べた結果(docs/XBRL_LABEL_VOCAB2_PLAN_2026-10-08.md §1.1):
++#
++#   - member の付かない行だけ   -> セグメント名は消えるが「連結子会社」は残る
++#   - jppfs_cor の要素だけ      -> 「連結子会社」(監査報酬の表 = jpcrp_cor)は消える
++#   - **両方**                  -> 2 つの型が別々の条件で落ち、残ってほしい語
++#                                  (売上原価・利益剰余金・短期借入金)は残る
++#
++# セグメント名は member つきの context を持つ行に、会社名・役員名・株主名は
++# jpcrp_cor の要素に付いている。だから **両方**を要求する。
++# ---------------------------------------------------------------------------
++_IX_TAG_RE = re.compile(r"<ix:non(?:Fraction|Numeric)[^>]*>", re.I)
++_IX_ATTR_NAME_RE = re.compile(r'\bname="([^"]+)"')
++_IX_ATTR_CTX_RE = re.compile(r'\bcontextRef="([^"]+)"')
++
++# 財務諸表タクソノミの接頭辞(字で書く)。計算書の行の要素はこれで付いている。
++STATEMENT_PREFIX = "jppfs_cor"
++
++
++def _row_elements(row, statement_only, contexts):
++    """その ``<tr>`` から採る要素名(接頭辞つき)の一覧。
++
++    ``statement_only`` が偽なら、今までどおり行の中の ix の ``name`` を全部採る。
++    真なら §7a の規則を当てる ― 行の ix の context に member が **1 つも**
++    付いていないこと、かつ要素が ``jppfs_cor`` のものだけを採る。
++    どちらも満たさない行は空の一覧を返し、呼び出し側が行ごと捨てる。
++    """
++
++    if not statement_only:
++        return _IX_NAME_RE.findall(row)
++    pairs = []
++    for tag in _IX_TAG_RE.findall(row):
++        name = _IX_ATTR_NAME_RE.search(tag)
++        if not name:
++            continue
++        ctx = _IX_ATTR_CTX_RE.search(tag)
++        pairs.append((name.group(1), ctx.group(1) if ctx else ""))
++    for _name, cid in pairs:
++        if (contexts.get(cid) or {}).get("members"):
++            return []
++    return [name for name, _cid in pairs if name.split(":")[0] == STATEMENT_PREFIX]
++
++
++def inline_labels(z, names, statement_only=False, contexts=None):
++    """``{日本語の勘定科目名: [要素の局所名, ...]}``。除く名前は適用済み。
++
++    ``statement_only`` は §7a。真のときは ``contexts``
++    (``load_instance`` の ``contexts``)が要る ― member が付いているかを見るため。
++    """
++
++    if statement_only and contexts is None:
++        raise ValueError("inline_labels(statement_only=True) needs contexts")
++    found = {}
++    for n in names:
++        if not n.endswith("_ixbrl.htm"):
++            continue
++        text = z.read(n).decode("utf-8", "replace")
++        for row in _TR_RE.findall(text):
++            elements = _row_elements(row, statement_only, contexts or {})
++            if not elements:
++                continue
++            label = _row_label(row)
++            if not label or len(label) < LABEL_MIN_LEN or label in LABEL_DENY:
++                continue
++            if "【" in label or "】" in label:
++                continue
++            bucket = found.setdefault(label, [])
++            for e in elements:
++                local = e.split(":")[-1]
++                if local not in bucket:
++                    bucket.append(local)
++    return found
++
++
++# ---------------------------------------------------------------------------
++# XBRL 直し §8(人間の許可、2026-10-08): 標準タクソノミ(jppfs・jpcrp の
++# 2025-11-01 版)の**日本語の標準ラベル**で勘定科目を引く。
++#
++# ラベルの本体は**このリポジトリの外**に在る(人間の指示: 「取得したファイルは
++# リポジトリの外に置いて sha256 だけを残す」)。置き場と取り方は
++# fixtures/xbrl/TAXONOMY_LABELS_README.md、照合用の sha256 は
++# fixtures/xbrl/taxonomy_labels_sha256.txt。
++#
++# **読む前に毎回 sha256 を照合し、無ければ・違えば落ちる。** 黙って 0 件を返すと
++# 「効かなかった」と読み違える(同じ型の誤りを前に 4 回踏んでいる)。
++#
++# 要素は ``fact_locals``(その書類に fact が在る要素)に限る ― タクソノミ全体は
++# 6,495 要素で、全部を主語の一覧にすると誤った一致が増える。
++# ---------------------------------------------------------------------------
++TAXONOMY_VERSION = "2025-11-01"
++TAXONOMY_DIR_DEFAULT = os.path.join(os.path.expanduser("~"), ".cache", "audit-core",
++                                    "edinet-taxonomy", TAXONOMY_VERSION)
++
++# (名前空間, ファイル名, sha256)。**字で書く。**
++TAXONOMY_LABEL_FILES = (
++    ("jppfs", "jppfs_2025-11-01_lab.xml",
++     "bf56ea1585afe426b398a9053ec4de4dbeafc211a53675b5d6d19453e4e04bf4"),
++    ("jpcrp", "jpcrp_2025-11-01_lab.xml",
++     "df9c23764ec9a63cb65b5ef62e79a2907c590523797421442ea2a60e334cd684"),
++)
++
++# 採るのは**標準ラベル**の role だけ。``totalLabel`` は「流動資産合計」のように
++# 合計行の言い回しで、本文の「流動資産は…」とは別物なので採らない。
++STANDARD_LABEL_ROLE = "http://www.xbrl.org/2003/role/label"
++
++_TAXONOMY_CACHE = {}
++
++
++def taxonomy_dir():
++    """ラベルの置き場。環境変数 ``EDINET_TAXONOMY_DIR`` で上書きできる。"""
++
++    return os.environ.get("EDINET_TAXONOMY_DIR") or TAXONOMY_DIR_DEFAULT
++
++
++def parse_label_linkbase(data, role=STANDARD_LABEL_ROLE):
++    """ラベル linkbase から ``{loc の指す id: 日本語ラベル}``。
++
++    ``loc`` -> ``labelArc`` -> ``label`` の 3 つを辿る(``label_XXX`` という
++    名前から要素名を推測することはしない。``labels_from_zip`` と同じ流儀)。
++    """
++
++    root = ET.fromstring(data)
++    loc_id, lab_text, arcs = {}, {}, []
++    for el in root.iter():
++        tag = el.tag.split("}")[-1]
++        if tag == "loc":
++            href = el.get(XLINK + "href") or ""
++            loc_id[el.get(XLINK + "label")] = href.split("#")[-1]
++        elif tag == "label":
++            if (el.get(XLINK + "role") or "") != role:
++                continue
++            if not (el.get(XML_NS + "lang") or "").startswith("ja"):
++                continue
++            lab_text[el.get(XLINK + "label")] = el.text or ""
++        elif tag == "labelArc":
++            arcs.append((el.get(XLINK + "from"), el.get(XLINK + "to")))
++    out = {}
++    for a, b in arcs:
++        if a in loc_id and b in lab_text:
++            out[loc_id[a]] = unicodedata.normalize("NFKC", lab_text[b].strip())
++    return out
++
++
++def _read_taxonomy_file(directory, filename, expected_sha256):
++    path = os.path.join(directory, filename)
++    if not os.path.exists(path):
++        raise FileNotFoundError(
++            "no taxonomy label file at %s (see fixtures/xbrl/TAXONOMY_LABELS_README.md)" % (path,))
++    data = open(path, "rb").read()
++    actual = hashlib.sha256(data).hexdigest()
++    if actual != expected_sha256:
++        raise ValueError("taxonomy label sha256 mismatch for %s: expected %s, got %s"
++                         % (filename, expected_sha256, actual))
++    return data, actual
++
++
++def taxonomy_label_map(namespaces=("jppfs",), directory=None):
++    """``{要素の局所名: 日本語の標準ラベル}``。``namespaces`` が ``None`` なら全部。"""
++
++    directory = directory or taxonomy_dir()
++    out = {}
++    for ns, filename, sha in TAXONOMY_LABEL_FILES:
++        if namespaces is not None and ns not in namespaces:
++            continue
++        key = (os.path.join(directory, filename), sha)
++        if key not in _TAXONOMY_CACHE:
++            data, _actual = _read_taxonomy_file(directory, filename, sha)
++            _TAXONOMY_CACHE[key] = parse_label_linkbase(data)
++        for full, word in _TAXONOMY_CACHE[key].items():
++            local = full.split("_cor_")[-1] if "_cor_" in full else full
++            out[local] = word
++    return out
++
++
++def taxonomy_labels(fact_locals, namespaces=("jppfs",), directory=None):
++    """``{日本語の標準ラベル: [要素の局所名, ...]}``。
++
++    ``fact_locals`` に在る要素だけを採り、``inline_labels`` と同じ除く名前
++    (長さ・``LABEL_DENY``・``【】``)を当てる。並びは要素名の順(決めておく)。
++    """
++
++    labels = taxonomy_label_map(namespaces, directory)
++    found = {}
++    for local in sorted(fact_locals):
++        word = labels.get(local)
++        if not word or len(word) < LABEL_MIN_LEN or word in LABEL_DENY:
++            continue
++        if "【" in word or "】" in word:
++            continue
++        found.setdefault(word, []).append(local)
++    return found
+diff --git a/audit-core/adapters/xbrl/recipes.py b/audit-core/adapters/xbrl/recipes.py
+index a9e938b..1b0f3bd 100644
+--- a/audit-core/adapters/xbrl/recipes.py
++++ b/audit-core/adapters/xbrl/recipes.py
+@@ -20,6 +20,7 @@ short-circuit reasons on ``Recipe`` is a transcription of
+ C-0 fixed for turning script output into the Core's expectation JSON.
+ """
+ 
++import dataclasses
+ import io
+ import re
+ import unicodedata
+@@ -52,6 +53,9 @@ UNBOUND_REASON_STATE = {
+     "target_or_plan": "UNVERIFIABLE",
+     "no_element(text needs money fact)": "POINTER_NOT_FOUND",
+     "no_element(no prior for text)": "POINTER_NOT_FOUND",
++    # XBRL 直し §1b(人間の決定、2026-10-08、profile P8 のみ)。前々期の値が
++    # 無いとき、当期の残高や偶然一致した fact で代用せず止める。
++    "no_element(no prior2 for prior-year diff)": "POINTER_NOT_FOUND",
+ }
+ 
+ 
+@@ -99,6 +103,12 @@ def _pointer_list(raw_pointer):
+ # member_source / sign_token / word.
+ # ---------------------------------------------------------------------------
+ 
++# A1(主語の規則の直し、人間の追加指示、2026-10-08): 金額が向きの語に
++# **直に付いている**と見なす形。字で書く。
++# ``""`` は「金額の直後がそのまま向きの語」(「30,950千円増加」)。
++DIRECTION_AMOUNT_GAPS = ("", "の")
++DIFFERENCE_NOUNS = ("増加額", "減少額", "増加分", "減少分")
++
+ _MONEY_UNIT_RE_AFTER = re.compile(r"(増加|減少|増|減)")
+ _MONEY_DIFF_PHRASE_RE = re.compile(r"(増加額|減少額|比べて)")
+ _PREV_YEAR_PHRASE = "前連結会計年度は"
+@@ -130,7 +140,7 @@ def _flow_direction_word(s, subj, a, b):
+     return None
+ 
+ 
+-def _apply_flow_sign(claim, s, a, b):
++def _apply_flow_sign(claim, s, a, b, rounding=None):
+     """§1-2。直接値の Claim が CF 流量項目の 1 件の fact に束縛されていて、
+     向きの語があるときだけ、claim["flow_convention"]/["claim_direction"] を
+     足し、normalization の札を abs を落とした梯子(round/truncate)に直す。
+@@ -152,7 +162,7 @@ def _apply_flow_sign(claim, s, a, b):
+     claim["flow_convention"] = conv
+     claim["claim_direction"] = direction
+     target_abs = abs(claim["value"]) * claim["unit_scale"]
+-    how = V.match_value(abs(claim["recomputed"]), target_abs, claim["claim_scale"])
++    how = V.match_value(abs(claim["recomputed"]), target_abs, claim["claim_scale"], rounding)
+     if how is not None:
+         claim["match"] = how
+ 
+@@ -197,7 +207,8 @@ def _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num)
+     claim["result"] = "GROUNDED" if abs(recomputed - claim["value"]) <= 0.15 else "VALUE_MISMATCH"
+ 
+ 
+-def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts):
++def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
++                        profile=None, rounding=None):
+     scale = prec if unit == "円" else V.UNIT_SCALE[unit]
+     unit_scale = 1.0 if unit == "円" else V.UNIT_SCALE[unit]
+     target = sign * num * unit_scale
+@@ -209,7 +220,7 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
+     pool = I.facts_for(elems, facts, contexts, member) if subj else [f for f in facts if I.ctx_ok(f["context"], contexts, member)]
+     pool = [f for f in pool if f["unit"] and f["unit"].upper().startswith("JPY")]
+     is_diff = bool(_MONEY_UNIT_RE_AFTER.search(s[b:b + 4])) or bool(_MONEY_DIFF_PHRASE_RE.search(s[max(0, a - 25):a]))
+-    hits = [(f, V.match_value(f["value"], target, scale)) for f in pool]
++    hits = [(f, V.match_value(f["value"], target, scale, rounding)) for f in pool]
+     hits = [(f, how) for f, how in hits if how]
+     if hits and not (is_diff and subj):
+         fams = sorted({f["name"] for f, _ in hits})
+@@ -244,7 +255,7 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
+             for pa, pb in pairs:
+                 fa, fb = ctx(pa), ctx(pb)
+                 if fa and fb:
+-                    how = V.match_value(fa["value"] - fb["value"], target, scale)
++                    how = V.match_value(fa["value"] - fb["value"], target, scale, rounding)
+                     if how:
+                         found = (fa, fb, how)
+                         break
+@@ -269,6 +280,19 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
+         else:
+             cur = [f for f in fs if f["context"].startswith("CurrentYear")]
+             if cur:
++                if prev_year_phrase and profile is not None and profile.prior2_required:
++                    # XBRL 直し §1b: 「前連結会計年度は…」= 前期と前々期の差を
++                    # 言う主張で、その対が引けなかったとき、**当期の残高**に
++                    # 結び直すのが代用である。代用せずここで止める。
++                    #
++                    # 止めるのはこの枝だけにする。1 つ上の ``elif hits:`` は
++                    # 主張の数と**値が実際に一致した** fact に結ぶ枝で、代用では
++                    # ない(2 社目 S100Z4B6 の N079「前連結会計年度は営業損失
++                    # 9,709千円」= 前期の実額が、まさにこの枝で前期の fact に
++                    # 正しく結ばれている)。2026-10-08 の 2 社目の実測で、
++                    # 最初の実装がその 2 件を誤って止めたので枝を狭めた。
++                    claim["reason"] = "no_element(no prior2 for prior-year diff)"
++                    return
+                 claim["pointer"] = "xbrl:%s@%s" % (cur[0]["name"], cur[0]["context"])
+                 claim["bound"] = True
+                 claim["result"] = "VALUE_MISMATCH"
+@@ -288,8 +312,46 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
+ _TARGET_WINDOW = 10
+ _TARGET_RE = re.compile(r"目標|計画")
+ 
++# ---------------------------------------------------------------------------
++# XBRL 直し §3(人間の決定、2026-10-08): 目標・見通しの判定を、数の主張と
++# 文字の主張の両方に掛ける。語を広げ、数(または向きの語)の**後ろ**に来る
++# 文型も拾う。後ろの窓は同じ節の中だけを見る(``、``・``。``・括弧で打ち切る)
++# ― 「5.8% となり、目標を達成することができませんでした」のような、実績の数の
++# 後ろに目標の語が別の節で来る文を止めてしまわないため。
++# 窓の幅は字で書く(定数から土台を作らない)。
++# ---------------------------------------------------------------------------
++_TARGET_AFTER_WINDOW = 20
++_TARGET_BOTH_RE = re.compile(r"目標|計画|見込|見通")
++_CLAUSE_END_RE = re.compile(r"[、。()（）]")
++
++
++def _target_or_plan(s, a, b, profile):
++    """``a`` は数(または向きの語)の開始、``b`` は終わりの位置。
++
++    ``profile.target_both`` が真: 手前 10 字 + 後ろ 20 字(節の中だけ)に
++    ``目標|計画|見込|見通``。
++    偽で ``profile.target_word`` が真(P7): 手前 10 字に ``目標|計画`` だけ
++    (C-1h の挙動そのまま)。
++    どちらも偽(P1/P5F/P6): 常に偽。
++    """
+ 
+-def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts, profile):
++    if profile is None:
++        return False
++    if profile.target_both:
++        if _TARGET_BOTH_RE.search(s[max(0, a - _TARGET_WINDOW):a]):
++            return True
++        after = s[b:b + _TARGET_AFTER_WINDOW]
++        cut = _CLAUSE_END_RE.search(after)
++        if cut is not None:
++            after = after[:cut.start()]
++        return bool(_TARGET_BOTH_RE.search(after))
++    if profile.target_word:
++        return bool(_TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]))
++    return False
++
++
++def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts, profile,
++                        rounding=None):
+     """§1-2 の目標値判定を通らなかった数の Claim の、既存の単位ごとの振り分け
+     (C-1d/C-1g と不変)。"""
+ 
+@@ -346,9 +408,10 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
+             claim["reason"] = "no_subject"
+     elif unit in V.UNIT_SCALE:
+         claim["form"] = "direct_value"
+-        _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts)
++        _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
++                            profile, rounding)
+         if profile.flow_sign:
+-            _apply_flow_sign(claim, s, a, b)
++            _apply_flow_sign(claim, s, a, b, rounding)
+     elif unit in ("％", "%", "ポイント"):
+         claim["form"] = "direct_value"
+         if profile.point_diff and unit == "ポイント" and subj:
+@@ -386,7 +449,138 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
+         claim["reason"] = "no_element(unit not in XBRL)"
+ 
+ 
+-def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member):
++# ---------------------------------------------------------------------------
++# XBRL 直し §6(人間の決定、2026-10-08): 括弧内の前期の方向語。
++# profile.text_prior_year_paren が真のときだけ使う。
++#
++# 「…22 億 8 千 1 百万円増加(前連結会計年度は 14 億 7 千 5 百万円増加)し、…」の
++# 括弧の中の「増加」は**前期の**増加であって、当期 − 前期ではなく前期 − 前々期を
++# 指す。数の主張の側には同じ扱いが既にある(_direct_value_claim の
++# prev_year_phrase、窓 15 字)。その文字版が無いのが T008・T022 の誤りの機構。
++#
++# 判定は**文字の窓ではなく括弧の深さ**で行う ― 「前連結会計年度は」(8 字)+ 金額
++# (8 字以上)で 16 字以上になり、数の側の窓 15 字では前の字に届かないため。
++# ---------------------------------------------------------------------------
++PAREN_OPEN_CHARS = "(（"
++PAREN_CLOSE_CHARS = ")）"
++
++
++def _enclosing_paren(s, pos, open_chars=PAREN_OPEN_CHARS, close_chars=PAREN_CLOSE_CHARS):
++    """``pos`` を囲む、いちばん内側の丸括弧の ``(開きの位置, 閉じの位置)``。
++    囲んでいなければ ``None``。閉じていない括弧は行末までを範囲とする
++    (内側の括弧は外側より先に閉じるので、最初に見つかった「囲んでいる対」が
++    いちばん内側になる)。
++    """
++
++    stack = []
++    for i, ch in enumerate(s):
++        if ch in open_chars:
++            stack.append(i)
++        elif ch in close_chars:
++            if stack:
++                o = stack.pop()
++                if o < pos < i:
++                    return (o, i)
++    if stack and stack[-1] < pos:
++        return (stack[-1], len(s))
++    return None
++
++
++def _in_prior_year_paren(s, pos):
++    """``pos`` が、「前連結会計年度は」を含む丸括弧の中にあるか。
++    語そのものは数の側と同じ ``_PREV_YEAR_PHRASE`` を使う(1 か所で持つ)。
++    """
++
++    span = _enclosing_paren(s, pos)
++    if span is None:
++        return False
++    return _PREV_YEAR_PHRASE in s[span[0]:span[1]]
++
++
++# ---------------------------------------------------------------------------
++# 主語の規則の直し(人間の判断 1、2026-10-08)の S2・A1。
++# S1・S3 は ``extract.subject_of`` の ``skip`` で書いてある(順位は変えない)。
++# ---------------------------------------------------------------------------
++
++
++def _elements_for_word(subjects, word):
++    """語彙の中で ``word`` に**最初に**当たる行の要素。
++
++    **``dict(subjects)`` を使ってはいけない** ― 同じ語が 2 回出てくる語彙では
++    ``dict`` は**最後**を採るが、``subject_of`` は(同じ終わり・同じ長さなら)
++    **一覧の早い方**を採る。ここは ``subject_of`` と同じ側に揃える。
++    """
++
++    for w, elems in subjects:
++        if w == word:
++            return elems
++    return None
++
++
++def _direction_amount_check(claim, s, word_start, word_end, rounding):
++    """A1(人間の追加指示、2026-10-08): 向きの語と**同じ節**に金額が在れば、
++    向きだけでなく金額も ``|当期 − 前期|`` と照合する。
++
++    節に限るのは、**文に限ると列挙の文で他の項目の金額を拾う**からである。
++    節の中に金額が 2 つ以上在るときは**向きの語にいちばん近いもの 1 つ**を採り、
++    何件在ったかを ``amount_in_clause_count`` に残す(人が全件読めるように)。
++
++    **これは通る主張を増やす直しではない。** 金額が合わなければ
++    ``GROUNDED`` を ``VALUE_MISMATCH`` に落とすだけで、逆向きには動かさない。
++
++    ## 封を狭めた理由(2026-10-08、1 回目の実測の後)
++
++    封じた計画は「**同じ節**に金額が在れば照合する」だった。4 書類で測ったら
++    **正しかった主張を 3 件止めた** ― 封じた合格条件(「2 件まで。3 件以上なら
++    規則が広すぎるので狭めてから測り直す」)に当たったので狭めた。
++
++    止めた 3 件のうち 2 件は**差ではなく水準**を拾っていた ―
++    「営業利益は、前連結会計年度に比べて38.1%増加し**253百万円**となりました」
++    「期初の業績予想を上回る**393億94百万円**となりました」。
++    節の中でいちばん近い金額が、増減ではなくその期の残高・売上だった。
++
++    だから採る金額を「**向きの語に直に付いた金額**」に限る ―
++    金額の直後(``の`` を 1 つ挟むのは許す)に向きの語が来る形
++    (「30,950千円増加」「8億96百万円増加」)か、金額の直前が
++    ``増加額``/``減少額`` などの差を表す名詞である形(「減少額14,472千円」)。
++    **水準の金額は「…となりました」で終わるので、どちらの形にも入らない。**
++    """
++
++    left, right = E.clause_span(s, word_start, word_end)
++    found = []
++    for (a, b, signed, unit, prec) in E.iter_numbers(s[left:right]):
++        if unit not in V.UNIT_SCALE:
++            continue
++        start, end = left + a, left + b
++        gap_text = s[end:word_start] if end <= word_start else None
++        attached_after = gap_text in DIRECTION_AMOUNT_GAPS
++        attached_before = any(s[:start].endswith(n) for n in DIFFERENCE_NOUNS)
++        if not (attached_after or attached_before):
++            continue
++        gap = min(abs(start - word_end), abs(word_start - end))
++        found.append((gap, signed, unit, prec))
++    claim["amount_in_clause_count"] = len(found)
++    if not found:
++        return
++    found.sort(key=lambda r: r[0])
++    _gap, signed, unit, prec = found[0]
++    unit_scale = 1.0 if unit == "円" else V.UNIT_SCALE[unit]
++    claim_scale = prec if unit == "円" else V.UNIT_SCALE[unit]
++    claim["value"] = abs(signed)
++    claim["unit"] = unit
++    claim["unit_scale"] = unit_scale
++    claim["claim_scale"] = claim_scale
++    claim["amount_in_clause"] = abs(signed) * unit_scale
++    if rounding is not None:
++        claim["rounding"] = rounding
++    how = V.match_value(abs(claim["recomputed"]), abs(signed) * unit_scale, claim_scale, rounding)
++    claim["amount_match"] = how
++    claim["match"] = how
++    if how is None and claim["result"] == "GROUNDED":
++        claim["result"] = "VALUE_MISMATCH"
++
++
++def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rounding=None):
+     num_claims = []
+     for si, s in enumerate(sentences):
+         for (a, b, signed, unit, prec) in E.iter_numbers(s):
+@@ -397,20 +591,27 @@ def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member):
+                 continue
+             sign = -1 if signed < 0 else 1
+             num = abs(signed)
+-            subj, elems = E.subject_of(s, a, profile.subjects)
++            subj, elems = E.subject_of(s, a, profile.subjects, E.subject_skip_for(profile))
+             claim = {
+                 "id": "N%03d" % (len(num_claims) + 1,), "sentence": si, "span": s[max(0, a - 30):b + 10],
++                # XBRL 直し(2026-10-08): 文の中の位置。文の切り方を変える直し
++                # (§4)の前後で主張を 1 対 1 に対応づけるためだけに使う計器で、
++                # Claim・Recipe には写らない(claim_to_recipe は読まない)。
++                "pos": a,
+                 "value": sign * num, "unit": unit, "subject": subj, "form": None, "pointer": None,
+                 "bound": False, "reason": None, "result": None, "recomputed": None,
+             }
+-            if profile.target_word and _TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]):
+-                # Core 接続 C-1h §1-2: 数の手前 10 字以内に 目標|計画 があれば
+-                # UNVERIFIABLE。数の後ろの語・文章 Claim は見ない。
++            if _target_or_plan(s, a, b, profile):
++                # Core 接続 C-1h §1-2(P7)+ XBRL 直し §3(P8): 目標・計画・
++                # 見込み・見通しの数は UNVERIFIABLE。
+                 claim["form"] = "direct_value"
+                 claim["result"] = "UNVERIFIABLE"
+                 claim["reason"] = "target_or_plan"
+             else:
+-                _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts, profile)
++                _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
++                                    profile, rounding)
++            if rounding is not None and claim.get("unit_scale") is not None:
++                claim["rounding"] = rounding
+             if profile.member_on:
+                 if msrc == "ambiguous" and not claim["bound"]:
+                     claim["reason"] = "ambiguous(member)"
+@@ -440,19 +641,50 @@ def _text_unbound_reason(profile, member, cur, elems, facts, contexts):
+     return "no_element(no prior for text)"
+ 
+ 
+-def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
++def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, rounding=None):
+     text_claims = []
+     for si, s in enumerate(sentences):
+         for w, sg in E.DIRECTION_WORDS.items():
+             for m in re.finditer(w, s):
+                 member, msrc = claim_member(si, m.start())
+-                subj, elems = E.subject_of(s, m.start(), profile.subjects)
++                subj, elems = E.subject_of(s, m.start(), profile.subjects, E.subject_skip_for(profile))
+                 claim = {
+                     "id": "T%03d" % (len(text_claims) + 1,), "sentence": si, "word": w,
+-                    "span": s[max(0, m.start() - 30):m.end() + 5], "subject": subj,
++                    "span": s[max(0, m.start() - 30):m.end() + 5], "subject": subj, "pos": m.start(),
+                     "form": "threshold", "pointer": None, "bound": False, "result": None, "reason": None,
+                     "direction": sg,
+                 }
++                if profile.subject_direction_object:
++                    # S2: 「<名詞>を増加/減少」なら、向きが掛かっているのは
++                    # **その目的語**である。語彙に在ればそれを主語にし、
++                    # 無ければ主張にしない(たまたま近くの語に当たって
++                    # 通ってしまう型を止める)。
++                    obj = E.direction_object(s, m.start())
++                    if obj is not None and obj != subj:
++                        oelems = _elements_for_word(profile.subjects, obj)
++                        if oelems is None:
++                            claim["dropped"] = "direction_object(no subject: %s)" % obj
++                        else:
++                            subj, elems = obj, oelems
++                            claim["subject"] = subj
++                            claim["subject_from"] = "direction_object"
++                if profile.direction_word_lexicon and not claim.get("dropped"):
++                    # S4: 増収/減収 は売上高系へ、増益/減益 は利益系へ。
++                    # 0 個なら指す先が無い・2 個以上ならどれか決められないので、
++                    # どちらも主張にしない。
++                    fam = V.direction_family_words(s, w)
++                    if fam is not None:
++                        if len(fam) != 1:
++                            claim["dropped"] = "direction_word(%d in the sentence)" % len(fam)
++                        else:
++                            fword = fam[0][0]
++                            felems = _elements_for_word(profile.subjects, fword)
++                            if felems is None:
++                                claim["dropped"] = "direction_word(no subject: %s)" % fword
++                            else:
++                                subj, elems = fword, felems
++                                claim["subject"] = subj
++                                claim["subject_from"] = "direction_word"
+                 flow_conv = None
+                 if subj and profile.flow_sign:
+                     for e in elems:
+@@ -468,7 +700,17 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
+                         if V.expenditure_convention(e):
+                             expend_conv = True
+                             break
+-                if subj and flow_conv is not None:
++                if claim.get("dropped"):
++                    # S2・S4 で落とした主張は、束縛まで進めない(どちらにしても
++                    # 末尾で外すので、結果の欄を埋めずに素通りさせる)。
++                    pass
++                elif _target_or_plan(s, m.start(), m.end(), profile):
++                    # XBRL 直し §3: 向きの語の手前 10 字・後ろ 20 字(節の中)に
++                    # 目標|計画|見込|見通 があれば、盤面の事実ではなく将来の
++                    # 見通しなので束縛しない(「売上高の拡大を見込みます」)。
++                    claim["result"] = "UNVERIFIABLE"
++                    claim["reason"] = "target_or_plan"
++                elif subj and flow_conv is not None:
+                     # Core 接続 C-1g §1-2: 主語が CF 流量項目なら、前期との
+                     # 対でなく当期 1 件の fact + builtin:flow_sign(cur)==direction
+                     # で束縛する(値そのものが増減を表すので前期は要らない)。
+@@ -503,9 +745,14 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
+                     else:
+                         claim["reason"] = _text_unbound_reason(profile, member, cur, elems, facts, contexts)
+                 elif subj:
+-                    cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and f["unit"] and f["unit"].upper().startswith("JPY")]
+-                    pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
+-                    pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
++                    # XBRL 直し §6: 括弧の中の前期の方向語は、当期・前期ではなく
++                    # 前期・前々期の対に結ぶ。期の組だけを差し替え、以降の
++                    # 判定(符号の向き・理由)は同じ 1 か所を通す。
++                    prior_paren = profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())
++                    a_pre, b_pre = ("Prior1Year", "Prior2Year") if prior_paren else ("CurrentYear", "Prior1Year")
++                    cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith(a_pre) and f["unit"] and f["unit"].upper().startswith("JPY")]
++                    pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith(b_pre)]
++                    pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace(a_pre, "") == p["context"].replace(b_pre, "")]
+                     if pairs:
+                         c, p = pairs[0]
+                         claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"]), "builtin:sign(cur-prior)"]
+@@ -513,6 +760,13 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
+                         actual = 1 if c["value"] - p["value"] > 0 else -1
+                         claim["result"] = "GROUNDED" if actual == sg else "VALUE_MISMATCH"
+                         claim["recomputed"] = c["value"] - p["value"]
++                        if profile.direction_amount_check:
++                            # A1(人間の追加指示): 同じ節に金額が在れば金額も照合する。
++                            _direction_amount_check(claim, s, m.start(), m.end(), rounding)
++                    elif prior_paren:
++                        # 前々期が無いときは代用せず止める(数の側の §1b と同じ
++                        # 原因なので同じ理由の名前を使う。登録簿は増やさない)。
++                        claim["reason"] = "no_element(no prior2 for prior-year diff)"
+                     else:
+                         claim["reason"] = _text_unbound_reason(profile, member, cur, elems, facts, contexts)
+                 else:
+@@ -522,17 +776,61 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
+                         claim["reason"] = "ambiguous(member)"
+                     claim["member"] = None if member == E.AMBIG else member
+                     claim["member_source"] = msrc
++                if profile.drop_qualitative and not claim.get("subject"):
++                    # XBRL 直し §5(広い版): 主語が語彙に引けない向きの語を
++                    # 主張にしない。
++                    #
++                    # **2026-10-08 の実測で、この枝は広すぎることが分かった。**
++                    # 1 社目では景気の語(「わが国経済は…改善」)だったが、
++                    # 2 社目・3 社目では実在の勘定科目が混ざっていた ―
++                    # 「売上原価は 30,950 千円増加」「流動資産は…37 百万円減少」
++                    # 「固定資産は…239 百万円増加」など、**語彙に主語が無いだけ**の
++                    # 主張を黙って分母から消していた(3 書類で 3 / 18 / 20 件)。
++                    # 狭い版(``drop_state_words_only``、profile P10)はこの枝を
++                    # 通らず、向きの語は ``no_subject`` のまま残す ― その件数が
++                    # 語彙の穴の大きさを指す計器になる。
++                    # 経緯は docs/XBRL_FIX5_NARROW_PLAN_2026-10-08.md。
++                    claim["dropped"] = "qualitative(no subject)"
+                 text_claims.append(claim)
+         for w in E.STATE_WORDS:
+             for m in re.finditer(w, s):
+-                text_claims.append({
++                st = {
+                     "id": "T%03d" % (len(text_claims) + 1,), "sentence": si, "word": w,
+-                    "span": s[max(0, m.start() - 30):m.end() + 5], "subject": None, "form": "threshold",
++                    "span": s[max(0, m.start() - 30):m.end() + 5], "subject": None, "pos": m.start(), "form": "threshold",
+                     "pointer": None, "bound": False, "result": "UNVERIFIABLE", "reason": "state_word(no line)",
+-                })
++                }
++                if profile.drop_qualitative or profile.drop_state_words_only:
++                    # XBRL 直し §5: 状態語(堅調・不透明・回復…)は構造上どの
++                    # 行にも束縛されない(``state_word(no line)``)。主張にしない。
++                    # 狭い版(§5')が落とすのはこの群**だけ**である。
++                    st["dropped"] = "qualitative(state word)"
++                text_claims.append(st)
++    # 番号を振った**後に**落とす ― ID は欠番になるが、直す前との対応づけが
++    # ずれない(落とした件数と ID を結果に書けるようにするため)。
++    if (profile.drop_qualitative or profile.drop_state_words_only
++            or profile.subject_direction_object or profile.direction_word_lexicon):
++        text_claims = [c for c in text_claims if not c.get("dropped")]
+     return text_claims
+ 
+ 
++def _rounding_evidence(num_claims):
++    """XBRL 直し §2: 丸め方を決める根拠。束縛できた金額の主張ごとに
++    ``(差, 桁)`` を返す。差は**その主張の照合が実際に使った軸**で測る
++    (``abs+`` の札が付いたもの・CF 流量項目は絶対値の軸)。
++    """
++
++    rows = []
++    for c in num_claims:
++        how = c.get("match")
++        if not how or c.get("unit_scale") is None or c.get("recomputed") is None:
++            continue
++        on_abs = how.startswith("abs+") or c.get("flow_convention") is not None
++        target = (abs(c["value"]) if on_abs else c["value"]) * c["unit_scale"]
++        fact = abs(c["recomputed"]) if on_abs else c["recomputed"]
++        rows.append((fact - target, c["claim_scale"]))
++    return rows
++
++
+ def _member_material(zb, inst, text, sentences, profile):
+     if not profile.member_on:
+         return [(None, None)] * len(sentences), {}
+@@ -546,21 +844,107 @@ def _member_material(zb, inst, text, sentences, profile):
+     id2label = I.labels_from_zip(z, inst["names"])
+     ntext = unicodedata.normalize("NFKC", text)
+     reg, _rows, _hand = E.build_registry(members, id2label, ntext, profile.run3)
+-    paras = E.paragraph_index(text, sentences)
++    paras = E.paragraph_index(text, sentences, profile.paren_sentence)
+     sent_member = E.resolve_members(sentences, paras, reg)
+     return sent_member, reg
+ 
+ 
+-def build_raw_claims(zb, profile):
++def _label_tables(zb, inst, profile):
++    """ラベルの表を 2 つ返す ― 書類自身のインライン XBRL から(§7)と、
++    標準タクソノミの日本語標準ラベルから(§8)。使わない設定なら空の辞書。
++    """
++
++    doc_labels = {}
++    if profile.label_vocabulary:
++        z = zipfile.ZipFile(io.BytesIO(zb))
++        doc_labels = I.inline_labels(
++            z, inst["names"],
++            statement_only=profile.label_statement_rows_only,
++            contexts=inst["contexts"] if profile.label_statement_rows_only else None)
++    tax_labels = {}
++    if profile.taxonomy_labels:
++        # §8 の名前空間の限定。``taxonomy_labels_all_ns`` は**参考専用**。
++        namespaces = None if profile.taxonomy_labels_all_ns else ("jppfs",)
++        locals_ = {f["name"].split(":")[-1] for f in inst["facts"]}
++        tax_labels = I.taxonomy_labels(locals_, namespaces=namespaces)
++    return doc_labels, tax_labels
++
++
++def _label_subjects(zb, inst, profile):
++    """XBRL 直し §7・§7b・§8: ラベルから取った「日本語の勘定科目名 → 要素」を
++    主語の一覧の**行**にして返す。
++
++    返すのは 3 つ。
++
++    ``hand_rows``
++        手書きの語彙の行(順も件数もそのまま)。``label_overrides_dead_hand``
++        (§7b)が真のときだけ、**手書きの要素で fact を 1 件も引けず、かつ
++        ラベル側の要素が 1 件以上引ける**語の要素をラベルのものに差し替える。
++        引けないラベルには差し替えない(2 社目の ``繰延税金負債`` のように、
++        手書きもラベルも同じ名前で両方引けない語が在る)。
++    ``added``
++        **手書きの語彙に無い語**の行。書類のラベルを先に、足りない語を標準
++        タクソノミで埋める(会社自身の表の言葉が本文の言い回しに近いので先)。
++        並びは**長い名前が先**(``subject_of`` は同じ終わり位置・同じ長さなら
++        先に在る方を採るので、並べる順を決めておく)。
++    ``overrides``
++        §7b で差し替えた語の記録(人間の指示: 「(b) でラベルに切り替わった
++        ときは記録に残し、件数と該当の語を報告する」)。
++    """
++
++    doc_labels, tax_labels = _label_tables(zb, inst, profile)
++    facts, contexts = inst["facts"], inst["contexts"]
++
++    def resolves(elems):
++        return bool(I.facts_for(list(elems), facts, contexts))
++
++    hand_rows, overrides = [], []
++    for w, elems in profile.subjects:
++        replaced = None
++        if profile.label_overrides_dead_hand and not resolves(elems):
++            for source, table in (("document", doc_labels), ("taxonomy", tax_labels)):
++                cand = table.get(w)
++                if cand and resolves(cand):
++                    replaced = (source, list(cand))
++                    break
++        if replaced is None:
++            hand_rows.append((w, list(elems)))
++            continue
++        source, cand = replaced
++        overrides.append({"word": w, "hand": list(elems), "label": cand, "source": source})
++        hand_rows.append((w, cand))
++
++    hand = {w for w, _e in profile.subjects}
++    added = {}
++    for table in (doc_labels, tax_labels):
++        for w, elems in table.items():
++            if w not in hand and w not in added:
++                added[w] = list(elems)
++    rows = sorted(added.items(), key=lambda r: (-len(r[0]), r[0]))
++    return hand_rows, [(w, list(elems)) for w, elems in rows], overrides
++
++
++def build_raw_claims(zb, profile, info=None):
+     """1 文書・1 profile ぶんの、原本と同じ形(辞書)の num_claims / text_claims
+     を作る。recipes.to_recipes の前段(確認・再現がしやすいように分けておく)。
++
++    ``info`` に辞書を渡すと、測るのに要る数(文の数・決めた丸め方とその根拠)
++    をそこに書き込む。渡さなければ何もしない(既存の呼び出しは不変)。
+     """
+ 
+     inst = I.load_instance(zb)
++    if profile.label_vocabulary or profile.taxonomy_labels:
++        # XBRL 直し §7/§7b/§8: 主語の一覧をラベルで直した profile で以降を回す
++        # (``subject_of`` も他の関数も 1 行も変えない)。
++        hand_rows, added, overrides = _label_subjects(zb, inst, profile)
++        profile = dataclasses.replace(profile, subjects=tuple(hand_rows) + tuple(added))
++        if info is not None:
++            info["label_subjects_added"] = len(added)
++            info["label_overrides"] = overrides
+     facts, contexts, tbs = inst["facts"], inst["contexts"], inst["textblocks"]
+     mdna_name = I.select_mdna(tbs)
+     text = I.strip_html(tbs[mdna_name]) if mdna_name else ""
+-    sentences = E.split_sentences(text)
++    sentences = E.split_sentences(text, profile.paren_sentence)
+     sent_member, reg = _member_material(zb, inst, text, sentences, profile)
+ 
+     def claim_member(si, pos):
+@@ -569,7 +953,20 @@ def build_raw_claims(zb, profile):
+         return E.claim_member_B(sentences[si], pos, reg, sent_member[si])
+ 
+     num_claims = _build_raw_num_claims(sentences, facts, contexts, profile, claim_member)
+-    text_claims = _build_raw_text_claims(sentences, facts, contexts, profile, claim_member)
++    rounding = None
++    if profile.doc_rounding:
++        # XBRL 直し §2: 1 周目(今までの梯子)で根拠を数え、書類の丸め方を
++        # 1 つに決め、2 周目はその 1 つだけで照合し直す。
++        rounding, r_only, t_only = V.decide_rounding(_rounding_evidence(num_claims))
++        num_claims = _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rounding)
++        if info is not None:
++            info["rounding_round_only"] = r_only
++            info["rounding_truncate_only"] = t_only
++    text_claims = _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, rounding)
++    if info is not None:
++        info["sentences"] = len(sentences)
++        info["mdna_chars"] = len(text)
++        info["rounding"] = rounding
+     return num_claims, text_claims
+ 
+ 
+@@ -642,6 +1039,14 @@ def claim_to_recipe(raw, kind):
+             else:
+                 comparator = "builtin:sign(cur-prior)==direction"
+                 params = {"direction": raw.get("direction")}
++                if raw.get("amount_in_clause") is not None:
++                    # A1: 同じ節に金額が在った向きの主張だけ、符号 **と** 金額を
++                    # 見る比較器に替える。金額が無い主張は今までどおり符号だけ。
++                    comparator = "builtin:sign(cur-prior)==direction&amount"
++                    params["unit_scale"] = raw.get("unit_scale")
++                    params["claim_scale"] = raw.get("claim_scale")
++                    if raw.get("rounding") is not None:
++                        params["rounding"] = raw["rounding"]
+         elif form_name == "direct_value":
+             if raw.get("unit") not in ("%", "％", "ポイント"):
+                 comparator = "equals_within"
+@@ -654,6 +1059,9 @@ def claim_to_recipe(raw, kind):
+                     if raw.get("flow_convention") is not None:
+                         params["flow_convention"] = raw["flow_convention"]
+                         params["claim_direction"] = raw["claim_direction"]
++                    # XBRL 直し §2: 書類単位で決めた丸め方を検証時にも使う。
++                    if raw.get("rounding") is not None:
++                        params["rounding"] = raw["rounding"]
+             else:
+                 comparator = "equals_within(pure*100)"
+                 params = {"tolerance": 0.15, "pure_threshold": 1.5}
+@@ -667,6 +1075,9 @@ def claim_to_recipe(raw, kind):
+             }.get(f, "pct_change(cur,prior)")
+             if comparator == "diff(a-b) equals_within":
+                 params = {"unit_scale": raw.get("unit_scale"), "claim_scale": raw.get("claim_scale")}
++                # XBRL 直し §2: 書類単位で決めた丸め方を検証時にも使う。
++                if raw.get("rounding") is not None:
++                    params["rounding"] = raw["rounding"]
+             else:
+                 params = {"tolerance": 0.15}
+         contract = core.Contract(comparator=comparator, params=params)
+@@ -694,12 +1105,12 @@ def claim_to_recipe(raw, kind):
+     )
+ 
+ 
+-def build_recipes(zb, profile):
++def build_recipes(zb, profile, info=None):
+     """1 文書・1 profile ぶんの Core Recipe の列(num の後に text。原本の
+-    num_claims + text_claims の順のまま)。
++    num_claims + text_claims の順のまま)。``info`` は build_raw_claims へ素通し。
+     """
+ 
+-    num_claims, text_claims = build_raw_claims(zb, profile)
++    num_claims, text_claims = build_raw_claims(zb, profile, info)
+     recipes = [claim_to_recipe(c, "num") for c in num_claims]
+     recipes += [claim_to_recipe(c, "text") for c in text_claims]
+     return recipes
+diff --git a/audit-core/adapters/xbrl/registry_setup.py b/audit-core/adapters/xbrl/registry_setup.py
+index c6ffb1d..e3a466e 100644
+--- a/audit-core/adapters/xbrl/registry_setup.py
++++ b/audit-core/adapters/xbrl/registry_setup.py
+@@ -3,13 +3,13 @@
+ C-1h §3.4-c, 2026-10-06): registers this Adapter's schemes, comparators,
+ normalizations and reasons on top of ``audit_core.Registry.default()``.
+ 
+-28 registrations: 2 schemes (``xbrl``, ``formula`` -- ``builtin`` is
++29 registrations: 2 schemes (``xbrl``, ``formula`` -- ``builtin`` is
+ already registered by ``Registry.default()`` and is *not* re-registered
+ here) + 9 comparators (:mod:`comparators`; 6 from C-1d + 2 from C-1g's
+ profile P6 + 1 from C-1h's profile P7) + 4 normalizations (the
+ ``_match_value`` ladder's four ``how`` strings; unchanged -- P6's
+ flow-sign branch of ``equals_within`` reuses the existing
+-"round"/"truncate" names, see ``comparators.py``) + 13 reasons (7
++"round"/"truncate" names, see ``comparators.py``) + 14 reasons (7
+ POINTER_NOT_FOUND + 6 UNVERIFIABLE; C-1d's 9, matching
+ ``recipes.UNBOUND_REASON_STATE`` plus the count-free
+ ``ambiguous(elements)``, plus C-1g's one new POINTER_NOT_FOUND reason
+@@ -33,6 +33,9 @@ _COMPARATORS = (
+     ("pct_change(cur,prior)", C.pct_change),
+     ("diff(a-b) equals_within", C.diff_ab_equals_within),
+     ("builtin:sign(cur-prior)==direction", C.builtin_sign_direction),
++    # A1(主語の規則の直し、人間の追加指示、2026-10-08): 符号 **と** 金額。
++    # 理由コードは増やさない(合わなければ既存の VALUE_MISMATCH)。
++    ("builtin:sign(cur-prior)==direction&amount", C.builtin_sign_direction_with_amount),
+     # Core 接続 C-1g §1-2/§1-3(profile P6 のみが参照する)。
+     ("builtin:flow_sign(cur)==direction", C.builtin_flow_sign_direction),
+     ("diff(a-b)(pure*100)", C.diff_ab_pure100),
+@@ -52,6 +55,10 @@ _POINTER_NOT_FOUND_REASONS = (
+     # Core 接続 C-1h §1-3(profile P7 のみ)。
+     "no_element(text needs money fact)",
+     "no_element(no prior for text)",
++    # XBRL 直し §1b(人間の決定、2026-10-08、profile P8 のみ)。前々期の値が
++    # 無いときに代用せず止める理由。P1/P5F/P6/P7 はこの理由を作らないので、
++    # 登録簿に在ること自体は彼らに対して無害(既存の理由は 1 つも消していない)。
++    "no_element(no prior2 for prior-year diff)",
+ )
+ 
+ _UNVERIFIABLE_REASONS = (
+diff --git a/audit-core/adapters/xbrl/vocabulary.py b/audit-core/adapters/xbrl/vocabulary.py
+index db51b9f..03b8fbd 100644
+--- a/audit-core/adapters/xbrl/vocabulary.py
++++ b/audit-core/adapters/xbrl/vocabulary.py
+@@ -110,6 +110,54 @@ SUBJECTS_P6_EXTRA_7 = [
+ ]
+ SUBJECTS_P6 = tuple(SUBJECTS_P6_EXTRA_7) + tuple(SUBJECTS_74)
+ 
++# ---------------------------------------------------------------------------
++# XBRL 直し §1a(人間の決定、2026-10-08): 「資産合計」の要素に ``TotalAssets``
++# を足す。``instance.facts_for`` は ``要素名 + "SummaryOfBusinessResults"`` を
++# 完全一致に数えるので、これで業績概要の要素
++# ``jpcrp_cor:TotalAssetsSummaryOfBusinessResults``(前々期まで在る)が引ける。
++# 「純資産合計」は ``["NetAssets"]`` のまま
++# ``NetAssetsSummaryOfBusinessResults`` が引けていた ― その非対称を直すだけで、
++# 新しい主語は 1 つも足していない。P6 の語彙(``SUBJECTS_P6``)は不変。
++# ---------------------------------------------------------------------------
++SUBJECTS_P8 = tuple(
++    ("資産合計", ["Assets", "TotalAssets"]) if w == "資産合計" else (w, e)
++    for (w, e) in SUBJECTS_P6
++)
++
++# ---------------------------------------------------------------------------
++# XBRL 直し §7c(人間の判断、2026-10-08): 「手書きの語彙が存在しない要素を指して
++# いたと分かった分は、手書きの語彙そのものも直す。」
++#
++# 直すのは**この 2 語だけ**。許可された標準タクソノミ(jppfs 2025-11-01)で
++# 機械確認した結果、次の 3 つを同時に満たすのがこの 2 語しかなかった:
++#
++#   (i)   手書きが指す要素名が 2025-11-01 の標準タクソノミに**実在しない**
++#   (ii)  **同じ日本語の標準ラベル**を持つ実在の要素が在る
++#   (iii) 3 書類とも手書きの要素では fact を 1 件も引けない
++#
++# 手書き 78 語のうち 43 語は「要素名のどれか 1 つが標準タクソノミに無い」が、
++# ``facts_for`` の部分一致が ``PurchaseOfInvestmentSecurities`` ->
++# ``PurchaseOfInvestmentSecuritiesInvCF`` のような接尾の族を吸収しているので
++# 実際には引けている。**「名前が無い」だけでは直す理由にしない。**
++# ``長期借入金の返済``(複数形 ``Repayments…``)は 3 書類とも fact 0 だが、
++# 同じ日本語ラベルの要素が無い(ラベルは ``長期借入金の返済による支出``)ので
++# ここでは直さず、§8 が**語として足す**側で解く。
++#
++# **古い要素名は消さずに足す**(会社拡張がその名前を使っている書類がありうる)。
++# **``SUBJECTS_P6``・``SUBJECTS_P8`` は 1 文字も変えない** ― 変えると
++# ``P7``(「直す前」)と ``P10`` の既に測った数が黙って動き、これまでの全部の
++# 比較の土台が崩れる。直しは**新しい版**として入れる。
++# 根拠は docs/XBRL_LABEL_VOCAB2_PLAN_2026-10-08.md §1.3。
++# ---------------------------------------------------------------------------
++SUBJECTS_P12_FIXES = {
++    "退職給付に係る資産": ["RetirementBenefitAsset", "NetDefinedBenefitAsset"],
++    "退職給付に係る負債": ["RetirementBenefitLiability", "NetDefinedBenefitLiability"],
++}
++SUBJECTS_P12 = tuple(
++    (w, list(SUBJECTS_P12_FIXES[w])) if w in SUBJECTS_P12_FIXES else (w, e)
++    for (w, e) in SUBJECTS_P8
++)
++
+ PROFIT_SUBJECTS = ("利益", "損失")
+ 
+ UNIT_SCALE = {"百万円": 1e6, "千円": 1e3, "億円": 1e8, "兆円": 1e12, "円": 1}
+@@ -127,18 +175,50 @@ def tol_of(fact, claim_scale):
+     return 0.5 * claim_scale
+ 
+ 
+-def match_value(fact_value, target, unit):
+-    """xbrl_probe.py: match_value の写し(round / truncate / abs の組)。"""
++def match_value(fact_value, target, unit, mode=None):
++    """xbrl_probe.py: match_value の写し(round / truncate / abs の組)。
++
++    ``mode`` は XBRL 直し §2(人間の決定、2026-10-08)で足した省略可能な引数。
++    ``None`` のとき、この関数は写し元と 1 行も違わない振る舞いをする
++    (P1/P5F/P6/P7 はすべて ``None`` で呼ぶ)。``"round"`` / ``"truncate"``
++    のときは**その 1 つだけ**を試す ― 主張ごとに 4 つの梯子を順に試すのを
++    やめ、書類単位で決めた 1 つの丸め方で照合するため。許容幅は
++    ``mode=None`` の実質 ``-unit/2 .. +unit`` から、``"round"`` なら
++    ``-unit/2 .. +unit/2``、``"truncate"`` なら ``0 .. +unit`` に狭まる。
++    """
+ 
+     for sign_mode, fv in (("", fact_value), ("abs", abs(fact_value))):
+         t = abs(target) if sign_mode else target
+-        if abs(fv - t) <= unit / 2:
++        if mode in (None, "round") and abs(fv - t) <= unit / 2:
+             return (sign_mode + "+round").strip("+")
+-        if 0 <= fv - t < unit:
++        if mode in (None, "truncate") and 0 <= fv - t < unit:
+             return (sign_mode + "+truncate").strip("+")
+     return None
+ 
+ 
++# ---------------------------------------------------------------------------
++# XBRL 直し §2(人間の決定、2026-10-08): 書類単位の丸め方。``profile.doc_rounding``
++# が真のときだけ使う。既定の札(どちらとも言えないとき)は字で書く。
++# ---------------------------------------------------------------------------
++DOC_ROUNDING_DEFAULT = "round"
++ROUNDING_MODES = ("round", "truncate")
++
++
++def decide_rounding(evidence):
++    """書類の丸め方を 1 つに決める。``evidence`` は ``(diff, unit)`` の列
++    (``diff`` は照合が実際に使った軸での fact − 目標、``unit`` は主張の桁)。
++
++    ``R`` = round しか説明できない件数(``diff < 0``)。
++    ``T`` = truncate しか説明できない件数(``diff > unit/2``)。
++    ``T > R`` なら ``"truncate"``、そうでなければ ``DOC_ROUNDING_DEFAULT``。
++    戻り値は ``(mode, R, T)`` ― 決めた根拠の数も一緒に返す(記録に残すため)。
++    """
++
++    r = sum(1 for d, u in evidence if d < 0)
++    t = sum(1 for d, u in evidence if d > u / 2.0)
++    return (("truncate" if t > r else DOC_ROUNDING_DEFAULT), r, t)
++
++
+ # ---------------------------------------------------------------------------
+ # Core 接続 C-1g §1-2(人間の決定、2026-10-06、CF 流量項目の符号の規約 b)。
+ # 要素の局所名(接頭辞を除いた部分。会社拡張でも同じ判定)が
+@@ -183,6 +263,63 @@ def expenditure_convention(element_name):
+     return bool(_EXPENDITURE_RE.match(local))
+ 
+ 
++# ---------------------------------------------------------------------------
++# S4(主語の規則の直し、人間の判断 1、2026-10-08): 向きの語そのものが主語の
++# 範囲を決める 2 つの族。**語は字で書く。**
++#
++# 「増収」は収益の増、「増益」は利益の増である ― これは手書きの知識
++# (CLAUDE.md の区分では記述的知識)なので、既定 False のフラグ
++# ``direction_word_lexicon`` の下にだけ置く。
++#
++# **部分一致では決めない。** 「減損損失」は「損失」を含むが利益の族ではない。
++# だから「利益」「損失」の部分一致ではなく、**この一覧の語そのもの**を文の
++# 中から探す(入れ子になった出現は長い方だけを採る ― 「当期純損失」は
++# 「親会社株主に帰属する当期純損失」の中にあるので 1 件と数える)。
++# ---------------------------------------------------------------------------
++REVENUE_WORDS = ("売上高", "営業収益", "売上収益")
++PROFIT_WORDS = ("営業利益", "営業損失", "経常利益", "経常損失",
++                "当期純利益", "当期純損失",
++                "親会社株主に帰属する当期純利益", "親会社株主に帰属する当期純損失",
++                "セグメント利益", "税引前利益")
++
++# 向きの語 → 探す族。ここに無い向きの語(増加・減少・拡大…)には S4 を当てない
++# (「増加」が何の増加かは語そのものからは決まらない)。
++DIRECTION_WORD_FAMILY = {
++    "増収": REVENUE_WORDS, "減収": REVENUE_WORDS,
++    "増益": PROFIT_WORDS, "減益": PROFIT_WORDS,
++}
++
++
++def direction_family_words(sentence, word):
++    """S4。向きの語 ``word`` の族の語のうち、``sentence`` に**現れるもの**。
++    入れ子の出現は長い方だけを採る。戻りは (語, 出現位置) の列(文の左から)。
++    族が無い向きの語なら ``None``(「当てない」と「0 件」を言い分ける)。
++    """
++
++    family = DIRECTION_WORD_FAMILY.get(word)
++    if family is None:
++        return None
++    spans = []
++    for w in family:
++        start = 0
++        while True:
++            i = sentence.find(w, start)
++            if i < 0:
++                break
++            spans.append((i, i + len(w), w))
++            start = i + 1
++    kept = [(i, j, w) for (i, j, w) in spans
++            if not any((a <= i and j <= b and (b - a) > (j - i)) for (a, b, _x) in spans)]
++    kept.sort()
++    out, seen = [], set()
++    for (i, _j, w) in kept:
++        if w in seen:
++            continue
++        seen.add(w)
++        out.append((w, i))
++    return out
++
++
+ @dataclass(frozen=True)
+ class Profile:
+     """A named bundle of Adapter settings (Adapter-only knowledge; the Core
+@@ -206,6 +343,36 @@ class Profile:
+     expenditure_sign: bool = False
+     target_word: bool = False
+     text_reason_split: bool = False
++    # XBRL 直し(人間の決定、2026-10-08): P8 だけの 5 つのフラグ。
++    # P1・P5F・P6・P7 はこれらの既定値 False のまま変わらない。
++    # 1 つずつ独立に測れるように、5 つを 1 つのフラグに束ねていない。
++    prior2_required: bool = False      # §1b 前々期が無ければ代用せず止める
++    doc_rounding: bool = False         # §2  丸め方は書類単位で 1 つ
++    target_both: bool = False          # §3  目標・見通しを数と文字の両方に
++    paren_sentence: bool = False       # §4  括弧の中の句点では切らない
++    drop_qualitative: bool = False     # §5  定性的な語を主張にしない
++    # XBRL 直し §6(人間の決定、2026-10-08)。P9 だけ。P1〜P8 は既定の False。
++    text_prior_year_paren: bool = False  # §6 括弧内の前期の方向語を前期−前々期に
++    # XBRL 直し §5 を狭める(人間の指示で確かめた結果、2026-10-08)。P10 だけ。
++    # 広い版 drop_qualitative は消さずに残し、両方を測って並べる。
++    drop_state_words_only: bool = False  # §5' 状態語だけを落とす(向きの語は残す)
++    # XBRL 直し §7(人間の指示、2026-10-08)。P11 だけ。書類自身のインライン
++    # XBRL から「日本語の勘定科目名 → 要素」を取って語彙の後ろに足す。
++    label_vocabulary: bool = False       # §7 書類のラベルで主語を引く
++    # XBRL 直し §7a・§7b・§8(人間の判断、2026-10-08)。P12 以降だけ。
++    # P1〜P11 はこれらの既定値 False のまま変わらない(定義そのものを書き換えていない)。
++    label_statement_rows_only: bool = False   # §7a 計算書の行から来たラベルだけ使う
++    label_overrides_dead_hand: bool = False   # §7b 手書きが fact を引けない語はラベルで引く
++    taxonomy_labels: bool = False             # §8  標準タクソノミの日本語ラベルで引く
++    taxonomy_labels_all_ns: bool = False      # §8  **参考専用**。jppfs の限定を外す
++    # 主語の規則の直し(人間の判断 1、2026-10-08)。P15 以降だけ。
++    # P1〜P14 はこれらの既定値 False のまま変わらない(定義そのものを書き換えていない)。
++    # 計画と予測は docs/XBRL_SUBJECT_RULE_PLAN_2026-10-08.md(実装前に封じた)。
++    subject_skip_coordinated_cause: bool = False  # S1 「A及びBによる/により」の成分を採らない
++    subject_direction_object: bool = False        # S2 「<名詞>を増加/減少」の目的語に向きが掛かる
++    subject_not_part_of_aggregate: bool = False   # S3 「A及びBの合計」の成分を採らない
++    direction_word_lexicon: bool = False          # S4 増収→売上高系・増益→利益系
++    direction_amount_check: bool = False          # A1 向きの語と同じ節の金額も照合する
+ 
+ 
+ P1 = Profile(
+@@ -249,4 +416,208 @@ P7 = Profile(
+     text_reason_split=True,
+ )
+ 
+-PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7}
++P8 = Profile(
++    name="P8",
++    subjects=SUBJECTS_P8,
++    member_on=True,
++    claim_level_member=True,
++    run3="L",
++    flow_sign=True,
++    point_diff=True,
++    segment_denominator=True,
++    expenditure_sign=True,
++    target_word=True,
++    text_reason_split=True,
++    prior2_required=True,
++    doc_rounding=True,
++    target_both=True,
++    paren_sentence=True,
++    drop_qualitative=True,
++)
++
++# XBRL 直し §6(人間の決定、2026-10-08): 6 つ目の直しを足した profile。
++# P8 の定義は書き換えない(5 つと 6 つの差が読めるように両方残す)。
++P9 = Profile(
++    name="P9",
++    subjects=SUBJECTS_P8,
++    member_on=True,
++    claim_level_member=True,
++    run3="L",
++    flow_sign=True,
++    point_diff=True,
++    segment_denominator=True,
++    expenditure_sign=True,
++    target_word=True,
++    text_reason_split=True,
++    prior2_required=True,
++    doc_rounding=True,
++    target_both=True,
++    paren_sentence=True,
++    drop_qualitative=True,
++    text_prior_year_paren=True,
++)
++
++# XBRL 直し §5' (人間の指示で確かめた結果、2026-10-08): 直し 5 を状態語だけに
++# 狭めた版。P9 との差は drop_qualitative → drop_state_words_only の 1 つだけ。
++# P9 の定義は書き換えない(広い版の数の照合ができるように両方残す)。
++P10 = Profile(
++    name="P10",
++    subjects=SUBJECTS_P8,
++    member_on=True,
++    claim_level_member=True,
++    run3="L",
++    flow_sign=True,
++    point_diff=True,
++    segment_denominator=True,
++    expenditure_sign=True,
++    target_word=True,
++    text_reason_split=True,
++    prior2_required=True,
++    doc_rounding=True,
++    target_both=True,
++    paren_sentence=True,
++    drop_qualitative=False,
++    text_prior_year_paren=True,
++    drop_state_words_only=True,
++)
++
++# XBRL 直し §7(人間の指示、2026-10-08): P10(正本)+ ラベルの語彙。
++# P10 の定義は書き換えない。
++P11 = Profile(
++    name="P11",
++    subjects=SUBJECTS_P8,
++    member_on=True,
++    claim_level_member=True,
++    run3="L",
++    flow_sign=True,
++    point_diff=True,
++    segment_denominator=True,
++    expenditure_sign=True,
++    target_word=True,
++    text_reason_split=True,
++    prior2_required=True,
++    doc_rounding=True,
++    target_both=True,
++    paren_sentence=True,
++    drop_qualitative=False,
++    text_prior_year_paren=True,
++    drop_state_words_only=True,
++    label_vocabulary=True,
++)
++
++# XBRL 直し §7a/§7b/§7c(人間の判断、2026-10-08): P11 の悪化 2 件のうち原因が
++# 分かっている 1 件を消し(§7a)、手書きが fact を引けない語をラベルで引き(§7b)、
++# 手書きの語彙そのものを直した版(§7c = SUBJECTS_P12)。
++# P10・P11 の定義は書き換えない。
++P12 = Profile(
++    name="P12",
++    subjects=SUBJECTS_P12,
++    member_on=True,
++    claim_level_member=True,
++    run3="L",
++    flow_sign=True,
++    point_diff=True,
++    segment_denominator=True,
++    expenditure_sign=True,
++    target_word=True,
++    text_reason_split=True,
++    prior2_required=True,
++    doc_rounding=True,
++    target_both=True,
++    paren_sentence=True,
++    drop_qualitative=False,
++    text_prior_year_paren=True,
++    drop_state_words_only=True,
++    label_vocabulary=True,
++    label_statement_rows_only=True,
++    label_overrides_dead_hand=True,
++)
++
++# XBRL 直し §8(人間の許可、2026-10-08): P12 + 標準タクソノミの日本語ラベル。
++P13 = Profile(
++    name="P13",
++    subjects=SUBJECTS_P12,
++    member_on=True,
++    claim_level_member=True,
++    run3="L",
++    flow_sign=True,
++    point_diff=True,
++    segment_denominator=True,
++    expenditure_sign=True,
++    target_word=True,
++    text_reason_split=True,
++    prior2_required=True,
++    doc_rounding=True,
++    target_both=True,
++    paren_sentence=True,
++    drop_qualitative=False,
++    text_prior_year_paren=True,
++    drop_state_words_only=True,
++    label_vocabulary=True,
++    label_statement_rows_only=True,
++    label_overrides_dead_hand=True,
++    taxonomy_labels=True,
++)
++
++# **参考専用**。P13 から名前空間の限定(jppfs だけ)を外した版。
++# 「jppfs に限って何を失ったか」を数で言えるようにするためだけに在る。
++P14 = Profile(
++    name="P14",
++    subjects=SUBJECTS_P12,
++    member_on=True,
++    claim_level_member=True,
++    run3="L",
++    flow_sign=True,
++    point_diff=True,
++    segment_denominator=True,
++    expenditure_sign=True,
++    target_word=True,
++    text_reason_split=True,
++    prior2_required=True,
++    doc_rounding=True,
++    target_both=True,
++    paren_sentence=True,
++    drop_qualitative=False,
++    text_prior_year_paren=True,
++    drop_state_words_only=True,
++    label_vocabulary=True,
++    label_statement_rows_only=True,
++    label_overrides_dead_hand=True,
++    taxonomy_labels=True,
++    taxonomy_labels_all_ns=True,
++)
++
++# 主語の規則の直し(人間の判断 1、2026-10-08): P13 + S1・S2・S3・S4・A1。
++# **P13 の定義は 1 行も書き換えない**(直す前と直した後を並べて測るため)。
++P15 = Profile(
++    name="P15",
++    subjects=SUBJECTS_P12,
++    member_on=True,
++    claim_level_member=True,
++    run3="L",
++    flow_sign=True,
++    point_diff=True,
++    segment_denominator=True,
++    expenditure_sign=True,
++    target_word=True,
++    text_reason_split=True,
++    prior2_required=True,
++    doc_rounding=True,
++    target_both=True,
++    paren_sentence=True,
++    drop_qualitative=False,
++    text_prior_year_paren=True,
++    drop_state_words_only=True,
++    label_vocabulary=True,
++    label_statement_rows_only=True,
++    label_overrides_dead_hand=True,
++    taxonomy_labels=True,
++    subject_skip_coordinated_cause=True,
++    subject_direction_object=True,
++    subject_not_part_of_aggregate=True,
++    direction_word_lexicon=True,
++    direction_amount_check=True,
++)
++
++PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
++            "P12": P12, "P13": P13, "P14": P14, "P15": P15}

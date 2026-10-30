@@ -1,0 +1,755 @@
+{
+ "thresholds": {
+  "S1_E1_over_L_min": 0.5,
+  "S2_E2_over_G_max": 0.1,
+  "S3_E3_over_L_max": 0.4,
+  "S4_warn_pt": 15.0
+ },
+ "verdict": {
+  "L": 217,
+  "L_min_ok": true,
+  "S1": {
+   "value": 0.6682,
+   "pass": true
+  },
+  "S2": {
+   "value": 0.0823,
+   "pass": true
+  },
+  "S3": {
+   "value": 0.2719,
+   "pass": true
+  },
+  "S4_pt": 37.3,
+  "S4_warn": false,
+  "success": true,
+  "judgement": "成功"
+ },
+ "metrics": {
+  "P7": {
+   "all": {
+    "L": 216,
+    "G": 111,
+    "E1_strict": 64,
+    "E2_strict": 47,
+    "E2_v0": 17,
+    "E3": 105,
+    "MISSING": 1
+   },
+   "value_form": {
+    "L": 156,
+    "G": 78,
+    "E1_strict": 46,
+    "E2_strict": 32,
+    "E2_v0": 9,
+    "E3": 78,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 60,
+    "G": 33,
+    "E1_strict": 18,
+    "E2_strict": 15,
+    "E2_v0": 8,
+    "E3": 27,
+    "MISSING": 1
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 56,
+    "E1_strict": 36,
+    "E2_strict": 20,
+    "E2_v0": 7,
+    "E3": 30,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 130,
+    "G": 55,
+    "E1_strict": 28,
+    "E2_strict": 27,
+    "E2_v0": 10,
+    "E3": 75,
+    "MISSING": 1
+   }
+  },
+  "P13": {
+   "all": {
+    "L": 216,
+    "G": 153,
+    "E1_strict": 103,
+    "E2_strict": 50,
+    "E2_v0": 20,
+    "E3": 63,
+    "MISSING": 1
+   },
+   "value_form": {
+    "L": 156,
+    "G": 104,
+    "E1_strict": 72,
+    "E2_strict": 32,
+    "E2_v0": 9,
+    "E3": 52,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 60,
+    "G": 49,
+    "E1_strict": 31,
+    "E2_strict": 18,
+    "E2_v0": 11,
+    "E3": 11,
+    "MISSING": 1
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 80,
+    "E1_strict": 58,
+    "E2_strict": 22,
+    "E2_v0": 9,
+    "E3": 6,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 130,
+    "G": 73,
+    "E1_strict": 45,
+    "E2_strict": 28,
+    "E2_v0": 11,
+    "E3": 57,
+    "MISSING": 1
+   }
+  },
+  "P16": {
+   "all": {
+    "L": 217,
+    "G": 158,
+    "E1_strict": 145,
+    "E2_strict": 13,
+    "E2_v0": 13,
+    "E3": 59,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 156,
+    "G": 108,
+    "E1_strict": 104,
+    "E2_strict": 4,
+    "E2_v0": 4,
+    "E3": 48,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 61,
+    "G": 50,
+    "E1_strict": 41,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 11,
+    "MISSING": 0
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 80,
+    "E1_strict": 74,
+    "E2_strict": 6,
+    "E2_v0": 6,
+    "E3": 6,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 131,
+    "G": 78,
+    "E1_strict": 71,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 53,
+    "MISSING": 0
+   }
+  },
+  "P16-taxonomy_labels_all_ns": {
+   "all": {
+    "L": 217,
+    "G": 158,
+    "E1_strict": 145,
+    "E2_strict": 13,
+    "E2_v0": 13,
+    "E3": 59,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 156,
+    "G": 108,
+    "E1_strict": 104,
+    "E2_strict": 4,
+    "E2_v0": 4,
+    "E3": 48,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 61,
+    "G": 50,
+    "E1_strict": 41,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 11,
+    "MISSING": 0
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 80,
+    "E1_strict": 74,
+    "E2_strict": 6,
+    "E2_v0": 6,
+    "E3": 6,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 131,
+    "G": 78,
+    "E1_strict": 71,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 53,
+    "MISSING": 0
+   }
+  },
+  "P16-statement_facts_first": {
+   "all": {
+    "L": 217,
+    "G": 158,
+    "E1_strict": 109,
+    "E2_strict": 49,
+    "E2_v0": 18,
+    "E3": 59,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 156,
+    "G": 108,
+    "E1_strict": 75,
+    "E2_strict": 33,
+    "E2_v0": 9,
+    "E3": 48,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 61,
+    "G": 50,
+    "E1_strict": 34,
+    "E2_strict": 16,
+    "E2_v0": 9,
+    "E3": 11,
+    "MISSING": 0
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 80,
+    "E1_strict": 59,
+    "E2_strict": 21,
+    "E2_v0": 8,
+    "E3": 6,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 131,
+    "G": 78,
+    "E1_strict": 50,
+    "E2_strict": 28,
+    "E2_v0": 10,
+    "E3": 53,
+    "MISSING": 0
+   }
+  },
+  "P16-period_cue": {
+   "all": {
+    "L": 217,
+    "G": 157,
+    "E1_strict": 144,
+    "E2_strict": 13,
+    "E2_v0": 13,
+    "E3": 60,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 156,
+    "G": 107,
+    "E1_strict": 103,
+    "E2_strict": 4,
+    "E2_v0": 4,
+    "E3": 49,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 61,
+    "G": 50,
+    "E1_strict": 41,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 11,
+    "MISSING": 0
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 80,
+    "E1_strict": 74,
+    "E2_strict": 6,
+    "E2_v0": 6,
+    "E3": 6,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 131,
+    "G": 77,
+    "E1_strict": 70,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 54,
+    "MISSING": 0
+   }
+  },
+  "P16-flow_item_from_label": {
+   "all": {
+    "L": 217,
+    "G": 155,
+    "E1_strict": 140,
+    "E2_strict": 15,
+    "E2_v0": 15,
+    "E3": 62,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 156,
+    "G": 106,
+    "E1_strict": 102,
+    "E2_strict": 4,
+    "E2_v0": 4,
+    "E3": 50,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 61,
+    "G": 49,
+    "E1_strict": 38,
+    "E2_strict": 11,
+    "E2_v0": 11,
+    "E3": 12,
+    "MISSING": 0
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 80,
+    "E1_strict": 73,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 6,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 131,
+    "G": 75,
+    "E1_strict": 67,
+    "E2_strict": 8,
+    "E2_v0": 8,
+    "E3": 56,
+    "MISSING": 0
+   }
+  },
+  "P16-pct_change_phrase": {
+   "all": {
+    "L": 217,
+    "G": 158,
+    "E1_strict": 145,
+    "E2_strict": 13,
+    "E2_v0": 13,
+    "E3": 59,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 156,
+    "G": 108,
+    "E1_strict": 104,
+    "E2_strict": 4,
+    "E2_v0": 4,
+    "E3": 48,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 61,
+    "G": 50,
+    "E1_strict": 41,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 11,
+    "MISSING": 0
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 80,
+    "E1_strict": 74,
+    "E2_strict": 6,
+    "E2_v0": 6,
+    "E3": 6,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 131,
+    "G": 78,
+    "E1_strict": 71,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 53,
+    "MISSING": 0
+   }
+  },
+  "P16-ratio_table": {
+   "all": {
+    "L": 217,
+    "G": 157,
+    "E1_strict": 144,
+    "E2_strict": 13,
+    "E2_v0": 13,
+    "E3": 60,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 156,
+    "G": 107,
+    "E1_strict": 103,
+    "E2_strict": 4,
+    "E2_v0": 4,
+    "E3": 49,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 61,
+    "G": 50,
+    "E1_strict": 41,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 11,
+    "MISSING": 0
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 80,
+    "E1_strict": 74,
+    "E2_strict": 6,
+    "E2_v0": 6,
+    "E3": 6,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 131,
+    "G": 77,
+    "E1_strict": 70,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 54,
+    "MISSING": 0
+   }
+  }
+ },
+ "E2_rows_P16": {
+  "S100Z39P:H-002": {
+   "arm": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ]
+   ],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z39P:H-010": {
+   "arm": [
+    [
+     "ProceedsFromDistributionOfInvestmentInPartnershipsInvCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "ProceedsFromDistributionOfInvestmentInPartnershipsInvCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z39P:H-016": {
+   "arm": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z39P:H-022": {
+   "arm": [
+    [
+     "NetDefinedBenefitLiability",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetDefinedBenefitLiability",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "OtherNCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherNCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z39P:H-038": {
+   "arm": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ]
+   ],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z39P:H-067": {
+   "arm": [
+    [
+     "IncomeTaxesPaidRefundOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncomeTaxesPaidRefundOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z4N9:H-002": {
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ]
+   ],
+   "label": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z4N9:H-013": {
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ],
+   "label": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ],
+    [
+     "RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z4N9:H-033": {
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ],
+   "label": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z4N9:H-093": {
+   "arm": [
+    [
+     "LeaseObligationsCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseObligationsCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "LeaseObligationsNCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseObligationsNCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z4N9:H-097": {
+   "arm": [
+    [
+     "NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z4N9:H-100": {
+   "arm": [
+    [
+     "ShortTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "ShortTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "NetIncreaseDecreaseInShortTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  },
+  "S100Z4N9:H-103": {
+   "arm": [
+    [
+     "MachineryEquipmentAndVehicles",
+     "CurrentYearInstant"
+    ],
+    [
+     "MachineryEquipmentAndVehicles",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "MachineryEquipmentAndVehiclesNet",
+     "CurrentYearInstant"
+    ],
+    [
+     "MachineryEquipmentAndVehiclesNet",
+     "Prior1YearInstant"
+    ]
+   ],
+   "responsible": [
+    "P13以前"
+   ]
+  }
+ },
+ "E2_attribution": {
+  "P13以前": 13
+ },
+ "E3_stop_reasons": {
+  "VALUE_MISMATCH|None": 44,
+  "UNVERIFIABLE|no_subject": 9,
+  "POINTER_NOT_FOUND|no_element": 3,
+  "UNVERIFIABLE|ambiguous(elements)": 2,
+  "POINTER_NOT_FOUND|no_element(point without prior phrase)": 1
+ },
+ "labels_sha256": "4ff620322bb84c934121e551daba3b11786d36b65463c2acd32611cced0b52bc"
+}

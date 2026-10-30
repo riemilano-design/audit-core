@@ -1,0 +1,179 @@
+{
+ "seal": "docs/XBRL_CD_SEAL_2026-10-17.md",
+ "rule": "封 §1-2。order[22:] を順に見て、名簿以外で名前が出ていない先頭 8 件",
+ "seed_hex": "6a24d72",
+ "pool": 256,
+ "予備": 234,
+ "規則を満たす書類": 84,
+ "引いた 8 件": [
+  "S100YYRG",
+  "S100YXMA",
+  "S100YZ7E",
+  "S100YWGX",
+  "S100YZCT",
+  "S100YYRV",
+  "S100YZEV",
+  "S100YXF5"
+ ],
+ "位置": [
+  34,
+  37,
+  41,
+  42,
+  43,
+  46,
+  56,
+  58
+ ],
+ "飛ばした件": [
+  {
+   "位置": 22,
+   "docID": "S100YYVN",
+   "名前が出た file": "docs/Q2_NONCONSOLIDATED_SEAL_2026-10-14.md"
+  },
+  {
+   "位置": 23,
+   "docID": "S100Z404",
+   "名前が出た file": "docs/Q2_NONCONSOLIDATED_SEAL_2026-10-14.md"
+  },
+  {
+   "位置": 24,
+   "docID": "S100Z40G",
+   "名前が出た file": "docs/Q2_NONCONSOLIDATED_RESULT_2026-10-14.md"
+  },
+  {
+   "位置": 25,
+   "docID": "S100YYIA",
+   "名前が出た file": "docs/Q2_NONCONSOLIDATED_RESULT_2026-10-14.md"
+  },
+  {
+   "位置": 26,
+   "docID": "S100Z448",
+   "名前が出た file": "docs/DEFECT_A_EVAL_SEAL_2026-10-14.md"
+  },
+  {
+   "位置": 27,
+   "docID": "S100Z492",
+   "名前が出た file": "docs/DEFECT_A_EVAL_SEAL_2026-10-14.md"
+  },
+  {
+   "位置": 28,
+   "docID": "S100YYS4",
+   "名前が出た file": "docs/DEFECT_A_EVAL_SEAL_2026-10-14.md"
+  },
+  {
+   "位置": 29,
+   "docID": "S100YZ31",
+   "名前が出た file": "docs/DEFECT_A_EVAL_SEAL_2026-10-14.md"
+  },
+  {
+   "位置": 30,
+   "docID": "S100Z48T",
+   "名前が出た file": "docs/DEFECT_A_EVAL_SEAL_2026-10-14.md"
+  },
+  {
+   "位置": 31,
+   "docID": "S100Z5DN",
+   "名前が出た file": "docs/DEFECT_A_EVAL_SEAL_2026-10-14.md"
+  },
+  {
+   "位置": 32,
+   "docID": "S100YYDI",
+   "名前が出た file": "docs/DEFECT_A_EVAL_RESULT_2026-10-14.md"
+  },
+  {
+   "位置": 33,
+   "docID": "S100YYK8",
+   "名前が出た file": "docs/DEFECT_A_EVAL_SEAL_2026-10-14.md"
+  },
+  {
+   "位置": 35,
+   "docID": "S100Z42D",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 36,
+   "docID": "S100Z3C1",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 38,
+   "docID": "S100Z3CP",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 39,
+   "docID": "S100Z3AD",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 40,
+   "docID": "S100Z32B",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 44,
+   "docID": "S100Z32V",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 45,
+   "docID": "S100Z590",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 47,
+   "docID": "S100Z3ME",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 48,
+   "docID": "S100Z4HT",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 49,
+   "docID": "S100Z4HZ",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 50,
+   "docID": "S100Z43N",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 51,
+   "docID": "S100Z483",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 52,
+   "docID": "S100Z4OA",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 53,
+   "docID": "S100Z5HJ",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 54,
+   "docID": "S100Z4GS",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 55,
+   "docID": "S100Z4UN",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  },
+  {
+   "位置": 57,
+   "docID": "S100Z3PM",
+   "名前が出た file": "fixtures/xbrl/candidates_2026-09.json"
+  }
+ ],
+ "**キャッシュに在るか**": {
+  "在った": [],
+  "note": "1 件も無い = 一度も取っていない"
+ }
+}

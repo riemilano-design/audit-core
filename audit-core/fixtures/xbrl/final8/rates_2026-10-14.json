@@ -1,0 +1,275 @@
+{
+ "k": 0,
+ "docs": {
+  "S100Z4LC": {
+   "group": "A",
+   "claims": 114,
+   "P16": {
+    "states": {
+     "GROUNDED": 78,
+     "VALUE_MISMATCH": 20,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 11
+    },
+    "grounded_pct": 68.4,
+    "document_unverifiable": false
+   },
+   "P20": {
+    "states": {
+     "GROUNDED": 78,
+     "VALUE_MISMATCH": 20,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 11
+    },
+    "grounded_pct": 68.4,
+    "document_unverifiable": false
+   }
+  },
+  "S100Z40H": {
+   "group": "A",
+   "claims": 238,
+   "P16": {
+    "states": {
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 55,
+     "GROUNDED": 109,
+     "VALUE_MISMATCH": 63
+    },
+    "grounded_pct": 45.8,
+    "document_unverifiable": false
+   },
+   "P20": {
+    "states": {
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 55,
+     "GROUNDED": 109,
+     "VALUE_MISMATCH": 63
+    },
+    "grounded_pct": 45.8,
+    "document_unverifiable": false
+   }
+  },
+  "S100Z46V": {
+   "group": "A",
+   "claims": 56,
+   "P16": {
+    "states": {
+     "GROUNDED": 41,
+     "VALUE_MISMATCH": 4,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 5
+    },
+    "grounded_pct": 73.2,
+    "document_unverifiable": false
+   },
+   "P20": {
+    "states": {
+     "GROUNDED": 41,
+     "VALUE_MISMATCH": 4,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 5
+    },
+    "grounded_pct": 73.2,
+    "document_unverifiable": false
+   }
+  },
+  "S100Z38F": {
+   "group": "A",
+   "claims": 147,
+   "P16": {
+    "states": {
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 26,
+     "GROUNDED": 70,
+     "VALUE_MISMATCH": 25
+    },
+    "grounded_pct": 47.6,
+    "document_unverifiable": false
+   },
+   "P20": {
+    "states": {
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 26,
+     "GROUNDED": 70,
+     "VALUE_MISMATCH": 25
+    },
+    "grounded_pct": 47.6,
+    "document_unverifiable": false
+   }
+  },
+  "S100Z3DU": {
+   "group": "A",
+   "claims": 91,
+   "P16": {
+    "states": {
+     "POINTER_NOT_FOUND": 7,
+     "GROUNDED": 53,
+     "VALUE_MISMATCH": 18,
+     "UNVERIFIABLE": 13
+    },
+    "grounded_pct": 58.2,
+    "document_unverifiable": false
+   },
+   "P20": {
+    "states": {
+     "POINTER_NOT_FOUND": 7,
+     "GROUNDED": 53,
+     "VALUE_MISMATCH": 18,
+     "UNVERIFIABLE": 13
+    },
+    "grounded_pct": 58.2,
+    "document_unverifiable": false
+   }
+  },
+  "S100Z4R8": {
+   "group": "A",
+   "claims": 79,
+   "P16": {
+    "states": {
+     "GROUNDED": 55,
+     "VALUE_MISMATCH": 13,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 5
+    },
+    "grounded_pct": 69.6,
+    "document_unverifiable": false
+   },
+   "P20": {
+    "states": {
+     "GROUNDED": 55,
+     "VALUE_MISMATCH": 13,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 5
+    },
+    "grounded_pct": 69.6,
+    "document_unverifiable": false
+   }
+  },
+  "S100Z3CI": {
+   "group": "A",
+   "claims": 142,
+   "P16": {
+    "states": {
+     "GROUNDED": 99,
+     "VALUE_MISMATCH": 24,
+     "UNVERIFIABLE": 18,
+     "POINTER_NOT_FOUND": 1
+    },
+    "grounded_pct": 69.7,
+    "document_unverifiable": false
+   },
+   "P20": {
+    "states": {
+     "GROUNDED": 99,
+     "VALUE_MISMATCH": 24,
+     "UNVERIFIABLE": 18,
+     "POINTER_NOT_FOUND": 1
+    },
+    "grounded_pct": 69.7,
+    "document_unverifiable": false
+   }
+  },
+  "S100Z461": {
+   "group": "A",
+   "claims": 57,
+   "P16": {
+    "states": {
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 9,
+     "GROUNDED": 27
+    },
+    "grounded_pct": 47.4,
+    "document_unverifiable": false
+   },
+   "P20": {
+    "states": {
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 9,
+     "GROUNDED": 27
+    },
+    "grounded_pct": 47.4,
+    "document_unverifiable": false
+   }
+  }
+ },
+ "N0": {
+  "S100Z4LC": {
+   "changed_by_id": 0,
+   "changed_ids": [],
+   "unpaired_by_content_key": 0,
+   "dup_keys_P16": 1
+  },
+  "S100Z40H": {
+   "changed_by_id": 0,
+   "changed_ids": [],
+   "unpaired_by_content_key": 0,
+   "dup_keys_P16": 1
+  },
+  "S100Z46V": {
+   "changed_by_id": 0,
+   "changed_ids": [],
+   "unpaired_by_content_key": 0,
+   "dup_keys_P16": 0
+  },
+  "S100Z38F": {
+   "changed_by_id": 0,
+   "changed_ids": [],
+   "unpaired_by_content_key": 0,
+   "dup_keys_P16": 3
+  },
+  "S100Z3DU": {
+   "changed_by_id": 0,
+   "changed_ids": [],
+   "unpaired_by_content_key": 0,
+   "dup_keys_P16": 26
+  },
+  "S100Z4R8": {
+   "changed_by_id": 0,
+   "changed_ids": [],
+   "unpaired_by_content_key": 0,
+   "dup_keys_P16": 1
+  },
+  "S100Z3CI": {
+   "changed_by_id": 0,
+   "changed_ids": [],
+   "unpaired_by_content_key": 0,
+   "dup_keys_P16": 0
+  },
+  "S100Z461": {
+   "changed_by_id": 0,
+   "changed_ids": [],
+   "unpaired_by_content_key": 0,
+   "dup_keys_P16": 0
+  }
+ },
+ "R": {
+  "P16": {
+   "claims": 924,
+   "grounded": 532,
+   "grounded_pct": 57.6,
+   "states": {
+    "GROUNDED": 532,
+    "VALUE_MISMATCH": 176,
+    "POINTER_NOT_FOUND": 67,
+    "UNVERIFIABLE": 149
+   }
+  },
+  "P20": {
+   "claims": 924,
+   "grounded": 532,
+   "grounded_pct": 57.6,
+   "states": {
+    "GROUNDED": 532,
+    "VALUE_MISMATCH": 176,
+    "POINTER_NOT_FOUND": 67,
+    "UNVERIFIABLE": 149
+   }
+  }
+ },
+ "N0_total": {
+  "changed_by_id": 0,
+  "unpaired_by_content_key": 0
+ }
+}

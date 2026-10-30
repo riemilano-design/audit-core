@@ -1,0 +1,66 @@
+{
+ "seal": "docs/XBRL_CD_SEAL_V2_2026-10-17.md",
+ "step": "**封 v2 §3 の段 2。取得。費用 0 USD(EDINET は無料)**",
+ "鍵": {
+  "環境変数の名前": "EDINET_API_KEY",
+  "値": "**読まない・印字しない・記録しない**"
+ },
+ "取得した書類": [
+  {
+   "docID": "S100YYRG",
+   "bytes": 730962,
+   "sha256": "e1fdf292e146deb540a634b7c0bab060b19d29f08552f1276617a9e8309702fe",
+   "cache": "~/.cache/audit-core/edinet/S100YYRG.zip"
+  },
+  {
+   "docID": "S100YXMA",
+   "bytes": 695615,
+   "sha256": "511f1811cebc9bd7d72d069652effe99ebdb271ae99823c0115f89d697ae2726",
+   "cache": "~/.cache/audit-core/edinet/S100YXMA.zip"
+  },
+  {
+   "docID": "S100YZ7E",
+   "bytes": 368592,
+   "sha256": "bd2fe7969c31528f9c1609c85cb2dd8bb26aad2469ee060e3227b7f9367353f3",
+   "cache": "~/.cache/audit-core/edinet/S100YZ7E.zip"
+  },
+  {
+   "docID": "S100YWGX",
+   "bytes": 978128,
+   "sha256": "11a87aa7ddda60db6d51910decfbf8a643621e520f582ba920ecece743604cec",
+   "cache": "~/.cache/audit-core/edinet/S100YWGX.zip"
+  },
+  {
+   "docID": "S100YZCT",
+   "bytes": 466294,
+   "sha256": "b31651903185ef1afe2c8141b96646a947721b2333311a183d2f49348af7659e",
+   "cache": "~/.cache/audit-core/edinet/S100YZCT.zip"
+  },
+  {
+   "docID": "S100YYRV",
+   "bytes": 596254,
+   "sha256": "b4f42344bb48be29c047e7f9fd825b0b3f2e2ef8d62f84d29c534cd08ae2c52a",
+   "cache": "~/.cache/audit-core/edinet/S100YYRV.zip"
+  },
+  {
+   "docID": "S100YZEV",
+   "bytes": 438938,
+   "sha256": "1ca23bba5f21e83d0d8784dbb0f7ece069e59c43d9f81c192918223a90cf6f70",
+   "cache": "~/.cache/audit-core/edinet/S100YZEV.zip"
+  },
+  {
+   "docID": "S100YXF5",
+   "bytes": 623242,
+   "sha256": "2fea27f5328ec8fb528a08b681a747d6c4d43c8edb843507815db774179a9b1c",
+   "cache": "~/.cache/audit-core/edinet/S100YXF5.zip"
+  }
+ ],
+ "合計バイト": 4898025,
+ "取得した時刻(UTC)": "2026-10-17T05:30:33.847399Z",
+ "置いた場所": "**`~/.cache/audit-core/edinet/` だけ。repo に生 ZIP は入れない**",
+ "**1 度しか開かない**": "封 `HOLDOUT_SPLIT_SEAL_2026-10-14` の守ること 4。この 8 件は本実験のあと使用済みへ移る",
+ "limits": [
+  "**取得しただけである。**本文も fact も 1 件も読んでいない",
+  "**席は 1 回も呼んでいない**"
+ ]
+}

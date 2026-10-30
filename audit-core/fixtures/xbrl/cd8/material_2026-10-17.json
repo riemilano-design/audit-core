@@ -1,0 +1,5569 @@
+{
+ "spec": "docs/XBRL_CD_MATERIAL_SPEC_2026-10-17.md",
+ "seal": "docs/XBRL_CD_SEAL_V2_2026-10-17.md",
+ "step": "**封 v2 §3 の段 3。0 USD・席を 1 回も呼んでいない**",
+ "profile": "P16",
+ "注入の種": {
+  "file": "measure/SEED.json",
+  "sealed_on": null
+ },
+ "採点の関数": "**(ア) の実物を import して使った**(`norm_pointer` / `_say` / `core_say` / `core_pointer_say` / `d_prime` / `d_double` / `gold_of` / `judge`)― 監査の指摘 2",
+ "問いの sha256": "4c63022014736bb25de0c3808d227c06bbfcd72856aaf3a2e2dfdf31cb85c0fb",
+ "問いの字数": 411,
+ "書類ごと": [
+  {
+   "docID": "S100YYRG",
+   "本文の字数": 6153,
+   "改変後の字数": 6159,
+   "refs 件数": 742,
+   "注入": {
+    "件数": 8,
+    "型ごと": {
+     "T5_COINCIDENT": {
+      "作れる site": 11,
+      "採った": 8
+     },
+     "T3_ABSENT": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     },
+     "T1_VALUE": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     }
+    },
+    "**8 件そろったか**": true,
+    "ids": [
+     "S100YYRG-T5-01",
+     "S100YYRG-T5-02",
+     "S100YYRG-T5-03",
+     "S100YYRG-T5-04",
+     "S100YYRG-T5-05",
+     "S100YYRG-T5-06",
+     "S100YYRG-T5-07",
+     "S100YYRG-T5-08"
+    ],
+    "型の内訳": {
+     "T5_COINCIDENT": 8
+    }
+   },
+   "行": {
+    "合計": 24,
+    "注入の行": 8,
+    "無改変の行": 16,
+    "無改変の候補の総数": 86,
+    "**24 行そろったか**": true
+   },
+   "材料": {
+    "path": "**scratchpad のみ(repo に入れない)**",
+    "字数": 66759,
+    "sha256": "9a97f60545a6ce49b77c564adb72c97a0ee19fa1c10b3b2a2a13a3992136bb2b"
+   },
+   "**見せない字**": {
+    "検査した語": [
+     "注入",
+     "正解",
+     "Core",
+     "engine",
+     "GROUNDED",
+     "pointer",
+     "T1",
+     "T3",
+     "T5",
+     "profile",
+     "P16",
+     "P20",
+     "VALUE_MISMATCH"
+    ],
+    "見つかった": {},
+    "**0 件か**": true
+   },
+   "**他の行への影響の検査**": {
+    "一意に対になった主張": 51,
+    "**判定が動いた**": 0,
+    "明細": [],
+    "対にならなかった(原文側)": 19,
+    "対にならなかった(改変後側)": 20,
+    "書類単位の決定": {
+     "原文": false,
+     "改変後": false,
+     "**変わったか**": false
+    },
+    "注": "**対にならない行には注入した 8 件が入る**(値が変わったので対にならない)"
+   },
+   "席の前に出せる分": {
+    "R001": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberofdirectorsandotherofficersremunerationetcbycategoryofdirectorsandotherofficers@currentyearduration_directorsexcludingauditandsupervisorycommitteemembersandoutsidedirectorsmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 6
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R002": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberofsharesconstitutingoneunit@currentyearinstant_ordinarysharemember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 3
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R003": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberofshareholdersforeigninvestorsotherthanindividuals@currentyearinstant_ordinarysharemember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 3
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R004": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberofshareholdersforeignindividualinvestors@currentyearinstant_ordinarysharemember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R005": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "netsales@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R006": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R007": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "grossprofit@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R008": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R009": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "netsales@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R010": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R011": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "grossprofit@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R012": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "othernoe@currentyearduration",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R013": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "netsales@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R014": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 3
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R015": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "grossprofit@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R016": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R017": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "otherca@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "otherca@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "operatingincome@currentyearduration",
+      "偶然一致する側": "otherca@prior1yearinstant_nonconsolidatedmember"
+     }
+    },
+    "R018": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "liabilities@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "increasedecreaseinnetdefinedbenefitliabilityopecf@currentyearduration",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "increasedecreaseinnetdefinedbenefitliabilityopecf@currentyearduration",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "liabilities@currentyearinstant",
+      "偶然一致する側": "increasedecreaseinnetdefinedbenefitliabilityopecf@currentyearduration"
+     }
+    },
+    "R019": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "cashandcashequivalents@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "rawmaterialsandsupplies@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "rawmaterialsandsupplies@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+      "偶然一致する側": "rawmaterialsandsupplies@prior1yearinstant_nonconsolidatedmember"
+     }
+    },
+    "R020": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "incomebeforeincometaxes@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "rawmaterialsandsupplies@currentyearinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "rawmaterialsandsupplies@currentyearinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "incomebeforeincometaxes@currentyearduration",
+      "偶然一致する側": "rawmaterialsandsupplies@currentyearinstant"
+     }
+    },
+    "R021": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "costofsales@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "costofsales@currentyearduration",
+      "偶然一致する側": "retirementbenefitexpensessga@currentyearduration_nonconsolidatedmember"
+     }
+    },
+    "R022": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+      "偶然一致する側": "subsidyincome@prior1yearduration"
+     }
+    },
+    "R023": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "nonoperatingincome@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "nonoperatingincome@currentyearduration",
+      "偶然一致する側": "lossoninsurancecancellationnoe@prior1yearduration_nonconsolidatedmember"
+     }
+    },
+    "R024": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "incometaxesdeferred@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "incometaxes@currentyearduration",
+      "偶然一致する側": "temporarytransferchargesincomenoi@prior1yearduration_nonconsolidatedmember"
+     }
+    }
+   }
+  },
+  {
+   "docID": "S100YXMA",
+   "本文の字数": 9279,
+   "改変後の字数": 9284,
+   "refs 件数": 1172,
+   "注入": {
+    "件数": 8,
+    "型ごと": {
+     "T5_COINCIDENT": {
+      "作れる site": 13,
+      "採った": 8
+     },
+     "T3_ABSENT": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     },
+     "T1_VALUE": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     }
+    },
+    "**8 件そろったか**": true,
+    "ids": [
+     "S100YXMA-T5-01",
+     "S100YXMA-T5-02",
+     "S100YXMA-T5-03",
+     "S100YXMA-T5-04",
+     "S100YXMA-T5-05",
+     "S100YXMA-T5-06",
+     "S100YXMA-T5-07",
+     "S100YXMA-T5-08"
+    ],
+    "型の内訳": {
+     "T5_COINCIDENT": 8
+    }
+   },
+   "行": {
+    "合計": 24,
+    "注入の行": 8,
+    "無改変の行": 16,
+    "無改変の候補の総数": 87,
+    "**24 行そろったか**": true
+   },
+   "材料": {
+    "path": "**scratchpad のみ(repo に入れない)**",
+    "字数": 108706,
+    "sha256": "4e74f6cb755db449b343ff08345873692d324edf609be409eff6a69b85cf3a92"
+   },
+   "**見せない字**": {
+    "検査した語": [
+     "注入",
+     "正解",
+     "Core",
+     "engine",
+     "GROUNDED",
+     "pointer",
+     "T1",
+     "T3",
+     "T5",
+     "profile",
+     "P16",
+     "P20",
+     "VALUE_MISMATCH"
+    ],
+    "見つかった": {},
+    "**0 件か**": true
+   },
+   "**他の行への影響の検査**": {
+    "一意に対になった主張": 75,
+    "**判定が動いた**": 0,
+    "明細": [],
+    "対にならなかった(原文側)": 18,
+    "対にならなかった(改変後側)": 18,
+    "書類単位の決定": {
+     "原文": false,
+     "改変後": false,
+     "**変わったか**": false
+    },
+    "注": "**対にならない行には注入した 8 件が入る**(値が変わったので対にならない)"
+   },
+   "席の前に出せる分": {
+    "R001": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R002": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "operatingincome@currentyearduration",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R003": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R004": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R005": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R006": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R007": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 3
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R008": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "equitytoassetratiosummaryofbusinessresults@prior3yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R009": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R010": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "netsales@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R011": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R012": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R013": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 9
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 43
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R014": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R015": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R016": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "netsales@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R017": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R018": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "incomebeforeincometaxes@currentyearduration",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R019": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "decreaseincreaseinadvancepaymentsopecf@currentyearduration",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R020": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "proceedsfromcollectionofdepositspaidinvcf@currentyearduration",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R021": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "currentassets@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 16
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 19
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "currentassets@currentyearinstant",
+      "偶然一致する側": "leaseobligationsncl@prior1yearinstant_nonconsolidatedmember"
+     }
+    },
+    "R022": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "currentliabilities@currentyearinstant",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R023": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "noncurrentliabilities@currentyearinstant",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R024": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "totalchangesofitemsduringtheperiod@currentyearduration",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    }
+   }
+  },
+  {
+   "docID": "S100YZ7E",
+   "本文の字数": 4998,
+   "改変後の字数": 5049,
+   "refs 件数": 487,
+   "注入": {
+    "件数": 8,
+    "型ごと": {
+     "T5_COINCIDENT": {
+      "作れる site": 6,
+      "採った": 6
+     },
+     "T3_ABSENT": {
+      "作れる site": 171,
+      "採った": 2
+     },
+     "T1_VALUE": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     }
+    },
+    "**8 件そろったか**": true,
+    "ids": [
+     "S100YZ7E-T5-01",
+     "S100YZ7E-T5-02",
+     "S100YZ7E-T5-03",
+     "S100YZ7E-T5-04",
+     "S100YZ7E-T5-05",
+     "S100YZ7E-T5-06",
+     "S100YZ7E-T3-01",
+     "S100YZ7E-T3-02"
+    ],
+    "型の内訳": {
+     "T5_COINCIDENT": 6,
+     "T3_ABSENT": 2
+    }
+   },
+   "行": {
+    "合計": 24,
+    "注入の行": 8,
+    "無改変の行": 16,
+    "無改変の候補の総数": 94,
+    "**24 行そろったか**": true
+   },
+   "材料": {
+    "path": "**scratchpad のみ(repo に入れない)**",
+    "字数": 51991,
+    "sha256": "1b056e4c0c3c1b284d8c44b8e33d0ed8b66b1886ed53ce0aa02d0c41b14557b1"
+   },
+   "**見せない字**": {
+    "検査した語": [
+     "注入",
+     "正解",
+     "Core",
+     "engine",
+     "GROUNDED",
+     "pointer",
+     "T1",
+     "T3",
+     "T5",
+     "profile",
+     "P16",
+     "P20",
+     "VALUE_MISMATCH"
+    ],
+    "見つかった": {},
+    "**0 件か**": true
+   },
+   "**他の行への影響の検査**": {
+    "一意に対になった主張": 71,
+    "**判定が動いた**": 0,
+    "明細": [],
+    "対にならなかった(原文側)": 8,
+    "対にならなかった(改変後側)": 10,
+    "書類単位の決定": {
+     "原文": true,
+     "改変後": true,
+     "**変わったか**": false
+    },
+    "注": "**対にならない行には注入した 8 件が入る**(値が変わったので対にならない)"
+   },
+   "席の前に出せる分": {
+    "R001": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 7
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R002": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R003": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberofsubmissiondei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 9
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R004": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R005": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R006": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R007": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "otherca@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R008": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R009": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R010": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R011": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R012": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R013": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R014": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberofsubmissiondei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R015": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R016": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R017": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "othercl@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "othercl@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "operatingrevenue2summaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+      "偶然一致する側": "othercl@prior1yearinstant_nonconsolidatedmember"
+     }
+    },
+    "R018": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "othercl@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "othercl@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+      "偶然一致する側": "othercl@prior1yearinstant_nonconsolidatedmember"
+     }
+    },
+    "R019": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "othercl@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "othercl@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "cashandcashequivalentssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+      "偶然一致する側": "othercl@prior1yearinstant_nonconsolidatedmember"
+     }
+    },
+    "R020": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "othercl@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "othercl@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "netcashprovidedbyusedininvestingactivitiessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+      "偶然一致する側": "othercl@prior1yearinstant_nonconsolidatedmember"
+     }
+    },
+    "R021": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "ratioofvotingrightsheld@currentyearinstant_no7majorshareholdersvotingrightsmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R022": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R023": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "othernetopecfsubtotal@currentyearduration_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "othernetopecfsubtotal@currentyearduration_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "totalassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+      "偶然一致する側": "othernetopecfsubtotal@currentyearduration_nonconsolidatedmember"
+     }
+    },
+    "R024": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "netassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+      "偶然一致する側": "othernetopecfsubtotal@prior1yearduration_nonconsolidatedmember"
+     }
+    }
+   }
+  },
+  {
+   "docID": "S100YWGX",
+   "本文の字数": 8202,
+   "改変後の字数": 8204,
+   "refs 件数": 1073,
+   "注入": {
+    "件数": 8,
+    "型ごと": {
+     "T5_COINCIDENT": {
+      "作れる site": 9,
+      "採った": 8
+     },
+     "T3_ABSENT": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     },
+     "T1_VALUE": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     }
+    },
+    "**8 件そろったか**": true,
+    "ids": [
+     "S100YWGX-T5-01",
+     "S100YWGX-T5-02",
+     "S100YWGX-T5-03",
+     "S100YWGX-T5-04",
+     "S100YWGX-T5-05",
+     "S100YWGX-T5-06",
+     "S100YWGX-T5-07",
+     "S100YWGX-T5-08"
+    ],
+    "型の内訳": {
+     "T5_COINCIDENT": 8
+    }
+   },
+   "行": {
+    "合計": 24,
+    "注入の行": 8,
+    "無改変の行": 16,
+    "無改変の候補の総数": 253,
+    "**24 行そろったか**": true
+   },
+   "材料": {
+    "path": "**scratchpad のみ(repo に入れない)**",
+    "字数": 103515,
+    "sha256": "6f6aaf0a7c41ec0cc53c339e13e1d532c1b2fdb6ee50d0164261920612ecc63c"
+   },
+   "**見せない字**": {
+    "検査した語": [
+     "注入",
+     "正解",
+     "Core",
+     "engine",
+     "GROUNDED",
+     "pointer",
+     "T1",
+     "T3",
+     "T5",
+     "profile",
+     "P16",
+     "P20",
+     "VALUE_MISMATCH"
+    ],
+    "見つかった": {},
+    "**0 件か**": true
+   },
+   "**他の行への影響の検査**": {
+    "一意に対になった主張": 79,
+    "**判定が動いた**": 0,
+    "明細": [],
+    "対にならなかった(原文側)": 22,
+    "対にならなかった(改変後側)": 20,
+    "書類単位の決定": {
+     "原文": false,
+     "改変後": false,
+     "**変わったか**": false
+    },
+    "注": "**対にならない行には注入した 8 件が入る**(値が変わったので対にならない)"
+   },
+   "席の前に出せる分": {
+    "R001": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 40
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R002": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 40
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R003": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "netsales@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R004": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R005": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R006": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R007": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R008": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R009": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 40
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R010": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "netsales@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 8
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 15
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+      "偶然一致する側": "totalchangesofitemsduringtheperiod@currentyearduration_nonconsolidatedmember_capitalsurplusmember"
+     }
+    },
+    "R011": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberofshareholdersfinancialinstitutions@currentyearinstant_ordinarysharemember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 8
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R012": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R013": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R014": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "netsales@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R015": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R016": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 6
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R017": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R018": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "currentassets@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "currentassets@currentyearinstant",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R019": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "currentassets@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "currentassets@prior1yearinstant",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R020": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "currentassets@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "noncurrentassets@prior1yearinstant",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R021": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "currentassets@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "liabilities@currentyearinstant",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R022": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "currentassets@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "liabilities@prior1yearinstant",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R023": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "currentassets@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "costofsales@currentyearduration",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    },
+    "R024": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "currentassets@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "securitycodedei@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+      "偶然一致する側": "securitycodedei@filingdateinstant"
+     }
+    }
+   }
+  },
+  {
+   "docID": "S100YZCT",
+   "本文の字数": 11116,
+   "改変後の字数": 11121,
+   "refs 件数": 1047,
+   "注入": {
+    "件数": 8,
+    "型ごと": {
+     "T5_COINCIDENT": {
+      "作れる site": 35,
+      "採った": 8
+     },
+     "T3_ABSENT": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     },
+     "T1_VALUE": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     }
+    },
+    "**8 件そろったか**": true,
+    "ids": [
+     "S100YZCT-T5-01",
+     "S100YZCT-T5-02",
+     "S100YZCT-T5-03",
+     "S100YZCT-T5-04",
+     "S100YZCT-T5-05",
+     "S100YZCT-T5-06",
+     "S100YZCT-T5-07",
+     "S100YZCT-T5-08"
+    ],
+    "型の内訳": {
+     "T5_COINCIDENT": 8
+    }
+   },
+   "行": {
+    "合計": 24,
+    "注入の行": 8,
+    "無改変の行": 16,
+    "無改変の候補の総数": 136,
+    "**24 行そろったか**": true
+   },
+   "材料": {
+    "path": "**scratchpad のみ(repo に入れない)**",
+    "字数": 101954,
+    "sha256": "12b7b157595491c23c570ea08935c876a8fc08240cf960632f7ba4f8a346b1d4"
+   },
+   "**見せない字**": {
+    "検査した語": [
+     "注入",
+     "正解",
+     "Core",
+     "engine",
+     "GROUNDED",
+     "pointer",
+     "T1",
+     "T3",
+     "T5",
+     "profile",
+     "P16",
+     "P20",
+     "VALUE_MISMATCH"
+    ],
+    "見つかった": {},
+    "**0 件か**": true
+   },
+   "**他の行への影響の検査**": {
+    "一意に対になった主張": 64,
+    "**判定が動いた**": 0,
+    "明細": [],
+    "対にならなかった(原文側)": 35,
+    "対にならなかった(改変後側)": 39,
+    "書類単位の決定": {
+     "原文": false,
+     "改変後": false,
+     "**変わったか**": false
+    },
+    "注": "**対にならない行には注入した 8 件が入る**(値が変わったので対にならない)"
+   },
+   "席の前に出せる分": {
+    "R001": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 3
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 8
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R002": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05536-000carerelatedservicesreportablesegmentsmember",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R003": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberofshareholdersfinancialinstitutions@currentyearinstant_ordinarysharemember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R004": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05536-000carerelatedservicesreportablesegmentsmember",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "operatingincome@currentyearduration",
+      "偶然一致する側": "amortizationofgoodwillopecf@prior1yearduration"
+     }
+    },
+    "R005": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 3
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 3
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R006": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R007": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "numberofconsolidatedsubsidiaries@currentyearinstant",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R008": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R009": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberofshareholdersfinancialserviceproviders@currentyearinstant_ordinarysharemember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 3
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R010": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R011": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R012": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R013": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R014": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberofshareholdersfinancialserviceproviders@currentyearinstant_ordinarysharemember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 7
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R015": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberoffemaledirectorsandotherofficers@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 6
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R016": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "ratiooffemaledirectorsandotherofficers@filingdateinstant",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R017": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R018": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "currentassets@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "commissionfeesga@currentyearduration_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "commissionfeesga@currentyearduration_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "currentassets@currentyearinstant",
+      "偶然一致する側": "commissionfeesga@currentyearduration_nonconsolidatedmember"
+     }
+    },
+    "R019": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "incomebeforeincometaxes@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+      "偶然一致する側": "baseremunerationremunerationetcbycategoryofdirectorsandotherofficers@currentyearduration_directorsappointedasauditandsupervisorycommitteemembersexcludingoutsidedirectorsmember"
+     }
+    },
+    "R020": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "cashanddeposits@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 3
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+      "偶然一致する側": "totalamountofremunerationetcremunerationetcbycategoryofdirectorsandotherofficers@currentyearduration_outsidedirectorsandotherofficersmember"
+     }
+    },
+    "R021": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "currentliabilities@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "otherncl@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "otherncl@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "currentliabilities@currentyearinstant",
+      "偶然一致する側": "otherncl@prior1yearinstant_nonconsolidatedmember"
+     }
+    },
+    "R022": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "grossprofit@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "grossprofit@currentyearduration",
+      "偶然一致する側": "impairmentlossel@currentyearduration_jpcrp030000-asr_e05536-000childcarerelatedservicesreportablesegmentsmember"
+     }
+    },
+    "R023": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "taxesandduessga@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "depreciationsegmentinformation@currentyearduration_jpcrp030000-asr_e05536-000comprehensivestaffingservicesreportablesegmentsmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "depreciationsegmentinformation@currentyearduration_jpcrp030000-asr_e05536-000comprehensivestaffingservicesreportablesegmentsmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+      "偶然一致する側": "depreciationsegmentinformation@currentyearduration_jpcrp030000-asr_e05536-000comprehensivestaffingservicesreportablesegmentsmember"
+     }
+    },
+    "R024": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "othernetopecf@currentyearduration",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "othernetopecf@currentyearduration",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "operatingincome@currentyearduration",
+      "偶然一致する側": "othernetopecf@currentyearduration"
+     }
+    }
+   }
+  },
+  {
+   "docID": "S100YYRV",
+   "本文の字数": 7648,
+   "改変後の字数": 7656,
+   "refs 件数": 908,
+   "注入": {
+    "件数": 8,
+    "型ごと": {
+     "T5_COINCIDENT": {
+      "作れる site": 26,
+      "採った": 8
+     },
+     "T3_ABSENT": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     },
+     "T1_VALUE": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     }
+    },
+    "**8 件そろったか**": true,
+    "ids": [
+     "S100YYRV-T5-01",
+     "S100YYRV-T5-02",
+     "S100YYRV-T5-03",
+     "S100YYRV-T5-04",
+     "S100YYRV-T5-05",
+     "S100YYRV-T5-06",
+     "S100YYRV-T5-07",
+     "S100YYRV-T5-08"
+    ],
+    "型の内訳": {
+     "T5_COINCIDENT": 8
+    }
+   },
+   "行": {
+    "合計": 24,
+    "注入の行": 8,
+    "無改変の行": 16,
+    "無改変の候補の総数": 164,
+    "**24 行そろったか**": true
+   },
+   "材料": {
+    "path": "**scratchpad のみ(repo に入れない)**",
+    "字数": 83867,
+    "sha256": "f8eec5f7de411a298b5616dafc3d0d288845bcfc2228ddf865aa87220de183af"
+   },
+   "**見せない字**": {
+    "検査した語": [
+     "注入",
+     "正解",
+     "Core",
+     "engine",
+     "GROUNDED",
+     "pointer",
+     "T1",
+     "T3",
+     "T5",
+     "profile",
+     "P16",
+     "P20",
+     "VALUE_MISMATCH"
+    ],
+    "見つかった": {},
+    "**0 件か**": true
+   },
+   "**他の行への影響の検査**": {
+    "一意に対になった主張": 109,
+    "**判定が動いた**": 0,
+    "明細": [],
+    "対にならなかった(原文側)": 13,
+    "対にならなかった(改変後側)": 14,
+    "書類単位の決定": {
+     "原文": false,
+     "改変後": false,
+     "**変わったか**": false
+    },
+    "注": "**対にならない行には注入した 8 件が入る**(値が変わったので対にならない)"
+   },
+   "席の前に出せる分": {
+    "R001": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R002": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R003": {
+     "Core": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 17
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R004": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R005": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R006": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "numberofsharesheldordinarysharesinformationaboutdirectorsandcorporateauditors@filingdateinstant_jpcrp030000-asr_e02480-000kurimotonorihiromember",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R007": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R008": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 8
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R009": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R010": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "numberofshareholdersforeignindividualinvestors@currentyearinstant_ordinarysharemember",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R011": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R012": {
+     "Core": {
+      "言うこと": "参照先を出さない(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(UNVERIFIABLE)",
+      "参照先": null,
+      "state": "UNVERIFIABLE"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R013": {
+     "Core": {
+      "言うこと": "確認済み",
+      "参照先": "netsales@currentyearduration",
+      "state": "GROUNDED"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "確認済み",
+      "参照先": "netsales@currentyearduration",
+      "state": "GROUNDED"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R014": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R015": {
+     "Core": {
+      "言うこと": "確認済み",
+      "参照先": "ordinaryincome@currentyearduration",
+      "state": "GROUNDED"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "確認済み",
+      "参照先": "ordinaryincome@currentyearduration",
+      "state": "GROUNDED"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R016": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R017": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "impairmentlossel@prior1yearduration_jpcrp030000-asr_e02480-000pictureproductionbusinessreportablesegmentsmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "impairmentlossel@prior1yearduration_jpcrp030000-asr_e02480-000pictureproductionbusinessreportablesegmentsmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000publishingbusinessreportablesegmentsmember",
+      "偶然一致する側": "impairmentlossel@prior1yearduration_jpcrp030000-asr_e02480-000pictureproductionbusinessreportablesegmentsmember"
+     }
+    },
+    "R018": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "operatingincome@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "bonusessga@prior1yearduration_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "bonusessga@prior1yearduration_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember",
+      "偶然一致する側": "bonusessga@prior1yearduration_nonconsolidatedmember"
+     }
+    },
+    "R019": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "incomebeforeincometaxes@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "incomebeforeincometaxes@currentyearduration",
+      "偶然一致する側": "legalretainedearnings@currentyearinstant_nonconsolidatedmember"
+     }
+    },
+    "R020": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "incomebeforeincometaxes@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "depreciationandamortizationopecf@currentyearduration",
+      "偶然一致する側": "legalretainedearnings@prior1yearinstant_nonconsolidatedmember"
+     }
+    },
+    "R021": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "longtermloanspayable@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "proceedsoflongtermborrowingsfincf@currentyearduration",
+      "偶然一致する側": "nonoperatingexpenses@currentyearduration_nonconsolidatedmember"
+     }
+    },
+    "R022": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "extraordinaryloss@currentyearduration",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "depreciationsegmentinformation@prior1yearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "depreciationsegmentinformation@prior1yearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "extraordinaryloss@currentyearduration",
+      "偶然一致する側": "depreciationsegmentinformation@prior1yearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember"
+     }
+    },
+    "R023": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "liabilities@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "increasedecreaseinnetdefinedbenefitliabilityopecf@prior1yearduration",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "increasedecreaseinnetdefinedbenefitliabilityopecf@prior1yearduration",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "liabilities@currentyearinstant",
+      "偶然一致する側": "increasedecreaseinnetdefinedbenefitliabilityopecf@prior1yearduration"
+     }
+    },
+    "R024": {
+     "Core": {
+      "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+      "参照先": "longtermloanspayable@currentyearinstant",
+      "state": "VALUE_MISMATCH"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(VALUE_MISMATCH)",
+      "参照先": null,
+      "state": "VALUE_MISMATCH"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "increasedecreaseinprovisionforlossonorderreceivedopecf@currentyearduration",
+      "偶然一致する側": "interestexpensesnoe@currentyearduration_nonconsolidatedmember"
+     }
+    }
+   }
+  },
+  {
+   "docID": "S100YZEV",
+   "本文の字数": 4229,
+   "改変後の字数": 4315,
+   "refs 件数": 380,
+   "注入": {
+    "件数": 8,
+    "型ごと": {
+     "T5_COINCIDENT": {
+      "作れる site": 4,
+      "採った": 4
+     },
+     "T3_ABSENT": {
+      "作れる site": 101,
+      "採った": 4
+     },
+     "T1_VALUE": {
+      "作れる site": null,
+      "採った": 0,
+      "注": "8 件そろったので見ていない"
+     }
+    },
+    "**8 件そろったか**": true,
+    "ids": [
+     "S100YZEV-T5-01",
+     "S100YZEV-T5-02",
+     "S100YZEV-T5-03",
+     "S100YZEV-T5-04",
+     "S100YZEV-T3-01",
+     "S100YZEV-T3-02",
+     "S100YZEV-T3-03",
+     "S100YZEV-T3-04"
+    ],
+    "型の内訳": {
+     "T5_COINCIDENT": 4,
+     "T3_ABSENT": 4
+    }
+   },
+   "行": {
+    "合計": 24,
+    "注入の行": 8,
+    "無改変の行": 16,
+    "無改変の候補の総数": 68,
+    "**24 行そろったか**": true
+   },
+   "材料": {
+    "path": "**scratchpad のみ(repo に入れない)**",
+    "字数": 41694,
+    "sha256": "86297965ddf34ed6c7b39a699e43ec61bff2a5ed299b4c01431d88c7b3ee1822"
+   },
+   "**見せない字**": {
+    "検査した語": [
+     "注入",
+     "正解",
+     "Core",
+     "engine",
+     "GROUNDED",
+     "pointer",
+     "T1",
+     "T3",
+     "T5",
+     "profile",
+     "P16",
+     "P20",
+     "VALUE_MISMATCH"
+    ],
+    "見つかった": {},
+    "**0 件か**": true
+   },
+   "**他の行への影響の検査**": {
+    "一意に対になった主張": 49,
+    "**判定が動いた**": 0,
+    "明細": [],
+    "対にならなかった(原文側)": 12,
+    "対にならなかった(改変後側)": 16,
+    "書類単位の決定": {
+     "原文": true,
+     "改変後": true,
+     "**変わったか**": false
+    },
+    "注": "**対にならない行には注入した 8 件が入る**(値が変わったので対にならない)"
+   },
+   "席の前に出せる分": {
+    "R001": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "numberofsharesheld@currentyearinstant_no3majorshareholdersmember",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R002": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "numberofsubmissiondei@filingdateinstant",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 7
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R003": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R004": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R005": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R006": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R007": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R008": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "numberofsharesheldnumberofunitsforeignindividualinvestors@currentyearinstant_ordinarysharemember",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R009": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R010": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R011": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "nonauditfeesreportingcompany@prior1yearduration",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "operatingincome@currentyearduration_nonconsolidatedmember",
+      "偶然一致する側": "nonauditfeesreportingcompany@prior1yearduration"
+     }
+    },
+    "R012": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R013": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 3
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R014": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R015": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R016": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R017": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R018": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "othernoi@currentyearduration_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "othernoi@currentyearduration_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "currentassets@currentyearinstant_nonconsolidatedmember",
+      "偶然一致する側": "othernoi@currentyearduration_nonconsolidatedmember"
+     }
+    },
+    "R019": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+      "偶然一致する側": "copyright@prior1yearinstant_nonconsolidatedmember"
+     }
+    },
+    "R020": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "nonauditfeesreportingcompany@prior1yearduration",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先が在る",
+      "正解": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember",
+      "偶然一致する側": "nonauditfeesreportingcompany@prior1yearduration"
+     }
+    },
+    "R021": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R022": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R023": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "numberofemployees@prior1yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R024": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    }
+   }
+  },
+  {
+   "docID": "S100YXF5",
+   "本文の字数": 6331,
+   "改変後の字数": 6462,
+   "refs 件数": 913,
+   "注入": {
+    "件数": 8,
+    "型ごと": {
+     "T5_COINCIDENT": {
+      "作れる site": 0,
+      "採った": 0
+     },
+     "T3_ABSENT": {
+      "作れる site": 235,
+      "採った": 6
+     },
+     "T1_VALUE": {
+      "作れる site": 25,
+      "採った": 2
+     }
+    },
+    "**8 件そろったか**": true,
+    "ids": [
+     "S100YXF5-T3-01",
+     "S100YXF5-T3-02",
+     "S100YXF5-T3-03",
+     "S100YXF5-T3-04",
+     "S100YXF5-T3-05",
+     "S100YXF5-T3-06",
+     "S100YXF5-T1-01",
+     "S100YXF5-T1-02"
+    ],
+    "型の内訳": {
+     "T3_ABSENT": 6,
+     "T1_VALUE": 2
+    }
+   },
+   "行": {
+    "合計": 24,
+    "注入の行": 8,
+    "無改変の行": 16,
+    "無改変の候補の総数": 124,
+    "**24 行そろったか**": true
+   },
+   "材料": {
+    "path": "**scratchpad のみ(repo に入れない)**",
+    "字数": 85657,
+    "sha256": "7953fdb7e5bdf1c48ec5d35c2a2a59b94957832fdfb17ca3898083355edd2508"
+   },
+   "**見せない字**": {
+    "検査した語": [
+     "注入",
+     "正解",
+     "Core",
+     "engine",
+     "GROUNDED",
+     "pointer",
+     "T1",
+     "T3",
+     "T5",
+     "profile",
+     "P16",
+     "P20",
+     "VALUE_MISMATCH"
+    ],
+    "見つかった": {},
+    "**0 件か**": true
+   },
+   "**他の行への影響の検査**": {
+    "一意に対になった主張": 75,
+    "**判定が動いた**": 0,
+    "明細": [],
+    "対にならなかった(原文側)": 8,
+    "対にならなかった(改変後側)": 14,
+    "書類単位の決定": {
+     "原文": false,
+     "改変後": false,
+     "**変わったか**": false
+    },
+    "注": "**対にならない行には注入した 8 件が入る**(値が変わったので対にならない)"
+   },
+   "席の前に出せる分": {
+    "R001": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 30
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R002": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "確認済み",
+      "参照先": "dividendpaidpersharesummaryofbusinessresults@prior4yearduration_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R003": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 6
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R004": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 3
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R005": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R006": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 5
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R007": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R008": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R009": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 15
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R010": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 15
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R011": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 6
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R012": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 30
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R013": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 12
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R014": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 9
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R015": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 30
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R016": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "確認済み",
+      "参照先": "numberofemployees@prior4yearinstant_nonconsolidatedmember",
+      "当たり": 1
+     },
+     "注入か": false,
+     "正解": null
+    },
+    "R017": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 6
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R018": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 6
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "値がどこにも無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R019": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R020": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 2
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R021": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R022": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R023": {
+     "Core": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "対応が付かない",
+      "参照先": null,
+      "state": null
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 4
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "参照先は無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    },
+    "R024": {
+     "Core": {
+      "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "Core(厳しい読み方)": {
+      "言うこと": "止めた(POINTER_NOT_FOUND)",
+      "参照先": null,
+      "state": "POINTER_NOT_FOUND"
+     },
+     "D′": {
+      "言うこと": "原資料と一致しない",
+      "参照先": null,
+      "当たり": 0
+     },
+     "D″": {
+      "言うこと": "一意でない",
+      "参照先": null,
+      "当たり": 6
+     },
+     "注入か": true,
+     "正解": {
+      "種類": "値がどこにも無い",
+      "正解": null,
+      "偶然一致する側": null
+     }
+    }
+   }
+  }
+ ],
+ "合計": {
+  "書類": 8,
+  "行": 192,
+  "注入": 64
+ },
+ "limits": [
+  "**席は 1 回も呼んでいない。**A と C′ の数はまだ 1 つも無い",
+  "**`席の前に出せる分` は Core・D′・D″ の言うことだけ**で、腕の成績ではない(腕は席の答えと合わせて初めて決まる)",
+  "**1 本の文に 8 件まとめて注入している**(spec §1)。v1 §3 の `--batch 1` と違うので、**他の行への影響を測って出した**",
+  "**汚染が 0 でなくても A 対 C′ の比較は成立する**(席と Core が同じ文を見るので入力の差はゼロ)。**ただし Core の絶対の成績はこの文に固有である**"
+ ]
+}

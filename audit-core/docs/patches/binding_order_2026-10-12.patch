@@ -1,0 +1,162 @@
+diff --git a/audit-core/adapters/xbrl/recipes.py b/audit-core/adapters/xbrl/recipes.py
+index b9db9b2..20b83a5 100644
+--- a/audit-core/adapters/xbrl/recipes.py
++++ b/audit-core/adapters/xbrl/recipes.py
+@@ -206,84 +206,85 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
+     # reproduce this function's own `scale`/`target` at verify time.
+     claim["unit_scale"] = unit_scale
+     claim["claim_scale"] = scale
+-    pool = I.facts_for(elems, facts, contexts, member) if subj else [f for f in facts if I.ctx_ok(f["context"], contexts, member)]
+-    pool = [f for f in pool if f["unit"] and f["unit"].upper().startswith("JPY")]
+     is_diff = bool(_MONEY_UNIT_RE_AFTER.search(s[b:b + 4])) or bool(_MONEY_DIFF_PHRASE_RE.search(s[max(0, a - 25):a]))
+-    hits = [(f, V.match_value(f["value"], target, scale)) for f in pool]
+-    hits = [(f, how) for f, how in hits if how]
+-    if hits and not (is_diff and subj):
+-        fams = sorted({f["name"] for f, _ in hits})
+-        if subj or len(fams) == 1:
+-            if subj:
+-                f, how = hits[0]
+-                claim["pointer"] = "xbrl:%s@%s" % (f["name"], f["context"])
+-                claim["bound"] = True
+-                claim["result"] = "GROUNDED"
+-                claim["recomputed"] = f["value"]
+-                claim["match"] = how
+-            else:
+-                # 封 BINDING_FIX_PLAN_2026-10-08(案ア、人間の決定 2026-10-08)。
+-                # subject が取れていない数の主張は、候補事実の家族が 1 つに
+-                # 絞れても束縛しない。pointer/bound/recomputed を立てず、
+-                # reason="no_subject" のまま返す(UNBOUND_REASON_STATE により
+-                # UNVERIFIABLE になる)。
++
++    if not subj:
++        # 封 BINDING_FIX_PLAN_2026-10-08(案ア、人間の決定 2026-10-08)のまま
++        # 不変: subject が取れていない数の主張は束縛しない。ここは候補を
++        # 「どれに束縛するか」選ぶ経路ではなく、診断用の reason
++        # (no_subject / ambiguous(elements) / no_element)を選ぶだけで、
++        # bound/pointer/recomputed は一度も立たない。封
++        # BINDING_ORDER_SEAL_2026-10-12 §3 の規則 3・4(値による再探索・
++        # 値による候補選択の禁止)は「束縛」に対する規則であり、ここには
++        # 適用対象が無い。
++        pool = [f for f in facts if I.ctx_ok(f["context"], contexts, member)]
++        pool = [f for f in pool if f["unit"] and f["unit"].upper().startswith("JPY")]
++        hits = [(f, V.match_value(f["value"], target, scale)) for f in pool]
++        hits = [(f, how) for f, how in hits if how]
++        if hits:
++            fams = sorted({f["name"] for f, _ in hits})
++            if len(fams) == 1:
+                 claim["reason"] = "no_subject"
++            else:
++                # C-1d §3.3: the registered reason name is the count-free
++                # `ambiguous(elements)`; the count moves to
++                # Claim.provenance["ambiguous_count"] (see claim_to_recipe).
++                claim["reason"] = "ambiguous(elements)"
++                claim["ambiguous_count"] = len(fams)
+         else:
+-            # C-1d §3.3: the registered reason name is the count-free
+-            # `ambiguous(elements)` (so a 3rd document's different element
+-            # count does not require a new registration); the count itself
+-            # moves to Claim.provenance["ambiguous_count"] (see claim_to_recipe).
+-            claim["reason"] = "ambiguous(elements)"
+-            claim["ambiguous_count"] = len(fams)
+-    elif subj:
+-        fs = I.facts_for(elems, facts, contexts, member)
+-        fs = [f for f in fs if f["unit"] and f["unit"].upper().startswith("JPY")]
+-        by = {}
+-        for f in fs:
+-            by.setdefault(f["name"], {})[f["context"]] = f
+-        found = None
++            claim["reason"] = "no_element"
++        return
++
++    # 封 BINDING_ORDER_SEAL_2026-10-12 §3(規則 1〜6。subj が取れている場合)。
++    # 候補集合を概念(elems)と期間(want_ctx)で先に絞り、値では絞らない
++    # (規則 1)。候補が 0 件/複数件なら値を使わずに停止する(規則 3・4)。
++    # 候補が 1 件のときだけ pointer を確定し、値の比較はその pointer に
++    # 対してのみ行う(規則 5・6)。対の形(is_diff)へ進むのは文に増減の語
++    # があるときだけで、単一 fact が値に一致しなかったことを理由に対の形
++    # へ落ちる経路は無い(いまの `N289` の誤りの経路)。
++    if is_diff:
+         prev_year_phrase = _PREV_YEAR_PHRASE in s[max(0, a - 15):a]
+-        for name, ctxs in by.items():
+-            def ctx(prefix):
+-                return next((v for k, v in ctxs.items() if k.startswith(prefix)), None)
+-            pairs = [("Prior1Year", "Prior2Year")] if prev_year_phrase else [("CurrentYear", "Prior1Year")]
+-            for pa, pb in pairs:
+-                fa, fb = ctx(pa), ctx(pb)
+-                if fa and fb:
+-                    how = V.match_value(fa["value"] - fb["value"], target, scale)
+-                    if how:
+-                        found = (fa, fb, how)
+-                        break
+-            if found:
+-                break
+-        if found:
+-            fa, fb, how = found
+-            claim["form"] = "derived_value"
+-            claim["pointer"] = ["xbrl:%s@%s" % (fa["name"], fa["context"]), "xbrl:%s@%s" % (fb["name"], fb["context"]), "formula:a-b"]
+-            claim["bound"] = True
+-            claim["result"] = "GROUNDED"
+-            claim["recomputed"] = fa["value"] - fb["value"]
+-            claim["match"] = how
+-        elif hits:
+-            f, how = hits[0]
+-            claim["pointer"] = "xbrl:%s@%s" % (f["name"], f["context"])
+-            claim["bound"] = True
+-            claim["result"] = "GROUNDED"
+-            claim["recomputed"] = f["value"]
++        want_a, want_b = ("Prior1Year", "Prior2Year") if prev_year_phrase else ("CurrentYear", "Prior1Year")
++        pool_a = [f for f in I.facts_for(elems, facts, contexts, member, want_ctx=want_a)
++                  if f["unit"] and f["unit"].upper().startswith("JPY")]
++        pool_b = [f for f in I.facts_for(elems, facts, contexts, member, want_ctx=want_b)
++                  if f["unit"] and f["unit"].upper().startswith("JPY")]
++        if not pool_a or not pool_b:
++            claim["reason"] = "no_element"
++            return
++        if len(pool_a) > 1 or len(pool_b) > 1:
++            claim["reason"] = "ambiguous(elements)"
++            claim["ambiguous_count"] = max(len(pool_a), len(pool_b))
++            return
++        fa, fb = pool_a[0], pool_b[0]
++        claim["form"] = "derived_value"
++        claim["pointer"] = ["xbrl:%s@%s" % (fa["name"], fa["context"]), "xbrl:%s@%s" % (fb["name"], fb["context"]), "formula:a-b"]
++        claim["bound"] = True
++        recomputed = fa["value"] - fb["value"]
++        claim["recomputed"] = recomputed
++        how = V.match_value(recomputed, target, scale)
++        claim["result"] = "GROUNDED" if how else "VALUE_MISMATCH"
++        if how:
+             claim["match"] = how
+-            claim["reason"] = "diff phrase but value matched a fact"
+-        else:
+-            cur = [f for f in fs if f["context"].startswith("CurrentYear")]
+-            if cur:
+-                claim["pointer"] = "xbrl:%s@%s" % (cur[0]["name"], cur[0]["context"])
+-                claim["bound"] = True
+-                claim["result"] = "VALUE_MISMATCH"
+-                claim["recomputed"] = cur[0]["value"]
+-                claim["reason"] = "value differs(segment/other period?)"
+-            else:
+-                claim["reason"] = "no_element"
+-    else:
++        return
++
++    pool = [f for f in I.facts_for(elems, facts, contexts, member, want_ctx="CurrentYear")
++            if f["unit"] and f["unit"].upper().startswith("JPY")]
++    if not pool:
+         claim["reason"] = "no_element"
++        return
++    if len(pool) > 1:
++        claim["reason"] = "ambiguous(elements)"
++        claim["ambiguous_count"] = len(pool)
++        return
++    f = pool[0]
++    how = V.match_value(f["value"], target, scale)
++    claim["pointer"] = "xbrl:%s@%s" % (f["name"], f["context"])
++    claim["bound"] = True
++    claim["recomputed"] = f["value"]
++    claim["result"] = "GROUNDED" if how else "VALUE_MISMATCH"
++    if how:
++        claim["match"] = how
+ 
+ 
+ # ---------------------------------------------------------------------------

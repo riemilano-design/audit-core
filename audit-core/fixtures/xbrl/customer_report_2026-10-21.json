@@ -1,0 +1,8056 @@
+{
+ "step": "**顧客向けの日本語の報告形の測定。0 USD・通信なし・engine は測る側から 1 行も変えない**",
+ "環境": {
+  "封": "docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md",
+  "HEAD": "6b724ad2e98b26e010ff55746d29cba9112cc3fc",
+  "python": "3.9.6",
+  "DEFAULT_PROFILE": "P22",
+  "比べた profile": [
+   "P22(既定。profile を渡さない)",
+   "P25(明示)"
+  ],
+  "ラベル 2 file の sha256(起動時に照合)": {
+   "jppfs_2025-11-01_lab.xml": "bf56ea1585afe426b398a9053ec4de4dbeafc211a53675b5d6d19453e4e04bf4",
+   "jpcrp_2025-11-01_lab.xml": "df9c23764ec9a63cb65b5ef62e79a2907c590523797421442ea2a60e334cd684"
+  },
+  "cache": "~/.cache/audit-core/edinet/*.zip(手元の file だけ。取りに行かない)",
+  "通信": "この script は urllib・socket・http を import しない。adapters は urllib を import するが接続は起きない",
+  "費用": "0 USD"
+ },
+ "書類の数": {
+  "経営分析の文を持つ": 67
+ },
+ "書類別": {
+  "P22": [
+   {
+    "doc": "S100YMFV",
+    "profile": "P22",
+    "claims": 133,
+    "節": {
+     "違う": 4,
+     "要確認": 18,
+     "対象外": 1,
+     "判断しない": 25,
+     "一致": 85
+    },
+    "一致の内訳": {
+     "当期": 34,
+     "前期": 0,
+     "計算": 51,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 85,
+     "POINTER_NOT_FOUND": 15,
+     "UNVERIFIABLE": 29,
+     "VALUE_MISMATCH": 4
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 8,
+     "no_element(no prior for text)": 2,
+     "no_element(point without prior phrase)": 1,
+     "no_element(ratio without fact)": 1,
+     "no_element(text needs money fact)": 2
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 24,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "2ec8fb8afdf1a78601742f2f9e0fb22813616445507c4d37ca8596ee1ddc2959",
+    "報告 --full の本体の sha256": "9845b877eebd716f04a3ea4e2724ef3e45e04e557a84ccfc297c24dd8da3566f",
+    "報告の行数": 99,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 28
+    },
+    "verify 秒": 0.61
+   },
+   {
+    "doc": "S100YUHC",
+    "profile": "P22",
+    "claims": 156,
+    "節": {
+     "違う": 29,
+     "要確認": 17,
+     "対象外": 21,
+     "判断しない": 19,
+     "一致": 70
+    },
+    "一致の内訳": {
+     "当期": 27,
+     "前期": 2,
+     "計算": 41,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 70,
+     "POINTER_NOT_FOUND": 32,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 29
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 8,
+     "no_element(ratio without fact)": 2,
+     "no_element(text needs money fact)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 21
+    },
+    "reason(判断しない)": {
+     "no_subject": 19
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "b6939fcaa34474ac9bd7525cba477dc3c66513982752d1ddd9fc725458fb3a63",
+    "報告 --full の本体の sha256": "d924bf08f376340968ad25fe241b7c3c0f28abe9313754c7c35031ac4b9dafe8",
+    "報告の行数": 137,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 20,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 20,
+     "要確認": 10,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 39
+    },
+    "verify 秒": 0.55
+   },
+   {
+    "doc": "S100YWGX",
+    "profile": "P22",
+    "claims": 141,
+    "節": {
+     "違う": 28,
+     "要確認": 14,
+     "対象外": 12,
+     "判断しない": 32,
+     "一致": 55
+    },
+    "一致の内訳": {
+     "当期": 18,
+     "前期": 4,
+     "計算": 33,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 55,
+     "POINTER_NOT_FOUND": 19,
+     "UNVERIFIABLE": 39,
+     "VALUE_MISMATCH": 28
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 7,
+     "no_element": 6,
+     "no_element(no prior2 for prior-year diff)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 12
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 14,
+     "no_subject": 18
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "0e8837dac803f41b678103805583589f3a0e4f4e94c0dd0bfdf8dddef884e0bf",
+    "報告 --full の本体の sha256": "4a3a6f3dd7d4b56af306faeac27294164f70f21a31e8d1505f9189ce69af7546",
+    "報告の行数": 137,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 15,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 9,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 9
+    },
+    "verify 秒": 0.55
+   },
+   {
+    "doc": "S100YXF5",
+    "profile": "P22",
+    "claims": 101,
+    "節": {
+     "違う": 29,
+     "要確認": 5,
+     "対象外": 15,
+     "判断しない": 13,
+     "一致": 39
+    },
+    "一致の内訳": {
+     "当期": 16,
+     "前期": 1,
+     "計算": 22,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 39,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 17,
+     "VALUE_MISMATCH": 29
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element(ratio without fact)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 15
+    },
+    "reason(判断しない)": {
+     "no_subject": 13
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "0708c02197e7df91afb801f293df0a017801c2d804eb00678ebcc386dc5bf446",
+    "報告 --full の本体の sha256": "d99725a4b86c7b10c5b2569c89be85e3afee1df94181705afddc0a948372fd53",
+    "報告の行数": 113,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 17,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 17,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 23
+    },
+    "verify 秒": 0.42
+   },
+   {
+    "doc": "S100YXGH",
+    "profile": "P22",
+    "claims": 129,
+    "節": {
+     "違う": 17,
+     "要確認": 19,
+     "対象外": 0,
+     "判断しない": 20,
+     "一致": 73
+    },
+    "一致の内訳": {
+     "当期": 33,
+     "前期": 4,
+     "計算": 36,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 73,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 17
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 2,
+     "no_element(point without prior phrase)": 1,
+     "no_element(ratio without fact)": 13
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 20
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "d5d7791d1318eab9a19b25261fa5ee5bacf9b8192829fb68683aa73ec9b92d37",
+    "報告 --full の本体の sha256": "2f3066ebd62f56bdbaf0bb07f96feccd479a550ef3d1844c0803cfc8c28aec1b",
+    "報告の行数": 108,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 12,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.36
+   },
+   {
+    "doc": "S100YXLE",
+    "profile": "P22",
+    "claims": 121,
+    "節": {
+     "違う": 40,
+     "要確認": 8,
+     "対象外": 0,
+     "判断しない": 13,
+     "一致": 60
+    },
+    "一致の内訳": {
+     "当期": 24,
+     "前期": 0,
+     "計算": 36,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 60,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 40
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 2,
+     "no_element": 4,
+     "no_element(point without prior phrase)": 2
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 13
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "968544da084e094f4e4e604d11e5d2d186b7c0e73ee29ed5f3fedd522e5ebbd1",
+    "報告 --full の本体の sha256": "59b0a4abf117978ce46cc5b4b310dc1a74dc9facfd2cab337e2352bdc110ccaa",
+    "報告の行数": 113,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 30,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.45
+   },
+   {
+    "doc": "S100YXMA",
+    "profile": "P22",
+    "claims": 119,
+    "節": {
+     "違う": 22,
+     "要確認": 23,
+     "対象外": 0,
+     "判断しない": 14,
+     "一致": 60
+    },
+    "一致の内訳": {
+     "当期": 19,
+     "前期": 2,
+     "計算": 39,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 60,
+     "POINTER_NOT_FOUND": 19,
+     "UNVERIFIABLE": 18,
+     "VALUE_MISMATCH": 22
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 14,
+     "no_element(no prior for text)": 2,
+     "no_element(ratio without fact)": 1,
+     "no_element(text needs money fact)": 2
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 13,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "0f0fa51466de319dc79d56c877295b5ba58c567f7470dbbed339a8c77ff82589",
+    "報告 --full の本体の sha256": "71ea6e73c99ca82f749833303fe17408a9d0e07d6e627275e029d888a7279d74",
+    "報告の行数": 111,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 16,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 3,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 2
+    },
+    "verify 秒": 0.6
+   },
+   {
+    "doc": "S100YYDI",
+    "profile": "P22",
+    "claims": 145,
+    "節": {
+     "違う": 22,
+     "要確認": 13,
+     "対象外": 9,
+     "判断しない": 19,
+     "一致": 82
+    },
+    "一致の内訳": {
+     "当期": 29,
+     "前期": 0,
+     "計算": 53,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 82,
+     "POINTER_NOT_FOUND": 18,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 22
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 6,
+     "no_element(ratio without fact)": 2,
+     "no_element(text needs money fact)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 9
+    },
+    "reason(判断しない)": {
+     "no_subject": 19
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "a49a3e20cf77fefdc5a37e5847a600af1264ca3cdcac47392535c9ab4d750393",
+    "報告 --full の本体の sha256": "a49d4eb0cf5d3b8b89654a79a97653c37e17ee18a296b773932eddfb0b8af40e",
+    "報告の行数": 114,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 18,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.5
+   },
+   {
+    "doc": "S100YYIA",
+    "profile": "P22",
+    "claims": 139,
+    "節": {
+     "違う": 28,
+     "要確認": 9,
+     "対象外": 0,
+     "判断しない": 13,
+     "一致": 89
+    },
+    "一致の内訳": {
+     "当期": 55,
+     "前期": 21,
+     "計算": 13,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 89,
+     "POINTER_NOT_FOUND": 4,
+     "UNVERIFIABLE": 18,
+     "VALUE_MISMATCH": 28
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 5,
+     "no_element": 4
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 10,
+     "target_or_plan": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "ad186ab12707c8f4fc63e8b2f7f3092d6b090baa7909bed379d1bc403b4ea5f8",
+    "報告 --full の本体の sha256": "b95ec0fff1383ab759236fd35940f557a2808ba5b7d0bc17b3c9308433968c8a",
+    "報告の行数": 102,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 26,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 1
+    },
+    "verify 秒": 0.5
+   },
+   {
+    "doc": "S100YYK8",
+    "profile": "P22",
+    "claims": 128,
+    "節": {
+     "違う": 37,
+     "要確認": 8,
+     "対象外": 0,
+     "判断しない": 19,
+     "一致": 64
+    },
+    "一致の内訳": {
+     "当期": 28,
+     "前期": 1,
+     "計算": 35,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 1,
+     "UNVERIFIABLE": 26,
+     "VALUE_MISMATCH": 37
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 7,
+     "no_element": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 19
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "87a24375d9ac4aa4e4f2c3c6979a571ca552dc74832c5e6f22c7002b8efa5c55",
+    "報告 --full の本体の sha256": "b261f85d6e76e5cf224c1af37cb73fe8914e0af4173dcffac765e87149a2ed85",
+    "報告の行数": 116,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 25,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 1,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 3
+    },
+    "verify 秒": 0.6
+   },
+   {
+    "doc": "S100YYN7",
+    "profile": "P22",
+    "claims": 152,
+    "節": {
+     "違う": 44,
+     "要確認": 18,
+     "対象外": 0,
+     "判断しない": 33,
+     "一致": 57
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 1,
+     "計算": 35,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 38,
+     "VALUE_MISMATCH": 44
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 5,
+     "no_element": 11,
+     "no_element(no prior2 for prior-year diff)": 2
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 32,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "563587fa33e47c1284ea42cf6e401630fdda39b1ddc3862b4472bd89f60bc627",
+    "報告 --full の本体の sha256": "a75bcbae1e5b94cd5e1d9cb984c2e79318fe39ed3ed1728085b27a79a98a28f7",
+    "報告の行数": 147,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 35,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 35,
+     "要確認": 18,
+     "対象外": 0,
+     "判断しない": 2,
+     "一致": 29
+    },
+    "verify 秒": 0.79
+   },
+   {
+    "doc": "S100YYOS",
+    "profile": "P22",
+    "claims": 81,
+    "節": {
+     "違う": 22,
+     "要確認": 16,
+     "対象外": 1,
+     "判断しない": 13,
+     "一致": 29
+    },
+    "一致の内訳": {
+     "当期": 12,
+     "前期": 0,
+     "計算": 17,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 29,
+     "POINTER_NOT_FOUND": 17,
+     "UNVERIFIABLE": 13,
+     "VALUE_MISMATCH": 22
+    },
+    "reason(要確認)": {
+     "no_element": 16
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 12,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "eb34f74c0fad3eb31da488d3b48716293828219105c9e332fad8fae47e00f8f4",
+    "報告 --full の本体の sha256": "3c46512d4474d0470c51141e591e69406c5fa28ae6e721be8f7eab2033cf8dd3",
+    "報告の行数": 103,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 13,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 13,
+     "要確認": 7,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 15
+    },
+    "verify 秒": 0.49
+   },
+   {
+    "doc": "S100YYQX",
+    "profile": "P22",
+    "claims": 110,
+    "節": {
+     "違う": 38,
+     "要確認": 13,
+     "対象外": 1,
+     "判断しない": 14,
+     "一致": 44
+    },
+    "一致の内訳": {
+     "当期": 16,
+     "前期": 0,
+     "計算": 28,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 44,
+     "POINTER_NOT_FOUND": 12,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 38
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 2,
+     "no_element": 11
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 14
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "9b33e68f82550b469879bb28fb87e76f49375e5704d4de2e7cc3ca1da2829716",
+    "報告 --full の本体の sha256": "93dba61379e02521240fce004c8e436aab91a49d6fc543d8720121f9765ac2b0",
+    "報告の行数": 117,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 28,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 40,
+    "ラベル無しの名前空間別の行数": {
+     "jpcrp030000": 2,
+     "jpigp_cor": 38
+    },
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.53
+   },
+   {
+    "doc": "S100YYRG",
+    "profile": "P22",
+    "claims": 96,
+    "節": {
+     "違う": 23,
+     "要確認": 5,
+     "対象外": 1,
+     "判断しない": 16,
+     "一致": 51
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 0,
+     "計算": 30,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 2,
+     "UNVERIFIABLE": 20,
+     "VALUE_MISMATCH": 23
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 15,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "0c11f50282b8e4bac54b5727c8e01ce0d3a4b6c0df7e03a362e841ee88498d6e",
+    "報告 --full の本体の sha256": "2cc8ee766a15949a12531ca0fb4f773d976b237b10b6ee5b17be681a65333fbc",
+    "報告の行数": 96,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 13,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 0
+    },
+    "verify 秒": 0.33
+   },
+   {
+    "doc": "S100YYRV",
+    "profile": "P22",
+    "claims": 141,
+    "節": {
+     "違う": 39,
+     "要確認": 22,
+     "対象外": 0,
+     "判断しない": 22,
+     "一致": 58
+    },
+    "一致の内訳": {
+     "当期": 27,
+     "前期": 0,
+     "計算": 31,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 58,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 39
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 12,
+     "no_element(no prior for text)": 4
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 22
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "9a0e49281a5bc361a1d4598f8aef7cbeaa7558f926160328b0a31bbfb5ae9177",
+    "報告 --full の本体の sha256": "281179e3397eafd19db20117e695729e4f2e438f157d2802f4843dfe9c11e9cb",
+    "報告の行数": 135,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 28,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 2,
+     "要確認": 1,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.52
+   },
+   {
+    "doc": "S100YYS4",
+    "profile": "P22",
+    "claims": 116,
+    "節": {
+     "違う": 35,
+     "要確認": 13,
+     "対象外": 0,
+     "判断しない": 13,
+     "一致": 55
+    },
+    "一致の内訳": {
+     "当期": 18,
+     "前期": 0,
+     "計算": 37,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 55,
+     "POINTER_NOT_FOUND": 7,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 35
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 7
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 13
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "3b4a2db7a4f7d297a0484a8d9ee82b753dcac35558856093d3f4a670b39285ea",
+    "報告 --full の本体の sha256": "99036808678a2dc4d70c5f52844103ecf96c31d6be5a5d7e3ec6ca87fd260b32",
+    "報告の行数": 113,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 13,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 1,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.47
+   },
+   {
+    "doc": "S100YYT4",
+    "profile": "P22",
+    "claims": 119,
+    "節": {
+     "違う": 16,
+     "要確認": 12,
+     "対象外": 0,
+     "判断しない": 24,
+     "一致": 67
+    },
+    "一致の内訳": {
+     "当期": 30,
+     "前期": 0,
+     "計算": 37,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 67,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 16
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 10,
+     "no_element(text needs money fact)": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 22,
+     "target_or_plan": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "9f6600e7ea75b128f1a5b3a3c8d1d2b548606c16b8f522d87eeab2f9e6bf5776",
+    "報告 --full の本体の sha256": "901cca5ba0e366000c599d43a955845f4aa9c64f8d2275183a8684b27d25990c",
+    "報告の行数": 104,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 11,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.48
+   },
+   {
+    "doc": "S100YYT8",
+    "profile": "P22",
+    "claims": 153,
+    "節": {
+     "違う": 45,
+     "要確認": 44,
+     "対象外": 8,
+     "判断しない": 19,
+     "一致": 37
+    },
+    "一致の内訳": {
+     "当期": 32,
+     "前期": 0,
+     "計算": 5,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 37,
+     "POINTER_NOT_FOUND": 51,
+     "UNVERIFIABLE": 20,
+     "VALUE_MISMATCH": 45
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 16,
+     "no_element(no prior for text)": 22,
+     "no_element(no prior2 for prior-year diff)": 3,
+     "no_element(ratio without fact)": 2
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 2,
+     "no_prior_member_context": 6
+    },
+    "reason(判断しない)": {
+     "no_subject": 19
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "834329fc2c8415d808ae066acbd8a81fcf26effc291f2efb7e33e8ee95e8ca3d",
+    "報告 --full の本体の sha256": "4146fef5dc5226c000a7856e05fff29717a645f67104648903f2a944399f6b01",
+    "報告の行数": 167,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 45,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 45,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 34
+    },
+    "verify 秒": 0.39
+   },
+   {
+    "doc": "S100YYUD",
+    "profile": "P22",
+    "claims": 67,
+    "節": {
+     "違う": 17,
+     "要確認": 3,
+     "対象外": 1,
+     "判断しない": 10,
+     "一致": 36
+    },
+    "一致の内訳": {
+     "当期": 16,
+     "前期": 3,
+     "計算": 17,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 36,
+     "POINTER_NOT_FOUND": 4,
+     "UNVERIFIABLE": 10,
+     "VALUE_MISMATCH": 17
+    },
+    "reason(要確認)": {
+     "no_element": 3
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 7,
+     "target_or_plan": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "c9e3fda5f869b35742b6e2b88613913da9d5733f4d721f486873067abc189794",
+    "報告 --full の本体の sha256": "1520ab6e53bc2b336c706ead66d2f75c2331260a247dc79c2976716996ea1c79",
+    "報告の行数": 82,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 12,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.33
+   },
+   {
+    "doc": "S100YYVN",
+    "profile": "P22",
+    "claims": 101,
+    "節": {
+     "違う": 37,
+     "要確認": 5,
+     "対象外": 1,
+     "判断しない": 25,
+     "一致": 33
+    },
+    "一致の内訳": {
+     "当期": 8,
+     "前期": 1,
+     "計算": 24,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 33,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 37
+    },
+    "reason(要確認)": {
+     "no_element": 2,
+     "no_element(no prior for text)": 2,
+     "no_element(ratio without fact)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 4,
+     "no_subject": 21
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "3be686b80ecaac72dd414f7c49bc91019fb884c41f82e1bd3ceffec86717538f",
+    "報告 --full の本体の sha256": "3767b52a82da45c1be1bd2a0cc91e860a9cab9f43bc2272e346206d55c073168",
+    "報告の行数": 119,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 24,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 24,
+     "要確認": 1,
+     "対象外": 0,
+     "判断しない": 2,
+     "一致": 9
+    },
+    "verify 秒": 0.57
+   },
+   {
+    "doc": "S100YZ31",
+    "profile": "P22",
+    "claims": 76,
+    "節": {
+     "違う": 8,
+     "要確認": 8,
+     "対象外": 6,
+     "判断しない": 3,
+     "一致": 51
+    },
+    "一致の内訳": {
+     "当期": 22,
+     "前期": 2,
+     "計算": 27,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 9,
+     "VALUE_MISMATCH": 8
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 1,
+     "no_element(no prior for text)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 6
+    },
+    "reason(判断しない)": {
+     "no_subject": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "a37a03529829d3274fe61a14488d474aa85df605e9856ae195b2966245428bef",
+    "報告 --full の本体の sha256": "4ba78e91ca8b35c9aecd8cff6d5ff1c5f7eb72870453f215a8505bc646912e25",
+    "報告の行数": 76,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 7,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 5,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 12
+    },
+    "verify 秒": 0.35
+   },
+   {
+    "doc": "S100YZ4E",
+    "profile": "P22",
+    "claims": 98,
+    "節": {
+     "違う": 13,
+     "要確認": 13,
+     "対象外": 0,
+     "判断しない": 12,
+     "一致": 60
+    },
+    "一致の内訳": {
+     "当期": 30,
+     "前期": 7,
+     "計算": 23,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 60,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 13
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 7,
+     "no_element": 3,
+     "no_element(no prior for text)": 3
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 12
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "4634afba482cfc150dd199743f01a8db3d9da85e7305f18eead2dc07d7b0a6d1",
+    "報告 --full の本体の sha256": "2887300e8c6bb14ce372946ae34d46550a8a4656912c363197383da44f43a4cb",
+    "報告の行数": 90,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 12,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.32
+   },
+   {
+    "doc": "S100YZ7E",
+    "profile": "P22",
+    "claims": 87,
+    "節": {
+     "違う": 22,
+     "要確認": 15,
+     "対象外": 2,
+     "判断しない": 16,
+     "一致": 32
+    },
+    "一致の内訳": {
+     "当期": 19,
+     "前期": 0,
+     "計算": 13,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 32,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 22
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 12
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 2
+    },
+    "reason(判断しない)": {
+     "no_subject": 15,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "b9cac6306e4f1f476cf7286261cedfdea5bce87491115b949d1ea1fb393c8a49",
+    "報告 --full の本体の sha256": "631832fab354991c33261f3f8c4229b65b86058131f2910962c0186f6b443805",
+    "報告の行数": 106,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 17,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 11,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 10
+    },
+    "verify 秒": 0.33
+   },
+   {
+    "doc": "S100YZCT",
+    "profile": "P22",
+    "claims": 158,
+    "節": {
+     "違う": 36,
+     "要確認": 25,
+     "対象外": 0,
+     "判断しない": 28,
+     "一致": 69
+    },
+    "一致の内訳": {
+     "当期": 31,
+     "前期": 0,
+     "計算": 38,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 69,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 31,
+     "VALUE_MISMATCH": 36
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 19,
+     "no_element(point without prior phrase)": 1,
+     "no_element(ratio without fact)": 2
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "ambiguous(member)": 1,
+     "no_subject": 27
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "4af966f83f137bf64b200fea2968c7e9c15b27a96316e6727d3193b5f3ef2357",
+    "報告 --full の本体の sha256": "d828656561d2b197c32855512ca613c76f927b9034ac9eb7c841725b72a2ba21",
+    "報告の行数": 141,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 24,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.58
+   },
+   {
+    "doc": "S100YZEV",
+    "profile": "P22",
+    "claims": 76,
+    "節": {
+     "違う": 12,
+     "要確認": 13,
+     "対象外": 0,
+     "判断しない": 8,
+     "一致": 43
+    },
+    "一致の内訳": {
+     "当期": 18,
+     "前期": 0,
+     "計算": 25,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 7,
+     "UNVERIFIABLE": 14,
+     "VALUE_MISMATCH": 12
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 6,
+     "no_element(no prior for text)": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 8
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "9a8bb96e1bd60fd8a9cfdb836814fde11eff93ba4b6ebf84ee8153244af1f325",
+    "報告 --full の本体の sha256": "52f63d1d753ae36c2dd23dd6f832952eb4e9b829eb15003a0a40523f3b870d70",
+    "報告の行数": 85,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 7,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.25
+   },
+   {
+    "doc": "S100Z0OS",
+    "profile": "P22",
+    "claims": 105,
+    "節": {
+     "違う": 29,
+     "要確認": 13,
+     "対象外": 11,
+     "判断しない": 2,
+     "一致": 50
+    },
+    "一致の内訳": {
+     "当期": 19,
+     "前期": 1,
+     "計算": 30,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 50,
+     "POINTER_NOT_FOUND": 18,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 29
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 6,
+     "no_element(ratio without fact)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 11
+    },
+    "reason(判断しない)": {
+     "no_subject": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "cbb6c6b8336260c66c2589e79ec565c4e0fd6d8cac32c63ec238ef557458eb4f",
+    "報告 --full の本体の sha256": "1677b326e89bfb97b10a85c24d24c19ce6a29b5ab6a9ea9f93d95539ca9c6b49",
+    "報告の行数": 106,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 26,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 26,
+     "要確認": 12,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 28
+    },
+    "verify 秒": 0.41
+   },
+   {
+    "doc": "S100Z1WR",
+    "profile": "P22",
+    "claims": 91,
+    "節": {
+     "違う": 16,
+     "要確認": 2,
+     "対象外": 10,
+     "判断しない": 7,
+     "一致": 56
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 0,
+     "計算": 35,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 56,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 16
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 10
+    },
+    "reason(判断しない)": {
+     "no_subject": 7
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "21461cd380ff405a95a32e31ceaaadaace0349c10f62debeab9cbb2f5fd62241",
+    "報告 --full の本体の sha256": "06e6c53d13d7170f1e8adf4c91e511d4c3d4bb345e2ca0443f3b003d2f3c4e96",
+    "報告の行数": 86,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 13,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 5,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 12
+    },
+    "verify 秒": 0.43
+   },
+   {
+    "doc": "S100Z35K",
+    "profile": "P22",
+    "claims": 133,
+    "節": {
+     "違う": 13,
+     "要確認": 68,
+     "対象外": 1,
+     "判断しない": 27,
+     "一致": 24
+    },
+    "一致の内訳": {
+     "当期": 10,
+     "前期": 3,
+     "計算": 11,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 24,
+     "POINTER_NOT_FOUND": 69,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 13
+    },
+    "reason(要確認)": {
+     "no_element": 62,
+     "no_element(no prior for text)": 1,
+     "no_element(ratio without fact)": 5
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 27
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "63e9431a116a52ee3db8befd55314da32e148845f1f0fb82db1958a25c5255b5",
+    "報告 --full の本体の sha256": "9f43b99b66776ad129b0902f6ba9911e23a5b9486d3c2d5b044b4c80156a7243",
+    "報告の行数": 160,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 7,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 31,
+    "ラベル無しの名前空間別の行数": {
+     "jpigp_cor": 31
+    },
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 2
+    },
+    "verify 秒": 0.66
+   },
+   {
+    "doc": "S100Z37J",
+    "profile": "P22",
+    "claims": 129,
+    "節": {
+     "違う": 12,
+     "要確認": 16,
+     "対象外": 2,
+     "判断しない": 18,
+     "一致": 81
+    },
+    "一致の内訳": {
+     "当期": 25,
+     "前期": 2,
+     "計算": 54,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 12,
+     "UNVERIFIABLE": 24,
+     "VALUE_MISMATCH": 12
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 5,
+     "no_element(point without prior phrase)": 1,
+     "no_element(ratio without fact)": 4
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 2
+    },
+    "reason(判断しない)": {
+     "no_subject": 18
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "c9334dcbff18e629afcbd33b009d30bb25b8b1e25d6208934bcf0e1856013510",
+    "報告 --full の本体の sha256": "d3feab49cc261528494b0d15ef52c7689d988766d1d382f69c302bce5f46de1b",
+    "報告の行数": 99,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 7,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 7,
+     "要確認": 8,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 40
+    },
+    "verify 秒": 0.48
+   },
+   {
+    "doc": "S100Z38F",
+    "profile": "P22",
+    "claims": 147,
+    "節": {
+     "違う": 25,
+     "要確認": 26,
+     "対象外": 3,
+     "判断しない": 23,
+     "一致": 70
+    },
+    "一致の内訳": {
+     "当期": 31,
+     "前期": 1,
+     "計算": 38,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 70,
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 26,
+     "VALUE_MISMATCH": 25
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 17,
+     "no_element(no prior for text)": 2,
+     "no_element(ratio without fact)": 3,
+     "no_element(text needs money fact)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 3
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 6,
+     "no_subject": 11,
+     "target_or_plan": 6
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "1daf22b559b730d1c44337704d4344e71fa6ed4a28d2fca4b31f9abff4d92404",
+    "報告 --full の本体の sha256": "5e9e8d0be7560631c9ba9419a78a8aa14a9d96c563f89347ee262e523a14af07",
+    "報告の行数": 128,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 13,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 4,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 2,
+     "一致": 18
+    },
+    "verify 秒": 0.6
+   },
+   {
+    "doc": "S100Z39P",
+    "profile": "P22",
+    "claims": 103,
+    "節": {
+     "違う": 5,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 16,
+     "一致": 79
+    },
+    "一致の内訳": {
+     "当期": 18,
+     "前期": 0,
+     "計算": 61,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 79,
+     "POINTER_NOT_FOUND": 3,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 5
+    },
+    "reason(要確認)": {
+     "no_element": 2,
+     "no_element(ratio without fact)": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 16
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "ac2b4f9f2aef930b124064e561d7cb210525e2833bb365715cb33ba5923f6f30",
+    "報告 --full の本体の sha256": "b0be586e0676e4c141ab9255d85a2f478be0e250d908548b381ddc5ca25f5f88",
+    "報告の行数": 76,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 1,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 21
+    },
+    "verify 秒": 0.49
+   },
+   {
+    "doc": "S100Z3BW",
+    "profile": "P22",
+    "claims": 145,
+    "節": {
+     "違う": 21,
+     "要確認": 8,
+     "対象外": 1,
+     "判断しない": 21,
+     "一致": 94
+    },
+    "一致の内訳": {
+     "当期": 41,
+     "前期": 3,
+     "計算": 50,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 94,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 24,
+     "VALUE_MISMATCH": 21
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 5
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 20,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "a5154b439b3ba0ad0f24535a853b4a4206726daa9303f5903bf9cdea81c37491",
+    "報告 --full の本体の sha256": "0392536d9b1fc0e3c7161c10df8b996a9cb4d5a27b6529c514f5c12ab37220b1",
+    "報告の行数": 102,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 12,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.56
+   },
+   {
+    "doc": "S100Z3CI",
+    "profile": "P22",
+    "claims": 142,
+    "節": {
+     "違う": 24,
+     "要確認": 6,
+     "対象外": 1,
+     "判断しない": 12,
+     "一致": 99
+    },
+    "一致の内訳": {
+     "当期": 42,
+     "前期": 0,
+     "計算": 57,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 99,
+     "POINTER_NOT_FOUND": 1,
+     "UNVERIFIABLE": 18,
+     "VALUE_MISMATCH": 24
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 3,
+     "no_subject": 9
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "32511b463f378db0898118d3e37bfb897133d8d10879aae10bbe899043152e29",
+    "報告 --full の本体の sha256": "921058c0cc459a0cfe4d4fa90acfe2e6d8e127ba99720c5f46a63d6292b07763",
+    "報告の行数": 94,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 20,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 1,
+    "ラベル無しの名前空間別の行数": {
+     "jpcrp030000": 1
+    },
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.52
+   },
+   {
+    "doc": "S100Z3CO",
+    "profile": "P22",
+    "claims": 143,
+    "節": {
+     "違う": 21,
+     "要確認": 24,
+     "対象外": 0,
+     "判断しない": 17,
+     "一致": 81
+    },
+    "一致の内訳": {
+     "当期": 29,
+     "前期": 0,
+     "計算": 52,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 15,
+     "UNVERIFIABLE": 26,
+     "VALUE_MISMATCH": 21
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 9,
+     "no_element": 14,
+     "no_element(no prior for text)": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 17
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "f924991e6188907a46e230c1df89f9e856f6a43ee0f0efc5b0941016a4484fbf",
+    "報告 --full の本体の sha256": "e1f8b486333751edd53447444b9bc4002fe703e6b6e13f3f3a479117917eec05",
+    "報告の行数": 114,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 12,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.5
+   },
+   {
+    "doc": "S100Z3DU",
+    "profile": "P22",
+    "claims": 91,
+    "節": {
+     "違う": 18,
+     "要確認": 10,
+     "対象外": 7,
+     "判断しない": 3,
+     "一致": 53
+    },
+    "一致の内訳": {
+     "当期": 19,
+     "前期": 3,
+     "計算": 31,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 53,
+     "POINTER_NOT_FOUND": 7,
+     "UNVERIFIABLE": 13,
+     "VALUE_MISMATCH": 18
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 10
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 7
+    },
+    "reason(判断しない)": {
+     "no_subject": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "871f889f70466eedb6a3a81544f792bc2c151c2ee78fad0146f0c06314b627dd",
+    "報告 --full の本体の sha256": "24c5cc7d731e09126a5f161f9abdeaff4ed22613ad22a9048e468e3c39540f91",
+    "報告の行数": 89,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 14,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 14,
+     "要確認": 10,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 33
+    },
+    "verify 秒": 0.41
+   },
+   {
+    "doc": "S100Z3FB",
+    "profile": "P22",
+    "claims": 148,
+    "節": {
+     "違う": 26,
+     "要確認": 21,
+     "対象外": 0,
+     "判断しない": 20,
+     "一致": 81
+    },
+    "一致の内訳": {
+     "当期": 26,
+     "前期": 0,
+     "計算": 55,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 21,
+     "VALUE_MISMATCH": 26
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 19,
+     "no_element(text needs money fact)": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 20
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "67d9b9bc5424ecaee591df8a402011b114af04f9037a5f8c4e581f42d5795174",
+    "報告 --full の本体の sha256": "4370f8ade40ce4bee11ee8d6132cecdb57ff18437fc79413922cdde7fdfd9d9c",
+    "報告の行数": 119,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 16,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 4,
+    "ラベル無しの名前空間別の行数": {
+     "jpcrp030000": 4
+    },
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 4,
+     "要確認": 7,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 8
+    },
+    "verify 秒": 0.6
+   },
+   {
+    "doc": "S100Z3H2",
+    "profile": "P22",
+    "claims": 167,
+    "節": {
+     "違う": 15,
+     "要確認": 31,
+     "対象外": 0,
+     "判断しない": 15,
+     "一致": 106
+    },
+    "一致の内訳": {
+     "当期": 39,
+     "前期": 9,
+     "計算": 58,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 106,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 15
+    },
+    "reason(要確認)": {
+     "no_element": 16,
+     "no_element(ratio without fact)": 13,
+     "no_element(text needs money fact)": 2
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 15
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "7b6e33fd1ac612b733bac9c921642cc54ad04194fc1e09769b4445a7267aa56a",
+    "報告 --full の本体の sha256": "1ea86d1737ece6a6a65662a7158a34e306f39e5450e23be596df51f3a9630b0b",
+    "報告の行数": 113,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 9,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 7,
+     "要確認": 8,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 52
+    },
+    "verify 秒": 0.53
+   },
+   {
+    "doc": "S100Z3HP",
+    "profile": "P22",
+    "claims": 62,
+    "節": {
+     "違う": 6,
+     "要確認": 7,
+     "対象外": 0,
+     "判断しない": 6,
+     "一致": 43
+    },
+    "一致の内訳": {
+     "当期": 22,
+     "前期": 2,
+     "計算": 19,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 6
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 2,
+     "no_element": 4,
+     "no_element(ratio without fact)": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 6
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "746bab0263b0f8a8a021d6455c46b4f6d9f1b1f99ebe2852cdb1ada62d16ebc6",
+    "報告 --full の本体の sha256": "51d787e251ad2bdb8ebf9fc232c65f7dd1ae4575433f41b5cd6bfbc3f8737537",
+    "報告の行数": 71,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 3,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 3,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 28
+    },
+    "verify 秒": 0.32
+   },
+   {
+    "doc": "S100Z3IZ",
+    "profile": "P22",
+    "claims": 121,
+    "節": {
+     "違う": 19,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 5,
+     "一致": 97
+    },
+    "一致の内訳": {
+     "当期": 30,
+     "前期": 3,
+     "計算": 64,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 97,
+     "UNVERIFIABLE": 5,
+     "VALUE_MISMATCH": 19
+    },
+    "reason(要確認)": {},
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 5
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "ef3c4eb28eb69feb463760b71e037b0177fc2c12accf182ad3da6db1e9ab67c5",
+    "報告 --full の本体の sha256": "aaf00a49806ab3efb14fe4f1dc0858c79a48589630bb82e14fd169e609611c28",
+    "報告の行数": 75,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 12,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 12,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 54
+    },
+    "verify 秒": 0.53
+   },
+   {
+    "doc": "S100Z3JY",
+    "profile": "P22",
+    "claims": 135,
+    "節": {
+     "違う": 29,
+     "要確認": 14,
+     "対象外": 0,
+     "判断しない": 9,
+     "一致": 83
+    },
+    "一致の内訳": {
+     "当期": 38,
+     "前期": 7,
+     "計算": 38,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 83,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 15,
+     "VALUE_MISMATCH": 29
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 8
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "ambiguous(member)": 1,
+     "no_subject": 8
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "10bf25c7dd3a68548de97aaf6ba5409617f3ca5dcd619f0605c5dff972b1ff13",
+    "報告 --full の本体の sha256": "a9e422722737720d36d64c16d04d57eb56ab1efb26a25feaf5883245775269cf",
+    "報告の行数": 104,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 18,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 16,
+     "要確認": 10,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 50
+    },
+    "verify 秒": 0.43
+   },
+   {
+    "doc": "S100Z3L6",
+    "profile": "P22",
+    "claims": 95,
+    "節": {
+     "違う": 12,
+     "要確認": 27,
+     "対象外": 1,
+     "判断しない": 15,
+     "一致": 40
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 0,
+     "計算": 19,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 40,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 21,
+     "VALUE_MISMATCH": 12
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 21
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 15
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "e7a8468ee7fdf0b7e7b33c107d311d398925fcf9ff4f8ac3b59fe3686df0a544",
+    "報告 --full の本体の sha256": "88cdc1fbfe42a8d72316420dcccbb36b35ae6e43ab5ea05fa91a87213b70fcc3",
+    "報告の行数": 106,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 9,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 3,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 8
+    },
+    "verify 秒": 0.44
+   },
+   {
+    "doc": "S100Z3LJ",
+    "profile": "P22",
+    "claims": 128,
+    "節": {
+     "違う": 5,
+     "要確認": 30,
+     "対象外": 0,
+     "判断しない": 23,
+     "一致": 70
+    },
+    "一致の内訳": {
+     "当期": 33,
+     "前期": 3,
+     "計算": 34,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 70,
+     "POINTER_NOT_FOUND": 30,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 5
+    },
+    "reason(要確認)": {
+     "no_element": 18,
+     "no_element(no prior for text)": 3,
+     "no_element(point without prior phrase)": 1,
+     "no_element(ratio without fact)": 7,
+     "no_element(text needs money fact)": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 23
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "8bac98116abfd824558260368c930e0217408842bcaa753f459179a8ad522230",
+    "報告 --full の本体の sha256": "669aa05431c6f783b9fbc1551c50b26ab288a22a5ce57e7bcf415c243197a6a7",
+    "報告の行数": 110,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 3,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 3,
+     "要確認": 17,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 36
+    },
+    "verify 秒": 0.45
+   },
+   {
+    "doc": "S100Z3PS",
+    "profile": "P22",
+    "claims": 93,
+    "節": {
+     "違う": 6,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 23,
+     "一致": 60
+    },
+    "一致の内訳": {
+     "当期": 33,
+     "前期": 1,
+     "計算": 26,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 60,
+     "POINTER_NOT_FOUND": 1,
+     "UNVERIFIABLE": 26,
+     "VALUE_MISMATCH": 6
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 23
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "2e6d083277189166372c9ccc575de2cc8d1c85277e1fd06dcc4c6486a5032a38",
+    "報告 --full の本体の sha256": "e5ef71f6319445ebe74cc446f4c4de62e5c22d206daa82c14bed881ceae3a6b8",
+    "報告の行数": 85,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.34
+   },
+   {
+    "doc": "S100Z3V1",
+    "profile": "P22",
+    "claims": 109,
+    "節": {
+     "違う": 10,
+     "要確認": 12,
+     "対象外": 0,
+     "判断しない": 37,
+     "一致": 50
+    },
+    "一致の内訳": {
+     "当期": 19,
+     "前期": 0,
+     "計算": 31,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 50,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 44,
+     "VALUE_MISMATCH": 10
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 7,
+     "no_element": 5
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 36,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "71b15d6efeab00919644503bf78a831bebc21fbbc86735d378bb2d8651bd9613",
+    "報告 --full の本体の sha256": "8f839dedacee3ddc166b7b2adf2d38c44798dd6b5bfdd0cc11d50ad3592ed958",
+    "報告の行数": 111,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 7,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 7,
+     "要確認": 8,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 31
+    },
+    "verify 秒": 0.45
+   },
+   {
+    "doc": "S100Z404",
+    "profile": "P22",
+    "claims": 84,
+    "節": {
+     "違う": 17,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 18,
+     "一致": 44
+    },
+    "一致の内訳": {
+     "当期": 24,
+     "前期": 0,
+     "計算": 20,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 44,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 18,
+     "VALUE_MISMATCH": 17
+    },
+    "reason(要確認)": {
+     "no_element": 1,
+     "no_element(ratio without fact)": 4
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 16,
+     "target_or_plan": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "c6a9cc01bc56872f10c1ab8262d36903f7fa86dcfd142a09309f03ca8e65e95f",
+    "報告 --full の本体の sha256": "cae3285d0e094a67557767c1ca155636a7423e172787855507b551eaa93d1ba6",
+    "報告の行数": 92,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 9,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.38
+   },
+   {
+    "doc": "S100Z40G",
+    "profile": "P22",
+    "claims": 111,
+    "節": {
+     "違う": 20,
+     "要確認": 21,
+     "対象外": 1,
+     "判断しない": 21,
+     "一致": 48
+    },
+    "一致の内訳": {
+     "当期": 19,
+     "前期": 0,
+     "計算": 29,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 48,
+     "POINTER_NOT_FOUND": 17,
+     "UNVERIFIABLE": 26,
+     "VALUE_MISMATCH": 20
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 5,
+     "no_element": 15,
+     "no_element(text needs money fact)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 1,
+     "no_subject": 20
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "2f37ba6e09468a36e23d77fe1df89d529442f3b5679fecd15ce1aad2aafce604",
+    "報告 --full の本体の sha256": "a8c5460d13688d0db6ffa324c4a8ae71400a4350bb48f38a0acd22920c0c5b97",
+    "報告の行数": 114,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 12,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.45
+   },
+   {
+    "doc": "S100Z40H",
+    "profile": "P22",
+    "claims": 238,
+    "節": {
+     "違う": 61,
+     "要確認": 12,
+     "対象外": 7,
+     "判断しない": 49,
+     "一致": 109
+    },
+    "一致の内訳": {
+     "当期": 24,
+     "前期": 1,
+     "計算": 84,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 109,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 55,
+     "VALUE_MISMATCH": 61
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 6
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 7
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 2,
+     "no_subject": 46,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "f8537cf810632c1dc3611659b66416fb289534db5f52c3f6eac805bca921f2fa",
+    "報告 --full の本体の sha256": "3b5d486b8617b2c926e4fb4168e2d85d0e569be777d92033a3c618ffd8cb2e60",
+    "報告の行数": 180,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 28,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 6,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 4
+    },
+    "verify 秒": 0.71
+   },
+   {
+    "doc": "S100Z42X",
+    "profile": "P22",
+    "claims": 79,
+    "節": {
+     "違う": 10,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 10,
+     "一致": 57
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 6,
+     "計算": 30,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 57,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 10
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 2
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 10
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "06cc51b4bec766a8d8d13206f5af0844023c22eab58178b4a715ba6b1c03c9bb",
+    "報告 --full の本体の sha256": "75ac350e5ed47fc7914867be4d28044ff75f285a84fdc464c4d0d459cbeefe99",
+    "報告の行数": 74,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 8,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 8,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 32
+    },
+    "verify 秒": 0.29
+   },
+   {
+    "doc": "S100Z433",
+    "profile": "P22",
+    "claims": 87,
+    "節": {
+     "違う": 14,
+     "要確認": 9,
+     "対象外": 2,
+     "判断しない": 6,
+     "一致": 56
+    },
+    "一致の内訳": {
+     "当期": 26,
+     "前期": 3,
+     "計算": 27,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 56,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 7,
+     "VALUE_MISMATCH": 14
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 7,
+     "no_element(no prior for text)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 2
+    },
+    "reason(判断しない)": {
+     "no_subject": 6
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "7d15513fff9ceb19fe2bb8b1c0bac32e31a3e0ebd4d57fbe442023ff43d08a37",
+    "報告 --full の本体の sha256": "e5f89088aa954e3e1a05ba418d32d96df62b60c2403cfb1b261ad22d7438f834",
+    "報告の行数": 82,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 8,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.45
+   },
+   {
+    "doc": "S100Z448",
+    "profile": "P22",
+    "claims": 55,
+    "節": {
+     "違う": 12,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 6,
+     "一致": 33
+    },
+    "一致の内訳": {
+     "当期": 11,
+     "前期": 0,
+     "計算": 22,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 33,
+     "POINTER_NOT_FOUND": 3,
+     "UNVERIFIABLE": 7,
+     "VALUE_MISMATCH": 12
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 3
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 5,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "4352ea49536e132ef8b8743d0baa8aeedc9b66e6ccd4163ca6407624ddf113bd",
+    "報告 --full の本体の sha256": "c670db0f9d92a2990b2e3acfb6caf34ce649f5519fe644da14d33677a590f8e7",
+    "報告の行数": 74,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 4,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 16
+    },
+    "verify 秒": 0.26
+   },
+   {
+    "doc": "S100Z461",
+    "profile": "P22",
+    "claims": 57,
+    "節": {
+     "違う": 9,
+     "要確認": 11,
+     "対象外": 0,
+     "判断しない": 10,
+     "一致": 27
+    },
+    "一致の内訳": {
+     "当期": 10,
+     "前期": 0,
+     "計算": 17,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 27,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 9
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 4,
+     "no_element(ratio without fact)": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 9,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "a24c55b907ece1aa13842d6422e3bd51eaa85731102c82340378ce74f13364b2",
+    "報告 --full の本体の sha256": "9458084565b672f4a9117891f084e208650000845a6f88a8d1497e43340b6da8",
+    "報告の行数": 82,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 5,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.29
+   },
+   {
+    "doc": "S100Z46V",
+    "profile": "P22",
+    "claims": 56,
+    "節": {
+     "違う": 4,
+     "要確認": 8,
+     "対象外": 1,
+     "判断しない": 2,
+     "一致": 41
+    },
+    "一致の内訳": {
+     "当期": 38,
+     "前期": 0,
+     "計算": 3,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 41,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 5,
+     "VALUE_MISMATCH": 4
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element(no prior for text)": 3,
+     "no_element(ratio without fact)": 2
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "e971f40fddeb03a825cfd9357ff72641bd5a6610640dbd35eff581dc12c82a8a",
+    "報告 --full の本体の sha256": "f1088a4d035f3fad7b2ac031f5fc89a4568269498733c69de8ddd097fbedc94a",
+    "報告の行数": 66,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 1
+    },
+    "verify 秒": 0.23
+   },
+   {
+    "doc": "S100Z48T",
+    "profile": "P22",
+    "claims": 157,
+    "節": {
+     "違う": 20,
+     "要確認": 1,
+     "対象外": 0,
+     "判断しない": 19,
+     "一致": 117
+    },
+    "一致の内訳": {
+     "当期": 30,
+     "前期": 3,
+     "計算": 84,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 117,
+     "POINTER_NOT_FOUND": 1,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 20
+    },
+    "reason(要確認)": {
+     "no_element(ratio without fact)": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 18,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "e061499e33df71005cfcf937b4c79286f2df067b5dc5f39b2f867186fcc80920",
+    "報告 --full の本体の sha256": "96495a54d8845def34907558d3770f0683441c0f10e1dd8d958b222729a7fbc1",
+    "報告の行数": 92,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 11,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 5,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 25
+    },
+    "verify 秒": 0.69
+   },
+   {
+    "doc": "S100Z492",
+    "profile": "P22",
+    "claims": 59,
+    "節": {
+     "違う": 7,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 17,
+     "一致": 31
+    },
+    "一致の内訳": {
+     "当期": 27,
+     "前期": 0,
+     "計算": 4,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 31,
+     "POINTER_NOT_FOUND": 1,
+     "UNVERIFIABLE": 20,
+     "VALUE_MISMATCH": 7
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 17
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "532cd3adbf47f396a00a018dac6f4f8a6fbc9c8a7e3fb1a2885dcccef8c54608",
+    "報告 --full の本体の sha256": "5c59591cfd14c5d8b2f84b789331f921be188e0f2503f4bece528518477693f7",
+    "報告の行数": 80,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 7,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.34
+   },
+   {
+    "doc": "S100Z4B6",
+    "profile": "P22",
+    "claims": 123,
+    "節": {
+     "違う": 13,
+     "要確認": 9,
+     "対象外": 15,
+     "判断しない": 21,
+     "一致": 65
+    },
+    "一致の内訳": {
+     "当期": 32,
+     "前期": 4,
+     "計算": 29,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 65,
+     "POINTER_NOT_FOUND": 18,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 13
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 2,
+     "no_element(no prior for text)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 15
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 5,
+     "no_subject": 14,
+     "target_or_plan": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "182b5e2ab57a0b6da80724d55abe318df26c0befa509c90f5c794ed964a06bf2",
+    "報告 --full の本体の sha256": "c8bb478bfe31dd3830e8110dea101f4621fc5dc4ebc96669f9c7282086afec3a",
+    "報告の行数": 109,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 9,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 2,
+     "一致": 0
+    },
+    "verify 秒": 0.41
+   },
+   {
+    "doc": "S100Z4DE",
+    "profile": "P22",
+    "claims": 117,
+    "節": {
+     "違う": 32,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 12,
+     "一致": 70
+    },
+    "一致の内訳": {
+     "当期": 25,
+     "前期": 3,
+     "計算": 42,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 70,
+     "POINTER_NOT_FOUND": 3,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 32
+    },
+    "reason(要確認)": {
+     "no_element": 3
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 12
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "47d804837cf7bd96a8ab629f8eb80836e3ae1468c1782bdbd694ccf627d3b2a0",
+    "報告 --full の本体の sha256": "17ed3d39de4cde4447c5dbe5f9f406d5cad2b91b72683bc445f9bd90175b5440",
+    "報告の行数": 99,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 19,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 19,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 3,
+     "一致": 41
+    },
+    "verify 秒": 0.62
+   },
+   {
+    "doc": "S100Z4GF",
+    "profile": "P22",
+    "claims": 128,
+    "節": {
+     "違う": 24,
+     "要確認": 28,
+     "対象外": 0,
+     "判断しない": 15,
+     "一致": 61
+    },
+    "一致の内訳": {
+     "当期": 30,
+     "前期": 12,
+     "計算": 19,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 61,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 33,
+     "VALUE_MISMATCH": 24
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 18,
+     "no_element": 10
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 14,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "7fcf1efca2914e28267b415028a602310fa37f4d746b1ef26f2253eef9a6affe",
+    "報告 --full の本体の sha256": "a5d1e8ba36b9aa0ff037de246ce40ded2ec80a35d9b5abf8556fb5b05c1e0dee",
+    "報告の行数": 119,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 20,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 2
+    },
+    "verify 秒": 0.45
+   },
+   {
+    "doc": "S100Z4J8",
+    "profile": "P22",
+    "claims": 110,
+    "節": {
+     "違う": 2,
+     "要確認": 16,
+     "対象外": 1,
+     "判断しない": 13,
+     "一致": 78
+    },
+    "一致の内訳": {
+     "当期": 23,
+     "前期": 0,
+     "計算": 55,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 78,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 2
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 2,
+     "no_element(no prior for text)": 3,
+     "no_element(ratio without fact)": 5
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 13
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "a1fe7d5fb1e932631d6d512526b9fcb217c5d1a3e85c8c4d997c8e8ad9962dff",
+    "報告 --full の本体の sha256": "69863b30aa38002e1bd39e59a414920a4338be1cdff4181e20d6c7d036ab0096",
+    "報告の行数": 83,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 2,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 2,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 19
+    },
+    "verify 秒": 0.45
+   },
+   {
+    "doc": "S100Z4LC",
+    "profile": "P22",
+    "claims": 114,
+    "節": {
+     "違う": 19,
+     "要確認": 8,
+     "対象外": 0,
+     "判断しない": 9,
+     "一致": 78
+    },
+    "一致の内訳": {
+     "当期": 36,
+     "前期": 9,
+     "計算": 33,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 78,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 11,
+     "VALUE_MISMATCH": 19
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 2,
+     "no_element": 2,
+     "no_element(no prior for text)": 2,
+     "no_element(no prior2 for prior-year diff)": 2
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "ambiguous(member)": 1,
+     "no_subject": 8
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "0dd2e00212a5844d994c203e78eb98d6272b014b147a187b70bcf25ee2a1be80",
+    "報告 --full の本体の sha256": "7d8f4769d4e309ae38cecf7f4f38ab597e2a35aa9e5063e6ec7e1c9445db08c7",
+    "報告の行数": 88,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 16,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.4
+   },
+   {
+    "doc": "S100Z4N9",
+    "profile": "P22",
+    "claims": 186,
+    "節": {
+     "違う": 53,
+     "要確認": 12,
+     "対象外": 0,
+     "判断しない": 23,
+     "一致": 98
+    },
+    "一致の内訳": {
+     "当期": 35,
+     "前期": 11,
+     "計算": 52,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 98,
+     "POINTER_NOT_FOUND": 7,
+     "UNVERIFIABLE": 28,
+     "VALUE_MISMATCH": 53
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 5,
+     "no_element": 6,
+     "no_element(point without prior phrase)": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 20,
+     "target_or_plan": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "d402af106120ea16d520c41f08702c60c690e077ae13dcdde39d1d6a66d1c889",
+    "報告 --full の本体の sha256": "11563e654ec4480de7e6c95fb327637dadb9abdfed134b0ca5467224608d876e",
+    "報告の行数": 140,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 35,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.63
+   },
+   {
+    "doc": "S100Z4PA",
+    "profile": "P22",
+    "claims": 125,
+    "節": {
+     "違う": 15,
+     "要確認": 18,
+     "対象外": 1,
+     "判断しない": 30,
+     "一致": 61
+    },
+    "一致の内訳": {
+     "当期": 27,
+     "前期": 5,
+     "計算": 29,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 61,
+     "POINTER_NOT_FOUND": 19,
+     "UNVERIFIABLE": 30,
+     "VALUE_MISMATCH": 15
+    },
+    "reason(要確認)": {
+     "no_element": 18
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 28,
+     "target_or_plan": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "b5ec9dc081d20342198ac7410022cf54fba7ff9f55291ef58bbd66d9133473a2",
+    "報告 --full の本体の sha256": "8c5bd68c45d4511565516c1a818dc7635a4f8609e5558acaec3b8d08662b9fce",
+    "報告の行数": 115,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 9,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.35
+   },
+   {
+    "doc": "S100Z4Q1",
+    "profile": "P22",
+    "claims": 88,
+    "節": {
+     "違う": 1,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 4,
+     "一致": 77
+    },
+    "一致の内訳": {
+     "当期": 28,
+     "前期": 6,
+     "計算": 43,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 77,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 4,
+     "VALUE_MISMATCH": 1
+    },
+    "reason(要確認)": {
+     "no_element": 4,
+     "no_element(no prior2 for prior-year diff)": 2
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 2,
+     "target_or_plan": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "52617b1d5a4bbf44bed0091cc7c434c8b975cdb450c00c94f85129cc68354050",
+    "報告 --full の本体の sha256": "96d4e38ec1a6e6acbc5f965f88546cee8b0860b7fcdcd6dd91d3384ef94f2a5c",
+    "報告の行数": 63,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 4,
+    "ラベル無しの名前空間別の行数": {
+     "jpcrp030000": 4
+    },
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 48
+    },
+    "verify 秒": 0.4
+   },
+   {
+    "doc": "S100Z4R8",
+    "profile": "P22",
+    "claims": 79,
+    "節": {
+     "違う": 12,
+     "要確認": 8,
+     "対象外": 0,
+     "判断しない": 4,
+     "一致": 55
+    },
+    "一致の内訳": {
+     "当期": 25,
+     "前期": 0,
+     "計算": 30,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 55,
+     "POINTER_NOT_FOUND": 7,
+     "UNVERIFIABLE": 5,
+     "VALUE_MISMATCH": 12
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 4,
+     "no_element(ratio without fact)": 3
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 4
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "6e888ba392fc9fa52420b48103eaa600d00e5257eae771ab6b4000333e8223dd",
+    "報告 --full の本体の sha256": "fcdd15b5867813f92f625b871404e58eb2bad948d083d2dd202efd9adfde2dad",
+    "報告の行数": 76,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 6,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 2,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 16
+    },
+    "verify 秒": 0.36
+   },
+   {
+    "doc": "S100Z55N",
+    "profile": "P22",
+    "claims": 121,
+    "節": {
+     "違う": 12,
+     "要確認": 20,
+     "対象外": 0,
+     "判断しない": 7,
+     "一致": 82
+    },
+    "一致の内訳": {
+     "当期": 31,
+     "前期": 0,
+     "計算": 51,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 82,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 13,
+     "VALUE_MISMATCH": 12
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element(ratio without fact)": 10,
+     "no_element(text needs money fact)": 4
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 7
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "6ca2dff77fb2b51049655cbf866b5be8cc5792cccddff3e31671a4e6bdb9d8d7",
+    "報告 --full の本体の sha256": "4f976683e1b050a15ecef0c3c9541f0546cce6d57c812ff3ded77ed206f301e8",
+    "報告の行数": 91,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 8,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.38
+   },
+   {
+    "doc": "S100Z5CH",
+    "profile": "P22",
+    "claims": 107,
+    "節": {
+     "違う": 15,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 8,
+     "一致": 81
+    },
+    "一致の内訳": {
+     "当期": 32,
+     "前期": 17,
+     "計算": 32,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 3,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 15
+    },
+    "reason(要確認)": {
+     "no_element": 3
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 8
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "ed682cd162307f58eccc1888405061f40edfce725cc5582c8ab7a45717435fec",
+    "報告 --full の本体の sha256": "9105d004ab90e33c475f58aadbe9e637510dc4f35f0dcd4c040fb37ca18caa27",
+    "報告の行数": 78,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 14,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 4
+    },
+    "verify 秒": 0.35
+   },
+   {
+    "doc": "S100Z5DN",
+    "profile": "P22",
+    "claims": 126,
+    "節": {
+     "違う": 14,
+     "要確認": 16,
+     "対象外": 1,
+     "判断しない": 17,
+     "一致": 78
+    },
+    "一致の内訳": {
+     "当期": 38,
+     "前期": 6,
+     "計算": 34,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 78,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 14
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 9,
+     "no_element(no prior for text)": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 16,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "959ed5ff42dd985329123af465cf786e1879dffcf601a48fc5a480c35a00c8ad",
+    "報告 --full の本体の sha256": "bb45c9b141618c8174a31b04ac9c39919e6afd4c8cee73191ee6fc9c7b5835de",
+    "報告の行数": 99,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 11,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 0
+    },
+    "verify 秒": 0.37
+   },
+   {
+    "doc": "S100Z6XO",
+    "profile": "P22",
+    "claims": 162,
+    "節": {
+     "違う": 49,
+     "要確認": 10,
+     "対象外": 6,
+     "判断しない": 18,
+     "一致": 79
+    },
+    "一致の内訳": {
+     "当期": 24,
+     "前期": 7,
+     "計算": 48,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 79,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 18,
+     "VALUE_MISMATCH": 49
+    },
+    "reason(要確認)": {
+     "no_element": 4,
+     "no_element(no prior2 for prior-year diff)": 3,
+     "no_element(ratio without fact)": 1,
+     "no_element(text needs money fact)": 2
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 6
+    },
+    "reason(判断しない)": {
+     "no_subject": 15,
+     "target_or_plan": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "c46a5aa6934aa379021964669d45b715181399064b8f60073b18e0b2ccb9a5cb",
+    "報告 --full の本体の sha256": "eac08971c8d91fe8737e65e0cf04aade4f305b502ce844308ba91e5baaffcad6",
+    "報告の行数": 134,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 29,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 27,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 2,
+     "一致": 38
+    },
+    "verify 秒": 0.74
+   }
+  ],
+  "P25": [
+   {
+    "doc": "S100YMFV",
+    "profile": "P25",
+    "claims": 133,
+    "節": {
+     "違う": 5,
+     "要確認": 18,
+     "対象外": 1,
+     "判断しない": 25,
+     "一致": 84
+    },
+    "一致の内訳": {
+     "当期": 34,
+     "前期": 0,
+     "計算": 50,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 84,
+     "POINTER_NOT_FOUND": 15,
+     "UNVERIFIABLE": 29,
+     "VALUE_MISMATCH": 5
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 8,
+     "no_element(no prior for text)": 2,
+     "no_element(point without prior phrase)": 1,
+     "no_element(ratio without fact)": 1,
+     "no_element(text needs money fact)": 2
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 24,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "2a5d52086054e5e7f654546dac19e32a42f6e398c11ee767fb0b8350efd2d550",
+    "報告 --full の本体の sha256": "3c71285a33295aed6a8bd9d95e3929ad767c2868076733c7024ddc42b9e20121",
+    "報告の行数": 100,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 28
+    },
+    "verify 秒": 0.47
+   },
+   {
+    "doc": "S100YUHC",
+    "profile": "P25",
+    "claims": 156,
+    "節": {
+     "違う": 19,
+     "要確認": 25,
+     "対象外": 21,
+     "判断しない": 19,
+     "一致": 72
+    },
+    "一致の内訳": {
+     "当期": 29,
+     "前期": 4,
+     "計算": 39,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 72,
+     "POINTER_NOT_FOUND": 42,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 19
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 2,
+     "no_element": 8,
+     "no_element(ratio without fact)": 2,
+     "no_element(text needs money fact)": 1,
+     "no_same_value": 10,
+     "other_frame": 2
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 21
+    },
+    "reason(判断しない)": {
+     "no_subject": 19
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "a8188b95a0a4ae661b791a083c2ebb4aa787cfd82259e2c65524d6013f826219",
+    "報告 --full の本体の sha256": "4ee665b9a53bef8d5a8fea90d8ef7e84757802c87acf1032dee392f391ecba82",
+    "報告の行数": 135,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 8,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 8,
+     "要確認": 18,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 43
+    },
+    "verify 秒": 0.58
+   },
+   {
+    "doc": "S100YWGX",
+    "profile": "P25",
+    "claims": 141,
+    "節": {
+     "違う": 12,
+     "要確認": 30,
+     "対象外": 12,
+     "判断しない": 32,
+     "一致": 55
+    },
+    "一致の内訳": {
+     "当期": 18,
+     "前期": 4,
+     "計算": 33,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 55,
+     "POINTER_NOT_FOUND": 29,
+     "UNVERIFIABLE": 45,
+     "VALUE_MISMATCH": 12
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 7,
+     "no_element": 6,
+     "no_element(no prior2 for prior-year diff)": 1,
+     "no_same_value": 10,
+     "other_frame": 6
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 12
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 14,
+     "no_subject": 18
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "21159a05f641ce3ffbbd691f182f1c9418b744bb7197bfb34c018cf53f44f07d",
+    "報告 --full の本体の sha256": "526a454eec2c9b1470a95af56a93ea7a7178a812a103dbf14eb25dd57f2ce520",
+    "報告の行数": 137,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 3,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 3,
+     "要確認": 11,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 9
+    },
+    "verify 秒": 0.58
+   },
+   {
+    "doc": "S100YXF5",
+    "profile": "P25",
+    "claims": 101,
+    "節": {
+     "違う": 13,
+     "要確認": 17,
+     "対象外": 15,
+     "判断しない": 13,
+     "一致": 43
+    },
+    "一致の内訳": {
+     "当期": 18,
+     "前期": 3,
+     "計算": 22,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 32,
+     "UNVERIFIABLE": 13,
+     "VALUE_MISMATCH": 13
+    },
+    "reason(要確認)": {
+     "no_element(ratio without fact)": 1,
+     "no_same_value": 16
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 15
+    },
+    "reason(判断しない)": {
+     "no_subject": 13
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "a7a60b9a10e027c0be5b310d0cdf92f1c03137c08782403f5954f77134e0fa6a",
+    "報告 --full の本体の sha256": "5317df889a2afd0e6dd531b332021ddbe9df16c5f28a76c93b4a5787fe138b0d",
+    "報告の行数": 109,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 1,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 16,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 27
+    },
+    "verify 秒": 0.45
+   },
+   {
+    "doc": "S100YXGH",
+    "profile": "P25",
+    "claims": 129,
+    "節": {
+     "違う": 8,
+     "要確認": 25,
+     "対象外": 0,
+     "判断しない": 20,
+     "一致": 76
+    },
+    "一致の内訳": {
+     "当期": 34,
+     "前期": 5,
+     "計算": 37,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 76,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 21,
+     "VALUE_MISMATCH": 8
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 2,
+     "no_element(ratio without fact)": 13,
+     "no_same_value": 9
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 20
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "b0f1104e3389894352d0664791d2675601bad30f6be170ddc72c7e2406595689",
+    "報告 --full の本体の sha256": "faac793aed0641d02cc4c2ac4876495b9df0d34c183d3f6581cdd59c55b4d57a",
+    "報告の行数": 105,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 3,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.39
+   },
+   {
+    "doc": "S100YXLE",
+    "profile": "P25",
+    "claims": 121,
+    "節": {
+     "違う": 14,
+     "要確認": 31,
+     "対象外": 0,
+     "判断しない": 13,
+     "一致": 63
+    },
+    "一致の内訳": {
+     "当期": 26,
+     "前期": 0,
+     "計算": 37,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 63,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 13,
+     "VALUE_MISMATCH": 14
+    },
+    "reason(要確認)": {
+     "no_element": 2,
+     "no_element(point without prior phrase)": 2,
+     "no_same_value": 27
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 13
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "3659c28ad05d7b5405950f4f4216dfd5a5a8cfc0dcfa3af656efe01b5cf7aed5",
+    "報告 --full の本体の sha256": "ae3d2f4859c541377de0ecf25af25cb0f4e4e2f0a9f34946c7e8c4e9b04c697a",
+    "報告の行数": 110,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.48
+   },
+   {
+    "doc": "S100YXMA",
+    "profile": "P25",
+    "claims": 119,
+    "節": {
+     "違う": 10,
+     "要確認": 30,
+     "対象外": 0,
+     "判断しない": 15,
+     "一致": 64
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 4,
+     "計算": 39,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 26,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 10
+    },
+    "reason(要確認)": {
+     "no_element": 14,
+     "no_element(no prior for text)": 2,
+     "no_element(ratio without fact)": 1,
+     "no_element(text needs money fact)": 2,
+     "no_same_value": 7,
+     "other_frame": 4
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "ambiguous(member)": 1,
+     "no_subject": 13,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "facc5451c4d5f489855bc5473908d945a8fb6a3e16f16b0421b4732cebb65814",
+    "報告 --full の本体の sha256": "142e4894953b3fd441326c6c263c990d193f473f5105afd9edfbc7d6e28ca0cc",
+    "報告の行数": 107,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 7,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 2
+    },
+    "verify 秒": 0.63
+   },
+   {
+    "doc": "S100YYDI",
+    "profile": "P25",
+    "claims": 145,
+    "節": {
+     "違う": 13,
+     "要確認": 22,
+     "対象外": 9,
+     "判断しない": 19,
+     "一致": 82
+    },
+    "一致の内訳": {
+     "当期": 29,
+     "前期": 0,
+     "計算": 53,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 82,
+     "POINTER_NOT_FOUND": 27,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 13
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 6,
+     "no_element(ratio without fact)": 2,
+     "no_element(text needs money fact)": 1,
+     "no_same_value": 9
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 9
+    },
+    "reason(判断しない)": {
+     "no_subject": 19
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "d9096e991a4e922ba8e550a04b5bb312b19084ba94064058f95569c13bdee2d1",
+    "報告 --full の本体の sha256": "c843df711e9ad25a1a596249af953bab347880c5c9fa8526085f67c762240c1b",
+    "報告の行数": 114,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 9,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.53
+   },
+   {
+    "doc": "S100YYIA",
+    "profile": "P25",
+    "claims": 139,
+    "節": {
+     "違う": 19,
+     "要確認": 18,
+     "対象外": 0,
+     "判断しない": 13,
+     "一致": 89
+    },
+    "一致の内訳": {
+     "当期": 55,
+     "前期": 21,
+     "計算": 13,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 89,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 18,
+     "VALUE_MISMATCH": 19
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 5,
+     "no_element": 4,
+     "no_same_value": 9
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 10,
+     "target_or_plan": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "914c7550fa9aec5e4cf0b918e06701b953dd5e53681f7570c0abfefe0a884387",
+    "報告 --full の本体の sha256": "a0ecb083e62839161e91dd424c659eda3682bf0d600677351c344b8d15474537",
+    "報告の行数": 102,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 17,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 1
+    },
+    "verify 秒": 0.52
+   },
+   {
+    "doc": "S100YYK8",
+    "profile": "P25",
+    "claims": 128,
+    "節": {
+     "違う": 19,
+     "要確認": 22,
+     "対象外": 0,
+     "判断しない": 16,
+     "一致": 71
+    },
+    "一致の内訳": {
+     "当期": 31,
+     "前期": 3,
+     "計算": 37,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 71,
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 18,
+     "VALUE_MISMATCH": 19
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 1,
+     "no_same_value": 19,
+     "other_frame": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 16
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "c6a9983c06f6632a23d16edcc393649aea257c1d3740650abf0da171534c75bd",
+    "報告 --full の本体の sha256": "d7c53a27f84f7274ad55a16ed8c497bc8fd525098fbafd751e982e28a7e7a66e",
+    "報告の行数": 109,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 7,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 1,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 3
+    },
+    "verify 秒": 0.64
+   },
+   {
+    "doc": "S100YYN7",
+    "profile": "P25",
+    "claims": 152,
+    "節": {
+     "違う": 19,
+     "要確認": 43,
+     "対象外": 0,
+     "判断しない": 33,
+     "一致": 57
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 1,
+     "計算": 35,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 35,
+     "UNVERIFIABLE": 41,
+     "VALUE_MISMATCH": 19
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 5,
+     "no_element": 11,
+     "no_element(no prior2 for prior-year diff)": 2,
+     "no_same_value": 22,
+     "other_frame": 3
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 32,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "e8ff49b26d72eb8e11105d082782c118c8d5314ea4c9b4c8a93c27a6d162c724",
+    "報告 --full の本体の sha256": "792683aab57b3888e445df0ccaa0f760aa0f51f8d8a51716044655fb19b4a64f",
+    "報告の行数": 147,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 12,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 12,
+     "要確認": 41,
+     "対象外": 0,
+     "判断しない": 2,
+     "一致": 29
+    },
+    "verify 秒": 0.84
+   },
+   {
+    "doc": "S100YYOS",
+    "profile": "P25",
+    "claims": 81,
+    "節": {
+     "違う": 12,
+     "要確認": 26,
+     "対象外": 1,
+     "判断しない": 13,
+     "一致": 29
+    },
+    "一致の内訳": {
+     "当期": 12,
+     "前期": 0,
+     "計算": 17,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 29,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 12
+    },
+    "reason(要確認)": {
+     "no_element": 16,
+     "no_same_value": 7,
+     "other_frame": 3
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 12,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "a05dbe282b51b0836ab884aa117b0a178da2e25abbd3fe1a1e349b0111c26242",
+    "報告 --full の本体の sha256": "385f3fd72d7692ef3dc7a14eca3ac88263e625d75e35c3bb6e064384d7076897",
+    "報告の行数": 103,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 6,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 6,
+     "要確認": 14,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 15
+    },
+    "verify 秒": 0.52
+   },
+   {
+    "doc": "S100YYQX",
+    "profile": "P25",
+    "claims": 110,
+    "節": {
+     "違う": 16,
+     "要確認": 35,
+     "対象外": 1,
+     "判断しない": 14,
+     "一致": 44
+    },
+    "一致の内訳": {
+     "当期": 16,
+     "前期": 0,
+     "計算": 28,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 44,
+     "POINTER_NOT_FOUND": 34,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 16
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 2,
+     "no_element": 11,
+     "no_same_value": 22
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 14
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "d76560b434ececf27934743b03863a603d177f725a947081a6fccac53c56b079",
+    "報告 --full の本体の sha256": "ae7a090d472a187a3f6647ad56c523b948578701f6f5048aefcec1bf4d722a59",
+    "報告の行数": 117,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 6,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 33,
+    "ラベル無しの名前空間別の行数": {
+     "jpcrp030000": 2,
+     "jpigp_cor": 31
+    },
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 1,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.56
+   },
+   {
+    "doc": "S100YYRG",
+    "profile": "P25",
+    "claims": 96,
+    "節": {
+     "違う": 13,
+     "要確認": 15,
+     "対象外": 1,
+     "判断しない": 16,
+     "一致": 51
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 0,
+     "計算": 30,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 21,
+     "VALUE_MISMATCH": 13
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 1,
+     "no_same_value": 9,
+     "other_frame": 1
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 15,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "92841676dddc99c4a38a31612f8209bea22016a694a1e25a0edd206724821334",
+    "報告 --full の本体の sha256": "be250ce8eaa47685cf7942ef17a4b6f027cbeb12dd6ef80dbfd0275e1b4e483f",
+    "報告の行数": 96,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 3,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 0
+    },
+    "verify 秒": 0.35
+   },
+   {
+    "doc": "S100YYRV",
+    "profile": "P25",
+    "claims": 141,
+    "節": {
+     "違う": 9,
+     "要確認": 46,
+     "対象外": 0,
+     "判断しない": 19,
+     "一致": 67
+    },
+    "一致の内訳": {
+     "当期": 30,
+     "前期": 3,
+     "計算": 34,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 67,
+     "POINTER_NOT_FOUND": 28,
+     "UNVERIFIABLE": 37,
+     "VALUE_MISMATCH": 9
+    },
+    "reason(要確認)": {
+     "no_element": 12,
+     "no_element(no prior for text)": 4,
+     "no_same_value": 12,
+     "other_frame": 18
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 19
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "d1487cd534a5b0b3100677abd619577f28a6ba22769bb6028b2f464d1905f569",
+    "報告 --full の本体の sha256": "3a6dc413508fa4ddcfb892a224f8e73141dfadf3d1817d4172599d79cf5caad9",
+    "報告の行数": 126,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 6,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.56
+   },
+   {
+    "doc": "S100YYS4",
+    "profile": "P25",
+    "claims": 116,
+    "節": {
+     "違う": 17,
+     "要確認": 23,
+     "対象外": 0,
+     "判断しない": 10,
+     "一致": 66
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 5,
+     "計算": 40,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 66,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 24,
+     "VALUE_MISMATCH": 17
+    },
+    "reason(要確認)": {
+     "no_element": 7,
+     "no_same_value": 2,
+     "other_frame": 14
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 10
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "cb8bd3836d0d611b20be48dce26c6e36524a33aea5ba61f282b90a4694e672dc",
+    "報告 --full の本体の sha256": "44bb116d329bbc468e959e51e7544cb82e46d601283d08df8b49df6b0bfddb68",
+    "報告の行数": 102,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.51
+   },
+   {
+    "doc": "S100YYT4",
+    "profile": "P25",
+    "claims": 119,
+    "節": {
+     "違う": 12,
+     "要確認": 15,
+     "対象外": 0,
+     "判断しない": 23,
+     "一致": 69
+    },
+    "一致の内訳": {
+     "当期": 31,
+     "前期": 0,
+     "計算": 38,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 69,
+     "POINTER_NOT_FOUND": 15,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 12
+    },
+    "reason(要確認)": {
+     "no_element": 9,
+     "no_element(text needs money fact)": 1,
+     "no_same_value": 5
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 21,
+     "target_or_plan": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "496daf12b1e562d65e278482b74470f1249df2b0b282a0c4d2aff0faf167c4d2",
+    "報告 --full の本体の sha256": "e9503b8637a86dd41c474ba37b250d904705e6484997d6bb248eea1b0a6a0ca6",
+    "報告の行数": 102,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 7,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.51
+   },
+   {
+    "doc": "S100YYT8",
+    "profile": "P25",
+    "claims": 153,
+    "節": {
+     "違う": 0,
+     "要確認": 89,
+     "対象外": 8,
+     "判断しない": 19,
+     "一致": 37
+    },
+    "一致の内訳": {
+     "当期": 32,
+     "前期": 0,
+     "計算": 5,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 37,
+     "POINTER_NOT_FOUND": 92,
+     "UNVERIFIABLE": 24
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 16,
+     "no_element(no prior for text)": 22,
+     "no_element(no prior2 for prior-year diff)": 3,
+     "no_element(ratio without fact)": 2,
+     "no_same_value": 41,
+     "other_frame": 4
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 2,
+     "no_prior_member_context": 6
+    },
+    "reason(判断しない)": {
+     "no_subject": 19
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "43a190304041a292ccdf9569e6fd68471bbcbfc2f50ce4436ec66a6a2399ac0b",
+    "報告 --full の本体の sha256": "387437e87bee3abc761bc1b135776060f18c1731ac8e3b71fdbd5a38428934c9",
+    "報告の行数": 166,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 50,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 34
+    },
+    "verify 秒": 0.41
+   },
+   {
+    "doc": "S100YYUD",
+    "profile": "P25",
+    "claims": 67,
+    "節": {
+     "違う": 13,
+     "要確認": 7,
+     "対象外": 1,
+     "判断しない": 10,
+     "一致": 36
+    },
+    "一致の内訳": {
+     "当期": 16,
+     "前期": 3,
+     "計算": 17,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 36,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 10,
+     "VALUE_MISMATCH": 13
+    },
+    "reason(要確認)": {
+     "no_element": 3,
+     "no_same_value": 4
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 7,
+     "target_or_plan": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "0041febb292d983f39348bcbc1a73d5306ed1a26a94749b6ab9c1b77d492370e",
+    "報告 --full の本体の sha256": "d98fdb587029aa2ca09a71fcdd135eb391d53d55eb845000b1c180f92bc488b2",
+    "報告の行数": 82,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 8,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.35
+   },
+   {
+    "doc": "S100YYVN",
+    "profile": "P25",
+    "claims": 101,
+    "節": {
+     "違う": 16,
+     "要確認": 24,
+     "対象外": 1,
+     "判断しない": 25,
+     "一致": 35
+    },
+    "一致の内訳": {
+     "当期": 8,
+     "前期": 4,
+     "計算": 23,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 35,
+     "POINTER_NOT_FOUND": 23,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 16
+    },
+    "reason(要確認)": {
+     "no_element": 2,
+     "no_element(no prior for text)": 2,
+     "no_element(ratio without fact)": 1,
+     "no_same_value": 17,
+     "other_frame": 2
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 4,
+     "no_subject": 21
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "fd7c25d94f3838d845f3bbf876bfed15b7476427ff15c36053f702022e4c93e7",
+    "報告 --full の本体の sha256": "f82fa0527d05e89145ac6b295952a196c0df8a4c18a6e80d9802e65f6e92cf2d",
+    "報告の行数": 117,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 4,
+     "要確認": 18,
+     "対象外": 0,
+     "判断しない": 2,
+     "一致": 12
+    },
+    "verify 秒": 0.6
+   },
+   {
+    "doc": "S100YZ31",
+    "profile": "P25",
+    "claims": 76,
+    "節": {
+     "違う": 5,
+     "要確認": 11,
+     "対象外": 6,
+     "判断しない": 3,
+     "一致": 51
+    },
+    "一致の内訳": {
+     "当期": 22,
+     "前期": 2,
+     "計算": 27,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 9,
+     "VALUE_MISMATCH": 5
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 1,
+     "no_element(no prior for text)": 1,
+     "no_same_value": 3
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 6
+    },
+    "reason(判断しない)": {
+     "no_subject": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "52657553f2616bc0feb1d69bfee5224fa31dfd870b2751bff1831de7b848029b",
+    "報告 --full の本体の sha256": "a5a5534ee3c5aa2dfb17f7e9641a87b0b32223a80924b3cdee93ea324681ec96",
+    "報告の行数": 76,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 4,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 12
+    },
+    "verify 秒": 0.37
+   },
+   {
+    "doc": "S100YZ4E",
+    "profile": "P25",
+    "claims": 98,
+    "節": {
+     "違う": 1,
+     "要確認": 18,
+     "対象外": 0,
+     "判断しない": 15,
+     "一致": 64
+    },
+    "一致の内訳": {
+     "当期": 32,
+     "前期": 9,
+     "計算": 23,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 64,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 20,
+     "VALUE_MISMATCH": 1
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 3,
+     "no_element(no prior for text)": 3,
+     "no_same_value": 7,
+     "other_frame": 2
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "ambiguous(member)": 3,
+     "no_subject": 12
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "1deb6a28c272226cc560a99a6b3b1a641fb70f10e15bc45d7d9c1888ef4418d7",
+    "報告 --full の本体の sha256": "38d01bf245d5b938ad893905e471237d647254f678bdfbca19a5c6b8a1e6c527",
+    "報告の行数": 86,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 1,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.34
+   },
+   {
+    "doc": "S100YZ7E",
+    "profile": "P25",
+    "claims": 87,
+    "節": {
+     "違う": 8,
+     "要確認": 29,
+     "対象外": 2,
+     "判断しない": 16,
+     "一致": 32
+    },
+    "一致の内訳": {
+     "当期": 19,
+     "前期": 0,
+     "計算": 13,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 32,
+     "POINTER_NOT_FOUND": 28,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 8
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 12,
+     "no_same_value": 14
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 2
+    },
+    "reason(判断しない)": {
+     "no_subject": 15,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "4671a565773f210f5f3f1c505a87d971099427980991a621bebc96241b4904a9",
+    "報告 --full の本体の sha256": "9f3c116b60f379b0d2532f533d2480d0404eda6438a2a5aeea56da6a6a6d7373",
+    "報告の行数": 106,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 3,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 2,
+     "要確認": 15,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 10
+    },
+    "verify 秒": 0.36
+   },
+   {
+    "doc": "S100YZCT",
+    "profile": "P25",
+    "claims": 158,
+    "節": {
+     "違う": 12,
+     "要確認": 47,
+     "対象外": 0,
+     "判断しない": 25,
+     "一致": 74
+    },
+    "一致の内訳": {
+     "当期": 34,
+     "前期": 0,
+     "計算": 40,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 74,
+     "POINTER_NOT_FOUND": 33,
+     "UNVERIFIABLE": 39,
+     "VALUE_MISMATCH": 12
+    },
+    "reason(要確認)": {
+     "no_element": 19,
+     "no_element(ratio without fact)": 2,
+     "no_same_value": 12,
+     "other_frame": 14
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "ambiguous(member)": 1,
+     "no_subject": 24
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "9cf2372436a7dbfb74422aa822f27eaf379de64c96dff7a664d3bf026481eda2",
+    "報告 --full の本体の sha256": "3395c408e8b250820ded28e89aef20a5ffbeff6cc8272e9735b65eae68cc8315",
+    "報告の行数": 136,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 5,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.62
+   },
+   {
+    "doc": "S100YZEV",
+    "profile": "P25",
+    "claims": 76,
+    "節": {
+     "違う": 10,
+     "要確認": 15,
+     "対象外": 0,
+     "判断しない": 8,
+     "一致": 43
+    },
+    "一致の内訳": {
+     "当期": 18,
+     "前期": 0,
+     "計算": 25,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 14,
+     "VALUE_MISMATCH": 10
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 6,
+     "no_element(no prior for text)": 1,
+     "no_same_value": 2
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 8
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "3f820f8f32b1fafe21f65adb7e78f41e9cf8364411204b39502a2cf2ca48d273",
+    "報告 --full の本体の sha256": "1d1d1088a399672c103d61d8f402252acceff28274c8ba3120d06ed2369b6be3",
+    "報告の行数": 85,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 5,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.27
+   },
+   {
+    "doc": "S100Z0OS",
+    "profile": "P25",
+    "claims": 105,
+    "節": {
+     "違う": 10,
+     "要確認": 28,
+     "対象外": 11,
+     "判断しない": 2,
+     "一致": 54
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 3,
+     "計算": 30,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 54,
+     "POINTER_NOT_FOUND": 37,
+     "UNVERIFIABLE": 4,
+     "VALUE_MISMATCH": 10
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 2,
+     "no_element": 6,
+     "no_element(ratio without fact)": 1,
+     "no_same_value": 19
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 11
+    },
+    "reason(判断しない)": {
+     "no_subject": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "bc0f6f4801b2d9442099f1f39c94c87b1fdbe3170b17cdd96a8343b6dbb4cb4f",
+    "報告 --full の本体の sha256": "59a7bbd7f62700029ce019c1c95007760654289ff42c144b6971e568fd74d23c",
+    "報告の行数": 102,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 7,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 7,
+     "要確認": 27,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 32
+    },
+    "verify 秒": 0.44
+   },
+   {
+    "doc": "S100Z1WR",
+    "profile": "P25",
+    "claims": 91,
+    "節": {
+     "違う": 6,
+     "要確認": 13,
+     "対象外": 10,
+     "判断しない": 7,
+     "一致": 55
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 0,
+     "計算": 34,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 55,
+     "POINTER_NOT_FOUND": 22,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 6
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 1,
+     "no_same_value": 11
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 10
+    },
+    "reason(判断しない)": {
+     "no_subject": 7
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "81c7f4d33169039fcbe809ef2ed06dd30ca338418ffb6cfd8716fea76f59533e",
+    "報告 --full の本体の sha256": "051a6eb4e028988ab55f999fc9be9d4a3522956889d62aeef98cbd270bc9e348",
+    "報告の行数": 87,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 2,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 12
+    },
+    "verify 秒": 0.45
+   },
+   {
+    "doc": "S100Z35K",
+    "profile": "P25",
+    "claims": 133,
+    "節": {
+     "違う": 6,
+     "要確認": 75,
+     "対象外": 1,
+     "判断しない": 27,
+     "一致": 24
+    },
+    "一致の内訳": {
+     "当期": 10,
+     "前期": 3,
+     "計算": 11,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 24,
+     "POINTER_NOT_FOUND": 76,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 6
+    },
+    "reason(要確認)": {
+     "no_element": 62,
+     "no_element(no prior for text)": 1,
+     "no_element(ratio without fact)": 5,
+     "no_same_value": 7
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 27
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "80f1788d1b13dddac98fa737592fabaab1bd084a757d2f74c5ae1723c6deb955",
+    "報告 --full の本体の sha256": "d7c7275dacc23beff23c160569db65cb5d3898ad5e73a5900ea297fcc863815a",
+    "報告の行数": 160,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 24,
+    "ラベル無しの名前空間別の行数": {
+     "jpigp_cor": 24
+    },
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 2
+    },
+    "verify 秒": 0.68
+   },
+   {
+    "doc": "S100Z37J",
+    "profile": "P25",
+    "claims": 129,
+    "節": {
+     "違う": 6,
+     "要確認": 18,
+     "対象外": 2,
+     "判断しない": 16,
+     "一致": 87
+    },
+    "一致の内訳": {
+     "当期": 27,
+     "前期": 4,
+     "計算": 56,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 87,
+     "POINTER_NOT_FOUND": 18,
+     "UNVERIFIABLE": 18,
+     "VALUE_MISMATCH": 6
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 2,
+     "no_element": 6,
+     "no_element(ratio without fact)": 4,
+     "no_same_value": 6
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 2
+    },
+    "reason(判断しない)": {
+     "no_subject": 16
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "7aabadca8f7aee4110131d2c7562c760a5509c357b42b9c503d1fe21d8ca8e65",
+    "報告 --full の本体の sha256": "e0bb3b52b2aad2fe5b0114cdda16a27b9975a1f7d6b108714acf0b08a620becc",
+    "報告の行数": 93,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 1,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 10,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 44
+    },
+    "verify 秒": 0.51
+   },
+   {
+    "doc": "S100Z38F",
+    "profile": "P25",
+    "claims": 147,
+    "節": {
+     "違う": 11,
+     "要確認": 40,
+     "対象外": 3,
+     "判断しない": 23,
+     "一致": 70
+    },
+    "一致の内訳": {
+     "当期": 31,
+     "前期": 1,
+     "計算": 38,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 70,
+     "POINTER_NOT_FOUND": 31,
+     "UNVERIFIABLE": 35,
+     "VALUE_MISMATCH": 11
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 17,
+     "no_element(no prior for text)": 2,
+     "no_element(ratio without fact)": 3,
+     "no_element(text needs money fact)": 1,
+     "no_same_value": 5,
+     "other_frame": 9
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 3
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 6,
+     "no_subject": 11,
+     "target_or_plan": 6
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "ce7c2c3ab7d530935692193b53b5154cf57a60c47750b191a624eccd19b2864f",
+    "報告 --full の本体の sha256": "0b5d80174e4535648f13b5922a48a629ae9f4da05128d8683ebace7bec5c05be",
+    "報告の行数": 128,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 3,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 2,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 2,
+     "一致": 18
+    },
+    "verify 秒": 0.63
+   },
+   {
+    "doc": "S100Z39P",
+    "profile": "P25",
+    "claims": 103,
+    "節": {
+     "違う": 2,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 16,
+     "一致": 79
+    },
+    "一致の内訳": {
+     "当期": 18,
+     "前期": 0,
+     "計算": 61,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 79,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 2
+    },
+    "reason(要確認)": {
+     "no_element": 2,
+     "no_element(ratio without fact)": 1,
+     "no_same_value": 3
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 16
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "5c2e7a5b323eea71a05ddd533d4847c88275d1afe03d273dfb926ca6d952a60d",
+    "報告 --full の本体の sha256": "7860d264f707a45b6250ca10ff8f4f20ba411ea91e9812f8aff5156c3c24e01b",
+    "報告の行数": 76,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 1,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 1,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 21
+    },
+    "verify 秒": 0.51
+   },
+   {
+    "doc": "S100Z3BW",
+    "profile": "P25",
+    "claims": 145,
+    "節": {
+     "違う": 9,
+     "要確認": 19,
+     "対象外": 1,
+     "判断しない": 22,
+     "一致": 94
+    },
+    "一致の内訳": {
+     "当期": 41,
+     "前期": 3,
+     "計算": 50,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 94,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 33,
+     "VALUE_MISMATCH": 9
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 5,
+     "no_same_value": 3,
+     "other_frame": 8
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 1,
+     "no_subject": 20,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "2bd3c566174227ae6d8eea8ea93d7046410122fd5a37c84a80e81d49b11137df",
+    "報告 --full の本体の sha256": "d57cfeef3b7d89f1754127ec0dfa398a42c14993ab789ea73563682423362fdf",
+    "報告の行数": 102,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 6,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.59
+   },
+   {
+    "doc": "S100Z3CI",
+    "profile": "P25",
+    "claims": 142,
+    "節": {
+     "違う": 19,
+     "要確認": 5,
+     "対象外": 1,
+     "判断しない": 12,
+     "一致": 105
+    },
+    "一致の内訳": {
+     "当期": 45,
+     "前期": 3,
+     "計算": 57,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 105,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 12,
+     "VALUE_MISMATCH": 19
+    },
+    "reason(要確認)": {
+     "no_same_value": 5
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 3,
+     "no_subject": 9
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "7258ae4e1d35231b34dce6b330239023a4e4e3bed135d94ffee1ca517ac7b16f",
+    "報告 --full の本体の sha256": "2a0da7159927052ed9561ad0165d123b8a1e498d698c281d1001c89136e4a4a6",
+    "報告の行数": 88,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 15,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 1,
+    "ラベル無しの名前空間別の行数": {
+     "jpcrp030000": 1
+    },
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 1,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.55
+   },
+   {
+    "doc": "S100Z3CO",
+    "profile": "P25",
+    "claims": 143,
+    "節": {
+     "違う": 7,
+     "要確認": 32,
+     "対象外": 0,
+     "判断しない": 19,
+     "一致": 85
+    },
+    "一致の内訳": {
+     "当期": 31,
+     "前期": 2,
+     "計算": 52,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 85,
+     "POINTER_NOT_FOUND": 19,
+     "UNVERIFIABLE": 32,
+     "VALUE_MISMATCH": 7
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 5,
+     "no_element": 14,
+     "no_element(no prior for text)": 1,
+     "no_same_value": 4,
+     "other_frame": 8
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "ambiguous(member)": 2,
+     "no_subject": 17
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "e456b14b43fdebe807f99be3fca4ce48e84ba722e54d4895739f815dcf3ac9a0",
+    "報告 --full の本体の sha256": "4cd7d19cb3a0a891f60a87ab08269fafbe84eb79c627fab16b6b1fed8a84f5ad",
+    "報告の行数": 110,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.52
+   },
+   {
+    "doc": "S100Z3DU",
+    "profile": "P25",
+    "claims": 91,
+    "節": {
+     "違う": 14,
+     "要確認": 10,
+     "対象外": 7,
+     "判断しない": 3,
+     "一致": 57
+    },
+    "一致の内訳": {
+     "当期": 21,
+     "前期": 5,
+     "計算": 31,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 57,
+     "POINTER_NOT_FOUND": 11,
+     "UNVERIFIABLE": 9,
+     "VALUE_MISMATCH": 14
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_same_value": 4
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 7
+    },
+    "reason(判断しない)": {
+     "no_subject": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "c799ec215d62152b4657bba6a1304fdb95fbc9f79a36c67de5b93e58788cb5a1",
+    "報告 --full の本体の sha256": "5cb0fec24314c54984b5844d01380e335f343bc7ec5a649b3e5d2e77732c4021",
+    "報告の行数": 85,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 10,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 10,
+     "要確認": 10,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 37
+    },
+    "verify 秒": 0.44
+   },
+   {
+    "doc": "S100Z3FB",
+    "profile": "P25",
+    "claims": 148,
+    "節": {
+     "違う": 5,
+     "要確認": 40,
+     "対象外": 0,
+     "判断しない": 22,
+     "一致": 81
+    },
+    "一致の内訳": {
+     "当期": 26,
+     "前期": 0,
+     "計算": 55,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 38,
+     "VALUE_MISMATCH": 5
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 19,
+     "no_element(text needs money fact)": 1,
+     "no_same_value": 4,
+     "other_frame": 15
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "ambiguous(member)": 2,
+     "no_subject": 20
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "76f03f6a0ff0d98cb82e4c0d3bbe18e2df7bc7453d998379921091d44c4e166c",
+    "報告 --full の本体の sha256": "aa313925c12d89bada7a401dcf60ad5c79323b185dd184d5807136c7dd8b0410",
+    "報告の行数": 119,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 1,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 4,
+    "ラベル無しの名前空間別の行数": {
+     "jpcrp030000": 4
+    },
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 11,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 8
+    },
+    "verify 秒": 0.63
+   },
+   {
+    "doc": "S100Z3H2",
+    "profile": "P25",
+    "claims": 167,
+    "節": {
+     "違う": 6,
+     "要確認": 40,
+     "対象外": 0,
+     "判断しない": 15,
+     "一致": 106
+    },
+    "一致の内訳": {
+     "当期": 39,
+     "前期": 9,
+     "計算": 58,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 106,
+     "POINTER_NOT_FOUND": 36,
+     "UNVERIFIABLE": 19,
+     "VALUE_MISMATCH": 6
+    },
+    "reason(要確認)": {
+     "no_element": 16,
+     "no_element(ratio without fact)": 13,
+     "no_element(text needs money fact)": 2,
+     "no_same_value": 5,
+     "other_frame": 4
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 15
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "8c173c7c68bae97d53f0083602be5f4a56d603c8d89bdb5f9c0bf06e4546aa61",
+    "報告 --full の本体の sha256": "ed4fbce11566cc39e9cfb86fba4b3c2f182a82b270f1bd8af8cb38f90e645389",
+    "報告の行数": 113,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 2,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 14,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 52
+    },
+    "verify 秒": 0.56
+   },
+   {
+    "doc": "S100Z3HP",
+    "profile": "P25",
+    "claims": 62,
+    "節": {
+     "違う": 7,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 6,
+     "一致": 43
+    },
+    "一致の内訳": {
+     "当期": 23,
+     "前期": 3,
+     "計算": 17,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 6,
+     "VALUE_MISMATCH": 7
+    },
+    "reason(要確認)": {
+     "no_element": 4,
+     "no_element(ratio without fact)": 1,
+     "no_same_value": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 6
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "52a903676b596b3150500e36ecc97376217e44571bf7fd437fbba92ea866fae5",
+    "報告 --full の本体の sha256": "61c8b1b68e77d4be81d82748c71b9bd97d9ab116830373c418d1c3ba2f0406e4",
+    "報告の行数": 71,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 2,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 2,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 30
+    },
+    "verify 秒": 0.33
+   },
+   {
+    "doc": "S100Z3IZ",
+    "profile": "P25",
+    "claims": 121,
+    "節": {
+     "違う": 9,
+     "要確認": 11,
+     "対象外": 0,
+     "判断しない": 5,
+     "一致": 96
+    },
+    "一致の内訳": {
+     "当期": 30,
+     "前期": 3,
+     "計算": 63,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 96,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 6,
+     "VALUE_MISMATCH": 9
+    },
+    "reason(要確認)": {
+     "no_same_value": 10,
+     "other_frame": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 5
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "39c8a69275dc457ff780039473d0180c89950a2e6d9be988d06a06241c569fdb",
+    "報告 --full の本体の sha256": "ed5723b7e901e15209cb9586fb30d8668eb8da3f0b9b2cfd6ae6efaae05ea483",
+    "報告の行数": 77,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 1,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 11,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 54
+    },
+    "verify 秒": 0.55
+   },
+   {
+    "doc": "S100Z3JY",
+    "profile": "P25",
+    "claims": 135,
+    "節": {
+     "違う": 15,
+     "要確認": 26,
+     "対象外": 0,
+     "判断しない": 9,
+     "一致": 85
+    },
+    "一致の内訳": {
+     "当期": 39,
+     "前期": 8,
+     "計算": 38,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 85,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 14,
+     "VALUE_MISMATCH": 15
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 8,
+     "no_same_value": 13,
+     "other_frame": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "ambiguous(member)": 1,
+     "no_subject": 8
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "d3c0c6b09509b081c07f0f2d69b34ca71744080d46c15338527d9dfa55240865",
+    "報告 --full の本体の sha256": "8a789b07faec4bf0eaadf10186b8624cd1a989bfbe41f86b4d1a91709e78a33b",
+    "報告の行数": 102,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 4,
+     "要確認": 20,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 52
+    },
+    "verify 秒": 0.46
+   },
+   {
+    "doc": "S100Z3L6",
+    "profile": "P25",
+    "claims": 95,
+    "節": {
+     "違う": 7,
+     "要確認": 26,
+     "対象外": 1,
+     "判断しない": 12,
+     "一致": 49
+    },
+    "一致の内訳": {
+     "当期": 24,
+     "前期": 3,
+     "計算": 22,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 49,
+     "POINTER_NOT_FOUND": 25,
+     "UNVERIFIABLE": 14,
+     "VALUE_MISMATCH": 7
+    },
+    "reason(要確認)": {
+     "no_element": 21,
+     "no_same_value": 3,
+     "other_frame": 2
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 12
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "31253da22014e14ccda201155c23a9818bd0d7d05586f8da008b45b7d71005ef",
+    "報告 --full の本体の sha256": "3d828a1e6294b210921a288277c1057812c5e24e5ee4c2eccc5f0d0c56395af0",
+    "報告の行数": 97,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 5,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 2,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 10
+    },
+    "verify 秒": 0.47
+   },
+   {
+    "doc": "S100Z3LJ",
+    "profile": "P25",
+    "claims": 128,
+    "節": {
+     "違う": 2,
+     "要確認": 32,
+     "対象外": 0,
+     "判断しない": 23,
+     "一致": 71
+    },
+    "一致の内訳": {
+     "当期": 33,
+     "前期": 3,
+     "計算": 35,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 71,
+     "POINTER_NOT_FOUND": 32,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 2
+    },
+    "reason(要確認)": {
+     "no_element": 18,
+     "no_element(no prior for text)": 3,
+     "no_element(ratio without fact)": 7,
+     "no_element(text needs money fact)": 1,
+     "no_same_value": 3
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 23
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "f0e7c9a009fab05f7a390e8d813f02f890ec6e9d4dfdbbaf8e3dfebb83f9887f",
+    "報告 --full の本体の sha256": "33e96d4ce3f3868969891b866b9211a9f00190b7d0151b3183206d9058820f39",
+    "報告の行数": 109,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 20,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 36
+    },
+    "verify 秒": 0.46
+   },
+   {
+    "doc": "S100Z3PS",
+    "profile": "P25",
+    "claims": 93,
+    "節": {
+     "違う": 5,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 23,
+     "一致": 60
+    },
+    "一致の内訳": {
+     "当期": 33,
+     "前期": 1,
+     "計算": 26,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 60,
+     "POINTER_NOT_FOUND": 2,
+     "UNVERIFIABLE": 26,
+     "VALUE_MISMATCH": 5
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 3,
+     "no_element": 1,
+     "no_same_value": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 23
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "b97fe7b1abb4941aaa0096ca57779ebec2bc0e2075c14ee6eeed49b90939ab84",
+    "報告 --full の本体の sha256": "db17c9749667c14c3cccb596798d1941daedf352eb5ebd9fe64af29936b598ef",
+    "報告の行数": 85,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 3,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.36
+   },
+   {
+    "doc": "S100Z3V1",
+    "profile": "P25",
+    "claims": 109,
+    "節": {
+     "違う": 2,
+     "要確認": 14,
+     "対象外": 0,
+     "判断しない": 35,
+     "一致": 58
+    },
+    "一致の内訳": {
+     "当期": 22,
+     "前期": 3,
+     "計算": 33,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 58,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 41,
+     "VALUE_MISMATCH": 2
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 5,
+     "no_same_value": 3,
+     "other_frame": 5
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 34,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "037abc3c5e506636a1a783eb82b8174658727b098ed3b3a403148cc6aff4c6cf",
+    "報告 --full の本体の sha256": "724b3d9f8dd6e626b046e613bd9a660f902b29cf6680c2f23bc1ff86c5cd6656",
+    "報告の行数": 103,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 1,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 8,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 37
+    },
+    "verify 秒": 0.47
+   },
+   {
+    "doc": "S100Z404",
+    "profile": "P25",
+    "claims": 84,
+    "節": {
+     "違う": 5,
+     "要確認": 17,
+     "対象外": 0,
+     "判断しない": 18,
+     "一致": 44
+    },
+    "一致の内訳": {
+     "当期": 24,
+     "前期": 0,
+     "計算": 20,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 44,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 30,
+     "VALUE_MISMATCH": 5
+    },
+    "reason(要確認)": {
+     "no_element": 1,
+     "no_element(ratio without fact)": 4,
+     "other_frame": 12
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 16,
+     "target_or_plan": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "0323e51325078da078260f6d2378f333f5b4464978f70eed5e2ec2925f4c37f2",
+    "報告 --full の本体の sha256": "9b0fcff8f1cafa5345e10642032b570dd02ffcde0b3ad638b1ba2488f7066c6d",
+    "報告の行数": 92,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 3,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.41
+   },
+   {
+    "doc": "S100Z40G",
+    "profile": "P25",
+    "claims": 111,
+    "節": {
+     "違う": 13,
+     "要確認": 25,
+     "対象外": 1,
+     "判断しない": 21,
+     "一致": 51
+    },
+    "一致の内訳": {
+     "当期": 22,
+     "前期": 0,
+     "計算": 29,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 51,
+     "POINTER_NOT_FOUND": 24,
+     "UNVERIFIABLE": 23,
+     "VALUE_MISMATCH": 13
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 2,
+     "no_element": 15,
+     "no_element(text needs money fact)": 1,
+     "no_same_value": 7
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 1,
+     "no_subject": 20
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "fda6742e56752272567b997f8add8bb4b3b70ea4c307821b6d340606bb5012ff",
+    "報告 --full の本体の sha256": "5e2e986cc91af0de8f6cb83eaaed600acedccbf9dc77931f792b498ce0443927",
+    "報告の行数": 111,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 5,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.47
+   },
+   {
+    "doc": "S100Z40H",
+    "profile": "P25",
+    "claims": 238,
+    "節": {
+     "違う": 32,
+     "要確認": 38,
+     "対象外": 7,
+     "判断しない": 50,
+     "一致": 111
+    },
+    "一致の内訳": {
+     "当期": 25,
+     "前期": 2,
+     "計算": 84,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 111,
+     "POINTER_NOT_FOUND": 37,
+     "UNVERIFIABLE": 58,
+     "VALUE_MISMATCH": 32
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 6,
+     "no_same_value": 24,
+     "other_frame": 4
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 7
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 3,
+     "no_subject": 46,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "7bd94fa8b8351b535d1dc24e1d75a48cd2d90f8539074849c85cc07d3c2a3a7b",
+    "報告 --full の本体の sha256": "a4185fc3cb42006b57f3cfab5b98375f26b4844911d48d4f4f1d1e7f6a86ce68",
+    "報告の行数": 178,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 3,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 10,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 4
+    },
+    "verify 秒": 0.75
+   },
+   {
+    "doc": "S100Z42X",
+    "profile": "P25",
+    "claims": 79,
+    "節": {
+     "違う": 4,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 10,
+     "一致": 59
+    },
+    "一致の内訳": {
+     "当期": 22,
+     "前期": 7,
+     "計算": 30,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 59,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 10,
+     "VALUE_MISMATCH": 4
+    },
+    "reason(要確認)": {
+     "no_same_value": 6
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 10
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "5b2531c96bf22abf998ae9f5fe464681935ab612aaca6912cf45c94b1bd1f6aa",
+    "報告 --full の本体の sha256": "acd74fee4d20b1f7c84280ace63d64440af9811a75e9c99a9cf629c1b89bf3a3",
+    "報告の行数": 72,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 2,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 2,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 34
+    },
+    "verify 秒": 0.31
+   },
+   {
+    "doc": "S100Z433",
+    "profile": "P25",
+    "claims": 87,
+    "節": {
+     "違う": 10,
+     "要確認": 13,
+     "対象外": 2,
+     "判断しない": 6,
+     "一致": 56
+    },
+    "一致の内訳": {
+     "当期": 26,
+     "前期": 3,
+     "計算": 27,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 56,
+     "POINTER_NOT_FOUND": 14,
+     "UNVERIFIABLE": 7,
+     "VALUE_MISMATCH": 10
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element": 7,
+     "no_element(no prior for text)": 1,
+     "no_same_value": 4
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 2
+    },
+    "reason(判断しない)": {
+     "no_subject": 6
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "2ebfd36cb16649b7ac4f3386bd1675f23f793f48c76f89bdb14884ba349379e6",
+    "報告 --full の本体の sha256": "029f9283d7f57d566def9d3f67313ddd6c62216a01f884822e2ba9e7a102b1fb",
+    "報告の行数": 82,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.47
+   },
+   {
+    "doc": "S100Z448",
+    "profile": "P25",
+    "claims": 55,
+    "節": {
+     "違う": 9,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 5,
+     "一致": 35
+    },
+    "一致の内訳": {
+     "当期": 12,
+     "前期": 0,
+     "計算": 23,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 35,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 5,
+     "VALUE_MISMATCH": 9
+    },
+    "reason(要確認)": {
+     "no_element": 3,
+     "no_same_value": 3
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 4,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "4f6456f8f3d70c6e4a0ab8ad1535e590e4a0a75d100c1bac6a0f809baf8cceda",
+    "報告 --full の本体の sha256": "f774cacfddc5b56f6b33467dcd525a1ecc4a77eac195fa3301899a6ab8d1c30d",
+    "報告の行数": 72,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 1,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 17
+    },
+    "verify 秒": 0.28
+   },
+   {
+    "doc": "S100Z461",
+    "profile": "P25",
+    "claims": 57,
+    "節": {
+     "違う": 4,
+     "要確認": 13,
+     "対象外": 0,
+     "判断しない": 11,
+     "一致": 29
+    },
+    "一致の内訳": {
+     "当期": 11,
+     "前期": 1,
+     "計算": 17,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 29,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 4
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 4,
+     "no_element(ratio without fact)": 1,
+     "no_same_value": 3,
+     "other_frame": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "ambiguous(member)": 1,
+     "no_subject": 9,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "9918c115a3f163cf8ef16f7e5148c37828d2e239a50348d28405ed1cf35cc432",
+    "報告 --full の本体の sha256": "6635264c432e154e72b4814795f8ceb05f97f8becdff9cd923b4c20644042ac1",
+    "報告の行数": 80,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 1,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.31
+   },
+   {
+    "doc": "S100Z46V",
+    "profile": "P25",
+    "claims": 56,
+    "節": {
+     "違う": 0,
+     "要確認": 10,
+     "対象外": 1,
+     "判断しない": 2,
+     "一致": 43
+    },
+    "一致の内訳": {
+     "当期": 40,
+     "前期": 0,
+     "計算": 3,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 43,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 3
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 1,
+     "no_element(no prior for text)": 3,
+     "no_element(ratio without fact)": 2,
+     "no_same_value": 4
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "40867f251f63bb7a68c8e3c4ec9a41fb8b66da048f4eaad531bf06247d4c967c",
+    "報告 --full の本体の sha256": "686277692c51148ad2e9aa4f25f3a0c221620829bbe3668aa3465c5a6f018b64",
+    "報告の行数": 63,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 1
+    },
+    "verify 秒": 0.24
+   },
+   {
+    "doc": "S100Z48T",
+    "profile": "P25",
+    "claims": 157,
+    "節": {
+     "違う": 6,
+     "要確認": 15,
+     "対象外": 0,
+     "判断しない": 19,
+     "一致": 117
+    },
+    "一致の内訳": {
+     "当期": 30,
+     "前期": 3,
+     "計算": 84,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 117,
+     "POINTER_NOT_FOUND": 9,
+     "UNVERIFIABLE": 25,
+     "VALUE_MISMATCH": 6
+    },
+    "reason(要確認)": {
+     "no_element(ratio without fact)": 1,
+     "no_same_value": 8,
+     "other_frame": 6
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 18,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "1cdcbe25e5ce2b1673ae21f2d2e63e18d106f8fe973adec028de030ed4bae978",
+    "報告 --full の本体の sha256": "a3a5cd8ec4d1508277857ce094268f9687c01d1718909c49f3401c980a69eb5b",
+    "報告の行数": 92,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 5,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 25
+    },
+    "verify 秒": 0.72
+   },
+   {
+    "doc": "S100Z492",
+    "profile": "P25",
+    "claims": 59,
+    "節": {
+     "違う": 0,
+     "要確認": 8,
+     "対象外": 0,
+     "判断しない": 17,
+     "一致": 34
+    },
+    "一致の内訳": {
+     "当期": 30,
+     "前期": 0,
+     "計算": 4,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 34,
+     "POINTER_NOT_FOUND": 8,
+     "UNVERIFIABLE": 17
+    },
+    "reason(要確認)": {
+     "no_element": 1,
+     "no_same_value": 7
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 17
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "582c798edc30d0cbeaa714a0fc3a1f3bf0ca7205ae896b337197f3cc3c84beff",
+    "報告 --full の本体の sha256": "9ed4ebf6233744916ff75d6024718597c4d9be43cb344005ac868d9ae74ba2f1",
+    "報告の行数": 76,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.37
+   },
+   {
+    "doc": "S100Z4B6",
+    "profile": "P25",
+    "claims": 123,
+    "節": {
+     "違う": 4,
+     "要確認": 18,
+     "対象外": 15,
+     "判断しない": 21,
+     "一致": 65
+    },
+    "一致の内訳": {
+     "当期": 32,
+     "前期": 4,
+     "計算": 29,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 65,
+     "POINTER_NOT_FOUND": 27,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 4
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 6,
+     "no_element": 2,
+     "no_element(no prior for text)": 1,
+     "no_same_value": 9
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 15
+    },
+    "reason(判断しない)": {
+     "ambiguous(member)": 5,
+     "no_subject": 14,
+     "target_or_plan": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "7559df81808e6af9ad54dfd4dca72d9c5646d49803871184e8dade13167b921e",
+    "報告 --full の本体の sha256": "84677aab9b4c4335a8957179269c32d70d35d5285c5073832e5beb1aa695ebd8",
+    "報告の行数": 109,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 2,
+     "一致": 0
+    },
+    "verify 秒": 0.44
+   },
+   {
+    "doc": "S100Z4DE",
+    "profile": "P25",
+    "claims": 117,
+    "節": {
+     "違う": 5,
+     "要確認": 25,
+     "対象外": 0,
+     "判断しない": 12,
+     "一致": 75
+    },
+    "一致の内訳": {
+     "当期": 25,
+     "前期": 8,
+     "計算": 42,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 75,
+     "POINTER_NOT_FOUND": 10,
+     "UNVERIFIABLE": 27,
+     "VALUE_MISMATCH": 5
+    },
+    "reason(要確認)": {
+     "no_element": 3,
+     "no_same_value": 7,
+     "other_frame": 15
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 12
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "0662afca824fc2d5af1eff4c965b6857244aaccba2f106c2e05eaa5606d47d64",
+    "報告 --full の本体の sha256": "d47eda573022deaaab1626f42b3b33ac123f6c10673070adff68d6bcdc99a659",
+    "報告の行数": 94,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 16,
+     "対象外": 0,
+     "判断しない": 3,
+     "一致": 46
+    },
+    "verify 秒": 0.64
+   },
+   {
+    "doc": "S100Z4GF",
+    "profile": "P25",
+    "claims": 128,
+    "節": {
+     "違う": 15,
+     "要確認": 31,
+     "対象外": 0,
+     "判断しない": 14,
+     "一致": 68
+    },
+    "一致の内訳": {
+     "当期": 33,
+     "前期": 15,
+     "計算": 20,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 68,
+     "POINTER_NOT_FOUND": 19,
+     "UNVERIFIABLE": 26,
+     "VALUE_MISMATCH": 15
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 12,
+     "no_element": 10,
+     "no_same_value": 9
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 13,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "d427d991b3f608bcc16f79b9f17d3d12c67a9568907b947de3df9e0c06e0b50c",
+    "報告 --full の本体の sha256": "afcffb47ffb0ed8e910557978d47a4a8f8f4b1fde47d1548d68c474cf23714a6",
+    "報告の行数": 112,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 11,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 2
+    },
+    "verify 秒": 0.48
+   },
+   {
+    "doc": "S100Z4J8",
+    "profile": "P25",
+    "claims": 110,
+    "節": {
+     "違う": 0,
+     "要確認": 16,
+     "対象外": 1,
+     "判断しない": 13,
+     "一致": 80
+    },
+    "一致の内訳": {
+     "当期": 24,
+     "前期": 1,
+     "計算": 55,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 17
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 2,
+     "no_element(no prior for text)": 3,
+     "no_element(ratio without fact)": 5,
+     "no_same_value": 2
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 13
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "a9af3fc26ffccebdb93dc7860405495ca35cf41abe6050149f7256c8116395ed",
+    "報告 --full の本体の sha256": "f7c71ba132f65acf5295953073df3d7f18f5b84cef825eac4ae01ef436b21f0d",
+    "報告の行数": 80,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 19
+    },
+    "verify 秒": 0.47
+   },
+   {
+    "doc": "S100Z4LC",
+    "profile": "P25",
+    "claims": 114,
+    "節": {
+     "違う": 4,
+     "要確認": 23,
+     "対象外": 0,
+     "判断しない": 9,
+     "一致": 78
+    },
+    "一致の内訳": {
+     "当期": 36,
+     "前期": 9,
+     "計算": 33,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 78,
+     "POINTER_NOT_FOUND": 16,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 4
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 2,
+     "no_element": 2,
+     "no_element(no prior for text)": 2,
+     "no_element(no prior2 for prior-year diff)": 2,
+     "no_same_value": 10,
+     "other_frame": 5
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "ambiguous(member)": 1,
+     "no_subject": 8
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "7294c5ec15e16b66cea3194f7e9d81674479f4783ed5e08f5c77557c02ac80a2",
+    "報告 --full の本体の sha256": "1ce02f6874721a72d0516b6f3fdc2f70eb94bce38e6b87bf8659761c53ff0376",
+    "報告の行数": 88,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 3,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 1,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.42
+   },
+   {
+    "doc": "S100Z4N9",
+    "profile": "P25",
+    "claims": 186,
+    "節": {
+     "違う": 18,
+     "要確認": 47,
+     "対象外": 0,
+     "判断しない": 23,
+     "一致": 98
+    },
+    "一致の内訳": {
+     "当期": 35,
+     "前期": 11,
+     "計算": 52,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 98,
+     "POINTER_NOT_FOUND": 29,
+     "UNVERIFIABLE": 41,
+     "VALUE_MISMATCH": 18
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 5,
+     "no_element": 7,
+     "no_same_value": 22,
+     "other_frame": 13
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 20,
+     "target_or_plan": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "4bc478a4278bb32e657f79228129258aa822e777f190c8596859707746b0d719",
+    "報告 --full の本体の sha256": "425ef782f788e9b80c725462201c6b2b904ff80f78124c5ae79f46b437f3c250",
+    "報告の行数": 140,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 5,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 2,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.68
+   },
+   {
+    "doc": "S100Z4PA",
+    "profile": "P25",
+    "claims": 125,
+    "節": {
+     "違う": 7,
+     "要確認": 26,
+     "対象外": 1,
+     "判断しない": 30,
+     "一致": 61
+    },
+    "一致の内訳": {
+     "当期": 27,
+     "前期": 5,
+     "計算": 29,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 61,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 36,
+     "VALUE_MISMATCH": 7
+    },
+    "reason(要確認)": {
+     "no_element": 18,
+     "no_same_value": 2,
+     "other_frame": 6
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 28,
+     "target_or_plan": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "2e23740e87adabb34a8dcad9a0b45ab7db8defc50cac095cf682fd4bb269c993",
+    "報告 --full の本体の sha256": "da8088f65809a1533e21dac32e03b1796ef0cb1487ac10ba41f61eb5abe72deb",
+    "報告の行数": 115,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 5,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.38
+   },
+   {
+    "doc": "S100Z4Q1",
+    "profile": "P25",
+    "claims": 88,
+    "節": {
+     "違う": 1,
+     "要確認": 6,
+     "対象外": 0,
+     "判断しない": 4,
+     "一致": 77
+    },
+    "一致の内訳": {
+     "当期": 28,
+     "前期": 6,
+     "計算": 43,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 77,
+     "POINTER_NOT_FOUND": 6,
+     "UNVERIFIABLE": 4,
+     "VALUE_MISMATCH": 1
+    },
+    "reason(要確認)": {
+     "no_element": 4,
+     "no_element(no prior2 for prior-year diff)": 2
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 2,
+     "target_or_plan": 2
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "7b55f80e9952648b54db096435bf5e15ab5b87a3c914c37ef8815c0d4df9bbc2",
+    "報告 --full の本体の sha256": "06f5c57438f30bbc0b2de899201c45f00c6ad7f613036476f3e978ddc3ab13a3",
+    "報告の行数": 63,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 4,
+    "ラベル無しの名前空間別の行数": {
+     "jpcrp030000": 4
+    },
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 48
+    },
+    "verify 秒": 0.4
+   },
+   {
+    "doc": "S100Z4R8",
+    "profile": "P25",
+    "claims": 79,
+    "節": {
+     "違う": 6,
+     "要確認": 12,
+     "対象外": 0,
+     "判断しない": 3,
+     "一致": 58
+    },
+    "一致の内訳": {
+     "当期": 26,
+     "前期": 0,
+     "計算": 32,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 58,
+     "POINTER_NOT_FOUND": 12,
+     "UNVERIFIABLE": 3,
+     "VALUE_MISMATCH": 6
+    },
+    "reason(要確認)": {
+     "no_element": 3,
+     "no_element(ratio without fact)": 3,
+     "no_same_value": 6
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "a1a170c0b6686ba485c8b0dd84f47b5c41dfe8ea4cb9539e4ec19a96d6d0f580",
+    "報告 --full の本体の sha256": "f89add13fd675775d19d6c5e6bcbf088103cd716b2a73b1729c3ab13fd940de2",
+    "報告の行数": 73,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 0,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 4,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 16
+    },
+    "verify 秒": 0.38
+   },
+   {
+    "doc": "S100Z55N",
+    "profile": "P25",
+    "claims": 121,
+    "節": {
+     "違う": 4,
+     "要確認": 22,
+     "対象外": 0,
+     "判断しない": 7,
+     "一致": 88
+    },
+    "一致の内訳": {
+     "当期": 34,
+     "前期": 3,
+     "計算": 51,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 88,
+     "POINTER_NOT_FOUND": 21,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 4
+    },
+    "reason(要確認)": {
+     "no_element(ratio without fact)": 10,
+     "no_element(text needs money fact)": 4,
+     "no_same_value": 7,
+     "other_frame": 1
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 7
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "300c503c28ba4ef1ee8dbb71c7eb47b66643c9a815e1df42935602d78b687e3b",
+    "報告 --full の本体の sha256": "1ecdad47183e132295e09c0a78ea6037a58449db36f4e1f23f419df2680f9870",
+    "報告の行数": 85,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 1,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 0
+    },
+    "verify 秒": 0.39
+   },
+   {
+    "doc": "S100Z5CH",
+    "profile": "P25",
+    "claims": 107,
+    "節": {
+     "違う": 5,
+     "要確認": 13,
+     "対象外": 0,
+     "判断しない": 8,
+     "一致": 81
+    },
+    "一致の内訳": {
+     "当期": 32,
+     "前期": 17,
+     "計算": 32,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 13,
+     "UNVERIFIABLE": 8,
+     "VALUE_MISMATCH": 5
+    },
+    "reason(要確認)": {
+     "no_element": 3,
+     "no_same_value": 10
+    },
+    "reason(対象外)": {},
+    "reason(判断しない)": {
+     "no_subject": 8
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "c9bb3f9c2d3adf9f9c9167a6116d8b4df10b697943f67e6990f0767ad3e1b066",
+    "報告 --full の本体の sha256": "8b79ac25662098404ebdc7939ca20cfe94c4f7d12b90e931340606d7a19359e9",
+    "報告の行数": 78,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 4,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 1,
+     "要確認": 0,
+     "対象外": 0,
+     "判断しない": 0,
+     "一致": 4
+    },
+    "verify 秒": 0.37
+   },
+   {
+    "doc": "S100Z5DN",
+    "profile": "P25",
+    "claims": 126,
+    "節": {
+     "違う": 10,
+     "要確認": 18,
+     "対象外": 1,
+     "判断しない": 17,
+     "一致": 80
+    },
+    "一致の内訳": {
+     "当期": 39,
+     "前期": 7,
+     "計算": 34,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 80,
+     "POINTER_NOT_FOUND": 15,
+     "UNVERIFIABLE": 21,
+     "VALUE_MISMATCH": 10
+    },
+    "reason(要確認)": {
+     "ambiguous(elements)": 4,
+     "no_element": 9,
+     "no_element(no prior for text)": 1,
+     "no_same_value": 4
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 1
+    },
+    "reason(判断しない)": {
+     "no_subject": 16,
+     "target_or_plan": 1
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "3b832081ee56ffd903c903834eb25cd2a5459881e4198aef0425324d38af8ca7",
+    "報告 --full の本体の sha256": "57ee52d30c46f8772b39e7c1feeb6f50d10a2efa7d97a9fe08f922ebd3e18608",
+    "報告の行数": 97,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 7,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 0,
+     "要確認": 3,
+     "対象外": 0,
+     "判断しない": 1,
+     "一致": 0
+    },
+    "verify 秒": 0.39
+   },
+   {
+    "doc": "S100Z6XO",
+    "profile": "P25",
+    "claims": 162,
+    "節": {
+     "違う": 21,
+     "要確認": 36,
+     "対象外": 6,
+     "判断しない": 18,
+     "一致": 81
+    },
+    "一致の内訳": {
+     "当期": 24,
+     "前期": 7,
+     "計算": 50,
+     "その他": 0
+    },
+    "state": {
+     "GROUNDED": 81,
+     "POINTER_NOT_FOUND": 34,
+     "UNVERIFIABLE": 26,
+     "VALUE_MISMATCH": 21
+    },
+    "reason(要確認)": {
+     "no_element": 4,
+     "no_element(no prior2 for prior-year diff)": 3,
+     "no_element(ratio without fact)": 1,
+     "no_element(text needs money fact)": 2,
+     "no_same_value": 18,
+     "other_frame": 8
+    },
+    "reason(対象外)": {
+     "no_element(unit not in XBRL)": 6
+    },
+    "reason(判断しない)": {
+     "no_subject": 15,
+     "target_or_plan": 3
+    },
+    "その他の節": 0,
+    "同じ byte(既定)": true,
+    "同じ byte(--full)": true,
+    "報告の本体の sha256": "f937d076236affd674f0ca3e095c8cfdf89e970975db4290fc3b5baabddb2402",
+    "報告 --full の本体の sha256": "83400c4b4cdb0837870266ae9372ee3600660dfbe9dd595466ead1733f784de7",
+    "報告の行数": 132,
+    "単位の検査": {
+     "文が金額の単位で出典の値がある「違う」": 7,
+     "出典の値の単位が文と違う": 0
+    },
+    "字のまま残った pointer": 0,
+    "ラベル無しの要素を持つ行(違う・一致)": 0,
+    "ラベル無しの名前空間別の行数": {},
+    "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+     "違う": 7,
+     "要確認": 23,
+     "対象外": 0,
+     "判断しない": 2,
+     "一致": 38
+    },
+    "verify 秒": 0.78
+   }
+  ]
+ },
+ "集計": {
+  "P22": {
+   "書類数": 67,
+   "claims": 7799,
+   "節": {
+    "違う": 1410,
+    "要確認": 915,
+    "対象外": 151,
+    "判断しない": 1081,
+    "一致": 4242
+   },
+   "節の和": 7799,
+   "その他の節": 0,
+   "一致の内訳": {
+    "当期": 1736,
+    "前期": 180,
+    "計算": 2326,
+    "その他": 0
+   },
+   "state": {
+    "GROUNDED": 4242,
+    "POINTER_NOT_FOUND": 824,
+    "UNVERIFIABLE": 1323,
+    "VALUE_MISMATCH": 1410
+   },
+   "reason(要確認)": {
+    "ambiguous(elements)": 242,
+    "no_element": 491,
+    "no_element(no prior for text)": 55,
+    "no_element(no prior2 for prior-year diff)": 13,
+    "no_element(point without prior phrase)": 8,
+    "no_element(ratio without fact)": 87,
+    "no_element(text needs money fact)": 19
+   },
+   "reason(対象外)": {
+    "no_element(unit not in XBRL)": 145,
+    "no_prior_member_context": 6
+   },
+   "reason(判断しない)": {
+    "ambiguous(member)": 38,
+    "no_subject": 1001,
+    "target_or_plan": 42
+   },
+   "同じ byte(全部)": true,
+   "単位の検査": {
+    "文が金額の単位で出典の値がある「違う」": 951,
+    "出典の値の単位が文と違う": 0
+   },
+   "字のまま残った pointer": 0,
+   "ラベル無しの要素を持つ行(違う・一致)": 80,
+   "ラベル無しの名前空間別の行数": {
+    "jpcrp030000": 11,
+    "jpigp_cor": 69
+   },
+   "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+    "違う": 375,
+    "要確認": 220,
+    "対象外": 0,
+    "判断しない": 24,
+    "一致": 881
+   }
+  },
+  "P25": {
+   "書類数": 67,
+   "claims": 7799,
+   "節": {
+    "違う": 626,
+    "要確認": 1571,
+    "対象外": 151,
+    "判断しない": 1069,
+    "一致": 4382
+   },
+   "節の和": 7799,
+   "その他の節": 0,
+   "一致の内訳": {
+    "当期": 1800,
+    "前期": 237,
+    "計算": 2345,
+    "その他": 0
+   },
+   "state": {
+    "GROUNDED": 4382,
+    "POINTER_NOT_FOUND": 1394,
+    "UNVERIFIABLE": 1397,
+    "VALUE_MISMATCH": 626
+   },
+   "reason(要確認)": {
+    "ambiguous(elements)": 130,
+    "no_element": 489,
+    "no_element(no prior for text)": 55,
+    "no_element(no prior2 for prior-year diff)": 13,
+    "no_element(point without prior phrase)": 3,
+    "no_element(ratio without fact)": 87,
+    "no_element(text needs money fact)": 19,
+    "no_same_value": 577,
+    "other_frame": 198
+   },
+   "reason(対象外)": {
+    "no_element(unit not in XBRL)": 145,
+    "no_prior_member_context": 6
+   },
+   "reason(判断しない)": {
+    "ambiguous(member)": 49,
+    "no_subject": 978,
+    "target_or_plan": 42
+   },
+   "同じ byte(全部)": true,
+   "単位の検査": {
+    "文が金額の単位で出典の値がある「違う」": 260,
+    "出典の値の単位が文と違う": 0
+   },
+   "字のまま残った pointer": 0,
+   "ラベル無しの要素を持つ行(違う・一致)": 66,
+   "ラベル無しの名前空間別の行数": {
+    "jpcrp030000": 11,
+    "jpigp_cor": 55
+   },
+   "文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)": {
+    "違う": 86,
+    "要確認": 466,
+    "対象外": 0,
+    "判断しない": 24,
+    "一致": 924
+   }
+  }
+ },
+ "入力の sha256": {
+  "書類 67 の docID\\tsha256(point_prior の記録の「文あり」)": {
+   "S100YMFV": "4a5982e7447d6e0614c6ad12e7c091d462ca61a0128c2ce2af957a8bdfe1d52c",
+   "S100YUHC": "cd212b810b33d07bd9723ed9518c299dcfaf88fc434f7026211206a9d5f6d450",
+   "S100YWGX": "11a87aa7ddda60db6d51910decfbf8a643621e520f582ba920ecece743604cec",
+   "S100YXF5": "2fea27f5328ec8fb528a08b681a747d6c4d43c8edb843507815db774179a9b1c",
+   "S100YXGH": "29b7eb0b24e579a5b2ae9ce664d58af2d1d3cd0ffe4aec23fd7a45bd7fc36cbf",
+   "S100YXLE": "906951be808f0ebbe406c2689b577b6f198d68d0677d84ff2a9d59e226793d20",
+   "S100YXMA": "511f1811cebc9bd7d72d069652effe99ebdb271ae99823c0115f89d697ae2726",
+   "S100YYDI": "430ae0aec4807aa73b35b8409a8075b37b9487357d129b10bc1194905f87c753",
+   "S100YYIA": "c37346d3285f33377d82e103a5192d496c85da7dada60754b1a7a0ee1968bf42",
+   "S100YYK8": "512b316c0739e2cb83c465ec7ffae4474efebf4ffbc234a70270346cf1e1caad",
+   "S100YYN7": "646d95e04a253fc996dd17a231905ecb662686bd5c77f1c7730f51161c59e75a",
+   "S100YYOS": "7993b5ff710ccd33dde89aa363438ef1c7b52f4e47d8af28ce841ee2bcac3bbd",
+   "S100YYQX": "a0313840d8ecc13e8470e34f54451a0207c5510ffd0a9c3860e50c9640a9cdf0",
+   "S100YYRG": "e1fdf292e146deb540a634b7c0bab060b19d29f08552f1276617a9e8309702fe",
+   "S100YYRV": "b4f42344bb48be29c047e7f9fd825b0b3f2e2ef8d62f84d29c534cd08ae2c52a",
+   "S100YYS4": "02fcaa9a52e52943108f905abc115daea2243eba97bfdc5f56f51f783fe792de",
+   "S100YYT4": "861de89d99d2463f9c2230fdbf596c1e75eba5a59096efe969d72cdb3f272828",
+   "S100YYT8": "e8c2c6cfc2079b24938e78c702559d5ac9b339d06d775cfd542ecb0143ce93d0",
+   "S100YYUD": "944ed61c7b78dc48722f34796f520d6dbc86bbeaaf82a151913f0840133ffcd4",
+   "S100YYVN": "20d381114819b7608f4113d37fcd8920357a5da05f37f4542aaf6b5b3e92198d",
+   "S100YZ31": "7365ffce12ee1cb1514b83e52a30aa4c004bbd94077d42146a376d6f096ba06d",
+   "S100YZ4E": "761f019f4c1533ba195b6622f34b42004f9536c078580135d4fec20dd5aa8ec5",
+   "S100YZ7E": "bd2fe7969c31528f9c1609c85cb2dd8bb26aad2469ee060e3227b7f9367353f3",
+   "S100YZCT": "b31651903185ef1afe2c8141b96646a947721b2333311a183d2f49348af7659e",
+   "S100YZEV": "1ca23bba5f21e83d0d8784dbb0f7ece069e59c43d9f81c192918223a90cf6f70",
+   "S100Z0OS": "f646974b4447f633f41d844333681f2bf71ae77558693786d3edd8dd76b3987f",
+   "S100Z1WR": "1d67d1910fa96fa0465206480400e99f7c9fb3c66c577171a833699ec3682278",
+   "S100Z35K": "53991c2cc3021f050fac8ff1f1c16a3b7f3c2c8cd1a923706977f0d1f4a403ed",
+   "S100Z37J": "74c51c983fe55d0bfbaf14e6c3a298a4aeb6ce0940c9acb9ab60f2ee37ade432",
+   "S100Z38F": "02358db58564bca3b19b58bb60b0cca0c01f2b8c305366a7ea1083ed1edd9d70",
+   "S100Z39P": "52ece970160e6d7e45d9d0d4aebbbe50094f726ab55db4a3ea1a409de3a5c1e9",
+   "S100Z3BW": "57a1433e56905297735294f5e48795e48eba1ccbe29e5ea54000d58bf3c80b7c",
+   "S100Z3CI": "35654a6bfa47e203c92c5bc33391bc48c68e792a29129996676ecfbf83da63b9",
+   "S100Z3CO": "45a71507465dbf9c1cbf82f23d378aca7a0330f78809c403ac23c82f9c7d8d06",
+   "S100Z3DU": "edb9a67e11131f7bc189fb071128a65eef328e515528056b0550a27e006db61f",
+   "S100Z3FB": "d029feb21328c92305dc4222722ea1ffd294b649e86a944b89ccfcb989f963b0",
+   "S100Z3H2": "946b4a8fa94cffe2120dff46be0df296adb2f7a60b42e769398bb7fbefcebd3b",
+   "S100Z3HP": "a3170c66ce46185f02e8f5274c9d4f646ef97b089d13e6f7f4e65539e8d69719",
+   "S100Z3IZ": "d3183747336ee1ab3fd80b2114046f3cf15e5130c2cddd7110132b644075e0bb",
+   "S100Z3JY": "5851a52ff80044bbb31f622f847461b1fccb5fc802a555dba868fd983372efbf",
+   "S100Z3L6": "8ecaed66f2f15d9251f3daf14ff53dd6e2c2d248db8fc691bf5bc63cfd73f12d",
+   "S100Z3LJ": "4876a2b52b30706b7c38ee925108dbb1eb8e5f3b8fd0dc33031aeb54349ef051",
+   "S100Z3PS": "55ab0bb442c1106cd119ecfc3c6ed1af5597d2e21b344bad938addfc034e2152",
+   "S100Z3V1": "79ae06b59b670e21bcd00883d58dc37399d06a5d27490e04d7bf75f6dd55cbf6",
+   "S100Z404": "81de2055f7dc51ded49fad1d19291bbc84c59c9a26a23e1b634b2f9b01ce24ac",
+   "S100Z40G": "4cfd8ff692f81692cf79f9acfc71af0265e161dd4852755e01d84ebdd934c322",
+   "S100Z40H": "566f171ee5e55dc2b12b7f84dd1c6c481642683b5feba49baa290fe830645c3e",
+   "S100Z42X": "c9337c162e23e2808f73cb0318cfd96e36c25915cc6aaaa8a9eccc974557bbbc",
+   "S100Z433": "7e033584d1c9975a93a07a4c337b403119581b96dd59c4bdfa056a17a03cba7f",
+   "S100Z448": "ab1cb84c0f983f8527accda1e6b7a2219f2950082090c4f1bcb2326ca42bb873",
+   "S100Z461": "b3d46992ceb5eb86b9bd230a1ab34d06bbf031fc9182d29cb211830afcd39b6d",
+   "S100Z46V": "ac0a65a02d908b0dbfd4a56cc46cf0eb5384ef5d7db7926b244ca7443b30c9f4",
+   "S100Z48T": "3aad9a94337487665f23b2066612ca3cf7ece7b596b47a6885e5975d4a00c9b2",
+   "S100Z492": "eab8422ec94cf9ed7f5ccc9d8eb43fa548ad5abe4d9899223f060f4a4de84396",
+   "S100Z4B6": "d617b6e1807c8aa6d2b1269f6b25ff57a6a71dbf683020f1859d2d4a04c02d26",
+   "S100Z4DE": "5f154b2a5ba081abe7495fabc2cf6aae795cf92b1ad02808954d2befe424aa43",
+   "S100Z4GF": "778a6a113f4ee1e2fc40b64375e55273cd38a15906271e08bd95415cf49d4a9e",
+   "S100Z4J8": "2de15610c9b207fdb286035fb76b30c1ac88d6ad16e8356a3517bb99ae453214",
+   "S100Z4LC": "13cf3587a467a0af3869d0ecaa8d8a921e4d9fcb881b6bf369a5734a4060714d",
+   "S100Z4N9": "9b695ec4541d08acbe57eb9b52e7378b61ab9d67f0d140e08bdaa62a0d0a1717",
+   "S100Z4PA": "e4d7621bd1f65b451037db3bde4c5cb23297e59a7f9ba830b3bfcf5b62f8b3c7",
+   "S100Z4Q1": "0731a291f10af5dd207e05d54df8e2b5dc34e79a84de94af1c1a5d4e207228f6",
+   "S100Z4R8": "b8bb37a7c8984f5bf7d7ac5761df502feea2fe35b00b3b3f25d4bd194e69b862",
+   "S100Z55N": "fa1db1d43ef6eac7f682b728128b6f13e32c130086e49f93aad60e4bfb4a2e37",
+   "S100Z5CH": "818194e233e7ceea8f3070289776425a8f314ed647310d917a180a5bf3d5d30e",
+   "S100Z5DN": "2b988d6b20de5de7b7eae20d28f5085117c553331ac1b979576de60fa4208114",
+   "S100Z6XO": "d94d447b6f8182d770179d58e60c03962ccb1f9a6251dff793239e8e4663ac85"
+  },
+  "fixtures/xbrl/point_prior_2026-10-20.json": "e1db3f515bd83182235bf5751052e0bd440e8f6ff2a555419b014863b8e42862",
+  "seal": "14594fc9233b94b1a0c1e7b41a85e73acab4bd201d92f7a3d94b5f6d564ef490"
+ },
+ "C1": {
+  "入力": {
+   "在りか": "repo の外(客の席の scratchpad)の客 A の P22 の出力 my_text.json。客の日記は repo に入れない",
+   "sha256": "60e5fbdf2efffd0e81b4f4bf61aa857f8afa1a60e57c5036b27e68e8cac471b6",
+   "profile": "P22",
+   "claims": 39,
+   "git_commit(出力を作った engine)": "cb4b497504910c1685779da1f811be87c2f45fb5"
+  },
+  "答え合わせの表": {
+   "在りか": "repo の外(客の席の answer_key.md)",
+   "sha256": "71ae780c68199c5ee24d601a1622a6e99768ead51a97298d2bc4c7c38bb44412"
+  },
+  "行": [
+   {
+    "答え合わせ": "E1 前期を当期",
+    "id": "N001",
+    "節": "違う",
+    "先頭の節に在る": true,
+    "文の値": "40,539 百万円",
+    "出典の値": "40,480 百万円",
+    "文の単位": "百万円",
+    "出典の値の単位が文と同じ(語の主張は円)": true
+   },
+   {
+    "答え合わせ": "E2 末尾桁",
+    "id": "N007",
+    "節": "違う",
+    "先頭の節に在る": true,
+    "文の値": "3,117 百万円",
+    "出典の値": "3,111 百万円",
+    "文の単位": "百万円",
+    "出典の値の単位が文と同じ(語の主張は円)": true
+   },
+   {
+    "答え合わせ": "E5 率",
+    "id": "N010",
+    "節": "違う",
+    "先頭の節に在る": true,
+    "文の値": "26.2 %",
+    "出典の値": "36.22 %",
+    "文の単位": "%",
+    "出典の値の単位が文と同じ(語の主張は円)": true
+   },
+   {
+    "答え合わせ": "E3 単位",
+    "id": "N015",
+    "節": "違う",
+    "先頭の節に在る": true,
+    "文の値": "53,812 千円",
+    "出典の値": "53,812,000 千円",
+    "文の単位": "千円",
+    "出典の値の単位が文と同じ(語の主張は円)": true
+   },
+   {
+    "答え合わせ": "E4 向き",
+    "id": "T009",
+    "節": "違う",
+    "先頭の節に在る": true,
+    "文の値": "増加",
+    "出典の値": "-569,000,000 円",
+    "文の単位": null,
+    "出典の値の単位が文と同じ(語の主張は円)": true
+   }
+  ],
+  "先頭の節に在る数": 5,
+  "単位が文と同じ数": 5,
+  "節": {
+   "違う": 5,
+   "要確認": 1,
+   "対象外": 1,
+   "判断しない": 2,
+   "一致": 30
+  },
+  "同じ byte": true,
+  "報告の sha256": "e9deab41cea2dc88ba28eea6d0ad3ae3e19a5f8c73721782d7ac40c75305159c"
+ },
+ "C3": {
+  "登録簿の理由": {
+   "POINTER_NOT_FOUND": [
+    "no_element",
+    "no_element(unit not in XBRL)",
+    "no_element(ratio without fact)",
+    "no_prior_member_context",
+    "no_element(point without prior phrase)",
+    "no_element(text needs money fact)",
+    "no_element(no prior for text)",
+    "no_element(no prior2 for prior-year diff)",
+    "no_same_value"
+   ],
+   "UNVERIFIABLE": [
+    "no_subject",
+    "ambiguous(member)",
+    "ambiguous(elements)",
+    "state_word(no line)",
+    "prior is 0",
+    "target_or_plan",
+    "other_frame"
+   ],
+   "数": 16
+  },
+  "UNBOUND_REASON_STATE の key の数": 14,
+  "登録簿 − UNBOUND_REASON_STATE": [
+   "no_same_value",
+   "other_frame"
+  ],
+  "UNBOUND_REASON_STATE − 登録簿": [],
+  "理由の表の key の数": 16,
+  "理由の表 − 登録簿": [],
+  "登録簿 − 理由の表": [],
+  "1 つ消したときの網羅の検査(消した key → 表に無い登録簿の理由)": {
+   "ambiguous(elements)": [
+    "ambiguous(elements)"
+   ],
+   "ambiguous(member)": [
+    "ambiguous(member)"
+   ],
+   "no_element": [
+    "no_element"
+   ],
+   "no_element(no prior for text)": [
+    "no_element(no prior for text)"
+   ],
+   "no_element(no prior2 for prior-year diff)": [
+    "no_element(no prior2 for prior-year diff)"
+   ],
+   "no_element(point without prior phrase)": [
+    "no_element(point without prior phrase)"
+   ],
+   "no_element(ratio without fact)": [
+    "no_element(ratio without fact)"
+   ],
+   "no_element(text needs money fact)": [
+    "no_element(text needs money fact)"
+   ],
+   "no_element(unit not in XBRL)": [
+    "no_element(unit not in XBRL)"
+   ],
+   "no_prior_member_context": [
+    "no_prior_member_context"
+   ],
+   "no_same_value": [
+    "no_same_value"
+   ],
+   "no_subject": [
+    "no_subject"
+   ],
+   "other_frame": [
+    "other_frame"
+   ],
+   "prior is 0": [
+    "prior is 0"
+   ],
+   "state_word(no line)": [
+    "state_word(no line)"
+   ],
+   "target_or_plan": [
+    "target_or_plan"
+   ]
+  },
+  "実測に出た reason": [
+   "ambiguous(elements)",
+   "ambiguous(member)",
+   "no_element",
+   "no_element(no prior for text)",
+   "no_element(no prior2 for prior-year diff)",
+   "no_element(point without prior phrase)",
+   "no_element(ratio without fact)",
+   "no_element(text needs money fact)",
+   "no_element(unit not in XBRL)",
+   "no_prior_member_context",
+   "no_same_value",
+   "no_subject",
+   "other_frame",
+   "target_or_plan"
+  ],
+  "実測に出た reason のうち表の外": [],
+  "実測に出なかった登録簿の理由": [
+   "prior is 0",
+   "state_word(no line)"
+  ],
+  "profile 別の reason の件数": {
+   "P22": {
+    "ambiguous(elements)": 242,
+    "ambiguous(member)": 38,
+    "no_element": 491,
+    "no_element(no prior for text)": 55,
+    "no_element(no prior2 for prior-year diff)": 13,
+    "no_element(point without prior phrase)": 8,
+    "no_element(ratio without fact)": 87,
+    "no_element(text needs money fact)": 19,
+    "no_element(unit not in XBRL)": 145,
+    "no_prior_member_context": 6,
+    "no_subject": 1001,
+    "target_or_plan": 42
+   },
+   "P25": {
+    "ambiguous(elements)": 130,
+    "ambiguous(member)": 49,
+    "no_element": 489,
+    "no_element(no prior for text)": 55,
+    "no_element(no prior2 for prior-year diff)": 13,
+    "no_element(point without prior phrase)": 3,
+    "no_element(ratio without fact)": 87,
+    "no_element(text needs money fact)": 19,
+    "no_element(unit not in XBRL)": 145,
+    "no_prior_member_context": 6,
+    "no_same_value": 577,
+    "no_subject": 978,
+    "other_frame": 198,
+    "target_or_plan": 42
+   }
+  }
+ },
+ "C4": [
+  {
+   "入力": "entry_output_S100Z4N9_original_2026-10-13.json",
+   "report.py の golden": "report_golden_S100Z4N9_original_2026-10-13.md",
+   "report.py の出力が golden とバイト一致": true,
+   "golden の sha256": "dfa347925c84de4be763c43cbd5d54db13a636b52a367fff3ec37bd91ad0c763",
+   "新しい報告の sha256": "0ea0fdea5234066ac63fd312de133bc7c48f5d1b0882d8532fbcfaec7393de4c",
+   "新しい報告が 2 回で同じ": true
+  },
+  {
+   "入力": "entry_output_S100Z4Q1_ai_prose_2026-10-13.json",
+   "report.py の golden": "report_golden_S100Z4Q1_ai_prose_2026-10-13.md",
+   "report.py の出力が golden とバイト一致": true,
+   "golden の sha256": "ead08b97484551a36ffa53c7a28d51e477c89ce3aa2ef4ed3cf5f22103d2c11e",
+   "新しい報告の sha256": "0a0aeb4a01956715c18e57b19164fc8a17a5fd3269eed3f57d9440bf34dac458",
+   "新しい報告が 2 回で同じ": true
+  }
+ ],
+ "C5": {
+  "sha256": {
+   "adapters/xbrl/report.py": "0d2854e659a5d8e0c91592aedf98e85483e48da4233650c680ce7b37b9ea994c",
+   "adapters/xbrl/verify_document.py": "67e7639de3f5f2adf8965558064f9a191c82450ea8cda59a78560d698f73ec73",
+   "adapters/xbrl/vocabulary.py": "27e71e9861fc5aad3dbb8b1b722c6004ff0ba2a8e185ffe91a11b9d3b3317e57",
+   "adapters/xbrl/recipes.py": "bff243f13429b553bfd2e79d2520212033aab37ec31bb5cadaaeae7b9967b8cd",
+   "adapters/xbrl/registry_setup.py": "f42ffe23aaa7673b754ce24355ae17857dbffd24a9322432955610908a559c07"
+  },
+  "HEAD からの差分(git diff --numstat)": {
+   "adapters/xbrl/report.py": "0 行",
+   "adapters/xbrl/verify_document.py": "0 行",
+   "adapters/xbrl/vocabulary.py": "0 行",
+   "adapters/xbrl/recipes.py": "0 行",
+   "adapters/xbrl/registry_setup.py": "0 行"
+  },
+  "engine の指紋": {
+   "adapter_xbrl_py_sha256": "c556de1cb26e975a172d54a4e39f4971bb5c11a5fd8a02a8404b9a719eb27acb",
+   "adapter_xbrl_py_files": 16,
+   "core_py_sha256": "34e836bb39762d5af831a9aa11d4ea095e73221beb5bd4510d3b234363a2a6e8",
+   "core_py_files": 4
+  },
+  "adapters/xbrl の .py の数": 16,
+  "core/ の HEAD からの差分": "0 行",
+  "report_customer.py の sha256": "d82481697762d1672213e89355ef8c462829f7d81f3404c53b04b418a3c3820c",
+  "report_customer.py の行数": 518
+ },
+ "抜粋": {
+  "doc": "S100YMFV",
+  "profile": "P25",
+  "違う(先頭 5 行)": {
+   "見出し行": "| # | 文の抜粋 | 文の値 | 出典の値 | 出典 |",
+   "行": [
+    "| N066 | あり、当連結会計年度末の自己資本比率は、前連結会計年度末から2.9ポイント増加し52.5%とな | 2.9 ポイント | 3 ポイント | 自己資本比率 当期末 / 自己資本比率 前期末(当期末 − 前期末(ポイント)) |",
+    "| T021 | 万円、減価償却費133百万円、売上債権の減少額61百万円等の増加によるもの | 増加 | 61,274,000 円 | 売上債権の増減額(△は増加) 当期(当期 の符号) |",
+    "| T022 | 6百万円、その他146百万円、法人税等の支払額86百万円等の減少と、税金等 | 減少 | 19,499,000 円 | 法人税等の支払額又は還付額(△は支払) 当期 / 法人税等の支払額又は還付額(△は支払) 前期(当期 と 前期 の大きさの差の符号) |",
+    "| T027 | 百万円、セール・アンド・リースバックによる収入30百万円等の増加と、長期借 | 増加 | -34,683,000 円 | セール・アンド・リースバックによる収入 当期 / セール・アンド・リースバックによる収入 前期(当期 − 前期 の符号) |",
+    "| T028 | 金の返済による支出499百万円、配当金の支払額63百万円等の減少によるもの | 減少 | 11,822,000 円 | 配当金の支払額 当期 / 配当金の支払額 前期(当期 と 前期 の大きさの差の符号) |"
+   ]
+  },
+  "要確認(先頭 5 行)": {
+   "見出し行": "| # | 文の抜粋 | 文の値 | 理由 |",
+   "行": [
+    "| N005 | 流通市場の当連結会計年度の販売実績は前期比で0.9%減少し、4,641百万円となっております。 | 4,641 百万円 | 文の項目に当たる数が出典(XBRL)に見つからなかった |",
+    "| N010 | 当連結会計年度の同市場の販売実績は前期比で11.8%増加し、2,321百万円となっております。 | 2,321 百万円 | 文の項目に当たる数が出典(XBRL)に見つからなかった |",
+    "| N012 | 当連結会計年度の同市場の販売実績は前期比で23.9%減少し、1,149百万円となっております。 | 1,149 百万円 | 文の項目に当たる数が出典(XBRL)に見つからなかった |",
+    "| N014 | 当連結会計年度の同市場の販売実績は前期比で20.3%増加し、182百万円となっております。 | 182,000,000 円 | 文の項目に当たる数が出典(XBRL)に見つからなかった |",
+    "| N016 | に関しましては、当連結会計年度の仕入実績為替レートが1ドル=148円22銭となり、前期と | 148 円 | 文の項目に当たる数が出典(XBRL)に見つからなかった |"
+   ]
+  },
+  "報告の本体の sha256": "2a5d52086054e5e7f654546dac19e32a42f6e398c11ee767fb0b8350efd2d550"
+ },
+ "所要秒": {
+  "合計": 64.4,
+  "verify 合計": 63.6
+ },
+ "予測の判定": {
+  "C-2": {
+   "実測": "違う 1410 / 要確認 915 / 対象外 + 判断しない 1232 / 一致 4242 / 和 7799",
+   "幅": {
+    "違う": 1410,
+    "要確認": [
+     880,
+     950
+    ],
+    "対象外 + 判断しない": [
+     1200,
+     1260
+    ],
+    "一致": 4242,
+    "和": 7799
+   },
+   "判定": "当たり"
+  },
+  "C-2b": {
+   "実測": "違う 626 / 一致 4382 / 対象外 + 判断しない 1220 / 要確認 1571 / 和 7799",
+   "幅": {
+    "違う": 626,
+    "一致": 4382,
+    "対象外 + 判断しない": [
+     1190,
+     1250
+    ],
+    "要確認": [
+     1540,
+     1600
+    ],
+    "和": 7799
+   },
+   "判定": "当たり"
+  },
+  "C-3": {
+   "実測": "登録簿 16・表 16・差 0・1 つ消すと 16 / 16 が赤・実測の reason の表の外 0",
+   "判定": "当たり"
+  },
+  "C-4": {
+   "実測": "67 書類 × 2 profile で同じ byte・report.py の golden 2 本とバイト一致",
+   "判定": "当たり"
+  },
+  "C-1": {
+   "実測": "先頭の節「違う」に 5 / 5・出典の値の単位が文と同じ 5 / 5",
+   "判定": "当たり"
+  },
+  "C-5": {
+   "実測": "report.py・verify_document.py・vocabulary.py・recipes.py・registry_setup.py の HEAD からの差分 0 行は True・engine の指紋 file 数 16",
+   "判定": "当たり"
+  }
+ },
+ "limits": [
+  "「違う」が正しい文に出る率は報告の形では減らない(既定 P22 で 違う の率は変わらない。P25 明示で減るのは P24・P25 の engine の直しの効き目で、この封の効き目ではない)",
+  "no_same_value の名指した当期の値は verify_document の出力に欄が無く、報告に出さない(理由の 1 行だけ)",
+  "標準ラベルは repo の外。IFRS(jpigp_cor)と会社ごとのセグメント member はラベル file に無く要素名のまま",
+  "語の主張の出典の値は単位が無いので円で出る。report.py 末尾の「率・差は文と同じ単位」は差については実物と違う(差も円)― report.py は触らない",
+  "--labels の dir の sha256 は報告の module では照合しない(照合はこの測定の起動時と instance.py)"
+ ]
+}

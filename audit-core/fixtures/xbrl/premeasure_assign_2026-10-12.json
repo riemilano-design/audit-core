@@ -1,0 +1,4339 @@
+{
+ "delta_vs_main": {
+  "1B:N016": {
+   "forms": [
+    "F2"
+   ],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "百万円増加(前連結会計年度は【14億7千5百万円】増加)し、278億3千6百万",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "1B:N018": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "千6百万円(前連結会計年度は【255億5千4百万円】)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "1B:N019": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "は、受取手形及び売掛金の増加【8億4百万円】、投資有価証券の増加3億1百",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N020": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "4百万円、投資有価証券の増加【3億1百万円】、退職給付に係る資産の増加1",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N021": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "円、退職給付に係る資産の増加【18億2千8百万円】、現金及び預金の減少2億9千",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N022": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "8百万円、現金及び預金の減少【2億9千3百万円】、契約資産の減少1億6千1百",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N023": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "9千3百万円、契約資産の減少【1億6千1百万円】であります。",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N025": {
+   "forms": [
+    "F2"
+   ],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "百万円増加(前連結会計年度は【5億3千7百万円】減少)し、106億7千万円(",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "1B:N027": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "億7千万円(前連結会計年度は【100億5千5百万円】)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "1B:N028": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "は、完成業務補償引当金の増加【7億8千6百万円】、繰延税金負債の増加4億4千",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N029": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "6百万円、繰延税金負債の増加【4億4千8百万円】、業務未払金の減少3億円、未",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N030": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "千8百万円、業務未払金の減少【3億円】、未払法人税等の減少1億7百",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N031": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "少3億円、未払法人税等の減少【1億7百万円】、長期借入金の減少2億3千4",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N032": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "億7百万円、長期借入金の減少【2億3千4百万円】であります。",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N034": {
+   "forms": [
+    "F2"
+   ],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "百万円増加(前連結会計年度は【20億1千2百万円】増加)し、171億6千5百万",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "1B:N036": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "千5百万円(前連結会計年度は【154億9千8百万円】)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "1B:N039": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "の他有価証券評価差額金の増加【2億1千7百万円】、退職給付に係る調整累計額の",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N040": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "職給付に係る調整累計額の増加【10億8千5百万円】によるものであります。",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "1B:N043": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "べて2億9千3百万円減少し、【26億5百万円】となりました。",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "1B:N045": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "前連結会計年度は獲得した資金【30億2千9百万円】)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "1B:N046": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "主に、税金等調整前当期純利益【14億5千2百万円】に、減価償却費4億5千2百万",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "1B:N048": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "費用のほか、売上債権の増加額【8億2百万円】、契約資産の減少額1億6千1",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "1B:N049": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "億2百万円、契約資産の減少額【1億6千1百万円】、仕入債務の減少額3億円、契",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "1B:N050": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "千1百万円、仕入債務の減少額【3億円】、契約負債の減少額9千3百万",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "1B:N051": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "少額3億円、契約負債の減少額【9千3百万円】、法人税等の支払額7億8千万",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "1B:N052": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "千3百万円、法人税等の支払額【7億8千万円】によるものであります。",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "1B:N054": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "前連結会計年度は使用した資金【5億6百万円】)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "1B:N058": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "前連結会計年度は使用した資金【17億4千万円】)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "5F:N008": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": ",196千円(前期は営業損失【9,709千円】)、経常損失98,576千円",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "5F:N010": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": ",576千円(前期は経常損失【7,091千円】)、親会社株主に帰属する当期",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "5F:N012": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "会社株主に帰属する当期純損失【17,621千円】)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "5F:N051": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "前連結会計年度は獲得した資金【29,377千円】)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "5F:N052": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "は主に税金等調整前当期純損失【102,694千円】、減価償却費14,423千円",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "5F:N056": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "190千円、棚卸資産の増加額【23,262千円】、未払消費税等の減少額14,",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "5F:N057": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "2千円、未払消費税等の減少額【14,472千円】などによるものであります。",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "5F:N059": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "前連結会計年度は使用した資金【10,892千円】)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "5F:N064": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "前連結会計年度は使用した資金【47,193千円】)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "5F:N065": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "これは主に短期借入金の増加額【150,000千円】、長期借入金の返済による支出",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "5F:N078": {
+   "forms": [
+    "F1",
+    "F3"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "6千円と前連結会計年度に比べ【42,487千円】(前連結会計年度は営業損失9",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "5F:N079": {
+   "forms": [],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "円(前連結会計年度は営業損失【9,709千円】)の減益となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "5F:N083": {
+   "forms": [
+    "F1",
+    "F3"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "6千円と前連結会計年度に比べ【91,485千円】(前連結会計年度は経常損失7",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "5F:N084": {
+   "forms": [],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "円(前連結会計年度は経常損失【7,091千円】)の減益となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "5F:N088": {
+   "forms": [
+    "F1",
+    "F3"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "3千円と前連結会計年度に比べ【88,251千円】(前連結会計年度は親会社株主",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "5F:N089": {
+   "forms": [],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "会社株主に帰属する当期純損失【17,621千円】)の減益となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N015": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "万円となり、前連結会計年度の【36,975百万円】から1,088百万円、率にし",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N022": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "で2,556百万円と前期末の【1,751百万円】から804百万円増加しており",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N025": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": ",334百万円となり、前期の【12,018百万円】から684百万円、5.7%の",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N026": {
+   "forms": [
+    "F5"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "前期の12,018百万円から【684百万円】、5.7%の減少となりました",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N029": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "価は26,729百万円(前期【24,956百万円】)と1,772百万円、7.1",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N030": {
+   "forms": [
+    "F5"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "(前期24,956百万円)と【1,772百万円】、7.1%増加しました。",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N043": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": ",869百万円となり、前期の【9,303百万円】から566百万円、6.1%増",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N044": {
+   "forms": [
+    "F5"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "、前期の9,303百万円から【566百万円】、6.1%増加しました。",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N047": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "手当は3,559百万円(前期【3,441百万円】)と118百万円増加しており",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N050": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "究開発費は255百万円(前期【257百万円】)とほぼ前年並みの水準を維持",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N052": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "給付費用は118百万円(前期【137百万円】)と18百万円減少しました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N055": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "金繰入額は△28百万円(前期【58百万円】)と戻入となっており、この点",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N057": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "管費は5,962百万円(前期【5,407百万円】)と554百万円増加しており",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N060": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "991百万円となり、前期末の【205百万円】から786百万円増加いたしま",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N063": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "加は、当期の営業利益の減益額【1,250百万円】の約6割に相当する規模であり",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N065": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": ",465百万円となり、前期の【2,715百万円】から1,250百万円、46.",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N066": {
+   "forms": [
+    "F5"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "、前期の2,715百万円から【1,250百万円】、46.0%の大幅減益となり",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N072": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "営業外収益は87百万円(前期【72百万円】)と14百万円増加しました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N075": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "訳は、受取利息9百万円(前期【1百万円】)、受取配当金25百万円(同",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N077": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": ")、受取配当金25百万円(同【20百万円】)、不動産賃貸料15百万円(",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N079": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "、不動産賃貸料15百万円(同【15百万円】)、その他37百万円(同35",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N081": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "万円)、その他37百万円(同【35百万円】)です。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N083": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "営業外費用は95百万円(前期【79百万円】)と15百万円増加しました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N086": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "訳は支払利息80百万円(前期【58百万円】)で、金利上昇の影響により2",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N089": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "利益は1,457百万円(前期【2,709百万円】)となり、1,251百万円、",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N090": {
+   "forms": [
+    "F5"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "期2,709百万円)となり、【1,251百万円】、46.2%の減益となりまし",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N095": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "で、内訳は関係会社株式売却損【6百万円】および減損損失0百万円です。",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "P7:N098": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "利益は1,452百万円(前期【2,707百万円】)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N100": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "税等合計は506百万円(前期【785百万円】)で、内訳は法人税等調整額を",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N106": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "期純利益は945百万円(前期【1,922百万円】)となり、976百万円、50",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N107": {
+   "forms": [
+    "F5"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "期1,922百万円)となり、【976百万円】、50.8%の減益となりまし",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N111": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "純利益は115円43銭(前期【236円】28銭)、自己資本当期純利益",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N115": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "は2,256百万円**(前期【2,451百万円】)と、前期比では194百万円",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N116": {
+   "forms": [
+    "F5"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "451百万円)と、前期比では【194百万円】、7.9%の減少にとどまりま",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N119": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "利益は1,310百万円(前期【528百万円】)と782百万円増加しており",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N122": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "調整額1,085百万円(前期【470百万円】)、その他有価証券評価差額金",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N124": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "券評価差額金217百万円(同【62百万円】)、為替換算調整勘定2百万円",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N126": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "為替換算調整勘定2百万円(同【△3百万円】)、繰延ヘッジ損益4百万円で",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N129": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "円となり、前連結会計年度末の【25,554百万円】から2,281百万円、8.9",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N130": {
+   "forms": [
+    "F5"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "度末の25,554百万円から【2,281百万円】、8.9%増加しました。",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N133": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "は16,943百万円(前期末【16,533百万円】)と409百万円増加しました",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N136": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "金:2,605百万円(前期末【2,899百万円】)、293百万円の減少",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N139": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "売掛金:2,556百万円(同【1,751百万円】)、804百万円の増加",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N142": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "資産:11,267百万円(同【11,428百万円】)、161百万円の減少",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N145": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "の流動資産:513百万円(同【454百万円】)、59百万円の増加",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N150": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "は10,892百万円(前期末【9,021百万円】)と1,871百万円、20.",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N151": {
+   "forms": [
+    "F5"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "(前期末9,021百万円)と【1,871百万円】、20.7%の大幅増加となり",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N154": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "産:2,092百万円(前期末【2,083百万円】)、9百万円の増加",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N157": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "形固定資産:371百万円(同【528百万円】)、157百万円の減少(うち",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N163": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "の資産:8,428百万円(同【6,409百万円】)、2,019百万円の増加",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N166": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "*が6,174百万円(前期末【4,345百万円】)と1,828百万円増加した",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N169": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "価証券も1,203百万円(同【901百万円】)と301百万円増加しました",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N172": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "評価差額金が414百万円から【631百万円】へ増加)および一部銘柄の追加",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "P7:N175": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "670百万円となり、前期末の【10,055百万円】から614百万円、6.1%増",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N176": {
+   "forms": [
+    "F5"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "期末の10,055百万円から【614百万円】、6.1%増加しました。",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N179": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "*は8,041百万円(前期末【7,642百万円】)と398百万円増加しました",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N182": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "金:1,757百万円(前期末【2,057百万円】)、300百万円の減少",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N185": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "費税等:1,490百万円(同【1,191百万円】)、299百万円の増加",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N188": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "払法人税等:579百万円(同【687百万円】)、107百万円の減少",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N191": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "約負債:1,500百万円(同【1,594百万円】)、93百万円の減少",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N194": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "長期借入金:234百万円(同【332百万円】)、98百万円の減少",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N197": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "株式報酬引当金:7百万円(同【69百万円】)、62百万円の減少",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N200": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "注損失引当金:19百万円(同【18百万円】)、1百万円の増加",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N203": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "*は2,629百万円(前期末【2,413百万円】)と215百万円増加しました",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N206": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "負債1,738百万円(前期末【1,290百万円】、448百万円増)、長期借入",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N209": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "、長期借入金275百万円(同【510百万円】、234百万円減)、資産除去",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N210": {
+   "forms": [
+    "F2"
+   ],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "75百万円(同510百万円、【234百万円】減)、資産除去債務215百万",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N212": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "資産除去債務215百万円(同【198百万円】)、その他242百万円です。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N215": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "償引当金991百万円(前期末【205百万円】)が前述のとおり786百万円",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N220": {
+   "forms": [],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "円の合計510百万円(前期末【843百万円】)まで減少しており、現預金2",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N223": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "165百万円となり、前期末の【15,498百万円】から1,667百万円、10.",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N224": {
+   "forms": [
+    "F5"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "期末の15,498百万円から【1,667百万円】、10.8%増加しました。",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N227": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": ":14,258百万円(前期末【13,890百万円】)、367百万円の増加",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N229": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "- 資本金【2,000百万円】(増減なし)",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "P7:N231": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "本剰余金1,766百万円(同【1,696百万円】)、70百万円増",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N234": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "剰余金10,510百万円(同【10,217百万円】)、292百万円増",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N237": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "- 自己株式△18百万円(同【△22百万円】)",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N239": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "累計額:2,907百万円(同【1,596百万円】)、1,310百万円の増加",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N242": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "券評価差額金631百万円(同【414百万円】)",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N245": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "換算調整勘定△16百万円(同【△19百万円】)",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N247": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "整累計額2,287百万円(同【1,201百万円】)",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N256": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "産額は2,096円83銭(同【1,897円】74銭)と199円増加してお",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N259": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "円となり、前連結会計年度末の【2,899百万円】から293百万円減少しました",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N262": {
+   "forms": [
+    "F2"
+   ],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "加は1,032百万円(前期は【3,029百万円】の増加)となり、前期比で1,",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N263": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "万円の増加)となり、前期比で【1,996百万円】の収入減少となりました。",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "P7:N264": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "容は、税金等調整前当期純利益【1,452百万円】、減価償却費452百万円、の",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "P7:N267": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "円、完成業務補償引当金の増加【786百万円】、契約資産の減少161百万円",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N268": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "786百万円、契約資産の減少【161百万円】などの収入要因に対し、退職給",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N269": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "し、退職給付に係る資産の増加【1,828百万円】、売上債権の増加802百万円",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N270": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "828百万円、売上債権の増加【802百万円】、仕入債務の減少300百万円",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N271": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "802百万円、仕入債務の減少【300百万円】、契約負債の減少93百万円な",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N272": {
+   "forms": [
+    "F1"
+   ],
+   "kind": [
+    "対にする"
+   ],
+   "main_diff": false,
+   "text": "300百万円、契約負債の減少【93百万円】などの支出要因がありました。",
+   "v2_pair": true,
+   "v2_period": "Current"
+  },
+  "P7:N274": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "小計は1,813百万円(前期【4,032百万円】)となり、これに利息及び配当",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N277": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "80百万円、法人税等の支払額【△780百万円】を加減しております。",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "P7:N279": {
+   "forms": [],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "給付に係る資産の増加額が前期【890百万円】から当期1,828百万円へと",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N280": {
+   "forms": [],
+   "kind": [
+    "対をやめる"
+   ],
+   "main_diff": true,
+   "text": "額が前期890百万円から当期【1,828百万円】へと938百万円拡大したこと",
+   "v2_pair": false,
+   "v2_period": "Current"
+  },
+  "P7:N282": {
+   "forms": [
+    "F2"
+   ],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "したこと、3前期は売上債権が【209百万円】減少したのに対し当期は802",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N286": {
+   "forms": [
+    "F2"
+   ],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "の減少は259百万円(前期は【506百万円】の減少)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N292": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "前期(設備投資関連【453百万円】)と比べ投資額は抑制されてお",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N294": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "は773百万円のプラス(前期【2,522百万円】のプラス)を確保しております",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N296": {
+   "forms": [
+    "F2"
+   ],
+   "kind": [
+    "対をやめる",
+    "前期の単一"
+   ],
+   "main_diff": true,
+   "text": "少は1,073百万円(前期は【1,740百万円】の減少)となりました。",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N300": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "前期は短期借入金の純減【905百万円】がありましたが、当期は借入金",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  },
+  "P7:N301": {
+   "forms": [],
+   "kind": [
+    "前期の単一"
+   ],
+   "main_diff": false,
+   "text": "配当金の支払額は前期の【529百万円】から122百万円増加しており",
+   "v2_pair": false,
+   "v2_period": "Prior1"
+  }
+ },
+ "rows": {
+  "1st:1B:N005": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "(同106.8%)、売上高は【380億6千4百万円】(同102.9%)となりまし",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N007": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "額を計上したため、営業利益は【14億6千5百万円】(同54.0%)、経常利益は",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N009": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "(同54.0%)、経常利益は【14億5千7百万円】(同53.8%)、最終の親会",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N011": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "社株主に帰属する当期純利益は【9億4千5百万円】(同49.2%)となり、前連",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N017": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "14億7千5百万円増加)し、【278億3千6百万円】(前連結会計年度は255億5",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N018": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "千6百万円(前連結会計年度は【255億5千4百万円】)となりました。",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:1B:N026": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "は5億3千7百万円減少)し、【106億7千万円】(前連結会計年度は100億5",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N027": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "億7千万円(前連結会計年度は【100億5千5百万円】)となりました。",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:1B:N033": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "は、前連結会計年度末と比べて【16億6千7百万円】増加(前連結会計年度は20億",
+   "v1": {
+    "diff": true,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1",
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N034": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "百万円増加(前連結会計年度は【20億1千2百万円】増加)し、171億6千5百万",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [
+     "F2"
+    ],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:1B:N035": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "20億1千2百万円増加)し、【171億6千5百万円】(前連結会計年度は154億9",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N036": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "千5百万円(前連結会計年度は【154億9千8百万円】)となりました。",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:1B:N037": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "主な変動は、剰余金の配当【6億5千2百万円】、親会社株主に帰属する当期純",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N038": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "会社株主に帰属する当期純利益【9億4千5百万円】、その他有価証券評価差額金の",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N044": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "動の結果獲得した資金純額は、【10億3千2百万円】(前連結会計年度は獲得した資",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N045": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "前連結会計年度は獲得した資金【30億2千9百万円】)となりました。",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:1B:N046": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "主に、税金等調整前当期純利益【14億5千2百万円】に、減価償却費4億5千2百万",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N047": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "億5千2百万円に、減価償却費【4億5千2百万円】の非資金費用のほか、売上債権",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N048": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "費用のほか、売上債権の増加額【8億2百万円】、契約資産の減少額1億6千1",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": true,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N049": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "億2百万円、契約資産の減少額【1億6千1百万円】、仕入債務の減少額3億円、契",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": true,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N050": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "千1百万円、仕入債務の減少額【3億円】、契約負債の減少額9千3百万",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": true,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N051": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "少額3億円、契約負債の減少額【9千3百万円】、法人税等の支払額7億8千万",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": true,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N052": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "千3百万円、法人税等の支払額【7億8千万円】によるものであります。",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N053": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "動の結果使用した資金純額は、【2億5千9百万円】(前連結会計年度は使用した資",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N054": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "前連結会計年度は使用した資金【5億6百万円】)となりました。",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:1B:N055": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "有形固定資産の取得による支出【3億7百万円】、無形固定資産の取得による支",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N056": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "無形固定資産の取得による支出【4千4百万円】によるものであります。",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N057": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "動の結果使用した資金純額は、【10億7千3百万円】(前連結会計年度は使用した資",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N058": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "前連結会計年度は使用した資金【17億4千万円】)となりました。",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:1B:N059": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "、長期借入金の返済による支出【3億3千2百万円】、配当金の支払額6億5千1百",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:1B:N060": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "3千2百万円、配当金の支払額【6億5千1百万円】によるものであります。",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N003": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "発行に係る諸費用を株式交付費【48,190千円】として営業外費用として計上し",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N004": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "係る固定資産について減損損失【3,758千円】を特別損失として計上したこと",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N005": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "連結会計年度の業績は、売上高【1,850,502千円】(前期比0.3%増)、営業損",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N007": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "前期比0.3%増)、営業損失【52,196千円】(前期は営業損失9,709千",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N008": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": ",196千円(前期は営業損失【9,709千円】)、経常損失98,576千円",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:5F:N009": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "失9,709千円)、経常損失【98,576千円】(前期は経常損失7,091千",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N010": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": ",576千円(前期は経常損失【7,091千円】)、親会社株主に帰属する当期",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:5F:N011": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "会社株主に帰属する当期純損失【105,873千円】(前期は親会社株主に帰属する",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N012": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "会社株主に帰属する当期純損失【17,621千円】)となりました。",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:5F:N048": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "シュ・フローがプラスとなり、【505,066千円】(前連結会計年度比11.9%",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N050": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "業活動の結果、使用した資金は【71,459千円】(前連結会計年度は獲得した資",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N052": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "は主に税金等調整前当期純損失【102,694千円】、減価償却費14,423千円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N056": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "190千円、棚卸資産の増加額【23,262千円】、未払消費税等の減少額14,",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": true,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N057": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "2千円、未払消費税等の減少額【14,472千円】などによるものであります。",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": true,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N062": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "46千円、短期貸付による支出【50,000千円】などによるものであります。",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N065": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "これは主に短期借入金の増加額【150,000千円】、長期借入金の返済による支出",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": true,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N066": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "、長期借入金の返済による支出【12,471千円】、配当金の支払額5,771千",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N067": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": ",471千円、配当金の支払額【5,771千円】によるものであります。",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N068": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "売上高は、【1,850,502千円】と前連結会計年度に比べ6,4",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N077": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "損益につきましては、営業損失【52,196千円】と前連結会計年度に比べ42,",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N079": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "円(前連結会計年度は営業損失【9,709千円】)の減益となりました。",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:5F:N082": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "551千円を計上し、経常損失【98,576千円】と前連結会計年度に比べ91,",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "1st:5F:N084": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "円(前連結会計年度は経常損失【7,091千円】)の減益となりました。",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "1st:5F:N087": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "会社株主に帰属する当期純損失【105,873千円】と前連結会計年度に比べ88,",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "2nd:1B:N012": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "money": false,
+   "target": false,
+   "text": "純利益は9億4千5百万円(同【49.2%】)となり、前連結会計年度に比",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:1B:N015": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "money": true,
+   "target": false,
+   "text": "は、前連結会計年度末と比べて【22億8千1百万円】増加(前連結会計年度は14億",
+   "v1": {
+    "diff": true,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1",
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:1B:N019": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "money": true,
+   "target": true,
+   "text": "は、受取手形及び売掛金の増加【8億4百万円】、投資有価証券の増加3億1百",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:1B:N020": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "money": true,
+   "target": true,
+   "text": "4百万円、投資有価証券の増加【3億1百万円】、退職給付に係る資産の増加1",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:1B:N022": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "money": true,
+   "target": true,
+   "text": "8百万円、現金及び預金の減少【2億9千3百万円】、契約資産の減少1億6千1百",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:1B:N023": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "money": true,
+   "target": true,
+   "text": "9千3百万円、契約資産の減少【1億6千1百万円】であります。",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:1B:N024": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "money": true,
+   "target": false,
+   "text": "は、前連結会計年度末と比べて【6億1千4百万円】増加(前連結会計年度は5億3",
+   "v1": {
+    "diff": true,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1",
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:1B:N029": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "money": true,
+   "target": true,
+   "text": "6百万円、繰延税金負債の増加【4億4千8百万円】、業務未払金の減少3億円、未",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:1B:N031": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "money": true,
+   "target": true,
+   "text": "少3億円、未払法人税等の減少【1億7百万円】、長期借入金の減少2億3千4",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:1B:N032": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "money": true,
+   "target": true,
+   "text": "億7百万円、長期借入金の減少【2億3千4百万円】であります。",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:5F:N020": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "money": false,
+   "target": false,
+   "text": "利益32,925千円(前期比【42.5%】減)となりました。",
+   "v1": {
+    "diff": true,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:5F:N034": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "money": false,
+   "target": false,
+   "text": "利益62,407千円(前期比【11.8%】減)となりました。",
+   "v1": {
+    "diff": true,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:5F:N069": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "money": true,
+   "target": true,
+   "text": "2千円と前連結会計年度に比べ【6,442千円】増加(前連結会計年度比0.3",
+   "v1": {
+    "diff": true,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1",
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:5F:N074": {
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "money": true,
+   "target": false,
+   "text": "び一般管理費につきましては、【17,979千円】増加(前連結会計年度比3.5",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:5F:N078": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "money": true,
+   "target": true,
+   "text": "6千円と前連結会計年度に比べ【42,487千円】(前連結会計年度は営業損失9",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1",
+     "F3"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "2nd:5F:N083": {
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "money": true,
+   "target": true,
+   "text": "6千円と前連結会計年度に比べ【91,485千円】(前連結会計年度は経常損失7",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1",
+     "F3"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  }
+ },
+ "rows_p7": {
+  "N003": {
+   "ctx": "CurrentYearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "高を更新した一方、営業利益は【1,465百万円】(同46.0%減)、経常利益",
+   "unit": "百万円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N009": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "政状態につきましては、総資産【27,836百万円】、純資産17,165百万円、",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N011": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": ",165百万円、自己資本比率【61.7%】(前期末60.6%)と財務の",
+   "unit": "%",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N014": {
+   "ctx": "CurrentYearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "当連結会計年度の売上高は【38,064百万円】となり、前連結会計年度の36",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N021": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "手形及び売掛金)は期末時点で【2,556百万円】と前期末の1,751百万円か",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N024": {
+   "ctx": "CurrentYearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "売上総利益は【11,334百万円】となり、前期の12,018百",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N026": {
+   "ctx": "CurrentYearDuration | Prior1YearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "前期の12,018百万円から【684百万円】、5.7%の減少となりました",
+   "unit": "円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F5"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "N063": {
+   "ctx": "CurrentYearDuration | Prior1YearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "加は、当期の営業利益の減益額【1,250百万円】の約6割に相当する規模であり",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "N066": {
+   "ctx": "CurrentYearDuration | Prior1YearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "、前期の2,715百万円から【1,250百万円】、46.0%の大幅減益となり",
+   "unit": "百万円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F5"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "N089": {
+   "ctx": "Prior1YearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "利益は1,457百万円(前期【2,709百万円】)となり、1,251百万円、",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "N105": {
+   "ctx": "CurrentYearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "社株主に帰属する当期純利益は【945百万円】(前期1,922百万円)とな",
+   "unit": "円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N112": {
+   "ctx": "CurrentYearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "資本当期純利益率(ROE)は【5.8%】(前期13.3%)となってお",
+   "unit": "%",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N130": {
+   "ctx": "CurrentYearInstant | Prior1YearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "度末の25,554百万円から【2,281百万円】、8.9%増加しました。",
+   "unit": "百万円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F5"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "N131": {
+   "ctx": "CurrentYearInstant | Prior1YearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "百万円から2,281百万円、【8.9%】増加しました。",
+   "unit": "%",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "N137": {
+   "ctx": "CurrentYearInstant | Prior1YearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "(前期末2,899百万円)、【293百万円】の減少",
+   "unit": "円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "N138": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "- 受取手形及び売掛金:【2,556百万円】(同1,751百万円)、80",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N143": {
+   "ctx": "CurrentYearInstant | Prior1YearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "円(同11,428百万円)、【161百万円】の減少",
+   "unit": "円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "N168": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "また、投資有価証券も【1,203百万円】(同901百万円)と301百",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N170": {
+   "ctx": "CurrentYearInstant | Prior1YearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "3百万円(同901百万円)と【301百万円】増加しました。",
+   "unit": "円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "N172": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "評価差額金が414百万円から【631百万円】へ増加)および一部銘柄の追加",
+   "unit": "円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N174": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "負債合計は【10,670百万円】となり、前期末の10,055",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N175": {
+   "ctx": "Prior1YearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "670百万円となり、前期末の【10,055百万円】から614百万円、6.1%増",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "N178": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "**流動負債**は【8,041百万円】(前期末7,642百万円)と",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N179": {
+   "ctx": "Prior1YearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "*は8,041百万円(前期末【7,642百万円】)と398百万円増加しました",
+   "unit": "百万円",
+   "v1": {
+    "diff": true,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "N181": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "- 業務未払金:【1,757百万円】(前期末2,057百万円)、",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N187": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "- 未払法人税等:【579百万円】(同687百万円)、107百",
+   "unit": "円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N191": {
+   "ctx": "Prior1YearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "約負債:1,500百万円(同【1,594百万円】)、93百万円の減少",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "N192": {
+   "ctx": "CurrentYearInstant | Prior1YearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "万円(同1,594百万円)、【93百万円】の減少",
+   "unit": "円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "N193": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "1年内返済予定の長期借入金:【234百万円】(同332百万円)、98百万",
+   "unit": "円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N205": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "主な内訳は、繰延税金負債【1,738百万円】(前期末1,290百万円、4",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N214": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "また、完成業務補償引当金【991百万円】(前期末205百万円)が前述",
+   "unit": "円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N218": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "定分234百万円と長期借入金【275百万円】の合計510百万円(前期末8",
+   "unit": "円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N219": {
+   "ctx": "Prior1YearInstant",
+   "judge": "wrong_binding",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "長期借入金275百万円の合計【510百万円】(前期末843百万円)まで減",
+   "unit": "円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "N241": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "- その他有価証券評価差額金【631百万円】(同414百万円)",
+   "unit": "円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N249": {
+   "ctx": "CurrentYearDuration",
+   "judge": "ambiguous",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "5百万円の計上と剰余金の配当【652百万円】により292百万円の増加にと",
+   "unit": "円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N264": {
+   "ctx": "CurrentYearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "容は、税金等調整前当期純利益【1,452百万円】、減価償却費452百万円、の",
+   "unit": "百万円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N267": {
+   "ctx": "CurrentYearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "円、完成業務補償引当金の増加【786百万円】、契約資産の減少161百万円",
+   "unit": "円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F1"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N278": {
+   "ctx": "CurrentYearDuration | Prior1YearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "、1税金等調整前当期純利益が【1,255百万円】減少したこと、2退職給付に係",
+   "unit": "百万円",
+   "v1": {
+    "diff": true,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F2"
+    ],
+    "pair": true,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "N282": {
+   "ctx": "Prior1YearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": true,
+    "period": "Current"
+   },
+   "text": "したこと、3前期は売上債権が【209百万円】減少したのに対し当期は802",
+   "unit": "円",
+   "v1": {
+    "diff": true,
+    "period": "Prior1"
+   },
+   "v2": {
+    "diff": true,
+    "flow": false,
+    "forms": [
+     "F2"
+    ],
+    "pair": false,
+    "period": "Prior1"
+   },
+   "want": {
+    "form": "single",
+    "period": "Prior1"
+   }
+  },
+  "N288": {
+   "ctx": "CurrentYearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "無形固定資産の取得による支出【44百万円】、関係会社株式の売却による収",
+   "unit": "円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N289": {
+   "ctx": "CurrentYearDuration | Prior1YearDuration",
+   "judge": "wrong_binding",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "関係会社株式の売却による収入【9百万円】、その他47百万円の収入です",
+   "unit": "円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "pair",
+    "period": "Current"
+   }
+  },
+  "N291": {
+   "ctx": "CurrentYearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "当期の設備投資総額は【341百万円】であり、業務効率化のためのシ",
+   "unit": "円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N298": {
+   "ctx": "CurrentYearDuration",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "332百万円、配当金の支払額【651百万円】、その他7百万円の支出です。",
+   "unit": "円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  },
+  "N303": {
+   "ctx": "CurrentYearInstant",
+   "judge": "correct",
+   "main": {
+    "diff": false,
+    "period": "Current"
+   },
+   "text": "当期末の現金及び預金は【2,605百万円】、有利子負債は510百万円で",
+   "unit": "百万円",
+   "v1": {
+    "diff": false,
+    "period": "Current"
+   },
+   "v2": {
+    "diff": false,
+    "flow": false,
+    "forms": [],
+    "pair": false,
+    "period": "Current"
+   },
+   "want": {
+    "form": "single",
+    "period": "Current"
+   }
+  }
+ },
+ "rules": [
+  "main",
+  "v1",
+  "v2"
+ ]
+}

@@ -1,0 +1,601 @@
+diff --git a/audit-core/tests/adapters/xbrl/test_adoption_mutation_gate.py b/audit-core/tests/adapters/xbrl/test_adoption_mutation_gate.py
+new file mode 100644
+index 0000000..b30d532
+--- /dev/null
++++ b/audit-core/tests/adapters/xbrl/test_adoption_mutation_gate.py
+@@ -0,0 +1,273 @@
++# -*- coding: utf-8 -*-
++"""採用条件 T-R5(docs/ADOPTION_CONDITIONS_2026-10-13.md §1-1)と、
++T-R1・T-R2・T-R4・T-E1・T-E2 が**実際に欠陥を検知する**ことの実証。
++
++**なぜ専用のハーネスか。** 既存の ``test_mutations.py`` は部分木で
++``unittest discover`` を走らせ、終了コードで赤/緑を判定する。2 本の patch を
++重ねた木は**変異を当てる前から 13 本落ちている**ため、どの変異も rc=1 =「赤」に
++見える(飽和)。台帳 L-021 に記録したとおり、接頭辞を取り違える変異はエンジンの
++出力を 28 行変えるのに、既存の試験の数は 1 本も動かなかった。
++
++そこでこのハーネスは、部分木に**この条件のための試験ファイルだけ**を置く
++(ZIP も Golden 期待値も読まないので、基準が緑になる)。
++
++**「検知した」と「実行が失敗しただけ」を分ける。** 変異を当てた回は、次の
++4 つを別々に見て全部満たしたときだけ検知とする。
++  1. ``Ran N tests`` の組が**ちょうど 1 組**で、N が基準と同じ(収集が落ちていない)。
++  2. ``errors`` が 0(import やハーネスの壊れではなく、assert の失敗)。
++  3. 落ちた試験の**名前**が、その変異に対応する名前を含む(**件数では数えない**)。
++  4. 終了コードが 0 でない。
++``grep -c "^FAIL:"`` のような行数の合算は使わない。
++"""
++
++import hashlib
++import os
++import re
++import shutil
++import subprocess
++import sys
++import tempfile
++import unittest
++
++_HERE = os.path.dirname(os.path.abspath(__file__))
++_AUDIT_CORE_DIR = os.path.abspath(os.path.join(_HERE, "..", "..", ".."))
++_ADAPTERS_SRC_DIR = os.path.join(_AUDIT_CORE_DIR, "adapters")
++_CORE_PY_DIR = os.path.join(_AUDIT_CORE_DIR, "core", "py")
++_TESTS_DIR = os.path.join(_AUDIT_CORE_DIR, "tests")
++_TARGET = os.path.join("adapters", "xbrl", "recipes.py")
++
++# この条件のための試験ファイル(部分木に置くのはこれだけ)
++_GUARD_TEST_FILENAMES = ("test_representative_selection.py", "test_extraction_v2_boundary.py")
++
++_RAN_RE = re.compile(r"^Ran (\d+) tests? in ", re.M)
++_FAILED_RE = re.compile(r"^FAILED \((.*)\)\s*$", re.M)
++_OK_RE = re.compile(r"^OK\s*$", re.M)
++_FAILNAME_RE = re.compile(r"^(FAIL|ERROR): (\S+) \(", re.M)
++
++# T-R5 が名指しした 2 つ(接頭辞の取り違え・最終順序)+ 取りこぼしを見る 3 つ
++# + T-E1 の 6 本 + T-E2 の 1 本。old は recipes.py の中で 1 回だけ現れる字。
++_MUTATIONS = [
++    {"id": "M-R1-prefix-swapped", "条件": "T-R1・T-R2",
++     "old": 'startswith("jppfs_cor:")', "new": 'startswith("jpcrp_cor:")',
++     "expect": {"test_exactly_one_jppfs_kind_wins_even_when_it_is_not_the_head",
++                "test_no_jppfs_kind_returns_the_head_in_document_order"},
++     "note": "台帳 L-021 の変異①と同じ置換。既存の試験では黙った。"},
++    {"id": "M-R2-representative-is-the-tail", "条件": "T-R1",
++     "old": "        return group[0]\n", "new": "        return group[-1]\n",
++     "expect": {"test_no_jppfs_kind_returns_the_head_in_document_order"},
++     "note": "代表の最終順序(T-R5 の名指し)。"},
++    {"id": "M-R3-one-kind-becomes-at-least-one", "条件": "T-R1・T-R2",
++     "old": "    if len(names) == 1:", "new": "    if len(names) >= 1:",
++     "expect": {"test_two_jppfs_kinds_decide_nothing", "test_three_jppfs_kinds_decide_nothing"},
++     "note": "2 種以上でも代表を決めてしまう。"},
++    {"id": "M-R4-never-returns-none",
++     "条件": "T-R1・T-R2",
++     "old": '    if len(names) == 1:\n        return next(f for f in group if f["name"] == names[0])\n    return None',
++     "new": '    if len(names) == 1:\n        return next(f for f in group if f["name"] == names[0])\n    return group[0]',
++     "expect": {"test_two_jppfs_kinds_decide_nothing", "test_three_jppfs_kinds_decide_nothing"},
++     "note": "代表を決めない枝を潰す(停止の取りこぼし)。"},
++    {"id": "M-R5-groups-chosen-by-value", "条件": "T-R4",
++     "old": "    groups = _collapse_candidates(pool)",
++     "new": "    groups = [[f for f in pool if V.match_value(f[\"value\"], target, scale)] or list(pool)]",
++     "expect": {"test_several_groups_stop_even_when_one_of_them_matches_the_claim"},
++     "note": "候補の群を値で選ぶ(封 BINDING_ORDER_SEAL §3 規則 4 の違反)。"},
++    {"id": "M-E1a-diff-word-includes-zougakugaku", "条件": "T-E1",
++     "old": 'r"(?:(?:増加|減少)(?!額)|', "new": 'r"(?:(?:増加|減少)(?:額)?|',
++     "expect": {"test_each_boundary_row"}, "note": "増加額・減少額を増減語に含める。"},
++    {"id": "M-E1b-bare-word-ignores-following-kanji", "条件": "T-E1",
++     "old": 'r"[増減](?![一-龥])"', "new": 'r"[増減]"',
++     "expect": {"test_each_boundary_row"}, "note": "減価・減損を増減語として拾う。"},
++    {"id": "M-E1c-f3-allows-percent", "条件": "T-E1",
++     "old": 'r"^[(（][^()（）%％]*[)）]の?"', "new": 'r"^[(（][^()（）]*[)）]の?"',
++     "expect": {"test_each_boundary_row"}, "note": "F3 の括弧の中に % があっても対にする。"},
++    {"id": "M-E1d-flow-item-rule-removed", "条件": "T-E1",
++     "old": "    flow = bool(_FLOW_BEFORE_RE.search(left))",
++     "new": "    flow = False",
++     "expect": {"test_each_boundary_row"}, "note": "R-2f(増加額・減少額の直前)を外す。"},
++    {"id": "M-E1e-baseline-cue-not-excluded", "条件": "T-E1",
++     "old": "            if _BASELINE_AFTER_CUE_RE.match(s[ce:ce + 6]) or s[ce:ce + 1] == \"比\":",
++     "new": "            if False:",
++     "expect": {"test_each_boundary_row"}, "note": "前期に比べ・前期比 を期間の手がかりに使う。"},
++    {"id": "M-E1f-cue-window-widened", "条件": "T-E1",
++     "old": "        base = max(0, a - 15)", "new": "        base = max(0, a - 25)",
++     "expect": {"test_each_boundary_row"},
++     "note": ("手がかりの窓 15 字 → 25 字(旧窓)。"
++              "test_the_cue_window_rows_differ_by_exactly_one_character は表の宣言と"
++              "印の位置だけを見るので、この変異を**構造的に検知できない**(期待に入れない)。")},
++    {"id": "M-E2-period-searched-again-by-value", "条件": "T-E2",
++     "old": '    want_single = "Prior1Year" if period == "Prior1" else "CurrentYear"',
++     "new": ('    want_single = "Prior1Year" if (period == "Prior1" or not any(\n'
++             '        V.match_value(f["value"], target, scale) for f in facts\n'
++             '        if f["context"].startswith("CurrentYear"))) else "CurrentYear"'),
++     "expect": {"test_a_value_that_does_not_match_is_not_looked_for_in_another_period"},
++     "note": "値が合わないときに別の期間を探す(封 BINDING_ORDER_SEAL §3 規則 3 の違反)。"},
++]
++
++# 陰性対照: 同じファイルのコメントだけを変える(振る舞いは変わらない)。
++_NEGATIVE_CONTROL = {
++    "id": "N-C-comment-only",
++    "old": "# 正本は fixtures/xbrl/premeasure_assign_2026-10-12.py の v2_rule。",
++    "new": "# 正本は fixtures/xbrl/premeasure_assign_2026-10-12.py の v2_rule(陰性対照)。",
++}
++
++
++def _sha256(path):
++    with open(path, "rb") as handle:
++        return hashlib.sha256(handle.read()).hexdigest()
++
++
++def _build_tree(temp_root):
++    shutil.copytree(_CORE_PY_DIR, os.path.join(temp_root, "core", "py"))
++    shutil.copytree(_ADAPTERS_SRC_DIR, os.path.join(temp_root, "adapters"))
++    tests_dir = os.path.join(temp_root, "tests")
++    os.makedirs(tests_dir)
++    shutil.copyfile(os.path.join(_TESTS_DIR, "__init__.py"), os.path.join(tests_dir, "__init__.py"))
++    adapters_dir = os.path.join(tests_dir, "adapters")
++    os.makedirs(adapters_dir)
++    shutil.copyfile(os.path.join(_TESTS_DIR, "adapters", "__init__.py"),
++                    os.path.join(adapters_dir, "__init__.py"))
++    xbrl_dir = os.path.join(adapters_dir, "xbrl")
++    os.makedirs(xbrl_dir)
++    shutil.copyfile(os.path.join(_HERE, "__init__.py"), os.path.join(xbrl_dir, "__init__.py"))
++    for name in _GUARD_TEST_FILENAMES:
++        shutil.copyfile(os.path.join(_HERE, name), os.path.join(xbrl_dir, name))
++
++
++def _run(temp_root):
++    # 変異と原文が**同じ字数**だと、mtime の分解能(1 秒)では pyc が古いまま
++    # 使われて変異が隠れる(M-R1・M-R3・M-E1f は置換前後で字数が同じ)。
++    # 実行ごとに捨てて、必ず作り直させる。
++    pycache = os.path.join(temp_root, "pyc")
++    shutil.rmtree(pycache, ignore_errors=True)
++    completed = subprocess.run(
++        [sys.executable, "-X", "pycache_prefix=" + pycache,
++         "-m", "unittest", "discover", "-s", "tests", "-t", "."],
++        cwd=temp_root, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
++    text = completed.stdout.decode("utf-8", errors="replace")
++    ran = _RAN_RE.findall(text)
++    failed = _FAILED_RE.findall(text)
++    counts = {"failures": 0, "errors": 0}
++    if failed:
++        for part in failed[-1].split(","):
++            key, _sep, value = part.strip().partition("=")
++            if key in counts:
++                counts[key] = int(value)
++    return {
++        "rc": completed.returncode,
++        "ran_blocks": [int(n) for n in ran],
++        "ok": bool(_OK_RE.search(text)),
++        "failed_line": failed[-1] if failed else None,
++        "counts": counts,
++        "names": sorted({m[1] for m in _FAILNAME_RE.findall(text)}),
++        "tail": text[-1500:],
++    }
++
++
++def _apply(temp_root, mutation):
++    path = os.path.join(temp_root, _TARGET)
++    with open(path, "r", encoding="utf-8") as handle:
++        text = handle.read()
++    occurrences = text.count(mutation["old"])
++    if occurrences != 1:
++        raise AssertionError("%s: old が %d 回現れる(1 回でなければならない)"
++                             % (mutation["id"], occurrences))
++    with open(path, "w", encoding="utf-8") as handle:
++        handle.write(text.replace(mutation["old"], mutation["new"], 1))
++
++
++def _restore(temp_root, original_text):
++    """**置換で戻さない。**保存した原文を書き戻す(逆向きの置換は別の場所に当たる)。"""
++
++    with open(os.path.join(temp_root, _TARGET), "w", encoding="utf-8") as handle:
++        handle.write(original_text)
++
++
++class AdoptionMutationGate(unittest.TestCase):
++    """基準 → 変異 → 陰性対照 → 復元 の 4 段階を、1 つの部分木で順に走らせる。"""
++
++    @classmethod
++    def setUpClass(cls):
++        cls.temp_root = tempfile.mkdtemp(prefix="audit-core-adoption-gate-")
++        _build_tree(cls.temp_root)
++        cls.target_path = os.path.join(cls.temp_root, _TARGET)
++        with open(cls.target_path, "r", encoding="utf-8") as handle:
++            cls.original_text = handle.read()
++        cls.base_sha = _sha256(cls.target_path)
++        cls.baseline = _run(cls.temp_root)
++
++    @classmethod
++    def tearDownClass(cls):
++        shutil.rmtree(cls.temp_root, ignore_errors=True)
++
++    def _assert_green(self, result, label):
++        self.assertEqual(result["ran_blocks"], [self.baseline["ran_blocks"][0]],
++                         "%s: Ran の組が 1 組でないか本数が違う %r" % (label, result["ran_blocks"]))
++        self.assertTrue(result["ok"], "%s: OK でない(%s)\n%s" % (label, result["failed_line"], result["tail"]))
++        self.assertEqual(result["rc"], 0, "%s: rc=%d" % (label, result["rc"]))
++        self.assertEqual(result["names"], [], "%s: 落ちた試験 %r" % (label, result["names"]))
++
++    def test_1_baseline_is_green(self):
++        self.assertEqual(len(self.baseline["ran_blocks"]), 1,
++                         "基準: Ran の組が 1 組でない %r(入れ子の実行が混ざっている)"
++                         % (self.baseline["ran_blocks"],))
++        self.assertGreater(self.baseline["ran_blocks"][0], 0)
++        self._assert_green(self.baseline, "基準")
++
++    def test_2_negative_control_does_not_turn_anything_red(self):
++        _apply(self.temp_root, _NEGATIVE_CONTROL)
++        try:
++            self._assert_green(_run(self.temp_root), "陰性対照(コメントだけ)")
++        finally:
++            _restore(self.temp_root, self.original_text)
++            self.assertEqual(_sha256(self.target_path), self.base_sha, "陰性対照の復元に失敗")
++
++    def test_3_every_mutation_is_detected_by_name_then_restored(self):
++        failures = []
++        for mutation in _MUTATIONS:
++            _apply(self.temp_root, mutation)
++            try:
++                result = _run(self.temp_root)
++            finally:
++                _restore(self.temp_root, self.original_text)
++            restored_sha = _sha256(self.target_path)
++            after = _run(self.temp_root)
++
++            why = []
++            if len(result["ran_blocks"]) != 1:
++                why.append("Ran の組が %r(1 組でない)" % (result["ran_blocks"],))
++            elif result["ran_blocks"][0] != self.baseline["ran_blocks"][0]:
++                why.append("収集された本数が %d(基準 %d)"
++                           % (result["ran_blocks"][0], self.baseline["ran_blocks"][0]))
++            if result["counts"]["errors"] != 0:
++                why.append("errors=%d(assert の失敗でない)" % result["counts"]["errors"])
++            if result["rc"] == 0:
++                why.append("rc=0(黙った)")
++            missing = sorted(mutation["expect"] - set(result["names"]))
++            if missing:
++                why.append("期待した名前が落ちていない %r / 実際に落ちた名前 %r"
++                           % (missing, result["names"]))
++            if restored_sha != self.base_sha:
++                why.append("復元後の sha が基準と違う")
++            if not after["ok"] or after["rc"] != 0:
++                why.append("復元後に緑に戻らない(%s)" % after["failed_line"])
++            if why:
++                failures.append("%s: %s" % (mutation["id"], " / ".join(why)))
++        self.assertEqual(failures, [], "変異の検知に失敗:\n" + "\n".join(failures))
++
++    def test_4_every_mutation_names_a_condition_and_a_test_that_exists(self):
++        import importlib
++        known = set()
++        for name in _GUARD_TEST_FILENAMES:
++            module = importlib.import_module("tests.adapters.xbrl." + name[:-3])
++            for attr in vars(module).values():
++                if isinstance(attr, type) and issubclass(attr, unittest.TestCase):
++                    known |= {n for n in dir(attr) if n.startswith("test_")}
++        for mutation in _MUTATIONS:
++            self.assertTrue(mutation["expect"], mutation["id"])
++            self.assertTrue(mutation["条件"], mutation["id"])
++            self.assertEqual(sorted(mutation["expect"] - known), [],
++                             "%s: 存在しない試験名を期待している" % mutation["id"])
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/audit-core/tests/adapters/xbrl/test_extraction_v2_boundary.py b/audit-core/tests/adapters/xbrl/test_extraction_v2_boundary.py
+new file mode 100644
+index 0000000..cccfcdf
+--- /dev/null
++++ b/audit-core/tests/adapters/xbrl/test_extraction_v2_boundary.py
+@@ -0,0 +1,141 @@
++# -*- coding: utf-8 -*-
++"""採用条件 T-E1・T-E2(docs/ADOPTION_CONDITIONS_2026-10-13.md §2-1)。
++
++守る対象は ``recipes._assign_period_form``(割当の純粋関数)と、その結果を使う
++``recipes._direct_value_claim`` の期間の選び方。
++
++**封 EXTRACTION_SEAL_V2_2026-10-12 §2.1 の表はここに書かない。** 表は
++``test_extraction_v2.py`` が持つ(封じた表と、監査が名指しした境界の追加を混ぜない)。
++ここに並べるのは、監査 `EXTRACTION_V2_AUDIT_RESULT_2026-10-13` §6 で
++**試験が黙った変異 6 本**が通してしまう入力。期待値は**封 §2 の規則の字から導いた**もので、
++実装の出力を写したものではない(導いた期待値と実装が食い違えば、この試験は赤くなる)。
++
++fact と context は合成で、追跡されていない ZIP も Golden 期待値も読まない。
++"""
++
++import unittest
++
++from adapters.xbrl import extract as E
++from adapters.xbrl import recipes as R
++
++CUR = "CurrentYearDuration"
++PRI = "Prior1YearDuration"
++CONTEXTS = {CUR: {"start": "2025-07-01", "end": "2026-06-30"},
++            PRI: {"start": "2024-07-01", "end": "2025-06-30"}}
++
++# 手がかり「前期」の終わり(index 2)から数の開始までの字数を 13 / 14 にする詰め物。
++_FILL13 = "の業績につきまして、ああい"
++_FILL14 = "の業績につきまして、ああいう"
++assert len(_FILL13) == 13 and len(_FILL14) == 14
++
++# (名前, 印つきの文, 期間, 対か, 封のどの字から導いたか, この行が赤にする変異)
++ROWS = [
++    ("数+増加額", "差引【1,012百万円】の増加額となりました。", "Current", False,
++     "F2 の増減語は 増加額・減少額 を含まない(§2 R-2 F1 の括弧書き)", "M-E1a"),
++    ("数+減価償却費", "うち【452百万円】の減価償却費が含まれます。", "Current", False,
++     "F2 の裸の 増・減 は後ろに漢字が続かないときだけ(§2 R-2 F2)", "M-E1b"),
++    ("数+(%)増加", "売上総利益は【684百万円】(5.7%)の減少となりました。", "Current", False,
++     "F3 は括弧の中に % が無いときだけ(§2 R-2 F3)", "M-E1c"),
++    ("増加額+数+増減語", "売上債権の増加額【802百万円】増加しました。", "Current", False,
++     "R-2f 流れの項目は差ではなく単一(§2 R-2 R-2f)", "M-E1d"),
++    ("前期に比べ+数のみ", "前期に比べ【42,487千円】", "Current", True,
++     "R-1.2 の手がかりの直後が に比べ なら比較の基準で期間に使わない + F1", "M-E1e"),
++    ("手がかり 15 字", "前期" + _FILL13 + "【510百万円】です。", "Prior1", False,
++     "R-1.2 数の直前 15 字に手がかり(窓の内側)", "M-E1f"),
++    ("手がかり 16 字", "前期" + _FILL14 + "【510百万円】です。", "Current", False,
++     "R-1.2 数の直前 15 字に手がかりが無い(窓の外側)", "M-E1f"),
++]
++
++# T-E2 の摂動に使う文(上の行 + 前期の括弧・対の形)。
++EXTRA_SENTENCES = [
++    "売上高は【100百万円】となりました。",
++    "売上高の増加【6百万円】です。",
++    "経常利益は1,457百万円(前期【2,709百万円】)となりました。",
++]
++
++
++def unmark(marked):
++    a = marked.index("【")
++    b = marked.index("】")
++    return marked[:a] + marked[a + 1:b] + marked[b + 1:], a, b - 1
++
++
++def fact(name, context, value):
++    return {"name": name, "context": context, "value": float(value), "unit": "JPY", "decimals": "-3"}
++
++
++def bend_digits(s):
++    """数の字だけを別の字に替える(桁数は変えない)。"""
++
++    return "".join((str((int(ch) % 9) + 1) if ch.isdigit() else ch) for ch in s)
++
++
++def run_claim(marked, num, elems, facts, unit="百万円"):
++    s, a, b = unmark(marked)
++    claim = {"id": "SYN", "value": num}
++    R._direct_value_claim(claim, s, a, b, 1, num, unit, None, "主語", elems, None, facts, CONTEXTS)
++    return claim
++
++
++class TE1Boundary(unittest.TestCase):
++    """T-E1 監査が名指しした境界。期待値は封 §2 の字から導いた。"""
++
++    def test_each_boundary_row(self):
++        for name, marked, period, pair, why, mutation in ROWS:
++            s, a, b = unmark(marked)
++            self.assertTrue(any(x == a and y == b for (x, y, _v, _u, _p) in E.iter_numbers(s)),
++                            "%s: 印の位置が iter_numbers の数と一致しない" % name)
++            self.assertEqual(R._assign_period_form(s, a, b), (period, pair),
++                             "%s(%s / %s を赤にする行)" % (name, why, mutation))
++
++    def test_the_cue_window_rows_differ_by_exactly_one_character(self):
++        # 15 字 / 16 字の 2 行が、窓の境界そのものを見ていることを留める。
++        inside = [r for r in ROWS if r[0] == "手がかり 15 字"][0]
++        outside = [r for r in ROWS if r[0] == "手がかり 16 字"][0]
++        _s_in, a_in, _b_in = unmark(inside[1])
++        _s_out, a_out, _b_out = unmark(outside[1])
++        self.assertEqual((a_in - 2, a_out - 2), (13, 14))
++        self.assertEqual((inside[2], outside[2]), ("Prior1", "Current"))
++
++
++class TE2AssignmentIgnoresValues(unittest.TestCase):
++    """T-E2 割当と pointer は値で変わらない(封 §2 R-4・§6)。"""
++
++    def test_bending_the_digits_does_not_move_the_assignment(self):
++        for marked in [r[1] for r in ROWS] + EXTRA_SENTENCES:
++            s, a, b = unmark(marked)
++            base = R._assign_period_form(s, a, b)
++            spans = [(x, y) for (x, y, _v, _u, _p) in E.iter_numbers(s)]
++            bent = bend_digits(s)
++            self.assertEqual([(x, y) for (x, y, _v, _u, _p) in E.iter_numbers(bent)], spans,
++                             "数の位置が動いた(摂動の作り方が悪い): %s" % marked)
++            self.assertEqual(R._assign_period_form(bent, a, b), base, marked)
++
++    def test_the_pointer_does_not_move_when_the_claim_value_changes(self):
++        facts = [fact("jppfs_cor:NetSales", CUR, 100e6)]
++        seen = set()
++        for num in (94, 100, 120):
++            claim = run_claim("売上高は【%d百万円】となりました。" % num, num, ["NetSales"], facts)
++            seen.add(claim.get("pointer"))
++        self.assertEqual(seen, {"xbrl:jppfs_cor:NetSales@" + CUR})
++
++    def test_the_pointer_does_not_move_when_the_fact_value_changes(self):
++        seen = set()
++        for v in (100e6, 94e6, -3.0):
++            claim = run_claim("売上高は【100百万円】となりました。", 100, ["NetSales"],
++                              [fact("jppfs_cor:NetSales", CUR, v)])
++            seen.add(claim.get("pointer"))
++        self.assertEqual(seen, {"xbrl:jppfs_cor:NetSales@" + CUR})
++
++    def test_a_value_that_does_not_match_is_not_looked_for_in_another_period(self):
++        # 封 BINDING_ORDER_SEAL §3 規則 3(値による再探索の禁止)。
++        # 当期の fact は一致せず、前期の fact が一致する入力。
++        facts = [fact("jppfs_cor:NetSales", CUR, 100e6),
++                 fact("jppfs_cor:NetSales", PRI, 94e6)]
++        claim = run_claim("売上高は【94百万円】となりました。", 94, ["NetSales"], facts)
++        self.assertEqual(claim.get("pointer"), "xbrl:jppfs_cor:NetSales@" + CUR)
++        self.assertEqual(claim.get("result"), "VALUE_MISMATCH")
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/audit-core/tests/adapters/xbrl/test_representative_selection.py b/audit-core/tests/adapters/xbrl/test_representative_selection.py
+new file mode 100644
+index 0000000..1edeced
+--- /dev/null
++++ b/audit-core/tests/adapters/xbrl/test_representative_selection.py
+@@ -0,0 +1,169 @@
++# -*- coding: utf-8 -*-
++"""採用条件 T-R1・T-R2・T-R4(docs/ADOPTION_CONDITIONS_2026-10-13.md §1-1)。
++
++守る対象は ``recipes._representative`` と ``recipes._collapse_candidates``、および
++``recipes._direct_value_claim`` の 3 つの呼び出し(単一・対の a 側・対の b 側)。
++
++fact と context は**合成**で、追跡されていない ZIP も Golden 期待値も読まない。
++これは T-R5 の変異ハーネスが、基準が緑の状態でこのファイルだけを走らせるため。
++
++``ambiguous_count`` は**立っていること**だけを見て、値は固定しない。
++値の意味は T-R6(未決。封 CANDIDATE_DEFINITION_SEAL §5 は「畳んだ後の候補数」と
++定めるが、``_representative`` が None を返す枝は封が扱っていない)。
++"""
++
++import unittest
++
++from adapters.xbrl import extract as E
++from adapters.xbrl import recipes as R
++
++CUR = "CurrentYearDuration"
++PRI = "Prior1YearDuration"
++CONTEXTS = {CUR: {"start": "2025-07-01", "end": "2026-06-30"},
++            PRI: {"start": "2024-07-01", "end": "2025-06-30"}}
++
++
++def fact(name, context, value):
++    return {"name": name, "context": context, "value": float(value), "unit": "JPY", "decimals": "-3"}
++
++
++def unmark(marked):
++    a = marked.index("【")
++    b = marked.index("】")
++    return marked[:a] + marked[a + 1:b] + marked[b + 1:], a, b - 1
++
++
++def run_claim(marked, num, elems, facts, unit="百万円"):
++    """``_direct_value_claim`` を 1 回だけ呼び、claim の辞書を返す。"""
++
++    s, a, b = unmark(marked)
++    assert any(x == a and y == b for (x, y, _v, _u, _p) in E.iter_numbers(s)), marked
++    claim = {"id": "SYN", "value": num}
++    R._direct_value_claim(claim, s, a, b, 1, num, unit, None, "主語", elems, None, facts, CONTEXTS)
++    return claim
++
++
++class TR1Representative(unittest.TestCase):
++    """T-R1 ``_representative`` の返り値を入力ごとに固定する。"""
++
++    def test_no_jppfs_kind_returns_the_head_in_document_order(self):
++        # 群は 2 件。先頭と末尾が別名なので、代表を末尾に差し替える変異が赤くなる。
++        group = [fact("jpcrp_cor:AlphaSummaryOfBusinessResults", CUR, 100e6),
++                 fact("jpcrp_cor:BetaSummaryOfBusinessResults", CUR, 100e6)]
++        chosen = R._representative(group)
++        self.assertIsNotNone(chosen, "jppfs が 0 種なら文書順の先頭を返す")
++        self.assertEqual(chosen["name"], "jpcrp_cor:AlphaSummaryOfBusinessResults")
++
++    def test_exactly_one_jppfs_kind_wins_even_when_it_is_not_the_head(self):
++        group = [fact("jpcrp_cor:AlphaSummaryOfBusinessResults", CUR, 100e6),
++                 fact("jppfs_cor:Alpha", CUR, 100e6)]
++        chosen = R._representative(group)
++        self.assertIsNotNone(chosen, "jppfs が 1 種ならその fact を返す")
++        self.assertEqual(chosen["name"], "jppfs_cor:Alpha")
++
++    def test_two_jppfs_kinds_decide_nothing(self):
++        group = [fact("jppfs_cor:Alpha", CUR, 100e6),
++                 fact("jppfs_cor:AlphaSummaryOfBusinessResults", CUR, 100e6)]
++        self.assertIsNone(R._representative(group))
++
++    def test_three_jppfs_kinds_decide_nothing(self):
++        group = [fact("jppfs_cor:Alpha", CUR, 100e6),
++                 fact("jppfs_cor:Beta", CUR, 100e6),
++                 fact("jppfs_cor:Gamma", CUR, 100e6)]
++        self.assertIsNone(R._representative(group))
++
++    def test_same_jppfs_name_in_several_facts_takes_the_first_in_document_order(self):
++        first = fact("jppfs_cor:Alpha", CUR, 100e6)
++        first["decimals"] = "-3"
++        second = fact("jppfs_cor:Alpha", CUR, 100e6)
++        second["decimals"] = "-6"
++        group = [fact("jpcrp_cor:AlphaSummaryOfBusinessResults", CUR, 100e6), first, second]
++        chosen = R._representative(group)
++        self.assertIsNotNone(chosen)
++        self.assertEqual(chosen["name"], "jppfs_cor:Alpha")
++        self.assertIs(chosen, first)
++
++
++class TR2AllThreeCallSitesStop(unittest.TestCase):
++    """T-R2 単一・対の a 側・対の b 側の 3 呼び出しで、jppfs 2 種なら停止する。
++
++    片側だけに規約を当てた実装(取りこぼし)は、対の b 側の試験で赤くなる。
++    """
++
++    SINGLE = "売上高は【100百万円】となりました。"
++    PAIR = "売上高の増加【6百万円】です。"
++
++    def assert_stopped(self, claim):
++        self.assertEqual(claim.get("reason"), "ambiguous(elements)")
++        self.assertIsNotNone(claim.get("ambiguous_count"), "ambiguous_count が立っていない")
++        self.assertNotIn("pointer", claim)
++        self.assertFalse(claim.get("bound"))
++        self.assertIsNone(claim.get("result"))
++
++    def test_single_path_stops(self):
++        facts = [fact("jppfs_cor:NetSales", CUR, 100e6),
++                 fact("jppfs_cor:NetSalesSummaryOfBusinessResults", CUR, 100e6)]
++        self.assert_stopped(run_claim(self.SINGLE, 100, ["NetSales"], facts))
++
++    def test_pair_path_stops_when_only_the_a_side_is_ambiguous(self):
++        facts = [fact("jppfs_cor:NetSales", CUR, 100e6),
++                 fact("jppfs_cor:NetSalesSummaryOfBusinessResults", CUR, 100e6),
++                 fact("jppfs_cor:NetSales", PRI, 94e6)]
++        self.assert_stopped(run_claim(self.PAIR, 6, ["NetSales"], facts))
++
++    def test_pair_path_stops_when_only_the_b_side_is_ambiguous(self):
++        facts = [fact("jppfs_cor:NetSales", CUR, 100e6),
++                 fact("jppfs_cor:NetSales", PRI, 94e6),
++                 fact("jppfs_cor:NetSalesSummaryOfBusinessResults", PRI, 94e6)]
++        self.assert_stopped(run_claim(self.PAIR, 6, ["NetSales"], facts))
++
++    def test_the_pair_sentence_really_takes_the_pair_path(self):
++        # 上の 2 本が「対の経路を通っていない」ために通ることを防ぐ。
++        facts = [fact("jppfs_cor:NetSales", CUR, 100e6),
++                 fact("jppfs_cor:NetSales", PRI, 94e6)]
++        claim = run_claim(self.PAIR, 6, ["NetSales"], facts)
++        self.assertEqual(claim.get("form"), "derived_value")
++        self.assertEqual((claim.get("pointer") or [None])[-1], "formula:a-b")
++
++    def test_the_single_sentence_really_takes_the_single_path(self):
++        facts = [fact("jppfs_cor:NetSales", CUR, 100e6)]
++        claim = run_claim(self.SINGLE, 100, ["NetSales"], facts)
++        self.assertEqual(claim.get("pointer"), "xbrl:jppfs_cor:NetSales@" + CUR)
++
++
++class TR4SelectionDoesNotUseValues(unittest.TestCase):
++    """T-R4 群が複数ある入力で、値だけを変えても選択が変わらない。
++
++    封 BINDING_ORDER_SEAL §3 の規則 4(候補が複数なら値を使わずに停止)。
++    """
++
++    SINGLE = "売上高は【100百万円】となりました。"
++
++    def test_representative_ignores_the_value_of_the_group(self):
++        names = ("jpcrp_cor:AlphaSummaryOfBusinessResults", "jppfs_cor:Alpha")
++        chosen = set()
++        for v in (100e6, 1.0, -7777.0, 0.0):
++            picked = R._representative([fact(names[0], CUR, v), fact(names[1], CUR, v)])
++            self.assertIsNotNone(picked, "値 %r で代表が決まらなかった" % v)
++            chosen.add(picked["name"])
++        self.assertEqual(chosen, {"jppfs_cor:Alpha"})
++
++    def test_several_groups_stop_even_when_one_of_them_matches_the_claim(self):
++        facts = [fact("jppfs_cor:NetSales", CUR, 100e6),
++                 fact("jppfs_cor:NetSalesSummaryOfBusinessResults", CUR, 120e6)]
++        for num in (100, 120, 999):
++            claim = run_claim(self.SINGLE.replace("100百万円", "%d百万円" % num), num, ["NetSales"], facts)
++            self.assertEqual(claim.get("reason"), "ambiguous(elements)",
++                             "num=%d で停止しなかった(値で候補を選んでいる)" % num)
++            self.assertNotIn("pointer", claim)
++
++    def test_the_same_two_groups_bind_nothing_whatever_the_fact_values_are(self):
++        for a_value, b_value in ((100e6, 120e6), (120e6, 100e6), (1.0, 2.0)):
++            facts = [fact("jppfs_cor:NetSales", CUR, a_value),
++                     fact("jppfs_cor:NetSalesSummaryOfBusinessResults", CUR, b_value)]
++            claim = run_claim(self.SINGLE, 100, ["NetSales"], facts)
++            self.assertEqual(claim.get("reason"), "ambiguous(elements)")
++
++
++if __name__ == "__main__":
++    unittest.main()

@@ -1,0 +1,139 @@
+{
+ "seal": "docs/DOMAIN1_SAIIRU_SEAL_2026-10-16.md",
+ "step": "P-6 誤った別名の対照",
+ "min_independent": 3,
+ "D-1 正しい対の受理": {
+  "accepted": 18,
+  "of": 18,
+  "detail": [
+   {
+    "alias": "東京都と場会計",
+    "canonical": "と場会計",
+    "accepted": true,
+    "independent": 5
+   },
+   {
+    "alias": "東京都中小企業設備導入等資金会計",
+    "canonical": "中小企業設備導入等資金会計",
+    "accepted": true,
+    "independent": 5
+   },
+   {
+    "alias": "東京都公債費会計",
+    "canonical": "公債費会計",
+    "accepted": true,
+    "independent": 5
+   },
+   {
+    "alias": "東京都国民健康保険事業会計",
+    "canonical": "国民健康保険事業会計",
+    "accepted": true,
+    "independent": 10
+   },
+   {
+    "alias": "東京都地方消費税清算会計",
+    "canonical": "地方消費税清算会計",
+    "accepted": true,
+    "independent": 4
+   },
+   {
+    "alias": "東京都地方独立行政法人東京都立病院機構貸付等事業会計 ",
+    "canonical": "地方独立行政法人東京都立病院機構貸付等事業会計",
+    "accepted": true,
+    "independent": 3
+   },
+   {
+    "alias": "東京都小笠原諸島生活再建資金会計",
+    "canonical": "小笠原諸島生活再建資金会計",
+    "accepted": true,
+    "independent": 4
+   },
+   {
+    "alias": "東京都工業用水道事業清算会計",
+    "canonical": "工業用水道事業清算会計",
+    "accepted": true,
+    "independent": 4
+   },
+   {
+    "alias": "東京都心身障害者扶養年金会計",
+    "canonical": "心身障害者扶養年金会計",
+    "accepted": true,
+    "independent": 4
+   },
+   {
+    "alias": "東京都林業・木材産業改善資金助成会計",
+    "canonical": "林業・木材産業改善資金助成会計",
+    "accepted": true,
+    "independent": 4
+   },
+   {
+    "alias": "東京都母子父子福祉貸付資金会計",
+    "canonical": "母子父子福祉貸付資金会計",
+    "accepted": true,
+    "independent": 5
+   },
+   {
+    "alias": "東京都沿岸漁業改善資金助成会計",
+    "canonical": "沿岸漁業改善資金助成会計",
+    "accepted": true,
+    "independent": 4
+   },
+   {
+    "alias": "東京都特別区財政調整会計",
+    "canonical": "特別区財政調整会計",
+    "accepted": true,
+    "independent": 3
+   },
+   {
+    "alias": "東京都用地会計",
+    "canonical": "用地会計",
+    "accepted": true,
+    "independent": 6
+   },
+   {
+    "alias": "東京都臨海都市基盤整備事業会計",
+    "canonical": "臨海都市基盤整備事業会計",
+    "accepted": true,
+    "independent": 5
+   },
+   {
+    "alias": "東京都都営住宅等事業会計",
+    "canonical": "都営住宅等事業会計",
+    "accepted": true,
+    "independent": 9
+   },
+   {
+    "alias": "東京都都営住宅等保証金会計",
+    "canonical": "都営住宅等保証金会計",
+    "accepted": true,
+    "independent": 6
+   },
+   {
+    "alias": "東京都都市開発資金会計",
+    "canonical": "都市開発資金会計",
+    "accepted": true,
+    "independent": 4
+   }
+  ]
+ },
+ "D-2 誤った対の受理": {
+  "accepted": 0,
+  "of": 324,
+  "detail": []
+ },
+ "D-3 歯の測定(規則を緩めたら誤った対が何件通るか)": {
+  "値の食い違いを無視する": 286,
+  "6a を外す": 0,
+  "6b を外す": 0,
+  "6d を外す": 2,
+  "MIN_INDEPENDENT を 1 にする": 324,
+  "歳出側の既存の裏づけも数える(既定)": 0,
+  "全部緩める": 324
+ },
+ "has_teeth": true,
+ "limits": [
+  "**これは実データの数字で作った対照であり、実物の報告文の中に誤った別名が現れたわけではない。**",
+  "**人工材料での診断結果は実データでの安全性の証明と分けて記録する**(人間の指示)。",
+  "**「別名規則の安全性が改善した」とは書かない。**"
+ ]
+}

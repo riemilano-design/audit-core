@@ -1,0 +1,783 @@
+{
+ "purpose": "Q1 の方向の形の E2 20 件の原因分け(合否の判定ではない)",
+ "profile": "P16",
+ "total": 20,
+ "bucket_counts": {
+  "alias": 1,
+  "member": 4,
+  "overlap": 7,
+  "disjoint": 8
+ },
+ "cause_counts": {
+  "(c) 語の掛かり先": 5,
+  "(b) member の選び方": 4,
+  "判定不能": 2,
+  "(a) 対の取り方": 7,
+  "3 候補の外(要素の同定の誤り)": 1,
+  "3 候補の外(同値類の表記違い)": 1
+ },
+ "co_cause_counts": {
+  "(a) 対の取り方(結んだ fact の数が違う)": 5
+ },
+ "number_axis_counts": {
+  "ラベルの数だけ文に在る(数を付ければ落ちた)": 6,
+  "どちらの数も文に無い": 4,
+  "両方の数が文に在る(どちらの数かを決める必要)": 5,
+  "文に金額が無い": 5
+ },
+ "cross_counts": {
+  "(a) 対の取り方 | どちらの数も文に無い": 4,
+  "(a) 対の取り方 | 文に金額が無い": 3,
+  "(b) member の選び方 | ラベルの数だけ文に在る(数を付ければ落ちた)": 3,
+  "(b) member の選び方 | 文に金額が無い": 1,
+  "(c) 語の掛かり先 | ラベルの数だけ文に在る(数を付ければ落ちた)": 2,
+  "(c) 語の掛かり先 | 両方の数が文に在る(どちらの数かを決める必要)": 3,
+  "3 候補の外(同値類の表記違い) | 両方の数が文に在る(どちらの数かを決める必要)": 1,
+  "3 候補の外(要素の同定の誤り) | 文に金額が無い": 1,
+  "判定不能 | ラベルの数だけ文に在る(数を付ければ落ちた)": 1,
+  "判定不能 | 両方の数が文に在る(どちらの数かを決める必要)": 1
+ },
+ "same_quantity_counts": {
+  "False": 8,
+  "None": 10,
+  "True": 2
+ },
+ "axis1_counts": {
+  "値の形 | 数あり | E1'": 246,
+  "値の形 | 数あり | E2": 13,
+  "値の形 | 数なし | E1'": 13,
+  "値の形 | 数なし | E2": 5,
+  "方向 | 数なし | E1'": 32,
+  "方向 | 数なし | E2": 20
+ },
+ "stop_cost_counts": {
+  "結んだ fact の値が文に在る(通る)": 22,
+  "文に金額が無い(影響なし)": 2,
+  "結んだ fact の値が文に無い(止まる恐れ)": 8
+ },
+ "seat2_direction_rows": 11,
+ "rows": [
+  {
+   "id": "S100Z38F:H-010",
+   "docID": "S100Z38F",
+   "bucket": "disjoint",
+   "arm": [
+    [
+     "CapitalSurplus",
+     "CurrentYearInstant"
+    ],
+    [
+     "CapitalSurplus",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "RetirementOfTreasuryStock",
+     "CurrentYearDuration_CapitalSurplusMember"
+    ]
+   ],
+   "cause": "(c) 語の掛かり先",
+   "co_causes": [
+    "(a) 対の取り方(結んだ fact の数が違う)"
+   ],
+   "number_axis": "ラベルの数だけ文に在る(数を付ければ落ちた)",
+   "same_quantity": false,
+   "claim_number": null,
+   "seat2_direction": false,
+   "arm_word": "資本剰余金",
+   "label_word": "自己株式の消却",
+   "reason": "方向の語「減少」は文法上は資本剰余金に掛かるが、ラベルは株主資本等変動計算書の『自己株式の消却』の行を根拠とした。どちらも文に在る別の語で、engine は別の語に結んだ"
+  },
+  {
+   "id": "S100Z38F:H-052",
+   "docID": "S100Z38F",
+   "bucket": "member",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember"
+    ]
+   ],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05663-000ConsolidatedFinancialDisclosureBusinessReportableSegmentMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05663-000ConsolidatedFinancialDisclosureBusinessReportableSegmentMember"
+    ]
+   ],
+   "cause": "(b) member の選び方",
+   "co_causes": [],
+   "number_axis": "ラベルの数だけ文に在る(数を付ければ落ちた)",
+   "same_quantity": false,
+   "claim_number": null,
+   "seat2_direction": true,
+   "arm_word": "",
+   "label_word": "",
+   "reason": ""
+  },
+  {
+   "id": "S100Z38F:H-078",
+   "docID": "S100Z38F",
+   "bucket": "disjoint",
+   "arm": [
+    [
+     "ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "DecreaseIncreaseInAccountsReceivableTradeAndContractAssetsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "cause": "判定不能",
+   "co_causes": [
+    "(a) 対の取り方(結んだ fact の数が違う)"
+   ],
+   "number_axis": "ラベルの数だけ文に在る(数を付ければ落ちた)",
+   "same_quantity": false,
+   "claim_number": null,
+   "seat2_direction": false,
+   "arm_word": "契約資産",
+   "label_word": "売上債権及び契約資産",
+   "reason": "arm の契約資産は label の複合名詞『売上債権及び契約資産』の一部。別の語に結んだとも、同じ語の狭い側に結んだとも読める"
+  },
+  {
+   "id": "S100Z38F:H-081",
+   "docID": "S100Z38F",
+   "bucket": "member",
+   "arm": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05663-000ConsolidatedFinancialDisclosureBusinessReportableSegmentMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E05663-000ConsolidatedFinancialDisclosureBusinessReportableSegmentMember"
+    ]
+   ],
+   "cause": "(b) member の選び方",
+   "co_causes": [],
+   "number_axis": "ラベルの数だけ文に在る(数を付ければ落ちた)",
+   "same_quantity": false,
+   "claim_number": null,
+   "seat2_direction": true,
+   "arm_word": "",
+   "label_word": "",
+   "reason": ""
+  },
+  {
+   "id": "S100Z40H:H-019",
+   "docID": "S100Z40H",
+   "bucket": "member",
+   "arm": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+    ]
+   ],
+   "cause": "(b) member の選び方",
+   "co_causes": [],
+   "number_axis": "ラベルの数だけ文に在る(数を付ければ落ちた)",
+   "same_quantity": false,
+   "claim_number": null,
+   "seat2_direction": true,
+   "arm_word": "",
+   "label_word": "",
+   "reason": ""
+  },
+  {
+   "id": "S100Z40H:H-024",
+   "docID": "S100Z40H",
+   "bucket": "overlap",
+   "arm": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "cause": "(a) 対の取り方",
+   "co_causes": [],
+   "number_axis": "どちらの数も文に無い",
+   "same_quantity": null,
+   "claim_number": null,
+   "seat2_direction": false,
+   "arm_word": "売上総利益",
+   "label_word": "販売費及び一般管理費",
+   "reason": "文は 2 項目の増加率を比べている。arm は label の 2 項目のうち 1 項目だけを結んだ(部分で結んだ)"
+  },
+  {
+   "id": "S100Z40H:H-053",
+   "docID": "S100Z40H",
+   "bucket": "disjoint",
+   "arm": [
+    [
+     "GainOnSalesOfNoncurrentAssetsEI",
+     "CurrentYearDuration"
+    ],
+    [
+     "GainOnSalesOfNoncurrentAssetsEI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "ExtraordinaryIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "ExtraordinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "cause": "(c) 語の掛かり先",
+   "co_causes": [],
+   "number_axis": "ラベルの数だけ文に在る(数を付ければ落ちた)",
+   "same_quantity": false,
+   "claim_number": null,
+   "seat2_direction": true,
+   "arm_word": "固定資産売却益",
+   "label_word": "特別利益",
+   "reason": "25.2%増加は特別利益に掛かる。engine はその原因として挙げられた固定資産売却益に結んだ"
+  },
+  {
+   "id": "S100Z40H:H-055",
+   "docID": "S100Z40H",
+   "bucket": "overlap",
+   "arm": [
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "cause": "(a) 対の取り方",
+   "co_causes": [],
+   "number_axis": "どちらの数も文に無い",
+   "same_quantity": null,
+   "claim_number": null,
+   "seat2_direction": false,
+   "arm_word": "販売費及び一般管理費",
+   "label_word": "売上総利益",
+   "reason": "H-024 と同じ文の別の主張。arm は 2 項目のうち 1 項目だけを結んだ"
+  },
+  {
+   "id": "S100Z40H:H-069",
+   "docID": "S100Z40H",
+   "bucket": "disjoint",
+   "arm": [
+    [
+     "DepreciationAndAmortizationOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "DepreciationAndAmortizationOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "DecreaseIncreaseInInventoriesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "cause": "(c) 語の掛かり先",
+   "co_causes": [
+    "(a) 対の取り方(結んだ fact の数が違う)"
+   ],
+   "number_axis": "両方の数が文に在る(どちらの数かを決める必要)",
+   "same_quantity": false,
+   "claim_number": null,
+   "seat2_direction": false,
+   "arm_word": "減価償却費",
+   "label_word": "棚卸資産",
+   "reason": "文は資金の増加要因と減少要因を並べる。engine は減価償却費に、ラベルは棚卸資産の増加に結んだ"
+  },
+  {
+   "id": "S100Z40H:H-074",
+   "docID": "S100Z40H",
+   "bucket": "member",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+    ]
+   ],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "cause": "(b) member の選び方",
+   "co_causes": [],
+   "number_axis": "文に金額が無い",
+   "same_quantity": false,
+   "claim_number": null,
+   "seat2_direction": true,
+   "arm_word": "",
+   "label_word": "",
+   "reason": ""
+  },
+  {
+   "id": "S100Z461:H-007",
+   "docID": "S100Z461",
+   "bucket": "overlap",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ]
+   ],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ]
+   ],
+   "cause": "(a) 対の取り方",
+   "co_causes": [],
+   "number_axis": "どちらの数も文に無い",
+   "same_quantity": null,
+   "claim_number": null,
+   "seat2_direction": true,
+   "arm_word": "売上高",
+   "label_word": "増益",
+   "reason": "文は『増収・増益』と 2 つの方向を述べる。arm は売上高だけ。H-030 と同じ文・同じラベルで、どちらの主張が増収でどちらが増益かは記録から決められない"
+  },
+  {
+   "id": "S100Z461:H-030",
+   "docID": "S100Z461",
+   "bucket": "overlap",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ]
+   ],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+    ]
+   ],
+   "cause": "(a) 対の取り方",
+   "co_causes": [],
+   "number_axis": "どちらの数も文に無い",
+   "same_quantity": null,
+   "claim_number": null,
+   "seat2_direction": true,
+   "arm_word": "売上高",
+   "label_word": "増益",
+   "reason": "H-007 と同じ文・同じラベル。切り分けは記録から決められない"
+  },
+  {
+   "id": "S100Z4LC:H-017",
+   "docID": "S100Z4LC",
+   "bucket": "disjoint",
+   "arm": [
+    [
+     "DecreaseIncreaseInAdvancePaymentsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "DecreaseIncreaseInInventoriesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "cause": "(c) 語の掛かり先",
+   "co_causes": [],
+   "number_axis": "両方の数が文に在る(どちらの数かを決める必要)",
+   "same_quantity": null,
+   "claim_number": null,
+   "seat2_direction": false,
+   "arm_word": "前渡金",
+   "label_word": "棚卸資産",
+   "reason": "文は 5 項目を金額付きで並べる。engine は前渡金、ラベルは棚卸資産。形(1 fact)は同じ"
+  },
+  {
+   "id": "S100Z4LC:H-031",
+   "docID": "S100Z4LC",
+   "bucket": "disjoint",
+   "arm": [
+    [
+     "IncreaseDecreaseInDepositsReceivedOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "DecreaseIncreaseInAdvancePaymentsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "cause": "(c) 語の掛かり先",
+   "co_causes": [],
+   "number_axis": "両方の数が文に在る(どちらの数かを決める必要)",
+   "same_quantity": null,
+   "claim_number": null,
+   "seat2_direction": false,
+   "arm_word": "預り金",
+   "label_word": "前渡金",
+   "reason": "同じ文の別の主張。engine は預り金、ラベルは前渡金。形(1 fact)は同じ"
+  },
+  {
+   "id": "S100Z4R8:H-009",
+   "docID": "S100Z4R8",
+   "bucket": "disjoint",
+   "arm": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "AccountsPayableTrade",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccountsPayableTrade",
+     "Prior1YearInstant"
+    ],
+    [
+     "OtherCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "cause": "3 候補の外(要素の同定の誤り)",
+   "co_causes": [
+    "(a) 対の取り方(結んだ fact の数が違う)"
+   ],
+   "number_axis": "文に金額が無い",
+   "same_quantity": null,
+   "claim_number": null,
+   "seat2_direction": true,
+   "arm_word": "",
+   "label_word": "買掛金",
+   "reason": "arm の流動負債(合計)に対応する名詞句が文に無い(『その他流動負債』の部分文字列としてのみ現れる)。文が挙げるのは買掛金とその他流動負債の 2 項目で、engine は合計に結んだ"
+  },
+  {
+   "id": "S100Z4R8:H-021",
+   "docID": "S100Z4R8",
+   "bucket": "overlap",
+   "arm": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ],
+    [
+     "MachineryEquipmentAndVehiclesNet",
+     "CurrentYearInstant"
+    ],
+    [
+     "MachineryEquipmentAndVehiclesNet",
+     "Prior1YearInstant"
+    ]
+   ],
+   "cause": "(a) 対の取り方",
+   "co_causes": [],
+   "number_axis": "文に金額が無い",
+   "same_quantity": null,
+   "claim_number": null,
+   "seat2_direction": true,
+   "arm_word": "投資有価証券",
+   "label_word": "機械装置及び運搬具",
+   "reason": "文は 2 項目を並べる。arm はうち 1 項目だけ"
+  },
+  {
+   "id": "S100Z4R8:H-037",
+   "docID": "S100Z4R8",
+   "bucket": "overlap",
+   "arm": [
+    [
+     "LeaseReceivablesAndInvestmentAssetsCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseReceivablesAndInvestmentAssetsCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndDeposits",
+     "Prior1YearInstant"
+    ],
+    [
+     "LeaseReceivablesAndInvestmentAssetsCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseReceivablesAndInvestmentAssetsCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "cause": "(a) 対の取り方",
+   "co_causes": [],
+   "number_axis": "文に金額が無い",
+   "same_quantity": null,
+   "claim_number": null,
+   "seat2_direction": true,
+   "arm_word": "リース債権及びリース投資資産",
+   "label_word": "現金及び預金",
+   "reason": "文は 2 項目を並べる。arm はうち 1 項目だけ"
+  },
+  {
+   "id": "S100Z4R8:H-047",
+   "docID": "S100Z4R8",
+   "bucket": "overlap",
+   "arm": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ],
+    [
+     "RetainedEarnings",
+     "Prior1YearInstant"
+    ],
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "cause": "(a) 対の取り方",
+   "co_causes": [],
+   "number_axis": "文に金額が無い",
+   "same_quantity": null,
+   "claim_number": null,
+   "seat2_direction": true,
+   "arm_word": "その他有価証券評価差額金",
+   "label_word": "利益剰余金",
+   "reason": "文は 2 項目を並べる。arm はうち 1 項目だけ"
+  },
+  {
+   "id": "S100Z4R8:H-057",
+   "docID": "S100Z4R8",
+   "bucket": "alias",
+   "arm": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "label": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "cause": "3 候補の外(同値類の表記違い)",
+   "co_causes": [],
+   "number_axis": "両方の数が文に在る(どちらの数かを決める必要)",
+   "same_quantity": true,
+   "claim_number": null,
+   "seat2_direction": false,
+   "arm_word": "",
+   "label_word": "",
+   "reason": ""
+  },
+  {
+   "id": "S100Z4R8:H-068",
+   "docID": "S100Z4R8",
+   "bucket": "disjoint",
+   "arm": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ]
+   ],
+   "label": [
+    [
+     "NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ]
+   ],
+   "cause": "判定不能",
+   "co_causes": [
+    "(a) 対の取り方(結んだ fact の数が違う)"
+   ],
+   "number_axis": "両方の数が文に在る(どちらの数かを決める必要)",
+   "same_quantity": true,
+   "claim_number": null,
+   "seat2_direction": false,
+   "arm_word": "現金及び現金同等物",
+   "label_word": "現金及び現金同等物",
+   "reason": "語は同じ。違いは『当期末と前期末の差を engine が自作した』か『文書に在る増減 fact を使う』か。数は 235,092 千円で完全に一致する"
+  }
+ ]
+}

@@ -1,0 +1,645 @@
+{
+ "purpose": "M-1 読み取りの結果。**精度の主張ではない**(封 §4)",
+ "seal": "docs/DOMAIN1_FETCH_SEAL_2026-10-15.md",
+ "source": "東京都オープンデータカタログサイト / 東京都会計管理局",
+ "license": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/deed.ja)",
+ "dataset": "令和６年度東京都各会計歳入歳出決算書及び東京都各会計歳入歳出決算附属書類等(東京都会計管理局、CC BY 4.0)",
+ "reader": "標準ライブラリのみ(案 A)",
+ "files": [
+  {
+   "label": "決算書 総括",
+   "file": "op20251218_06kessan_01_soukatu.xlsx",
+   "sha256": "edbaeccfcf07617ce65e447e15e779679e9d594e1d51faeee94ac9ebdf005cc7",
+   "sheets": 1,
+   "cells": 88,
+   "formula_cells": 0,
+   "formula_cells_without_value": 0,
+   "date_formatted_cells": 0,
+   "number_formats": {
+    "#,##0_ ": 60,
+    "General": 28
+   },
+   "notes": {
+    "has_shared_strings": true,
+    "inline_strings": 0,
+    "shared_formulas": 0,
+    "date1904": false,
+    "unresolved_number_format_ids": 0,
+    "errors": [],
+    "phonetic_strings": 6,
+    "shared_strings": 26
+   },
+   "per_sheet": [
+    {
+     "name": "総括",
+     "cells": 88,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 25
+    }
+   ],
+   "cross_check_openpyxl": {
+    "compared": 88,
+    "same": 88,
+    "value_diff": 0,
+    "format_diff": 0,
+    "examples": []
+   }
+  },
+  {
+   "label": "決算書 歳出",
+   "file": "op20251218_06kessan_03_saisyutu.xlsx",
+   "sha256": "87b79489dfb6252e80b1b4fa1399e17a3b05ea5ae37655461e8108e48074a419",
+   "sheets": 1,
+   "cells": 1442,
+   "formula_cells": 0,
+   "formula_cells_without_value": 0,
+   "date_formatted_cells": 0,
+   "number_formats": {
+    "#,##0_ ": 785,
+    "General": 343,
+    "@": 295,
+    "#,##0\"円\"": 19
+   },
+   "notes": {
+    "has_shared_strings": true,
+    "inline_strings": 0,
+    "shared_formulas": 0,
+    "date1904": false,
+    "unresolved_number_format_ids": 0,
+    "errors": [],
+    "phonetic_strings": 12,
+    "shared_strings": 156
+   },
+   "per_sheet": [
+    {
+     "name": "歳出",
+     "cells": 1442,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 1566
+    }
+   ],
+   "cross_check_openpyxl": {
+    "compared": 1442,
+    "same": 1442,
+    "value_diff": 0,
+    "format_diff": 0,
+    "examples": []
+   }
+  },
+  {
+   "label": "事項別明細 歳出",
+   "file": "op20251218_06kessan_05_jikoubetu_saisyutu.xlsx",
+   "sha256": "c19cce01e8ec100ad06889468a485cdba6a38b73ae952d0c39b96b15a5634de6",
+   "sheets": 20,
+   "cells": 58623,
+   "formula_cells": 0,
+   "formula_cells_without_value": 0,
+   "date_formatted_cells": 0,
+   "number_formats": {
+    "#,##0": 40169,
+    "@": 10921,
+    "General": 5079,
+    "#,##0_ ": 2453,
+    "None": 1
+   },
+   "notes": {
+    "has_shared_strings": true,
+    "inline_strings": 0,
+    "shared_formulas": 0,
+    "date1904": false,
+    "unresolved_number_format_ids": 0,
+    "errors": [],
+    "phonetic_strings": 45,
+    "shared_strings": 795
+   },
+   "per_sheet": [
+    {
+     "name": "目次",
+     "cells": 41,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 0
+    },
+    {
+     "name": "(1)",
+     "cells": 53114,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 9148
+    },
+    {
+     "name": "(2)",
+     "cells": 118,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 35
+    },
+    {
+     "name": "(3)",
+     "cells": 140,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 38
+    },
+    {
+     "name": "(4)",
+     "cells": 95,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 32
+    },
+    {
+     "name": "(5)",
+     "cells": 546,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 103
+    },
+    {
+     "name": "(6)",
+     "cells": 234,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 48
+    },
+    {
+     "name": "(7)",
+     "cells": 113,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 34
+    },
+    {
+     "name": "(8)",
+     "cells": 377,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 81
+    },
+    {
+     "name": "(9)",
+     "cells": 359,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 78
+    },
+    {
+     "name": "(10)",
+     "cells": 167,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 40
+    },
+    {
+     "name": "(11)",
+     "cells": 158,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 39
+    },
+    {
+     "name": "(12)",
+     "cells": 609,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 121
+    },
+    {
+     "name": "(13)",
+     "cells": 908,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 171
+    },
+    {
+     "name": "(14)",
+     "cells": 222,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 50
+    },
+    {
+     "name": "(15)",
+     "cells": 238,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 49
+    },
+    {
+     "name": "(16)",
+     "cells": 248,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 49
+    },
+    {
+     "name": "(17)",
+     "cells": 323,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 75
+    },
+    {
+     "name": "(18)",
+     "cells": 482,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 91
+    },
+    {
+     "name": "(19)",
+     "cells": 131,
+     "formula_cells": 0,
+     "formula_cells_without_value": 0,
+     "merged": 36
+    }
+   ],
+   "cross_check_openpyxl": {
+    "compared": 58623,
+    "same": 58623,
+    "value_diff": 0,
+    "format_diff": 0,
+    "examples": []
+   }
+  }
+ ],
+ "previews": [
+  {
+   "sheet": "総括",
+   "grid": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     "令和６年度東京都歳入歳出決算総括",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     "会計別",
+     null,
+     null,
+     "歳入決算額",
+     "歳出決算額",
+     "差額",
+     null,
+     null
+    ],
+    [
+     null,
+     "一般会計",
+     null,
+     "円 ",
+     "円 ",
+     null,
+     "円 ",
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     8962754865176,
+     8724585235292,
+     null,
+     238169629884,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "特別区財政調整会計",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     1259932193000,
+     1259932193000,
+     null,
+     0,
+     null
+    ]
+   ]
+  },
+  {
+   "sheet": "歳出",
+   "grid": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     "令和６年度東京都一般会計歳入歳出決算書",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     "歳出",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     "科目",
+     null,
+     null,
+     "予算現額",
+     "支出済額",
+     "翌年度繰越額",
+     "不用額",
+     "　予算現額と支出\n　済額との比較"
+    ],
+    [
+     "款",
+     "項",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     "01",
+     "議会費",
+     null,
+     "円 ",
+     "円 ",
+     "円 ",
+     "円 ",
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     5314472000,
+     4802993869,
+     0,
+     511478131,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "01",
+     "都議会費",
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ]
+  },
+  {
+   "sheet": "目次",
+   "grid": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "シート名",
+     "会　　計　　名",
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "（１）",
+     "東京都一般会計",
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "（２）",
+     "東京都特別区財政調整会計",
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "（３）",
+     "東京都地方消費税清算会計",
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "（４）",
+     "東京都小笠原諸島生活再建資金会計",
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "（５）",
+     "東京都国民健康保険事業会計",
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "（６）",
+     "東京都母子父子福祉貸付資金会計",
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "（７）",
+     "東京都心身障害者扶養年金会計",
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "（８）",
+     "東京都地方独立行政法人東京都立病院機構貸付等事業会計 ",
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "（９）",
+     "東京都中小企業設備導入等資金会計",
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ]
+  }
+ ]
+}

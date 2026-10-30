@@ -1,0 +1,4688 @@
+{
+ "seal": "audit-core/docs/XBRL_P27_SEAL_2026-10-27.md",
+ "step": "P27 段 2 §3-1 ― 調整用の注入(T1_VALUE・T8_REL。4 profile。U-1 U-4 U-5)",
+ "backend": "real",
+ "HEAD の commit": "43fe0e37eff85985b8b111a549a96d514ea7d6c8",
+ "W の commit": "c48f4648c07d185807f07f78872d20d2a6d49c75",
+ "W は HEAD の祖先": true,
+ "この script の sha256": "c3aada860ebf39b00bc3242b81d59185ee094fe8e4dfd60871cdd49bc011f258",
+ "段 1 の測定の script(読むだけ・1 行も変えない)の sha256": "0891c2d652eabddc2db8f0ee1887672e4001c070a6b717aa9c60dc93816a40a4",
+ "対象の docID": [
+  "S100YXFQ",
+  "S100YZ4M",
+  "S100YYIV",
+  "S100YYHK",
+  "S100YYGF",
+  "S100YYAI",
+  "S100YZ2B",
+  "S100YZFP",
+  "S100YYMP",
+  "S100YYKZ"
+ ],
+ "対象は調整用の全部": true,
+ "使った文の sha256": {
+  "S100YXFQ": "7bba775dc112a032d2dc24de5c77a630c0fde810cc181d6bdfe4d8d6c4e489b5",
+  "S100YZ4M": "696a88bb9af4051297797f983bbbfa111322418ea19e9524217857f13a29f426",
+  "S100YYIV": "71b1032d14d4c2f569695e9bc9e06b403462cf2a9afa264535cc65c3dd845ad7",
+  "S100YYHK": "3daa86bb8ccb844b6bdd7ac8d3a88215cba9a5bd5e7ce159889b713d50f79f02",
+  "S100YYGF": "12e548c6664ba8301991d195e157cb4b9794065c150f8750c9f75bfd5a222846",
+  "S100YYAI": "b6fc4d62c100bd9d7d5c7b9369a49b9adee97a79b20a64fd893df598c62f4bbd",
+  "S100YZ2B": "446506ca484bd0a5b3b653ba522a1d551acaf275a84aad03ea2c984b8a2a1289",
+  "S100YZFP": "234776776b81bf6c7b1bca92c473cdd87470837393412f83fe57a591176ff4ef",
+  "S100YYMP": "07e29d071f6f9c8cd16e0bae2467cd0b65864b3bb4a968eac647efbe16a81220",
+  "S100YYKZ": "fc3f5f9a4d467822b5e3e847de89666dffd789493bba41995beeda20dda3dfee"
+ },
+ "engine の指紋": {
+  "adapter_xbrl_py_sha256": "0e51211a8aed2151409cb6bf443fb6eae2aed87e6b2b4bd6150c8286afee87de",
+  "adapter_xbrl_py_files": 16,
+  "core_py_sha256": "34e836bb39762d5af831a9aa11d4ea095e73221beb5bd4510d3b234363a2a6e8",
+  "core_py_files": 4,
+  "git_commit": "43fe0e37eff85985b8b111a549a96d514ea7d6c8"
+ },
+ "cache の前後": {
+  "前": {
+   "既存の cache": {
+    "folder": "~/.cache/audit-core/edinet",
+    "存在": true,
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "ZIP の folder": {
+    "folder": "~/.cache/audit-core/edinet-fresh-2026-10-21",
+    "存在": true,
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   }
+  },
+  "後": {
+   "既存の cache": {
+    "folder": "~/.cache/audit-core/edinet",
+    "存在": true,
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "ZIP の folder": {
+    "folder": "~/.cache/audit-core/edinet-fresh-2026-10-21",
+    "存在": true,
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   }
+  },
+  "変化なし": true
+ },
+ "種": {
+  "file": "measure/SEED.json",
+  "sealed_in_commit": "e945ee66a2b76789793a2e4163b95e06dc01ba74",
+  "seed_file_sha256": "f74146592f68b88dab89869a185d9f69bc68e8b4fa0c4eee1400581354b19f80"
+ },
+ "型": {
+  "T1_VALUE": "inject.select(types=[T1_VALUE]) のまま",
+  "T8_REL": "円の単位族の token・r ∈ [-0.1, -0.03, 0.03, 0.1]・4 回まで",
+  "上限": "型ごと・1 書類あたり 40 件",
+  "土台": "無改変で P22 と P26 の両方が GROUNDED(段 1 と同じ)。分類の土台は各 profile の同じ id の無改変の claim"
+ },
+ "書類別の数え": {
+  "S100YXFQ": {
+   "T1_VALUE": {
+    "作れる site": 1,
+    "採った": 1,
+    "両方 GROUNDED": 1
+   },
+   "T8_REL": {
+    "円族の token": 4,
+    "どちらも GROUNDED でない": 1,
+    "両方 GROUNDED": 3,
+    "作れる site": 3,
+    "採った": 3
+   }
+  },
+  "S100YZ4M": {
+   "T1_VALUE": {
+    "作れる site": 7,
+    "採った": 7,
+    "どちらも GROUNDED でない": 4,
+    "基準に対応が付かない": 1,
+    "両方 GROUNDED": 2
+   },
+   "T8_REL": {
+    "円族の token": 30,
+    "両方 GROUNDED": 12,
+    "どちらも GROUNDED でない": 18,
+    "作れる site": 12,
+    "採った": 12
+   }
+  },
+  "S100YYIV": {
+   "T1_VALUE": {
+    "作れる site": 0,
+    "採った": 0
+   },
+   "T8_REL": {
+    "円族の token": 17,
+    "両方 GROUNDED": 7,
+    "どちらも GROUNDED でない": 10,
+    "r が決まらず site にしない": 1,
+    "作れる site": 6,
+    "採った": 6
+   }
+  },
+  "S100YYHK": {
+   "T1_VALUE": {
+    "作れる site": 2,
+    "採った": 2,
+    "どちらも GROUNDED でない": 1,
+    "両方 GROUNDED": 1
+   },
+   "T8_REL": {
+    "円族の token": 27,
+    "両方 GROUNDED": 18,
+    "どちらも GROUNDED でない": 9,
+    "作れる site": 18,
+    "採った": 18
+   }
+  },
+  "S100YYGF": {
+   "T1_VALUE": {
+    "作れる site": 3,
+    "採った": 3,
+    "基準に対応が付かない": 2,
+    "両方 GROUNDED": 1
+   },
+   "T8_REL": {
+    "円族の token": 35,
+    "どちらも GROUNDED でない": 14,
+    "両方 GROUNDED": 20,
+    "基準に対応が付かない": 1,
+    "作れる site": 20,
+    "採った": 20
+   }
+  },
+  "S100YYAI": {
+   "T1_VALUE": {
+    "作れる site": 5,
+    "採った": 5,
+    "両方 GROUNDED": 2,
+    "どちらも GROUNDED でない": 3
+   },
+   "T8_REL": {
+    "円族の token": 16,
+    "両方 GROUNDED": 8,
+    "どちらも GROUNDED でない": 8,
+    "r が決まらず site にしない": 2,
+    "作れる site": 6,
+    "採った": 6
+   }
+  },
+  "S100YZ2B": {
+   "T1_VALUE": {
+    "作れる site": 1,
+    "採った": 1,
+    "どちらも GROUNDED でない": 1
+   },
+   "T8_REL": {
+    "円族の token": 4,
+    "どちらも GROUNDED でない": 4,
+    "作れる site": 0,
+    "採った": 0
+   }
+  },
+  "S100YZFP": {
+   "T1_VALUE": {
+    "作れる site": 7,
+    "採った": 7,
+    "基準に対応が付かない": 2,
+    "どちらも GROUNDED でない": 3,
+    "両方 GROUNDED": 2
+   },
+   "T8_REL": {
+    "円族の token": 41,
+    "両方 GROUNDED": 19,
+    "どちらも GROUNDED でない": 22,
+    "r が決まらず site にしない": 1,
+    "作れる site": 18,
+    "採った": 18
+   }
+  },
+  "S100YYMP": {
+   "T1_VALUE": {
+    "作れる site": 1,
+    "採った": 1,
+    "どちらも GROUNDED でない": 1
+   },
+   "T8_REL": {
+    "円族の token": 14,
+    "どちらも GROUNDED でない": 9,
+    "両方 GROUNDED": 5,
+    "作れる site": 5,
+    "採った": 5
+   }
+  },
+  "S100YYKZ": {
+   "T1_VALUE": {
+    "作れる site": 5,
+    "採った": 5,
+    "両方 GROUNDED": 2,
+    "どちらも GROUNDED でない": 3
+   },
+   "T8_REL": {
+    "円族の token": 10,
+    "どちらも GROUNDED でない": 8,
+    "両方 GROUNDED": 2,
+    "作れる site": 2,
+    "採った": 2
+   }
+  }
+ },
+ "注入の行の数": 101,
+ "集計": {
+  "T1_VALUE": {
+   "P22": {
+    "A": {
+     "注入の行": 4,
+     "対応が付く": 3,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 3,
+      "分母": 3,
+      "率": 100.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "B": {
+     "注入の行": 5,
+     "対応が付く": 5,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 5,
+      "分母": 5,
+      "率": 100.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "C": {
+     "注入の行": 2,
+     "対応が付く": 2,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 2,
+      "分母": 2,
+      "率": 100.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "全体": {
+     "注入の行": 11,
+     "対応が付く": 10,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 10,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 10,
+      "分母": 10,
+      "率": 100.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 10,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 10,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 10,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {}
+    }
+   },
+   "P26": {
+    "A": {
+     "注入の行": 4,
+     "対応が付く": 3,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 2,
+      "分母": 3,
+      "率": 66.7
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 1,
+      "分母": 3,
+      "率": 33.3
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {
+      "other_frame": 1
+     }
+    },
+    "B": {
+     "注入の行": 5,
+     "対応が付く": 5,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 5,
+      "分母": 5,
+      "率": 100.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "C": {
+     "注入の行": 2,
+     "対応が付く": 2,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 1,
+      "分母": 2,
+      "率": 50.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 1,
+      "分母": 2,
+      "率": 50.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 1
+     },
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "全体": {
+     "注入の行": 11,
+     "対応が付く": 10,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 10,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 8,
+      "分母": 10,
+      "率": 80.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 10,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 1,
+      "分母": 10,
+      "率": 10.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 1,
+      "分母": 10,
+      "率": 10.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 1
+     },
+     "UNVERIFIABLE の reason の内訳": {
+      "other_frame": 1
+     }
+    }
+   },
+   "P27": {
+    "A": {
+     "注入の行": 4,
+     "対応が付く": 3,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 1,
+      "分母": 3,
+      "率": 33.3
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 1,
+      "分母": 3,
+      "率": 33.3
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 1,
+      "分母": 3,
+      "率": 33.3
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 1
+     },
+     "UNVERIFIABLE の reason の内訳": {
+      "other_frame": 1
+     }
+    },
+    "B": {
+     "注入の行": 5,
+     "対応が付く": 5,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 3,
+      "分母": 5,
+      "率": 60.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 2,
+      "分母": 5,
+      "率": 40.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 2
+     },
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "C": {
+     "注入の行": 2,
+     "対応が付く": 2,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 1,
+      "分母": 2,
+      "率": 50.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 1,
+      "分母": 2,
+      "率": 50.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 1
+     },
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "全体": {
+     "注入の行": 11,
+     "対応が付く": 10,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 10,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 5,
+      "分母": 10,
+      "率": 50.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 10,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 4,
+      "分母": 10,
+      "率": 40.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 1,
+      "分母": 10,
+      "率": 10.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 4
+     },
+     "UNVERIFIABLE の reason の内訳": {
+      "other_frame": 1
+     }
+    }
+   },
+   "P27E": {
+    "A": {
+     "注入の行": 4,
+     "対応が付く": 3,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 2,
+      "分母": 3,
+      "率": 66.7
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 3,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 1,
+      "分母": 3,
+      "率": 33.3
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {
+      "other_frame": 1
+     }
+    },
+    "B": {
+     "注入の行": 5,
+     "対応が付く": 5,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 4,
+      "分母": 5,
+      "率": 80.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 1,
+      "分母": 5,
+      "率": 20.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 5,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 1
+     },
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "C": {
+     "注入の行": 2,
+     "対応が付く": 2,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 1,
+      "分母": 2,
+      "率": 50.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 1,
+      "分母": 2,
+      "率": 50.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 2,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 1
+     },
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "全体": {
+     "注入の行": 11,
+     "対応が付く": 10,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 10,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 7,
+      "分母": 10,
+      "率": 70.0
+     },
+     "名指したが別の値": {
+      "件": 0,
+      "分母": 10,
+      "率": 0.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 2,
+      "分母": 10,
+      "率": 20.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 1,
+      "分母": 10,
+      "率": 10.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 2
+     },
+     "UNVERIFIABLE の reason の内訳": {
+      "other_frame": 1
+     }
+    }
+   },
+   "両方の profile で対応が付く": 10
+  },
+  "T8_REL": {
+   "P22": {
+    "A": {
+     "注入の行": 23,
+     "対応が付く": 22,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 1,
+      "分母": 22,
+      "率": 4.5
+     },
+     "名指して原本の値を返した": {
+      "件": 19,
+      "分母": 22,
+      "率": 86.4
+     },
+     "名指したが別の値": {
+      "件": 2,
+      "分母": 22,
+      "率": 9.1
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 22,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 22,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "B": {
+     "注入の行": 50,
+     "対応が付く": 50,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 21,
+      "分母": 50,
+      "率": 42.0
+     },
+     "名指して原本の値を返した": {
+      "件": 28,
+      "分母": 50,
+      "率": 56.0
+     },
+     "名指したが別の値": {
+      "件": 1,
+      "分母": 50,
+      "率": 2.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 50,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 50,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "C": {
+     "注入の行": 17,
+     "対応が付く": 16,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 6,
+      "分母": 16,
+      "率": 37.5
+     },
+     "名指して原本の値を返した": {
+      "件": 9,
+      "分母": 16,
+      "率": 56.2
+     },
+     "名指したが別の値": {
+      "件": 1,
+      "分母": 16,
+      "率": 6.2
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 16,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 16,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "全体": {
+     "注入の行": 90,
+     "対応が付く": 88,
+     "対応が付かない": 2,
+     "通した": {
+      "件": 28,
+      "分母": 88,
+      "率": 31.8
+     },
+     "名指して原本の値を返した": {
+      "件": 56,
+      "分母": 88,
+      "率": 63.6
+     },
+     "名指したが別の値": {
+      "件": 4,
+      "分母": 88,
+      "率": 4.5
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 88,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 88,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {}
+    }
+   },
+   "P26": {
+    "A": {
+     "注入の行": 23,
+     "対応が付く": 22,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 1,
+      "分母": 22,
+      "率": 4.5
+     },
+     "名指して原本の値を返した": {
+      "件": 9,
+      "分母": 22,
+      "率": 40.9
+     },
+     "名指したが別の値": {
+      "件": 2,
+      "分母": 22,
+      "率": 9.1
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 10,
+      "分母": 22,
+      "率": 45.5
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 22,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 10
+     },
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "B": {
+     "注入の行": 50,
+     "対応が付く": 50,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 21,
+      "分母": 50,
+      "率": 42.0
+     },
+     "名指して原本の値を返した": {
+      "件": 8,
+      "分母": 50,
+      "率": 16.0
+     },
+     "名指したが別の値": {
+      "件": 1,
+      "分母": 50,
+      "率": 2.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 20,
+      "分母": 50,
+      "率": 40.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 50,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 18,
+      "other_concept": 2
+     },
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "C": {
+     "注入の行": 17,
+     "対応が付く": 16,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 6,
+      "分母": 16,
+      "率": 37.5
+     },
+     "名指して原本の値を返した": {
+      "件": 2,
+      "分母": 16,
+      "率": 12.5
+     },
+     "名指したが別の値": {
+      "件": 1,
+      "分母": 16,
+      "率": 6.2
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 4,
+      "分母": 16,
+      "率": 25.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 3,
+      "分母": 16,
+      "率": 18.8
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 4
+     },
+     "UNVERIFIABLE の reason の内訳": {
+      "other_frame": 3
+     }
+    },
+    "全体": {
+     "注入の行": 90,
+     "対応が付く": 88,
+     "対応が付かない": 2,
+     "通した": {
+      "件": 28,
+      "分母": 88,
+      "率": 31.8
+     },
+     "名指して原本の値を返した": {
+      "件": 19,
+      "分母": 88,
+      "率": 21.6
+     },
+     "名指したが別の値": {
+      "件": 4,
+      "分母": 88,
+      "率": 4.5
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 34,
+      "分母": 88,
+      "率": 38.6
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 3,
+      "分母": 88,
+      "率": 3.4
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 32,
+      "other_concept": 2
+     },
+     "UNVERIFIABLE の reason の内訳": {
+      "other_frame": 3
+     }
+    }
+   },
+   "P27": {
+    "A": {
+     "注入の行": 23,
+     "対応が付く": 22,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 22,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 8,
+      "分母": 22,
+      "率": 36.4
+     },
+     "名指したが別の値": {
+      "件": 3,
+      "分母": 22,
+      "率": 13.6
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 11,
+      "分母": 22,
+      "率": 50.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 22,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 11
+     },
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "B": {
+     "注入の行": 50,
+     "対応が付く": 50,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 0,
+      "分母": 50,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 8,
+      "分母": 50,
+      "率": 16.0
+     },
+     "名指したが別の値": {
+      "件": 3,
+      "分母": 50,
+      "率": 6.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 37,
+      "分母": 50,
+      "率": 74.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 2,
+      "分母": 50,
+      "率": 4.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 35,
+      "other_concept": 2
+     },
+     "UNVERIFIABLE の reason の内訳": {
+      "target_or_plan": 2
+     }
+    },
+    "C": {
+     "注入の行": 17,
+     "対応が付く": 16,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 16,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 3,
+      "分母": 16,
+      "率": 18.8
+     },
+     "名指したが別の値": {
+      "件": 1,
+      "分母": 16,
+      "率": 6.2
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 12,
+      "分母": 16,
+      "率": 75.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 16,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 12
+     },
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "全体": {
+     "注入の行": 90,
+     "対応が付く": 88,
+     "対応が付かない": 2,
+     "通した": {
+      "件": 0,
+      "分母": 88,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 19,
+      "分母": 88,
+      "率": 21.6
+     },
+     "名指したが別の値": {
+      "件": 7,
+      "分母": 88,
+      "率": 8.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 60,
+      "分母": 88,
+      "率": 68.2
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 2,
+      "分母": 88,
+      "率": 2.3
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "no_same_value": 58,
+      "other_concept": 2
+     },
+     "UNVERIFIABLE の reason の内訳": {
+      "target_or_plan": 2
+     }
+    }
+   },
+   "P27E": {
+    "A": {
+     "注入の行": 23,
+     "対応が付く": 22,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 22,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 18,
+      "分母": 22,
+      "率": 81.8
+     },
+     "名指したが別の値": {
+      "件": 4,
+      "分母": 22,
+      "率": 18.2
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 22,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 22,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "B": {
+     "注入の行": 50,
+     "対応が付く": 50,
+     "対応が付かない": 0,
+     "通した": {
+      "件": 0,
+      "分母": 50,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 43,
+      "分母": 50,
+      "率": 86.0
+     },
+     "名指したが別の値": {
+      "件": 3,
+      "分母": 50,
+      "率": 6.0
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 2,
+      "分母": 50,
+      "率": 4.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 2,
+      "分母": 50,
+      "率": 4.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "other_concept": 2
+     },
+     "UNVERIFIABLE の reason の内訳": {
+      "target_or_plan": 2
+     }
+    },
+    "C": {
+     "注入の行": 17,
+     "対応が付く": 16,
+     "対応が付かない": 1,
+     "通した": {
+      "件": 0,
+      "分母": 16,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 14,
+      "分母": 16,
+      "率": 87.5
+     },
+     "名指したが別の値": {
+      "件": 2,
+      "分母": 16,
+      "率": 12.5
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 0,
+      "分母": 16,
+      "率": 0.0
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 0,
+      "分母": 16,
+      "率": 0.0
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {},
+     "UNVERIFIABLE の reason の内訳": {}
+    },
+    "全体": {
+     "注入の行": 90,
+     "対応が付く": 88,
+     "対応が付かない": 2,
+     "通した": {
+      "件": 0,
+      "分母": 88,
+      "率": 0.0
+     },
+     "名指して原本の値を返した": {
+      "件": 75,
+      "分母": 88,
+      "率": 85.2
+     },
+     "名指したが別の値": {
+      "件": 9,
+      "分母": 88,
+      "率": 10.2
+     },
+     "止めたが名指さない(POINTER_NOT_FOUND)": {
+      "件": 2,
+      "分母": 88,
+      "率": 2.3
+     },
+     "止めたが名指さない(UNVERIFIABLE)": {
+      "件": 2,
+      "分母": 88,
+      "率": 2.3
+     },
+     "POINTER_NOT_FOUND の reason の内訳": {
+      "other_concept": 2
+     },
+     "UNVERIFIABLE の reason の内訳": {
+      "target_or_plan": 2
+     }
+    }
+   },
+   "両方の profile で対応が付く": 88
+  }
+ },
+ "T8_REL の site": {
+  "注入の行": 90,
+  "作れる site(上限の前)": 90
+ },
+ "行": [
+  {
+   "docID": "S100YXFQ",
+   "id": "S100YXFQ-T1-01",
+   "型": "T1_VALUE",
+   "文体": "A",
+   "基準の claim": "N003",
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YXFQ",
+   "id": "S100YXFQ-T8-01",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N003",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YXFQ",
+   "id": "S100YXFQ-T8-02",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N018",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YXFQ",
+   "id": "S100YXFQ-T8-03",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N019",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T1-06",
+   "型": "T1_VALUE",
+   "文体": "B",
+   "基準の claim": "N059",
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T1-07",
+   "型": "T1_VALUE",
+   "文体": "B",
+   "基準の claim": "N046",
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-01",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N051",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-02",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N050",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-03",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N004",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-04",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N023",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-05",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N048",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-06",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N015",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-07",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N002",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-08",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N024",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-09",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N008",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-10",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N013",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-11",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N001",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "S100YZ4M-T8-12",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N046",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYIV",
+   "id": "S100YYIV-T8-01",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N020",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYIV",
+   "id": "S100YYIV-T8-02",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N022",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYIV",
+   "id": "S100YYIV-T8-03",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N023",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYIV",
+   "id": "S100YYIV-T8-04",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N003",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYIV",
+   "id": "S100YYIV-T8-05",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N005",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYIV",
+   "id": "S100YYIV-T8-06",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N021",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T1-02",
+   "型": "T1_VALUE",
+   "文体": "A",
+   "基準の claim": "N006",
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-01",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N005",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-02",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N007",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-03",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N031",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-04",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N030",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-05",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N006",
+   "r": -0.1,
+   "r を決めた回": 2,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-06",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N015",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-07",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N041",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-08",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N032",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-09",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N028",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-10",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N019",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-11",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N002",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-12",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N052",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-13",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N053",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-14",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N010",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-15",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N040",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-16",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N027",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-17",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N009",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYHK",
+   "id": "S100YYHK-T8-18",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N004",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T1-03",
+   "型": "T1_VALUE",
+   "文体": "B",
+   "基準の claim": "N059",
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-01",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N012",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-02",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N039",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-03",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N002",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-04",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N004",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-05",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N029",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-06",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N001",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-07",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N038",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-08",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N019",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-09",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N032",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-10",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N009",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-11",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N018",
+   "r": 0.1,
+   "r を決めた回": 2,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-12",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N050",
+   "r": 0.03,
+   "r を決めた回": 2,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "other_concept"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "other_concept"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "other_concept"
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-13",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N028",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-14",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N016",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-15",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N040",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-16",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N063",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(UNVERIFIABLE)",
+    "state": "UNVERIFIABLE",
+    "reason": "target_or_plan"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "止めたが名指さない(UNVERIFIABLE)",
+    "state": "UNVERIFIABLE",
+    "reason": "target_or_plan"
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-17",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N051",
+   "r": 0.03,
+   "r を決めた回": 3,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "other_concept"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "other_concept"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "other_concept"
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-18",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N037",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-19",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N065",
+   "r": 0.03,
+   "r を決めた回": 2,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(UNVERIFIABLE)",
+    "state": "UNVERIFIABLE",
+    "reason": "target_or_plan"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "止めたが名指さない(UNVERIFIABLE)",
+    "state": "UNVERIFIABLE",
+    "reason": "target_or_plan"
+   }
+  },
+  {
+   "docID": "S100YYGF",
+   "id": "S100YYGF-T8-20",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N020",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYAI",
+   "id": "S100YYAI-T1-01",
+   "型": "T1_VALUE",
+   "文体": "C",
+   "基準の claim": "N012",
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   }
+  },
+  {
+   "docID": "S100YYAI",
+   "id": "S100YYAI-T1-02",
+   "型": "T1_VALUE",
+   "文体": "C",
+   "基準の claim": "N016",
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYAI",
+   "id": "S100YYAI-T8-01",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N018",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYAI",
+   "id": "S100YYAI-T8-02",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N005",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYAI",
+   "id": "S100YYAI-T8-03",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N012",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(UNVERIFIABLE)",
+    "state": "UNVERIFIABLE",
+    "reason": "other_frame"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指したが別の値",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYAI",
+   "id": "S100YYAI-T8-04",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N017",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYAI",
+   "id": "S100YYAI-T8-05",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N010",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   },
+   "P26": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   },
+   "P27": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   },
+   "P27E": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYAI",
+   "id": "S100YYAI-T8-06",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N007",
+   "r": 0.03,
+   "r を決めた回": 4,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T1-06",
+   "型": "T1_VALUE",
+   "文体": "B",
+   "基準の claim": "N016",
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T1-07",
+   "型": "T1_VALUE",
+   "文体": "B",
+   "基準の claim": "N066",
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-01",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N045",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-02",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N046",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-03",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N015",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-04",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N019",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-05",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N021",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-06",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N018",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-07",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N039",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-08",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N032",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-09",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N004",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-10",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N050",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-11",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N016",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-12",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N029",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-13",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N008",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-14",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N013",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-15",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N012",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-16",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N051",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-17",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N044",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YZFP",
+   "id": "S100YZFP-T8-18",
+   "型": "T8_REL",
+   "文体": "B",
+   "基準の claim": "N011",
+   "r": -0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYMP",
+   "id": "S100YYMP-T8-01",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N014",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(UNVERIFIABLE)",
+    "state": "UNVERIFIABLE",
+    "reason": "other_frame"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYMP",
+   "id": "S100YYMP-T8-02",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N007",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYMP",
+   "id": "S100YYMP-T8-03",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N013",
+   "r": 0.03,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "通した",
+    "state": "GROUNDED",
+    "reason": null
+   },
+   "P27": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYMP",
+   "id": "S100YYMP-T8-04",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N015",
+   "r": -0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(UNVERIFIABLE)",
+    "state": "UNVERIFIABLE",
+    "reason": "other_frame"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYMP",
+   "id": "S100YYMP-T8-05",
+   "型": "T8_REL",
+   "文体": "C",
+   "基準の claim": "N011",
+   "r": 0.1,
+   "r を決めた回": 1,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYKZ",
+   "id": "S100YYKZ-T1-01",
+   "型": "T1_VALUE",
+   "文体": "A",
+   "基準の claim": "N019",
+   "P22": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   },
+   "P26": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   },
+   "P27": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   },
+   "P27E": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYKZ",
+   "id": "S100YYKZ-T1-03",
+   "型": "T1_VALUE",
+   "文体": "A",
+   "基準の claim": "N020",
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(UNVERIFIABLE)",
+    "state": "UNVERIFIABLE",
+    "reason": "other_frame"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(UNVERIFIABLE)",
+    "state": "UNVERIFIABLE",
+    "reason": "other_frame"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "止めたが名指さない(UNVERIFIABLE)",
+    "state": "UNVERIFIABLE",
+    "reason": "other_frame"
+   }
+  },
+  {
+   "docID": "S100YYKZ",
+   "id": "S100YYKZ-T8-01",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N020",
+   "r": 0.1,
+   "r を決めた回": 2,
+   "P22": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   },
+   "P26": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27": {
+    "対応": true,
+    "結果": "止めたが名指さない(POINTER_NOT_FOUND)",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value"
+   },
+   "P27E": {
+    "対応": true,
+    "結果": "名指して原本の値を返した",
+    "state": "VALUE_MISMATCH",
+    "reason": null
+   }
+  },
+  {
+   "docID": "S100YYKZ",
+   "id": "S100YYKZ-T8-02",
+   "型": "T8_REL",
+   "文体": "A",
+   "基準の claim": "N019",
+   "r": 0.03,
+   "r を決めた回": 4,
+   "P22": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   },
+   "P26": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   },
+   "P27": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   },
+   "P27E": {
+    "対応": false,
+    "結果": "対応が付かない",
+    "state": null,
+    "reason": null
+   }
+  }
+ ],
+ "U-1(旗が偽の P22・P26)": {
+  "段 1 の記録": "fixtures/xbrl/p27/tune_inject_2026-10-27.json",
+  "段 1 の記録と分類(対応・結果・state・reason)が違う行": 0,
+  "違う行": [],
+  "照らした行": 101,
+  "段 1 の記録の行": 101,
+  "行の集合が同じ": true
+ },
+ "repo の外に置いたもの": {
+  "folder": "/private/tmp/claude-501/-Users-midoriko-Desktop-sgogi-coach/9b3d86ea-ed3b-407c-837e-4c2262a5b8e1/scratchpad/p27/e_impl/tune_out_final",
+  "注入の字・新しい値": {
+   "file": "inject_full.json",
+   "sha256": "bfdef0115d775c6788a243fe3031018dd4e43f569d68b30aff15f93ae180ea16",
+   "bytes": 15696
+  }
+ },
+ "限界": [
+  "注入は 2 型だけ。DB と原本の差の実際の分布ではない(T8_REL の r の 4 値は 3 本の差の大きさに寄せた決め打ち)",
+  "ρ = 0.15 は T8_REL の変え幅(±10%)を包むように決めたので、同じ T8_REL で測る P27E の『名指す率』は作りから当たりやすい(封 §10-2)"
+ ]
+}

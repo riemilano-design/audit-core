@@ -1,0 +1,2500 @@
+{
+  "判定者": "席2",
+  "読んだファイル": [
+    "fixtures/xbrl/q2_nonconsolidated/seat/seat_instruction_2026-10-14.md",
+    "fixtures/xbrl/q2_nonconsolidated/seat/material_S100YYIA.json",
+    "fixtures/xbrl/q2_nonconsolidated/seat/facts_S100YYIA.json",
+    "fixtures/xbrl/q2_nonconsolidated/seat/contexts_S100YYIA.json"
+  ],
+  "行": [
+    {
+      "行の鍵": "H-001",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 59429000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「59,429千円」×1000=59,429,000円。jppfs_cor:ProfitLoss(前期, 単体)=59,429,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(当期純利益・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+          "context": "Prior1YearDuration_NonConsolidatedMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "Prior1YearDuration_NonConsolidatedMember_ShareholdersEquityMember"
+        },
+        {
+          "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+          "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember"
+        },
+        {
+          "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+          "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsMember"
+        },
+        {
+          "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+          "context": "Prior1YearDuration_NonConsolidatedMember_ShareholdersEquityMember"
+        },
+        {
+          "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+          "context": "Prior1YearDuration_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "同じ値(59,429,000円)を持つfactが複数あるが、本文は損益計算書の「当期純利益」を述べる文脈(MD&A実績まとめ)であり、個別財務諸表の損益項目jppfs_cor:ProfitLossを採用した。株主資本等変動表側(RetainedEarnings各member)やサマリー表側(SummaryOfBusinessResults)は同額だが文脈上の主役ではないため同値候補に回した。",
+      "迷った点": "どの要素が「正本」かは本文の語だけでは一意に決まらず、値が同じ複数要素のどれを選ぶかは判断。"
+    },
+    {
+      "行の鍵": "H-002",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "不明(数値を含まない一般的な記述)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "「今後の業容拡大を目指し営業活動に注力してまいりました」は数値を伴わない一般的な記述で、対応するfactが存在しない。",
+      "迷った点": "方向を示す語(増加・減少等)も見当たらず、判定不能とした。"
+    },
+    {
+      "行の鍵": "H-003",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NonOperatingIncome",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 94657000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「94,657千円」×1000=94,657,000円。jppfs_cor:NonOperatingIncome(前期)=94,657,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(営業外収益・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "「営業外収益は...前事業年度は94,657千円」との記述に対応する唯一のfact。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-004",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 20280000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 18720000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期20,280,000円−前期18,720,000円=1,560,000円。文の「1,560千円増」×1000=1,560,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(1年内返済予定の長期借入金)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "BS注記の「1年内返済予定の長期借入金20,280千円(同1,560千円増)」の増加額を、当期末・前期末の同一要素の差で再現できた。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-005",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 1795757000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「1,795,757千円」×1000=1,795,757,000円。jppfs_cor:NetSales(当期)=1,795,757,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(売上高・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+          "context": "CurrentYearDuration_NonConsolidatedMember"
+        },
+        {
+          "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+          "context": "CurrentYearDuration_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember"
+        },
+        {
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "同額の候補が複数あるが、本文はMD&A本文の売上高であり財務諸表のNetSalesを採用、サマリー表・セグメント合計側は同値候補とした。",
+      "迷った点": "H-001と同種の選択の迷い。"
+    },
+    {
+      "行の鍵": "H-006",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:AccountsReceivableTrade",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 168137000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:AccountsReceivableTrade",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 147137000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期168,137,000円−前期147,137,000円=21,000,000円。文の「20,999千円増」×1000=20,999,000円とは1,000円(1千円)差がある。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(売掛金)",
+      "値は一致するか": "不一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対応する要素・contextは一致する(売掛金の当期末・前期末)が、差の計算結果が文中の増加額と1千円ずれる。個別の丸めによる差とみられるが、別のfactに合わせて選び直すことはしない。",
+      "迷った点": "1千円の差は丸めの影響と考えられるが、確証はない。"
+    },
+    {
+      "行の鍵": "H-007",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CurrentLiabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 356962000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「356,962千円」×1000=356,962,000円。jppfs_cor:CurrentLiabilities(当期末)=356,962,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(流動負債・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "一意に一致するfact。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-008",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:DividendsFromSurplus",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -4700000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「配当金4,700千円」×1000=4,700,000円。jppfs_cor:DividendsFromSurplus(当期)=−4,700,000円。絶対値は一致(符号は剰余金減少を表す負値)。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(配当金の支払・利益剰余金)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "株主資本等変動表の「配当金の支払」行に対応する要素。文は支払額を正の金額として述べるが、fact側は利益剰余金減少として負値で記録されており、絶対値は一致する。",
+      "迷った点": "符号が逆である点を「一致」としてよいか迷ったが、金額としては一致するため一致とした。"
+    },
+    {
+      "行の鍵": "H-009",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:DeferredTaxAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 51757000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:DeferredTaxAssets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 33543000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期51,757,000円−前期33,543,000円=18,214,000円。文の「18,214千円増」×1000=18,214,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(繰延税金資産)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "差額が文中の増加額と正確に一致。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-010",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -15361000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「15,361千円の資金を使用」。jppfs_cor:NetCashProvidedByUsedInInvestmentActivities(当期)=−15,361,000円。絶対値が一致し、符号(負)は「使用」と整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(投資活動によるキャッシュ・フロー・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "「使用した」という語と負値のfactが整合する。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-011",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 61547000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「税引前当期純利益61,547千円」×1000=61,547,000円。jppfs_cor:IncomeBeforeIncomeTaxes(当期)=61,547,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(税引前当期純利益・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "一意に一致。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-012",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "情報サービス業界全体(マクロ・業界動向)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "DX投資需要や生成AIの活用拡大といった業界・マクロ環境についての定性的記述であり、提出会社自身の数値データ(facts)には対応する項目がない。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-013",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "日本経済全体(マクロ経済動向)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "「我が国経済は...緩やかな回復傾向」という日本経済全体についての定性的記述で、提出会社のfactsに対応する項目がない。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-014",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CostOfSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 1177488000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「売上原価は1,177,488千円」×1000=1,177,488,000円。jppfs_cor:CostOfSales(当期)=1,177,488,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(売上原価・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "一意に一致。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-015",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E05641-000SolutionDivisionReportableSegmentsMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 12349000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「セグメント利益は12,349千円」×1000=12,349,000円。ソリューション事業セグメントのjppfs_cor:OperatingIncome(当期)=12,349,000円と一致。同文の売上高120,484千円もソリューション事業の売上高と一致することで区分を確認。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "ソリューション事業(セグメント利益・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "同文中の売上高120,484千円がソリューション事業セグメントの売上高と一致するため、このセグメント利益もソリューション事業のものと判断した。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-016",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 92427000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「(前事業年度は92,427千円の獲得)」。jppfs_cor:NetCashProvidedByUsedInOperatingActivities(前期)=92,427,000円で、符号(正)は「獲得」と整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(営業活動によるキャッシュ・フロー・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+          "context": "Prior1YearDuration_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "財務諸表側の要素を優先し、主要な経営指標等の推移(サマリー表)側は同値候補とした。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-017",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CashDividendsPaidFinCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -4631000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「配当金の支払額4,631千円」×1000=4,631,000円。jppfs_cor:CashDividendsPaidFinCF(当期)=−4,631,000円。絶対値が一致し、符号(負)は「支出」と整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(配当金の支払額・当期キャッシュフロー)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jppfs_cor:IncomeTaxesCurrent",
+          "context": "Prior1YearDuration_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "同じ値(4,631,000円)を持つjppfs_cor:IncomeTaxesCurrent(前期・法人税)が存在するが、本文は「配当金の支払額」であり概念が異なるため採用しなかった(同値の他の候補に記載)。",
+      "迷った点": "値の一致だけでは別概念のfactと混同しやすい例で、語の意味を優先した。"
+    },
+    {
+      "行の鍵": "H-018",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E05641-000SolutionDivisionReportableSegmentsMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 44327000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「セグメント利益は...(同44,327千円)」×1000=44,327,000円。ソリューション事業セグメントのjppfs_cor:OperatingIncome(前期)=44,327,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "ソリューション事業(セグメント利益・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "H-015と同文、前期側。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-019",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": -17160000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「(前事業年度は17,160千円)」は財務活動の結果使用した資金の前期分。jppfs_cor:NetCashProvidedByUsedInFinancingActivities(前期)=−17,160,000円。絶対値一致、符号(負)は「使用」と整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(財務活動によるキャッシュ・フロー・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-020",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E05641-000SESDivisionReportableSegmentsMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 419113000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「セグメント利益は419,113千円」×1000=419,113,000円。SES事業セグメントのjppfs_cor:OperatingIncome(当期)=419,113,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "SES事業(セグメント利益・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "同文中の売上高1,675,273千円がSES事業セグメントの売上高と一致するため、このセグメント利益もSES事業のものと判断した。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-021",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -15361000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「投資活動の結果使用した資金は15,361千円」。jppfs_cor:NetCashProvidedByUsedInInvestmentActivities(当期)=−15,361,000円。絶対値一致、符号(負)は「使用」と整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(投資活動によるキャッシュ・フロー・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-022",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:IntangibleAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 11584000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:IntangibleAssets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 16199000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期11,584,000円−前期16,199,000円=−4,615,000円(減少)。文の「4,614千円減」×1000=4,614,000円とは1,000円差がある。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(無形固定資産)",
+      "値は一致するか": "不一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "減少方向は一致するが、金額が1千円ずれる(丸めの影響とみられる)。別のfactに合わせて選び直すことはしない。",
+      "迷った点": "H-006と同種の1千円ずれ。"
+    },
+    {
+      "行の鍵": "H-023",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "全社(キャッシュ・フロー調整項目の列挙の一部だが、どの項目かが抜粋の範囲だけでは一意に決まらない)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "集計項目が文に無い",
+      "判定の理由": "抜粋が「未払費用の増加額50,996千円、未払消費税等の増加額7,08」の境界にかかっており、この行が指す対象が未払費用側か未払消費税等側か、抜粋だけでは一意に決められない(両方とも別の行(H-032/H-068, H-040/H-078)で既に数値付きで判定されている)。",
+      "迷った点": "同一文に対して重複した抜粋位置が複数行あり、本行固有の対象を切り出せなかった。"
+    },
+    {
+      "行の鍵": "H-024",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CostOfSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 1102040000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「(同1,102,040千円)」×1000=1,102,040,000円。jppfs_cor:CostOfSales(前期)=1,102,040,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(売上原価・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-025",
+      "判定": "独立判定",
+      "形": "符号・方向",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:DividendsFromSurplus",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -4700000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文は「配当金4,700千円の支払による利益剰余金の減少」と方向(減少)を述べる。jppfs_cor:DividendsFromSurplus(当期)=−4,700,000円であり、負値=減少方向と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(利益剰余金の減少・配当金の支払)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "本行は数値そのものではなく「減少」という方向の語に対応する行と判断した(数値自体はH-008で判定済み)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-026",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:DecreaseIncreaseInInventoriesOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -4716000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「棚卸資産の増加額4,716千円」×1000=4,716,000円。jppfs_cor:DecreaseIncreaseInInventoriesOpeCF(当期)=−4,716,000円。絶対値一致、符号(負)はキャッシュ・フロー上の資金減少調整として整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(棚卸資産の増加額・キャッシュフロー調整)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-027",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "ITエンジニア育成研修(虎の穴研修)という個別施策についての評価・方針",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "「人材不足が叫ばれるITエンジニアの増加施策としての役割は大きい」という定性的な評価であり、対応する数値のfactが無い。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-028",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:LeaseAndGuaranteeDeposits",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 34342000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:LeaseAndGuaranteeDeposits",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 36048000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期34,342,000円−前期36,048,000円=−1,706,000円(減少)。文の「1,705千円減」×1000=1,705,000円とは1,000円差がある。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(敷金及び保証金)",
+      "値は一致するか": "不一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "減少方向は一致するが金額が1千円ずれる(丸めの影響とみられる)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-029",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:DepositsReceived",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 31729000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「預り金31,729千円」×1000=31,729,000円。jppfs_cor:DepositsReceived(当期末)=31,729,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(預り金・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-030",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:InsuranceFunds",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 23081000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「保険積立金23,081千円」×1000=23,081,000円。jppfs_cor:InsuranceFunds(当期末)=23,081,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(保険積立金・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-031",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "全社(キャッシュ・フロー調整項目の列挙の一部だが、どの項目かが抜粋の範囲だけでは一意に決まらない)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "集計項目が文に無い",
+      "判定の理由": "抜粋が「12,490千円、棚卸資産の増加額4,716千円、未払費用の増加額50,9」の境界にかかっており、対象が売上債権側・棚卸資産側・未払費用側のいずれかを抜粋だけでは一意に決められない。",
+      "迷った点": "H-023と同種。"
+    },
+    {
+      "行の鍵": "H-032",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncreaseDecreaseInAccruedExpensesOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 50996000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「未払費用171,850千円(同50,996千円増)」の増加額。jppfs_cor:IncreaseDecreaseInAccruedExpensesOpeCF(当期)=50,996,000円と一致。BS計上額の当期末・前期末の差(171,850,000−120,853,000=50,997,000)は1千円ずれるため、キャッシュ・フロー表の対応する調整項目を採用した。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(未払費用の増加額)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "BS差額だと50,997千円になり文の50,996千円と1千円ずれるが、キャッシュ・フロー注記の対応項目は50,996千円で正確に一致するため、こちらを採用した。",
+      "迷った点": "どちらを選ぶか迷ったが、値が完全一致する方を採用した。"
+    },
+    {
+      "行の鍵": "H-033",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "SES事業及びソリューション事業(売上総利益率というKPI)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "「売上総利益率は34%」という自社管理指標(KPI)で、facts中にこれに対応する要素(売上総利益率・稼働率)が存在しない。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-034",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E05641-000SESDivisionReportableSegmentsMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 1675273000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「売上高は1,675,273千円」×1000=1,675,273,000円。SES事業セグメントのjppfs_cor:NetSales(当期)=1,675,273,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "SES事業(売上高・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E05641-000SESDivisionReportableSegmentsMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "同値のjpcrp_cor:RevenuesFromExternalCustomers(外部顧客への売上高)があるが、文の語「売上高」はNetSalesの定義語に近いため採用した。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-035",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "不明(数値を含まない一般的な記述)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "H-002と同文・同抜粋。対応するfactが無い。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-036",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:Liabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 424282000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「負債合計は424,282千円」×1000=424,282,000円。jppfs_cor:Liabilities(当期末)=424,282,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(負債合計・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-037",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 1795757000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「売上高1,795,757千円」×1000=1,795,757,000円。jppfs_cor:NetSales(当期)=1,795,757,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(売上高・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+          "context": "CurrentYearDuration_NonConsolidatedMember"
+        },
+        {
+          "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+          "context": "CurrentYearDuration_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember"
+        },
+        {
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "H-005と同じ数・同じ選択理由(MD&A業績まとめの文脈)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-038",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CashAndCashEquivalents",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 388954000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「当事業年度末における資金は...前事業年度末は388,954千円」×1000=388,954,000円。jppfs_cor:CashAndCashEquivalents(前期末)=388,954,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(資金=現金及び現金同等物・前期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+          "context": "Prior1YearInstant_NonConsolidatedMember"
+        },
+        {
+          "要素": "jppfs_cor:CashAndDeposits",
+          "context": "Prior1YearInstant_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "「資金」はH-047の文で「現金及び現金同等物(以下「資金」という)」と定義されているため、CashAndCashEquivalentsを採用。現金及び預金(CashAndDeposits)は同額だが別概念として同値候補に回した。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-039",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 41672000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「当期純利益は41,672千円」×1000=41,672,000円。jppfs_cor:ProfitLoss(当期)=41,672,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(当期純利益・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+          "context": "CurrentYearDuration_NonConsolidatedMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "H-001と同様の理由でjppfs_cor:ProfitLoss(無member)を採用。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-040",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncreaseDecreaseInAccruedConsumptionTaxesOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 7081000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「未払消費税等の増加額7,081千円」×1000=7,081,000円。jppfs_cor:IncreaseDecreaseInAccruedConsumptionTaxesOpeCF(当期)=7,081,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(未払消費税等の増加額・キャッシュフロー調整)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-041",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:InsuranceFunds",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 23081000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:InsuranceFunds",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 21305000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期23,081,000円−前期21,305,000円=1,776,000円。文の「1,775千円増」×1000=1,775,000円とは1,000円差がある。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(保険積立金)",
+      "値は一致するか": "不一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "増加方向は一致するが金額が1千円ずれる(丸めの影響とみられる)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-042",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:RepaymentOfLongTermLoansPayableFinCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -18720000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「長期借入金の返済による支出18,720千円」×1000=18,720,000円。jppfs_cor:RepaymentOfLongTermLoansPayableFinCF(当期)=−18,720,000円。絶対値一致、符号(負)は「支出」と整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(長期借入金の返済による支出・当期キャッシュフロー)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+          "context": "Prior1YearInstant_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "同じ値(18,720,000円)を持つjppfs_cor:CurrentPortionOfLongTermLoansPayable(前期末のBS残高)が存在するが、本文は「返済による支出」であり概念が異なるため採用しなかった(同値の他の候補に記載)。",
+      "迷った点": "H-017と同種の、値の一致だけでは別概念と混同しやすい例。"
+    },
+    {
+      "行の鍵": "H-043",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "SES事業及びソリューション事業(売上総利益率・稼働率というKPI目標)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "「売上総利益率36%、稼働率95%を目標」という自社管理指標(KPI)の目標値で、facts中に対応する要素が存在しない。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-044",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "全社(キャッシュ・フロー調整項目の列挙の一部だが、どの項目かが抜粋の範囲だけでは一意に決まらない)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "集計項目が文に無い",
+      "判定の理由": "抜粋が「未払費用の増加額50,996千円、未払消費税等の増加額7,081千円、契約負債の増加額23,6」の境界にかかっており、対象が未払消費税等側か契約負債側か抜粋だけでは一意に決められない。",
+      "迷った点": "H-023・H-031と同種。"
+    },
+    {
+      "行の鍵": "H-045",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncomeTaxesPaidOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -4122000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「法人税等の支払額4,122千円」×1000=4,122,000円。jppfs_cor:IncomeTaxesPaidOpeCF(当期)=−4,122,000円。絶対値一致、符号(負)は「支払(支出)」と整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(法人税等の支払額・キャッシュフロー)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-046",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PropertyPlantAndEquipment",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 21344000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「有形固定資産21,344千円」×1000=21,344,000円。jppfs_cor:PropertyPlantAndEquipment(当期末)=21,344,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(有形固定資産・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-047",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CashAndCashEquivalents",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 388954000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「現金及び現金同等物...前事業年度末は388,954千円」×1000=388,954,000円。jppfs_cor:CashAndCashEquivalents(前期末)=388,954,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(現金及び現金同等物・前期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+          "context": "Prior1YearInstant_NonConsolidatedMember"
+        },
+        {
+          "要素": "jppfs_cor:CashAndDeposits",
+          "context": "Prior1YearInstant_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "文自体が「現金及び現金同等物」と明示しており、要素名と直接対応する。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-048",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:Liabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 424282000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:Liabilities",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 326836000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期424,282,000円−前期326,836,000円=97,446,000円。文の「97,446千円増」×1000=97,446,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(負債合計)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-049",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 23615000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「契約負債の増加額23,615千円」×1000=23,615,000円。jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF(当期)=23,615,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(契約負債の増加額・キャッシュフロー調整)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-050",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncomeTaxesDeferred",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -18214000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「法人税等調整額は△18,214千円」×1000=−18,214,000円。jppfs_cor:IncomeTaxesDeferred(当期)=−18,214,000円と一致(△は負を表す)。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(法人税等調整額・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-051",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 20280000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「長期借入金67,320千円(同20,280千円減)により67,320千円」の20,280千円部分。×1000=20,280,000円。jppfs_cor:CurrentPortionOfLongTermLoansPayable(当期末)=20,280,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(1年内返済予定の長期借入金・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "固定負債の文中で「長期借入金67,320千円(同20,280千円減)」と書かれているが、20,280という値そのものは1年内返済予定の長期借入金(当期末)の残高と一致する。",
+      "迷った点": "文の文脈(固定負債の長期借入金)と一致したfactの概念(1年内返済予定の長期借入金)が完全には一致しない可能性があるが、値と期間は一致する。"
+    },
+    {
+      "行の鍵": "H-052",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:AccountsPayableOther",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 16440000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「未払金16,440千円」×1000=16,440,000円。jppfs_cor:AccountsPayableOther(当期末)=16,440,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(未払金・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-053",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 553130000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「販売費及び一般管理費は553,130千円」×1000=553,130,000円。jppfs_cor:SellingGeneralAndAdministrativeExpenses(当期)=553,130,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(販売費及び一般管理費・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-054",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "将来の方針(人材確保・契約単価交渉等の取り組み)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "「優秀な人材の確保...指標の改善に邁進していく所存」という将来方針の記述で、数値を伴わず対応するfactが無い。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-055",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:IncomeTaxesPayable",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 42221000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:IncomeTaxesPayable",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 6590000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期42,221,000円−前期6,590,000円=35,631,000円。文の「35,630千円増」×1000=35,630,000円とは1,000円差がある。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(未払法人税等)",
+      "値は一致するか": "不一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "増加方向は一致するが金額が1千円ずれる(丸めの影響とみられる)。キャッシュ・フロー表にはこの項目単独の調整行が無いため、BS残高の差を採用した。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-056",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IntangibleAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 11584000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「無形固定資産11,584千円」×1000=11,584,000円。jppfs_cor:IntangibleAssets(当期末)=11,584,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(無形固定資産・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-057",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:AccountsReceivableTrade",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 168137000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「売掛金168,137千円」×1000=168,137,000円。jppfs_cor:AccountsReceivableTrade(当期末)=168,137,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(売掛金・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-058",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncomeTaxesCurrent",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 38090000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「法人税、住民税及び事業税は38,090千円」×1000=38,090,000円。jppfs_cor:IncomeTaxesCurrent(当期)=38,090,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(法人税、住民税及び事業税・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-059",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:GrossProfit",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 617300000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「売上総利益618,268千円(同617,300千円)」の括弧内(前期)。×1000=617,300,000円。jppfs_cor:GrossProfit(前期)=617,300,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(売上総利益・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-060",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 20280000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「長期借入金67,320千円(同20,280千円減)により67,320千円(同20,280千円減)」の20,280千円部分。×1000=20,280,000円。jppfs_cor:CurrentPortionOfLongTermLoansPayable(当期末)=20,280,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(1年内返済予定の長期借入金・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "H-051と同じ数値・同じ文(固定負債の長期借入金の文)からの別の抜粋位置。",
+      "迷った点": "固定負債側の「長期借入金」という語とfactの概念(1年内返済予定の長期借入金)が完全には一致しない可能性がある。"
+    },
+    {
+      "行の鍵": "H-061",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:CurrentAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 682275000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:CurrentAssets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 569122000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期682,275,000円−前期569,122,000円=113,153,000円。文の「113,153千円増」×1000=113,153,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(流動資産)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-062",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "全社(キャッシュ・フロー調整項目の列挙の一部だが、どの項目かが抜粋の範囲だけでは一意に決まらない)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "集計項目が文に無い",
+      "判定の理由": "抜粋が「0,456千円、売上債権の増加額12,490千円、棚卸資産の増加額4,71」の境界にかかっており、対象が減価償却費側か売上債権側か棚卸資産側か抜粋だけでは一意に決められない。",
+      "迷った点": "H-023・H-031・H-044と同種。"
+    },
+    {
+      "行の鍵": "H-063",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "情報サービス業界全体・社会全体(マクロ・業界動向)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "H-012と同文・同抜粋。対応するfactが無い。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-064",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CashAndDeposits",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 486913000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「現金及び預金486,913千円」×1000=486,913,000円。jppfs_cor:CashAndDeposits(当期末)=486,913,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(現金及び預金・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jppfs_cor:CashAndCashEquivalents",
+          "context": "CurrentYearInstant_NonConsolidatedMember"
+        },
+        {
+          "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+          "context": "CurrentYearInstant_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "本文は「現金及び預金」であり、H-038/H-047の「現金及び現金同等物」とは別の文・別の概念(値はたまたま同額)。語に対応するCashAndDepositsを採用した。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-065",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E05641-000SESDivisionReportableSegmentsMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 1533759000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「売上高は...(前事業年度は1,533,759千円)」×1000=1,533,759,000円。SES事業セグメントのjppfs_cor:NetSales(前期)=1,533,759,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "SES事業(売上高・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+          "context": "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E05641-000SESDivisionReportableSegmentsMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "H-034と同じ理由。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-066",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OrdinaryIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 63398000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「経常利益は63,398千円」×1000=63,398,000円。jppfs_cor:OrdinaryIncome(当期)=63,398,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(経常利益・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+          "context": "CurrentYearDuration_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "サマリー表側の同値要素は候補として記載。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-067",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": -17160000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「(同17,160千円の使用)」。jppfs_cor:NetCashProvidedByUsedInFinancingActivities(前期)=−17,160,000円。絶対値一致、符号(負)は「使用」と整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(財務活動によるキャッシュ・フロー・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "H-019と同じ数値。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-068",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncreaseDecreaseInAccruedExpensesOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 50996000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「未払費用の増加額50,996千円」×1000=50,996,000円。jppfs_cor:IncreaseDecreaseInAccruedExpensesOpeCF(当期)=50,996,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(未払費用の増加額・キャッシュフロー調整)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "H-032と同じfact(キャッシュ・フロー注記側の文での再掲)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-069",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 1719341000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「(前事業年度は1,719,341千円)」×1000=1,719,341,000円。jppfs_cor:NetSales(前期)=1,719,341,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(売上高・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+          "context": "Prior1YearDuration_NonConsolidatedMember"
+        },
+        {
+          "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+          "context": "Prior1YearDuration_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember"
+        },
+        {
+          "要素": "jppfs_cor:NetSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "H-005/H-037と同じ理由(前期側)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-070",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:AccruedExpenses",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 171850000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「未払費用171,850千円」×1000=171,850,000円。jppfs_cor:AccruedExpenses(当期末)=171,850,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(未払費用・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-071",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:PropertyPlantAndEquipment",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 21344000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:PropertyPlantAndEquipment",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 15146000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期21,344,000円−前期15,146,000円=6,198,000円。文の「6,197千円増」×1000=6,197,000円とは1,000円差がある。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(有形固定資産)",
+      "値は一致するか": "不一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "増加方向は一致するが金額が1千円ずれる(丸めの影響とみられる)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-072",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 36525000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「営業利益65,138千円(同36,525千円)」の括弧内(前期)。×1000=36,525,000円。jppfs_cor:OperatingIncome(前期)=36,525,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(営業利益・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-073",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -23351000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「財務活動の結果使用した資金は23,351千円」。jppfs_cor:NetCashProvidedByUsedInFinancingActivities(当期)=−23,351,000円。絶対値一致、符号(負)は「使用」と整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(財務活動によるキャッシュ・フロー・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-074",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 59429000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「当期純利益41,672千円(同59,429千円)」の括弧内(前期)。×1000=59,429,000円。jppfs_cor:ProfitLoss(前期)=59,429,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(当期純利益・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+          "context": "Prior1YearDuration_NonConsolidatedMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "Prior1YearDuration_NonConsolidatedMember_RetainedEarningsMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "Prior1YearDuration_NonConsolidatedMember_ShareholdersEquityMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "H-001と同じ数値・同じ理由。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-075",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncomeTaxesDeferred",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 6295000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「法人税等調整額は...(同6,295千円)」×1000=6,295,000円。jppfs_cor:IncomeTaxesDeferred(前期)=6,295,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(法人税等調整額・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-076",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:GrossProfit",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 617300000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「売上総利益は...(同617,300千円)」×1000=617,300,000円。jppfs_cor:GrossProfit(前期)=617,300,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(売上総利益・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "H-059と同じfact(別の文での再掲)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-077",
+      "判定": "独立判定",
+      "形": "符号・方向",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 41672000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文は「当期純利益41,672千円の計上による利益剰余金の増加」と方向(増加)を述べる。jppfs_cor:ProfitLoss(当期)=41,672,000円(正)であり、増加方向と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(利益剰余金の増加・当期純利益の計上)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "本行は方向の語に対応する行と判断した(数値自体はH-091で判定済み)。株主資本等変動表側(RetainedEarnings member)の同値factを候補とした。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-078",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncreaseDecreaseInAccruedConsumptionTaxesOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 7081000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「未払消費税等33,934千円(同7,081千円増)」の増加額。×1000=7,081,000円。jppfs_cor:IncreaseDecreaseInAccruedConsumptionTaxesOpeCF(当期)=7,081,000円と一致。BS差額(33,934,000−26,852,000=7,082,000)は1千円ずれるため、一致するキャッシュ・フロー側を採用した。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(未払消費税等の増加額)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "H-040と同じfact。BS残高の差では7,082千円となり文の7,081千円と1千円ずれるため、完全一致するキャッシュ・フロー注記側を優先した。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-079",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": null,
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "将来の方針(人材確保・契約単価交渉等の取り組み)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "H-054と同文・同抜粋。対応するfactが無い。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-080",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 136671000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「営業活動の結果獲得した資金は136,671千円」×1000=136,671,000円。jppfs_cor:NetCashProvidedByUsedInOperatingActivities(当期)=136,671,000円と一致(符号正=獲得)。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(営業活動によるキャッシュ・フロー・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+          "context": "CurrentYearDuration_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-081",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 65138000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「営業利益65,138千円」×1000=65,138,000円。jppfs_cor:OperatingIncome(当期)=65,138,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(営業利益・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-082",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncreaseDecreaseInAccountsPayableOtherOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 2634000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「未払金16,440千円(同2,634千円増)」の増加額。×1000=2,634,000円。jppfs_cor:IncreaseDecreaseInAccountsPayableOtherOpeCF(当期)=2,634,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(未払金の増加額・キャッシュフロー調整)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "BS残高差(16,440,000−13,805,000=2,635,000)は1千円ずれるが、完全一致するキャッシュ・フロー側を優先した。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-083",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 65138000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「営業利益は65,138千円」×1000=65,138,000円。jppfs_cor:OperatingIncome(当期)=65,138,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(営業利益・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "H-081と同じfact(別の文での再掲)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-084",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PrepaidExpenses",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 9805000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「前払費用9,805千円」×1000=9,805,000円。jppfs_cor:PrepaidExpenses(当期末)=9,805,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(前払費用・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-085",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NonOperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 51020000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「51,020千円」×1000=51,020,000円。jppfs_cor:NonOperatingIncome(当期)=51,020,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(営業外収益・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-086",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OrdinaryIncome",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 70316000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「経常利益63,398千円(同70,316千円)」の括弧内(前期)。×1000=70,316,000円。jppfs_cor:OrdinaryIncome(前期)=70,316,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(経常利益・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+          "context": "Prior1YearDuration_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-087",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 61547000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「税引前当期純利益は61,547千円」×1000=61,547,000円。jppfs_cor:IncomeBeforeIncomeTaxes(当期)=61,547,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(税引前当期純利益・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "H-011と同じfact(別の文での再掲)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-088",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -12490000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「売上債権の増加額12,490千円」×1000=12,490,000円。jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF(当期)=−12,490,000円。絶対値一致、符号(負)はキャッシュ・フロー上の資金減少調整として整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(売上債権の増加額・キャッシュフロー調整)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-089",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 11540000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「(同11,540千円の獲得)」。jppfs_cor:NetCashProvidedByUsedInInvestmentActivities(前期)=11,540,000円(正=獲得)と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(投資活動によるキャッシュ・フロー・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+          "context": "Prior1YearDuration_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-090",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 92427000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「営業活動の結果獲得した資金は...(前事業年度は92,427千円)」×1000=92,427,000円。jppfs_cor:NetCashProvidedByUsedInOperatingActivities(前期)=92,427,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(営業活動によるキャッシュ・フロー・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+          "context": "Prior1YearDuration_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "H-016と同じfact(別の文での再掲)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-091",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 41672000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「当期純利益41,672千円の計上による利益剰余金の増加」×1000=41,672,000円。株主資本等変動表の繰越利益剰余金欄のjppfs_cor:ProfitLoss(当期)=41,672,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(利益剰余金の増加・当期純利益の計上)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember"
+        },
+        {
+          "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+          "context": "CurrentYearDuration_NonConsolidatedMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsMember"
+        },
+        {
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "本文は利益剰余金の変動を述べる注記であるため、株主資本等変動表の繰越利益剰余金(RetainedEarningsBroughtForwardMember)欄のProfitLossを優先した。損益計算書側(member無し)は同値候補とした。",
+      "迷った点": "H-039とは文脈が異なるため選んだcontextが違う。どちらを優先すべきかは語だけからは確定しづらい。"
+    },
+    {
+      "行の鍵": "H-092",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NoncurrentAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 152382000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「152,382千円」×1000=152,382,000円。jppfs_cor:NoncurrentAssets(当期末)=152,382,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(固定資産・当期末)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-093",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jpcrp030000-asr_E05641-000:NursingServicesIncomeNOI",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 49589000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「保育事業収益49,589千円」×1000=49,589,000円。jpcrp030000-asr_E05641-000:NursingServicesIncomeNOI(当期)=49,589,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "保育事業(保育事業収益・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-094",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 70356000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「税引前当期純利益は...前事業年度は70,356千円」×1000=70,356,000円。jppfs_cor:IncomeBeforeIncomeTaxes(前期)=70,356,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(税引前当期純利益・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-095",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:CurrentLiabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "2026-05-31",
+          "値": 356962000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:CurrentLiabilities",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "2025-05-31",
+          "値": 239236000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期356,962,000円−前期239,236,000円=117,726,000円。文の「117,726千円増」×1000=117,726,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(流動負債)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-096",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": -23351000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「財務活動によるキャッシュ・フローとして、23,351千円の資金を使用」。jppfs_cor:NetCashProvidedByUsedInFinancingActivities(当期)=−23,351,000円。絶対値一致、符号(負)は「使用」と整合。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(財務活動によるキャッシュ・フロー・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "H-073と同じfact(別の文での再掲)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-097",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NonOperatingExpenses",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 52761000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「営業外費用は...52,761千円」×1000=52,761,000円。jppfs_cor:NonOperatingExpenses(当期)=52,761,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(営業外費用・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-098",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "2024-06-01~2025-05-31",
+          "値": 1719341000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「売上高...(前事業年度は1,719,341千円)」×1000=1,719,341,000円。jppfs_cor:NetSales(前期)=1,719,341,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(売上高・前期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+          "context": "Prior1YearDuration_NonConsolidatedMember"
+        },
+        {
+          "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+          "context": "Prior1YearDuration_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember"
+        },
+        {
+          "要素": "jppfs_cor:NetSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember_TotalOfReportableSegmentsAndOthersMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "H-069と同じfact(別の文での再掲)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-099",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 136671000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「営業活動によるキャッシュ・フローとして、136,671千円の資金を獲得」。jppfs_cor:NetCashProvidedByUsedInOperatingActivities(当期)=136,671,000円(正=獲得)と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(営業活動によるキャッシュ・フロー・当期)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+          "context": "CurrentYearDuration_NonConsolidatedMember"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "H-080と同じfact(別の文での再掲)。",
+      "迷った点": null
+    },
+    {
+      "行の鍵": "H-100",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:DepreciationAndAmortizationOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "2025-06-01~2026-05-31",
+          "値": 10456000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "文の「減価償却費10,456千円」×1000=10,456,000円。jppfs_cor:DepreciationAndAmortizationOpeCF(当期)=10,456,000円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "全社(減価償却費・キャッシュフロー調整)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": null,
+      "迷った点": null
+    }
+  ]
+}

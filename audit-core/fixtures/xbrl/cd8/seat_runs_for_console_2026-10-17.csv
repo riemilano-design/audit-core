@@ -1,0 +1,8 @@
+file,model(記録のまま),合計トークン(実測),時刻
+fixtures/sheet/errdet_answers_seat1_2026-10-17.json,claude-sonnet-4-5,101111,2026-10-17T02:12:16Z
+fixtures/sheet/errdet_answers_seat2_2026-10-17.json,claude-haiku-4-5,70493,2026-10-17T02:12:16Z
+fixtures/sheet/errdet_score_2026-10-17.json,claude-sonnet-4-5,70493,
+fixtures/sheet/m11_report_2026-10-16.json,"claude-sonnet-4-5(Agent, subagent_type=general-purpose, model=sonnet)",82529,2026-10-16T12:19:10Z
+fixtures/sheet/poc_c_answers_seat1_2026-10-17.json,claude-sonnet-4-5,103778,2026-10-17T01:02:15Z
+fixtures/sheet/poc_c_answers_seat2_2026-10-17.json,claude-haiku-4-5,80562,2026-10-17T01:02:15Z
+fixtures/sheet/poc_c_score_2026-10-17.json,claude-sonnet-4-5,80562,

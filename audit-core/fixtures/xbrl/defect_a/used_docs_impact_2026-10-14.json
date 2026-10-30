@@ -1,0 +1,263 @@
+{
+ "purpose": "欠陥 A の候補の差分を使用済み 16 書類に当てた影響。合否ではなく観測",
+ "candidate": "docs/DEFECT_A_PATCH_CANDIDATE_2026-10-14.patch",
+ "docs": [
+  "S100YMFV",
+  "S100Z1WR",
+  "S100Z35K",
+  "S100Z37J",
+  "S100Z3BW",
+  "S100Z3CO",
+  "S100Z3HP",
+  "S100Z3JY",
+  "S100Z3V1",
+  "S100Z433",
+  "S100Z4B6",
+  "S100Z4DE",
+  "S100Z4PA",
+  "S100Z4Q1",
+  "S100Z39P",
+  "S100Z4N9"
+ ],
+ "note": "未使用の封じた書類には当てていない",
+ "result": {
+  "P20": {
+   "claims": 1909,
+   "moved": 38,
+   "other": 2,
+   "moved_by_doc": {
+    "S100Z1WR": 9,
+    "S100Z35K": 1,
+    "S100Z3BW": 7,
+    "S100Z3CO": 4,
+    "S100Z3HP": 1,
+    "S100Z433": 5,
+    "S100Z4B6": 1,
+    "S100Z4N9": 6,
+    "S100Z4PA": 4
+   },
+   "moved_ids": [
+    "S100Z1WR:N019",
+    "S100Z1WR:N029",
+    "S100Z1WR:N044",
+    "S100Z1WR:N049",
+    "S100Z1WR:N054",
+    "S100Z1WR:N056",
+    "S100Z1WR:N057",
+    "S100Z1WR:N059",
+    "S100Z1WR:N061",
+    "S100Z35K:N050",
+    "S100Z3BW:N001",
+    "S100Z3BW:N007",
+    "S100Z3BW:N034",
+    "S100Z3BW:N055",
+    "S100Z3BW:N058",
+    "S100Z3BW:N060",
+    "S100Z3BW:N067",
+    "S100Z3CO:N034",
+    "S100Z3CO:N035",
+    "S100Z3CO:N037",
+    "S100Z3CO:N044",
+    "S100Z3HP:N014",
+    "S100Z433:N004",
+    "S100Z433:N005",
+    "S100Z433:N006",
+    "S100Z433:N008",
+    "S100Z433:N036",
+    "S100Z4B6:N071",
+    "S100Z4N9:N036",
+    "S100Z4N9:N038",
+    "S100Z4N9:N040",
+    "S100Z4N9:N041",
+    "S100Z4N9:N106",
+    "S100Z4N9:N112",
+    "S100Z4PA:N048",
+    "S100Z4PA:N051",
+    "S100Z4PA:N055",
+    "S100Z4PA:N059"
+   ],
+   "moved_offset_units": {
+    "1.0": 38
+   },
+   "other_rows": [
+    {
+     "id": "S100Z3CO:N063",
+     "docID": "S100Z3CO",
+     "unit": "千円",
+     "value": 434055.0,
+     "claim_scale": 1000.0,
+     "subject": "為替換算調整勘定",
+     "span": "の計上により利益剰余金が83,807千円、為替換算調整勘定が434,055千円増加したことによるも",
+     "sentence": "これは主に、配当金の支払244,164千円及び親会社株主に帰属する当期純利益327,971千円の計上により利益剰余金が83,807千円、為替換算調整勘定が434,055千円増加したことによるものです。",
+     "before": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:ForeignCurrencyTranslationAdjustmentNetOfTaxOCI@CurrentYearDuration"
+      ],
+      "recomputed": 434055000.0,
+      "form": "direct_value",
+      "match": "round"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:ForeignCurrencyTranslationAdjustment@CurrentYearInstant",
+       "xbrl:jppfs_cor:ForeignCurrencyTranslationAdjustment@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 434056000.0,
+      "form": "derived_value",
+      "match": "truncate(2x)"
+     },
+     "offset_units": 1.0
+    },
+    {
+     "id": "S100Z4Q1:N050",
+     "docID": "S100Z4Q1",
+     "unit": "円",
+     "value": 300000000.0,
+     "claim_scale": 100000000.0,
+     "subject": "仕入債務",
+     "span": "2百万円、契約資産の減少額1億6千1百万円、仕入債務の減少額3億円、契約負債の減少額9",
+     "sentence": "これは主に、税金等調整前当期純利益14億5千2百万円に、減価償却費4億5千2百万円の非資金費用のほか、売上債権の増加額8億2百万円、契約資産の減少額1億6千1百万円、仕入債務の減少額3億円、契約負債の減少額9千3百万円、法人税等の支払額7億8千万円によるものであります。",
+     "before": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+      ],
+      "recomputed": -300297000.0,
+      "form": "direct_value",
+      "match": "truncate"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+       "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@Prior1YearDuration",
+       "formula:a-b"
+      ],
+      "recomputed": -456901000.0,
+      "form": "derived_value",
+      "match": "truncate(2x)"
+     },
+     "offset_units": 1.569
+    }
+   ]
+  },
+  "P16": {
+   "claims": 1909,
+   "moved": 32,
+   "other": 2,
+   "moved_by_doc": {
+    "S100Z1WR": 9,
+    "S100Z35K": 1,
+    "S100Z3BW": 7,
+    "S100Z3CO": 4,
+    "S100Z4B6": 1,
+    "S100Z4N9": 6,
+    "S100Z4PA": 4
+   },
+   "moved_ids": [
+    "S100Z1WR:N019",
+    "S100Z1WR:N029",
+    "S100Z1WR:N044",
+    "S100Z1WR:N049",
+    "S100Z1WR:N054",
+    "S100Z1WR:N056",
+    "S100Z1WR:N057",
+    "S100Z1WR:N059",
+    "S100Z1WR:N061",
+    "S100Z35K:N050",
+    "S100Z3BW:N001",
+    "S100Z3BW:N007",
+    "S100Z3BW:N034",
+    "S100Z3BW:N055",
+    "S100Z3BW:N058",
+    "S100Z3BW:N060",
+    "S100Z3BW:N067",
+    "S100Z3CO:N034",
+    "S100Z3CO:N035",
+    "S100Z3CO:N037",
+    "S100Z3CO:N044",
+    "S100Z4B6:N071",
+    "S100Z4N9:N036",
+    "S100Z4N9:N038",
+    "S100Z4N9:N040",
+    "S100Z4N9:N041",
+    "S100Z4N9:N106",
+    "S100Z4N9:N112",
+    "S100Z4PA:N048",
+    "S100Z4PA:N051",
+    "S100Z4PA:N055",
+    "S100Z4PA:N059"
+   ],
+   "moved_offset_units": {
+    "1.0": 32
+   },
+   "other_rows": [
+    {
+     "id": "S100Z3CO:N063",
+     "docID": "S100Z3CO",
+     "unit": "千円",
+     "value": 434055.0,
+     "claim_scale": 1000.0,
+     "subject": "為替換算調整勘定",
+     "span": "の計上により利益剰余金が83,807千円、為替換算調整勘定が434,055千円増加したことによるも",
+     "sentence": "これは主に、配当金の支払244,164千円及び親会社株主に帰属する当期純利益327,971千円の計上により利益剰余金が83,807千円、為替換算調整勘定が434,055千円増加したことによるものです。",
+     "before": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:ForeignCurrencyTranslationAdjustmentNetOfTaxOCI@CurrentYearDuration"
+      ],
+      "recomputed": 434055000.0,
+      "form": "direct_value",
+      "match": "round"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:ForeignCurrencyTranslationAdjustment@CurrentYearInstant",
+       "xbrl:jppfs_cor:ForeignCurrencyTranslationAdjustment@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 434056000.0,
+      "form": "derived_value",
+      "match": "truncate(2x)"
+     },
+     "offset_units": 1.0
+    },
+    {
+     "id": "S100Z4Q1:N050",
+     "docID": "S100Z4Q1",
+     "unit": "円",
+     "value": 300000000.0,
+     "claim_scale": 100000000.0,
+     "subject": "仕入債務",
+     "span": "2百万円、契約資産の減少額1億6千1百万円、仕入債務の減少額3億円、契約負債の減少額9",
+     "sentence": "これは主に、税金等調整前当期純利益14億5千2百万円に、減価償却費4億5千2百万円の非資金費用のほか、売上債権の増加額8億2百万円、契約資産の減少額1億6千1百万円、仕入債務の減少額3億円、契約負債の減少額9千3百万円、法人税等の支払額7億8千万円によるものであります。",
+     "before": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+      ],
+      "recomputed": -300297000.0,
+      "form": "direct_value",
+      "match": "truncate"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+       "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@Prior1YearDuration",
+       "formula:a-b"
+      ],
+      "recomputed": -456901000.0,
+      "form": "derived_value",
+      "match": "truncate(2x)"
+     },
+     "offset_units": 1.569
+    }
+   ]
+  }
+ }
+}

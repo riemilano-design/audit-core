@@ -1,0 +1,341 @@
+{
+ "step": "**仮説 A の分岐の特定・再現入力・修正前の予測。engine 不変・0 USD**",
+ "人間の指示": "2026-10-17(分岐を特定する / 予測を固定する / 証拠が揃ったら止める)",
+ "**実行された行**": {
+  "S100YZ7E": [
+   {
+    "行": 330,
+    "関数": "_direct_value_claim",
+    "主張 id": "N022",
+    "subject": "営業収益",
+    "選ばれた要素": [
+     "OperatingRevenue",
+     "NetSales",
+     "Revenue"
+    ],
+    "member": "None",
+    "**候補 fact の数 fs**": 0,
+    "当期の候補 cur": 0
+   },
+   {
+    "行": 330,
+    "関数": "_direct_value_claim",
+    "主張 id": "N066",
+    "subject": "資産合計",
+    "選ばれた要素": [
+     "Assets",
+     "TotalAssets"
+    ],
+    "member": "None",
+    "**候補 fact の数 fs**": 0,
+    "当期の候補 cur": 0
+   },
+   {
+    "行": 330,
+    "関数": "_direct_value_claim",
+    "主張 id": "N070",
+    "subject": "純資産合計",
+    "選ばれた要素": [
+     "NetAssets"
+    ],
+    "member": "None",
+    "**候補 fact の数 fs**": 0,
+    "当期の候補 cur": 0
+   }
+  ],
+  "S100YZEV": [
+   {
+    "行": 330,
+    "関数": "_direct_value_claim",
+    "主張 id": "N007",
+    "subject": "営業利益",
+    "選ばれた要素": [
+     "OperatingIncome",
+     "OperatingProfit"
+    ],
+    "member": "None",
+    "**候補 fact の数 fs**": 0,
+    "当期の候補 cur": 0
+   },
+   {
+    "行": 330,
+    "関数": "_direct_value_claim",
+    "主張 id": "N014",
+    "subject": "流動資産",
+    "選ばれた要素": [
+     "CurrentAssets"
+    ],
+    "member": "None",
+    "**候補 fact の数 fs**": 0,
+    "当期の候補 cur": 0
+   },
+   {
+    "行": 330,
+    "関数": "_direct_value_claim",
+    "主張 id": "N017",
+    "subject": "固定資産",
+    "選ばれた要素": [
+     "NoncurrentAssets"
+    ],
+    "member": "None",
+    "**候補 fact の数 fs**": 0,
+    "当期の候補 cur": 0
+   }
+  ]
+ },
+ "**分岐の場所**": {
+  "file": "adapters/xbrl/recipes.py",
+  "行": 330,
+  "関数": "_direct_value_claim",
+  "直前の条件": "`fs = I.facts_for(elems, facts, contexts, member)` が空 → `cur` も空 → `claim[\"reason\"] = \"no_element\"`",
+  "落とす関数": {
+   "file": "adapters/xbrl/instance.py",
+   "関数": "ctx_ok / plain_context",
+   "行": "216-224(ctx_ok)・208-213(plain_context)",
+   "規則": "`member is None` のときは `plain_context` ― **members が空で、cid に NonConsolidated を含まない枠だけ**。例外は `nonconsolidated_ok` が立っているときだけ"
+  },
+  "条件を立てる場所": {
+   "file": "adapters/xbrl/instance.py",
+   "関数": "with_nonconsolidated_fallback",
+   "行": "178-188",
+   "2 つの条件": [
+    "profile の `nonconsolidated_fallback` が真",
+    "`consolidated_element_count(facts) == 0`"
+   ]
+  },
+  "**profile**": {
+   "今回の測定で使った": "P16",
+   "`P16.nonconsolidated_fallback`": false,
+   "`P20.nonconsolidated_fallback`": true,
+   "**Core の既定**": "P20",
+   "**注意**": "**(ア) の封は P16 を「既定」と書いたが、コードの既定は P20 である**(`vocabulary.DEFAULT_PROFILE`)。**封の字は直さない。この食い違いを記録に残す**"
+  }
+ },
+ "**最小の再現入力**": {
+  "入れた枠と fact": {
+   "素": {
+    "CurrentYearInstant": {
+     "members": []
+    }
+   },
+   "単体 member だけ": {
+    "CurrentYearInstant_NonConsolidatedMember": {
+     "members": [
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    }
+   }
+  },
+  "場合ごと": [
+   {
+    "場合": "素の枠(次元なし)",
+    "連結の財務要素の数": 1,
+    "nonconsolidated_ok": false,
+    "ctx_ok(member=None)": true,
+    "**facts_for の件数**": 1
+   },
+   {
+    "場合": "**単体 member だけの枠**・fallback 無効(P16)",
+    "連結の財務要素の数": 0,
+    "nonconsolidated_ok": false,
+    "ctx_ok(member=None)": false,
+    "**facts_for の件数**": 0
+   },
+   {
+    "場合": "**単体 member だけの枠**・fallback 有効(P20)",
+    "連結の財務要素の数": 0,
+    "nonconsolidated_ok": true,
+    "ctx_ok(member=None)": true,
+    "**facts_for の件数**": 1
+   },
+   {
+    "場合": "単体 member だけの枠・fallback 有効・**連結の要素が在る**",
+    "連結の財務要素の数": 1,
+    "nonconsolidated_ok": false,
+    "ctx_ok(member=None)": false,
+    "**facts_for の件数**": 0
+   }
+  ],
+  "**この再現入力が示すこと**": "**member を指定しない引き(`member=None`)で、単体 member だけの枠は `nonconsolidated_ok` が立っていないと候補に入らない。**立つ条件は `with_nonconsolidated_fallback(…, enabled)` の `enabled`(profile の `nonconsolidated_fallback`)と **連結の財務要素が 0 件**の 2 つ"
+ },
+ "材料の性質(8 書類)": {
+  "S100YYRG": {
+   "連結の財務要素の数": 121,
+   "単体 member だけの context": 10,
+   "fact": 777,
+   "**fallback の条件を満たす**": false
+  },
+  "S100YXMA": {
+   "連結の財務要素の数": 195,
+   "単体 member だけの context": 12,
+   "fact": 1223,
+   "**fallback の条件を満たす**": false
+  },
+  "S100YZ7E": {
+   "連結の財務要素の数": 0,
+   "単体 member だけの context": 10,
+   "fact": 502,
+   "**fallback の条件を満たす**": true
+  },
+  "S100YWGX": {
+   "連結の財務要素の数": 155,
+   "単体 member だけの context": 10,
+   "fact": 1122,
+   "**fallback の条件を満たす**": false
+  },
+  "S100YZCT": {
+   "連結の財務要素の数": 153,
+   "単体 member だけの context": 10,
+   "fact": 1097,
+   "**fallback の条件を満たす**": false
+  },
+  "S100YYRV": {
+   "連結の財務要素の数": 159,
+   "単体 member だけの context": 10,
+   "fact": 943,
+   "**fallback の条件を満たす**": false
+  },
+  "S100YZEV": {
+   "連結の財務要素の数": 0,
+   "単体 member だけの context": 10,
+   "fact": 397,
+   "**fallback の条件を満たす**": true
+  },
+  "S100YXF5": {
+   "連結の財務要素の数": 158,
+   "単体 member だけの context": 10,
+   "fact": 947,
+   "**fallback の条件を満たす**": false
+  }
+ },
+ "rows": [
+  {
+   "doc": "S100YZ7E",
+   "id": "R017",
+   "主張 id": "N022",
+   "subject": "営業収益",
+   "選ばれた要素": [
+    "OperatingRevenue",
+    "NetSales",
+    "Revenue"
+   ],
+   "正解の要素": "operatingrevenue2summaryofbusinessresults",
+   "どこで落ちたか": "subject に当たった要素に正解が無い"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R018",
+   "主張 id": "N022",
+   "subject": "営業収益",
+   "選ばれた要素": [
+    "OperatingRevenue",
+    "NetSales",
+    "Revenue"
+   ],
+   "正解の要素": "ordinaryincomelosssummaryofbusinessresults",
+   "どこで落ちたか": "subject に当たった要素に正解が無い"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R019",
+   "主張 id": "N022",
+   "subject": "営業収益",
+   "選ばれた要素": [
+    "OperatingRevenue",
+    "NetSales",
+    "Revenue"
+   ],
+   "正解の要素": "cashandcashequivalentssummaryofbusinessresults",
+   "どこで落ちたか": "subject に当たった要素に正解が無い"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R020",
+   "主張 id": "N022",
+   "subject": "営業収益",
+   "選ばれた要素": [
+    "OperatingRevenue",
+    "NetSales",
+    "Revenue"
+   ],
+   "正解の要素": "netcashprovidedbyusedininvestingactivitiessummaryofbusinessresults",
+   "どこで落ちたか": "subject に当たった要素に正解が無い"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R023",
+   "主張 id": "N066",
+   "subject": "資産合計",
+   "選ばれた要素": [
+    "Assets",
+    "TotalAssets"
+   ],
+   "正解の要素": "totalassetssummaryofbusinessresults",
+   "どこで落ちたか": "subject に当たった要素に正解が無い"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R024",
+   "主張 id": "N070",
+   "subject": "純資産合計",
+   "選ばれた要素": [
+    "NetAssets"
+   ],
+   "正解の要素": "netassetssummaryofbusinessresults",
+   "どこで落ちたか": "subject に当たった要素に正解が無い"
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R011",
+   "主張 id": "N007",
+   "subject": "営業利益",
+   "選ばれた要素": [
+    "OperatingIncome",
+    "OperatingProfit"
+   ],
+   "正解の要素": "operatingincome",
+   "どこで落ちたか": "語彙は正解の要素を持っていた(落ちたのは後段)"
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R018",
+   "主張 id": "N014",
+   "subject": "流動資産",
+   "選ばれた要素": [
+    "CurrentAssets"
+   ],
+   "正解の要素": "currentassets",
+   "どこで落ちたか": "語彙は正解の要素を持っていた(落ちたのは後段)"
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R019",
+   "主張 id": "N017",
+   "subject": "固定資産",
+   "選ばれた要素": [
+    "NoncurrentAssets"
+   ],
+   "正解の要素": "noncurrentassets",
+   "どこで落ちたか": "語彙は正解の要素を持っていた(落ちたのは後段)"
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R020",
+   "主張 id": "N007",
+   "subject": "営業利益",
+   "選ばれた要素": [
+    "OperatingIncome",
+    "OperatingProfit"
+   ],
+   "正解の要素": "increasedecreaseinaccountspayableotheropecf",
+   "どこで落ちたか": "subject に当たった要素に正解が無い"
+  }
+ ],
+ "limits": [
+  "**分岐の特定であって、原因の修正ではない。**engine は 1 行も変えていない",
+  "**`sys.settrace` で観測した。**実行された行は記録したが、**実行されなかった行が通らない理由までは観測していない**",
+  "**2 書類 10 行の観測である。**他の 6 書類では `fallback の条件` を満たさないので、同じ分岐には入らない",
+  "**仮説 B(語彙・主語)には触っていない。**7 行はそちらが先に効いている",
+  "**予測は profile の切り替えについてである。**コードの修正についての予測ではない"
+ ]
+}

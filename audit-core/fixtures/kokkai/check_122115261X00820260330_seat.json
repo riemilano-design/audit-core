@@ -1,0 +1,326 @@
+{
+  "issueID": "122115261X00820260330",
+  "checked_by": "AI の席(確認、2 回目)",
+  "rows": [
+    {
+      "id": "K-001",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-002",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「歳出総額は八兆五千六百四十一億円」。値 8,564,100,000,000 円と一致"
+    },
+    {
+      "id": "K-003",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「歳入総額は六百四十四億円」。値 64,400,000,000 円と一致"
+    },
+    {
+      "id": "K-004",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-005",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-006",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": "「それも」の指す内容は直前の質問(発言 23、石垣議員「総理御自身が出席する集中審議には応じない意向が示されているという報道」)で確認"
+    },
+    {
+      "id": "K-007",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「約八千億円分」。値 800,000,000,000 円と一致(「約」つき)"
+    },
+    {
+      "id": "K-008",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-009",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-010",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "数は石垣議員が他の答弁を引いて述べたもの。本文にそのまま「二百四十四時間」とある"
+    },
+    {
+      "id": "K-011",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「小選挙区につきましては二七・七％」。27.7 ％と一致"
+    },
+    {
+      "id": "K-012",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-013",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": "「そのように」の指す内容は直前の質問(発言 71、石垣議員「笑っているように見えてしまう」)で確認"
+    },
+    {
+      "id": "K-014",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「年収百三十万円を超えた被扶養者」。1,300,000 円と一致(約三割は number に含めていない)"
+    },
+    {
+      "id": "K-015",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-016",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「現行は一人当たり千五百円…これを二千五百円、千円引き上げる」。2,500 円と一致"
+    },
+    {
+      "id": "K-017",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-018",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": "「そのような予定」は直前の質問(発言 95、原告に直接会っておわびする予定)で確認"
+    },
+    {
+      "id": "K-019",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「十四隻、つまり従来の四十五隻じゃなくて五十九隻」。59 隻と一致"
+    },
+    {
+      "id": "K-020",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-021",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-022",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-023",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-024",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「月額千六百七十二円」。1,672 円と一致"
+    },
+    {
+      "id": "K-025",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「月額八十円、年額九百六十円程度」。960 円と一致"
+    },
+    {
+      "id": "K-026",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「高市総理、現在四時間です」。4 時間と一致。石破総理四十時間も本文にある"
+    },
+    {
+      "id": "K-027",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-028",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-029",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-030",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-031",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-032",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-033",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-034",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「二年とする理由」「目安として二年間」。2 年と一致"
+    },
+    {
+      "id": "K-035",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": "本文「日割りでございますから三百億円」。30,000,000,000 円と一致。「本予算では一兆円」も本文にある"
+    },
+    {
+      "id": "K-036",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-037",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "正",
+      "note": ""
+    },
+    {
+      "id": "K-038",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    },
+    {
+      "id": "K-039",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": "直前の発言 233 は仁比聡平議員「総理はいかがですか」で確認"
+    },
+    {
+      "id": "K-040",
+      "order_exists": "正",
+      "speaker_ok": "正",
+      "quote_ok": "正",
+      "number_ok": "対象外",
+      "note": ""
+    }
+  ]
+}

@@ -1,0 +1,702 @@
+{
+ "S100Z40G:H-001": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "関係会社株式",
+  "span": "行準備に伴う子会社設立により関係会社株式が125,000千円増加した一方で",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-002": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "営業利益",
+  "span": "その結果、営業利益は819,147千円(前期比8.4%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-003": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "法人税等",
+  "span": "めた税効果計算後の法人税等合計は、259,177千円(前期比46.2%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-004": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "当期純利益",
+  "span": "その結果当期純利益は563,426千円(前期比23.9%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-005": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "無形固定資産",
+  "span": "円増加した一方で、有形固定資産・無形固定資産の減価償却により減少したことに",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-006": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "く、継続的な広告投資に加えて、ブランドアンバサダー就任、大手3社とアライアンス締結に",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z40G:H-007": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "利益剰余金",
+  "span": "これは、当期純利益の計上により利益剰余金が563,426千円増加した一方で、自己",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-008": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "営業外収益",
+  "span": "業外収益は派遣スタッフの給与前払いによる手数料収入等を計上し21,158千円(前期比11.1%増",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-009": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "営業外収益",
+  "span": "給与前払いによる手数料収入等を計上し21,158千円(前期比11.1%増)となり、営業外費",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-010": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "2,485,487千円(前期末2,065,504千円)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-011": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "当期純利益",
+  "span": "(前期比8.0%増)、当期純利益は563,426千円(前期比23.9%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-012": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "自己株式取得費用",
+  "span": ")となり、営業外費用は支払利息及び自己株式取得費用等を計上し9,841千円(前期比66.1%増",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-013": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "給料手当",
+  "span": "これは主に売上規模の拡大に伴い従業員が増加し、給料手当が増加したことや",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-014": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "結果の概況」)であり、「人材が不足している」と感じる事業者は72.7%(日本・東京商工会議",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-015": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "固定負債",
+  "span": "固定負債の残高は、前事業年度末に比べ57,957千円減少し、211,645千円となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-016": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "経常利益",
+  "span": "その結果、経常利益は830,465千円(前期比8.0%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-017": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上原価",
+  "span": "事業年度における売上原価は、11,576,282千円(前期比12.2%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-018": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "固定資産",
+  "span": "固定資産の除却による損失を7,861千円計上しました(前期比95.7%減)。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-019": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "以上の結果、当セグメントの売上高は817,588千円(前期比3.2%増)",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-020": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "総資産",
+  "span": "81,346千円となり、前事業年度末に比べ541,978千円増加しました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-021": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上総利益",
+  "span": "この結果、売上総利益は3,749,136千円(前期比8.1%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-022": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "がり、当セグメントの売上高は14,505,330千円(前期比11.8%増)となり、セグメン",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-023": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "また、6月の訪日外客数は3,148,600人で、前年同月比6.8%減となったものの、台",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-024": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "宿泊・飲食業の離職率は産業別では最も高く25.1%(厚生労働省「令和6",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-025": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "自己株式",
+  "span": "加した一方で、自己株式の取得により自己株式が83,281千円増加したことに",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-026": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上総利益",
+  "span": "この結果、売上総利益は3,749,136千円(前期比8.1%増)",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-027": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "現金及び現金同等物",
+  "span": "物(以下、「資金」という。)は、期初に比べ419,982千円増加し、",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-028": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "関係会社株式",
+  "span": "持株会社体制への移行準備に伴う子会社設立により関係会社株式が125,000千円増加した一方で、有形",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-029": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "流動資産",
+  "span": "動資産の残高は、前事業年度末に比べ516,315千円増加し、3,887,776千円となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-030": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "これは主に、売上の増加により現預金が増加したことに",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-031": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "広告宣伝費",
+  "span": "当が増加したことや、継続的な広告宣伝投資を行い、広告宣伝費が増加しました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-032": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "固定負債",
+  "span": "における固定負債の残高は、前事業年度末に比べ57,957千円減少し、211",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-033": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "営業利益",
+  "span": "円(前期比11.8%増)となり、セグメント利益(営業利益)は1,359,794千円(前期比6.8%増)",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-034": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "営業利益",
+  "span": "は15,325,418千円(前期比11.2%増)、営業利益は819,147千円(前期比8.4%増)",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-035": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "前期比8.0%増)と着実に積み上がり、当セグメントの売上高は14,505,330千円(前期比11.8%増",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-036": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "利益剰余金",
+  "span": "これは、当期純利益の計上により利益剰余金が563,426千円増加した一方で",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-037": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "固定資産",
+  "span": "における固定資産の残高は、前事業年度末に比べ25,663千円増加し、1,0",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-038": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": ",096億円(前期比0.2%増)となり、消費内訳では宿泊費が37.0%と最も高い割合を示し",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-039": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "固定資産",
+  "span": "固定資産の残高は、前事業年度末に比べ25,663千円増加し、1,093,570千円となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-040": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "負債合計",
+  "span": "205,063千円となり、前事業年度末に比べ37,992千円増加しました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-041": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "当事業年度においては、2026年1月以降に訪日外客数が前年を下回る月があっ",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-042": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "これは主に観光HR事業における派遣スタッフの増加により、派",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-043": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "営業利益",
+  "span": "その結果、営業利益は819,147千円(前期比8.4%増)",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-044": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "現金及び現金同等物",
+  "span": "る現金及び現金同等物(以下、「資金」という。)は、期初に比べ419,982千円増加し、",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-045": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "負債合計",
+  "span": "この結果、負債合計は2,205,063千円となり、前事業年度末",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-046": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "の拡大による人件費や、観光HR事業における認知度向上・登録者増加に必要な広",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-047": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "これは主に、増加要因として",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-048": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上債権",
+  "span": "等の支払いが252,313千円、売上債権が163,586千円増加したことに",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-049": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "営業利益",
+  "span": "となり、セグメント利益(営業利益)は17,415千円(前期比201.7%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-050": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "販売費及び一般管理費",
+  "span": "おける販売費及び一般管理費は、2,929,988千円(前期比8.1%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-051": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "当社の運転資金需要のうち主なものは、事業規模の拡大による人件",
+  "reason": "ambiguous(member)"
+ },
+ "S100Z40G:H-052": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "固定資産",
+  "span": "当事業年度における特別損失は固定資産の除却による損失を7,861千円計上しました(前期比",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-053": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "費額は、中国人旅行者の減少を他国からの訪日客の増加が補い2兆5,096億円(前期比0.2%増)",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-054": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "減少を他国からの訪日客の増加が補い2兆5,096億円(前期比0.2%増)となり、消費内訳",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-055": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "これは主に、人件費の増加に伴い未払",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-056": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "これは主に、減少要因として",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-057": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "販売費及び一般管理費",
+  "span": "当事業年度における販売費及び一般管理費は、2,929,988千円(前期比8.1%増)",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-058": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "投資活動の結果支出した資金は219,583千円となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-059": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "2,485,487千円(前期末2,065,",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-060": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "総資産",
+  "span": "果、総資産は4,981,346千円となり、前事業年度末に比べ541,978千円増加しました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-061": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "純資産",
+  "span": "における純資産の残高は、前事業年度末に比べ503,986千円増加し、2,7",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-062": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "策の結果、当事業年度における就業者数は15,726名(前期比8.0%増)と着実に積み上が",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-063": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "関係会社株式の取得による支出",
+  "span": "移行準備に伴う子会社設立により関係会社株式の取得による支出が125,000千円あったことによるもの",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-064": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "、当事業年度における売上高は15,325,418千円(前期比11.2%増)、営業利益は81",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-065": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "の総販売実績に対する割合については、総販売実績に対する割合が10%以上の相手先が存在し",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-066": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "固定資産",
+  "span": "当事業年度末における固定資産の残高は、前事業年度末に比べ25,663千円増加し、1,093,",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-067": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "純資産",
+  "span": "当事業年度末における純資産の残高は、前事業年度末に比べ503,986千円増加し、2,776,",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-068": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "に観光HR事業における派遣スタッフの増加により、派遣人件費が増加したことに",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-069": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "営業利益",
+  "span": "、セグメント利益(営業利益)は1,359,794千円(前期比6.8%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-070": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "財務活動の結果支出した資金は161,315千円となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-071": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "流動負債",
+  "span": "における流動負債の残高は、前事業年度末に比べ95,950千円増加し、1,9",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-072": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "法人税等",
+  "span": "2,604千円あった一方で、減少要因として法人税等の支払いが252,313千円、売上債権が163,",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-073": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "未払費用",
+  "span": "これは主に、人件費の増加に伴い未払金や未払費用が増加したことに",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-074": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "を中心に当社の業績は堅調に推移し、当事業年度における売上高は15,325,418千円(前期比11.2%増",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-075": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "自己株式の取得による支出",
+  "span": "返済による支出が68,286千円、自己株式の取得による支出が84,409千円あったことによるもの",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-076": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "法人税等",
+  "span": "業年度の法人税等調整額を含めた税効果計算後の法人税等合計は、259,177千円(前期比46.2%増",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-077": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "当事業年度における売上高は15,325,418千円(前期比11.2%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-078": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "また、6月の訪日外客数は3,148,600人で、前年同月比6.8",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-079": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "経常利益",
+  "span": "その結果、経常利益は830,465千円(前期比8.0%増)",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-080": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "純資産",
+  "span": "純資産の残高は、前事業年度末に比べ503,986千円増加し、2,776,283千円となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-081": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "自己株式取得費用",
+  "span": "支払利息及び自己株式取得費用等を計上し9,841千円(前期比66.1%増)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-082": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "従業員",
+  "span": "これは主に売上規模の拡大に伴い従業員が増加し、給料手",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-083": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "固定負債",
+  "span": "当事業年度末における固定負債の残高は、前事業年度末に比べ57,957千円減少し、211,64",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-084": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "以上の結果、当セグメントの売上高は817,588千円(前期比3.2%増)となり、セグメン",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-085": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "これは主に、売上の増加により現預",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-086": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "流動資産",
+  "span": "当事業年度末における流動資産の残高は、前事業年度末に比べ516,315千円増加し、3,887,",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-087": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "営業活動の結果得られた資金は800,880千円となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-088": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "日外国人旅行消費額は、中国人旅行者の減少を他国からの訪日客の増加が補い2兆",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-089": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "当事業年度における売上高は15,325,418千円(前期比11.2%増",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-090": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "自己株式",
+  "span": "3,426千円増加した一方で、自己株式の取得により自己株式が83,281千円増加したことによるも",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-091": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "流動負債",
+  "span": "流動負債の残高は、前事業年度末に比べ95,950千円増加し、1,993,417千円となりました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-092": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "営業利益",
+  "span": "千円(前期比3.2%増)となり、セグメント利益(営業利益)は17,415千円(前期比201.7%",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-093": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "有形固定資産の取得による支出",
+  "span": "おける宿泊施設の増設等に伴い、有形固定資産の取得による支出が53,179千円、持株会社体制への移",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-094": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "経常利益",
+  "span": "営業利益は819,147千円(前期比8.4%増)、経常利益は830,465千円(前期比8.0%増)",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-095": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上債権",
+  "span": "少要因として法人税等の支払いが252,313千円、売上債権が163,586千円増加したことによるも",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-096": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "営業利益",
+  "span": "(前期比11.2%増)、営業利益は819,147千円(前期比8.4%増)、経常利益は83",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-097": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "負債合計",
+  "span": "、負債合計は2,205,063千円となり、前事業年度末に比べ37,992千円増加しました。",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-098": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "流動資産",
+  "span": "おける流動資産の残高は、前事業年度末に比べ516,315千円増加し、3,8",
+  "reason": "no_element"
+ },
+ "S100Z40G:H-099": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "である観光施設の人材需要が旺盛であり、当社への人材オーダーも増加したことに",
+  "reason": "no_subject"
+ },
+ "S100Z40G:H-100": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "当期純利益",
+  "span": "その結果当期純利益は563,426千円(前期比23.9%増",
+  "reason": "no_element"
+ }
+}

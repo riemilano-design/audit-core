@@ -1,0 +1,2503 @@
+{
+ "tool": "adapters.kokkai.verify_meeting",
+ "engine": {
+  "adapter_kokkai_py_sha256": "a67d6ffb842b0fdbe9430e1e5826072a5dc25db935d761dc1c00d042ab5e7c10",
+  "adapter_kokkai_py_files": 9,
+  "core_py_sha256": "34e836bb39762d5af831a9aa11d4ea095e73221beb5bd4510d3b234363a2a6e8",
+  "core_py_files": 4,
+  "git_commit": "27d482c42a12d7c22e9f81adfde2702eea16ed86"
+ },
+ "input": {
+  "meeting": {
+   "issueID": "122115261X00820260330",
+   "nameOfHouse": "参議院",
+   "nameOfMeeting": "予算委員会",
+   "issue": "第8号",
+   "date": "2026-03-30",
+   "session": 221
+  },
+  "meeting_sha256": "332ae8902a029af0175e1896418fdc9d19665a2faaec6e2bbc9bdf27bad89be8",
+  "speeches": 261,
+  "summary_written_by": "AI の席(要約、2 回目)",
+  "summary_sha256": "a9c8422a895761018e0e18a021b1b9c211869d9fff3128b42137fd6d81ce1c16"
+ },
+ "document": {
+  "claims": 40,
+  "states": {
+   "GROUNDED": 40
+  },
+  "checks": 104,
+  "check_states": {
+   "GROUNDED": 104
+  },
+  "rule": "claim の検査(発言者・引用・数)の state のうち、1 つでも POINTER_NOT_FOUND なら POINTER_NOT_FOUND。無ければ、1 つでも VALUE_MISMATCH なら VALUE_MISMATCH。無ければ、1 つでも UNVERIFIABLE なら UNVERIFIABLE。全部 GROUNDED なら GROUNDED。検査が 0 件の claim は無い(発言者の検査は必ず作る)。"
+ },
+ "claims": [
+  {
+   "id": "K-001",
+   "text": "片山さつき財務大臣は、令和八年四月一日から四月十一日までの期間の暫定予算を編成したと趣旨説明を行った。",
+   "speech_order": 5,
+   "speaker": "片山さつき",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-002",
+   "text": "片山財務大臣は、今回の一般会計暫定予算の歳出総額は八兆五千六百四十一億円になると述べた。",
+   "speech_order": 5,
+   "speaker": "片山さつき",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-003",
+   "text": "片山財務大臣は、一般会計暫定予算の歳入総額は六百四十四億円であり、歳出超過分は必要に応じ財務省証券を発行できるとした。",
+   "speech_order": 5,
+   "speaker": "片山さつき",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-004",
+   "text": "石垣のりこ議員は、本予算の年度内成立をもう諦めたのかと高市総理に質問した。",
+   "speech_order": 7,
+   "speaker": "石垣のりこ",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-005",
+   "text": "高市早苗総理は、参議院での審査日程が今朝の時点で決まっておらず、年度内成立は非常に難しい状況にあると答弁した。",
+   "speech_order": 12,
+   "speaker": "高市早苗",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-006",
+   "text": "高市総理は、自身が出席する集中審議に応じない意向を示しているとの報道について、事実ではないと答弁した。",
+   "speech_order": 24,
+   "speaker": "高市早苗",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-007",
+   "text": "片山財務大臣は、中東情勢のうち燃油高騰対策として約八千億円分を既存の基金に振り込む手続を取ったと述べた。",
+   "speech_order": 30,
+   "speaker": "片山さつき",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-008",
+   "text": "片山財務大臣は、令和八年度本予算が成立すれば一兆円の予備費が利用可能になると述べた。",
+   "speech_order": 30,
+   "speaker": "片山さつき",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-009",
+   "text": "林芳正総務大臣は、点字版選挙公報について、令和六年の総選挙時に比べ到着がやや遅れた自治体はあったが、遅くとも投票日までには配布されたと答弁した。",
+   "speech_order": 38,
+   "speaker": "林芳正",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-010",
+   "text": "石垣議員は、都道府県選管職員の一月の残業時間が二百四十四時間に上ったという答弁があったと指摘した。",
+   "speech_order": 45,
+   "speaker": "石垣のりこ",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-011",
+   "text": "長谷川孝選挙部長は、今回の総選挙の在外投票のうち投票所を閉じる時刻の経過後に送致を受けた投票の割合は、小選挙区で二七・七％だったと答弁した。",
+   "speech_order": 46,
+   "speaker": "長谷川孝",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-012",
+   "text": "林総務大臣は、投票時の本人確認で身分証明書の提示を義務付けることには論点があり、各党各会派で議論すべきものだと答弁した。",
+   "speech_order": 58,
+   "speaker": "林芳正",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-013",
+   "text": "高市総理は、ホワイトハウスのオートペンの写真を見て驚いたと述べ、笑っているように取られたらとても残念だと答弁した。",
+   "speech_order": 72,
+   "speaker": "高市早苗",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-014",
+   "text": "間隆一郎保険局長は、被扶養者認定の事業主証明の特例について、年収百三十万円を超えた被扶養者のうち約三割から証明書が提出されたと述べた。",
+   "speech_order": 76,
+   "speaker": "間隆一郎",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-015",
+   "text": "上野賢一郎厚生労働大臣は、キャリアアップ助成金を拡充し、労働者一人当たり最大七十五万円まで支給額を引き上げたと述べた。",
+   "speech_order": 78,
+   "speaker": "上野賢一郎",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-016",
+   "text": "上野厚労大臣は、令和八年十月からの一年間、生活扶助基準額への臨時的・特例的な加算を一人当たり千五百円から二千五百円に引き上げると述べた。",
+   "speech_order": 80,
+   "speaker": "上野賢一郎",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-017",
+   "text": "上野厚労大臣は、生活保護の最高裁判決で厚生労働大臣の判断の過程と手続に過誤、欠落があったと指摘されたことを深く反省し、原告を含め広く国民におわびすると述べた。",
+   "speech_order": 84,
+   "speaker": "上野賢一郎",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-018",
+   "text": "高市総理は、生活保護の原告に直接会っておわびする予定について、現段階でそのような予定はないと答弁した。",
+   "speech_order": 96,
+   "speaker": "高市早苗",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-019",
+   "text": "木原稔官房長官は、国民民主党の提言のうち、全日本海員組合の組合員が乗船する十四隻を含めた五十九隻を対象とする点に同意したと述べた。",
+   "speech_order": 125,
+   "speaker": "木原稔",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-020",
+   "text": "新垣慶太海事局長は、日本関係船舶が現時点でペルシャ湾内に四十五隻入域しており、各運航会社との間で毎日安否確認を実施していると述べた。",
+   "speech_order": 129,
+   "speaker": "新垣慶太",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-021",
+   "text": "山田仁政策統括調整官は、ＷＴＩの原油価格が本日三十日七時時点で一バレル当たり百一ドル前後で推移していると述べた。",
+   "speech_order": 131,
+   "speaker": "山田仁",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-022",
+   "text": "山田政策統括調整官は、ガソリンの全国小売平均価格が三月二十三日の調査時点で一リットル当たり百七十七・七円だったと述べた。",
+   "speech_order": 131,
+   "speaker": "山田仁",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-023",
+   "text": "赤澤亮正経済産業大臣は、経済産業省の情報提供受付に三月二十七日時点で約三百件の情報が寄せられ、石油製品の一部供給に偏りが生じていると認識していると述べた。",
+   "speech_order": 133,
+   "speaker": "赤澤亮正",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-024",
+   "text": "山田政策統括調整官は、二〇二六年度の再エネ賦課金は月四百キロワットアワーを想定した場合、一世帯当たり月額千六百七十二円の負担になると述べた。",
+   "speech_order": 141,
+   "speaker": "山田仁",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-025",
+   "text": "赤澤経産大臣は、二〇二六年度の再エネ賦課金は一般的な世帯で今年度に比べ月額八十円、年額九百六十円程度の増額になると述べた。",
+   "speech_order": 143,
+   "speaker": "赤澤亮正",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-026",
+   "text": "伊藤孝恵議員は、総理の集中審議への出席時間が石破総理は四十時間だったのに対し、高市総理は現在四時間だと指摘した。",
+   "speech_order": 146,
+   "speaker": "伊藤孝恵",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-027",
+   "text": "伊藤議員は、国民民主党がイラン情勢に伴うエネルギー高騰対策のため、およそ二兆円の修正動議を提出する予定だと述べた。",
+   "speech_order": 148,
+   "speaker": "伊藤孝恵",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-028",
+   "text": "赤澤経産大臣は、中小企業庁の調査でエネルギー費の価格転嫁率は四八・九％であり、原材料費の五五・〇％と比べて低い水準だと述べた。",
+   "speech_order": 155,
+   "speaker": "赤澤亮正",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-029",
+   "text": "原口剛政策統括官は、令和七年就労条件総合調査で勤務間インターバル制度を導入している企業割合は六・九％だと答弁した。",
+   "speech_order": 157,
+   "speaker": "原口剛",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-030",
+   "text": "高市総理は、三月十六日から民間備蓄の放出を、先週二十六日から原油を中心とする国家備蓄の放出を開始したと述べた。",
+   "speech_order": 175,
+   "speaker": "高市早苗",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-031",
+   "text": "杉久武議員は、暫定予算の編成は二〇一五年以来十一年ぶりだと述べた。",
+   "speech_order": 179,
+   "speaker": "杉久武",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-032",
+   "text": "片山財務大臣は、暫定予算には高校無償化や学校給食費の負担軽減などの経費を計上する一方、本予算に計上のない経費は暫定予算に計上できないと説明した。",
+   "speech_order": 190,
+   "speaker": "片山さつき",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-033",
+   "text": "高市総理は、原油対策については予備費で対応できるため予算修正が必要とは考えていないと答弁した。",
+   "speech_order": 194,
+   "speaker": "高市早苗",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-034",
+   "text": "高市総理は、食料品の消費税をゼロとする理由は負担軽減を十分なものとするためであり、二年とする理由は給付付き税額控除を実施するまでの目安だと説明した。",
+   "speech_order": 198,
+   "speaker": "高市早苗",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-035",
+   "text": "片山財務大臣は、暫定予算期間中の予備費は日割りで三百億円であるのに対し、本予算では一兆円だと述べた。",
+   "speech_order": 211,
+   "speaker": "片山さつき",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-036",
+   "text": "城内実大臣は、社会保障国民会議は立法府や行政府のいずれかに属するのではなく、参加各党と政府による共同開催だと答弁した。",
+   "speech_order": 213,
+   "speaker": "城内実",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-037",
+   "text": "安藤裕議員は、食料品だけ消費税をゼロにしても食料品の価格が八％下がることはないと述べた。",
+   "speech_order": 226,
+   "speaker": "安藤裕",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED",
+    "number": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-038",
+   "text": "茂木敏充外務大臣は、米軍部隊を我が国の基地から他の地域に移動させることは日米安全保障条約上問題なく、事前協議の対象ではないと答弁した。",
+   "speech_order": 230,
+   "speaker": "茂木敏充",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-039",
+   "text": "高市総理は、仁比聡平議員の質問に対し、今何よりも大切なのは事態の早期鎮静化であり、その旨をトランプ大統領にも伝えたと答弁した。",
+   "speech_order": 234,
+   "speaker": "高市早苗",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  },
+  {
+   "id": "K-040",
+   "text": "藤川政人委員長は、令和八年度暫定予算三案が多数をもって原案どおり可決すべきものと決定したと宣告した。",
+   "speech_order": 257,
+   "speaker": "藤川政人",
+   "state": "GROUNDED",
+   "checks": {
+    "speaker": "GROUNDED",
+    "quote": "GROUNDED"
+   }
+  }
+ ],
+ "checks": [
+  {
+   "id": "K-001/speaker",
+   "claim_id": "K-001",
+   "check": "speaker",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#5"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "片山さつき",
+    "actual": "片山さつき"
+   }
+  },
+  {
+   "id": "K-001/quote",
+   "claim_id": "K-001",
+   "check": "quote",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": "令和八年四月一日から四月十一日までの期間の暫定予算を編成することといたしました",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#5"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 39,
+    "found": true
+   }
+  },
+  {
+   "id": "K-002/speaker",
+   "claim_id": "K-002",
+   "check": "speaker",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#5"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "片山さつき",
+    "actual": "片山さつき"
+   }
+  },
+  {
+   "id": "K-002/quote",
+   "claim_id": "K-002",
+   "check": "quote",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": "一般会計暫定予算の歳出総額は八兆五千六百四十一億円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#5"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 25,
+    "found": true
+   }
+  },
+  {
+   "id": "K-002/number",
+   "claim_id": "K-002",
+   "check": "number",
+   "subject": "片山さつき",
+   "value": 8564100000000.0,
+   "unit": "円",
+   "word": "八兆五千六百四十一億円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#5"
+   ],
+   "reason": null,
+   "recomputed": 8564100000000.0,
+   "detail": {
+    "tokens": 13,
+    "unit": "円",
+    "matched_raw": "八兆五千六百四十一億円"
+   }
+  },
+  {
+   "id": "K-003/speaker",
+   "claim_id": "K-003",
+   "check": "speaker",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#5"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "片山さつき",
+    "actual": "片山さつき"
+   }
+  },
+  {
+   "id": "K-003/quote",
+   "claim_id": "K-003",
+   "check": "quote",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": "歳入総額は六百四十四億円となります",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#5"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 17,
+    "found": true
+   }
+  },
+  {
+   "id": "K-003/number",
+   "claim_id": "K-003",
+   "check": "number",
+   "subject": "片山さつき",
+   "value": 64400000000.0,
+   "unit": "円",
+   "word": "六百四十四億円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#5"
+   ],
+   "reason": null,
+   "recomputed": 64400000000.0,
+   "detail": {
+    "tokens": 13,
+    "unit": "円",
+    "matched_raw": "六百四十四億円"
+   }
+  },
+  {
+   "id": "K-004/speaker",
+   "claim_id": "K-004",
+   "check": "speaker",
+   "subject": "石垣のりこ",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#7"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "石垣のりこ",
+    "actual": "石垣のりこ"
+   }
+  },
+  {
+   "id": "K-004/quote",
+   "claim_id": "K-004",
+   "check": "quote",
+   "subject": "石垣のりこ",
+   "value": null,
+   "unit": null,
+   "word": "本予算の年度内成立はもう諦められたんでしょうか",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#7"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 23,
+    "found": true
+   }
+  },
+  {
+   "id": "K-005/speaker",
+   "claim_id": "K-005",
+   "check": "speaker",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#12"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "高市早苗",
+    "actual": "高市早苗"
+   }
+  },
+  {
+   "id": "K-005/quote",
+   "claim_id": "K-005",
+   "check": "quote",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": "非常に難しい状況にあると承知をいたしております",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#12"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 23,
+    "found": true
+   }
+  },
+  {
+   "id": "K-006/speaker",
+   "claim_id": "K-006",
+   "check": "speaker",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#24"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "高市早苗",
+    "actual": "高市早苗"
+   }
+  },
+  {
+   "id": "K-006/quote",
+   "claim_id": "K-006",
+   "check": "quote",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": "それも事実ではございません",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#24"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 13,
+    "found": true
+   }
+  },
+  {
+   "id": "K-007/speaker",
+   "claim_id": "K-007",
+   "check": "speaker",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#30"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "片山さつき",
+    "actual": "片山さつき"
+   }
+  },
+  {
+   "id": "K-007/quote",
+   "claim_id": "K-007",
+   "check": "quote",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": "約八千億円分を既存の基金に振り込む手続を今日取りまして",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#30"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 27,
+    "found": true
+   }
+  },
+  {
+   "id": "K-007/number",
+   "claim_id": "K-007",
+   "check": "number",
+   "subject": "片山さつき",
+   "value": 800000000000.0,
+   "unit": "円",
+   "word": "約八千億円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#30"
+   ],
+   "reason": null,
+   "recomputed": 800000000000.0,
+   "detail": {
+    "tokens": 6,
+    "unit": "円",
+    "matched_raw": "八千億円"
+   }
+  },
+  {
+   "id": "K-008/speaker",
+   "claim_id": "K-008",
+   "check": "speaker",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#30"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "片山さつき",
+    "actual": "片山さつき"
+   }
+  },
+  {
+   "id": "K-008/quote",
+   "claim_id": "K-008",
+   "check": "quote",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": "予算成立後には一兆円の予備費が利用可能である",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#30"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 22,
+    "found": true
+   }
+  },
+  {
+   "id": "K-008/number",
+   "claim_id": "K-008",
+   "check": "number",
+   "subject": "片山さつき",
+   "value": 1000000000000.0,
+   "unit": "円",
+   "word": "一兆円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#30"
+   ],
+   "reason": null,
+   "recomputed": 1000000000000.0,
+   "detail": {
+    "tokens": 6,
+    "unit": "円",
+    "matched_raw": "一兆円"
+   }
+  },
+  {
+   "id": "K-009/speaker",
+   "claim_id": "K-009",
+   "check": "speaker",
+   "subject": "林芳正",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#38"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "林芳正",
+    "actual": "林芳正"
+   }
+  },
+  {
+   "id": "K-009/quote",
+   "claim_id": "K-009",
+   "check": "quote",
+   "subject": "林芳正",
+   "value": null,
+   "unit": null,
+   "word": "遅くとも投票日までには配布が行われたと承知をしております",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#38"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 28,
+    "found": true
+   }
+  },
+  {
+   "id": "K-010/speaker",
+   "claim_id": "K-010",
+   "check": "speaker",
+   "subject": "石垣のりこ",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#45"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "石垣のりこ",
+    "actual": "石垣のりこ"
+   }
+  },
+  {
+   "id": "K-010/quote",
+   "claim_id": "K-010",
+   "check": "quote",
+   "subject": "石垣のりこ",
+   "value": null,
+   "unit": null,
+   "word": "一月が二百四十四時間に上ったという答弁を引き出しました",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#45"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 27,
+    "found": true
+   }
+  },
+  {
+   "id": "K-010/number",
+   "claim_id": "K-010",
+   "check": "number",
+   "subject": "石垣のりこ",
+   "value": 244.0,
+   "unit": "時間",
+   "word": "二百四十四時間",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#45"
+   ],
+   "reason": null,
+   "recomputed": 244.0,
+   "detail": {
+    "tokens": 4,
+    "unit": "時間",
+    "matched_raw": "二百四十四時間"
+   }
+  },
+  {
+   "id": "K-011/speaker",
+   "claim_id": "K-011",
+   "check": "speaker",
+   "subject": "長谷川孝",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#46"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "長谷川孝",
+    "actual": "長谷川孝"
+   }
+  },
+  {
+   "id": "K-011/quote",
+   "claim_id": "K-011",
+   "check": "quote",
+   "subject": "長谷川孝",
+   "value": null,
+   "unit": null,
+   "word": "小選挙区につきましては二七・七％",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#46"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 16,
+    "found": true
+   }
+  },
+  {
+   "id": "K-011/number",
+   "claim_id": "K-011",
+   "check": "number",
+   "subject": "長谷川孝",
+   "value": 27.7,
+   "unit": "％",
+   "word": "二七・七％",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#46"
+   ],
+   "reason": null,
+   "recomputed": 27.7,
+   "detail": {
+    "tokens": 6,
+    "unit": "％",
+    "matched_raw": "二七・七％"
+   }
+  },
+  {
+   "id": "K-012/speaker",
+   "claim_id": "K-012",
+   "check": "speaker",
+   "subject": "林芳正",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#58"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "林芳正",
+    "actual": "林芳正"
+   }
+  },
+  {
+   "id": "K-012/quote",
+   "claim_id": "K-012",
+   "check": "quote",
+   "subject": "林芳正",
+   "value": null,
+   "unit": null,
+   "word": "各党各会派において御議論をいただくべきものと",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#58"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 22,
+    "found": true
+   }
+  },
+  {
+   "id": "K-013/speaker",
+   "claim_id": "K-013",
+   "check": "speaker",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#72"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "高市早苗",
+    "actual": "高市早苗"
+   }
+  },
+  {
+   "id": "K-013/quote",
+   "claim_id": "K-013",
+   "check": "quote",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": "私はそのように取られてしまったらとっても残念です",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#72"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 24,
+    "found": true
+   }
+  },
+  {
+   "id": "K-014/speaker",
+   "claim_id": "K-014",
+   "check": "speaker",
+   "subject": "間隆一郎",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#76"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "間隆一郎",
+    "actual": "間隆一郎"
+   }
+  },
+  {
+   "id": "K-014/quote",
+   "claim_id": "K-014",
+   "check": "quote",
+   "subject": "間隆一郎",
+   "value": null,
+   "unit": null,
+   "word": "年収百三十万円を超えた被扶養者のうち、約三割の方から証明書が提出された",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#76"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 35,
+    "found": true
+   }
+  },
+  {
+   "id": "K-014/number",
+   "claim_id": "K-014",
+   "check": "number",
+   "subject": "間隆一郎",
+   "value": 1300000.0,
+   "unit": "円",
+   "word": "百三十万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#76"
+   ],
+   "reason": null,
+   "recomputed": 1300000.0,
+   "detail": {
+    "tokens": 8,
+    "unit": "円",
+    "matched_raw": "百三十万円"
+   }
+  },
+  {
+   "id": "K-015/speaker",
+   "claim_id": "K-015",
+   "check": "speaker",
+   "subject": "上野賢一郎",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#78"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "上野賢一郎",
+    "actual": "上野賢一郎"
+   }
+  },
+  {
+   "id": "K-015/quote",
+   "claim_id": "K-015",
+   "check": "quote",
+   "subject": "上野賢一郎",
+   "value": null,
+   "unit": null,
+   "word": "労働者一人当たり最大七十五万円まで支給額を引き上げております",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#78"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 30,
+    "found": true
+   }
+  },
+  {
+   "id": "K-015/number",
+   "claim_id": "K-015",
+   "check": "number",
+   "subject": "上野賢一郎",
+   "value": 750000.0,
+   "unit": "円",
+   "word": "七十五万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#78"
+   ],
+   "reason": null,
+   "recomputed": 750000.0,
+   "detail": {
+    "tokens": 9,
+    "unit": "円",
+    "matched_raw": "七十五万円"
+   }
+  },
+  {
+   "id": "K-016/speaker",
+   "claim_id": "K-016",
+   "check": "speaker",
+   "subject": "上野賢一郎",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#80"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "上野賢一郎",
+    "actual": "上野賢一郎"
+   }
+  },
+  {
+   "id": "K-016/quote",
+   "claim_id": "K-016",
+   "check": "quote",
+   "subject": "上野賢一郎",
+   "value": null,
+   "unit": null,
+   "word": "これを二千五百円、千円引き上げることといたしました",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#80"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 25,
+    "found": true
+   }
+  },
+  {
+   "id": "K-016/number",
+   "claim_id": "K-016",
+   "check": "number",
+   "subject": "上野賢一郎",
+   "value": 2500.0,
+   "unit": "円",
+   "word": "二千五百円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#80"
+   ],
+   "reason": null,
+   "recomputed": 2500.0,
+   "detail": {
+    "tokens": 12,
+    "unit": "円",
+    "matched_raw": "二千五百円"
+   }
+  },
+  {
+   "id": "K-017/speaker",
+   "claim_id": "K-017",
+   "check": "speaker",
+   "subject": "上野賢一郎",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#84"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "上野賢一郎",
+    "actual": "上野賢一郎"
+   }
+  },
+  {
+   "id": "K-017/quote",
+   "claim_id": "K-017",
+   "check": "quote",
+   "subject": "上野賢一郎",
+   "value": null,
+   "unit": null,
+   "word": "深く反省をし、原告の皆様を含め、広く国民の皆様におわびを申し上げたいと思います",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#84"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 39,
+    "found": true
+   }
+  },
+  {
+   "id": "K-018/speaker",
+   "claim_id": "K-018",
+   "check": "speaker",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#96"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "高市早苗",
+    "actual": "高市早苗"
+   }
+  },
+  {
+   "id": "K-018/quote",
+   "claim_id": "K-018",
+   "check": "quote",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": "現段階でそのような予定はございません",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#96"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 18,
+    "found": true
+   }
+  },
+  {
+   "id": "K-019/speaker",
+   "claim_id": "K-019",
+   "check": "speaker",
+   "subject": "木原稔",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#125"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "木原稔",
+    "actual": "木原稔"
+   }
+  },
+  {
+   "id": "K-019/quote",
+   "claim_id": "K-019",
+   "check": "quote",
+   "subject": "木原稔",
+   "value": null,
+   "unit": null,
+   "word": "従来の四十五隻じゃなくて五十九隻",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#125"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 16,
+    "found": true
+   }
+  },
+  {
+   "id": "K-019/number",
+   "claim_id": "K-019",
+   "check": "number",
+   "subject": "木原稔",
+   "value": 59.0,
+   "unit": "隻",
+   "word": "五十九隻",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#125"
+   ],
+   "reason": null,
+   "recomputed": 59.0,
+   "detail": {
+    "tokens": 8,
+    "unit": "隻",
+    "matched_raw": "五十九隻"
+   }
+  },
+  {
+   "id": "K-020/speaker",
+   "claim_id": "K-020",
+   "check": "speaker",
+   "subject": "新垣慶太",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#129"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "新垣慶太",
+    "actual": "新垣慶太"
+   }
+  },
+  {
+   "id": "K-020/quote",
+   "claim_id": "K-020",
+   "check": "quote",
+   "subject": "新垣慶太",
+   "value": null,
+   "unit": null,
+   "word": "現時点でペルシャ湾内に四十五隻入域しております",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#129"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 23,
+    "found": true
+   }
+  },
+  {
+   "id": "K-020/number",
+   "claim_id": "K-020",
+   "check": "number",
+   "subject": "新垣慶太",
+   "value": 45.0,
+   "unit": "隻",
+   "word": "四十五隻",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#129"
+   ],
+   "reason": null,
+   "recomputed": 45.0,
+   "detail": {
+    "tokens": 6,
+    "unit": "隻",
+    "matched_raw": "四十五隻"
+   }
+  },
+  {
+   "id": "K-021/speaker",
+   "claim_id": "K-021",
+   "check": "speaker",
+   "subject": "山田仁",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#131"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "山田仁",
+    "actual": "山田仁"
+   }
+  },
+  {
+   "id": "K-021/quote",
+   "claim_id": "K-021",
+   "check": "quote",
+   "subject": "山田仁",
+   "value": null,
+   "unit": null,
+   "word": "一バレル当たり百一ドル前後で推移をしてございます",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#131"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 24,
+    "found": true
+   }
+  },
+  {
+   "id": "K-021/number",
+   "claim_id": "K-021",
+   "check": "number",
+   "subject": "山田仁",
+   "value": 101.0,
+   "unit": "ドル",
+   "word": "百一ドル",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#131"
+   ],
+   "reason": null,
+   "recomputed": 101.0,
+   "detail": {
+    "tokens": 8,
+    "unit": "ドル",
+    "matched_raw": "百一ドル"
+   }
+  },
+  {
+   "id": "K-022/speaker",
+   "claim_id": "K-022",
+   "check": "speaker",
+   "subject": "山田仁",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#131"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "山田仁",
+    "actual": "山田仁"
+   }
+  },
+  {
+   "id": "K-022/quote",
+   "claim_id": "K-022",
+   "check": "quote",
+   "subject": "山田仁",
+   "value": null,
+   "unit": null,
+   "word": "一リットル当たり百七十七・七円となってございます",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#131"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 24,
+    "found": true
+   }
+  },
+  {
+   "id": "K-022/number",
+   "claim_id": "K-022",
+   "check": "number",
+   "subject": "山田仁",
+   "value": 177.7,
+   "unit": "円",
+   "word": "百七十七・七円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#131"
+   ],
+   "reason": null,
+   "recomputed": 177.7,
+   "detail": {
+    "tokens": 8,
+    "unit": "円",
+    "matched_raw": "百七十七・七円"
+   }
+  },
+  {
+   "id": "K-023/speaker",
+   "claim_id": "K-023",
+   "check": "speaker",
+   "subject": "赤澤亮正",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#133"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "赤澤亮正",
+    "actual": "赤澤亮正"
+   }
+  },
+  {
+   "id": "K-023/quote",
+   "claim_id": "K-023",
+   "check": "quote",
+   "subject": "赤澤亮正",
+   "value": null,
+   "unit": null,
+   "word": "三月二十七日の時点で約三百件の情報が提供されています",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#133"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 26,
+    "found": true
+   }
+  },
+  {
+   "id": "K-023/number",
+   "claim_id": "K-023",
+   "check": "number",
+   "subject": "赤澤亮正",
+   "value": 300.0,
+   "unit": "件",
+   "word": "約三百件",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#133"
+   ],
+   "reason": null,
+   "recomputed": 300.0,
+   "detail": {
+    "tokens": 6,
+    "unit": "件",
+    "matched_raw": "三百件"
+   }
+  },
+  {
+   "id": "K-024/speaker",
+   "claim_id": "K-024",
+   "check": "speaker",
+   "subject": "山田仁",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#141"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "山田仁",
+    "actual": "山田仁"
+   }
+  },
+  {
+   "id": "K-024/quote",
+   "claim_id": "K-024",
+   "check": "quote",
+   "subject": "山田仁",
+   "value": null,
+   "unit": null,
+   "word": "一世帯当たりの金額は月額千六百七十二円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#141"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 19,
+    "found": true
+   }
+  },
+  {
+   "id": "K-024/number",
+   "claim_id": "K-024",
+   "check": "number",
+   "subject": "山田仁",
+   "value": 1672.0,
+   "unit": "円",
+   "word": "千六百七十二円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#141"
+   ],
+   "reason": null,
+   "recomputed": 1672.0,
+   "detail": {
+    "tokens": 8,
+    "unit": "円",
+    "matched_raw": "千六百七十二円"
+   }
+  },
+  {
+   "id": "K-025/speaker",
+   "claim_id": "K-025",
+   "check": "speaker",
+   "subject": "赤澤亮正",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#143"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "赤澤亮正",
+    "actual": "赤澤亮正"
+   }
+  },
+  {
+   "id": "K-025/quote",
+   "claim_id": "K-025",
+   "check": "quote",
+   "subject": "赤澤亮正",
+   "value": null,
+   "unit": null,
+   "word": "月額八十円、年額九百六十円程度の増額となります",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#143"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 23,
+    "found": true
+   }
+  },
+  {
+   "id": "K-025/number",
+   "claim_id": "K-025",
+   "check": "number",
+   "subject": "赤澤亮正",
+   "value": 960.0,
+   "unit": "円",
+   "word": "九百六十円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#143"
+   ],
+   "reason": null,
+   "recomputed": 960.0,
+   "detail": {
+    "tokens": 8,
+    "unit": "円",
+    "matched_raw": "九百六十円"
+   }
+  },
+  {
+   "id": "K-026/speaker",
+   "claim_id": "K-026",
+   "check": "speaker",
+   "subject": "伊藤孝恵",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#146"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "伊藤孝恵",
+    "actual": "伊藤孝恵"
+   }
+  },
+  {
+   "id": "K-026/quote",
+   "claim_id": "K-026",
+   "check": "quote",
+   "subject": "伊藤孝恵",
+   "value": null,
+   "unit": null,
+   "word": "高市総理、現在四時間です",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#146"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 12,
+    "found": true
+   }
+  },
+  {
+   "id": "K-026/number",
+   "claim_id": "K-026",
+   "check": "number",
+   "subject": "伊藤孝恵",
+   "value": 4.0,
+   "unit": "時間",
+   "word": "四時間",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#146"
+   ],
+   "reason": null,
+   "recomputed": 4.0,
+   "detail": {
+    "tokens": 8,
+    "unit": "時間",
+    "matched_raw": "四時間"
+   }
+  },
+  {
+   "id": "K-027/speaker",
+   "claim_id": "K-027",
+   "check": "speaker",
+   "subject": "伊藤孝恵",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#148"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "伊藤孝恵",
+    "actual": "伊藤孝恵"
+   }
+  },
+  {
+   "id": "K-027/quote",
+   "claim_id": "K-027",
+   "check": "quote",
+   "subject": "伊藤孝恵",
+   "value": null,
+   "unit": null,
+   "word": "およそ二兆円のこれ修正動議を提出をする予定です",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#148"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 23,
+    "found": true
+   }
+  },
+  {
+   "id": "K-027/number",
+   "claim_id": "K-027",
+   "check": "number",
+   "subject": "伊藤孝恵",
+   "value": 2000000000000.0,
+   "unit": "円",
+   "word": "二兆円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#148"
+   ],
+   "reason": null,
+   "recomputed": 2000000000000.0,
+   "detail": {
+    "tokens": 12,
+    "unit": "円",
+    "matched_raw": "二兆円"
+   }
+  },
+  {
+   "id": "K-028/speaker",
+   "claim_id": "K-028",
+   "check": "speaker",
+   "subject": "赤澤亮正",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#155"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "赤澤亮正",
+    "actual": "赤澤亮正"
+   }
+  },
+  {
+   "id": "K-028/quote",
+   "claim_id": "K-028",
+   "check": "quote",
+   "subject": "赤澤亮正",
+   "value": null,
+   "unit": null,
+   "word": "エネルギー費の価格転嫁率は四八・九％",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#155"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 18,
+    "found": true
+   }
+  },
+  {
+   "id": "K-028/number",
+   "claim_id": "K-028",
+   "check": "number",
+   "subject": "赤澤亮正",
+   "value": 48.9,
+   "unit": "％",
+   "word": "四八・九％",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#155"
+   ],
+   "reason": null,
+   "recomputed": 48.9,
+   "detail": {
+    "tokens": 4,
+    "unit": "％",
+    "matched_raw": "四八・九％"
+   }
+  },
+  {
+   "id": "K-029/speaker",
+   "claim_id": "K-029",
+   "check": "speaker",
+   "subject": "原口剛",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#157"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "原口剛",
+    "actual": "原口剛"
+   }
+  },
+  {
+   "id": "K-029/quote",
+   "claim_id": "K-029",
+   "check": "quote",
+   "subject": "原口剛",
+   "value": null,
+   "unit": null,
+   "word": "勤務間インターバル制度を導入している企業割合は六・九％",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#157"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 27,
+    "found": true
+   }
+  },
+  {
+   "id": "K-029/number",
+   "claim_id": "K-029",
+   "check": "number",
+   "subject": "原口剛",
+   "value": 6.9,
+   "unit": "％",
+   "word": "六・九％",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#157"
+   ],
+   "reason": null,
+   "recomputed": 6.9,
+   "detail": {
+    "tokens": 12,
+    "unit": "％",
+    "matched_raw": "六・九％"
+   }
+  },
+  {
+   "id": "K-030/speaker",
+   "claim_id": "K-030",
+   "check": "speaker",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#175"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "高市早苗",
+    "actual": "高市早苗"
+   }
+  },
+  {
+   "id": "K-030/quote",
+   "claim_id": "K-030",
+   "check": "quote",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": "先週二十六日から原油を中心とする国家備蓄の放出を開始しました",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#175"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 30,
+    "found": true
+   }
+  },
+  {
+   "id": "K-031/speaker",
+   "claim_id": "K-031",
+   "check": "speaker",
+   "subject": "杉久武",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#179"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "杉久武",
+    "actual": "杉久武"
+   }
+  },
+  {
+   "id": "K-031/quote",
+   "claim_id": "K-031",
+   "check": "quote",
+   "subject": "杉久武",
+   "value": null,
+   "unit": null,
+   "word": "暫定予算の編成は、二〇一五年以来、実に十一年ぶりであります",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#179"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 29,
+    "found": true
+   }
+  },
+  {
+   "id": "K-031/number",
+   "claim_id": "K-031",
+   "check": "number",
+   "subject": "杉久武",
+   "value": 11.0,
+   "unit": "年",
+   "word": "十一年",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#179"
+   ],
+   "reason": null,
+   "recomputed": 11.0,
+   "detail": {
+    "tokens": 4,
+    "unit": "年",
+    "matched_raw": "十一年"
+   }
+  },
+  {
+   "id": "K-032/speaker",
+   "claim_id": "K-032",
+   "check": "speaker",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#190"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "片山さつき",
+    "actual": "片山さつき"
+   }
+  },
+  {
+   "id": "K-032/quote",
+   "claim_id": "K-032",
+   "check": "quote",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": "本予算に計上のない経費は暫定予算に計上できない",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#190"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 23,
+    "found": true
+   }
+  },
+  {
+   "id": "K-033/speaker",
+   "claim_id": "K-033",
+   "check": "speaker",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#194"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "高市早苗",
+    "actual": "高市早苗"
+   }
+  },
+  {
+   "id": "K-033/quote",
+   "claim_id": "K-033",
+   "check": "quote",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": "予算修正が必要とは考えておりません",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#194"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 17,
+    "found": true
+   }
+  },
+  {
+   "id": "K-034/speaker",
+   "claim_id": "K-034",
+   "check": "speaker",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#198"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "高市早苗",
+    "actual": "高市早苗"
+   }
+  },
+  {
+   "id": "K-034/quote",
+   "claim_id": "K-034",
+   "check": "quote",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": "給付付き税額控除をできる限り早期に実施するまでの目安として二年間を考えている",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#198"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 38,
+    "found": true
+   }
+  },
+  {
+   "id": "K-034/number",
+   "claim_id": "K-034",
+   "check": "number",
+   "subject": "高市早苗",
+   "value": 2.0,
+   "unit": "年",
+   "word": "二年",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#198"
+   ],
+   "reason": null,
+   "recomputed": 2.0,
+   "detail": {
+    "tokens": 5,
+    "unit": "年",
+    "matched_raw": "二年"
+   }
+  },
+  {
+   "id": "K-035/speaker",
+   "claim_id": "K-035",
+   "check": "speaker",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#211"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "片山さつき",
+    "actual": "片山さつき"
+   }
+  },
+  {
+   "id": "K-035/quote",
+   "claim_id": "K-035",
+   "check": "quote",
+   "subject": "片山さつき",
+   "value": null,
+   "unit": null,
+   "word": "日割りでございますから三百億円でございますが",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#211"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 22,
+    "found": true
+   }
+  },
+  {
+   "id": "K-035/number",
+   "claim_id": "K-035",
+   "check": "number",
+   "subject": "片山さつき",
+   "value": 30000000000.0,
+   "unit": "円",
+   "word": "三百億円",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#211"
+   ],
+   "reason": null,
+   "recomputed": 30000000000.0,
+   "detail": {
+    "tokens": 14,
+    "unit": "円",
+    "matched_raw": "三百億円"
+   }
+  },
+  {
+   "id": "K-036/speaker",
+   "claim_id": "K-036",
+   "check": "speaker",
+   "subject": "城内実",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#213"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "城内実",
+    "actual": "城内実"
+   }
+  },
+  {
+   "id": "K-036/quote",
+   "claim_id": "K-036",
+   "check": "quote",
+   "subject": "城内実",
+   "value": null,
+   "unit": null,
+   "word": "参加各党と政府による共同開催としたところであります",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#213"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 25,
+    "found": true
+   }
+  },
+  {
+   "id": "K-037/speaker",
+   "claim_id": "K-037",
+   "check": "speaker",
+   "subject": "安藤裕",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#226"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "安藤裕",
+    "actual": "安藤裕"
+   }
+  },
+  {
+   "id": "K-037/quote",
+   "claim_id": "K-037",
+   "check": "quote",
+   "subject": "安藤裕",
+   "value": null,
+   "unit": null,
+   "word": "食料品の価格が八％下がるということはないんですよ",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#226"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 24,
+    "found": true
+   }
+  },
+  {
+   "id": "K-037/number",
+   "claim_id": "K-037",
+   "check": "number",
+   "subject": "安藤裕",
+   "value": 8.0,
+   "unit": "％",
+   "word": "八％",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#226"
+   ],
+   "reason": null,
+   "recomputed": 8.0,
+   "detail": {
+    "tokens": 1,
+    "unit": "％",
+    "matched_raw": "八％"
+   }
+  },
+  {
+   "id": "K-038/speaker",
+   "claim_id": "K-038",
+   "check": "speaker",
+   "subject": "茂木敏充",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#230"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "茂木敏充",
+    "actual": "茂木敏充"
+   }
+  },
+  {
+   "id": "K-038/quote",
+   "claim_id": "K-038",
+   "check": "quote",
+   "subject": "茂木敏充",
+   "value": null,
+   "unit": null,
+   "word": "事前協議の対象とはなっておりません",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#230"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 17,
+    "found": true
+   }
+  },
+  {
+   "id": "K-039/speaker",
+   "claim_id": "K-039",
+   "check": "speaker",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#234"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "高市早苗",
+    "actual": "高市早苗"
+   }
+  },
+  {
+   "id": "K-039/quote",
+   "claim_id": "K-039",
+   "check": "quote",
+   "subject": "高市早苗",
+   "value": null,
+   "unit": null,
+   "word": "その旨はトランプ大統領にもお伝えをいたしました",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#234"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 23,
+    "found": true
+   }
+  },
+  {
+   "id": "K-040/speaker",
+   "claim_id": "K-040",
+   "check": "speaker",
+   "subject": "藤川政人",
+   "value": null,
+   "unit": null,
+   "word": null,
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#257"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "expected": "藤川政人",
+    "actual": "藤川政人"
+   }
+  },
+  {
+   "id": "K-040/quote",
+   "claim_id": "K-040",
+   "check": "quote",
+   "subject": "藤川政人",
+   "value": null,
+   "unit": null,
+   "word": "多数をもって原案どおり可決すべきものと決定いたしました",
+   "state": "GROUNDED",
+   "pointers": [
+    "kokkai:122115261X00820260330#257"
+   ],
+   "reason": null,
+   "recomputed": null,
+   "detail": {
+    "quote_chars": 27,
+    "found": true
+   }
+  }
+ ]
+}

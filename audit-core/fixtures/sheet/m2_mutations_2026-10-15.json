@@ -1,0 +1,148 @@
+{
+ "purpose": "段 3 の検査が外れうることを確かめる変異。**合否ではない**",
+ "spec": "docs/DOMAIN1_M2_SPEC_2026-10-15.md",
+ "base": {
+  "checks": 1061,
+  "states": {
+   "GROUNDED": 1061
+  },
+  "not_grounded_by_check": {},
+  "sheets_without_toc_entry": 0
+ },
+ "mutations": [
+  {
+   "mutation": "1 子の範囲を「次の兄弟まで」ではなく全部にする",
+   "result": {
+    "checks": 1061,
+    "states": {
+     "GROUNDED": 853,
+     "VALUE_MISMATCH": 208
+    },
+    "not_grounded_by_check": {
+     "C-5 明細 款 = Σ項": 40,
+     "C-5 明細 項 = Σ目": 168
+    },
+    "sheets_without_toc_entry": 0
+   },
+   "silent": false
+  },
+  {
+   "mutation": "2 値の行を 1 行ずらす",
+   "result": {
+    "checks": 1061,
+    "states": {
+     "POINTER_NOT_FOUND": 1024,
+     "VALUE_MISMATCH": 37
+    },
+    "not_grounded_by_check": {
+     "C-1 款 = Σ項": 148,
+     "C-2 歳出合計 = Σ款": 76,
+     "C-3 総括 = 決算書(支出済額)": 19,
+     "C-4 総括 合計 = Σ会計": 2,
+     "C-5 明細 款 = Σ項": 74,
+     "C-5 明細 項 = Σ目": 202,
+     "C-7 明細 計 = 当初+補正+繰越+流用": 503,
+     "C-6 明細の款 = 決算書の款(支出済額)": 37
+    },
+    "sheets_without_toc_entry": 0
+   },
+   "silent": false
+  },
+  {
+   "mutation": "3 △ を符号として見ない",
+   "result": {
+    "checks": 1061,
+    "states": {
+     "GROUNDED": 875,
+     "VALUE_MISMATCH": 186
+    },
+    "not_grounded_by_check": {
+     "C-7 明細 計 = 当初+補正+繰越+流用": 186
+    },
+    "sheets_without_toc_entry": 0
+   },
+   "silent": false
+  },
+  {
+   "mutation": "4 △ を無視して絶対値を使う",
+   "result": {
+    "checks": 1061,
+    "states": {
+     "GROUNDED": 875,
+     "VALUE_MISMATCH": 186
+    },
+    "not_grounded_by_check": {
+     "C-7 明細 計 = 当初+補正+繰越+流用": 186
+    },
+    "sheets_without_toc_entry": 0
+   },
+   "silent": false
+  },
+  {
+   "mutation": "5 孫(目)を項の一覧に混ぜる",
+   "result": {
+    "checks": 2156,
+    "states": {
+     "GROUNDED": 1152,
+     "VALUE_MISMATCH": 72,
+     "POINTER_NOT_FOUND": 932
+    },
+    "not_grounded_by_check": {
+     "C-5 明細 款 = Σ項": 72,
+     "C-5 明細 項 = Σ目": 932
+    },
+    "sheets_without_toc_entry": 0
+   },
+   "silent": false
+  },
+  {
+   "mutation": "6 列の対応を 1 つずらす",
+   "result": {
+    "checks": 1061,
+    "states": {
+     "GROUNDED": 867,
+     "VALUE_MISMATCH": 194
+    },
+    "not_grounded_by_check": {
+     "C-1 款 = Σ項": 37,
+     "C-2 歳出合計 = Σ款": 19,
+     "C-5 明細 款 = Σ項": 37,
+     "C-5 明細 項 = Σ目": 101
+    },
+    "sheets_without_toc_entry": 0
+   },
+   "silent": false
+  },
+  {
+   "mutation": "7 全角半角の正規化を外す",
+   "result": {
+    "checks": 245,
+    "states": {
+     "GROUNDED": 245
+    },
+    "not_grounded_by_check": {},
+    "sheets_without_toc_entry": 19
+   },
+   "silent": false
+  },
+  {
+   "mutation": "8 子を 1 件だけ二重に数える",
+   "result": {
+    "checks": 1061,
+    "states": {
+     "VALUE_MISMATCH": 447,
+     "GROUNDED": 614
+    },
+    "not_grounded_by_check": {
+     "C-1 款 = Σ項": 116,
+     "C-2 歳出合計 = Σ款": 60,
+     "C-5 明細 款 = Σ項": 72,
+     "C-5 明細 項 = Σ目": 199
+    },
+    "sheets_without_toc_entry": 0
+   },
+   "silent": false
+  }
+ ],
+ "silent": []
+}

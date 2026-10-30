@@ -1,0 +1,142 @@
+{
+ "seal": "docs/PACKAGING_SEAL_2026-10-20.md",
+ "seal_commit": "f4d956b",
+ "measured_at": "2026-10-20",
+ "machine": {"python": "3.9.6", "pip": "21.2.4", "setuptools": "58.0.4", "wheel": "0.37.0"},
+ "network": "0 USD。pip には --no-build-isolation と --no-index を常に渡した。PyPI には触れていない",
+ "venv_dir": "scratchpad/pkg/venv, venv_editable(--system-site-packages。pip 自体には wheel/setuptools が無いので要った)",
+ "G-1": {
+  "prediction": "新しい venv で `pip install -e . --no-build-isolation` が rc=0。`python -c \"import audit_core, adapters.xbrl.verify_external\"`(repo の外の cwd)が rc=0",
+  "editable": {
+   "install_cmd": "pip install -e . --no-build-isolation --no-index",
+   "install_rc": 0,
+   "import_cmd": "python -c \"import audit_core, adapters.xbrl.verify_external\"",
+   "import_cwd": "repo の外(scratchpad/pkg/outside2)",
+   "import_rc": 1,
+   "import_stderr_tail": "ModuleNotFoundError: No module named 'audit_core'"
+  },
+  "non_editable_extra_measurement": {
+   "note": "封 G-1 の判定には使わない追加の実測(人間への指示のとおり)",
+   "install_cmd": "pip install . --no-build-isolation --no-index",
+   "install_rc": 0,
+   "import_cmd": "python -c \"import audit_core, adapters.xbrl.verify_external\"",
+   "import_cwd": "repo の外(scratchpad/pkg/outside2)",
+   "import_rc": 0
+  },
+  "root_cause": "この機械の setuptools 58.0.4 は PEP 660 を持たない。`setup.py develop` が作る egg-link(easy-install.pth)は repo の根 1 つだけを sys.path に足す。`package_dir` で `core/py/audit_core` に写した `audit_core` パッケージは repo の根には実在しないので、`import audit_core` を先に評価する combined import では解決できない。`adapters` を先に import すればパッケージ自身の既存コード(`adapters/__init__.py` の `sys.path.insert(0, core/py)`、engine 側の仕組みで今回変えていない)が効いて解決するが、それは封が作った経路の順序と違う。非 editable(`pip install .`、PEP 517 の通常ビルド)では `audit_core` が site-packages の直下に実体として配置されるので両方 rc=0",
+  "hit": false
+ },
+ "G-2": {
+  "prediction": "`audit-core-verify-external --help` と `audit-core-verify-document --help` が rc=0",
+  "editable_venv": {"audit-core-verify-document": 0, "audit-core-verify-external": 0},
+  "non_editable_venv": {"audit-core-verify-document": 0, "audit-core-verify-external": 0},
+  "hit": true
+ },
+ "G-3": {
+  "prediction": "`pip wheel . --no-deps --no-build-isolation` で wheel が 1 本でき、中の .py の本数 = 保護面の 36 本。.py 以外の file は metadata だけ",
+  "wheel_filename": "audit_core-0.1.0-py3-none-any.whl",
+  "wheel_size_bytes": 115262,
+  "sha256_is_not_reproducible_across_rebuilds": true,
+  "sha256_observed": [
+   "fea99a13fc945ec2e3bce026080ef2c0c9cc2584f24471af32214795899d97af",
+   "21d0f25515c35cad98c50ea5915374ff6f232b0af9742cf5255090190f08f793",
+   "31821a789accb16816fb4d70597967918acc626eace8d7e85a4f120a457e47b5"
+  ],
+  "sha256_note": "同じ木から 3 回 `pip wheel` を回し、3 回とも違う sha256(size は 115262 で同じ)。zip 内の per-file timestamp が SOURCE_DATE_EPOCH 無しで変わるためと見られる(測っていない: 原因の断定はしない)。だから sha256 を同一性の証拠にしない。中身(.py の本数と一覧)で確かめる",
+  "total_entries": 41,
+  "py_count": 36,
+  "frozen_count": 36,
+  "non_py_files": [
+   "audit_core-0.1.0.dist-info/METADATA",
+   "audit_core-0.1.0.dist-info/WHEEL",
+   "audit_core-0.1.0.dist-info/entry_points.txt",
+   "audit_core-0.1.0.dist-info/top_level.txt",
+   "audit_core-0.1.0.dist-info/RECORD"
+  ],
+  "elapsed_seconds_approx": 0.86,
+  "hit": true
+ },
+ "G-4": {
+  "prediction": "`pytest --collect-only -q` の本数は pyproject を置く前後で同じ",
+  "before_pyproject_collected": 3363,
+  "after_pyproject_setup_cfg_setup_py_collected": 3363,
+  "measured_before_any_new_test_file_existed": true,
+  "hit": true
+ },
+ "G-5": {
+  "prediction": "覆いの検査(suite_coverage)は試験 file +2(test_packaging.py・test_packaging_result.py)で、漏れは既存の 1 本(measure/tests/test_inject.py)のまま",
+  "pytest_tests_before": 3363,
+  "pytest_tests_after": 3409,
+  "test_files_on_disk_before": 176,
+  "test_files_on_disk_after": 178,
+  "tests_measure_before": 118,
+  "tests_measure_after": 120,
+  "missed_discover_before": ["measure/tests/test_inject.py"],
+  "missed_discover_after": ["measure/tests/test_inject.py"],
+  "uncovered_files_after": [],
+  "hit": true
+ },
+ "G-6": {
+  "prediction": "README.en.md の数はすべて §0-1 の記録と一致(門)。禁止語(accurate, world's first, only, unique, guarantee)0 件",
+  "forbidden_words_checked": ["accurate", "world's first", "only", "unique", "guarantee"],
+  "forbidden_words_found": [],
+  "numbers_cited": {
+   "sheet_connection_llm": "24/24",
+   "sheet_connection_core": "12/24",
+   "sheet_connection_core_held": 12,
+   "attr_inject_unit": "24/24",
+   "attr_inject_period": "18/18",
+   "attr_inject_dimension": "24/24",
+   "holds_product_path_period": "18/18",
+   "holds_product_path_unit": "24/24",
+   "holds_product_path_dimension": "24/24",
+   "holds_product_path_reproduction": "192/192",
+   "correct_reference_hold_rate": "0/50",
+   "errdet_llm": "8/8",
+   "errdet_old_c": "4/8",
+   "errdet_c_prime": "8/8",
+   "errdet_overwrite": 0,
+   "kokkai_false_pass": "1/49",
+   "test_files_on_disk": 178,
+   "pytest_tests": 3409,
+   "mutation_count": 96,
+   "core_line_count": 429
+  },
+  "hit": true
+ },
+ "summary": {"predictions": 6, "hits": 5, "misses": 1, "miss_ids": ["G-1"]},
+ "independent_audit": {
+  "2026-10-20": {
+   "final_verdict": "REVISE 2 回(直した)",
+   "note": "封の G-1〜G-6 の予測欄・当たり/外れ(summary)は両回とも変えていない。REVISE は README.en.md の字・覆いの記録に対するもので、engine・setup.* は触っていない",
+   "rounds": [
+    {
+     "round": 1,
+     "verdict": "REVISE",
+     "revise_count": 1,
+     "fixed_count": 4,
+     "categories": {"domain_name_mismatch": 2, "denominator_provenance": 1, "timeline": 1},
+     "fixed_locations": [
+      "errdet detection bullet: national-parliament-minutes domain -> spreadsheet domain",
+      "false-pass bullet: 'in the same domain' -> 'in the national-parliament-minutes domain (a separate dataset)'",
+      "lede paragraph: '24-document spreadsheet-reconciliation benchmark' -> '24-claim gold-confirmed subset (of 35 claims checked against a single spreadsheet)'",
+      "attribute-injection bullet: 'the production hold rule is bypassed' -> 'measured 2026-10-17, before the production hold rules described in the next bullet existed'"
+     ],
+     "new_gate": "tests/measure/test_packaging.py::ReadmeDomainPairTest(4 本)。直す前の README(scratchpad に保存)を in-memory で通すと 4 本とも赤"
+    },
+    {
+     "round": 2,
+     "verdict": "REVISE",
+     "revise_count": 1,
+     "fixed_count": 2,
+     "categories": {"coverage_regeneration_missed": 1, "old_c_wording": 1},
+     "fixed_locations": [
+      "suite_coverage regenerated (test_packaging.py 25 -> 30 test methods across both rounds' 5 new gates): pytest 3404 -> 3409, discover 3308 -> 3313; test_files_on_disk unchanged at 178",
+      "errdet bullet: 'a prior rule-based detector detected 4/8' -> \"a prior design (the LLM's answers passed through an earlier verification layer that overwrote 4 of the LLM's correct findings) detected 4/8\""
+     ],
+     "new_gate": "tests/measure/test_packaging.py::ReadmeDomainPairTest::test_g6_4_of_8_bullet_names_the_overwrite_not_rule_based(1 本)。直す前の字(scratchpad に保存)を in-memory で通すと赤"
+    }
+   ]
+  }
+ }
+}

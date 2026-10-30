@@ -1,0 +1,7572 @@
+{
+ "classifier": "独立 分類席(2026-10-12)",
+ "criteria_sha256": "b43cb05a734e109fd93ebb1e68fe55c0b23692bd9ff18a654f10540b6bce350b",
+ "material_sha256": "a2eb562d1fa5ebcb2d8f6530af195fb75791038264e9a8ba3e0ff812a8ce8b21",
+ "zip_sha256_checked": true,
+ "zip_sha256": "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799",
+ "zip_sha256_matches_material_identity": true,
+ "saw_main_classification": false,
+ "rows": [
+  {
+   "id": "N012",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "主語「自己資本比率」は取れているが、engine は当期末の自己資本比率に結んだ。この数(60.6%)は前期末の同じ要素の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+     ],
+     "subject": "自己資本比率",
+     "recomputed": 61.7,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 60.6,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 6
+    },
+    "正しい pointer": [
+     {
+      "element": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+      "context": "Prior1YearInstant",
+      "value": 0.606,
+      "decimals": "3",
+      "unit": "pure"
+     }
+    ],
+    "engine が結んだ pointer の値": 61.7
+   }
+  },
+  {
+   "id": "N013",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": 2256.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 7
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ComprehensiveIncome",
+     "context": "CurrentYearDuration",
+     "value": 2256683000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N017",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は売上高の増減率。増減率の fact が無いで、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "売上高",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2.9,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 11
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "CurrentYearDuration",
+      "value": 38064274000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "Prior1YearDuration",
+      "value": 36975577000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "1,088,697,000/36,975,577,000=2.9444%"
+   }
+  },
+  {
+   "id": "N019",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [
+    "A1"
+   ],
+   "why": "この数は5期分の売上高の最初と最後の差で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 5951.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 13
+    },
+    "導出に使う fact": [
+     {
+      "element": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+      "context": "CurrentYearDuration",
+      "value": 38064274000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+      "context": "Prior4YearDuration",
+      "value": 32112770000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "38,064,274,000-32,112,770,000=5,951,504,000",
+    "注": "主語「売上高」は直前の文に在り、この文(第13文)の中には無い。A1 の第2条件(文から主語を特定できる)は満たさないと判断した。"
+   }
+  },
+  {
+   "id": "N020",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は5年間の売上高の伸び率で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 18.5,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 13
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "計算": "5,951,504,000/32,112,770,000=18.5331%"
+   }
+  },
+  {
+   "id": "N027",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は売上総利益の減少率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "売上総利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 5.7,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 17
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:GrossProfit",
+      "context": "CurrentYearDuration",
+      "value": 11334658000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:GrossProfit",
+      "context": "Prior1YearDuration",
+      "value": 12018937000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "684,279,000/12,018,937,000=5.6933%"
+   }
+  },
+  {
+   "id": "N028",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 26729.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 19
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:CostOfSales",
+     "context": "CurrentYearDuration",
+     "value": 26729616000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N029",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 24956.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 19
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:CostOfSales",
+     "context": "Prior1YearDuration",
+     "value": 24956639000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N030",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は売上原価の当期・前期の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1772.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 19
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=no_element は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "26,729,616,000-24,956,639,000=1,772,977,000"
+   }
+  },
+  {
+   "id": "N031",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は売上原価の増加率で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 7.1,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 19
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "計算": "1,772,977,000/24,956,639,000=7.1042%"
+   }
+  },
+  {
+   "id": "N032",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は売上高の伸び率。増減率の fact が無いで、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "売上高",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2.9,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 20
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "CurrentYearDuration",
+      "value": 38064274000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "Prior1YearDuration",
+      "value": 36975577000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "2.9444%"
+   }
+  },
+  {
+   "id": "N033",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は前期の売上原価率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "売上高",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 67.5,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 20
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:CostOfSales",
+      "context": "Prior1YearDuration",
+      "value": 24956639000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "Prior1YearDuration",
+      "value": 36975577000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "24,956,639,000/36,975,577,000=67.4949%"
+   }
+  },
+  {
+   "id": "N034",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は当期の売上原価率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "売上高",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 70.2,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 20
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:CostOfSales",
+      "context": "CurrentYearDuration",
+      "value": 26729616000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "CurrentYearDuration",
+      "value": 38064274000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "26,729,616,000/38,064,274,000=70.2223%"
+   }
+  },
+  {
+   "id": "N035",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は売上原価率(前期・当期)の差。売上原価率そのものに fact が無いで、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(point without prior phrase)",
+     "pointers": [],
+     "subject": "売上高",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2.7,
+     "単位": "ポイント",
+     "kind": "num",
+     "word": null,
+     "sentence": 20
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:CostOfSales",
+      "context": "CurrentYearDuration",
+      "value": 26729616000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "CurrentYearDuration",
+      "value": 38064274000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "70.2223-67.4949=2.7274"
+   }
+  },
+  {
+   "id": "N036",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は前期の売上総利益率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "売上総利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 32.5,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 20
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:GrossProfit",
+      "context": "Prior1YearDuration",
+      "value": 12018937000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "Prior1YearDuration",
+      "value": 36975577000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "12,018,937,000/36,975,577,000=32.5051%"
+   }
+  },
+  {
+   "id": "N037",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は当期の売上総利益率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "売上総利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 29.8,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 20
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:GrossProfit",
+      "context": "CurrentYearDuration",
+      "value": 11334658000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "CurrentYearDuration",
+      "value": 38064274000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "11,334,658,000/38,064,274,000=29.7777%"
+   }
+  },
+  {
+   "id": "N039",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "主語「従業員数」は取れているが、engine は当期末に結んだ。この数(1,447名)は前期末の同じ要素の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:NumberOfEmployees@CurrentYearInstant"
+     ],
+     "subject": "従業員数",
+     "recomputed": 1462.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1447.0,
+     "単位": "名",
+     "kind": "num",
+     "word": null,
+     "sentence": 22
+    },
+    "正しい pointer": [
+     {
+      "element": "jpcrp_cor:NumberOfEmployees",
+      "context": "Prior1YearInstant",
+      "value": 1447.0,
+      "decimals": "0",
+      "unit": "pure"
+     }
+    ],
+    "engine が結んだ pointer の値": 1462.0
+   }
+  },
+  {
+   "id": "N040",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は「従業員数」の当期末に結んだが、この数(409名)は臨時従業員の年間平均という別の要素の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:NumberOfEmployees@CurrentYearInstant"
+     ],
+     "subject": "従業員",
+     "recomputed": 1462.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 409.0,
+     "単位": "名",
+     "kind": "num",
+     "word": null,
+     "sentence": 22
+    },
+    "正しい pointer": [
+     {
+      "element": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+      "context": "CurrentYearInstant",
+      "value": 409.0,
+      "decimals": "0",
+      "unit": "pure"
+     }
+    ],
+    "engine が結んだ pointer の値": 1462.0
+   }
+  },
+  {
+   "id": "N041",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は「従業員数」の当期末に結んだが、この数(393名)は臨時従業員の年間平均の前期の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:NumberOfEmployees@CurrentYearInstant"
+     ],
+     "subject": "従業員",
+     "recomputed": 1462.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 393.0,
+     "単位": "名",
+     "kind": "num",
+     "word": null,
+     "sentence": 22
+    },
+    "正しい pointer": [
+     {
+      "element": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+      "context": "Prior1YearInstant",
+      "value": 393.0,
+      "decimals": "0",
+      "unit": "pure"
+     }
+    ],
+    "engine が結んだ pointer の値": 1462.0
+   }
+  },
+  {
+   "id": "N046",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '従業員')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "従業員",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 3559.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 25
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:EmployeesSalariesAndAllowancesSGA",
+      "context": "CurrentYearDuration",
+      "value": 3559936000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "従業員給料及び手当 / EmployeesSalariesAndAllowancesSGA"
+   }
+  },
+  {
+   "id": "N047",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '従業員')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "従業員",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 3441.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 25
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:EmployeesSalariesAndAllowancesSGA",
+      "context": "Prior1YearDuration",
+      "value": 3441694000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "従業員給料及び手当 / EmployeesSalariesAndAllowancesSGA"
+   }
+  },
+  {
+   "id": "N048",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は従業員給料及び手当の当期・前期の差で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "従業員",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 118000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 25
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:EmployeesSalariesAndAllowancesSGA",
+      "context": "CurrentYearDuration",
+      "value": 3559936000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:EmployeesSalariesAndAllowancesSGA",
+      "context": "Prior1YearDuration",
+      "value": 3441694000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "3,559,936,000-3,441,694,000=118,242,000"
+   }
+  },
+  {
+   "id": "N051",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 118000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 28
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:RetirementBenefitExpensesSGA",
+     "context": "CurrentYearDuration",
+     "value": 118308000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N052",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 137000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 28
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:RetirementBenefitExpensesSGA",
+     "context": "Prior1YearDuration",
+     "value": 137251000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N053",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は退職給付費用の当期・前期の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": 18000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 28
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "137,251,000-118,308,000=18,943,000"
+   }
+  },
+  {
+   "id": "N054",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": -28000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 29
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersSGA",
+     "context": "CurrentYearDuration",
+     "value": -28619000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N055",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 4
+    },
+    "claim": {
+     "数": 58000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 29
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersSGA",
+     "context": "Prior1YearDuration",
+     "value": 58499000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N056",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 5962.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 30
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OtherSGA",
+     "context": "CurrentYearDuration",
+     "value": 5962566000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N057",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 5407.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 30
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OtherSGA",
+     "context": "Prior1YearDuration",
+     "value": 5407575000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N058",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数はその他の販管費の当期・前期の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 554000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 30
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=no_element は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "5,962,566,000-5,407,575,000=554,991,000"
+   }
+  },
+  {
+   "id": "N062",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 786000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 34
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "context": "CurrentYearDuration",
+     "value": 786000000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N067",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は営業利益の減益率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "営業利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 46.0,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 35
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:OperatingIncome",
+      "context": "CurrentYearDuration",
+      "value": 1465387000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:OperatingIncome",
+      "context": "Prior1YearDuration",
+      "value": 2715924000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "-46.0446%"
+   }
+  },
+  {
+   "id": "N068",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は前期の売上高営業利益率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "営業利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 7.3,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 36
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:OperatingIncome",
+      "context": "Prior1YearDuration",
+      "value": 2715924000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "Prior1YearDuration",
+      "value": 36975577000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "2,715,924,000/36,975,577,000=7.3452%"
+   }
+  },
+  {
+   "id": "N069",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は当期の売上高営業利益率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "営業利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 3.8,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 36
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:OperatingIncome",
+      "context": "CurrentYearDuration",
+      "value": 1465387000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "CurrentYearDuration",
+      "value": 38064274000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "1,465,387,000/38,064,274,000=3.8498%"
+   }
+  },
+  {
+   "id": "N070",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は売上高営業利益率(前期・当期)の差。同率に fact が無いで、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(point without prior phrase)",
+     "pointers": [],
+     "subject": "営業利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 3.5,
+     "単位": "ポイント",
+     "kind": "num",
+     "word": null,
+     "sentence": 36
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:OperatingIncome",
+      "context": "CurrentYearDuration",
+      "value": 1465387000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetSales",
+      "context": "CurrentYearDuration",
+      "value": 38064274000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "7.3452-3.8498=3.4954"
+   }
+  },
+  {
+   "id": "N071",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 87000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 40
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NonOperatingIncome",
+     "context": "CurrentYearDuration",
+     "value": 87537000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N072",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 72000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 40
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NonOperatingIncome",
+     "context": "Prior1YearDuration",
+     "value": 72687000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N073",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は営業外収益の当期・前期の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 14000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 40
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "87,537,000-72,687,000=14,850,000"
+   }
+  },
+  {
+   "id": "N074",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 9000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 41
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:InterestIncomeNOI",
+     "context": "CurrentYearDuration",
+     "value": 9510000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N075",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 14
+    },
+    "claim": {
+     "数": 1000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 41
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:InterestIncomeNOI",
+     "context": "Prior1YearDuration",
+     "value": 1901000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N076",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '配当')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "配当",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 25000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 41
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:DividendsIncomeNOI",
+      "context": "CurrentYearDuration",
+      "value": 25567000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "受取配当金 / DividendsIncomeNOI"
+   }
+  },
+  {
+   "id": "N077",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '配当')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "配当",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 20000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 41
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:DividendsIncomeNOI",
+      "context": "Prior1YearDuration",
+      "value": 20161000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "受取配当金 / DividendsIncomeNOI"
+   }
+  },
+  {
+   "id": "N078",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '配当')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "配当",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 15000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 41
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:RealEstateRentNOI",
+      "context": "CurrentYearDuration",
+      "value": 15315000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "不動産賃貸料 / RealEstateRentNOI"
+   }
+  },
+  {
+   "id": "N079",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '配当')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "配当",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 15000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 41
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:RealEstateRentNOI",
+      "context": "Prior1YearDuration",
+      "value": 15296000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "不動産賃貸料 / RealEstateRentNOI"
+   }
+  },
+  {
+   "id": "N080",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '配当')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "配当",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 37000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 41
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:OtherNOI",
+      "context": "CurrentYearDuration",
+      "value": 37144000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "営業外収益のその他 / OtherNOI"
+   }
+  },
+  {
+   "id": "N081",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '配当')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "配当",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 35000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 41
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:OtherNOI",
+      "context": "Prior1YearDuration",
+      "value": 35328000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "営業外収益のその他 / OtherNOI"
+   }
+  },
+  {
+   "id": "N082",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 95000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 43
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NonOperatingExpenses",
+     "context": "CurrentYearDuration",
+     "value": 95075000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N083",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 79000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 43
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NonOperatingExpenses",
+     "context": "Prior1YearDuration",
+     "value": 79560000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N084",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は営業外費用の当期・前期の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 15000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 43
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "95,075,000-79,560,000=15,515,000"
+   }
+  },
+  {
+   "id": "N085",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 4
+    },
+    "claim": {
+     "数": 80000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 44
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:InterestExpensesNOE",
+     "context": "CurrentYearDuration",
+     "value": 80579000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N086",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 4
+    },
+    "claim": {
+     "数": 58000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 44
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:InterestExpensesNOE",
+     "context": "Prior1YearDuration",
+     "value": 58689000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N087",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は支払利息の当期・前期の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 21000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 44
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "80,579,000-58,689,000=21,890,000"
+   }
+  },
+  {
+   "id": "N091",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は経常利益の減益率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "経常利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 46.2,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 45
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:OrdinaryIncome",
+      "context": "CurrentYearDuration",
+      "value": 1457848000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:OrdinaryIncome",
+      "context": "Prior1YearDuration",
+      "value": 2709051000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "-46.1860%"
+   }
+  },
+  {
+   "id": "N092",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 14
+    },
+    "claim": {
+     "数": 1000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 47
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ExtraordinaryIncome",
+     "context": "CurrentYearDuration",
+     "value": 1232000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N093",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 14
+    },
+    "claim": {
+     "数": 1000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 47
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:GainOnSalesOfNoncurrentAssetsEI",
+     "context": "CurrentYearDuration",
+     "value": 1232000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N094",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": 7000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 48
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ExtraordinaryLoss",
+     "context": "CurrentYearDuration",
+     "value": 7068000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N095",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": 6000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 48
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:LossOnSalesOfStocksOfSubsidiariesAndAffiliatesEL",
+     "context": "CurrentYearDuration",
+     "value": 6165000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N096",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 14
+    },
+    "claim": {
+     "数": 0.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 48
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ImpairmentLossEL",
+     "context": "CurrentYearDuration",
+     "value": 903000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N099",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": 506000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 51
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:IncomeTaxes",
+     "context": "CurrentYearDuration",
+     "value": 506218000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N100",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 785000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 51
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:IncomeTaxes",
+     "context": "Prior1YearDuration",
+     "value": 785289000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N101",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 626000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 51
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:IncomeTaxesCurrent",
+     "context": "CurrentYearDuration",
+     "value": 626340000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N102",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": -120000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 51
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:IncomeTaxesDeferred",
+     "context": "CurrentYearDuration",
+     "value": -120121000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N103",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は当期の税負担率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "税金等調整前当期純利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 34.9,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 52
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:IncomeTaxes",
+      "context": "CurrentYearDuration",
+      "value": 506218000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:IncomeBeforeIncomeTaxes",
+      "context": "CurrentYearDuration",
+      "value": 1452012000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "506,218,000/1,452,012,000=34.8632%"
+   }
+  },
+  {
+   "id": "N104",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は前期の税負担率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "税金等調整前当期純利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 29.0,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 52
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:IncomeTaxes",
+      "context": "Prior1YearDuration",
+      "value": 785289000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:IncomeBeforeIncomeTaxes",
+      "context": "Prior1YearDuration",
+      "value": 2707871000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "785,289,000/2,707,871,000=29.0002%"
+   }
+  },
+  {
+   "id": "N108",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は親会社株主に帰属する当期純利益の減益率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "親会社株主に帰属する当期純利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 50.8,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 53
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+      "context": "CurrentYearDuration",
+      "value": 945793000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+      "context": "Prior1YearDuration",
+      "value": 1922581000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "-50.8061%"
+   }
+  },
+  {
+   "id": "N113",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は ROE の当期に結んだが、この数(13.3%)は前期の同じ要素の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "subject": "ROE",
+     "recomputed": 5.8,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 13.3,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 54
+    },
+    "正しい pointer": [
+     {
+      "element": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+      "context": "Prior1YearDuration",
+      "value": 0.133,
+      "decimals": "3",
+      "unit": "pure"
+     }
+    ],
+    "engine が結んだ pointer の値": 5.8
+   }
+  },
+  {
+   "id": "N114",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は「当期純利益」に結んだが、この数(2,256百万円)は包括利益という別の要素の当期の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "subject": "当期純利益",
+     "recomputed": 945793000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2256.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 56
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:ComprehensiveIncome",
+      "context": "CurrentYearDuration",
+      "value": 2256683000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 945793000.0
+   }
+  },
+  {
+   "id": "N115",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は「当期純利益」に結んだが、この数(2,451百万円)は包括利益の前期の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "subject": "当期純利益",
+     "recomputed": 945793000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2451.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 56
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:ComprehensiveIncome",
+      "context": "Prior1YearDuration",
+      "value": 2451498000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 945793000.0
+   }
+  },
+  {
+   "id": "N116",
+   "state": "VALUE_MISMATCH",
+   "primary": "B4",
+   "secondary": [
+    "B3"
+   ],
+   "why": "この数は包括利益の前期・当期の差で、独立した fact が無い。engine は別の要素に結んだため VALUE_MISMATCH になった。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "subject": "当期純利益",
+     "recomputed": 945793000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 194000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 56
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:ComprehensiveIncome",
+      "context": "Prior1YearDuration",
+      "value": 2451498000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:ComprehensiveIncome",
+      "context": "CurrentYearDuration",
+      "value": 2256683000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "2,451,498,000-2,256,683,000=194,815,000",
+    "engine が結んだ pointer": [
+     "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   }
+  },
+  {
+   "id": "N117",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は包括利益の減少率で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "当期純利益",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 7.9,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 56
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:ComprehensiveIncome",
+      "context": "CurrentYearDuration",
+      "value": 2256683000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:ComprehensiveIncome",
+      "context": "Prior1YearDuration",
+      "value": 2451498000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "194,815,000/2,451,498,000=7.9468%"
+   }
+  },
+  {
+   "id": "N118",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1310.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 57
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OtherComprehensiveIncome",
+     "context": "CurrentYearDuration",
+     "value": 1310889000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N119",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 528000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 57
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OtherComprehensiveIncome",
+     "context": "Prior1YearDuration",
+     "value": 528917000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N120",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数はその他の包括利益の当期・前期の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 782000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 57
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "計算": "1,310,889,000-528,917,000=781,972,000"
+   }
+  },
+  {
+   "id": "N121",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1085.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 58
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI",
+     "context": "CurrentYearDuration",
+     "value": 1085488000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N122",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 470000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 58
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI",
+     "context": "Prior1YearDuration",
+     "value": 470303000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N124",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は貸借対照表の評価差額金残高に結んだが、この数(62百万円)はその他の包括利益の内訳(前期)の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+     ],
+     "subject": "その他有価証券評価差額金",
+     "recomputed": 631931000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 62000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 58
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecuritiesNetOfTaxOCI",
+      "context": "Prior1YearDuration",
+      "value": 62235000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 631931000.0
+   }
+  },
+  {
+   "id": "N125",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は評価差額金残高に結んだが、この数(2百万円)は為替換算調整勘定のその他の包括利益(当期)の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+     ],
+     "subject": "その他有価証券評価差額金",
+     "recomputed": 631931000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 58
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:ForeignCurrencyTranslationAdjustmentNetOfTaxOCI",
+      "context": "CurrentYearDuration",
+      "value": 2918000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 631931000.0
+   }
+  },
+  {
+   "id": "N126",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は評価差額金残高に結んだが、この数(△3百万円)は為替換算調整勘定のその他の包括利益(前期)の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+     ],
+     "subject": "その他有価証券評価差額金",
+     "recomputed": 631931000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": -3000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 58
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:ForeignCurrencyTranslationAdjustmentNetOfTaxOCI",
+      "context": "Prior1YearDuration",
+      "value": -3621000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 631931000.0
+   }
+  },
+  {
+   "id": "N127",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は評価差額金残高に結んだが、この数(4百万円)は繰延ヘッジ損益のその他の包括利益(当期)の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+     ],
+     "subject": "その他有価証券評価差額金",
+     "recomputed": 631931000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 4000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 58
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:DeferredGainsOrLossesOnHedgesNetOfTaxOCI",
+      "context": "CurrentYearDuration",
+      "value": 4992000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 631931000.0
+   }
+  },
+  {
+   "id": "N132",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 16943.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 65
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "value": 16943470000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N133",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 16533.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 65
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:CurrentAssets",
+     "context": "Prior1YearInstant",
+     "value": 16533523000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N134",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は流動資産の当期末・前期末の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 409000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 65
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=no_element は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "16,943,470,000-16,533,523,000=409,947,000"
+   }
+  },
+  {
+   "id": "N144",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 513000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 70
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OtherCA",
+     "context": "CurrentYearInstant",
+     "value": 513505000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N145",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 454000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 70
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OtherCA",
+     "context": "Prior1YearInstant",
+     "value": 454114000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N146",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数はその他の流動資産の当期末・前期末の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": 59000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 70
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "513,505,000-454,114,000=59,391,000"
+   }
+  },
+  {
+   "id": "N148",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は契約資産の総資産に対する構成比で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(ratio without fact)",
+     "pointers": [],
+     "subject": "総資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 40.5,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 72
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:ContractAssets",
+      "context": "CurrentYearInstant",
+      "value": 11267515000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:Assets",
+      "context": "CurrentYearInstant",
+      "value": 27836421000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "11,267,515,000/27,836,421,000=40.4776%"
+   }
+  },
+  {
+   "id": "N149",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 10892.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 73
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NoncurrentAssets",
+     "context": "CurrentYearInstant",
+     "value": 10892950000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N150",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 9021.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 73
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NoncurrentAssets",
+     "context": "Prior1YearInstant",
+     "value": 9021152000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N151",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は固定資産の当期末・前期末の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1871.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 73
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=no_element は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "10,892,950,000-9,021,152,000=1,871,798,000"
+   }
+  },
+  {
+   "id": "N152",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は固定資産の増加率で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 20.7,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 73
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "計算": "1,871,798,000/9,021,152,000=20.7490%"
+   }
+  },
+  {
+   "id": "N153",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2092.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 74
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:PropertyPlantAndEquipment",
+     "context": "CurrentYearInstant",
+     "value": 2092189000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N154",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2083.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 74
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:PropertyPlantAndEquipment",
+     "context": "Prior1YearInstant",
+     "value": 2083066000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N155",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は有形固定資産の当期末・前期末の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 9000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 74
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "2,092,189,000-2,083,066,000=9,123,000"
+   }
+  },
+  {
+   "id": "N156",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 371000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 75
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:IntangibleAssets",
+     "context": "CurrentYearInstant",
+     "value": 371901000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N157",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 528000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 75
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:IntangibleAssets",
+     "context": "Prior1YearInstant",
+     "value": 528971000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N158",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は無形固定資産の当期末・前期末の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 157000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 75
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "計算": "528,971,000-371,901,000=157,070,000"
+   }
+  },
+  {
+   "id": "N159",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 213000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 75
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:Goodwill",
+     "context": "Prior1YearInstant",
+     "value": 213025000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N160",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 159000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 75
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:Goodwill",
+     "context": "CurrentYearInstant",
+     "value": 159768000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N161",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数はのれんの当期末・前期末の差(償却額 53,256,000 は別概念で 1 千円ずれる)で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 53000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 75
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "213,025,000-159,768,000=53,257,000"
+   }
+  },
+  {
+   "id": "N162",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 8428.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 76
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:InvestmentsAndOtherAssets",
+     "context": "CurrentYearInstant",
+     "value": 8428859000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N163",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 6409.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 76
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:InvestmentsAndOtherAssets",
+     "context": "Prior1YearInstant",
+     "value": 6409114000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N164",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は投資その他の資産の当期末・前期末の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2019.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 76
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=no_element は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "8,428,859,000-6,409,114,000=2,019,745,000"
+   }
+  },
+  {
+   "id": "N165",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '退職給付に係る資産')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "退職給付に係る資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 6174.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 77
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:NetDefinedBenefitAsset",
+      "context": "CurrentYearInstant",
+      "value": 6174228000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "退職給付に係る資産 / NetDefinedBenefitAsset"
+   }
+  },
+  {
+   "id": "N166",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '退職給付に係る資産')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "退職給付に係る資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 4345.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 77
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:NetDefinedBenefitAsset",
+      "context": "Prior1YearInstant",
+      "value": 4345389000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "退職給付に係る資産 / NetDefinedBenefitAsset"
+   }
+  },
+  {
+   "id": "N167",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '退職給付に係る資産')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "退職給付に係る資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1828.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 77
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "CurrentYearDuration",
+      "value": -1828838000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "退職給付に係る資産の増加額 / IncreaseDecreaseInNetDefinedBenefitAssetOpeCF"
+   }
+  },
+  {
+   "id": "N173",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は評価差額金残高に結んだが、この数(3百万円)は株式の追加取得額という別の要素の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+     ],
+     "subject": "その他有価証券評価差額金",
+     "recomputed": 631931000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 3000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 80
+    },
+    "正しい pointer": [
+     {
+      "element": "jpcrp_cor:TotalAcquisitionCostForIncreasedSharesSharesOtherThanThoseNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentLargestHoldingCompany",
+      "context": "CurrentYearDuration",
+      "value": 3000000.0,
+      "decimals": "-6",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 631931000.0
+   }
+  },
+  {
+   "id": "N184",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1490.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 85
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:AccruedConsumptionTaxes",
+     "context": "CurrentYearInstant",
+     "value": 1490580000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N185",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1191.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 85
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:AccruedConsumptionTaxes",
+     "context": "Prior1YearInstant",
+     "value": 1191514000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N186",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は未払消費税等の当期末・前期末の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 299000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 85
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=no_element は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "1,490,580,000-1,191,514,000=299,066,000"
+   }
+  },
+  {
+   "id": "N196",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": 7000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 89
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "context": "CurrentYearInstant",
+     "value": 7326000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N197",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 69000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 89
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "context": "Prior1YearInstant",
+     "value": 69345000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N198",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 62000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 89
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:IncreaseDecreaseInProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersOpeCF",
+     "context": "CurrentYearDuration",
+     "value": -62018000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N199",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": 19000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 90
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ProvisionForLossOnOrderReceivedCL",
+     "context": "CurrentYearInstant",
+     "value": 19680000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N200",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": 18000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 90
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ProvisionForLossOnOrderReceivedCL",
+     "context": "Prior1YearInstant",
+     "value": 18500000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N201",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は受注損失引当金の当期末・前期末の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 14
+    },
+    "claim": {
+     "数": 1000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 90
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "19,680,000-18,500,000=1,180,000"
+   }
+  },
+  {
+   "id": "N211",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は長期借入金に結んだが、この数(215百万円)は資産除去債務(固定負債)の当期末の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+     ],
+     "subject": "長期借入金",
+     "recomputed": 275773000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 215000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 92
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:AssetRetirementObligationsNCL",
+      "context": "CurrentYearInstant",
+      "value": 215469000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 275773000.0
+   }
+  },
+  {
+   "id": "N212",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は長期借入金に結んだが、この数(198百万円)は資産除去債務の前期末の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+     ],
+     "subject": "長期借入金",
+     "recomputed": 275773000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 198000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 92
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:AssetRetirementObligationsNCL",
+      "context": "Prior1YearInstant",
+      "value": 198269000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 275773000.0
+   }
+  },
+  {
+   "id": "N213",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は長期借入金に結んだが、この数(242百万円)は固定負債の「その他」の当期末の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+     ],
+     "subject": "長期借入金",
+     "recomputed": 275773000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 242000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 92
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:OtherNCL",
+      "context": "CurrentYearInstant",
+      "value": 242590000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 275773000.0
+   }
+  },
+  {
+   "id": "N217",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '有利子負債')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "有利子負債",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 234000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 95
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+      "context": "CurrentYearInstant",
+      "value": 234864000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "1年内返済予定の長期借入金 / CurrentPortionOfLongTermLoansPayable"
+   }
+  },
+  {
+   "id": "N220",
+   "state": "VALUE_MISMATCH",
+   "primary": "B4",
+   "secondary": [
+    "B3"
+   ],
+   "why": "この数は前期末の1年内返済予定分と長期借入金の合計で、独立した fact が無い。engine は別の要素に結んだため VALUE_MISMATCH になった。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+     ],
+     "subject": "長期借入金",
+     "recomputed": 275773000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 843000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 95
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+      "context": "Prior1YearInstant",
+      "value": 332864000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:LongTermLoansPayable",
+      "context": "Prior1YearInstant",
+      "value": 510637000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "332,864,000+510,637,000=843,501,000",
+    "engine が結んだ pointer": [
+     "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+    ]
+   }
+  },
+  {
+   "id": "N221",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は長期借入金に結んだが、この数(2,605百万円)は現金及び預金の当期末の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+     ],
+     "subject": "長期借入金",
+     "recomputed": 275773000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2605.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 95
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:CashAndDeposits",
+      "context": "CurrentYearInstant",
+      "value": 2605950000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 275773000.0
+   }
+  },
+  {
+   "id": "N226",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 14258.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 98
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ShareholdersEquity",
+     "context": "CurrentYearInstant",
+     "value": 14258142000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N227",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 13890.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 98
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ShareholdersEquity",
+     "context": "Prior1YearInstant",
+     "value": 13890595000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N228",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 367000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 98
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=no_element は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration_ShareholdersEquityMember",
+     "value": 367547000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N229",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2000.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 99
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:CapitalStock",
+     "context": "CurrentYearInstant",
+     "value": 2000000000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N230",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1766.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 100
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:CapitalSurplus",
+     "context": "CurrentYearInstant",
+     "value": 1766366000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N231",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1696.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 100
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:CapitalSurplus",
+     "context": "Prior1YearInstant",
+     "value": 1696099000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N232",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 70000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 100
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=no_element は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration_CapitalSurplusMember",
+     "value": 70267000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N233",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 10510.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 101
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:RetainedEarnings",
+     "context": "CurrentYearInstant",
+     "value": 10510398000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N234",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 10217.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 101
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:RetainedEarnings",
+     "context": "Prior1YearInstant",
+     "value": 10217485000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N235",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 292000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 101
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=no_element は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration_RetainedEarningsMember",
+     "value": 292912000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N236",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": -18000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 102
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:TreasuryStock",
+     "context": "CurrentYearInstant",
+     "value": -18621000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N237",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": -22000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 102
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:TreasuryStock",
+     "context": "Prior1YearInstant",
+     "value": -22989000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N238",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2907.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 103
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ValuationAndTranslationAdjustments",
+     "context": "CurrentYearInstant",
+     "value": 2907801000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N239",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1596.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 103
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ValuationAndTranslationAdjustments",
+     "context": "Prior1YearInstant",
+     "value": 1596911000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N240",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1310.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 103
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OtherComprehensiveIncome",
+     "context": "CurrentYearDuration",
+     "value": 1310889000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N243",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 4
+    },
+    "claim": {
+     "数": 4000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 105
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:DeferredGainsOrLossesOnHedges",
+     "context": "CurrentYearInstant",
+     "value": 4992000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N244",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": -16000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 106
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ForeignCurrencyTranslationAdjustment",
+     "context": "CurrentYearInstant",
+     "value": -16146000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N245",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": -19000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 106
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ForeignCurrencyTranslationAdjustment",
+     "context": "Prior1YearInstant",
+     "value": -19064000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N250",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は剰余金の配当に結んだが、この数(292百万円)は株主資本等変動計算書の利益剰余金の当期変動額として fact に在る。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration"
+     ],
+     "subject": "剰余金の配当",
+     "recomputed": -652881000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 292000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 108
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+      "context": "CurrentYearDuration_RetainedEarningsMember",
+      "value": 292912000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": -652881000.0
+   }
+  },
+  {
+   "id": "N252",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は当期末の自己資本比率に結んだが、この数(60.6%)は前期末の同じ要素の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+     ],
+     "subject": "自己資本比率",
+     "recomputed": 61.7,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 60.6,
+     "単位": "%",
+     "kind": "num",
+     "word": null,
+     "sentence": 109
+    },
+    "正しい pointer": [
+     {
+      "element": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+      "context": "Prior1YearInstant",
+      "value": 0.606,
+      "decimals": "3",
+      "unit": "pure"
+     }
+    ],
+    "engine が結んだ pointer の値": 61.7
+   }
+  },
+  {
+   "id": "N253",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は自己資本比率の当期末・前期末の差(比率そのものの fact は在るが差には無い)で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(point without prior phrase)",
+     "pointers": [],
+     "subject": "自己資本比率",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1.1,
+     "単位": "ポイント",
+     "kind": "num",
+     "word": null,
+     "sentence": 109
+    },
+    "導出に使う fact": [
+     {
+      "element": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+      "context": "CurrentYearInstant",
+      "value": 0.617,
+      "decimals": "3",
+      "unit": "pure"
+     },
+     {
+      "element": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+      "context": "Prior1YearInstant",
+      "value": 0.606,
+      "decimals": "3",
+      "unit": "pure"
+     }
+    ],
+    "計算": "61.7-60.6=1.1"
+   }
+  },
+  {
+   "id": "N255",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は純資産額に結んだが、この数(2,096円)は1株当たり純資産額(当期末)の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant"
+     ],
+     "subject": "純資産",
+     "recomputed": 17165944000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2096.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 109
+    },
+    "正しい pointer": [
+     {
+      "element": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+      "context": "CurrentYearInstant",
+      "value": 2096.83,
+      "decimals": "2",
+      "unit": "JPYPerShares"
+     }
+    ],
+    "engine が結んだ pointer の値": 17165944000.0
+   }
+  },
+  {
+   "id": "N256",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は純資産額に結んだが、この数(1,897円)は1株当たり純資産額(前期末)の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant"
+     ],
+     "subject": "純資産",
+     "recomputed": 17165944000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1897.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 109
+    },
+    "正しい pointer": [
+     {
+      "element": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+      "context": "Prior1YearInstant",
+      "value": 1897.74,
+      "decimals": "2",
+      "unit": "JPYPerShares"
+     }
+    ],
+    "engine が結んだ pointer の値": 17165944000.0
+   }
+  },
+  {
+   "id": "N257",
+   "state": "VALUE_MISMATCH",
+   "primary": "B4",
+   "secondary": [
+    "B3"
+   ],
+   "why": "この数は1株当たり純資産額の当期末・前期末の差で、独立した fact が無い。engine は別の要素に結んだため VALUE_MISMATCH になった。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant"
+     ],
+     "subject": "純資産",
+     "recomputed": 17165944000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 199.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 109
+    },
+    "導出に使う fact": [
+     {
+      "element": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+      "context": "CurrentYearInstant",
+      "value": 2096.83,
+      "decimals": "2",
+      "unit": "JPYPerShares"
+     },
+     {
+      "element": "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults",
+      "context": "Prior1YearInstant",
+      "value": 1897.74,
+      "decimals": "2",
+      "unit": "JPYPerShares"
+     }
+    ],
+    "計算": "2,096.83-1,897.74=199.09",
+    "engine が結んだ pointer": [
+     "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant"
+    ]
+   }
+  },
+  {
+   "id": "N261",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 1032.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 115
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+     "context": "CurrentYearDuration",
+     "value": 1032971000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N262",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 3029.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 115
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+     "context": "Prior1YearDuration",
+     "value": 3029245000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N263",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "A1",
+   "secondary": [
+    "B4"
+   ],
+   "why": "主語が取れていない。仮に取れても、この数は営業CFの前期・当期の差で独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1996.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 115
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=no_element は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "計算": "3,029,245,000-1,032,971,000=1,996,274,000"
+   }
+  },
+  {
+   "id": "N266",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は減価償却費に結んだが、この数(53百万円)はのれん償却額(営業CF)の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+     ],
+     "subject": "減価償却費",
+     "recomputed": 452168000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 53000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 116
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:AmortizationOfGoodwillOpeCF",
+      "context": "CurrentYearDuration",
+      "value": 53256000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": 452168000.0
+   }
+  },
+  {
+   "id": "N269",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '退職給付に係る資産')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "退職給付に係る資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1828.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 116
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "CurrentYearDuration",
+      "value": -1828838000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "退職給付に係る資産の増加 / IncreaseDecreaseInNetDefinedBenefitAssetOpeCF"
+   }
+  },
+  {
+   "id": "N273",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1813.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 117
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:SubtotalOpeCF",
+     "context": "CurrentYearDuration",
+     "value": 1813214000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N274",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 4032.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 117
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:SubtotalOpeCF",
+     "context": "Prior1YearDuration",
+     "value": 4032950000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N275",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "D1(候補)",
+   "secondary": [
+    "B2"
+   ],
+   "why": "金額は fact と一致するが、本文の「営業CFの小計に加減」という位置づけが算術と合わない ― 札「真」を疑う(確定は手順⑥)。札が正しいとすれば原因は B2(語彙が主語に届かない)。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "配当",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 35000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 117
+    },
+    "D1_候補の理由": "利息及び配当金の受取額 35百万円。金額・期間は fact と一致するが、本文はこれを営業CFの小計に「加減」したと書く。営業CF = 小計 1,813,214 - 法人税等の支払額 780,243 = 1,032,971 がちょうど成立し、この 35,005 は投資活動の区分に在る(-307,279-44,037+9,834+35,005+47,439=-259,038≒fact -259,037)。札「真」は金額だけを見たものに見える。",
+    "札が正しい場合の正しい pointer": {
+     "element": "jppfs_cor:InterestAndDividendsIncomeReceivedOpeCFInvCF",
+     "context": "CurrentYearDuration",
+     "value": 35005000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    },
+    "engine の停止理由はこの疑いと無関係": "reason=no_element(主語「配当」が要素に解決できない)。engine が誤りを検出して止めたのではない。"
+   }
+  },
+  {
+   "id": "N276",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "D1(候補)",
+   "secondary": [
+    "B2"
+   ],
+   "why": "金額は fact と一致するが、本文の「営業CFの小計に加減」という位置づけが算術と合わない ― 札「真」を疑う(確定は手順⑥)。札が正しいとすれば原因は B2(語彙が主語に届かない)。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "配当",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": -80000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 117
+    },
+    "D1_候補の理由": "利息の支払額 △80百万円。金額・期間・符号は一致するが、本文はこれを営業CFの小計に「加減」したと書く。営業CFの恒等式が 35・△80 無しで閉じ、この -80,414 は財務活動の区分に在る(-332,864-651,749-80,414-7,981=-1,073,008≒fact -1,073,010)。",
+    "札が正しい場合の正しい pointer": {
+     "element": "jppfs_cor:InterestExpensesPaidOpeCFFinCF",
+     "context": "CurrentYearDuration",
+     "value": -80414000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    },
+    "engine の停止理由はこの疑いと無関係": "reason=no_element(主語「配当」が要素に解決できない)。engine が誤りを検出して止めたのではない。"
+   }
+  },
+  {
+   "id": "N279",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '退職給付に係る資産')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "退職給付に係る資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 890000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 118
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "Prior1YearDuration",
+      "value": -890115000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "退職給付に係る資産の増加額(前期) / IncreaseDecreaseInNetDefinedBenefitAssetOpeCF"
+   }
+  },
+  {
+   "id": "N280",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '退職給付に係る資産')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "退職給付に係る資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 1828.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 118
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "CurrentYearDuration",
+      "value": -1828838000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "退職給付に係る資産の増加額(当期) / IncreaseDecreaseInNetDefinedBenefitAssetOpeCF"
+   }
+  },
+  {
+   "id": "N281",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は退職給付に係る資産の増加額の当期・前期の差で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "退職給付に係る資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 938000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 118
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "CurrentYearDuration",
+      "value": -1828838000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "Prior1YearDuration",
+      "value": -890115000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "1,828,838,000-890,115,000=938,723,000"
+   }
+  },
+  {
+   "id": "N283",
+   "state": "VALUE_MISMATCH",
+   "primary": "C2",
+   "secondary": [],
+   "why": "pointer(要素・期間)は正しい。fact は -802,686,000 円(流出=負)で本文は「802百万円増加」。絶対値は百万円未満切り捨てで一致し、落ちているのは符号・向きの扱いだけ。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration"
+     ],
+     "subject": "売上債権",
+     "recomputed": -802686000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 802000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 118
+    },
+    "pointer": {
+     "element": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "context": "CurrentYearDuration",
+     "value": -802686000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    },
+    "残差": "|-802,686,000| - 802,000,000 = 686,000(< 1,000,000 なので切り捨てで一致)。符号を反転しない比較では -802,686,000 vs +802,000,000 で不一致。",
+    "contract": {
+     "comparator": "equals_within",
+     "params": {
+      "unit_scale": 1.0,
+      "claim_scale": 1000000.0,
+      "flow_convention": -1,
+      "claim_direction": -1
+     }
+    }
+   }
+  },
+  {
+   "id": "N285",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 259000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 122
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+     "context": "CurrentYearDuration",
+     "value": -259037000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N286",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 3
+    },
+    "claim": {
+     "数": 506000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 122
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+     "context": "Prior1YearDuration",
+     "value": -506793000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N290",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は無形固定資産の取得による支出に結んだが、この数(47百万円)は投資活動の「その他」の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+     ],
+     "subject": "無形固定資産の取得による支出",
+     "recomputed": -44037000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 47000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 123
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:OtherNetInvCF",
+      "context": "CurrentYearDuration",
+      "value": 47439000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": -44037000.0
+   }
+  },
+  {
+   "id": "N292",
+   "state": "VALUE_MISMATCH",
+   "primary": "B4",
+   "secondary": [
+    "B3"
+   ],
+   "why": "この数は前期の有形・無形固定資産の取得による支出の合計(設備投資の fact は当期の 1 件だけ)で、独立した fact が無い。engine は別の要素に結んだため VALUE_MISMATCH になった。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc@CurrentYearDuration"
+     ],
+     "subject": "設備投資",
+     "recomputed": 341000000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 453000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 125
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF",
+      "context": "Prior1YearDuration",
+      "value": -400837000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:PurchaseOfIntangibleAssetsInvCF",
+      "context": "Prior1YearDuration",
+      "value": -52919000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "400,837,000+52,919,000=453,756,000",
+    "engine が結んだ pointer": [
+     "xbrl:jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc@CurrentYearDuration"
+    ]
+   }
+  },
+  {
+   "id": "N293",
+   "state": "VALUE_MISMATCH",
+   "primary": "B4",
+   "secondary": [
+    "B3"
+   ],
+   "why": "この数は営業CFと投資CFの和(フリーCFの fact は無い)で、独立した fact が無い。engine は別の要素に結んだため VALUE_MISMATCH になった。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "subject": "投資活動によるキャッシュ・フロー",
+     "recomputed": -259037000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 773000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 126
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+      "context": "CurrentYearDuration",
+      "value": 1032971000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+      "context": "CurrentYearDuration",
+      "value": -259037000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "1,032,971,000+(-259,037,000)=773,934,000",
+    "engine が結んだ pointer": [
+     "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   }
+  },
+  {
+   "id": "N294",
+   "state": "VALUE_MISMATCH",
+   "primary": "B4",
+   "secondary": [
+    "B3"
+   ],
+   "why": "この数は前期の営業CFと投資CFの和で、独立した fact が無い。engine は別の要素に結んだため VALUE_MISMATCH になった。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "subject": "投資活動によるキャッシュ・フロー",
+     "recomputed": -259037000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 2522.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 126
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+      "context": "Prior1YearDuration",
+      "value": 3029245000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+      "context": "Prior1YearDuration",
+      "value": -506793000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "3,029,245,000+(-506,793,000)=2,522,452,000",
+    "engine が結んだ pointer": [
+     "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   }
+  },
+  {
+   "id": "N295",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 1073.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 128
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+     "context": "CurrentYearDuration",
+     "value": -1073010000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N296",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "ambiguous(elements)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": 2
+    },
+    "claim": {
+     "数": 1740.0,
+     "単位": "百万円",
+     "kind": "num",
+     "word": null,
+     "sentence": 128
+    },
+    "A1 の根拠": "subject=None かつ文中に主語が在る(基準の第2条件)。reason=ambiguous(elements) は recipes.py の _direct_value_claim で subj が偽のときだけ立つ枝であり、主語が取れていないことを表す。",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+     "context": "Prior1YearDuration",
+     "value": -1740057000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N297",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '長期借入金の返済')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "長期借入金の返済",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 332000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 129
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:RepaymentOfLongTermLoansPayableFinCF",
+      "context": "CurrentYearDuration",
+      "value": -332864000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "長期借入金の返済による支出 / RepaymentOfLongTermLoansPayableFinCF"
+   }
+  },
+  {
+   "id": "N299",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "engine は配当金の支払額に結んだが、この数(7百万円)は財務活動の「その他」の fact である。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+     ],
+     "subject": "配当金の支払額",
+     "recomputed": -651749000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 7000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 129
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:OtherNetFinCF",
+      "context": "CurrentYearDuration",
+      "value": -7981000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": -651749000.0
+   }
+  },
+  {
+   "id": "N300",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 905000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 130
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetIncreaseDecreaseInShortTermLoansPayableFinCF",
+     "context": "Prior1YearDuration",
+     "value": -905889000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "N304",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B4",
+   "secondary": [],
+   "why": "この数は1年内返済予定分と長期借入金の合計(「有利子負債」という要素は無い)で、独立した fact が無い。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "有利子負債",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": 510000000.0,
+     "単位": "円",
+     "kind": "num",
+     "word": null,
+     "sentence": 134
+    },
+    "導出に使う fact": [
+     {
+      "element": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+      "context": "CurrentYearInstant",
+      "value": 234864000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:LongTermLoansPayable",
+      "context": "CurrentYearInstant",
+      "value": 275773000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "計算": "234,864,000+275,773,000=510,637,000"
+   }
+  },
+  {
+   "id": "T001",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増収",
+     "sentence": 3
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration",
+     "value": 38064274000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T002",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減益",
+     "sentence": 3
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration",
+     "value": 1465387000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T003",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "下回",
+     "sentence": 3
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration",
+     "value": 1465387000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T004",
+   "state": "UNVERIFIABLE",
+   "primary": "A4",
+   "secondary": [
+    "B1"
+   ],
+   "why": "定性的・評価的な語('厳しい')から主張が作られている。対応する科目は fact に無いので、到達の段では止まるのが正しい。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "state_word(no line)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "厳しい",
+     "sentence": 3
+    },
+    "検索した語(0 件)": "「厳しい決算」という評価語に対応する科目(Severe|Difficult 等 0 件)"
+   }
+  },
+  {
+   "id": "T012",
+   "state": "UNVERIFIABLE",
+   "primary": "A4",
+   "secondary": [
+    "B1"
+   ],
+   "why": "定性的・評価的な語('底堅')から主張が作られている。対応する科目は fact に無いので、到達の段では止まるのが正しい。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "state_word(no line)",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "底堅",
+     "sentence": 13
+    },
+    "検索した語(0 件)": "「受注環境」に対応する科目(OrderEnvironment|OrdersReceived|Backlog 0 件)"
+   }
+  },
+  {
+   "id": "T017",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "向きの語「増加」は本文では売上原価に係るのに、engine は売上総利益に結んだ(売上総利益は減少なので向きが合わない)。売上原価の当期・前期の fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+      "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "subject": "売上総利益",
+     "recomputed": -684279000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 18
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:CostOfSales",
+      "context": "CurrentYearDuration",
+      "value": 26729616000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:CostOfSales",
+      "context": "Prior1YearDuration",
+      "value": 24956639000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": -684279000.0
+   }
+  },
+  {
+   "id": "T019",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 19
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:CostOfSales",
+     "context": "CurrentYearDuration",
+     "value": 26729616000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T025",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '従業員')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(text needs money fact)",
+     "pointers": [],
+     "subject": "従業員",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 22
+    },
+    "正しい pointer": [
+     {
+      "element": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+      "context": "CurrentYearInstant",
+      "value": 409.0,
+      "decimals": "0",
+      "unit": "pure"
+     },
+     {
+      "element": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+      "context": "Prior1YearInstant",
+      "value": 393.0,
+      "decimals": "0",
+      "unit": "pure"
+     }
+    ],
+    "検索した語": "臨時従業員(年間平均)/ AverageNumberOfTemporaryWorkers"
+   }
+  },
+  {
+   "id": "T027",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '従業員')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element(text needs money fact)",
+     "pointers": [],
+     "subject": "従業員",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 25
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:EmployeesSalariesAndAllowancesSGA",
+      "context": "CurrentYearDuration",
+      "value": 3559936000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:EmployeesSalariesAndAllowancesSGA",
+      "context": "Prior1YearDuration",
+      "value": 3441694000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "従業員給料及び手当 / EmployeesSalariesAndAllowancesSGA"
+   }
+  },
+  {
+   "id": "T029",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減少",
+     "sentence": 28
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:RetirementBenefitExpensesSGA",
+     "context": "CurrentYearDuration",
+     "value": 118308000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T030",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減少",
+     "sentence": 29
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersSGA",
+     "context": "CurrentYearDuration",
+     "value": -28619000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T031",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 30
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OtherSGA",
+     "context": "CurrentYearDuration",
+     "value": 5962566000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T032",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 30
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OtherSGA",
+     "context": "CurrentYearDuration",
+     "value": 5962566000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T034",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 34
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "context": "CurrentYearDuration",
+     "value": 786000000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T039",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 40
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NonOperatingIncome",
+     "context": "CurrentYearDuration",
+     "value": 87537000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T041",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 43
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NonOperatingExpenses",
+     "context": "CurrentYearDuration",
+     "value": 95075000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T042",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 44
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:InterestExpensesNOE",
+     "context": "CurrentYearDuration",
+     "value": 80579000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T047",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 57
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OtherComprehensiveIncome",
+     "context": "CurrentYearDuration",
+     "value": 1310889000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T050",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 65
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "value": 16943470000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T054",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 70
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:OtherCA",
+     "context": "CurrentYearInstant",
+     "value": 513505000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T057",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 73
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NoncurrentAssets",
+     "context": "CurrentYearInstant",
+     "value": 10892950000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T058",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 74
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:PropertyPlantAndEquipment",
+     "context": "CurrentYearInstant",
+     "value": 2092189000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T059",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減少",
+     "sentence": 75
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:IntangibleAssets",
+     "context": "CurrentYearInstant",
+     "value": 371901000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T060",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減少",
+     "sentence": 75
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:Goodwill",
+     "context": "CurrentYearInstant",
+     "value": 159768000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T061",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 76
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:InvestmentsAndOtherAssets",
+     "context": "CurrentYearInstant",
+     "value": 8428859000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T063",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '退職給付に係る資産')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "退職給付に係る資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 77
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:NetDefinedBenefitAsset",
+      "context": "CurrentYearInstant",
+      "value": 6174228000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:NetDefinedBenefitAsset",
+      "context": "Prior1YearInstant",
+      "value": 4345389000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "退職給付に係る資産 / NetDefinedBenefitAsset"
+   }
+  },
+  {
+   "id": "T065",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B1"
+   ],
+   "why": "主語が取れていない。仮に取れても、年金資産・退職給付債務の個別の額は fact に 0 件なので止まるのが正しい。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "拡大",
+     "sentence": 78
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "検索した語(0 件)": "年金資産 / 退職給付債務(PlanAssets|PensionAsset|RetirementBenefitObligation|ProjectedBenefitObligation|DefinedBenefitObligation)"
+   }
+  },
+  {
+   "id": "T071",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 85
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:AccruedConsumptionTaxes",
+     "context": "CurrentYearInstant",
+     "value": 1490580000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T075",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減少",
+     "sentence": 89
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "context": "CurrentYearInstant",
+     "value": 7326000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T076",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 90
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ProvisionForLossOnOrderReceivedCL",
+     "context": "CurrentYearInstant",
+     "value": 19680000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T083",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 98
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ShareholdersEquity",
+     "context": "CurrentYearInstant",
+     "value": 14258142000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T084",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 103
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:ValuationAndTranslationAdjustments",
+     "context": "CurrentYearInstant",
+     "value": 2907801000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T085",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "向きの語「増加」は本文では利益剰余金に係るのに、engine は剰余金の配当に結んだ。利益剰余金の当期末・前期末の fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration",
+      "xbrl:jppfs_cor:DividendsFromSurplus@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "subject": "剰余金の配当",
+     "recomputed": -126564000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 108
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:RetainedEarnings",
+      "context": "CurrentYearInstant",
+      "value": 10510398000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:RetainedEarnings",
+      "context": "Prior1YearInstant",
+      "value": 10217485000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": -126564000.0
+   }
+  },
+  {
+   "id": "T089",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 115
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+     "context": "CurrentYearDuration",
+     "value": 1032971000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T090",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 115
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+     "context": "CurrentYearDuration",
+     "value": 1032971000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T091",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減少",
+     "sentence": 115
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+     "context": "Prior1YearDuration",
+     "value": 3029245000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T093",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '退職給付に係る資産')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "退職給付に係る資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 116
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "CurrentYearDuration",
+      "value": -1828838000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jpcrp030000-asr_E36539-000:DecreaseIncreaseInContractAssetsOpeCF",
+      "context": "CurrentYearDuration",
+      "value": 161030000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "退職給付に係る資産の増加・契約資産の減少"
+   }
+  },
+  {
+   "id": "T098",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '退職給付に係る資産')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "退職給付に係る資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "増加",
+     "sentence": 118
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "Prior1YearDuration",
+      "value": -890115000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "退職給付に係る資産の増加額 / IncreaseDecreaseInNetDefinedBenefitAssetOpeCF"
+   }
+  },
+  {
+   "id": "T100",
+   "state": "POINTER_NOT_FOUND",
+   "primary": "B2",
+   "secondary": [],
+   "why": "主張が指す項目の fact は在るが、主語→要素の語彙に無くて辿れない(engine の主語は '退職給付に係る資産')。",
+   "evidence": {
+    "engine": {
+     "state": "POINTER_NOT_FOUND",
+     "reason": "no_element",
+     "pointers": [],
+     "subject": "退職給付に係る資産",
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "拡大",
+     "sentence": 118
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "CurrentYearDuration",
+      "value": -1828838000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     },
+     {
+      "element": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "Prior1YearDuration",
+      "value": -890115000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "検索した語": "退職給付に係る資産の増加額の当期・前期"
+   }
+  },
+  {
+   "id": "T103",
+   "state": "VALUE_MISMATCH",
+   "primary": "B3",
+   "secondary": [],
+   "why": "向きの語「減少」は本文では前期の売上債権に係るのに、engine は当期の fact を見た。前期の同じ要素の fact(+209,659千円=減少)は在る。",
+   "evidence": {
+    "engine": {
+     "state": "VALUE_MISMATCH",
+     "reason": null,
+     "pointers": [
+      "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+      "builtin:flow_sign(cur)==direction"
+     ],
+     "subject": "売上債権",
+     "recomputed": -802686000.0,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減少",
+     "sentence": 118
+    },
+    "正しい pointer": [
+     {
+      "element": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+      "context": "Prior1YearDuration",
+      "value": 209659000.0,
+      "decimals": "-3",
+      "unit": "JPY"
+     }
+    ],
+    "engine が結んだ pointer の値": -802686000.0
+   }
+  },
+  {
+   "id": "T107",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減少",
+     "sentence": 122
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+     "context": "CurrentYearDuration",
+     "value": -259037000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T108",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減少",
+     "sentence": 122
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+     "context": "Prior1YearDuration",
+     "value": -506793000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T109",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減少",
+     "sentence": 128
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+     "context": "CurrentYearDuration",
+     "value": -1073010000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  },
+  {
+   "id": "T110",
+   "state": "UNVERIFIABLE",
+   "primary": "A1",
+   "secondary": [
+    "B2"
+   ],
+   "why": "主語が取れていないため束縛していない(2026-10-08 の束縛修正により、候補が1つでも主語なしでは結ばない)。主語が取れれば届く fact は在る。",
+   "evidence": {
+    "engine": {
+     "state": "UNVERIFIABLE",
+     "reason": "no_subject",
+     "pointers": [],
+     "subject": null,
+     "recomputed": null,
+     "ambiguous_count": null
+    },
+    "claim": {
+     "数": null,
+     "単位": null,
+     "kind": "text",
+     "word": "減少",
+     "sentence": 128
+    },
+    "A1 の根拠": "reason=no_subject(基準の第1条件)",
+    "主語が取れれば届く fact": {
+     "element": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+     "context": "Prior1YearDuration",
+     "value": -1740057000.0,
+     "decimals": "-3",
+     "unit": "JPY"
+    }
+   }
+  }
+ ],
+ "counts": {
+  "by_primary": {
+   "A1": 132,
+   "A4": 2,
+   "B2": 22,
+   "B3": 26,
+   "B4": 29,
+   "C2": 1,
+   "D1(候補)": 2
+  },
+  "by_primary_x_state": {
+   "A1 x POINTER_NOT_FOUND": 10,
+   "A1 x UNVERIFIABLE": 122,
+   "A4 x UNVERIFIABLE": 2,
+   "B2 x POINTER_NOT_FOUND": 22,
+   "B3 x VALUE_MISMATCH": 26,
+   "B4 x POINTER_NOT_FOUND": 23,
+   "B4 x VALUE_MISMATCH": 6,
+   "C2 x VALUE_MISMATCH": 1,
+   "D1(候補) x POINTER_NOT_FOUND": 2
+  },
+  "by_secondary": {
+   "A1": 1,
+   "B1": 3,
+   "B2": 113,
+   "B3": 6,
+   "B4": 20
+  },
+  "A5": "未測定",
+  "total": 214
+ },
+ "E_share": {
+  "E1+E2": 0,
+  "percent_of_214": 0.0,
+  "over_20_percent": false
+ },
+ "D1_candidates": [
+  "N275",
+  "N276"
+ ],
+ "facts_read": {
+  "facts": 863,
+  "contexts": 162,
+  "distinct_elements": 249,
+  "how": "ai_prose_instance_2026-10-09.zip を bytes で読み adapters.xbrl.instance.load_instance / labels_from_zip のみ。Core・Adapter・tests は 1 行も変えていない。"
+ },
+ "criteria_insufficiency": [
+  "(1) 段の中の順序が基準に無い。宣言して使った内訳: A の中は『主張が存在してはいけない defect(A2/A3/A4)』を A1 より先に取る。B の中は、主張の数を表す要素の fact が別の要素・期・member に在れば B3、数が差・率・合計で、それを表す要素が無ければ B4、fact は在るのに pointer が立たなかったものは B2。",
+  "(2) A1 の第1条件(reason が no_subject)は字面どおりに適用した。さらに recipes.py の _direct_value_claim を読むと、reason='ambiguous(elements)' は subj が偽のときだけ立つ枝なので(subj が真なら GROUNDED か別の枝)、その 39 件も『主語が取れていない』である。結果として A1 が 132/214(61.7%)になり、到達の段の原因(B2 113・B4 20・B1 1)は副次表にしか出ない。主たる原因の表だけでは『どこを直すと何件動くか』は読めない ― 副次表と併せて読む必要がある。",
+  "(3) B1(止まるのが正しい)の主たる原因は 0 件。元データに項目が無いと機械で確かめられたのは T065(年金資産・退職給付債務の個別の額が fact に 0 件)の 1 件だけで、これは §3 の規則により A1 になる。『止まるのが正しい割合』は主たる原因の表からは読めない。",
+  "(4) A3 の例として基準に書かれた『1,03』は、本件では span(語の周りの窓)の切れ目であって主張の欠けではない。num の 170 行すべてで、主張の数の字面が span の中に在ることを機械で確かめた(0 件の例外)。したがって A3=0 と置いた。A2 も 0 ― num の 170 行すべてが量の単位(円・百万円・%・ポイント・名)を持つ(単位 None は 0 件)。見出し番号・序数のような非量の数は、この 214 件(真かつ停止)には含まれていない。",
+  "(5) 『主語は取れているが別のものを指している』に当たる項目が A に無い。T017/T085/T103 と VALUE_MISMATCH の多くがこの型(文の先頭の主語が隣の数に引き継がれた)で、B3(別の要素・期・member に結んだ)に入れた。A の段に項目を作らなかったのは基準の指示どおり。",
+  "(6) D1 の定義には『engine が正しく誤りを止めていた』が含まれる。N275/N276 で疑っているのは本文のキャッシュ・フロー区分の位置づけであり、engine が止めた理由(no_element)はこれと無関係。D1 が確定しても『engine が誤りを捕まえた』ことにはならない。",
+  "(7) 母数 214 には基準 §1 のとおり判定不能 23 件と偽 1 件(T087)を含めていない。1 書類なので文書別の集計は不成立。"
+ ],
+ "method_notes": [
+  "各行の数に一致する fact を機械で総当たり検索した(百万円未満の切り捨て・四捨五入・符号反転を許す)。候補 0 件は 34 行で、すべて差・率・ポイント・合計だった。候補が在っても値の偶然一致(例 N304 の 510百万円 ↔ 前期末の長期借入金 510,637,000)は要素名の意味で棄却し、evidence に計算を書いた。",
+  "C の段(比較)に入れたのは pointer の要素・期間が正しい行だけ ― 1 件(N283)。他の VALUE_MISMATCH 32 件は pointer 自体が別のものを指していたので B に入れた。C1/C3/C4 は 0 件。",
+  "営業CFの恒等式(小計 1,813,214 - 法人税等の支払額 780,243 = 営業CF 1,032,971)が完全に閉じることを自分で確かめ、N275/N276 の D1 候補の根拠にした。"
+ ]
+}

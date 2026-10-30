@@ -1,0 +1,82 @@
+{
+ "purpose": "M-2 段 2・段 3。**接続精度ではない**(仕様 §5)",
+ "spec": "docs/DOMAIN1_M2_SPEC_2026-10-15.md",
+ "source": "東京都オープンデータカタログ / 東京都会計管理局 / CC BY 4.0",
+ "stage2": {
+  "soukatu": {
+   "accounts": 20,
+   "unidentified": 0,
+   "columns": {
+    "歳入決算額": "D7",
+    "歳出決算額": "E7",
+    "差額": "F7"
+   }
+  },
+  "kessan": {
+   "blocks": 19,
+   "kan": 37,
+   "items": 101,
+   "totals": 19,
+   "rows_excluded": 38,
+   "not_identified": 0
+  },
+  "meisai": {
+   "toc_entries": 19,
+   "sheets": 19,
+   "sheets_without_toc_entry": [],
+   "toc_keys_without_sheet": [],
+   "kan": 37,
+   "items": 101,
+   "moku": 365,
+   "not_identified": 0
+  },
+  "normalizations": [
+   "NFKC(全角→半角)",
+   "空白の除去",
+   "ふりがなは読み取り段で除去済み"
+  ]
+ },
+ "stage3": {
+  "by_check": {
+   "C-1 款 = Σ項": 148,
+   "C-2 歳出合計 = Σ款": 76,
+   "C-3 総括 = 決算書(支出済額)": 19,
+   "C-4 総括 合計 = Σ会計": 2,
+   "C-5 明細 款 = Σ項": 74,
+   "C-5 明細 項 = Σ目": 202,
+   "C-7 明細 計 = 当初+補正+繰越+流用": 503,
+   "C-6 明細の款 = 決算書の款(支出済額)": 37
+  },
+  "by_state": {
+   "GROUNDED": 1061
+  },
+  "grouped": {
+   "C-1 款 = Σ項": {
+    "GROUNDED": 148
+   },
+   "C-2 歳出合計 = Σ款": {
+    "GROUNDED": 76
+   },
+   "C-3 総括 = 決算書(支出済額)": {
+    "GROUNDED": 19
+   },
+   "C-4 総括 合計 = Σ会計": {
+    "GROUNDED": 2
+   },
+   "C-5 明細 款 = Σ項": {
+    "GROUNDED": 74
+   },
+   "C-5 明細 項 = Σ目": {
+    "GROUNDED": 202
+   },
+   "C-7 明細 計 = 当初+補正+繰越+流用": {
+    "GROUNDED": 503
+   },
+   "C-6 明細の款 = 決算書の款(支出済額)": {
+    "GROUNDED": 37
+   }
+  },
+  "checks": 1061,
+  "not_grounded": []
+ }
+}

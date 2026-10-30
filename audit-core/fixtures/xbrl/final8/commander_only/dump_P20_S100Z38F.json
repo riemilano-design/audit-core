@@ -1,0 +1,887 @@
+{
+ "S100Z38F:H-001": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant"
+  ],
+  "subject": "資本剰余金",
+  "span": "当930百万円の支払い、自己株式の消却による資本剰余金の減少135百万円、利益剰余金の減少3",
+  "reason": null
+ },
+ "S100Z38F:H-002": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+  ],
+  "subject": "有形固定資産の取得による支出",
+  "span": "支出の主な内訳は、有形固定資産の取得による支出597百万円、投資有価証券の取得",
+  "reason": null
+ },
+ "S100Z38F:H-003": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "外注費",
+  "span": "自社リソースを補うための外注費は減少しましたが",
+  "reason": "no_element"
+ },
+ "S100Z38F:H-004": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember"
+  ],
+  "subject": "売上高",
+  "span": "思決定にデータを活用するニーズは引き続き堅調であり、売上高は11,022百万円(前年同期比6.8%",
+  "reason": null
+ },
+ "S100Z38F:H-005": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "関係会社株式",
+  "span": "用の増加325百万円、建物の増加579百万円、関係会社株式の増加386百万",
+  "reason": "no_element(no prior for text)"
+ },
+ "S100Z38F:H-006": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:Software@CurrentYearInstant"
+  ],
+  "subject": "ソフトウエア",
+  "span": "当連結会計年度のソフトウエア粗利益は、2,957百万円となり、前連結会計年",
+  "reason": null
+ },
+ "S100Z38F:H-007": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "現したことにより、連結売上高は30,481百万円(前年同期比8.0%増)となりました。",
+  "reason": "ambiguous(member)"
+ },
+ "S100Z38F:H-008": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInProvisionForLossOnOrderReceivedOpeCF@CurrentYearDuration"
+  ],
+  "subject": "受注損失引当金",
+  "span": "505百万円、減価償却費417百万円、受注損失引当金の増加額238百万円、契約負債の増加額4",
+  "reason": null
+ },
+ "S100Z38F:H-009": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "持続可能な成長を実現するためには、1人当たりの営業利益の分",
+  "reason": "no_element"
+ },
+ "S100Z38F:H-010": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant",
+   "xbrl:jppfs_cor:CapitalSurplus@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "資本剰余金",
+  "span": "の配当930百万円の支払い、自己株式の消却による資本剰余金の減少135百万",
+  "reason": null
+ },
+ "S100Z38F:H-011": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember"
+  ],
+  "subject": "営業利益",
+  "span": "件のキャンセルによって収益性が悪化した影響もあり、営業利益は1,717百万円(前年同期比0.1%",
+  "reason": null
+ },
+ "S100Z38F:H-012": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "注)1人当たりの営業利益は期",
+  "reason": "no_element"
+ },
+ "S100Z38F:H-013": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "が向上したことにより、営業利益は2,923百万円(前年同期比45.7%増)と売上増を大きく",
+  "reason": null
+ },
+ "S100Z38F:H-014": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": "ソフトウエア",
+  "span": "2028年6月期にはソフトウエア粗利益を55~60億円の目標レンジに引き上",
+  "reason": "target_or_plan"
+ },
+ "S100Z38F:H-015": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "したことにより、30,481百万円(前年同期比8.0%増)と増収になりまし",
+  "reason": "ambiguous(member)"
+ },
+ "S100Z38F:H-016": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:SubcontractExpensesSGA@CurrentYearDuration",
+   "xbrl:jppfs_cor:SubcontractExpensesSGA@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "外注費",
+  "span": "ビジネス強化のための研究開発費、マーケティング費用、外注費の増加、一過性費",
+  "reason": null
+ },
+ "S100Z38F:H-017": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "配当",
+  "span": "純資産配当率は約7.5%と東証上場企業の平均",
+  "reason": "no_element(ratio without fact)"
+ },
+ "S100Z38F:H-018": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfTreasuryStockFinCF@CurrentYearDuration"
+  ],
+  "subject": "自己株式の取得による支出",
+  "span": "支出の主な内訳は、自己株式の取得による支出3,231百万円、配当金の支払額93",
+  "reason": null
+ },
+ "S100Z38F:H-019": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember"
+  ],
+  "subject": "営業利益",
+  "span": "が悪化した影響もあり、営業利益は1,717百万円(前年同期比0.1%増)とほぼ横ばいとな",
+  "reason": null
+ },
+ "S100Z38F:H-020": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfInvestmentSecuritiesInvCF@CurrentYearDuration"
+  ],
+  "subject": "投資有価証券の取得による支出",
+  "span": "産の取得による支出597百万円、投資有価証券の取得による支出146百万円、関係会社株式の取得",
+  "reason": null
+ },
+ "S100Z38F:H-021": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "中期経営計画期間において前連結会計年度の売上高から平均成長率15%前後で売上成長を継続",
+  "reason": "ambiguous(member)"
+ },
+ "S100Z38F:H-022": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "過性費用である受注損失引当金の計上等の影響もあり、営業利益は1,129百万円(前年同期比36.3",
+  "reason": null
+ },
+ "S100Z38F:H-023": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "(前連結会計年度は201百万円の使用)",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z38F:H-024": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PrepaidExpenses@CurrentYearInstant",
+   "xbrl:jppfs_cor:PrepaidExpenses@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "前払費用",
+  "span": "、受取手形、売掛金及び契約資産の増加135百万円、前払費用の増加325百万",
+  "reason": null
+ },
+ "S100Z38F:H-025": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "外注費",
+  "span": "進事業は外注費等の支払いが先行するため、売上が伸びるに従って増加運転資金需",
+  "reason": "no_element"
+ },
+ "S100Z38F:H-026": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+  ],
+  "subject": "現金及び預金",
+  "span": "また、現金及び預金12,815百万円を保有しており、必要",
+  "reason": null
+ },
+ "S100Z38F:H-027": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@Prior1YearInstant"
+  ],
+  "subject": "自己資本比率",
+  "span": "この結果、自己資本比率は60.3%(前連結会計年度末は63.9%)と、前連結会計年度",
+  "reason": null
+ },
+ "S100Z38F:H-028": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+  ],
+  "subject": "税金等調整前当期純利益",
+  "span": "増加要因の主な内訳は、税金等調整前当期純利益4,505百万円、減価償却費417百",
+  "reason": null
+ },
+ "S100Z38F:H-029": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration"
+  ],
+  "subject": "剰余金の配当",
+  "span": "株主に帰属する当期純利益2,985百万円の計上、剰余金の配当930百万円の支払い、自己株式の",
+  "reason": null
+ },
+ "S100Z38F:H-030": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInProvisionForLossOnOrderReceivedOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "subject": "受注損失引当金",
+  "span": "益4,505百万円、減価償却費417百万円、受注損失引当金の増加額238百",
+  "reason": null
+ },
+ "S100Z38F:H-031": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "外注費",
+  "span": "は減少しましたが、売上成長を支えるための人員増に伴う人件費の増加、オフィス",
+  "reason": "no_element"
+ },
+ "S100Z38F:H-032": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Software@CurrentYearInstant",
+   "xbrl:jppfs_cor:Software@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "ソフトウエア",
+  "span": "長による利益率の向上及び自社リソースを補うための外注加工費が減少したことも",
+  "reason": null
+ },
+ "S100Z38F:H-033": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+   "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "資産合計",
+  "span": "計年度末の資産合計は、24,147百万円(前連結会計年度末比225百万円減)となりました。",
+  "reason": null
+ },
+ "S100Z38F:H-034": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "当連結会計年度の1人当たりの営業利益に関",
+  "reason": "no_element"
+ },
+ "S100Z38F:H-035": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant"
+  ],
+  "subject": "契約資産",
+  "span": "6百万円、減少要因の主な内訳は、売上債権及び契約資産の増加額135百万円、前払費用の増加額3",
+  "reason": null
+ },
+ "S100Z38F:H-036": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+  ],
+  "subject": "法人税等の支払額",
+  "span": "135百万円、前払費用の増加額322百万円、法人税等の支払額1,565百万円であります。",
+  "reason": null
+ },
+ "S100Z38F:H-037": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+  ],
+  "subject": "利益剰余金",
+  "span": "少135百万円、利益剰余金の減少3,095百万円などにより、14,570百万円(前連結会計年度末比",
+  "reason": null
+ },
+ "S100Z38F:H-038": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "subject": "契約負債",
+  "span": "失引当金の増加額238百万円、契約負債の増加額436百万円、減少要因の主な",
+  "reason": null
+ },
+ "S100Z38F:H-039": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "(前連結会計年度は1,036百万円の使用)",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z38F:H-040": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "subject": "契約負債",
+  "span": "417百万円、受注損失引当金の増加額238百万円、契約負債の増加額436百",
+  "reason": null
+ },
+ "S100Z38F:H-041": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "営業活動によるキャッシュ・フロー",
+  "span": "活動によるキャッシュ・フローは低水準となり、中期以降に徐々に増加し、通期で",
+  "reason": null
+ },
+ "S100Z38F:H-042": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "純利益",
+  "span": "純利益については、中期経営計画において平均成長率25%をベースとして202",
+  "reason": "no_element(ratio without fact)"
+ },
+ "S100Z38F:H-043": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+  ],
+  "subject": "減価償却費",
+  "span": "な内訳は、税金等調整前当期純利益4,505百万円、減価償却費417百万円、受注損失引当金の増",
+  "reason": null
+ },
+ "S100Z38F:H-044": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+  ],
+  "subject": "資産合計",
+  "span": "当連結会計年度末の資産合計は、24,147百万円(前連結会計年度末比",
+  "reason": null
+ },
+ "S100Z38F:H-045": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "外注費",
+  "span": "か、グループ全体としては、現金総保有高に加え、取引各行と総額35億円のコミットメントライ",
+  "reason": "no_element"
+ },
+ "S100Z38F:H-046": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "ソースを補うための外注加工費が減少したこともあり、営業利益は4,697百万円(前年同期比2.0%",
+  "reason": null
+ },
+ "S100Z38F:H-047": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant",
+   "xbrl:jppfs_cor:RetainedEarnings@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "利益剰余金",
+  "span": "己株式の消却による資本剰余金の減少135百万円、利益剰余金の減少3,095",
+  "reason": null
+ },
+ "S100Z38F:H-048": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+  ],
+  "subject": "現金及び現金同等物",
+  "span": "という。)は、前連結会計年度末に比べ1,779百万円減少し、13,382百万円となりました。",
+  "reason": null
+ },
+ "S100Z38F:H-049": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "純利益",
+  "span": "高、営業利益及び純利益はいずれも2023年6月期と比較して約1.4倍に成長し、ROE、D",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z38F:H-050": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CommissionFeeSGA@CurrentYearDuration",
+   "xbrl:jppfs_cor:CommissionFeeSGA@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "支払手数料",
+  "span": "たものの、投資事業組合運用損、自己株式取得に伴う支払手数料の増加、前年同期",
+  "reason": null
+ },
+ "S100Z38F:H-051": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "式売却益の反動の影響もあり、親会社株主に帰属する当期純利益は2,985百万円(前年同期比13.1",
+  "reason": null
+ },
+ "S100Z38F:H-052": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "とにより、売上高9,648百万円(前年同期比16.2%増)と増収になりまし",
+  "reason": null
+ },
+ "S100Z38F:H-053": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "円(前年同期比0.9%減)、親会社株主に帰属する当期純利益は2,985百万円(前年同期比13.1",
+  "reason": null
+ },
+ "S100Z38F:H-054": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "ド移行の推進等の影響で利益率が向上したことにより、営業利益は2,923百万円(前年同期比45.7",
+  "reason": null
+ },
+ "S100Z38F:H-055": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "配当",
+  "span": "度は、継続的な安定配当の基本方針のもと、1株当たり7円増配の32円とすることを2026",
+  "reason": "no_element"
+ },
+ "S100Z38F:H-056": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "投資活動の結果使用した資金",
+  "span": "投資活動の結果使用した資金は、1,338百万円となりました。",
+  "reason": null
+ },
+ "S100Z38F:H-057": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "当連結会計年度の1人当たりの営業利益に関しては2.6百万円となりました。",
+  "reason": null
+ },
+ "S100Z38F:H-058": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+  ],
+  "subject": "利益剰余金",
+  "span": "95百万円などにより、14,570百万円(前連結会計年度末比1,027百万円減)となりました。",
+  "reason": null
+ },
+ "S100Z38F:H-059": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000ConsolidatedFinancialDisclosureBusinessReportableSegmentMember"
+  ],
+  "subject": "売上高",
+  "span": "スの取引が連結決算開示事業に商流変更された影響もあり、売上高9,685百万円(前年同期比1.7%",
+  "reason": null
+ },
+ "S100Z38F:H-060": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "当連結会計年度は、業容拡大に応じた人",
+  "reason": "no_subject"
+ },
+ "S100Z38F:H-061": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "一時的な収益性の低下により、前",
+  "reason": "no_subject"
+ },
+ "S100Z38F:H-062": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@Prior1YearInstant",
+   "formula:a-b(pure)"
+  ],
+  "subject": "自己資本比率",
+  "span": "3%(前連結会計年度末は63.9%)と、前連結会計年度に比べ3.6ポイント低下しましたが、依然",
+  "reason": null
+ },
+ "S100Z38F:H-063": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "営業利益",
+  "span": "ソースを補うための外注加工費が減少したこともあり、営業利益は増益となったも",
+  "reason": null
+ },
+ "S100Z38F:H-064": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DecreaseIncreaseInPrepaidExpensesOpeCF@CurrentYearDuration"
+  ],
+  "subject": "前払費用",
+  "span": "、売上債権及び契約資産の増加額135百万円、前払費用の増加額322百万円、法人税等の支払額1",
+  "reason": null
+ },
+ "S100Z38F:H-065": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PrepaidExpenses@CurrentYearInstant",
+   "xbrl:jppfs_cor:PrepaidExpenses@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "前払費用",
+  "span": "取手形、売掛金及び契約資産の増加135百万円、前払費用の増加325百万円、建物の増加579百",
+  "reason": null
+ },
+ "S100Z38F:H-066": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PrepaidExpenses@CurrentYearInstant",
+   "xbrl:jppfs_cor:PrepaidExpenses@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "前払費用",
+  "span": "約資産の増加135百万円、前払費用の増加325百万円、建物の増加579百万",
+  "reason": null
+ },
+ "S100Z38F:H-067": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "ソフトウエア",
+  "span": "理ソリューション事業については、ソフトウエアビジネスの売上は増加しているも",
+  "reason": "no_element"
+ },
+ "S100Z38F:H-068": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "自己資本比率",
+  "span": "計年度末は63.9%)と、前連結会計年度に比べ3.6ポイント低下しましたが",
+  "reason": "no_element(text needs money fact)"
+ },
+ "S100Z38F:H-069": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember"
+  ],
+  "subject": "売上高",
+  "span": "は引き続き堅調であり、売上高は11,022百万円(前年同期比6.8%増)と増収になりまし",
+  "reason": null
+ },
+ "S100Z38F:H-070": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:Software@CurrentYearInstant"
+  ],
+  "subject": "ソフトウエア",
+  "span": "ア粗利益は、2,957百万円となり、前連結会計年度と比較して133百万円増加しました。",
+  "reason": null
+ },
+ "S100Z38F:H-071": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "現金及び預金",
+  "span": "これは主に、現金及び預金の減少1,778",
+  "reason": null
+ },
+ "S100Z38F:H-072": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+  ],
+  "subject": "経常利益",
+  "span": "、前年同期に計上した株式売却益の反動の影響もあり、経常利益は4,573百万円(前年同期比0.9%",
+  "reason": null
+ },
+ "S100Z38F:H-073": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember"
+  ],
+  "subject": "売上高",
+  "span": "増収に貢献したことにより、売上高9,648百万円(前年同期比16.2%増)と増収になりまし",
+  "reason": null
+ },
+ "S100Z38F:H-074": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:Software@CurrentYearInstant",
+   "xbrl:jppfs_cor:Software@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "ソフトウエア",
+  "span": "2,957百万円となり、前連結会計年度と比較して133百万円増加しました。",
+  "reason": null
+ },
+ "S100Z38F:H-075": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": "ROE",
+  "span": "維持しているROEについて、中期経営計画期間中においても平均20%以上の水準を維持する",
+  "reason": "target_or_plan"
+ },
+ "S100Z38F:H-076": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "現金及び預金",
+  "span": "これは主に、現金及び預金の減少1,778百万円、受取手形、売掛金及",
+  "reason": null
+ },
+ "S100Z38F:H-077": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "事業」、株式会社アバントを「経営管理ソリューション事業」と、1社1セグメントで構成し",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z38F:H-078": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "契約資産",
+  "span": "額436百万円、減少要因の主な内訳は、売上債権及び契約資産の増加額135百",
+  "reason": null
+ },
+ "S100Z38F:H-079": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "負債合計",
+  "span": "一方、負債合計は9,577百万円(前連結会計年度末比802百万円増)となりました。",
+  "reason": null
+ },
+ "S100Z38F:H-080": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "であり、売上高は11,022百万円(前年同期比6.8%増)と増収になりまし",
+  "reason": null
+ },
+ "S100Z38F:H-081": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "営業利益",
+  "span": "923百万円(前年同期比45.7%増)と売上増を大きく上回る増益率となりま",
+  "reason": null
+ },
+ "S100Z38F:H-082": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "営業利益",
+  "span": "は2,923百万円(前年同期比45.7%増)と売上増を大きく上回る増益率と",
+  "reason": null
+ },
+ "S100Z38F:H-083": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+  ],
+  "subject": "自己資本比率",
+  "span": "この結果、自己資本比率は60.3%(前連結会計年度末は",
+  "reason": null
+ },
+ "S100Z38F:H-084": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "投資活動を実施する際の目安として、当社グループが長期的に20%前後を維持しているR",
+  "reason": "no_subject"
+ },
+ "S100Z38F:H-085": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+  ],
+  "subject": "負債合計",
+  "span": "一方、負債合計は9,577百万円(前連結会計年度末比",
+  "reason": null
+ },
+ "S100Z38F:H-086": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "ソフトウエア",
+  "span": "とを目指しており、2028年6月期には価値創造生産性を示す「1人当たりの営業利益」を",
+  "reason": "no_element"
+ },
+ "S100Z38F:H-087": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "ては、人員増加やオフィスの増床に伴う人件費及びオフィス費用の増加といったコ",
+  "reason": "no_subject"
+ },
+ "S100Z38F:H-088": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": "売上高",
+  "span": "売上高は2028年6月期に400~450億円の目標レンジに達する",
+  "reason": "target_or_plan"
+ },
+ "S100Z38F:H-089": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTradeAndContractAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTradeAndContractAssets@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "受取手形、売掛金及び契約資産",
+  "span": "び預金の減少1,778百万円、受取手形、売掛金及び契約資産の増加135百万",
+  "reason": null
+ },
+ "S100Z38F:H-090": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "利益に関しては、業容拡大に応じた人",
+  "reason": "no_subject"
+ },
+ "S100Z38F:H-091": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "(前連結会計年度は4,469百万円の獲得)",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z38F:H-092": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:StocksOfSubsidiariesAndAffiliates@CurrentYearInstant"
+  ],
+  "subject": "関係会社株式",
+  "span": "増加325百万円、建物の増加579百万円、関係会社株式の増加386百万円、長期貸付金の増加1",
+  "reason": null
+ },
+ "S100Z38F:H-093": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+  ],
+  "subject": "利益剰余金",
+  "span": "式の消却による資本剰余金の減少135百万円、利益剰余金の減少3,095百万円などにより、14,5",
+  "reason": null
+ },
+ "S100Z38F:H-094": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": "1株当たり配当",
+  "span": "なお、達成時の1株当たり配当金は51円が見込まれます。",
+  "reason": "target_or_plan"
+ },
+ "S100Z38F:H-095": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember"
+  ],
+  "subject": "売上高",
+  "span": "ソーシングビジネスが引き続き増収に貢献したことにより、売上高9,648百万円(前年同期比16.2",
+  "reason": null
+ },
+ "S100Z38F:H-096": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "親会社株主に帰属する当期純利益は2,985百万円(前年同期比13.1%減)となりました。",
+  "reason": null
+ },
+ "S100Z38F:H-097": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "配当",
+  "span": "純資産配当率は約7.5%と東証上場企業の平均を大きく上回る水準を維",
+  "reason": "no_element"
+ },
+ "S100Z38F:H-098": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "商流変更されたことに加え、アウトソーシングビジネスが引き続き増収に貢献した",
+  "reason": "no_subject"
+ },
+ "S100Z38F:H-099": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "フィス費用の増加といったコスト増の要因はあるものの、採用費の減少に加え、生",
+  "reason": "no_subject"
+ },
+ "S100Z38F:H-100": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "の計上等の影響もあり、営業利益は1,129百万円(前年同期比36.3%減)と減益になりまし",
+  "reason": null
+ }
+}
