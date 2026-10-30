@@ -567,6 +567,11 @@ def check_b(rec, inp):
         out.append(u"窓なしの行数が行から数え直した値と違う")
     if g.get(u"当期の値が一意でない行数(止めない)") != sum(1 for r in rows if r[u"比較不能の理由"] == REASONS[0]):
         out.append(u"当期の値が一意でない行数が行から数え直した値と違う")
+    # 行の当期の値 = plain_rows の同じ (doc, id) の named の value(当期の値が一意でない行だけ除く。追記 1: 監査の気づき)
+    for r in rows:
+        if r[u"比較不能の理由"] != REASONS[0] and plain[(r["doc"], r["id"])][u"named の value"] != r[u"当期の値"]:
+            out.append(u"位置 %d の当期の値が plain_rows の named の value と違う" % r[u"位置"])
+            break
     # 行の claim の単位が文の単位で、文の値 = 記録の文の値
     for r in rows:
         if plain[(r["doc"], r["id"])]["unit"] != r[u"単位"] or plain[(r["doc"], r["id"])][u"文の値"] != r[u"文の値"]:
@@ -981,6 +986,9 @@ def render_blocks(rec, seal):
     rows.append([u"cache の前後(edinet・edinet-fresh-2026-10-21)", u"%d・%d から %d・%d(変化なし: %s)" % (cc[u"開始"][u"edinet"][u"件数"], cc[u"開始"][u"edinet-fresh-2026-10-21"][u"件数"],
                                                                                         cc[u"終了"][u"edinet"][u"件数"], cc[u"終了"][u"edinet-fresh-2026-10-21"][u"件数"], yesno(cc[u"変化なし"]))])
     rows.append([u"DEFAULT_PROFILE・測る profile", u"%s・%s" % (rec[u"DEFAULT_PROFILE"], rec[u"測る profile"])])
+    rows.append([u"測定時の HEAD の commit", u"`%s`" % rec[u"HEAD の commit"]])
+    rows.append([u"封の commit・封への追記 2 の commit", u"`%s`・`%s`" % (rec[u"封"][u"commit"], rec[u"封"][u"追記 2 の commit"])])
+    rows.append([u"key_leaks(記録の鍵らしい字の件数)", u"%d" % len(rec[u"key_leaks"])])
     rows.append([u"行の数(全体・探索・検証)", u"%d・%d・%d(探索 + 検証 = 全体: %s)" % (len(gr[u"全体"]), len(gr[EXPLORE]), len(gr[VERIFY]), yesno(len(gr[EXPLORE]) + len(gr[VERIFY]) == len(gr[u"全体"])))])
     for rel in ENGINE_AT_MEASURE:
         rows.append([u"`%s` の sha16" % rel, u"`%s`" % rec[u"engine sha16"][rel]])
@@ -1027,7 +1035,8 @@ def check_c(rec, seal, doc):
 
 
 DOC_LITERALS = (u"差分候補として機械的に名指せた", u"為替換算", u"売却", u"除却", u"組替え", u"連結範囲の変更", u"探索データ", u"未探索検証データ", u"258 行への予測は封に無い",
-                u"人間の条件 (7)", u"次の封の候補", u"2026-10-30", u"edinetdb-p27", u"engine は 0 行", u"追記", NOT_GATED)
+                u"人間の条件 (7)", u"次の封の候補", u"2026-10-30", u"edinetdb-p27", u"engine は 0 行", u"追記", NOT_GATED,
+                u"### 追記 1(2026-10-30", u"`_rounded_diff_match`", u"`rounded_diff_within_double_band`", u"floor(A) − floor(B) は floor(A − B) より 1 単位大きくなりうる")
 
 
 def unit_off(rec, k):
@@ -1045,6 +1054,8 @@ def fact_lines(rec):
         u"対照で『候補だけが一致』の行は 全体 %d・探索 %d・検証 %d。" % (qa["ctl"][CONTROLS[0]], qe["ctl"][CONTROLS[0]], qv["ctl"][CONTROLS[0]]) + NOT_GATED,
         u"一致(完全一致 + 許容差内)の行のうち、|差| − 文の値 がちょうど +1 単位の行は %d、ちょうど −1 単位の行は %d、それ以外は %d(全体)。"
         % (unit_off(rec, 1), unit_off(rec, -1), qa["match"] - unit_off(rec, 1) - unit_off(rec, -1)) + NOT_GATED,
+        u"追記 1 の数: 許容差内の行は 全体 %d。うち |差| − 文の値 がちょうど +1 単位の行は %d(G3 の帯 0 <= |a − b| − |文の数| < 2 × 桁 の中の形)。"
+        % (sum(1 for r in rec[u"行"] if r[u"段"] == u"許容差内"), unit_off(rec, 1)) + NOT_GATED,
     ]
 
 
