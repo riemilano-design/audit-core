@@ -15,7 +15,7 @@
 
 | 漏れていた場所 | file | 本数 | なぜ |
 |---|---|---|---|
-| `tests/measure` | 50 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
+| `tests/measure` | 178 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
 | `measure/tests` | 1 | 96 | `measure/` が package でないので**丸ごと飛ぶ** |
 
 `tests/measure` は `-s tests/measure` で毎回別に走らせていたので**測り落としは無かった**。
@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **243 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **244 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -197,6 +197,9 @@ P27 が「証拠が無く名指さない」で止めた行で、engine が内側
 
 **2026-10-30 に +1**(`tests/measure/test_xbrl_unnamed_candidate_result.py`。
 候補の欄を足した engine が他を壊さず止めた行にだけ候補を付けるかを数える測定の門(封 `docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md` §3・§4・§7-5 の (a)〜(j)。測定の文書 `docs/XBRL_UNNAMED_CANDIDATE_RESULT_2026-10-29.md` の表を記録 `fixtures/xbrl/unnamed_candidate_2026-10-29.json` から作り直す・CA-1〜CA-11 の当否と K-1〜K-4 の判定を封の字と記録から求める・配線の門を `regress97`・`stop_reason` から数え直す・engine の sha16 の留め・封の commit が実装と記録より前・読んだ入力の sha256・偽物で赤)。242 → 243(`tests/measure` 176 → 177)。
+
+**2026-10-30 に +1**(`tests/measure/test_xbrl_candidate_eyes.py`。
+候補の欄 `candidate` の正しさを、読み手の席(subagent)が無改変の 10 行で 1 回だけ見た便の門(封 `docs/XBRL_CANDIDATE_EYES_SEAL_2026-10-30.md` §5 の 6。結果の文書 `docs/XBRL_CANDIDATE_EYES_2026-10-30.md` の表を記録 `fixtures/xbrl/candidate_eyes_2026-10-30.json` から作り直す・E-1〜E-9 の当否を封の字と記録から求める・多数決と全員一致と集計を席ごとの読みから別実装で数え直す・指示文の定数が封の blockquote と同じ・10 行の選び方を記録から求め直す・実装と封の commit が記録より前・門の変異)。243 → 244(`tests/measure` 177 → 178)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

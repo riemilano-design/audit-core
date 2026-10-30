@@ -125,6 +125,7 @@ def is_roster(path):
 # 2026-10-29 追記(注入 741 行で「止めた理由」と「名指し」を分類し、P27E を同じ 741 行で測る診断): 新しい記録 stop_reason_2026-10-29.json(30 書類の docID を持つ)と、測定の script・門(script は docstring に docID を持たない。門も持たないが、前の便と同じ 3 つ組で宣言する)。封 docs/XBRL_STOP_REASON_DIAG_SEAL_2026-10-29.md の §5。前例(a7ceb29 の 3 file)と同じ扱い(引きは動かさない)。封と診断の文書は docID を書かない(門 (h) が見る)。
 # 2026-10-29 追記(P27 が「証拠が無く名指さない」で止めた行で、engine が内側に持つ「名指さなかった fact」は原本の fact かを数える診断): 新しい記録 unnamed_fact_2026-10-29.json(30 書類の docID を持つ)と、測定の script・門(script は docstring に docID を持たない。門も持たないが、前の便と同じ 3 つ組で宣言する)。封 docs/XBRL_UNNAMED_FACT_DIAG_SEAL_2026-10-29.md の §5。前例(ed615b5 の 3 file)と同じ扱い(引きは動かさない)。封と診断の文書は docID を書かない(門 (h) が見る)。
 # 2026-10-30 追記(候補の欄を足した engine が他を壊さず、止めた行にだけ候補を付けるかを数える測定): 新しい記録 unnamed_candidate_2026-10-29.json(97 書類の docID を持つ)と、測定の script・門(script は docstring に docID を持たない。門も持たないが、前の便と同じ 3 つ組で宣言する)。封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md の §7-5。前例(020ffc0 の 3 file)と同じ扱い(引きは動かさない)。封と測定の文書は docID を書かない(門 (h) が見る)。
+# 2026-10-30 追記(候補の欄 candidate の正しさを、読み手の席が無改変の 10 行で 1 回だけ見る便): 新しい記録 candidate_eyes_2026-10-30.json(10 書類の docID を持つ)と、測定の script・門(script は docstring に docID を持たない。門も持たないが、前の便と同じ 3 つ組で宣言する)。封 docs/XBRL_CANDIDATE_EYES_SEAL_2026-10-30.md の §5-7。前例(020ffc0・cb8612f の 3 file)と同じ扱い(引きは動かさない)。封と結果の文書は docID を書かない(門 (h) が見る)。
 LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixtures/xbrl/p26_2026-10-21.json",
                       "fixtures/xbrl/default_p26_2026-10-23.json", "measure/xbrl_default_p26_2026-10-23.py", "tests/measure/test_xbrl_default_p26_result.py",
                       "docs/XBRL_P27_SAMPLE_SEAL_2026-10-27.md",
@@ -150,7 +151,9 @@ LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixt
                       "fixtures/xbrl/unnamed_fact_2026-10-29.json", "measure/xbrl_unnamed_fact_2026-10-29.py",
                       "tests/measure/test_xbrl_unnamed_fact.py",
                       "fixtures/xbrl/unnamed_candidate_2026-10-29.json", "measure/xbrl_unnamed_candidate_2026-10-29.py",
-                      "tests/measure/test_xbrl_unnamed_candidate_result.py")
+                      "tests/measure/test_xbrl_unnamed_candidate_result.py",
+                      "fixtures/xbrl/candidate_eyes_2026-10-30.json", "measure/xbrl_candidate_eyes_2026-10-30.py",
+                      "tests/measure/test_xbrl_candidate_eyes.py")
 
 
 def drop_later_naming_files(named):

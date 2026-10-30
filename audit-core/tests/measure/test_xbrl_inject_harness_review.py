@@ -928,12 +928,14 @@ def check_b(R, J, root=ROOT):
 #: cd8 の系統の「行 -> claim」を位置で引き直す script は 2026-10-29 に宣言した(下の 3 行目。位置で引く対応付けを自分で持つ仕掛けで、M-05・M-03・M-16 の関数を使う)。
 #: 「名指さなかった fact」を raw から拾う script は 2026-10-29 に宣言した(下の 4 行目。止めた理由の script の RE.work_doc を呼ぶ使う側で、verify_raw の包みは返り値を変えない)。
 #: 候補の欄(candidate)を足した engine の測定の script は 2026-10-30 に宣言した(下の 5 行目。止めた理由の script の RE.work_doc を module の入れ物 WIRING 越しに呼ぶ使う側。観測する profile だけ替える)。
+#: 候補の欄の正しさを読み手の席が見る便の script は 2026-10-30 に宣言した(下の 6 行目。検査の呼び出し verify_document( と、記録の鍵の字『注入の書類』が副産物の検査の規準に当たるだけで、注入も本文の差し替えもしない = 役 対象外・確かめ 不要)。
 LATER_HARNESS_FILES = (
     ("measure/xbrl_p27_inject_reach_2026-10-29.py", u"仕掛け持ち + 使う側", u"有", "work_doc", u"reached = bool(tidx is not None and si == tidx)", "2026-10-29"),
     ("measure/xbrl_stop_reason_2026-10-29.py", u"使う側", u"有", "work", u"r = RE.work_doc(a)", "2026-10-29"),
     ("measure/xbrl_cd8_rowclaim_reach_2026-10-29.py", u"仕掛け持ち + 使う側", u"有", "claim_at", u"if pos < b2 and a2 < e:", "2026-10-29"),
     ("measure/xbrl_unnamed_fact_2026-10-29.py", u"使う側", u"有", "run_doc", u"r = RE.work_doc(a)", "2026-10-29"),
     ("measure/xbrl_unnamed_candidate_2026-10-29.py", u"使う側", u"有", "run_doc", u"return WIRING[\"RE\"].work_doc(a)", "2026-10-30"),
+    ("measure/xbrl_candidate_eyes_2026-10-30.py", u"対象外", u"不要", "build_row", u"out = VD.verify_document(zb, \"P27C\", None)", "2026-10-30"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
