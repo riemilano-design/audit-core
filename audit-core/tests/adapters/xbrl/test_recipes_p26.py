@@ -106,7 +106,7 @@ class FlagShapeTest(unittest.TestCase):
     def test_only_p26_has_any_flag_and_p26_is_the_only_new_profile(self):
         for n, p in sorted(V.PROFILES.items()):
             have = [f for f in FLAGS if getattr(p, f) != OFF[f]]
-            self.assertEqual(list(FLAGS) if n in ("P26", "P27", "P27E") else [], have, n)      # 2026-10-27 P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ(封 XBRL_P27_SEAL_2026-10-27)も P26 の旗 5 つを引き継ぐ
+            self.assertEqual(list(FLAGS) if n in ("P26", "P27", "P27C", "P27E") else [], have, n)      # 2026-10-27 P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ(封 XBRL_P27_SEAL_2026-10-27)も P26 の旗 5 つを引き継ぐ。2026-10-30 P27C(= P27 + 候補の旗。封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29)も
         self.assertEqual(["P26"], sorted(n for n in V.PROFILES if "P26" in n))      # 旗 1 つずつの profile・P26b は engine に登録しない
 
     def test_with_all_flags_false_p26_is_p25(self):

@@ -13,6 +13,11 @@
 足したのは**書類レベルの旗 1 つ**だけ(人間が承認した文面、``DOC_UNVERIFIABLE_RULE``)。
 Claim 個別の state は変えない。
 
+**候補の欄(封 ``docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md``、人間の承認 2026-10-30)。** 出力の Claim に
+``candidate`` を 1 欄足した(末尾)。``reason`` が ``no_same_value`` で ``provenance`` に ``no_same_value`` の鍵が在る行だけ
+``{"pointer", "value", "basis"}``、他は ``None``(欄は常に在る)。旗が偽の profile では全行 ``None``(P27C だけが真)。
+state・reason・pointers・recomputed は変えない。候補は「止めた行で道具が見ていた fact」で、正しさは測っていない。
+
 使い方::
 
     python3 -m adapters.xbrl.verify_document --zip ~/.cache/audit-core/edinet/S100Z4N9.zip --out out.json
@@ -61,7 +66,7 @@ DOC_UNVERIFIABLE_PNF_THRESHOLD = 0.5
 
 # 出力の Claim の欄(**並びを字で固定する**。byte の安定のため)
 CLAIM_FIELDS = ("id", "kind", "form", "subject", "value", "unit", "word", "span",
-                "state", "pointers", "reason", "recomputed")
+                "state", "pointers", "reason", "recomputed", "candidate")
 
 
 def sha256_bytes(b):
@@ -161,7 +166,12 @@ def verify_document(zip_bytes, profile_name=None, text=None):
                          for p in result.pointers],
             "reason": result.reason,
             "recomputed": result.recomputed,
+            "candidate": None,
         }
+        if getattr(profile, "unnamed_candidate_2026_10_29", False) and result.reason == R.NO_SAME_VALUE:
+            nsv = claim.provenance.get("no_same_value")
+            if nsv is not None:
+                row["candidate"] = {"pointer": nsv["named"], "value": nsv["value"], "basis": R.NO_SAME_VALUE}
         claims.append({k: row[k] for k in CLAIM_FIELDS})
 
     total = len(claims)

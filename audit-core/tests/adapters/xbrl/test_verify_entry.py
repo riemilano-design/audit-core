@@ -96,6 +96,15 @@ _PINNED_BODY_SHA256_S100Z4B6_P26 = "b0bb68e45aaea47a42f0f8039978070fb05d506f4537
 # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 既定が P26 -> P27 になり、既定の値が動いた(S100Z4B6 は profile 欄の字が違う。本体の claims は P26 と同じ)。P26 の値は P26 を明示して回した結果として残す = 測った時点の字。消さない。
 # 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md の段 2。
 _PINNED_BODY_SHA256_S100Z4B6_P27 = "424b2ce92ede62582904b56956aead68885c3f6764658455fc6a4f7b61a47ee2"
+# 2026-10-30(候補の欄を足す。封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3・§1-2): Claim の欄が 12 -> 13(末尾に candidate)になり、
+# **旗の真偽に関わらず上の 5 本は動く**(全行に ``"candidate": null`` が増える)。上の 5 本は「欄を足す前の字」の値として**残す**(測った時点の字。消さない)。
+# 下の 5 本が欄を足した後の本体の sha256(旗が偽の profile。candidate は全行 null)。上の 5 本は、candidate を消した本体の sha256 として
+# test_dropping_the_candidate_field_gives_the_old_pinned_sha256 が使う(= 欄を落とせば旧の字と byte 一致)。
+_PINNED_BODY_SHA256_S100Z4B6_P20_CAND_FIELD = "92f47ab4cf4ded99396457234c578606f84b226abb2bc64d44187bc1881db1fe"
+_PINNED_BODY_SHA256_S100Z4B6_P21_CAND_FIELD = "9d62cd1b7bb94ce2350216dcb26461e89ada8ada891ce981096ad5deb79316e5"
+_PINNED_BODY_SHA256_S100Z4B6_P22_CAND_FIELD = "8b589fae12668eb18eef62916d7924c8b9b50df71292d5202a18f2a6ab653621"
+_PINNED_BODY_SHA256_S100Z4B6_P26_CAND_FIELD = "19501cc70497fc979b76248e2de9c916768dabfae267767989c921c154416bc6"
+_PINNED_BODY_SHA256_S100Z4B6_P27_CAND_FIELD = "0d215b121d729a57ebe76afe6d5627426511e6ce61d7e1eb2a362dfea61c3c96"
 
 
 def _zip(doc):
@@ -267,7 +276,7 @@ class OutputStabilityTest(unittest.TestCase):
         body = VD.dumps(out)
         self.assertEqual(out["profile"], "P22")
         self.assertEqual(hashlib.sha256(body.encode("utf-8")).hexdigest(),
-                         "%s" % _PINNED_BODY_SHA256_S100Z4B6)
+                         "%s" % _PINNED_BODY_SHA256_S100Z4B6_P22_CAND_FIELD)
 
     @unittest.skipUnless(_have("S100Z4B6"), "材料が無い")
     def test_one_documents_output_sha256_is_pinned_literally_under_p26(self):
@@ -281,7 +290,7 @@ class OutputStabilityTest(unittest.TestCase):
         body = VD.dumps(out)
         self.assertEqual(out["profile"], "P26")
         self.assertEqual(hashlib.sha256(body.encode("utf-8")).hexdigest(),
-                         "%s" % _PINNED_BODY_SHA256_S100Z4B6_P26)
+                         "%s" % _PINNED_BODY_SHA256_S100Z4B6_P26_CAND_FIELD)
 
     @unittest.skipUnless(_have("S100Z4B6"), "材料が無い")
     def test_one_documents_output_sha256_is_pinned_literally(self):
@@ -295,7 +304,7 @@ class OutputStabilityTest(unittest.TestCase):
         body = VD.dumps(out)
         self.assertEqual(out["profile"], "P27")
         self.assertEqual(hashlib.sha256(body.encode("utf-8")).hexdigest(),
-                         "%s" % _PINNED_BODY_SHA256_S100Z4B6_P27)
+                         "%s" % _PINNED_BODY_SHA256_S100Z4B6_P27_CAND_FIELD)
 
     @unittest.skipUnless(_have("S100Z4B6"), "材料が無い")
     def test_one_documents_output_sha256_is_pinned_literally_under_p21(self):
@@ -307,7 +316,7 @@ class OutputStabilityTest(unittest.TestCase):
         body = VD.dumps(out)
         self.assertEqual(out["profile"], "P21")
         self.assertEqual(hashlib.sha256(body.encode("utf-8")).hexdigest(),
-                         "%s" % _PINNED_BODY_SHA256_S100Z4B6_P21)
+                         "%s" % _PINNED_BODY_SHA256_S100Z4B6_P21_CAND_FIELD)
 
     @unittest.skipUnless(_have("S100Z4B6"), "材料が無い")
     def test_one_documents_output_sha256_is_pinned_literally_under_p20(self):
@@ -319,7 +328,24 @@ class OutputStabilityTest(unittest.TestCase):
         body = VD.dumps(out)
         self.assertEqual(out["profile"], "P20")
         self.assertEqual(hashlib.sha256(body.encode("utf-8")).hexdigest(),
-                         "%s" % _PINNED_BODY_SHA256_S100Z4B6_P20)
+                         "%s" % _PINNED_BODY_SHA256_S100Z4B6_P20_CAND_FIELD)
+
+    @unittest.skipUnless(_have("S100Z4B6"), "材料が無い")
+    def test_dropping_the_candidate_field_gives_the_old_pinned_sha256(self):
+        """欄の追加(2026-10-30)の最小の門: 各 claim から ``candidate`` を消した本体の sha256 が、欄を足す前に留めた値(旧の 5 本)と**同じ**。
+        旗が偽の profile では欄は全行 null なので、欄を足した以外に 1 byte も動いていないことを言う(封 CA-1 の 1 書類版)。"""
+
+        zb = _read("S100Z4B6")
+        for profile, old in ((("P20", _PINNED_BODY_SHA256_S100Z4B6_P20)), ("P21", _PINNED_BODY_SHA256_S100Z4B6_P21),
+                             ("P22", _PINNED_BODY_SHA256_S100Z4B6), ("P26", _PINNED_BODY_SHA256_S100Z4B6_P26),
+                             (None, _PINNED_BODY_SHA256_S100Z4B6_P27)):
+            with self.subTest(profile=profile or "default"):
+                out = VD.verify_document(zb, profile_name=profile)
+                del out["engine"]
+                for row in out["claims"]:
+                    self.assertIsNone(row["candidate"])
+                    del row["candidate"]
+                self.assertEqual(hashlib.sha256(VD.dumps(out).encode("utf-8")).hexdigest(), old)
 
     @unittest.skipUnless(_have("S100Z4B6"), "材料が無い")
     def test_the_claim_rows_have_exactly_the_pinned_fields_in_order(self):
@@ -755,6 +781,163 @@ class RobustnessTableTest(unittest.TestCase):
         differs = sorted(d for d in docs if got[d] != base[d])
         self.assertEqual(differs, ["S100YMFV", "S100Z1WR", "S100Z37J", "S100Z3CO", "S100Z3JY", "S100Z3V1", "S100Z433", "S100Z4B6", "S100Z4PA"])
         self.assertEqual(sum(got[d] - base[d] for d in docs), -10)
+
+
+class CandidateFieldTest(unittest.TestCase):
+    """候補の欄(``candidate``。封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §1-2。2026-10-30 の人間の承認)。
+
+    形: reason が no_same_value で provenance に no_same_value の鍵が在る行だけ ``{"pointer", "value", "basis"}``、他は None(欄は常に在る)。
+    旗 ``unnamed_candidate_2026_10_29`` が偽の profile(既定の P27 も)では全行 None。真は P27C だけ(明示したときだけ)。
+    state・reason・pointers・recomputed は旗の真偽で 1 字も変わらない。"""
+
+    DOC = "S100Z4B6"                       # 手元の cache の開発書類 1 件(no_same_value の行が在る)
+    FIELDS_BEFORE = ("id", "kind", "form", "subject", "value", "unit", "word", "span",
+                     "state", "pointers", "reason", "recomputed")
+    NAMED = "xbrl:jppfs_cor:NetSales@CurrentYearDuration_ExampleMember"       # 作り物
+
+    def test_the_fields_are_the_twelve_plus_candidate_at_the_end(self):
+        self.assertEqual(13, len(VD.CLAIM_FIELDS))
+        self.assertEqual(self.FIELDS_BEFORE, VD.CLAIM_FIELDS[:12])
+        self.assertEqual("candidate", VD.CLAIM_FIELDS[-1])
+
+    def test_only_the_p27c_profile_has_the_flag_and_the_default_does_not(self):
+        self.assertEqual(["P27C"], sorted(n for n, p in V.PROFILES.items() if p.unnamed_candidate_2026_10_29))
+        self.assertEqual("P27", V.DEFAULT_PROFILE)
+        self.assertFalse(V.PROFILES[V.DEFAULT_PROFILE].unnamed_candidate_2026_10_29)
+
+    @unittest.skipUnless(_have(DOC), "材料が無い")
+    def test_flag_off_gives_none_on_every_row_but_the_field_is_there(self):
+        zb = _read(self.DOC)
+        for profile in (None, "P27", "P27E", "P26", "P22"):
+            with self.subTest(profile=profile or "default"):
+                out = VD.verify_document(zb, profile_name=profile)
+                self.assertTrue(out["claims"])
+                for row in out["claims"]:
+                    self.assertEqual(VD.CLAIM_FIELDS, tuple(row.keys()))
+                    self.assertIn("candidate", row)
+                    self.assertIsNone(row["candidate"])
+
+    @unittest.skipUnless(_have(DOC), "材料が無い")
+    def test_flag_on_attaches_only_to_no_same_value_rows_with_the_provenance_named(self):
+        """旗が真: 辞書の行 = reason が no_same_value の行(literal の字で比べる)。pointer・value は provenance の no_same_value そのまま。
+        期待値は verify_document を使わずに、同じ材料から Core の層(recipes -> verify_all)を自分で回して取る。"""
+
+        import audit_core as core
+        from adapters.xbrl import instance as I
+        from adapters.xbrl import recipes as R
+        from adapters.xbrl import registry_setup as RS
+        from adapters.xbrl import resolve as RV
+
+        zb = _read(self.DOC)
+        prof = V.PROFILES["P27C"]
+        inst = I.load_instance(zb)
+        recipes = R.build_recipes(zb, prof)
+        results = dict((r.claim_id, r) for r in core.verify_all(recipes, RV.make_resolver(inst["facts"]), RS.register_all(core.Registry.default())))
+        out = VD.verify_document(zb, profile_name="P27C")
+        self.assertEqual(len(recipes), len(out["claims"]))
+        n_dict = 0
+        for rec, row in zip(recipes, out["claims"]):
+            self.assertEqual(rec.claim.id, row["id"])
+            nsv = rec.claim.provenance.get("no_same_value")
+            if results[rec.claim.id].reason == "no_same_value":
+                self.assertIsNotNone(nsv, row["id"])
+                self.assertEqual({"pointer": nsv["named"], "value": nsv["value"], "basis": "no_same_value"}, row["candidate"])
+                self.assertTrue(row["candidate"]["pointer"].startswith("xbrl:"))
+                n_dict += 1
+            else:
+                self.assertIsNone(row["candidate"], row["id"])
+        self.assertGreater(n_dict, 0, "この書類に no_same_value の行が無いと、この試験は何も言わない")
+        self.assertEqual(n_dict, sum(1 for r in out["claims"] if r["reason"] == "no_same_value"))
+
+    @unittest.skipUnless(_have(DOC), "材料が無い")
+    def test_the_key_order_is_pointer_value_basis(self):
+        """``dumps`` は sort_keys=False なので、鍵の並びが byte を決める。"""
+
+        rows = [r["candidate"] for r in VD.verify_document(_read(self.DOC), profile_name="P27C")["claims"] if r["candidate"] is not None]
+        self.assertTrue(rows)
+        for cand in rows:
+            self.assertEqual(["pointer", "value", "basis"], list(cand.keys()))
+            self.assertEqual("no_same_value", cand["basis"])
+        text = VD.dumps(VD.verify_document(_read(self.DOC), profile_name="P27C"))
+        self.assertLess(text.index('"pointer"', text.index('"candidate": {')), text.index('"value"', text.index('"candidate": {')))
+
+    @unittest.skipUnless(_have(DOC), "材料が無い")
+    def test_the_flag_changes_nothing_but_the_candidate_field(self):
+        """P27C は P27 と、candidate 以外の欄(state・reason・pointers・recomputed を含む)が全行で同じ。pointers に足していない。"""
+
+        zb = _read(self.DOC)
+        a = VD.verify_document(zb, profile_name="P27")
+        b = VD.verify_document(zb, profile_name="P27C")
+        self.assertEqual("P27", a["profile"])
+        self.assertEqual("P27C", b["profile"])
+        self.assertEqual(a["document"], b["document"])
+        self.assertEqual(a["input"], b["input"])
+        self.assertEqual(len(a["claims"]), len(b["claims"]))
+        for ra, rb in zip(a["claims"], b["claims"]):
+            self.assertEqual(dict((k, ra[k]) for k in self.FIELDS_BEFORE), dict((k, rb[k]) for k in self.FIELDS_BEFORE), ra["id"])
+        # 候補の pointer は pointers にも recomputed にも入っていない(同じ字が pointers に在るのは別の理由。no_same_value の行は pointers が空)
+        for rb in b["claims"]:
+            if rb["candidate"] is not None:
+                self.assertEqual([], rb["pointers"], rb["id"])
+                self.assertIsNone(rb["recomputed"], rb["id"])
+
+    def _with_injected_provenance(self, injected):
+        """build_recipes の返り値の全 claim の provenance に ``no_same_value`` を入れる(injected が None なら鍵を外す)。reason は触らない。"""
+
+        import dataclasses
+        from unittest import mock
+
+        from adapters.xbrl import recipes as R
+
+        real = R.build_recipes
+
+        def build(zb, profile, info=None):
+            out = []
+            for rec in real(zb, profile, info):
+                prov = dict(rec.claim.provenance)
+                prov.pop("no_same_value", None)
+                if injected is not None:
+                    prov["no_same_value"] = dict(injected)
+                out.append(dataclasses.replace(rec, claim=dataclasses.replace(rec.claim, provenance=prov)))
+            return out
+
+        return mock.patch.object(R, "build_recipes", build)
+
+    @unittest.skipUnless(_have(DOC), "材料が無い")
+    def test_a_provenance_key_on_a_row_with_another_reason_is_not_read(self):
+        """当たらない例: reason が no_same_value でない行は、provenance に no_same_value の鍵が在っても None。"""
+
+        zb = _read(self.DOC)
+        with self._with_injected_provenance({"named": self.NAMED, "value": 123.0}):
+            out = VD.verify_document(zb, profile_name="P27C")
+        n_other = 0
+        for row in out["claims"]:
+            if row["reason"] == "no_same_value":
+                self.assertEqual({"pointer": self.NAMED, "value": 123.0, "basis": "no_same_value"}, row["candidate"])
+            else:
+                self.assertIsNone(row["candidate"], row["id"])
+                n_other += 1
+        self.assertGreater(n_other, 0)
+
+    @unittest.skipUnless(_have(DOC), "材料が無い")
+    def test_flag_off_does_not_read_the_provenance_key(self):
+        zb = _read(self.DOC)
+        with self._with_injected_provenance({"named": self.NAMED, "value": 123.0}):
+            out = VD.verify_document(zb, profile_name="P27")
+        for row in out["claims"]:
+            self.assertIsNone(row["candidate"], row["id"])
+
+    @unittest.skipUnless(_have(DOC), "材料が無い")
+    def test_a_no_same_value_row_without_the_provenance_key_gets_none(self):
+        """reason が no_same_value でも provenance に鍵が無ければ None(欄は在る)。"""
+
+        zb = _read(self.DOC)
+        with self._with_injected_provenance(None):
+            out = VD.verify_document(zb, profile_name="P27C")
+        self.assertTrue(any(r["reason"] == "no_same_value" for r in out["claims"]))
+        for row in out["claims"]:
+            self.assertIn("candidate", row)
+            self.assertIsNone(row["candidate"], row["id"])
 
 if __name__ == "__main__":
     unittest.main()

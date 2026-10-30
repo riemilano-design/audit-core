@@ -40,6 +40,10 @@ for _p in (ROOT, os.path.join(ROOT, "core", "py")):
 SEAL_REL = "docs/XBRL_P27_SEAL_2026-10-27.md"
 DEFAULT_P27_SEAL_REL = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"       # 2026-10-28: 既定を P26 -> P27 に切り替える 段 2 の封(下の test_61・test_65 の遷移)
 DEFAULT_P27_FP_TO = "92326a0f4dcefd21fae4393a611e4206ef174b19258ddadd0213117191e7b399"
+# 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。動いてよい engine の file は上の 2 file に report_customer.py を足した 3 file で、
+# 作業木の指紋が下の値のときに限る。上の DEFAULT_P27_FP_TO(既定を P27 に切り替える 段 2 の後の値)は測った時点の値として残す。
+CAND_SEAL_REL = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"
+CAND_FP_TO = "dc7e35fbfb0f56ca6410bb7bfa8b8a366cc3ec19d6614c4cb866400cd9994ff6"
 DOC_REL = "docs/XBRL_P27_RESULT_2026-10-27.md"
 EVAL_REC_REL = collections.OrderedDict([
     ("eval", "fixtures/xbrl/p27/eval_2026-10-27.json"),
@@ -1580,8 +1584,12 @@ class TestPins(Base):
         moved = [l.decode("utf-8") for l in git("diff", "--name-only", e, "--", *ENGINE_TREES).stdout.split() if l]
         if now["adapter_xbrl_py_sha256"] != fp_e["adapter_xbrl_py_sha256"]:
             self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + DEFAULT_P27_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
-            self.assertEqual(now["adapter_xbrl_py_sha256"], DEFAULT_P27_FP_TO)
-            self.assertEqual(sorted(moved), ["audit-core/adapters/xbrl/verify_document.py", "audit-core/adapters/xbrl/vocabulary.py"])
+            if now["adapter_xbrl_py_sha256"] == CAND_FP_TO:
+                self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + CAND_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
+                self.assertEqual(sorted(moved), ["audit-core/adapters/xbrl/report_customer.py", "audit-core/adapters/xbrl/verify_document.py", "audit-core/adapters/xbrl/vocabulary.py"])
+            else:
+                self.assertEqual(now["adapter_xbrl_py_sha256"], DEFAULT_P27_FP_TO)
+                self.assertEqual(sorted(moved), ["audit-core/adapters/xbrl/verify_document.py", "audit-core/adapters/xbrl/vocabulary.py"])
             self.assertEqual(dict((k, now[k]) for k in fp_e if k != "adapter_xbrl_py_sha256"), dict((k, fp_e[k]) for k in fp_e if k != "adapter_xbrl_py_sha256"))
         else:
             self.assertEqual(moved, [])

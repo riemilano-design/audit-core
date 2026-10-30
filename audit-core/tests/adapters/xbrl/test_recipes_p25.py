@@ -132,7 +132,7 @@ class FlagShapeTest(unittest.TestCase):
         self.assertIs(False, fields["last_branch_names_only_if_evidence"].default)
         # 2026-10-22 P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)は P25 の旗を引き継ぐ
         # 2026-10-27 P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ(封 XBRL_P27_SEAL_2026-10-27)も引き継ぐ
-        self.assertEqual(["P25", "P26", "P27", "P27E"], sorted(n for n, p in V.PROFILES.items() if p.last_branch_names_only_if_evidence))
+        self.assertEqual(["P25", "P26", "P27", "P27C", "P27E"], sorted(n for n, p in V.PROFILES.items() if p.last_branch_names_only_if_evidence))    # 2026-10-30 P27C(= P27 + 候補の旗。封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29)も引き継ぐ
 
     def test_with_the_flag_false_p25_is_p24(self):
         self.assertEqual(dataclasses.replace(V.P24, name="P25_OFF"), P25_OFF)
@@ -220,7 +220,7 @@ class FlagsOffIsP24Test(unittest.TestCase):
         """P1〜P24 は旗を持たない(偽)ので、証拠なしの文でも P21 の名指しのまま。"""
         facts = [nfact(5000000), nfact(4000000, PRI)]
         for p in sorted(V.PROFILES):
-            if p in ("P25", "P26", "P27", "P27E"):       # P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ(封 XBRL_P27_SEAL_2026-10-27)も引き継ぐ、P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)は P25 の旗を引き継ぐ
+            if p in ("P25", "P26", "P27", "P27C", "P27E"):       # P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ(封 XBRL_P27_SEAL_2026-10-27)も引き継ぐ、P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)は P25 の旗を引き継ぐ。2026-10-30 P27C(= P27 + 候補の旗。封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29)も
                 continue
             c = lb(p, sentence_of("7,777"), "7,777", "千円", facts)
             self.assertNotEqual(NSV, c["reason"], p)

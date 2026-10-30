@@ -53,7 +53,7 @@ class FlagShapeTest(unittest.TestCase):
         # 2026-10-21 P25 = P24 + 旗 1 つ も引き継ぐ(封 XBRL_LASTBRANCH_SEAL_2026-10-21)
         # 2026-10-22 P26 = P25 + 旗 5 つ も引き継ぐ(封 XBRL_P26_SEAL_2026-10-21)
         # 2026-10-27 P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ も引き継ぐ(封 XBRL_P27_SEAL_2026-10-27)
-        self.assertEqual(["P21", "P22", "P23", "P24", "P25", "P26", "P27", "P27E"], sorted(n for n, p in V.PROFILES.items() if p.last_branch_cues))
+        self.assertEqual(["P21", "P22", "P23", "P24", "P25", "P26", "P27", "P27C", "P27E"], sorted(n for n, p in V.PROFILES.items() if p.last_branch_cues))    # 2026-10-30 P27C(= P27 + 候補の旗。封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29)も引き継ぐ
 
     def test_the_default_profile_was_p21_from_step_2_and_p22_since_period_bind_step_2_and_is_p26_since_default_p26_step_2_and_p27_since_default_p27_step_2(self):
         """段 1(5eb80a2)では既定は P20 のままだった。段 2(2026-10-20)で P21 に切り替えた

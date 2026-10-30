@@ -131,8 +131,8 @@ class FlagShapeTest(unittest.TestCase):
         # 2026-10-21 P25 = P24 + 旗 1 つ(封 XBRL_LASTBRANCH_SEAL_2026-10-21)は P24 の旗 2 つを引き継ぐ
         # 2026-10-22 P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)も引き継ぐ
         # 2026-10-27 P27 = P26 + 旗 4 つ・P27E = P27 + 旗 1 つ(封 XBRL_P27_SEAL_2026-10-27)も引き継ぐ
-        self.assertEqual(["P24", "P25", "P26", "P27", "P27E"], sorted(n for n, p in V.PROFILES.items() if p.vocab_2026_10_21))
-        self.assertEqual(["P24", "P25", "P26", "P27", "P27E"], sorted(n for n, p in V.PROFILES.items() if p.frame_rebind))
+        self.assertEqual(["P24", "P25", "P26", "P27", "P27C", "P27E"], sorted(n for n, p in V.PROFILES.items() if p.vocab_2026_10_21))    # 2026-10-30 P27C(= P27 + 候補の旗。封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29)も引き継ぐ
+        self.assertEqual(["P24", "P25", "P26", "P27", "P27C", "P27E"], sorted(n for n, p in V.PROFILES.items() if p.frame_rebind))    # 2026-10-30 P27C(= P27 + 候補の旗。封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29)も引き継ぐ
 
     def test_with_both_flags_false_p24_is_p23(self):
         self.assertEqual(dataclasses.replace(V.P23, name="P24_OFF"), P24_OFF)

@@ -636,11 +636,19 @@ def labels_ok():
 
 # ----------------------------------------------------------------------------------------------------------------
 # engine: 宣言された遷移(封が履歴に在り、値が宣言の値のときだけ)
-ENGINE_DECL = {"adapters/xbrl/vocabulary.py": (EXPECT["vocab_sha16"], 8, 1), "adapters/xbrl/verify_document.py": (EXPECT["vd_sha16"], 1, 1)}
+# 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。この結果が測った時点の値は EXPECT に残す(記録の欄は 1 字も変えない)。
+# いまの engine の宣言の値({path: (sha16, 封の commit 87f83fd からの numstat の挿入の上限, 削除)})は下の値: vocabulary.py は 8 → 10 行(旗 1 つ + P27C + PROFILES の登録 +5)、
+# verify_document.py は 1 → 12 行・-1 → -2 行(Claim の欄 candidate)、report_customer.py は 0 → 22 行・-1 行(candidate_ja と理由の欄の描き直し 1 行)。受け入れるのは、その封が履歴に在り、値が下の値のときだけ。
+CAND_SEAL_REL = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"
+ENGINE_DECL = {"adapters/xbrl/vocabulary.py": ("7fbcfbf0e472f366", 10, 1), "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", 12, 2),
+               "adapters/xbrl/report_customer.py": ("bdbaa00a419219fe", 22, 1)}
+#: 束ねた指紋(adapter_xbrl_py_sha256)の、候補の欄の後の値。EXPECT["fingerprint"](この結果が測った時点の値)は残す。
+ENGINE_FP_LATER = "dc7e35fbfb0f56ca6410bb7bfa8b8a366cc3ec19d6614c4cb866400cd9994ff6"
 
 
 def engine_ok():
     assert git("log", "--diff-filter=A", "--format=%H", "--", SEAL_REL).stdout.split(), u"封が履歴に無い"
+    assert git("log", "--diff-filter=A", "--format=%H", "--", CAND_SEAL_REL).stdout.split(), u"遷移を宣言した封が履歴に無い: " + CAND_SEAL_REL
     from adapters.xbrl import vocabulary as V
     assert V.DEFAULT_PROFILE == "P27", V.DEFAULT_PROFILE
     for rel, (want, ins_max, dele) in sorted(ENGINE_DECL.items()):
@@ -653,7 +661,7 @@ def engine_ok():
     assert git("diff", SEAL_COMMIT, "--numstat", "--", "core").stdout.strip() == u"" and git("status", "--porcelain", "--", "core").stdout.strip() == u""
     from adapters.xbrl import verify_document as VD
     fp = VD.engine_fingerprint()
-    assert fp["adapter_xbrl_py_sha256"] == EXPECT["fingerprint"] and fp["adapter_xbrl_py_files"] == 16, u"束ねた指紋が宣言の値と違う"
+    assert fp["adapter_xbrl_py_sha256"] == ENGINE_FP_LATER and fp["adapter_xbrl_py_files"] == 16, u"束ねた指紋が宣言の値と違う"
     assert fp["core_py_sha256"] == "34e836bb39762d5af831a9aa11d4ea095e73221beb5bd4510d3b234363a2a6e8" and fp["core_py_files"] == 4
     return True
 
@@ -709,8 +717,10 @@ class RecordTest(unittest.TestCase):
         s7 = self.rec[u"S7"]
         self.assertEqual((s7[u"adapters/xbrl/vocabulary.py"][u"挿入"], s7[u"adapters/xbrl/vocabulary.py"][u"削除"]), (5, 1))
         self.assertEqual((s7[u"adapters/xbrl/verify_document.py"][u"挿入"], s7[u"adapters/xbrl/verify_document.py"][u"削除"]), (1, 1))
-        self.assertEqual(self.rec[u"環境"][u"vocabulary.py の sha16"], sha16("adapters/xbrl/vocabulary.py"))
-        self.assertEqual(self.rec[u"環境"][u"verify_document.py の sha16"], sha16("adapters/xbrl/verify_document.py"))
+        # 2026-10-30(候補の欄を足す。封 CAND_SEAL_REL §2-3): 記録の環境の sha16 は測った時点の値(EXPECT。変えない)で、いまの file は宣言された遷移の値(engine_ok が確かめる)。
+        self.assertEqual(self.rec[u"環境"][u"vocabulary.py の sha16"], EXPECT["vocab_sha16"])
+        self.assertEqual(self.rec[u"環境"][u"verify_document.py の sha16"], EXPECT["vd_sha16"])
+        self.assertEqual((sha16("adapters/xbrl/vocabulary.py"), sha16("adapters/xbrl/verify_document.py")), (ENGINE_DECL["adapters/xbrl/vocabulary.py"][0], ENGINE_DECL["adapters/xbrl/verify_document.py"][0]))
 
     def test_6_judgments_equal_the_document_table_and_the_seal_rows_are_not_edited(self):
         J = judge_all(self.rec, self.bounds, self.decision[1])
@@ -795,8 +805,23 @@ class RerunTest(unittest.TestCase):
         want = dict((x[u"doc"], x) for x in self.rec[u"S1"][u"書類別"] if x[u"doc"] in dict(LIGHT_DOCS))
         self.assertEqual(sorted(want), sorted(d for d, _f in LIGHT_DOCS))
         self.assertEqual(sorted(x[u"doc"] for x in got[u"S1"][u"書類別"]), sorted(want))
+        # 2026-10-30(候補の欄を足す。封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3): 出力に欄 candidate(旗が偽なら全行 null)が増えるので、script が出す
+        # 「既定の出力の sha256(engine の欄を除く)」の 1 欄だけは記録の値と違う。記録の値は変えない。この欄は、(1) candidate を消した出力の sha256 が記録の値と同じ、
+        # (2) script の値は candidate を消さない出力の sha256 と同じ、で比べ直す(= 欄を足した以外に 1 byte も動いていない)。他の欄は 1 字も違ってはならない。
+        SHA_KEY = u"既定の出力の sha256(engine の欄を除く)"
+        from adapters.xbrl import verify_document as VD
         for x in got[u"S1"][u"書類別"]:
-            self.assertEqual(x, want[x[u"doc"]], x[u"doc"])
+            fresh = dict(LIGHT_DOCS)[x[u"doc"]]
+            with io.open(os.path.join(FRESH_DIR if fresh else EXISTING_CACHE, x[u"doc"] + ".zip"), "rb") as fh:
+                o = VD.verify_document(fh.read())
+            o.pop("engine", None)
+            self.assertTrue(all(c["candidate"] is None for c in o["claims"]), x[u"doc"])
+            self.assertEqual(hashlib.sha256(json.dumps(o, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest(), x[SHA_KEY], x[u"doc"])
+            for c in o["claims"]:
+                del c["candidate"]
+            self.assertEqual(hashlib.sha256(json.dumps(o, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest(), want[x[u"doc"]][SHA_KEY], x[u"doc"])
+            self.assertNotEqual(x[SHA_KEY], want[x[u"doc"]][SHA_KEY], x[u"doc"])
+            self.assertEqual(dict((k, v) for k, v in x.items() if k != SHA_KEY), dict((k, v) for k, v in want[x[u"doc"]].items() if k != SHA_KEY), x[u"doc"])
         want_moved = [m for k in (u"S2", u"S3") for m in self.rec[k][u"動いた行"] if m[u"doc"] in want]
         got_moved = [m for k in (u"S2", u"S3") for m in got[k][u"動いた行"]]
         self.assertEqual(sorted(got_moved, key=lambda m: (m[u"doc"], m[u"id"])), sorted(want_moved, key=lambda m: (m[u"doc"], m[u"id"])))

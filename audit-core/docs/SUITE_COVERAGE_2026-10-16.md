@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **241 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **243 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 175 |
+| `tests/measure` | 177 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -191,6 +191,12 @@ cd8 の系統の「行 → claim」(値と字の最初の 1 件)を位置で引�
 
 **2026-10-29 に +1**(`tests/measure/test_xbrl_unnamed_fact.py`。
 P27 が「証拠が無く名指さない」で止めた行で、engine が内側に持つ「名指さなかった fact」は原本の fact かを数える診断の門(封 `docs/XBRL_UNNAMED_FACT_DIAG_SEAL_2026-10-29.md` §5-2 の (a)〜(j)。診断の文書 `docs/XBRL_UNNAMED_FACT_DIAG_2026-10-29.md` の表を記録 `fixtures/xbrl/unnamed_fact_2026-10-29.json` から作り直す・予測 UF-1〜UF-14 の当否を封の字から求める・一致の語と比の帯と 10 の冪を別の書き方で求め直す・包みの門(作り物の RE・LB で返り値を変えず戻せなければ止まる)・封の commit が script・記録・文書・門より前・読んだ入力の sha256)。240 → 241(`tests/measure` 174 → 175)。
+
+**2026-10-30 に +1**(`tests/measure/test_xbrl_unnamed_candidate_seal.py`。
+候補の欄(`verify_document` の出力の Claim の欄 `candidate`・旗 `unnamed_candidate_2026_10_29`・profile `P27C`・客向けの報告の案 A)の封の門(封 `docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md` §7 の 2。封の字に docID・claim の id・禁止語が 0・§2-3 の数を実物の `git grep`(commit `020ffc0`)から数え直す・§1-2 の欄・旗・`basis` の字が engine と同じ・封の commit と承認の追記の commit が engine を触っていない・門の変異)。241 → 242(`tests/measure` 175 → 176)。
+
+**2026-10-30 に +1**(`tests/measure/test_xbrl_unnamed_candidate_result.py`。
+候補の欄を足した engine が他を壊さず止めた行にだけ候補を付けるかを数える測定の門(封 `docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md` §3・§4・§7-5 の (a)〜(j)。測定の文書 `docs/XBRL_UNNAMED_CANDIDATE_RESULT_2026-10-29.md` の表を記録 `fixtures/xbrl/unnamed_candidate_2026-10-29.json` から作り直す・CA-1〜CA-11 の当否と K-1〜K-4 の判定を封の字と記録から求める・配線の門を `regress97`・`stop_reason` から数え直す・engine の sha16 の留め・封の commit が実装と記録より前・読んだ入力の sha256・偽物で赤)。242 → 243(`tests/measure` 176 → 177)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

@@ -978,5 +978,119 @@ class ProvenanceTest(unittest.TestCase):
         self.assertEqual([m["file"] for m in meta], ["a_lab.xml"])
 
 
+
+# ====================================================================================================
+# 案 A(候補の字)。封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §1-3・承認 2026-10-30。**golden の遷移**: 上の SMALL_GOLDEN・UNITS_GOLDEN・
+# GOLDEN_SHA256(入力に candidate の欄が無い)は変えない(測った当時の値を残す)。候補を持つ入力の新しい golden を別名で足す。
+def _small_candidate():
+    """``_small()`` の全 claim に ``candidate`` の欄(全部 None)を付け、N005 に辞書の候補(売上高・当期)、要確認の行 N008 を足してその行にも辞書の候補
+    (資産・当期末・単体の区分)を付ける。違う・一致・対象外・判断しない の行にも辞書の候補を付ける(字には出ない)。"""
+    d = _small()
+    for c in d["claims"]:
+        c["candidate"] = None
+    cl = dict((c["id"], c) for c in d["claims"])
+    cl["N005"]["candidate"] = {"pointer": "xbrl:jppfs_cor:NetSales@CurrentYearDuration", "value": 12345000.0, "basis": "no_same_value"}
+    for i in ("N001", "N004", "N007", "T001"):           # 違う・一致・対象外・判断しない の行に辞書の候補を付けても字には出ない(要確認の理由の欄だけ)
+        cl[i]["candidate"] = {"pointer": "xbrl:jppfs_cor:Assets@CurrentYearInstant", "value": 1.0, "basis": "no_same_value"}
+    extra = _claim("N008", "総資産は9百万円", 9.0, "百万円", "POINTER_NOT_FOUND", "no_same_value", [], None)
+    extra["candidate"] = {"pointer": "xbrl:jppfs_cor:Assets@CurrentYearInstant_NonConsolidatedMember", "value": 987654000.0, "basis": "no_same_value"}
+    d["claims"].append(extra)
+    d["document"]["claims"] = len(d["claims"])
+    return d
+
+
+SMALL_GOLDEN_CANDIDATE = u"""# 文章と出典(XBRL)の照合 ― (書類)
+
+文章の中の数と増減の語を、同じ書類の XBRL の値と突き合わせた。判定は道具が出したまま並べ替えている(足していない)。
+
+| 区分 | 件数 | 意味 |
+|---|---|---|
+| 違う | 3 | 出典に当たる値があり、文の値と**違う**。文の誤りか、当てた出典の誤りかは決めない |
+| 要確認 | 4 | 道具が文を出典の 1 つの値に結べなかった。理由の列を見て人が確かめる |
+| 対象外 | 1 | 出典(XBRL)にその数は無い(株数・人数など) |
+| 判断しない | 1 | 主語が無い・目標や計画・区分が決まらない。道具は判断しない |
+| 一致 | 1 | 出典の値と一致した |
+| 合計 | 10 | |
+
+## 1. 違う ― 3 件
+
+出典に当たる値は見つかったが、文の値と違う。文の誤りか、当てた出典の誤りかは、この表では決めない。「出典の値」は文と同じ単位に直してある。
+
+出典の値は文の桁に丸めた数。括弧は丸める前の値。△ は負の数(財務諸表の書き方)
+
+| # | 文の抜粋 | 文の値 | 出典の値 | 出典 |
+|---|---|---|---|---|
+| N001 | 売上高は40,539百万円 | 40,539百万円 | 40,480 百万円 | 売上高 当期 |
+| N002 | 前期比26.2%増 | 26.2 % | 36.2 %(36.22) | 売上高 当期 / 売上高 前期(前期比(当期 ÷ 前期 − 1)) |
+| N003 | 総資産は53,812千円 | 53,812千円 | 53,812,000 千円 | 資産 当期末 |
+
+## 2. 要確認 ― 4 件
+
+道具が文を出典の 1 つの値に結べなかった。理由の列を見て人が確かめる。
+
+| # | 文の抜粋 | 文の値 | 理由 |
+|---|---|---|---|
+| N005 | 営業利益は3百万円 | 3百万円 | 出典の当期の数と合わず、同じ数も桁違いの数もこの項目に無い。参照先を確かめる。候補: 売上高・当期・12 百万円(12.345) |
+| N006 | 売上高は7百万円 | 7百万円 | 同じ項目の別の区分(セグメント・単体等)の数と合う。どの区分の数かを確かめる |
+| T002 | 減少した | 減少 | something(new) |
+| N008 | 総資産は9百万円 | 9百万円 | 出典の当期の数と合わず、同じ数も桁違いの数もこの項目に無い。参照先を確かめる。候補: 資産・当期末[区分: 単体]・988 百万円(987.654) |
+
+## 3. 対象外 ― 1 件 / 判断しない ― 1 件
+
+対象外: 出典(XBRL)にその数は無い(株数・人数・区分ごとの前期の数など)。判断しない: 主語が無い・目標や計画の数・区分が 1 つに決まらない文。道具は判断しない。
+
+### 対象外 ― 1 件
+
+- N007: 従業員は10名(文の単位(株・名・件 など)の数は出典(XBRL)に無い)
+
+### 判断しない ― 1 件
+
+- T001: 増加した(文に主語(どの項目の数か)が無い)
+
+## 4. 一致 ― 1 件
+
+文の値と出典の値が一致した。出典の内訳: 当期 0 件 / 前期 1 件 / 計算 0 件。
+
+出典の値は文の桁に丸めた数。括弧は丸める前の値。△ は負の数(財務諸表の書き方)
+
+(行は `--full` で出す)
+
+---
+
+<sub>書類の指紋・道具の版・照合した文章の指紋は、同じ名前の `.provenance.json`(機械用)に置いた。</sub>
+"""
+
+
+class CandidateReportTest(unittest.TestCase):
+    def test_candidate_input_matches_the_new_golden_bytes(self):
+        self.assertEqual(RC.render_markdown(_small_candidate(), LABELS, False), SMALL_GOLDEN_CANDIDATE)
+
+    def test_the_old_golden_is_not_changed_when_the_candidate_key_is_absent_or_none(self):
+        self.assertEqual(RC.render_markdown(_small(), LABELS, False), SMALL_GOLDEN)
+        d = _small()
+        for c in d["claims"]:
+            c["candidate"] = None
+        self.assertEqual(RC.render_markdown(d, LABELS, False), SMALL_GOLDEN)
+
+    def test_the_candidate_follows_the_reason_sentence_once_and_only_in_the_check_section(self):
+        md = RC.render_markdown(_small_candidate(), LABELS, False)
+        self.assertEqual(2, md.count("。候補: "))
+        for line in md.split("\n"):
+            if "。候補: " in line:
+                self.assertTrue(line.startswith("| N005 |") or line.startswith("| N008 |"), line)
+                self.assertEqual(1, line.count("。候補: "))
+        self.assertNotIn("候補", [l for l in md.split("\n") if l.startswith("| N001 |")][0])
+        self.assertEqual(RC.REASON_JA["no_same_value"], "出典の当期の数と合わず、同じ数も桁違いの数もこの項目に無い。参照先を確かめる")     # 一文の字は変えない
+
+    def test_candidate_ja_is_empty_without_a_dict_and_survives_unknown_forms(self):
+        self.assertEqual("", RC.candidate_ja({}, LABELS))
+        self.assertEqual("", RC.candidate_ja({"candidate": None}, LABELS))
+        self.assertEqual("", RC.candidate_ja({"candidate": "xbrl:jppfs_cor:NetSales@CurrentYearDuration"}, LABELS))
+        self.assertEqual("", RC.candidate_ja({"candidate": {"pointer": "formula:a-b", "value": 1.0}}, LABELS))
+        c = _claim("N001", "売上高は3百万円", 3.0, "百万円", "POINTER_NOT_FOUND", "no_same_value", [], None)
+        c["candidate"] = {"pointer": "xbrl:jppfs_cor:Unlabeled@WeirdContext", "value": 5000000.0, "basis": "no_same_value"}
+        self.assertEqual("jppfs_cor:Unlabeled・WeirdContext・5 百万円", RC.candidate_ja(c, LABELS))
+        self.assertEqual("jppfs_cor:Unlabeled・WeirdContext・5 百万円", RC.candidate_ja(c, None))
+
 if __name__ == "__main__":
     unittest.main()

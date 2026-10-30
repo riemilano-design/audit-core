@@ -65,6 +65,7 @@ SEAL_CUSTOMER_REPORT = "docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md"    # 2026-
 SEAL_CUSTOMER_REPORT_FIX = "docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md"    # 2026-10-21 追記: 顧客向けの報告形の直し(report_customer.py の中身だけ。下の ENGINE_LATER)
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
 SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
+SEAL_CAND = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"    # 2026-10-30 追記: 候補の欄を足す(下の遷移)
 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に旗 vocab_2026_10_21・frame_rebind の塊(+224 行・既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
 # d5308700eae78c10(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 3461c3f8b7af6675。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)、vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)、registry_setup.py に理由 no_same_value(+2 行)を足した(DEFAULT_PROFILE は P22 のまま)。
@@ -80,7 +81,8 @@ ENGINE_LATER = {"adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
                 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
                 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
                 # 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-                "adapters/xbrl/vocabulary.py": ("514ebb8104451c07", SEAL_DEFAULT_P27),
+                # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
+                "adapters/xbrl/vocabulary.py": ("7fbcfbf0e472f366", SEAL_CAND),
                 # 2026-10-21(P24 の段 1): registry_setup.py に理由 other_frame を足した(+2 行)。この file はこの門が測った時点では動いていない(封の commit から 0 行だった)。
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で registry_setup.py に理由 3 つ(+6 行) を足した。
                 # f42ffe23aaa7673b(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 7f2cbded9c830211。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
@@ -91,12 +93,14 @@ ENGINE_LATER = {"adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
                 # module の中身だけを直す。判定と節の割り当ては変えない)で 715468699973cc4a。受け入れるのは、その封が履歴に在り、値が直した後の値のときだけ。
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で report_customer.py の理由の表に 3 行(+7 行・-2 行。判定と節の割り当ては変えない) を足した。
                 # 715468699973cc4a(報告形の直し 段 1)は残す(測った時点の値)、P26 の段 1 で 141767d189b63733。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
-                "adapters/xbrl/report_customer.py": ("6679138d350ec382", SEAL_P27),
+                # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
+                "adapters/xbrl/report_customer.py": ("bdbaa00a419219fe", SEAL_CAND),
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で extract.py に数の読み取りの足し(+42 行・-0 行)を足した。この file はこの門が測った時点では動いていない(封の commit から 0 行だった)。
                 "adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
                 # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行。実行の字は変えない)。
                 # 受け入れるのは、その封が履歴に在り、値が下の値のときだけ。
-                "adapters/xbrl/verify_document.py": ("c3791080ab5aef2f", SEAL_DEFAULT_P27)}
+                # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
+                "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", SEAL_CAND)}
 
 
 def only_declared_changes(numstat_out, status_out):
@@ -131,6 +135,8 @@ ENGINE_BUNDLE26 = "4f417562d322caa7241199d8462783e6a260a275a4e2794d18396a3bc6dc6
 ENGINE_BUNDLE27 = "9dd27fab331b2e4962c6d9c6a2710a7f91816395f3c820abbc92016437d4cbb0"
 #: 2026-10-28(既定を P26 -> P27 に切り替える 段 2): P27(既定)で採り直した記録を採ったときの engine の束ねた sha256(core/・adapters/ の 37 file)。上の ENGINE_BUNDLE26・ENGINE_BUNDLE27 は残す(P26 の記録・P27 の段 2 を採ったときの値)。
 ENGINE_BUNDLE_DEFAULT27 = "49bcd3ac7c3bfdcdadf275a8829f14b21e45a4908c3e857872231412e2d3e41c"
+#: 2026-10-30(候補の欄を足す): 封 SEAL_CAND §2-3 が宣言した遷移の後の engine の束ねた sha256(core/・adapters/ の 37 file)。上の ENGINE_BUNDLE_DEFAULT27 は記録を採った時点の値として残す。
+ENGINE_BUNDLE_CAND = "4f972be36943ce38fd44ee9e825c4cbd37d0aea23d09f292bbb8818250f30e8e"
 #: P26 のときの記録の写し(HEAD aeae608 の ritual_2026-10-20.json と同じバイト列)の sha256。字で留める。
 REC26_SHA256 = "42ff63e27e43200fbbc2172482a9c8fefc687e78da65f152138639134f87e3b9"
 #: P21 のときの記録の写し(git の履歴 3320c8c の ritual_2026-10-20.json と同じバイト列)の sha256。字で留める。
@@ -716,7 +722,15 @@ def check_rerun(res, rec):
     got_bundle = res["json"][K_ENV][u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)"]
     # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 記録は P27(既定)で採り直した(いまの engine で採ったので束ねた sha256 は記録を採ったときの値 ENGINE_BUNDLE_DEFAULT27)。
     # 2026-10-27 の P27 の段 2 の値(ENGINE_BUNDLE27)・P26 の記録を採ったときの値(ENGINE_BUNDLE26)は、それぞれの記録を採った時点の値として残す(ここでは受け入れない)。
-    assert got_bundle == ENGINE_BUNDLE_DEFAULT27, u"いまの engine が記録を採ったときの engine と違う(動いたなら記録を採り直す人間の判断)"
+    # 2026-10-30(候補の欄を足す): 封 SEAL_CAND §2-3 が宣言した遷移。engine の 3 file(vocabulary.py・verify_document.py・report_customer.py)が動き、束ねた sha256 が下の値(ENGINE_BUNDLE_CAND)になった。
+    # 記録の本体(儀式の結果)は 1 字も違わない(上の strip_volatile の比べが通った後でだけここに来る)。記録を採った時点の値 ENGINE_BUNDLE_DEFAULT27 は残す。受け入れるのは、その封が履歴に在り、値が宣言の値のときだけ。
+    if got_bundle != ENGINE_BUNDLE_DEFAULT27:
+        import subprocess
+        added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", SEAL_CAND], cwd=ROOT, capture_output=True, text=True).stdout.split()
+        assert added, u"engine が動いているのに、遷移を宣言した封が履歴に無い: " + SEAL_CAND
+        assert got_bundle == ENGINE_BUNDLE_CAND, u"いまの engine が記録を採ったときの engine とも、宣言された遷移の値とも違う(動いたなら記録を採り直す人間の判断)"
+    else:
+        assert got_bundle == ENGINE_BUNDLE_DEFAULT27
     # 2026-10-28(段 2): 記録は P27(既定)で採り直した。通した 2 / 243 = 0.8%・止めた 210 / 243 = 86.4%(P26 のときも同じ数。P22 のときは 15 / 240、P21 のときは 17 / 241)
     assert u"**通した %s**" % rec[K_PASSED][u"字"] in res["md"]
     scr = res["stdout"].strip().splitlines()

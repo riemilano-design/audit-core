@@ -90,6 +90,16 @@ class FlagShapeTest(unittest.TestCase):
         self.assertIs(V.PROFILES["P27E"], V.P27E)
         self.assertFalse(V.P27.last_branch_relative_2026_10_27)
 
+    def test_p27c_is_p27_plus_exactly_the_candidate_flag(self):
+        """封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29 §1-2 (イ)。P27・P27E の定義は変えず、P27C だけが候補の旗を持つ。既定は P27 のまま。"""
+        self.assertEqual(dataclasses.replace(V.P27, name="P27C", unnamed_candidate_2026_10_29=True), V.P27C)
+        self.assertIs(V.PROFILES["P27C"], V.P27C)
+        self.assertEqual(["P27C"], sorted(n for n, p in V.PROFILES.items() if p.unnamed_candidate_2026_10_29))
+        self.assertFalse(V.P27.unnamed_candidate_2026_10_29)
+        self.assertFalse(V.P27E.unnamed_candidate_2026_10_29)
+        self.assertIs(False, {f.name: f for f in dataclasses.fields(V.Profile)}["unnamed_candidate_2026_10_29"].default)
+        self.assertEqual("P27", V.DEFAULT_PROFILE)
+
     def test_the_flags_are_false_by_default_in_declared_order(self):
         fields = {f.name: f for f in dataclasses.fields(V.Profile)}
         for n in FLAGS:
@@ -100,7 +110,7 @@ class FlagShapeTest(unittest.TestCase):
     def test_only_p27_and_p27e_have_any_flag(self):
         for n, p in sorted(V.PROFILES.items()):
             have = [f for f in FLAGS if getattr(p, f)]
-            if n == "P27":
+            if n in ("P27", "P27C"):      # 2026-10-30 P27C = P27 + 候補の旗(封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29。この 5 つの旗の外)
                 want = [f for f in FLAGS if f != "last_branch_relative_2026_10_27"]
             elif n == "P27E":
                 want = list(FLAGS)
@@ -113,7 +123,7 @@ class FlagShapeTest(unittest.TestCase):
         self.assertEqual(dataclasses.replace(V.P26, name="P27E_OFF"), P27E_OFF)
 
     def test_no_per_flag_profile_is_registered_and_the_default_is_p27_since_default_p27_step_2(self):
-        self.assertEqual(["P27", "P27E"], sorted(n for n in V.PROFILES if "P27" in n))
+        self.assertEqual(["P27", "P27C", "P27E"], sorted(n for n in V.PROFILES if "P27" in n))      # 2026-10-30 P27C を明示して登録(封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29 §1-2 (イ))。旗 1 つずつの profile ではない
         # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 既定は P27。P27 の旗 4 つは真・B の旗(last_branch_relative_2026_10_27)は偽(P27E は既定にしない)
         self.assertEqual("P27", V.DEFAULT_PROFILE)
         self.assertIs(V.PROFILES[V.DEFAULT_PROFILE], V.P27)

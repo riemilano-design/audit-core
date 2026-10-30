@@ -74,7 +74,10 @@ ENGINE_AT_MEASURE = {
     "adapters/xbrl/resolve.py": "a41043763c1d4073", "adapters/xbrl/comparators.py": "d8706338325e725b", "adapters/xbrl/verify_document.py": "c3791080ab5aef2f",
 }
 #: 宣言された遷移 {file: (遷移の後の sha16, その遷移を宣言した封)}。今は 0 件。足すときは、封が履歴に在り、値が宣言の値のときだけ受け入れる。測った時点の値は消さない。
-ENGINE_DECLARED = {}
+# 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。この 6 本のうち動くのは vocabulary.py(旗 1 つ・P27C・PROFILES の登録)と
+# verify_document.py(Claim の欄 candidate)。測った時点の値は ENGINE_AT_MEASURE に残す。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
+ENGINE_DECLARED = {"adapters/xbrl/vocabulary.py": ("7fbcfbf0e472f366", "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"),
+                   "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md")}
 
 #: 記録から求めた当否のうち外れ・判定しないの名前(測った事実。外れは外れのまま残す。封も予測も直さない)。食い違えば d_5 が赤。
 #: 今回は 17 本のうち 3 本が外れ(SR-6・SR-12・SR-13)。判定しないは 0 本。

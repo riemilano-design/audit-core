@@ -450,6 +450,9 @@ class Profile:
     per_unit_counter_2026_10_27: bool = False
     # C3 当期末より先の決算期(「2027年5月期」等)の後ろの数は UNVERIFIABLE(target_or_plan)。
     future_period_2026_10_27: bool = False
+    # 候補(封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §1-2): reason が no_same_value の行に、名指さなかった fact を verify_document の candidate の欄として添える。
+    # state・reason・pointers・recomputed は変えない(偽でも欄は在り全行 None)。P27C だけが真(既定の P27・P27E は偽)。
+    unnamed_candidate_2026_10_29: bool = False
 
 
 P1 = Profile(
@@ -806,3 +809,5 @@ P27 = dataclasses.replace(P26, name="P27", written_precision_2026_10_27=True, pe
 PROFILES["P27"] = P27
 P27E = dataclasses.replace(P27, name="P27E", last_branch_relative_2026_10_27=True)
 PROFILES["P27E"] = P27E
+P27C = dataclasses.replace(P27, name="P27C", unnamed_candidate_2026_10_29=True)    # 封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29 §1-2 (イ)。明示したときだけ候補が付く。既定にしない
+PROFILES["P27C"] = P27C

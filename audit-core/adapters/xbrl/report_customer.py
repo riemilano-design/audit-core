@@ -739,6 +739,25 @@ def source_value_report(c, doc_unit="円", prefer_sentence=False):
 # 節の振り分け(state・reason から決定論で)
 # ---------------------------------------------------------------------------
 
+def candidate_ja(c, labels):
+    """候補(no_same_value の行で道具が見ていた fact。封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29 §1-3 案 A)の字。
+    「ラベル(無ければ要素名)・期[区分: …]・値(文の単位・桁)」。候補が無ければ空の字。正しさは測っていない。"""
+
+    cand = c.get("candidate")
+    if not isinstance(cand, dict):
+        return ""
+    name, ctx = split_pointer(cand.get("pointer"))
+    if name is None:
+        return ""
+    per, mem = split_context(ctx)
+    text = "%s・%s" % (element_ja(name, labels or {}), per or ctx or "")
+    if mem:
+        text += "[区分: %s]" % member_ja(mem, labels)
+    c2 = dict(c)
+    c2["recomputed"] = cand.get("value")
+    return text + "・" + source_value_report(c2)[0]
+
+
 def section_of(c):
     st = c.get("state")
     if st == STATE_MISMATCH:
@@ -903,8 +922,10 @@ def render_markdown(out, labels=None, full=False, dei=None):
         L.append("| # | 文の抜粋 | 文の値 | 理由 |")
         L.append("|---|---|---|---|")
         for c in rows:
+            cj = candidate_ja(c, labels)
             L.append("| %s | %s | %s | %s |" % (
-                cell(c.get("id")), _excerpt(c), cell(claim_value_written(c)) or "―", cell(reason_ja(c.get("reason")))))
+                cell(c.get("id")), _excerpt(c), cell(claim_value_written(c)) or "―",
+                cell(reason_ja(c.get("reason")) + ("。候補: " + cj if cj else ""))))
     else:
         L.append("(なし)")
     L.append("")

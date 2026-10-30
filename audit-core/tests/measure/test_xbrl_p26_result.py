@@ -70,13 +70,16 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/extract.py": "9982599fc31cbab3", "adapters/x
 SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
 SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
+SEAL_CAND = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"    # 2026-10-30 追記: 候補の欄を足す(下の遷移)
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
 # 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-ENGINE_TRANSITIONS = {"adapters/xbrl/vocabulary.py": ("514ebb8104451c07", SEAL_DEFAULT_P27),
+# 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
+ENGINE_TRANSITIONS = {"adapters/xbrl/vocabulary.py": ("7fbcfbf0e472f366", SEAL_CAND),
                       "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
                       "adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
                       "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
-                      "adapters/xbrl/report_customer.py": ("6679138d350ec382", SEAL_P27)}
+                      # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
+                      "adapters/xbrl/report_customer.py": ("bdbaa00a419219fe", SEAL_CAND)}
 #: 封の commit から 0 行でなければならない file(core/ は別に見る)。
 UNTOUCHED = ("adapters/xbrl/report.py", "adapters/xbrl/verify_document.py", "adapters/xbrl/comparators.py")
 
@@ -686,6 +689,11 @@ class RecordTest(unittest.TestCase):
         for rel in UNTOUCHED:
             # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行)だけは動いてよい
             # (封が履歴に在り、sha16 が宣言の値のときだけ。他の file は従来どおり 0 行)。
+            # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移。verify_document.py は上の docstring の 1 行(+1 行・-1 行)に続けて、
+            # Claim の欄 candidate(+11 行・-1 行)が動く(封の commit からの numstat は 12・2)。封が履歴に在り、sha16 が宣言の値のときだけ受け入れる。上の段 2 の値(c3791080ab5aef2f・1・1)は測った時点の値として残す。
+            if rel == "adapters/xbrl/verify_document.py" and sha16(rel) == "6c76c8ade6c7b1c8" and git("log", "--diff-filter=A", "--format=%H", "--", "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md").stdout.split():
+                self.assertEqual(git("diff", "--numstat", SEAL_COMMIT, "--", rel).stdout.split()[:2], ["12", "2"], rel)
+                continue
             if rel == "adapters/xbrl/verify_document.py" and sha16(rel) == "c3791080ab5aef2f" and git("log", "--diff-filter=A", "--format=%H", "--", "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md").stdout.split():
                 self.assertEqual(git("diff", "--numstat", SEAL_COMMIT, "--", rel).stdout.split()[:2], ["1", "1"], rel)
                 continue

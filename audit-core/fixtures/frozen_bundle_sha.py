@@ -141,6 +141,13 @@ FROZEN_BUNDLE_GENERATIONS = (
      "判定は封 docs/XBRL_P27_SEAL_2026-10-27.md §4 の条件を記録の数から機械で求めた結果 docs/XBRL_P27_RESULT_2026-10-27.md(commit aeae608)で「P27 を既定の候補として記録する」。"
      "人間の言葉 2026-10-27「価値を上げるためにも君に任せる 進めよう」・2026-10-28「君に任せるよ」、封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md(commit 87f83fd)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("864b1f96292f1615c7e5b7e3bbd6924ebd9955b8354b3c5d51400ba9a01fb054",
+     "2026-10-30 feature/audit-core-final-eval-8(候補の欄を足す): vocabulary.py に旗 unnamed_candidate_2026_10_29 と P27C・PROFILES の登録を足し(+5 行・-0 行。DEFAULT_PROFILE は P27 のまま)、"
+     "verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾。旗が真で reason が no_same_value の行だけ辞書、他は None)と docstring の 1 段を足し(+11 行・-1 行。"
+     "書き換えは CLAIM_FIELDS の 1 行だけ)、report_customer.py に candidate_ja と「要確認」の理由の欄の描き直し 1 行を足した(+22 行・-1 行。判定・節の割り当て・REASON_JA の字は変えない)。"
+     "recipes.py・extract.py・registry_setup.py・comparators.py・resolve.py・run.py・report.py・verify_external.py・core/py は 0 行。"
+     "人間の承認 2026-10-30「君に任せる進めて」(欄を足す・(イ) P27C・案 A)、封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md(commit 0df5222、承認の追記 db68a2c)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

@@ -48,6 +48,12 @@ P27_AFTER16 = {"vocabulary.py": "85896a67913ce1e7", "recipes.py": "52d645e713c53
 DEFAULT_P27_SEAL_REL = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"
 DEFAULT_P27_AFTER16 = {"vocabulary.py": "514ebb8104451c07", "verify_document.py": "c3791080ab5aef2f"}
 DEFAULT_P27_DELETIONS = {"adapters/xbrl/vocabulary.py": 1, "adapters/xbrl/verify_document.py": 1}
+#: 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録(+5 行)、
+#: verify_document.py に Claim の欄 candidate(+11 行・-1 行)、report_customer.py に candidate_ja と「要確認」の理由の欄の描き直し 1 行(+22 行・-1 行)。上の DEFAULT_P27_AFTER16
+#: (既定を P27 に切り替える 段 2 の後の値)は測った時点の値として残す。受け入れるのは、その封が履歴に在り、3 file の sha16 が下の値のときだけ(封の commit 43fe0e3 からの削除は累計: 1・2・1)。
+CAND_SEAL_REL = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"
+CAND_AFTER16 = {"vocabulary.py": "7fbcfbf0e472f366", "verify_document.py": "6c76c8ade6c7b1c8", "report_customer.py": "bdbaa00a419219fe"}
+CAND_DELETIONS = {"adapters/xbrl/vocabulary.py": 1, "adapters/xbrl/verify_document.py": 2, "adapters/xbrl/report_customer.py": 1}
 #: 既存の門が行頭の名前を数える変数名(封 §2-3 の言い分け)。新しい門はこれらを行頭に置かない。
 RESERVED_PREFIXES = ("ENGINE_LATER", "UNTOUCHED", "PIN_DEF", "LATER_ENGINE_COMMITS", "FROZEN_LATER", "ENGINE_TRANSITIONS", "LATER_FINGERPRINT",
                      "FINGERPRINT_", "LATER_TARGET", "LATER_FROZEN", "FROZEN_BUNDLE_AT_SEAL", "TARGET_AT_SEAL", "ENGINE_AT_SEAL")
@@ -75,8 +81,19 @@ def seal_commit():
     return got[0] if len(got) == 1 else None
 
 
+def cand_declared():
+    u"""候補の欄を足す遷移(封 CAND_SEAL_REL §2-3)が宣言されているか。封が履歴に在り、作業木の 3 file の sha16 が宣言の値のときだけ True。"""
+    added = git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + CAND_SEAL_REL).stdout.split()
+    if not added:
+        return False
+    return dict((n, sha16_of("adapters/xbrl/" + n)) for n in CAND_AFTER16) == CAND_AFTER16
+
+
 def default_p27_declared():
-    u"""既定を P27 に切り替える 段 2 の遷移が宣言されているか。封が履歴に在り、作業木の 2 file の sha16 が宣言の値のときだけ True。"""
+    u"""既定を P27 に切り替える 段 2 の遷移が宣言されているか。封が履歴に在り、作業木の 2 file の sha16 が宣言の値のときだけ True。
+    2026-10-30: 候補の欄を足す遷移(cand_declared)の後も既定は P27 のままなので、その宣言の後も True(vocabulary.py・verify_document.py は後の値になる)。"""
+    if cand_declared():
+        return True
     added = git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + DEFAULT_P27_SEAL_REL).stdout.split()
     if not added:
         return False
@@ -268,6 +285,8 @@ class SealTextTest(unittest.TestCase):
             self.assertTrue(holders, name)                                                  # 封の時点の値を字で持つ file(測った時点の値は残す)
             self.assertTrue(any(P27_AFTER16[name] in read(f) for f in union), name)         # いまの値(宣言された遷移の値)を字で持つ file が少なくとも 1 つ
             want = DEFAULT_P27_AFTER16[name] if (name == "vocabulary.py" and default_p27_declared()) else P27_AFTER16[name]
+            if cand_declared() and name in CAND_AFTER16:
+                want = CAND_AFTER16[name]          # 2026-10-30: 候補の欄を足す遷移の後の値(上の値は測った時点の値として残す)
             self.assertEqual(sha16_of("adapters/xbrl/" + name), want, name)
 
 
@@ -288,14 +307,17 @@ class EngineDiffTest(unittest.TestCase):
         rows = parse_numstat(out)
         self.assertTrue(rows)
         declared = default_p27_declared()
-        check_insertion_only(out, DEFAULT_P27_DELETIONS if declared else None)
+        cand = cand_declared()
+        check_insertion_only(out, CAND_DELETIONS if cand else (DEFAULT_P27_DELETIONS if declared else None))
         for name in ENGINE5:
             self.assertIn("audit-core/adapters/xbrl/" + name, rows, name)
         # 封 §2-1 の挿入の行数の見込み(vocabulary 10〜20・extract 10〜20・recipes 90〜140・registry 1〜4・report 1〜4)のうち、見込みの内に収まらない file は無い(recipes は上限が 140 の見込み)
         # 2026-10-28: 既定を P26 -> P27 に切り替える 段 2 の遷移(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1)が宣言されていれば、削除は vocabulary.py の 1 行(DEFAULT_PROFILE)と
         # verify_document.py の 1 行(docstring)だけで、vocabulary.py の挿入は注記の分(≤ 8)だけ増える。宣言が無ければ従来どおり削除 0・挿入 10〜20。
-        extra = 8 if declared else 0
-        self.assertEqual(sum(DEFAULT_P27_DELETIONS.values()) if declared else 0, sum(d for _a, d in rows.values()))
+        # 2026-10-30(候補の欄を足す。封 CAND_SEAL_REL §2-3): vocabulary.py の挿入はさらに +5(旗 1 つ・P27C・PROFILES の登録)、report_customer.py は +22(candidate_ja と理由の欄の描き直し)、
+        # 削除は累計 vocabulary.py 1・verify_document.py 2・report_customer.py 1(CLAIM_FIELDS の 1 行・理由の欄の 1 行が加わる)。
+        extra = (13 if cand else 8) if declared else 0
+        self.assertEqual(sum(CAND_DELETIONS.values()) if cand else (sum(DEFAULT_P27_DELETIONS.values()) if declared else 0), sum(d for _a, d in rows.values()))
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 10)
         self.assertLessEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 20 + extra)
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/extract.py"][0], 10)
@@ -305,11 +327,15 @@ class EngineDiffTest(unittest.TestCase):
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/registry_setup.py"][0], 1)
         self.assertLessEqual(rows["audit-core/adapters/xbrl/registry_setup.py"][0], 4)
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/report_customer.py"][0], 1)
-        self.assertLessEqual(rows["audit-core/adapters/xbrl/report_customer.py"][0], 4)
+        self.assertLessEqual(rows["audit-core/adapters/xbrl/report_customer.py"][0], 4 + 22 if cand else 4)
 
     def test_8_the_untouched_engine_files_and_core_are_byte_equal_to_the_seal_commit(self):
         for name in UNCHANGED_ENGINE:
             got = git("diff", self.s2, "--numstat", "--", "audit-core/adapters/xbrl/" + name).stdout.strip()
+            if name == "verify_document.py" and cand_declared():
+                # 2026-10-30: docstring の 1 行(+1 行・-1 行)に続けて、Claim の欄 candidate(+11 行・-1 行)。累計 12・2。他の 3 file は 0 行のまま
+                self.assertEqual("12\t2\taudit-core/adapters/xbrl/verify_document.py", got, name)
+                continue
             if name == "verify_document.py" and default_p27_declared():
                 # 2026-10-28: docstring の 1 行(+1 行・-1 行)だけ。他の 3 file は 0 行のまま
                 self.assertEqual("1\t1\taudit-core/adapters/xbrl/verify_document.py", got, name)
@@ -326,6 +352,8 @@ class EngineDiffTest(unittest.TestCase):
                 want = P27_AFTER16[name]
                 if default_p27_declared() and name == "vocabulary.py":
                     want = DEFAULT_P27_AFTER16[name]          # 2026-10-28: 既定を P27 に切り替える 段 2 の遷移の値(P27_AFTER16 は P27 の段 2 の後の値で、測った時点の値として残す)
+                if cand_declared() and name in CAND_AFTER16:
+                    want = CAND_AFTER16[name]                 # 2026-10-30: 候補の欄を足す遷移の後の値
                 self.assertEqual(want, got, u"**%s が封の時点の値でも、宣言された遷移の値でもない**" % name)
 
     def test_10_the_s2_commit_did_not_touch_the_engine(self):
@@ -398,7 +426,7 @@ class GateMutationTest(unittest.TestCase):
     def test_m5_a_deleted_line_or_an_outside_file_is_red(self):
         s2 = seal_commit()
         out = git("diff", "--numstat", s2, "--", "audit-core/adapters", "audit-core/core").stdout
-        allowed = DEFAULT_P27_DELETIONS if default_p27_declared() else None
+        allowed = CAND_DELETIONS if cand_declared() else (DEFAULT_P27_DELETIONS if default_p27_declared() else None)
         check_insertion_only(out, allowed)
         self._red(check_insertion_only, out + "1\t1\taudit-core/adapters/xbrl/recipes.py\n", allowed)
         self._red(check_insertion_only, out + "3\t0\taudit-core/adapters/xbrl/comparators.py\n", allowed)
