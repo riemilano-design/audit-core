@@ -1,0 +1,331 @@
+{
+ "判定者": "2巡目 席1(記憶なし)",
+ "読んだファイル": [
+  "/Users/midoriko/Desktop/sgogi-coach/audit-core/fixtures/xbrl/blind_round2_material_1_2026-10-12.json",
+  "/Users/midoriko/Desktop/sgogi-coach/audit-core/fixtures/xbrl/blind_round2_facts_2026-10-12.json",
+  "/Users/midoriko/Desktop/sgogi-coach/audit-core/fixtures/xbrl/blind_round2_contexts_2026-10-12.json"
+ ],
+ "行": [
+  {
+   "行の鍵": "Q-154",
+   "判定": "判定不能",
+   "形": null,
+   "当期側": null,
+   "前期側": null,
+   "差の計算": null,
+   "文が述べている単位": "%(前年同期比)",
+   "母集団": "連結",
+   "値は一致するか": "確かめていない",
+   "判定の理由": "「売上高は380億6千4百万円(同102.9%)」の「同」は直前の「前連結会計年度比」を指し、102.9% は当期売上高÷前期売上高の比。比は 1 つの fact でも 2 つの fact の差でもなく、この課題の形(単一/差/差額そのもの)のどれにも当たらないため判定不能とする。",
+   "迷った点": "比の分子・分母は jppfs_cor:NetSales CurrentYearDuration(2025-07-01..2026-06-30)=38064274000 と jppfs_cor:NetSales Prior1YearDuration(2024-07-01..2025-06-30)=36975577000 で、38064274000/36975577000=1.0294 → 102.9% と整合する(jpcrp_cor:NetSalesSummaryOfBusinessResults も同値)。比そのものを持つ fact は無い。"
+  },
+  {
+   "行の鍵": "Q-138",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "当期側": {
+    "要素": "jppfs_cor:NetSales",
+    "context": "CurrentYearDuration",
+    "期間": "2025-07-01..2026-06-30",
+    "値": 1850502000.0
+   },
+   "前期側": {
+    "要素": "jppfs_cor:NetSales",
+    "context": "Prior1YearDuration",
+    "期間": "2024-07-01..2025-06-30",
+    "値": 1844060000.0
+   },
+   "差の計算": "1850502000 − 1844060000 = 6442000(=6,442千円)",
+   "文が述べている単位": "千円",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "「売上高は…前連結会計年度に比べ6,442千円増加」なので、概念は連結の売上高、形は当期売上高−前期売上高の差。同じ文の 1,850,502千円が当期側の NetSales と一致する。",
+   "迷った点": "同値の fact: jpcrp_cor:NetSalesSummaryOfBusinessResults(CurrentYearDuration/Prior1YearDuration)、jpcrp_cor:RevenuesFromExternalCustomers(CurrentYearDuration/Prior1YearDuration、および _ReportableSegmentsMember)。いずれも同じ売上高の別表示で、損益計算書の売上高として jppfs_cor:NetSales を採った。"
+  },
+  {
+   "行の鍵": "Q-250",
+   "判定": "独立判定",
+   "形": "単一",
+   "当期側": {
+    "要素": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+    "context": "CurrentYearInstant",
+    "期間": "2026-06-30",
+    "値": 0.617
+   },
+   "前期側": null,
+   "差の計算": null,
+   "文が述べている単位": "%",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "「当社グループの自己資本比率は61.7%」なので、概念は連結の自己資本比率、期間は当連結会計年度末。member 無しの CurrentYearInstant の fact 0.617 が 61.7% に一致する。",
+   "迷った点": "個別(_NonConsolidatedMember)は 0.994 で不一致なので除外。同値の他要素は無い。"
+  },
+  {
+   "行の鍵": "Q-222",
+   "判定": "独立判定",
+   "形": "単一",
+   "当期側": {
+    "要素": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+    "context": "CurrentYearDuration",
+    "期間": "2025-07-01..2026-06-30",
+    "値": 0.058
+   },
+   "前期側": null,
+   "差の計算": null,
+   "文が述べている単位": "%",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "「当連結会計年度におきましては、株主資本利益率(ROE)は5.8%」なので、概念は連結の自己資本利益率、期間は当連結会計年度。CurrentYearDuration(member 無し)の 0.058 が一致する。",
+   "迷った点": "個別(_NonConsolidatedMember)は 0.075 で不一致。同値の他要素は無い。"
+  },
+  {
+   "行の鍵": "Q-049",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "当期側": {
+    "要素": "jppfs_cor:NetAssets",
+    "context": "CurrentYearInstant",
+    "期間": "2026-06-30",
+    "値": 17165944000.0
+   },
+   "前期側": {
+    "要素": "jppfs_cor:NetAssets",
+    "context": "Prior1YearInstant",
+    "期間": "2025-06-30",
+    "値": 15498746000.0
+   },
+   "差の計算": "17165944000 − 15498746000 = 1667198000(=16億6千7百万円)",
+   "文が述べている単位": "百万円(億・千万表記)",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "「純資産合計は、前連結会計年度末と比べて…増加し、171億6千5百万円(前連結会計年度は154億9千8百万円)」と両期末残高を並べているので、概念は連結貸借対照表の純資産合計、形は当期末−前期末の差。同じ文の 171億6千5百万・154億9千8百万が両 fact と一致する。",
+   "迷った点": "差額そのものの fact として jppfs_cor:TotalChangesOfItemsDuringThePeriod CurrentYearDuration=1667198000(株主資本等変動計算書の当期変動額合計)が同値で存在する。文は「前連結会計年度末と比べて」と期末残高の比較を述べているので差の形を採った。jpcrp_cor:NetAssetsSummaryOfBusinessResults も同値。"
+  },
+  {
+   "行の鍵": "Q-087",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "当期側": {
+    "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+    "context": "CurrentYearDuration",
+    "期間": "2025-07-01..2026-06-30",
+    "値": 525200000.0
+   },
+   "前期側": {
+    "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+    "context": "Prior1YearDuration",
+    "期間": "2024-07-01..2025-06-30",
+    "値": 507221000.0
+   },
+   "差の計算": "525200000 − 507221000 = 17979000(=17,979千円)",
+   "文が述べている単位": "千円",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "「販売費及び一般管理費につきましては、17,979千円増加(前連結会計年度比3.5%増)し、525,200千円」なので、概念は連結の販売費及び一般管理費、形は当期−前期の差。同じ文の 525,200千円が当期側と一致する。",
+   "迷った点": null
+  },
+  {
+   "行の鍵": "Q-088",
+   "判定": "判定不能",
+   "形": null,
+   "当期側": null,
+   "前期側": null,
+   "差の計算": null,
+   "文が述べている単位": "百万円(億・千万表記)",
+   "母集団": "連結",
+   "値は一致するか": "確かめていない",
+   "判定の理由": "概念は連結の「退職給付に係る調整累計額」の当期の増加。候補が (a) 貸借対照表残高の差 2287023000−1201534000=1085489000 と、(b) 株主資本等変動計算書の当期変動額 1085488000 の 2 系統あり、百万円表記(10億8千5百万)ではどちらも 1,085 で区別できない。同じ文の他の数(剰余金の配当・当期純利益)は変動計算書の流量 fact と合うが、(b) の中でも要素名で 1 つに絞れないため判定不能とする。",
+   "迷った点": "(a) jppfs_cor:RemeasurementsOfDefinedBenefitPlans CurrentYearInstant=2287023000 − Prior1YearInstant=1201534000(差 1085489000)。(b1) jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity CurrentYearDuration_RemeasurementsOfDefinedBenefitPlansMember=1085488000。(b2) jppfs_cor:TotalChangesOfItemsDuringThePeriod CurrentYearDuration_RemeasurementsOfDefinedBenefitPlansMember=1085488000。(b3) jppfs_cor:RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI CurrentYearDuration=1085488000(包括利益計算書の「退職給付に係る調整額」で名称が違う)。"
+  },
+  {
+   "行の鍵": "Q-024",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "当期側": {
+    "要素": "jppfs_cor:OrdinaryIncome",
+    "context": "CurrentYearDuration",
+    "期間": "2025-07-01..2026-06-30",
+    "値": -98576000.0
+   },
+   "前期側": {
+    "要素": "jppfs_cor:OrdinaryIncome",
+    "context": "Prior1YearDuration",
+    "期間": "2024-07-01..2025-06-30",
+    "値": -7091000.0
+   },
+   "差の計算": "(−98576000) − (−7091000) = −91485000(=91,485千円の減益)",
+   "文が述べている単位": "千円",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "「経常損失98,576千円と前連結会計年度に比べ91,485千円(前連結会計年度は経常損失7,091千円)の減益」なので、概念は連結の経常損益、形は当期−前期の差。同じ文の 98,576千円・7,091千円が両 fact(符号は損失=負)と一致する。",
+   "迷った点": "同値の fact: jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults(CurrentYearDuration=−98576000 / Prior1YearDuration=−7091000)。損益計算書の経常損益として jppfs_cor:OrdinaryIncome を採った。"
+  },
+  {
+   "行の鍵": "Q-107",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "当期側": {
+    "要素": "jppfs_cor:NetAssets",
+    "context": "Prior1YearInstant",
+    "期間": "2025-06-30",
+    "値": 15498746000.0
+   },
+   "前期側": {
+    "要素": "jppfs_cor:NetAssets",
+    "context": "Prior2YearInstant",
+    "期間": "2024-06-30",
+    "値": 13486462000.0
+   },
+   "差の計算": "15498746000 − 13486462000 = 2012284000(=20億1千2百万円)。この行の「当期」は前連結会計年度(2025-06-30 末)、「前期」はその前年度末(2024-06-30)",
+   "文が述べている単位": "百万円(億・千万表記)",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "「(前連結会計年度は20億1千2百万円増加)」は、前連結会計年度における純資産合計の増加なので、概念は連結の純資産合計、形は前期末−前々期末の差。前期末 154億9千8百万円は同じ文と一致する。",
+   "迷った点": "差額そのものの fact として jppfs_cor:TotalChangesOfItemsDuringThePeriod Prior1YearDuration=2012283000(百万円では同じ 2,012)が存在する。Q-049 と同じ文で期末残高の比較を述べているため差の形を採った。jpcrp_cor:NetAssetsSummaryOfBusinessResults(Prior1YearInstant/Prior2YearInstant)も同値。"
+  },
+  {
+   "行の鍵": "Q-201",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "当期側": {
+    "要素": "jppfs_cor:LongTermLoansPayable",
+    "context": "CurrentYearInstant",
+    "期間": "2026-06-30",
+    "値": 275773000.0
+   },
+   "前期側": {
+    "要素": "jppfs_cor:LongTermLoansPayable",
+    "context": "Prior1YearInstant",
+    "期間": "2025-06-30",
+    "値": 510637000.0
+   },
+   "差の計算": "275773000 − 510637000 = −234864000(=2億3千4百万円の減少)",
+   "文が述べている単位": "百万円(億・千万表記)",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "負債の変動を列挙する文の「長期借入金の減少2億3千4百万円」なので、概念は連結貸借対照表の長期借入金(固定負債)、形は当期末−前期末の差。同じ文の他の項目(完成業務補償引当金の増加 991−205=786、繰延税金負債の増加 1738−1290=448)も貸借対照表残高の差と合う。",
+   "迷った点": "同値の fact: jppfs_cor:CurrentPortionOfLongTermLoansPayable CurrentYearInstant=234864000(1年内返済予定の長期借入金の当期末残高)。値は一致するが概念が違う(残高であって減少額ではない)ので採らない。jppfs_cor:RepaymentOfLongTermLoansPayableFinCF CurrentYearDuration=−332864000 は 332 で不一致。"
+  },
+  {
+   "行の鍵": "Q-165",
+   "判定": "独立判定",
+   "形": "差額そのものの fact",
+   "当期側": {
+    "要素": "jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF",
+    "context": "CurrentYearDuration",
+    "期間": "2025-07-01..2026-06-30",
+    "値": -93465000.0
+   },
+   "前期側": null,
+   "差の計算": null,
+   "文が述べている単位": "百万円(億・千万表記)",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "営業活動によるキャッシュ・フローの内訳を説明する文(税金等調整前当期純利益・減価償却費・法人税等の支払額が並ぶ)の「契約負債の減少額」なので、概念はキャッシュ・フロー計算書の契約負債の増減額という差額そのものの fact。CurrentYearDuration の −93465000 が 9千3百万円の減少に一致する。",
+   "迷った点": "貸借対照表の差 jppfs_cor:ContractLiabilities CurrentYearInstant=1500638000 − Prior1YearInstant=1594084000 = −93446000 も百万円では同じ 93 になるが、文はキャッシュ・フロー計算書の項目を述べているので採らない。"
+  },
+  {
+   "行の鍵": "Q-151",
+   "判定": "判定不能",
+   "形": null,
+   "当期側": null,
+   "前期側": null,
+   "差の計算": null,
+   "文が述べている単位": "%(前年同期比)",
+   "母集団": "連結",
+   "値は一致するか": "確かめていない",
+   "判定の理由": "「経常利益は14億5千7百万円(同53.8%)」の「同」は前連結会計年度比で、53.8% は当期経常利益÷前期経常利益の比。比は単一の fact でも 2 つの fact の差でもないため判定不能とする。",
+   "迷った点": "比の分子・分母は jppfs_cor:OrdinaryIncome CurrentYearDuration=1457848000 と Prior1YearDuration=2709051000 で、1457848000/2709051000=0.5381 → 53.8% と整合する(jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults も同値)。比そのものの fact は無い。"
+  },
+  {
+   "行の鍵": "Q-044",
+   "判定": "独立判定",
+   "形": "単一",
+   "当期側": {
+    "要素": "jppfs_cor:DividendsFromSurplus",
+    "context": "CurrentYearDuration",
+    "期間": "2025-07-01..2026-06-30",
+    "値": -652881000.0
+   },
+   "前期側": null,
+   "差の計算": null,
+   "文が述べている単位": "百万円(億・千万表記)",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "純資産の主な変動を列挙する文の「剰余金の配当6億5千2百万円」なので、概念は株主資本等変動計算書の剰余金の配当(当期の流量)、期間は当連結会計年度。member 無しの CurrentYearDuration の −652881000 が 652 百万に一致する(配当は純資産の減少なので負)。",
+   "迷った点": "同値の fact: jppfs_cor:DividendsFromSurplus の CurrentYearDuration_RetainedEarningsMember、CurrentYearDuration_ShareholdersEquityMember、および _NonConsolidatedMember 系 3 件(いずれも −652881000)。同じ要素の内訳列・個別なので、連結・合計列の member 無しを採った。jppfs_cor:CashDividendsPaidFinCF=−651749000(651)と jpcrp_cor:TotalAmountOfDividendsDividendsOfSurplus=613996000(613)は不一致。"
+  },
+  {
+   "行の鍵": "Q-086",
+   "判定": "判定不能",
+   "形": null,
+   "当期側": null,
+   "前期側": null,
+   "差の計算": null,
+   "文が述べている単位": "%(前年同期比)",
+   "母集団": "連結",
+   "値は一致するか": "確かめていない",
+   "判定の理由": "「営業利益は14億6千5百万円(同54.0%)」の 54.0% は当期営業利益÷前期営業利益の比。比は単一の fact でも 2 つの fact の差でもないため判定不能とする。",
+   "迷った点": "比の分子・分母は jppfs_cor:OperatingIncome CurrentYearDuration=1465387000 と Prior1YearDuration=2715924000 で、1465387000/2715924000=0.5396 → 54.0% と整合する。比そのものの fact は無い。"
+  },
+  {
+   "行の鍵": "Q-152",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "当期側": {
+    "要素": "jppfs_cor:ContractAssets",
+    "context": "CurrentYearInstant",
+    "期間": "2026-06-30",
+    "値": 11267515000.0
+   },
+   "前期側": {
+    "要素": "jppfs_cor:ContractAssets",
+    "context": "Prior1YearInstant",
+    "期間": "2025-06-30",
+    "値": 11428545000.0
+   },
+   "差の計算": "11267515000 − 11428545000 = −161030000(=1億6千1百万円の減少)",
+   "文が述べている単位": "百万円(億・千万表記)",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "資産の主な変動を列挙する文の「契約資産の減少1億6千1百万円」なので、概念は連結貸借対照表の契約資産、形は当期末−前期末の差。同じ文の「受取手形及び売掛金の増加8億4百万円」が貸借対照表の差(2556498000−1751723000=804775000 → 804)と合い、キャッシュ・フロー計算書(−802686000 → 802)とは合わないので、貸借対照表の差の形と判断した。",
+   "迷った点": "差額そのものの fact jpcrp030000-asr_E36539-000:DecreaseIncreaseInContractAssetsOpeCF CurrentYearDuration=161030000 が同値(符号逆)で存在するが、文は貸借対照表の変動を述べているので採らない。"
+  },
+  {
+   "行の鍵": "Q-232",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "当期側": {
+    "要素": "jppfs_cor:IncomeTaxesPayable",
+    "context": "CurrentYearInstant",
+    "期間": "2026-06-30",
+    "値": 579515000.0
+   },
+   "前期側": {
+    "要素": "jppfs_cor:IncomeTaxesPayable",
+    "context": "Prior1YearInstant",
+    "期間": "2025-06-30",
+    "値": 687368000.0
+   },
+   "差の計算": "579515000 − 687368000 = −107853000(=1億7百万円の減少)",
+   "文が述べている単位": "百万円(億・千万表記)",
+   "母集団": "連結",
+   "値は一致するか": "一致",
+   "判定の理由": "負債の変動を列挙する文の「未払法人税等の減少1億7百万円」なので、概念は連結貸借対照表の未払法人税等、形は当期末−前期末の差。他の項目も貸借対照表残高の差と合う(Q-201 参照)。",
+   "迷った点": "個別(_NonConsolidatedMember)は 6527000−11318000=−4791000 で不一致。同値の他 fact は無い(jppfs_cor:IncomeTaxesPaidOpeCF=−780243000 は不一致)。"
+  },
+  {
+   "行の鍵": "Q-241",
+   "判定": "判定不能",
+   "形": null,
+   "当期側": null,
+   "前期側": null,
+   "差の計算": null,
+   "文が述べている単位": "%(前期比)",
+   "母集団": "連結(直営サロン運営事業セグメント)",
+   "値は一致するか": "確かめていない",
+   "判定の理由": "「売上高958,229千円(前期比3.3%増)」の 3.3% は当期セグメント売上高÷前期セグメント売上高−1 の増加率。比は単一の fact でも 2 つの fact の差でもないため判定不能とする。",
+   "迷った点": "同じ文の 958,229千円は jppfs_cor:NetSales CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember=958229000 に一致し、前期は jppfs_cor:NetSales Prior1YearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember=927625000。958229000/927625000=1.0330 → 3.3%増 と整合する。外部顧客売上高 jpcrp_cor:RevenuesFromExternalCustomers(946229000/915625000=1.0334)も 3.3% になるが、文の 958,229千円 は NetSales 側と合う。増加率そのものの fact は無い。"
+  }
+ ]
+}
