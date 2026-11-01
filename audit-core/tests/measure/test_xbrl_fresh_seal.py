@@ -156,7 +156,11 @@ LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixt
                       "fixtures/xbrl/candidate_eyes_2026-10-30.json", "measure/xbrl_candidate_eyes_2026-10-30.py",
                       "tests/measure/test_xbrl_candidate_eyes.py",
                       "fixtures/xbrl/delta_naming_2026-10-30.json", "measure/xbrl_delta_naming_2026-10-30.py",
-                      "tests/measure/test_xbrl_delta_naming.py")
+                      "tests/measure/test_xbrl_delta_naming.py",
+                      # 2026-11-01: 帯を fact の decimals の粒度にした版(封 docs/XBRL_DELTA_DECIMALS_SEAL_2026-11-01.md §5 の 6)。
+                      # 記録は前の便の記録を写すので 30 書類の docID を持つ。script・門は docID を持たない
+                      "fixtures/xbrl/delta_decimals_2026-11-01.json", "measure/xbrl_delta_decimals_2026-11-01.py",
+                      "tests/measure/test_xbrl_delta_decimals.py")
 
 
 def drop_later_naming_files(named):
