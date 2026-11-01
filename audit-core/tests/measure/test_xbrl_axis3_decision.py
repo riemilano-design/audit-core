@@ -200,10 +200,14 @@ class Axis3Test(unittest.TestCase):
 
     def test_9_the_engine_was_not_touched(self):
         """**文を信じない。**git と sha で確かめる(2026-10-19: 宣言された遷移だけ例外)。"""
-        out = subprocess.run(["git", "log", "--format=%h",
+        # 2026-11-01: `%h` の短縮の長さは clone の object の数で変わる(別の機で 8 字になり、
+        # 7 字の鍵と合わず赤になった)。`%H` を取って 7 字で切る(他の門の `out[-1][:7]` と同じ型)。
+        out = subprocess.run(["git", "log", "--format=%H",
                               "%s..HEAD" % BASE, "--", "adapters", "core"],
                              cwd=ROOT, capture_output=True, text=True)
-        commits = [c for c in out.stdout.split() if c]
+        self.assertEqual(out.returncode, 0,
+                         "**起点 %s が履歴に無い(shallow clone では門が空で通る)**" % BASE)
+        commits = [c[:7] for c in out.stdout.split() if c]
         undeclared = [c for c in commits if c not in LATER_ENGINE_COMMITS]
         self.assertEqual(undeclared, [],
                          "**adapters/ か core/ を触っている(宣言されていない commit: %s)**" % undeclared)
