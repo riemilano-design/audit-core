@@ -67,6 +67,10 @@ FACTS_ROWS_2026_10_29 = (u"L-39", u"L-40", u"D-27", u"D-28", u"H-15", u"P-22", u
 # 2026-10-29 の注記(2): 宣言された遷移の 3 つめ。同じ日の cd8 の系統の行 → claim の位置での診断(封 5f3ae0a → 診断 fb6f268)で台帳に足した行。上の 2 つと同じ規則で、
 # 下の ID の行が**全部**在るか**1 つも無い**かのどちらか(一部だけなら赤)。H-15 は上の 2026-10-29 の組に居る(状態の字を直しただけ)ので、この組には入れない。
 FACTS_ROWS_2026_10_29B = (u"L-41", u"D-29", u"P-25")
+# 2026-11-01 の注記: 宣言された遷移の 4 つめ。候補の欄 candidate(P27C)の系列(封 0df5222 → 結果 cb8612f・読み手の席 9d847c0 → 3001a10・増減額の診断 68c0a3b → 250b916)で台帳に足した行
+# (封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29 §5-3 の 5 の便)。上の 3 つと同じ規則で、下の ID の行が**全部**在るか**1 つも無い**かのどちらか(一部だけなら赤)。
+# 全部在るとき、P22・P26 の字は「その ID の行」にも在ってよい(L-42 と D-30 が P22 の名指しの数を P27 と並べる)。
+FACTS_ROWS_2026_11_01 = (u"L-42", u"L-43", u"D-30", u"D-31", u"D-32", u"P-26", u"P-27", u"P-28")
 STEP_NAMES = (u"S-1", u"S-2", u"S-3", u"S-4", u"S-5", u"S-6", u"S-7", u"S-8", u"S-9", u"S-10", u"S-11", u"S-12")
 
 #: **字で留める**(測った事実。定数から作らない)。変えたら記録も文書も作り直す。
@@ -750,7 +754,9 @@ class RecordTest(unittest.TestCase):
             self.assertIn(len(present_29), (0, len(FACTS_ROWS_2026_10_29)), u"2026-10-29 の便の行が一部だけ在る(中途の遷移)")
             present_29b = [i for i in FACTS_ROWS_2026_10_29B if any(l.startswith(u"| %s |" % i) for l in lines)]
             self.assertIn(len(present_29b), (0, len(FACTS_ROWS_2026_10_29B)), u"2026-10-29 の便(2)の行が一部だけ在る(中途の遷移)")
-            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b))
+            present_1101 = [i for i in FACTS_ROWS_2026_11_01 if any(l.startswith(u"| %s |" % i) for l in lines)]
+            self.assertIn(len(present_1101), (0, len(FACTS_ROWS_2026_11_01)), u"2026-11-01 の便(候補の欄の系列)の行が一部だけ在る(中途の遷移)")
+            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b) + tuple(present_1101))
             stray = [l[:60] for l in lines if (u"P22" in l or u"P26" in l) and not l.startswith(row_heads) and u"2026-10-28" not in l]
             self.assertEqual(stray, [], u"遷移の外の行に P22・P26 の字がある")
         n = 0
