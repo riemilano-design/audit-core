@@ -34,8 +34,8 @@ SUITE = os.path.join(ROOT, "fixtures", "suite_coverage_2026-10-16.json")
 REV = "c740e61"
 
 # 行の本数・印の本数。**黙って減らすと赤くなる**ように字で留める(増やすときは直す)
-EXPECT_ROWS = {"L": 43, "D": 32, "H": 11, "HD": 4, "P": 28, "Q": 8, "N": 13, "A": 11}
-EXPECT_CLAIMS = 620   # 印の本数(表の行の印、§5 の本数の印 1、§6 の印 11)。2026-11-01: 候補の欄の系列 8 行で +67
+EXPECT_ROWS = {"L": 43, "D": 32, "H": 11, "HD": 4, "P": 29, "Q": 7, "N": 13, "A": 11}
+EXPECT_CLAIMS = 634   # 印の本数(表の行の印、§5 の本数の印 1、§6 の印 11)。2026-11-01: 候補の欄の系列 8 行で +67、同日(2) Q-03 → P-29 で +14
 
 FORBIDDEN = [u"精度", u"LLM より正確", u"世界で 1 社", u"金額", u"契約", u"税", u"USD"]
 ALLOWED_PATH_PREFIX = (u"fixtures/", u"tests/adapters/xbrl/mutations.json", u"core/py/audit_core/")
@@ -382,7 +382,7 @@ class QuotesAndSealsTest(unittest.TestCase):
             self.assertIn(u"_SEAL_", os.path.basename(seal))
             self.assertEqual(glob.glob(os.path.join(ROOT, "docs", stem + u"*RESULT*")), [], stem)
             n += 1
-        self.assertEqual(n, 8)
+        self.assertEqual(n, 7)   # 2026-11-01: Q-03(AI_PROSE)は記録に判定の欄が在るので P-29 へ。ID は空けたまま
 
 
 class AssetNumbersTest(unittest.TestCase):
@@ -468,7 +468,9 @@ class NoApiNoNetworkTest(unittest.TestCase):
                                          # 2026-11-01: 候補の欄の系列(封・承認の追記・結果)
                                          u"0df5222", u"db68a2c", u"cb8612f",
                                          u"9d847c0", u"3001a10",
-                                         u"68c0a3b", u"31808fa", u"250b916"]))
+                                         u"68c0a3b", u"31808fa", u"250b916",
+                                         # 2026-11-01(2): P-29(AI が書いた文の最小実験。封・門③の置き換え・記録・凍結の観測)
+                                         u"4621b73", u"9140e6b", u"ab7d132", u"c11427c"]))
         r = subprocess.run(["git", "cat-file", "-e", REV + "^{commit}"], cwd=ROOT,
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if r.returncode != 0:
