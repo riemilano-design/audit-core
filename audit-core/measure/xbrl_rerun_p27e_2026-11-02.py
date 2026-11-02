@@ -242,6 +242,7 @@ def build_rows(entry16, new_entries, labels, sets):
 
 
 def _dist(items):
+    items = list(items)  # 2026-11-02 走らせ直し 1: 生成器を 1 回で使い切り GROUNDED 以外が 0 になっていた欠陥の直し(desktop の 1 回目で発覚)
     return collections.OrderedDict((s, sum(1 for x in items if x == s)) for s in STATES)
 
 
@@ -282,9 +283,11 @@ def tally(rows, new_entries):
     g249 = [r for r in rows if r[u"249 行(P16 で GROUNDED・札 真・num)"]]
     T[u"249 行"] = len(g249)
     for pf in PROFILES:
-        T[u"249 行で %s で GROUNDED でなくなった" % pf] = sum(1 for r in g249 if r[u"%s の state" % pf] != u"GROUNDED")
-        T[u"249 行で %s で GROUNDED でなくなった id" % pf] = [r[u"id"] for r in g249 if r[u"%s の state" % pf] != u"GROUNDED"]
-        T[u"249 行で %s で GROUNDED でなくなった state" % pf] = _dist(r[u"%s の state" % pf] for r in g249 if r[u"%s の state" % pf] != u"GROUNDED")
+        # 2026-11-02 走らせ直し 3: 対応しない行(新しい state が無い)は「GROUNDED でなくなった」に数えず、数だけ別に持つ(封 §2「対応しない行は数だけ」)
+        T[u"249 行で %s で対応しない" % pf] = sum(1 for r in g249 if not r[u"%s の state" % pf])
+        T[u"249 行で %s で GROUNDED でなくなった" % pf] = sum(1 for r in g249 if r[u"%s の state" % pf] and r[u"%s の state" % pf] != u"GROUNDED")
+        T[u"249 行で %s で GROUNDED でなくなった id" % pf] = [r[u"id"] for r in g249 if r[u"%s の state" % pf] and r[u"%s の state" % pf] != u"GROUNDED"]
+        T[u"249 行で %s で GROUNDED でなくなった state" % pf] = _dist(r[u"%s の state" % pf] for r in g249 if r[u"%s の state" % pf] and r[u"%s の state" % pf] != u"GROUNDED")
     both = [r for r in rows if r[u"P27E と P27 で state が違う"] is not None]
     T[u"P27E と P27 で state が違う行"] = sum(1 for r in both if r[u"P27E と P27 で state が違う"])
     T[u"P27E と P27 で state が違う id"] = [r[u"id"] for r in both if r[u"P27E と P27 で state が違う"]]
@@ -377,8 +380,17 @@ def main(argv=None):
     W[u"(d) 53 行・12 行・8 行の数"] = collections.OrderedDict([(u"53", len(sets[u"53"])), (u"12", len(sets[u"12"])), (u"8", len(sets[u"8"]))])
     W[u"(e) 行の対応"] = align_counts
     W[u"(f) P27 の state の分布が儀式の記録の素の書類と一致"] = (dict(T[u"P27 の state の分布(全 claim)"]) == dict(RITUAL_PLAIN))
+    # 2026-11-02 走らせ直し 2: 封 §2「対応しない行は数だけ」のとおり、対応しない行があっても配線は通る。ただし行のずれ(別の id が同じ位置に来る)は
+    # 配線の欠陥なので、対応しない P16 の行と同じ位置の新しい行の id が同じで、新しい方の余りがその数と等しいことを求める
+    # (desktop の 1 回目: 円と銭を 1 つの数に読む engine の変更(2026-10-21)で (span, value, unit) が変わった 4 行が、同じ id の同じ位置に在った)。
+    W[u"(e) 対応しない P16 の行と同じ位置の新しい行の id が同じ"] = collections.OrderedDict()
+    for pf in PROFILES:
+        unmatched = align_counts[pf][u"対応しない P16 の id"]
+        positions = [i for i, c in enumerate(entry16[u"claims"]) if c[u"id"] in unmatched]
+        same = [new_entries[pf][u"claims"][i][u"id"] for i in positions if i < len(new_entries[pf][u"claims"])] == list(unmatched)
+        W[u"(e) 対応しない P16 の行と同じ位置の新しい行の id が同じ"][pf] = bool(same and align_counts[pf][u"新しい方の余り"] == len(unmatched))
     W[u"通った"] = bool(W[u"(d) 53 行・12 行・8 行の数"] == collections.OrderedDict([(u"53", 53), (u"12", 12), (u"8", 8)]) and dirty == 0
-                      and all(align_counts[pf][u"対応しない P16 の行"] == 0 for pf in PROFILES))
+                      and all(W[u"(e) 対応しない P16 の行と同じ位置の新しい行の id が同じ"][pf] for pf in PROFILES))
     rec = collections.OrderedDict()
     rec[u"注意"] = (u"同梱の AI の文の書類を engine(変えていない)で P27E と P27 で判定し、P16 の記録と行を対応させて state の動きを数えた記録。"
                   u"1 書類・1 model の AI の文。docID は書かない。")

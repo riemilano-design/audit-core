@@ -185,6 +185,7 @@ def g_rows(entry16, new_entries, labels, sets):
 
 
 def _d(items):
+    items = list(items)  # 2026-11-02: 生成器を 1 回で使い切り GROUNDED 以外が 0 になる欠陥の直し(script の _dist と同じ型。desktop の実走で発覚)
     return collections.OrderedDict((s, sum(1 for x in items if x == s)) for s in STATES)
 
 
@@ -223,9 +224,11 @@ def ref_tally(rows):
     g249 = [r for r in rows if r[u"249 行(P16 で GROUNDED・札 真・num)"]]
     T[u"249 行"] = len(g249)
     for pf in PROFILES:
-        T[u"249 行で %s で GROUNDED でなくなった" % pf] = sum(1 for r in g249 if r[u"%s の state" % pf] != u"GROUNDED")
-        T[u"249 行で %s で GROUNDED でなくなった id" % pf] = [r[u"id"] for r in g249 if r[u"%s の state" % pf] != u"GROUNDED"]
-        T[u"249 行で %s で GROUNDED でなくなった state" % pf] = _d(r[u"%s の state" % pf] for r in g249 if r[u"%s の state" % pf] != u"GROUNDED")
+        # 2026-11-02: 対応しない行(新しい state が無い)は「GROUNDED でなくなった」に数えず、数だけ別に持つ(封 §2「対応しない行は数だけ」)
+        T[u"249 行で %s で対応しない" % pf] = sum(1 for r in g249 if not r[u"%s の state" % pf])
+        T[u"249 行で %s で GROUNDED でなくなった" % pf] = sum(1 for r in g249 if r[u"%s の state" % pf] and r[u"%s の state" % pf] != u"GROUNDED")
+        T[u"249 行で %s で GROUNDED でなくなった id" % pf] = [r[u"id"] for r in g249 if r[u"%s の state" % pf] and r[u"%s の state" % pf] != u"GROUNDED"]
+        T[u"249 行で %s で GROUNDED でなくなった state" % pf] = _d(r[u"%s の state" % pf] for r in g249 if r[u"%s の state" % pf] and r[u"%s の state" % pf] != u"GROUNDED")
     both = [r for r in rows if r[u"P27E と P27 で state が違う"] is not None]
     T[u"P27E と P27 で state が違う行"] = sum(1 for r in both if r[u"P27E と P27 で state が違う"])
     T[u"P27E と P27 で state が違う id"] = [r[u"id"] for r in both if r[u"P27E と P27 で state が違う"]]
