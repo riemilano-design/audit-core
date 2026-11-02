@@ -15,7 +15,7 @@
  "commands": {
   "pytest": {
    "collected_files": 259,
-   "tests": 5925,
+   "tests": 5947,
    "missed_files": [],
    "extra_files": [],
    "collect_rc": 0,
@@ -24,7 +24,7 @@
   },
   "discover": {
    "collected_files": 258,
-   "tests": 5829,
+   "tests": 5851,
    "missed_files": [
     "measure/tests/test_inject.py"
    ],

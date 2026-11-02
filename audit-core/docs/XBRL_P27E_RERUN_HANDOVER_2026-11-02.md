@@ -160,3 +160,7 @@ python3 measure/xbrl_prior_pairs_2026-11-02.py                                  
 
 - 「その他」の規則 R1 を engine に入れるか(既定にしない profile で)。期の印の規則を engine に入れるか。P27E を外部の文の既定にするか。― いずれも今日の 5 便の結果の文書 `docs/XBRL_DERIVATION_FALSE_2026-11-02.md`・`docs/XBRL_DERIVATION_STOPPED_2026-11-02.md`・`docs/XBRL_OTHER_RULE_2026-11-02.md`・`docs/XBRL_PERIOD_MARK_2026-11-02.md` と、この便の結果が材料。
 - engine の変更は `measure/` で測ってから、人間の承認、独立監査 GO、path 指定の commit の順。
+
+追記 2026-11-02(desktop): §2〜§7 を運んだ(commit `a65d07e`)。
+§8-2 の段 1(記録の commit)と段 2(次の commit)も運んだ。
+走らせ直しの回数と script・門の直しは結果の文書(P27E の便は `docs/XBRL_P27E_RERUN_2026-11-02.md` §9、出所のずれの名指しの便は `docs/XBRL_RESTATED_PRIOR_RESULT_2026-11-02.md` §7)。
