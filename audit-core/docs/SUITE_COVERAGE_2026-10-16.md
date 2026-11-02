@@ -15,7 +15,7 @@
 
 | 漏れていた場所 | file | 本数 | なぜ |
 |---|---|---|---|
-| `tests/measure` | 184 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
+| `tests/measure` | 185 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
 | `measure/tests` | 1 | 96 | `measure/` が package でないので**丸ごと飛ぶ** |
 
 `tests/measure` は `-s tests/measure` で毎回別に走らせていたので**測り落としは無かった**。
@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **250 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **251 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -215,6 +215,8 @@ cache の無い clone で `README.en.md` の 3 節の手順が字どおりに動
 **2026-11-02 に +1(3)**(`tests/measure/test_xbrl_derivation.py`。導出の検証の診断(前半)の門(封 `docs/XBRL_DERIVATION_DIAG_SEAL_2026-11-02.md`、結果 `docs/XBRL_DERIVATION_DIAG_2026-11-02.md`)。行の式の値の再計算・集計の数え直し・F1 の再現・判定の求め直し・文書の数・順序・変異 8 本。248 → **249**(`tests/measure` 182 → **183**)。)
 
 **2026-11-02 に +1(4)**(`tests/measure/test_xbrl_derivation_full.py`。導出の検証の診断(後半)の門(封 `docs/XBRL_DERIVATION_FULL_SEAL_2026-11-02.md`、結果 `docs/XBRL_DERIVATION_FULL_2026-11-02.md`)。script の読み取りと行の呼び直し・候補の段の再計算・集計の数え直し・封の幅からの判定の求め直し・文書の数・順序・変異 9 本。249 → **250**(`tests/measure` 183 → **184**)。)
+
+**2026-11-02 に +1(5)**(`tests/measure/test_xbrl_derivation_subject.py`。主語の制約つきの導出の門(封 `docs/XBRL_DERIVATION_SUBJECT_SEAL_2026-11-02.md`、結果 `docs/XBRL_DERIVATION_SUBJECT_2026-11-02.md`)。手がかり・近傍・残す条件の作り直し・前の便の derive の呼び直し・集計の数え直し・封の幅からの判定の求め直し・文書の数・順序・変異 10 本。250 → **251**(`tests/measure` 184 → **185**)。)
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
