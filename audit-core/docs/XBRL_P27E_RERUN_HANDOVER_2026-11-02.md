@@ -141,6 +141,21 @@ python3 -m pytest -q -p no:cacheprovider tests/measure/test_xbrl_rerun_p27e.py  
 
 封は「結果の文書が無い封」として台帳 §4-2 に **Q-09** を足す(状態: **測らなかった**。理由は §0-2)。`EXPECT_ROWS` の `"Q": 7 → 8`。門 `tests/measure/test_xbrl_rerun_p27e.py` は記録が無い限り skip のまま緑で、消さない。
 
+## §8-2 追記 2026-11-02: 出所のずれの名指しの便(封 `3a099e7`)の段 1 も desktop 待ち
+
+封 `docs/XBRL_RESTATED_PRIOR_SEAL_2026-11-02.md`。段 1 の script `measure/xbrl_prior_pairs_2026-11-02.py` と門 `tests/measure/test_xbrl_restated_prior.py` は commit 済み(合成の有報で確かめた。実走はしていない)。desktop(鍵 `EDINET_API_KEY` のある席)で:
+
+```
+cd audit-core && git pull origin feature/audit-core-final-eval-8-yzrflr
+python3 -m pytest -q -p no:cacheprovider tests/measure/test_xbrl_restated_prior.py     # 全 15 本(記録が無い間は 2 本 skip)
+python3 measure/xbrl_prior_pairs_2026-11-02.py                                        # 97 書類の前年の有報を EDINET から取り、要素を突き合わせる
+```
+
+- 書く先は新しい folder `~/.cache/audit-core/edinet-prior-2026-11-02/` と `fixtures/xbrl/prior_pairs_2026-11-02.json` だけ。既存の cache には書かない。
+- 日付一覧の呼び出しは、当期の末日の 1 年前から 60〜110 日の各日(会社をまたいで同じ日は 1 回)。末日の種類が多いほど回数が増える(記録の `集計 > 呼び出し` に出る)。ZIP の取得は見つかった会社の数 + E01777 の 2 本。
+- 止まる条件: 出力が既に在る / 97 書類の sha256 が `regress97` の記録と違う / engine に未 commit / 鍵が無い。
+- 走ったら記録を path 指定で commit・push。段 2(注入と規則 R)の script はその後(cloud で書く)。
+
 ## §9 この便の外にある判断(人間が決める)
 
 - 「その他」の規則 R1 を engine に入れるか(既定にしない profile で)。期の印の規則を engine に入れるか。P27E を外部の文の既定にするか。― いずれも今日の 5 便の結果の文書 `docs/XBRL_DERIVATION_FALSE_2026-11-02.md`・`docs/XBRL_DERIVATION_STOPPED_2026-11-02.md`・`docs/XBRL_OTHER_RULE_2026-11-02.md`・`docs/XBRL_PERIOD_MARK_2026-11-02.md` と、この便の結果が材料。
