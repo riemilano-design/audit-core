@@ -71,6 +71,8 @@ FACTS_ROWS_2026_10_29B = (u"L-41", u"D-29", u"P-25")
 # (封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29 §5-3 の 5 の便)。上の 3 つと同じ規則で、下の ID の行が**全部**在るか**1 つも無い**かのどちらか(一部だけなら赤)。
 # 全部在るとき、P22・P26 の字は「その ID の行」にも在ってよい(L-42 と D-30 が P22 の名指しの数を P27 と並べる)。
 FACTS_ROWS_2026_11_01 = (u"L-42", u"L-43", u"D-30", u"D-31", u"D-32", u"P-26", u"P-27", u"P-28")
+# 2026-11-03: 「その他」の主語の結び直し O(P28)の便の行。旗が偽の P22・P26・P27 の byte 一致(N-1)を印に持つので P22・P26 の字が在る(宣言された遷移。P-41 は P22・P26 の字を持たない)
+FACTS_ROWS_2026_11_03 = (u"L-56", u"D-33")
 STEP_NAMES = (u"S-1", u"S-2", u"S-3", u"S-4", u"S-5", u"S-6", u"S-7", u"S-8", u"S-9", u"S-10", u"S-11", u"S-12")
 
 #: **字で留める**(測った事実。定数から作らない)。変えたら記録も文書も作り直す。
@@ -760,7 +762,9 @@ class RecordTest(unittest.TestCase):
             self.assertIn(len(present_29b), (0, len(FACTS_ROWS_2026_10_29B)), u"2026-10-29 の便(2)の行が一部だけ在る(中途の遷移)")
             present_1101 = [i for i in FACTS_ROWS_2026_11_01 if any(l.startswith(u"| %s |" % i) for l in lines)]
             self.assertIn(len(present_1101), (0, len(FACTS_ROWS_2026_11_01)), u"2026-11-01 の便(候補の欄の系列)の行が一部だけ在る(中途の遷移)")
-            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b) + tuple(present_1101))
+            present_1103 = [i for i in FACTS_ROWS_2026_11_03 if any(l.startswith(u"| %s |" % i) for l in lines)]
+            self.assertIn(len(present_1103), (0, len(FACTS_ROWS_2026_11_03)), u"2026-11-03 の便(P28)の行が一部だけ在る(中途の遷移)")
+            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b) + tuple(present_1101) + tuple(present_1103))
             stray = [l[:60] for l in lines if (u"P22" in l or u"P26" in l) and not l.startswith(row_heads) and u"2026-10-28" not in l]
             self.assertEqual(stray, [], u"遷移の外の行に P22・P26 の字がある")
         n = 0
