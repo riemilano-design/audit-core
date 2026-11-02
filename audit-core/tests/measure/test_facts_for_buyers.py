@@ -34,8 +34,8 @@ SUITE = os.path.join(ROOT, "fixtures", "suite_coverage_2026-10-16.json")
 REV = "c740e61"
 
 # 行の本数・印の本数。**黙って減らすと赤くなる**ように字で留める(増やすときは直す)
-EXPECT_ROWS = {"L": 44, "D": 32, "H": 11, "HD": 4, "P": 30, "Q": 7, "N": 13, "A": 11}
-EXPECT_CLAIMS = 647   # 2026-11-02: L-44(9)・P-30(4)で +13。 印の本数(表の行の印、§5 の本数の印 1、§6 の印 11)。2026-11-01: 候補の欄の系列 8 行で +67、同日(2) Q-03 → P-29 で +14
+EXPECT_ROWS = {"L": 45, "D": 32, "H": 11, "HD": 4, "P": 30, "Q": 7, "N": 13, "A": 11}
+EXPECT_CLAIMS = 650   # 2026-11-02: L-44(9)・P-30(4)で +13。同日(2) L-45(3)で +3。 印の本数(表の行の印、§5 の本数の印 1、§6 の印 11)。2026-11-01: 候補の欄の系列 8 行で +67、同日(2) Q-03 → P-29 で +14
 
 FORBIDDEN = [u"精度", u"LLM より正確", u"世界で 1 社", u"金額", u"契約", u"税", u"USD"]
 ALLOWED_PATH_PREFIX = (u"fixtures/", u"tests/adapters/xbrl/mutations.json", u"core/py/audit_core/")
@@ -472,7 +472,9 @@ class NoApiNoNetworkTest(unittest.TestCase):
                                          # 2026-11-01(2): P-29(AI が書いた文の最小実験。封・門③の置き換え・記録・凍結の観測)
                                          u"4621b73", u"9140e6b", u"ab7d132", u"c11427c",
                                          # 2026-11-02: P-30(cache の無い clone で README の手順。封)
-                                         u"443a078"]))
+                                         u"443a078",
+                                         # 2026-11-02(2): L-45(README の入口の字の直し。封)
+                                         u"6cde4b3"]))
         r = subprocess.run(["git", "cat-file", "-e", REV + "^{commit}"], cwd=ROOT,
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if r.returncode != 0:

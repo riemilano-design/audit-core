@@ -35,6 +35,7 @@ SCRIPT_REL = "measure/readme_cacheless_2026-11-02.py"
 GATE_REL = "tests/measure/test_readme_cacheless.py"
 README_REL = "README.en.md"
 SEAL_COMMIT_SHORT = "443a078"
+RESULT_COMMIT_SHORT = "a6a1ea0"          # この便の結果(script・記録・文書・門)の commit
 
 SEAL, DOC, REC, SCRIPT, README = (os.path.join(ROOT, r) for r in (SEAL_REL, DOC_REL, REC_REL, SCRIPT_REL, README_REL))
 
@@ -253,11 +254,15 @@ def order_problems():
 
 
 def readme_diff_lines():
-    u"""封の commit の README と木の README の違う行(空なら同じ)。"""
+    u"""封の commit の README と結果の commit の README の違う行(空なら同じ)。
+    2026-11-02(2): 木と比べる形から commit 同士に変えた(次の便 docs/README_FIX_SEAL_2026-11-02.md が
+    README の入口の字を直すため。この便が README を変えなかったことは git の 2 点で永く言える)。
+    """
     rc, old = git("show", "%s:%s%s" % (SEAL_COMMIT_SHORT, PREFIX, README_REL))
-    if rc != 0:
+    rc2, new = git("show", "%s:%s%s" % (RESULT_COMMIT_SHORT, PREFIX, README_REL))
+    if rc != 0 or rc2 != 0:
         return None
-    new = jtext(README).rstrip("\n").splitlines()
+    new = new.splitlines()
     old = old.splitlines()
     import difflib
     return [l for l in difflib.unified_diff(old, new, lineterm=u"", n=0) if (l.startswith(u"+") or l.startswith(u"-")) and not l.startswith((u"+++", u"---"))]
@@ -325,12 +330,13 @@ class RecordTest(unittest.TestCase):
             self.skipTest(u"封の commit %s が無い clone" % SEAL_COMMIT_SHORT)
         self.assertEqual(committed.rstrip(u"\n"), self.seal.rstrip(u"\n"), u"**封が結果の後で変わっている**")
 
-    def test_e_1_readme_three_sections_unchanged_since_seal(self):
+    def test_e_1_readme_three_sections_unchanged_between_seal_and_result(self):
         d = readme_diff_lines()
         if d is None:
-            self.skipTest(u"封の commit %s が無い clone" % SEAL_COMMIT_SHORT)
+            self.skipTest(u"封 %s か結果 %s の commit が無い clone" % (SEAL_COMMIT_SHORT, RESULT_COMMIT_SHORT))
         stray = [l for l in d if u"test files" not in l]
-        self.assertEqual(stray, [], u"README.en.md が封の後で変わった(許すのは試験 file の本数の行だけ)")
+        self.assertEqual(stray, [], u"README.en.md が封と結果の間で変わった(許すのは試験 file の本数の行だけ)")
+        self.assertTrue(is_anc(SEAL_COMMIT_SHORT, RESULT_COMMIT_SHORT), u"結果の commit が封の後でない")
 
     def test_f_1_script_is_stdlib_only_and_matches_record(self):
         self.assertEqual(script_problems(jtext(SCRIPT)), [])

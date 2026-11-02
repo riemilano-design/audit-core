@@ -63,7 +63,7 @@ python3 measure/ritual_2026-10-20.py --out <output dir>
 
 ## Check your own filing's text and get a Japanese report (0 USD, no network)
 
-Give it your filing's ZIP (an EDINET securities report) and the text to check (it replaces the management-discussion section). The verdicts are the engine's, unchanged; the report reorders them and rewrites them in Japanese, nothing more (differs, needs a look, out of scope / not judged, matches; seal `docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md`, result `docs/XBRL_CUSTOMER_REPORT_RESULT_2026-10-21.md`). Without the standard-taxonomy labels (step 0 above) the source column shows element names.
+Give it your filing's ZIP (an EDINET securities report) and the text to check (it replaces the management-discussion section). The verdicts are the engine's, unchanged; the report reorders them and rewrites them in Japanese, nothing more (differs, needs a look, out of scope / not judged, matches; seal `docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md`, result `docs/XBRL_CUSTOMER_REPORT_RESULT_2026-10-21.md`). Step 0 above (the standard-taxonomy labels) is a prerequisite for this section as well: without them the first command stops with `FileNotFoundError` before writing anything (measured 2026-11-02 on a clone without the labels; `docs/README_CACHELESS_RESULT_2026-11-02.md`). In the report step, an element that has no standard label is printed by its element name. Whether the report step still runs when the label directory itself is missing was not measured in that run.
 
 ```
 python3 -m adapters.xbrl.verify_document --zip <your filing.zip> --text <your text.txt> --out out.json
@@ -87,12 +87,18 @@ Editable install (`pip install -e .`) on an older toolchain without PEP 660 supp
 (setuptools < 61, as measured on this machine: 58.0.4) installs successfully but the
 combined import `import audit_core, adapters.xbrl.verify_external` from outside the
 project directory fails with `ModuleNotFoundError`; the console scripts and a normal
-(non-editable) install both work. See the Japanese result document for the measured
+(non-editable) install both worked on that machine. See the Japanese result document for the measured
 detail.
+
+The reverse was measured on 2026-11-02 on Ubuntu 24.04 with the distribution's
+`python3-setuptools` 68.1.2 and Python 3.13.18: the normal `pip install .` failed while
+building the wheel (`AttributeError: install_layout`), and the editable install plus the
+combined import both worked. Whether this comes from this repository's packaging files or
+from that toolchain has not been isolated (`docs/README_CACHELESS_RESULT_2026-11-02.md`).
 
 ## Test suite
 
-247 test files (counted by the suite-coverage record; the collected-test count changes with every
+248 test files (counted by the suite-coverage record; the collected-test count changes with every
 added test and is kept in that record, not here), including 96
 adversarial mutations exercised against the XBRL adapter. The core verification engine
 itself is 429 lines (`core/py/audit_core/*.py`): existence and value checks, nothing

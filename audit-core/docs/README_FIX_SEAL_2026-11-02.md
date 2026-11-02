@@ -66,3 +66,17 @@
 
 - 封を先に commit → README・門・覆い・台帳を直す → 独立監査 GO → path 指定で commit。
 - 結果の文書は作らない(字の直しで数は増えない。当たり / 外れは本封の末尾に**日付つきの追記**として足し、予測欄は変えない)。
+
+## §4 追記(2026-11-02、実装の後): 当たり 4 / 外れ 1(F-4)
+
+予測欄(§1)は変えていない。直した後の字は §0-1・§0-2 のとおり(門 `tests/measure/test_readme_fix.py` が封の引用を読んで README と照らす)。
+
+| | 実測 | 判定 |
+|---|---|---|
+| **F-1** | `test_packaging.py` の常に走る門は全部緑。禁止語 0。英語だけ | 当たり |
+| **F-2** | 差分は「Check your own filing's text」「Install」「Test suite」(本数の行)の 3 節の中だけ。儀式の節は同じ。数の bullet は変わらない | 当たり |
+| **F-3** | `FileNotFoundError`・`AttributeError: install_layout`・Ubuntu 24.04・68.1.2・3.13.18・editable の rc 0 は全部 11-02 の記録の欄と一致(門 `test_a_2`) | 当たり |
+| **F-4** | 行数は **+6**(足した段落が折り返しで 5 行 + 空行 1。幅 +2〜+4 の外)。見立てが折り返しを数え落とした。門は実測の +6 を縛る(見立てに合わせて折り返しは変えない) | **外れ** |
+| **F-5** | L-45 の印 3 本、`facts_check --check` OK 650 / NG 0。覆い 248・`tests/measure` 182 | 当たり |
+
+`tests/measure/test_readme_cacheless.py` の `test_e_1` は、封 `443a078` と結果 `a6a1ea0` の commit 同士の README の差を見る形に変えた(§0-3 のとおり。他は変えていない)。
