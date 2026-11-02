@@ -15,7 +15,7 @@
 
 | 漏れていた場所 | file | 本数 | なぜ |
 |---|---|---|---|
-| `tests/measure` | 187 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
+| `tests/measure` | 188 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
 | `measure/tests` | 1 | 96 | `measure/` が package でないので**丸ごと飛ぶ** |
 
 `tests/measure` は `-s tests/measure` で毎回別に走らせていたので**測り落としは無かった**。
@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **253 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **254 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -221,6 +221,8 @@ cache の無い clone で `README.en.md` の 3 節の手順が字どおりに動
 **2026-11-02 に +1(6)**(`tests/measure/test_xbrl_derivation_depth.py`。近傍の深さ 2 と型 2 つの門(封 `docs/XBRL_DERIVATION_DEPTH_SEAL_2026-11-02.md`、結果 `docs/XBRL_DERIVATION_DEPTH_2026-11-02.md`)。深さ 2 の近傍・二項の和・比率の差の作り直し・前々便の derive の呼び直し・集計の数え直し・封の幅からの判定の求め直し・文書の表と遷移表・順序・変異 10 本。251 → **252**(`tests/measure` 185 → **186**)。)
 
 **2026-11-02 に +1(7)**(`tests/measure/test_xbrl_derivation_false.py`。偽の数に導出一致を出す率(誤受理)の門(封 `docs/XBRL_DERIVATION_FALSE_SEAL_2026-11-02.md`、結果 `docs/XBRL_DERIVATION_FALSE_2026-11-02.md`)。偽の数の作り直し・各変種の候補の出し直し・H までと片側の帯の数え直し・集計の数え直し・封の幅からの判定の求め直し・文書の表・順序・変異 10 本。252 → **253**(`tests/measure` 186 → **187**)。)
+
+**2026-11-02 に +1(8)**(`tests/measure/test_xbrl_derivation_stopped.py`。engine が止めた真の文 53 の中身の門(封 `docs/XBRL_DERIVATION_STOPPED_SEAL_2026-11-02.md`、結果 `docs/XBRL_DERIVATION_STOPPED_2026-11-02.md`)。53 行の型と根拠の照合を材料から作り直し・集計の数え直し・封の幅からの判定の求め直し・文書の表と id・順序・変異 10 本。253 → **254**(`tests/measure` 187 → **188**)。)
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
