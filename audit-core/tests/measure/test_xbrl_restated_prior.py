@@ -685,7 +685,8 @@ def order_problems_s2():
         c = a[-1]
         if c == S or not is_anc(S, c):
             p.append(u"%s が封の後でない" % rel)
-        if prev is not None and (c == prev[1] or not is_anc(prev[1], c)):
+        # 2026-11-02: script・記録・文書は同じ commit でよい(封 §5 の順は作る順で、commit の順ではない。封より後は厳密に求める)。前の file より前の commit なら赤
+        if prev is not None and c != prev[1] and not is_anc(prev[1], c):
             p.append(u"%s が %s の後でない" % (rel, prev[0]))
         prev = (rel, c)
     return p
