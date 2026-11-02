@@ -74,13 +74,14 @@ SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 �
 SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段 2(下の遷移)
 SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 SEAL_CAND = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"    # 2026-10-30 追記: 候補の欄を足す(下の遷移)
+SEAL_P28 = "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"    # 2026-11-02 追記: 「その他」の主語の結び直し O を足す(下の遷移。vocabulary.py 7fbcfbf0e472f366 → 180125cd94053a94・recipes.py 52d645e713c53c1c → 89eee7eca15480c6。直前の値は測った時点の値としてここに残す)
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
 # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行。実行の字は変えない)。67e7639de3f5f2ad(UNTOUCHED。測った時点の値)は残す。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 # 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("7fbcfbf0e472f366", SEAL_CAND), "adapters/xbrl/recipes.py": ("52d645e713c53c1c", SEAL_P27),
+UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("180125cd94053a94", SEAL_P28), "adapters/xbrl/recipes.py": ("89eee7eca15480c6", SEAL_P28),
                    "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
                    # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
                    "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", SEAL_CAND)}
@@ -108,7 +109,7 @@ FINGERPRINT_LATER = {
     # 2026-10-23 追記(既定を P22 -> P26 に切り替える 段 2。封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が宣言した遷移): vocabulary.py の 1 行と注記が動き、束ねた指紋が 498993e2…(P26 の段 1。残す)から 5aba7749… に動いた。
     # 0e51211a8aed2151(P27 の段 2) は残す(測った時点の値。束ねた指紋 adapter_xbrl_py_sha256 の頭 16 字)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 92326a0f4dcefd21。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
     # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-    "adapter_xbrl_py_sha256": ("dc7e35fbfb0f56ca6410bb7bfa8b8a366cc3ec19d6614c4cb866400cd9994ff6", SEAL_CAND),
+    "adapter_xbrl_py_sha256": ("d72c0cfb7cd74761144a935867a6ed798c952e2e04303b894d98ab358265ad7c", SEAL_P28),
     "adapter_xbrl_py_files": (16, SEAL_REL),
 }
 # 実装の便の後の frozen_bundle(FROZEN_COUNT 36 → 37・新しい世代。report_customer.py を git add した状態で測る)。封の commit 時点の値(FROZEN_BUNDLE_AT_SEAL)は残す。
@@ -125,6 +126,8 @@ FROZEN_BUNDLE_P27 = "29fd733c8988164aa7655d7efc90b8215499360987ca01ad14e137bf966
 FROZEN_BUNDLE_DEFAULT_P27 = "030455282c89661b4c0152498d76bc30314362b5896b15ab67a8886a6887b0f6"
 # 2026-10-30 追記(候補の欄を足す。封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md): 同じ 37 本のまま vocabulary.py・verify_document.py・report_customer.py が動き、世代がもう 1 つ増えた。最新の世代はこの値(上の世代は消さない)。
 FROZEN_BUNDLE_CAND = "864b1f96292f1615c7e5b7e3bbd6924ebd9955b8354b3c5d51400ba9a01fb054"
+# 2026-11-02 追記(「その他」の主語の結び直し O を足す。封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md): 同じ 37 本のまま vocabulary.py と recipes.py が動き(挿入だけ)、世代がもう 1 つ増えた。最新の世代はこの値(上の世代は消さない)。
+FROZEN_BUNDLE_P28 = "66a3e5f187ff64d5b94aaf884f43a7c6f541cf6f6a20423e4a5da7e1df165b1e"
 FROZEN_COUNT_AFTER = 37
 
 
@@ -530,8 +533,9 @@ class SealedStateTest(unittest.TestCase):
             self.assertTrue(FINGERPRINT_LATER, u"**frozen_bundle の本数が %d(定数 %d)に動いているのに、遷移の宣言が無い**" % (n_files, count))
             self.assertEqual((count, n_files), (FROZEN_COUNT_AFTER, FROZEN_COUNT_AFTER), u"遷移は 36 → 37 本だけ宣言されている")
             self.assertEqual(r.returncode, 0, out)
-            self.assertIn(FROZEN_BUNDLE_CAND, out)
-            self.assertEqual(gens[-1], FROZEN_BUNDLE_CAND)
+            self.assertIn(FROZEN_BUNDLE_P28, out)
+            self.assertEqual(gens[-1], FROZEN_BUNDLE_P28)
+            self.assertIn(FROZEN_BUNDLE_CAND, gens, u"候補の欄を足した世代は消さない")
             self.assertIn(FROZEN_BUNDLE_DEFAULT_P27, gens, u"既定を P27 にした段 2 の世代は消さない")
             self.assertIn(FROZEN_BUNDLE_P27, gens, u"P27 の段 2 の世代は消さない")
             self.assertIn(FROZEN_BUNDLE_DEFAULT_P26, gens, u"既定を P26 にした段 2 の世代は消さない")
@@ -543,6 +547,7 @@ class SealedStateTest(unittest.TestCase):
             self.assertEqual(gens.index(FROZEN_BUNDLE_P27), gens.index(FROZEN_BUNDLE_DEFAULT_P26) + 1, u"P27 の段 2 の世代は既定を P26 にした段 2 の次")
             self.assertEqual(gens.index(FROZEN_BUNDLE_DEFAULT_P27), gens.index(FROZEN_BUNDLE_P27) + 1, u"既定を P27 にした段 2 の世代は P27 の段 2 の次")
             self.assertEqual(gens.index(FROZEN_BUNDLE_CAND), gens.index(FROZEN_BUNDLE_DEFAULT_P27) + 1, u"候補の欄を足した世代は既定を P27 にした段 2 の次")
+            self.assertEqual(gens.index(FROZEN_BUNDLE_P28), gens.index(FROZEN_BUNDLE_CAND) + 1, u"「その他」の主語の結び直しの世代は候補の欄を足した世代の次")
         # 字で留めた本数は git が数える本数と同じ(今)
         ls = subprocess.run(["git", "ls-files", "audit-core/core", "audit-core/adapters"], cwd=REPO, capture_output=True, text=True).stdout.split()
         self.assertEqual(len(ls), n_files)

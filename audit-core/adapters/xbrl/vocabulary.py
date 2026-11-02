@@ -450,6 +450,9 @@ class Profile:
     per_unit_counter_2026_10_27: bool = False
     # C3 当期末より先の決算期(「2027年5月期」等)の後ろの数は UNVERIFIABLE(target_or_plan)。
     future_period_2026_10_27: bool = False
+    # P28 O(封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §1): 直前が「その他」「その他の○○」の円族の数で、engine が GROUNDED にしなかった行を、
+    # 書類の全部の Other… 要素(同じ期・member なし・JPY)のうち帯の中の fact がちょうど 1 つならそれに結ぶ。偽(既定)なら 1 行も変わらない。P28 だけが真。
+    other_subject_2026_11_02: bool = False
     # 候補(封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §1-2): reason が no_same_value の行に、名指さなかった fact を verify_document の candidate の欄として添える。
     # state・reason・pointers・recomputed は変えない(偽でも欄は在り全行 None)。P27C だけが真(既定の P27・P27E は偽)。
     unnamed_candidate_2026_10_29: bool = False
@@ -811,3 +814,6 @@ P27E = dataclasses.replace(P27, name="P27E", last_branch_relative_2026_10_27=Tru
 PROFILES["P27E"] = P27E
 P27C = dataclasses.replace(P27, name="P27C", unnamed_candidate_2026_10_29=True)    # 封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29 §1-2 (イ)。明示したときだけ候補が付く。既定にしない
 PROFILES["P27C"] = P27C
+# P28 = P27 + O(封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §1-3)。既定にしない(DEFAULT_PROFILE は P27 のまま)。
+P28 = dataclasses.replace(P27, name="P28", other_subject_2026_11_02=True)
+PROFILES["P28"] = P28

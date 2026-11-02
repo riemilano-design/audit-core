@@ -54,6 +54,11 @@ DEFAULT_P27_DELETIONS = {"adapters/xbrl/vocabulary.py": 1, "adapters/xbrl/verify
 CAND_SEAL_REL = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"
 CAND_AFTER16 = {"vocabulary.py": "7fbcfbf0e472f366", "verify_document.py": "6c76c8ade6c7b1c8", "report_customer.py": "bdbaa00a419219fe"}
 CAND_DELETIONS = {"adapters/xbrl/vocabulary.py": 1, "adapters/xbrl/verify_document.py": 2, "adapters/xbrl/report_customer.py": 1}
+#: 2026-11-02(「その他」の主語の結び直し O): 封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §2-3 が宣言した遷移(人間の承認 2026-11-02)。vocabulary.py に旗 1 つ・P28・PROFILES の登録(+6 行)、
+#: recipes.py に定数 3 つ・関数 2 つ・呼び出し 2 行・provenance の 2 行(+65 行)。削除は 0(挿入だけ)。上の CAND_AFTER16(候補の欄を足す遷移の後の値)は測った時点の値として残す
+#: (verify_document.py・report_customer.py は CAND_AFTER16 のまま)。受け入れるのは、その封が履歴に在り、vocabulary.py・recipes.py が下の値のときだけ(封の commit 43fe0e3 からの削除は累計のまま: 1・2・1)。
+P28_SEAL_REL = "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"
+P28_AFTER16 = {"vocabulary.py": "180125cd94053a94", "recipes.py": "89eee7eca15480c6"}
 #: 既存の門が行頭の名前を数える変数名(封 §2-3 の言い分け)。新しい門はこれらを行頭に置かない。
 RESERVED_PREFIXES = ("ENGINE_LATER", "UNTOUCHED", "PIN_DEF", "LATER_ENGINE_COMMITS", "FROZEN_LATER", "ENGINE_TRANSITIONS", "LATER_FINGERPRINT",
                      "FINGERPRINT_", "LATER_TARGET", "LATER_FROZEN", "FROZEN_BUNDLE_AT_SEAL", "TARGET_AT_SEAL", "ENGINE_AT_SEAL")
@@ -81,8 +86,22 @@ def seal_commit():
     return got[0] if len(got) == 1 else None
 
 
+def p28_declared():
+    u"""「その他」の主語の結び直しの遷移(封 P28_SEAL_REL §2-3)が宣言されているか。封が履歴に在り、作業木の vocabulary.py・recipes.py が P28_AFTER16 の値で、
+    verify_document.py・report_customer.py が CAND_AFTER16 の値のときだけ True。"""
+    added = git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + P28_SEAL_REL).stdout.split()
+    if not added:
+        return False
+    if dict((n, sha16_of("adapters/xbrl/" + n)) for n in P28_AFTER16) != P28_AFTER16:
+        return False
+    return all(sha16_of("adapters/xbrl/" + n) == CAND_AFTER16[n] for n in ("verify_document.py", "report_customer.py"))
+
+
 def cand_declared():
-    u"""候補の欄を足す遷移(封 CAND_SEAL_REL §2-3)が宣言されているか。封が履歴に在り、作業木の 3 file の sha16 が宣言の値のときだけ True。"""
+    u"""候補の欄を足す遷移(封 CAND_SEAL_REL §2-3)が宣言されているか。封が履歴に在り、作業木の 3 file の sha16 が宣言の値のときだけ True。
+    2026-11-02: 「その他」の主語の結び直しの遷移(p28_declared)の後も候補の欄は残るので、その宣言の後も True(vocabulary.py は後の値になる)。"""
+    if p28_declared():
+        return True
     added = git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + CAND_SEAL_REL).stdout.split()
     if not added:
         return False
@@ -287,6 +306,8 @@ class SealTextTest(unittest.TestCase):
             want = DEFAULT_P27_AFTER16[name] if (name == "vocabulary.py" and default_p27_declared()) else P27_AFTER16[name]
             if cand_declared() and name in CAND_AFTER16:
                 want = CAND_AFTER16[name]          # 2026-10-30: 候補の欄を足す遷移の後の値(上の値は測った時点の値として残す)
+            if p28_declared() and name in P28_AFTER16:
+                want = P28_AFTER16[name]           # 2026-11-02: 「その他」の主語の結び直しの遷移の後の値
             self.assertEqual(sha16_of("adapters/xbrl/" + name), want, name)
 
 
@@ -317,13 +338,15 @@ class EngineDiffTest(unittest.TestCase):
         # 2026-10-30(候補の欄を足す。封 CAND_SEAL_REL §2-3): vocabulary.py の挿入はさらに +5(旗 1 つ・P27C・PROFILES の登録)、report_customer.py は +22(candidate_ja と理由の欄の描き直し)、
         # 削除は累計 vocabulary.py 1・verify_document.py 2・report_customer.py 1(CLAIM_FIELDS の 1 行・理由の欄の 1 行が加わる)。
         extra = (13 if cand else 8) if declared else 0
+        p28 = p28_declared()
+        extra_vocab, extra_recipes = (6, 65) if p28 else (0, 0)       # 2026-11-02: 「その他」の主語の結び直し(封 P28_SEAL_REL §2-3)。vocabulary.py +6・recipes.py +65(削除は 0)
         self.assertEqual(sum(CAND_DELETIONS.values()) if cand else (sum(DEFAULT_P27_DELETIONS.values()) if declared else 0), sum(d for _a, d in rows.values()))
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 10)
-        self.assertLessEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 20 + extra)
+        self.assertLessEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 20 + extra + extra_vocab)
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/extract.py"][0], 10)
         self.assertLessEqual(rows["audit-core/adapters/xbrl/extract.py"][0], 20)
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/recipes.py"][0], 90)
-        self.assertLessEqual(rows["audit-core/adapters/xbrl/recipes.py"][0], 140)
+        self.assertLessEqual(rows["audit-core/adapters/xbrl/recipes.py"][0], 140 + extra_recipes)
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/registry_setup.py"][0], 1)
         self.assertLessEqual(rows["audit-core/adapters/xbrl/registry_setup.py"][0], 4)
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/report_customer.py"][0], 1)
@@ -354,6 +377,8 @@ class EngineDiffTest(unittest.TestCase):
                     want = DEFAULT_P27_AFTER16[name]          # 2026-10-28: 既定を P27 に切り替える 段 2 の遷移の値(P27_AFTER16 は P27 の段 2 の後の値で、測った時点の値として残す)
                 if cand_declared() and name in CAND_AFTER16:
                     want = CAND_AFTER16[name]                 # 2026-10-30: 候補の欄を足す遷移の後の値
+                if p28_declared() and name in P28_AFTER16:
+                    want = P28_AFTER16[name]                  # 2026-11-02: 「その他」の主語の結び直しの遷移の後の値
                 self.assertEqual(want, got, u"**%s が封の時点の値でも、宣言された遷移の値でもない**" % name)
 
     def test_10_the_s2_commit_did_not_touch_the_engine(self):

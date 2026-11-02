@@ -640,15 +640,19 @@ def labels_ok():
 # いまの engine の宣言の値({path: (sha16, 封の commit 87f83fd からの numstat の挿入の上限, 削除)})は下の値: vocabulary.py は 8 → 10 行(旗 1 つ + P27C + PROFILES の登録 +5)、
 # verify_document.py は 1 → 12 行・-1 → -2 行(Claim の欄 candidate)、report_customer.py は 0 → 22 行・-1 行(candidate_ja と理由の欄の描き直し 1 行)。受け入れるのは、その封が履歴に在り、値が下の値のときだけ。
 CAND_SEAL_REL = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"
-ENGINE_DECL = {"adapters/xbrl/vocabulary.py": ("7fbcfbf0e472f366", 10, 1), "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", 12, 2),
-               "adapters/xbrl/report_customer.py": ("bdbaa00a419219fe", 22, 1)}
+# 2026-11-02(「その他」の主語の結び直し O): 封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §2-3 が宣言した遷移(人間の承認 2026-11-02)。vocabulary.py は 10 → 16 行(旗 1 つ・P28・PROFILES の登録 +6、削除は 1 のまま)、
+# recipes.py は 0 → 65 行・削除 0(定数 3 つ・関数 2 つ・呼び出し 2 行・provenance の 2 行)。直前の値(vocabulary.py 7fbcfbf0e472f366・10 行)は測った時点の値としてここに残す。
+P28_SEAL_REL = "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"
+ENGINE_DECL = {"adapters/xbrl/vocabulary.py": ("180125cd94053a94", 16, 1), "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", 12, 2),
+               "adapters/xbrl/report_customer.py": ("bdbaa00a419219fe", 22, 1), "adapters/xbrl/recipes.py": ("89eee7eca15480c6", 65, 0)}
 #: 束ねた指紋(adapter_xbrl_py_sha256)の、候補の欄の後の値。EXPECT["fingerprint"](この結果が測った時点の値)は残す。
-ENGINE_FP_LATER = "dc7e35fbfb0f56ca6410bb7bfa8b8a366cc3ec19d6614c4cb866400cd9994ff6"
+ENGINE_FP_LATER = "d72c0cfb7cd74761144a935867a6ed798c952e2e04303b894d98ab358265ad7c"      # 2026-11-02: 「その他」の主語の結び直しの後の値。直前の値(候補の欄の後) dc7e35fbfb0f56ca6410bb7bfa8b8a366cc3ec19d6614c4cb866400cd9994ff6 は測った時点の値としてここに残す
 
 
 def engine_ok():
     assert git("log", "--diff-filter=A", "--format=%H", "--", SEAL_REL).stdout.split(), u"封が履歴に無い"
     assert git("log", "--diff-filter=A", "--format=%H", "--", CAND_SEAL_REL).stdout.split(), u"遷移を宣言した封が履歴に無い: " + CAND_SEAL_REL
+    assert git("log", "--diff-filter=A", "--format=%H", "--", P28_SEAL_REL).stdout.split(), u"遷移を宣言した封が履歴に無い: " + P28_SEAL_REL
     from adapters.xbrl import vocabulary as V
     assert V.DEFAULT_PROFILE == "P27", V.DEFAULT_PROFILE
     for rel, (want, ins_max, dele) in sorted(ENGINE_DECL.items()):

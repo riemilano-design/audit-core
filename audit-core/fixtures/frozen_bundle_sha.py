@@ -148,6 +148,12 @@ FROZEN_BUNDLE_GENERATIONS = (
      "recipes.py・extract.py・registry_setup.py・comparators.py・resolve.py・run.py・report.py・verify_external.py・core/py は 0 行。"
      "人間の承認 2026-10-30「君に任せる進めて」(欄を足す・(イ) P27C・案 A)、封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md(commit 0df5222、承認の追記 db68a2c)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("66a3e5f187ff64d5b94aaf884f43a7c6f541cf6f6a20423e4a5da7e1df165b1e",
+     "2026-11-02 feature/audit-core-final-eval-8(「その他」の主語の結び直し O を足す): vocabulary.py に旗 other_subject_2026_11_02 と P28・PROFILES の登録を足し(+6 行・-0 行。DEFAULT_PROFILE は P27 のまま)、"
+     "recipes.py に定数 3 つ・_other_subject_shape_2026_11_02・_other_subject_2026_11_02・_dispatch_num_claim の呼び出し 2 行・claim_to_recipe の provenance の 2 行を足した(挿入だけ・-0 行)。"
+     "verify_document.py・comparators.py・extract.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
+     "人間の承認 2026-11-02「君に任せる課題解決に向けて進めて」(旗 1 つ・profile 1 つ・挿入だけ。既定にしない)、封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md(commit c6cbfae)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

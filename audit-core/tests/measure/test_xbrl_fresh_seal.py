@@ -163,7 +163,10 @@ LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixt
                       "tests/measure/test_xbrl_delta_decimals.py",
                       # 2026-11-02: 出所のずれの名指し(封 docs/XBRL_RESTATED_PRIOR_SEAL_2026-11-02.md)。前年の有報の docID と手元の 97 の docID を材料の名として持つ記録 2 つと結果の文書
                       "fixtures/xbrl/prior_pairs_2026-11-02.json", "fixtures/xbrl/restated_naming_2026-11-02.json",
-                      "docs/XBRL_RESTATED_PRIOR_RESULT_2026-11-02.md")
+                      "docs/XBRL_RESTATED_PRIOR_RESULT_2026-11-02.md",
+                      # 2026-11-03: 「その他」の主語の結び直し O(封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md)。手元の 97 の docID を材料の名として持つ記録 3 つ(regress97・readings・zero_diag)。
+                      # AI の文の記録 2 つ(ai_prose・entry)は docID を <docID> に置換済みで持たない。script・門・結果の文書は docID を持たない
+                      "fixtures/xbrl/p28/regress97_2026-11-02.json", "fixtures/xbrl/p28/readings_2026-11-02.json", "fixtures/xbrl/p28/zero_diag_2026-11-03.json")
 
 
 def drop_later_naming_files(named):

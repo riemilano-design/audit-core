@@ -32,18 +32,18 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **259 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **262 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
 | `measure/tests` | 1 |
 | `tests/adapters/kokkai` | 11 |
 | `tests/adapters/shogi` | 8 |
-| `tests/adapters/xbrl` | 33 |
+| `tests/adapters/xbrl` | 34 |
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 193 |
+| `tests/measure` | 195 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -235,6 +235,9 @@ cache の無い clone で `README.en.md` の 3 節の手順が字どおりに動
 **2026-11-02 に +1(13)**(`tests/measure/test_xbrl_restated_prior.py`。出所のずれの名指しの便(封 `docs/XBRL_RESTATED_PRIOR_SEAL_2026-11-02.md`)の段 1 の門。封の幅と script の定数の一致・import と通信先と書く先の白名簿・合成の有報と作り物の backend で突き合わせと前年の探し方と失敗の日と ZIP でない応答と DEI と記録の形を確かめ・記録が在れば数え直しと判定(無ければ skip)・順序・変異 4 本。258 → **259**(`tests/measure` 192 → **193**)。)
 
 **2026-11-02 に +22 本(13)**(`tests/measure/test_xbrl_restated_prior.py` に出所のずれの名指しの便の段 2 の門 22 本(封 `docs/XBRL_RESTATED_PRIOR_SEAL_2026-11-02.md` の §2。記録 `fixtures/xbrl/restated_naming_2026-11-02.json` と結果 `docs/XBRL_RESTATED_PRIOR_RESULT_2026-11-02.md` の数・規則 R・site の絞り込み・順序・変異)。file 数は不変(259・`tests/measure` 193)。収集した本数が増えただけで、pytest の収集本数は記録の値に直した(`fixtures/suite_coverage_2026-10-16.json`)。)
+
+**2026-11-03 に +3**(`tests/adapters/xbrl/test_recipes_p28.py`・`tests/measure/test_xbrl_p28_seal.py`・`tests/measure/test_xbrl_p28_result.py`。
+「その他」の主語の結び直し O(P28 = P27 + O。封 `docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md`)の engine の試験と、封の門と、結果の門。結果は `docs/XBRL_OTHER_SUBJECT_ENGINE_RESULT_2026-11-02.md`)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

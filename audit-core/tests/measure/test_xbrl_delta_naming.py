@@ -87,7 +87,9 @@ ENGINE_AT_MEASURE = {
     "adapters/xbrl/report_customer.py": "bdbaa00a419219fe",
 }
 #: 宣言された遷移 {file: (遷移の後の sha16, その遷移を宣言した封)}。今は 0 件。足すときは、封が履歴に在り、値が宣言の値のときだけ受け入れる。測った時点の値は消さない。
-ENGINE_DECLARED = {}
+# 2026-11-02(「その他」の主語の結び直し O): 封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §2-3 が宣言した遷移(人間の承認 2026-11-02)。vocabulary.py(旗 1 つ・P28・PROFILES の登録。180125cd94053a94)と recipes.py(定数 3 つ・関数 2 つ・呼び出し 2 行・provenance の 2 行。89eee7eca15480c6)に挿入だけを足した。測った時点の値は ENGINE_AT_MEASURE に残す。
+ENGINE_DECLARED = {"adapters/xbrl/vocabulary.py": ("180125cd94053a94", "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"),
+                   "adapters/xbrl/recipes.py": ("89eee7eca15480c6", "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md")}
 
 #: 行頭に置いてはいけない名前(過去の門が数える)。この file の中で行頭に出る字を f の試験が見る
 RESERVED_HEADS = ("ENGINE_LATER", "UNTOUCHED", "PIN_DEF", "LATER_ENGINE_COMMITS", "FROZEN_LATER", "ENGINE_TRANSITIONS", "LATER_FINGERPRINT", "FINGERPRINT_",

@@ -294,14 +294,17 @@ DEFAULT_P27_FP_TO = "92326a0f4dcefd21fae4393a611e4206ef174b19258ddadd0213117191e
 #: いまの指紋が下の「後の値」(vocabulary.py・verify_document.py・report_customer.py が動いた後)で、記録の値が E の engine のときだけ受け入れる。封が履歴に在ること。
 CAND_SEAL_REL = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"
 CAND_FP_TO = "dc7e35fbfb0f56ca6410bb7bfa8b8a366cc3ec19d6614c4cb866400cd9994ff6"
+#: 2026-11-02(「その他」の主語の結び直し O): 封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §2-3 が宣言した遷移の後の値。上の CAND_FP_TO(候補の欄の後の値)は測った時点の値として残す。
+P28_SEAL_REL = "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"
+P28_FP_TO = "d72c0cfb7cd74761144a935867a6ed798c952e2e04303b894d98ab358265ad7c"
 
 
 def default_p27_declared_for(rec_sha, now_sha):
     import subprocess
     if rec_sha == now_sha:
         return True
-    assert rec_sha == DEFAULT_P27_FP_FROM and now_sha in (DEFAULT_P27_FP_TO, CAND_FP_TO), u"記録が測った engine がいまの engine と違う(宣言された遷移の値でもない)"
-    seal_rel = CAND_SEAL_REL if now_sha == CAND_FP_TO else DEFAULT_P27_SEAL_REL      # 2026-10-30: 候補の欄の遷移の後は、その封が履歴に在ること
+    assert rec_sha == DEFAULT_P27_FP_FROM and now_sha in (DEFAULT_P27_FP_TO, CAND_FP_TO, P28_FP_TO), u"記録が測った engine がいまの engine と違う(宣言された遷移の値でもない)"
+    seal_rel = P28_SEAL_REL if now_sha == P28_FP_TO else (CAND_SEAL_REL if now_sha == CAND_FP_TO else DEFAULT_P27_SEAL_REL)      # 2026-10-30: 候補の欄の遷移の後は、その封が履歴に在ること
     added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal_rel], cwd=ROOT, capture_output=True, text=True).stdout.split()
     assert added, u"engine が動いているのに、遷移を宣言した封が履歴に無い"
     return True

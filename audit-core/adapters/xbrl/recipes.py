@@ -600,6 +600,8 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
         claim["form"] = "direct_value"
         _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
                             profile, rounding)
+        if getattr(profile, "other_subject_2026_11_02", False):
+            _other_subject_2026_11_02(claim, s, a, b, sign, num, unit, facts, contexts, profile, rounding)   # P28(封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §1-2)
         if profile.flow_sign:
             _apply_flow_sign(claim, s, a, b, rounding, flow_base, mag_trunc)
     elif unit in ("％", "%", "ポイント"):
@@ -1686,6 +1688,67 @@ def _p27_gate(c, sentences, contexts, profile):
         c["p27_gate"] = "future_period"
 
 
+# ---------------------------------------------------------------------------
+# P28 O(封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §1)。旗 other_subject_2026_11_02 が真のときだけ呼ばれる。人間の決定の行の字は変えない。
+#   直前が「その他」「その他の○○」の円族の数で、engine が GROUNDED にしなかった行について、書類の全部の Other… 要素(同じ期・member なし・JPY)のうち
+#   engine の帯の中の fact がちょうど 1 つならそれに結ぶ(R0。近傍 R1 は無い)。measure/xbrl_other_rule_2026-11-02.py の字と同じ。
+# ---------------------------------------------------------------------------
+OTHER_SUBJECT_TRAIL_2026_11_02 = u":" + u":" + u"、はがをでに \u3000"   # コロン 2 つはどちらも ASCII
+OTHER_SUBJECT_RE_2026_11_02 = re.compile(u"その他(の[^、。::()()\\s]{0,8})?$")   # 字の集合のコロン 2 つと括弧 4 つは全部 ASCII
+OTHER_SUBJECT_HOPS_2026_11_02 = 5
+
+
+def _other_subject_shape_2026_11_02(profile, s, a, hops=0):
+    """数の開始位置 a の手前の字が「その他」「その他の○○」の形か。``(形, 前期)``。「(同」の数は直前の数へ辿り(最大 OTHER_SUBJECT_HOPS_2026_11_02 回)、前期 = 真。"""
+
+    w = s[:a].rstrip(OTHER_SUBJECT_TRAIL_2026_11_02)
+    if w.endswith("(同"):
+        prev = [a2 for (a2, b2, _v, _u, _p) in _numbers_of(profile, s) if b2 <= a]
+        if not prev or hops >= OTHER_SUBJECT_HOPS_2026_11_02:
+            return False, True
+        shape, _prior = _other_subject_shape_2026_11_02(profile, s, prev[-1], hops + 1)
+        return shape, True
+    return bool(OTHER_SUBJECT_RE_2026_11_02.search(w)), False
+
+
+def _other_subject_2026_11_02(claim, s, a, b, sign, num, unit, facts, contexts, profile, rounding):
+    """P28 O。形が真で engine が GROUNDED にしなかった円族の数に、Other… 要素の fact がちょうど 1 つ帯の中に在ればそれに結ぶ。それ以外は claim を変えない
+    (形が真なら provenance 用の欄 ``other_subject_2026_11_02`` だけ置く)。"""
+
+    if not getattr(profile, "other_subject_2026_11_02", False) or unit not in V.UNIT_SCALE:
+        return
+    shape, prior = _other_subject_shape_2026_11_02(profile, s, a)
+    if not shape:
+        return
+    target = sign * num * claim["unit_scale"]
+    scale = claim["claim_scale"]
+    mag_trunc = bool(claim.get("magnitude_truncate"))
+    want = "Prior1Year" if prior else "CurrentYear"
+    hits = []
+    for f in facts:
+        if not f["name"].split(":")[-1].startswith("Other"):
+            continue
+        if not (f["unit"] and f["unit"].upper().startswith("JPY")):
+            continue
+        if not f["context"].startswith(want) or "_" in f["context"]:
+            continue
+        how = V.match_value(f["value"], target, scale, rounding, mag_trunc)
+        if how:
+            hits.append((f, how))
+    decided = len(hits) == 1 and claim.get("result") != "GROUNDED"   # engine 自身の経路で一致した行(GROUNDED)は触らない(候補の数だけ欄に残す)
+    if decided:
+        f, how = hits[0]
+        for k in _P27_STALE_KEYS:
+            claim.pop(k, None)
+        claim["reason"] = None
+        claim["pointer"] = "xbrl:%s@%s" % (f["name"], f["context"])
+        claim["bound"] = True
+        claim["result"] = "GROUNDED"
+        claim["recomputed"] = f["value"]
+        claim["match"] = how
+    claim["other_subject_2026_11_02"] = {"前期": prior, "候補": len(hits), "決まった": decided}
+
+
 _PCT_PHRASE_RE = re.compile(r"(\d+(?:\.\d+)?)\s*(％|%)\s*の?(?:大幅な?)?(増加|減少|増益|減益|増収|減収|増|減)")
 # 語と数の間に許すもの: 助詞、「前期の」、そして「32.5%から」(AからBへ の A)。
 _RATIO_PARTICLE_RE = re.compile(r"^(は|が|を|も|の|、|\s)*(前期(末)?の)?(\d+(?:\.\d+)?\s*[％%]から)?$")
@@ -2127,6 +2190,8 @@ def claim_to_recipe(raw, kind):
         provenance["rounded_diff_hold"] = raw["rounded_diff_hold"]   # P26 G3: 名指さなかった残高の対と差
     if raw.get("cause_item") is not None:
         provenance["cause_item"] = raw["cause_item"]   # P26 G4: 形と、名指していた fact・その結果
+    if raw.get("other_subject_2026_11_02") is not None:
+        provenance["other_subject_2026_11_02"] = raw["other_subject_2026_11_02"]   # P28 O: 前期・候補の数・決まったか
 
     claim = core.Claim(
         id=raw["id"], form=form, subject=raw.get("subject"), value=raw.get("value"),

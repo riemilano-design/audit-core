@@ -1,0 +1,756 @@
+{
+ "注意": "候補 0 の行の 1 行ごとの分類。文・数の字・金額は入れない。97 書類の手元の原文。engine は変えていない。",
+ "封": {
+  "file": "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md",
+  "commit": "c6cbfae"
+ },
+ "HEAD の commit": "c6cbfaec301274eb60169bc479ac1e0650ee4aa1",
+ "この script の sha256": "1c3eb5e87a9b15a84141768ef25d63967be9f990b9c2f585faec13fecb2a949d",
+ "入力の sha256": {
+  "fixtures/xbrl/p28/regress97_2026-11-02.json": "569464b74124e5027512f0697f9e766d9bcb58c594e441ac4b50373786775d09",
+  "measure/xbrl_p27_regress97_2026-10-27.py": "d4e3430e7cf67b8465e48f8799c4b679d02ca9203d7f63d8c1973c2df1cf57ab"
+ },
+ "cache の前後": {
+  "前": {
+   "edinet": {
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "edinet-fresh-2026-10-21": {
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   },
+   "edinet-prior-2026-11-02": {
+    "件数": 94,
+    "名前の一覧の sha256": "de611b3805b5d8087eea119c0d341e126f9f0ed152edba940cefbed743ecc110"
+   }
+  },
+  "後": {
+   "edinet": {
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "edinet-fresh-2026-10-21": {
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   },
+   "edinet-prior-2026-11-02": {
+    "件数": 94,
+    "名前の一覧の sha256": "de611b3805b5d8087eea119c0d341e126f9f0ed152edba940cefbed743ecc110"
+   }
+  },
+  "変化なし": true
+ },
+ "集計": {
+  "形が真の行": 42,
+  "分類(形が真の 42 行。上から順に 1 つ)": {
+   "(a) engine が P27 で GROUNDED": 8,
+   "(b) 増減額の文": 21,
+   "(c) どの context にも帯の中の Other が無い": 11,
+   "(d) 帯の中の Other は在るが member なし・同じ期には無い": 1,
+   "(e) member なし・同じ期に 2 つ以上(保留)": 0,
+   "(f) その他": 0,
+   "決まった(候補 1)": 1
+  },
+  "候補 0 の行": 41,
+  "候補 0 の行の分類": {
+   "(a) engine が P27 で GROUNDED": 8,
+   "(b) 増減額の文": 21,
+   "(c) どの context にも帯の中の Other が無い": 11,
+   "(d) 帯の中の Other は在るが member なし・同じ期には無い": 1,
+   "(e) member なし・同じ期に 2 つ以上(保留)": 0,
+   "(f) その他": 0
+  },
+  "各分類の id": {
+   "(a) engine が P27 で GROUNDED": [
+    [
+     "S100YWGX",
+     "N041"
+    ],
+    [
+     "S100YYK8",
+     "N028"
+    ],
+    [
+     "S100YZ7E",
+     "N054"
+    ],
+    [
+     "S100Z35K",
+     "N043"
+    ],
+    [
+     "S100Z42X",
+     "N025"
+    ],
+    [
+     "S100Z46V",
+     "N019"
+    ],
+    [
+     "S100Z48T",
+     "N034"
+    ],
+    [
+     "S100Z4GF",
+     "N035"
+    ]
+   ],
+   "(b) 増減額の文": [
+    [
+     "S100YYRV",
+     "N089"
+    ],
+    [
+     "S100YYT8",
+     "N044"
+    ],
+    [
+     "S100YYT8",
+     "N049"
+    ],
+    [
+     "S100Z39P",
+     "N045"
+    ],
+    [
+     "S100Z3CO",
+     "N036"
+    ],
+    [
+     "S100Z3CO",
+     "N042"
+    ],
+    [
+     "S100Z3IZ",
+     "N058"
+    ],
+    [
+     "S100Z42X",
+     "N030"
+    ],
+    [
+     "S100Z48T",
+     "N029"
+    ],
+    [
+     "S100Z48T",
+     "N043"
+    ],
+    [
+     "S100Z48T",
+     "N047"
+    ],
+    [
+     "S100Z5DN",
+     "N015"
+    ],
+    [
+     "S100Z5DN",
+     "N051"
+    ],
+    [
+     "S100YXFQ",
+     "N082"
+    ],
+    [
+     "S100YZ4M",
+     "N062"
+    ],
+    [
+     "S100YYIV",
+     "N026"
+    ],
+    [
+     "S100YYSK",
+     "N016"
+    ],
+    [
+     "S100YYMP",
+     "N051"
+    ],
+    [
+     "S100YYMC",
+     "N032"
+    ],
+    [
+     "S100YYQN",
+     "N061"
+    ],
+    [
+     "S100YY3A",
+     "N067"
+    ]
+   ],
+   "(c) どの context にも帯の中の Other が無い": [
+    [
+     "S100YYQX",
+     "N011"
+    ],
+    [
+     "S100YYQX",
+     "N059"
+    ],
+    [
+     "S100YYQX",
+     "N060"
+    ],
+    [
+     "S100YYT8",
+     "N042"
+    ],
+    [
+     "S100YZ7E",
+     "N050"
+    ],
+    [
+     "S100YXFQ",
+     "N077"
+    ],
+    [
+     "S100YZ4M",
+     "N061"
+    ],
+    [
+     "S100YZ4M",
+     "N072"
+    ],
+    [
+     "S100YYFP",
+     "N064"
+    ],
+    [
+     "S100YXZQ",
+     "N043"
+    ],
+    [
+     "S100YXZQ",
+     "N046"
+    ]
+   ],
+   "(d) 帯の中の Other は在るが member なし・同じ期には無い": [
+    [
+     "S100YZ7E",
+     "N061"
+    ]
+   ],
+   "(e) member なし・同じ期に 2 つ以上(保留)": [],
+   "(f) その他": [],
+   "決まった(候補 1)": [
+    [
+     "S100YMFV",
+     "N039"
+    ]
+   ]
+  },
+  "(d) の内訳": {
+   "member つきだけ(別の期なし)": 1,
+   "別の期だけ(member つきなし)": 0,
+   "両方": 0
+  },
+  "(b) の内訳": {
+   "数の直後 6 字に増減": 17,
+   "form が derived_value": 12
+  },
+  "緩めた字で数えた件数(97 書類の MD&A)": 74,
+  "緩めた字の内訳": {
+   "封の形": 42,
+   "封の形でない": 32,
+   "封の形でない・「その他」の後に「の」以外が続く(9 字以上を含む)": 30,
+   "封の形でない・鉤括弧": 2,
+   "封の形・増減でない": 21,
+   "封の形・数の直後 6 字に増減": 21
+  }
+ },
+ "行": [
+  {
+   "docID": "S100YMFV",
+   "id": "N039",
+   "分類": "決まった(候補 1)",
+   "内訳": {},
+   "P27 の state": "UNVERIFIABLE",
+   "候補": 1
+  },
+  {
+   "docID": "S100YWGX",
+   "id": "N041",
+   "分類": "(a) engine が P27 で GROUNDED",
+   "内訳": {},
+   "P27 の state": "GROUNDED",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYK8",
+   "id": "N028",
+   "分類": "(a) engine が P27 で GROUNDED",
+   "内訳": {},
+   "P27 の state": "GROUNDED",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYQX",
+   "id": "N011",
+   "分類": "(c) どの context にも帯の中の Other が無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 0,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 0,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYQX",
+   "id": "N059",
+   "分類": "(c) どの context にも帯の中の Other が無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 0,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 0,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYQX",
+   "id": "N060",
+   "分類": "(c) どの context にも帯の中の Other が無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 0,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 0,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYRV",
+   "id": "N089",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYT8",
+   "id": "N042",
+   "分類": "(c) どの context にも帯の中の Other が無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 0,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 0,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYT8",
+   "id": "N044",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": false
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYT8",
+   "id": "N049",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": false
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YZ7E",
+   "id": "N050",
+   "分類": "(c) どの context にも帯の中の Other が無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 0,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 0,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YZ7E",
+   "id": "N054",
+   "分類": "(a) engine が P27 で GROUNDED",
+   "内訳": {},
+   "P27 の state": "GROUNDED",
+   "候補": 0
+  },
+  {
+   "docID": "S100YZ7E",
+   "id": "N061",
+   "分類": "(d) 帯の中の Other は在るが member なし・同じ期には無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 1,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 1,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z35K",
+   "id": "N043",
+   "分類": "(a) engine が P27 で GROUNDED",
+   "内訳": {},
+   "P27 の state": "GROUNDED",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z39P",
+   "id": "N045",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z3CO",
+   "id": "N036",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z3CO",
+   "id": "N042",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z3IZ",
+   "id": "N058",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z42X",
+   "id": "N025",
+   "分類": "(a) engine が P27 で GROUNDED",
+   "内訳": {},
+   "P27 の state": "GROUNDED",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z42X",
+   "id": "N030",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N019",
+   "分類": "(a) engine が P27 で GROUNDED",
+   "内訳": {},
+   "P27 の state": "GROUNDED",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z48T",
+   "id": "N029",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": false
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z48T",
+   "id": "N034",
+   "分類": "(a) engine が P27 で GROUNDED",
+   "内訳": {},
+   "P27 の state": "GROUNDED",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z48T",
+   "id": "N043",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": false
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z48T",
+   "id": "N047",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": false
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z4GF",
+   "id": "N035",
+   "分類": "(a) engine が P27 で GROUNDED",
+   "内訳": {},
+   "P27 の state": "GROUNDED",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z5DN",
+   "id": "N015",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": false
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100Z5DN",
+   "id": "N051",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  },
+  {
+   "docID": "S100YXFQ",
+   "id": "N077",
+   "分類": "(c) どの context にも帯の中の Other が無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 0,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 0,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YXFQ",
+   "id": "N082",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "N061",
+   "分類": "(c) どの context にも帯の中の Other が無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 0,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 0,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "N062",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  },
+  {
+   "docID": "S100YZ4M",
+   "id": "N072",
+   "分類": "(c) どの context にも帯の中の Other が無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 0,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 0,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYIV",
+   "id": "N026",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": false
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYSK",
+   "id": "N016",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYMP",
+   "id": "N051",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": false
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYFP",
+   "id": "N064",
+   "分類": "(c) どの context にも帯の中の Other が無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 0,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 0,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYMC",
+   "id": "N032",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  },
+  {
+   "docID": "S100YYQN",
+   "id": "N061",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": false
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YXZQ",
+   "id": "N043",
+   "分類": "(c) どの context にも帯の中の Other が無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 0,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 0,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YXZQ",
+   "id": "N046",
+   "分類": "(c) どの context にも帯の中の Other が無い",
+   "内訳": {
+    "数の直後 6 字に増減": false,
+    "form が derived_value": false,
+    "帯の中の Other の fact(全部)": 0,
+    "同じ期・member なし": 0,
+    "同じ期・member つき": 0,
+    "別の期": 0
+   },
+   "P27 の state": "POINTER_NOT_FOUND",
+   "候補": 0
+  },
+  {
+   "docID": "S100YY3A",
+   "id": "N067",
+   "分類": "(b) 増減額の文",
+   "内訳": {
+    "数の直後 6 字に増減": true,
+    "form が derived_value": true
+   },
+   "P27 の state": "VALUE_MISMATCH",
+   "候補": 0
+  }
+ ],
+ "limits": [
+  "分類は上から順に 1 つ。(b) は数の直後 6 字の字面と form で見るので、増減の語が 6 字より後ろにある文は (b) に入らない",
+  "帯の判定は engine と同じ式(claim の丸め方・桁)。member つき・別の期の fact は数えるだけで結ばない",
+  "緩めた字の内訳は文の字面の分類で、正しさの判定ではない"
+ ],
+ "key_leaks": []
+}

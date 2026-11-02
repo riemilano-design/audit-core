@@ -358,7 +358,8 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(len(self.rec[u"書類(手元の 97)"]), 97)
         self.assertEqual(self.rec[u"集計"][u"97 書類の sha256 が記録と一致"], 97)
         fb = load(os.path.join(ROOT, "fixtures", "frozen_bundle_sha.py"), "frozen_bundle_sha_for_prior_gate")
-        self.assertEqual(self.rec[u"engine の bundle の sha256(core/・adapters/)"], fb.FROZEN_BUNDLE_SHA)
+        self.assertEqual(self.rec[u"engine の bundle の sha256(core/・adapters/)"], "864b1f96292f1615c7e5b7e3bbd6924ebd9955b8354b3c5d51400ba9a01fb054")   # 2026-11-02: 測った時点の世代(候補の欄を足した世代)を字で留める。最新の世代は「その他」の主語の結び直し(封 XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02)で動いた
+        self.assertIn("864b1f96292f1615c7e5b7e3bbd6924ebd9955b8354b3c5d51400ba9a01fb054", [g[0] for g in fb.FROZEN_BUNDLE_GENERATIONS])
         self.assertNotIn(u"Subscription-Key", json.dumps(self.rec, ensure_ascii=False))
 
     def test_b_1_tally_recomputed(self):
@@ -997,7 +998,8 @@ class Stage2RecordTest(unittest.TestCase):
         self.assertTrue(r[u"配線の門"][u"通った"])
         self.assertNotIn(u"配線の門が通っていない", r[u"注意"])
         fb = load(os.path.join(ROOT, "fixtures", "frozen_bundle_sha.py"), "frozen_bundle_sha_for_restated_gate")
-        self.assertEqual(r[u"engine の bundle の sha256(core/・adapters/)"], fb.FROZEN_BUNDLE_SHA)
+        self.assertEqual(r[u"engine の bundle の sha256(core/・adapters/)"], "864b1f96292f1615c7e5b7e3bbd6924ebd9955b8354b3c5d51400ba9a01fb054")   # 2026-11-02: 同上(測った時点の世代を字で留める)
+        self.assertIn("864b1f96292f1615c7e5b7e3bbd6924ebd9955b8354b3c5d51400ba9a01fb054", [g[0] for g in fb.FROZEN_BUNDLE_GENERATIONS])
         self.assertEqual(r[u"engine の bundle の sha256(core/・adapters/)"], self.r1[u"engine の bundle の sha256(core/・adapters/)"])
         self.assertEqual((r[u"profile"], r[u"procs"] <= 4), (u"P27", True))
         G = r[u"配線の門"]

@@ -44,6 +44,10 @@ DEFAULT_P27_FP_TO = "92326a0f4dcefd21fae4393a611e4206ef174b19258ddadd0213117191e
 # 作業木の指紋が下の値のときに限る。上の DEFAULT_P27_FP_TO(既定を P27 に切り替える 段 2 の後の値)は測った時点の値として残す。
 CAND_SEAL_REL = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"
 CAND_FP_TO = "dc7e35fbfb0f56ca6410bb7bfa8b8a366cc3ec19d6614c4cb866400cd9994ff6"
+# 2026-11-02(「その他」の主語の結び直し O): 封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §2-3 が宣言した遷移。動いてよい engine の file は上の 3 file に recipes.py を足した 4 file で、作業木の指紋が下の値のときに限る。
+# 上の CAND_FP_TO(候補の欄の後の値)は測った時点の値として残す。
+P28_SEAL_REL = "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"
+P28_FP_TO = "d72c0cfb7cd74761144a935867a6ed798c952e2e04303b894d98ab358265ad7c"
 DOC_REL = "docs/XBRL_P27_RESULT_2026-10-27.md"
 EVAL_REC_REL = collections.OrderedDict([
     ("eval", "fixtures/xbrl/p27/eval_2026-10-27.json"),
@@ -1584,7 +1588,11 @@ class TestPins(Base):
         moved = [l.decode("utf-8") for l in git("diff", "--name-only", e, "--", *ENGINE_TREES).stdout.split() if l]
         if now["adapter_xbrl_py_sha256"] != fp_e["adapter_xbrl_py_sha256"]:
             self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + DEFAULT_P27_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
-            if now["adapter_xbrl_py_sha256"] == CAND_FP_TO:
+            if now["adapter_xbrl_py_sha256"] == P28_FP_TO:
+                self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + P28_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
+                self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + CAND_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
+                self.assertEqual(sorted(moved), ["audit-core/adapters/xbrl/recipes.py", "audit-core/adapters/xbrl/report_customer.py", "audit-core/adapters/xbrl/verify_document.py", "audit-core/adapters/xbrl/vocabulary.py"])
+            elif now["adapter_xbrl_py_sha256"] == CAND_FP_TO:
                 self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + CAND_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
                 self.assertEqual(sorted(moved), ["audit-core/adapters/xbrl/report_customer.py", "audit-core/adapters/xbrl/verify_document.py", "audit-core/adapters/xbrl/vocabulary.py"])
             else:

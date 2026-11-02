@@ -633,7 +633,8 @@ class RecordTest(unittest.TestCase):
         self.assertTrue(HEX64.match(W[u"(c) engine の bundle の sha256(core/・adapters/)"]))
         self.assertEqual(W[u"(c) engine の未 commit の file"], 0)
         fb = load(os.path.join(ROOT, "fixtures", "frozen_bundle_sha.py"), "frozen_bundle_sha_for_rerun_gate")
-        self.assertEqual(W[u"(c) engine の bundle の sha256(core/・adapters/)"], fb.FROZEN_BUNDLE_SHA, u"走らせたときの engine が凍結の束と違う")
+        self.assertEqual(W[u"(c) engine の bundle の sha256(core/・adapters/)"], "864b1f96292f1615c7e5b7e3bbd6924ebd9955b8354b3c5d51400ba9a01fb054", u"走らせたときの engine が測った時点の凍結の束と違う")   # 2026-11-02: 「その他」の主語の結び直し(封 XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02)で最新の世代は動いた。測った時点の世代(候補の欄を足した世代)を字で留め、世代の一覧に在ることを確かめる
+        self.assertIn("864b1f96292f1615c7e5b7e3bbd6924ebd9955b8354b3c5d51400ba9a01fb054", [g[0] for g in fb.FROZEN_BUNDLE_GENERATIONS])
         self.assertEqual(W[u"(c) engine の file の数"], fb.FROZEN_COUNT)
         self.assertEqual(dict(W[u"(d) 53 行・12 行・8 行の数"]), {u"53": 53, u"12": 12, u"8": 8})
         self.assertEqual(len(self.rec[u"行"]), 412)

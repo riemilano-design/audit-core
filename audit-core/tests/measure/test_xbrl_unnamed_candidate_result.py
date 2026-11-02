@@ -79,7 +79,9 @@ BASE_ENGINE = {
     "adapters/xbrl/report_customer.py": "6679138d350ec382",
 }
 #: 宣言された遷移 {file: (遷移の後の sha16, その遷移を宣言した封)}。今は 0 件。足すときは、封が履歴に在り、値が宣言の値のときだけ受け入れる。測った時点の値は消さない。
-ENGINE_DECLARED = {}
+# 2026-11-02(「その他」の主語の結び直し O): 封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §2-3 が宣言した遷移(人間の承認 2026-11-02)。vocabulary.py(旗 1 つ・P28・PROFILES の登録。180125cd94053a94)と recipes.py(定数 3 つ・関数 2 つ・呼び出し 2 行・provenance の 2 行。89eee7eca15480c6)に挿入だけを足した。測った時点の値は ENGINE_AT_MEASURE に残す。
+ENGINE_DECLARED = {"adapters/xbrl/vocabulary.py": ("180125cd94053a94", "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"),
+                   "adapters/xbrl/recipes.py": ("89eee7eca15480c6", "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md")}
 
 #: CA-9・CA-11 は engine を走らせる測定でなく、段 1 の試験の結果(db68a2c の試験 + 段 1 の engine)を測り直した事実。字で留める(出どころは文書の第 6 節)。
 #: CA-9 の「緑」の側は門が測れない(golden の定数が HEAD と同じ字であることだけ門が見る)。値は (当たりか, 実測の字)。
@@ -1073,6 +1075,12 @@ class EngineTest(unittest.TestCase):
         r = git("diff", "--numstat", BASE_COMMIT, "--", "core")
         self.assertEqual(r.stdout.strip(), u"", u"core/ に差分がある")
         for rel in ("adapters/xbrl/extract.py", "adapters/xbrl/recipes.py", "adapters/xbrl/resolve.py", "adapters/xbrl/comparators.py"):
+            if sha16(rel) != BASE_ENGINE[rel] and rel in ENGINE_DECLARED:
+                # 2026-11-02(「その他」の主語の結び直し O): recipes.py は封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §2-3 が宣言した遷移(挿入だけ)で動いてよい(封が履歴に在り、値が宣言の値のときだけ)。
+                later, seal_rel = ENGINE_DECLARED[rel]
+                self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(), u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % (rel, seal_rel))
+                self.assertEqual(sha16(rel), later, u"**%s が、宣言された遷移の値とも違う**" % rel)
+                continue
             self.assertEqual(sha16(rel), BASE_ENGINE[rel], rel)
 
     def test_f_5_the_registered_profiles_are_as_the_seal_says(self):
