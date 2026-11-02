@@ -34,8 +34,8 @@ SUITE = os.path.join(ROOT, "fixtures", "suite_coverage_2026-10-16.json")
 REV = "c740e61"
 
 # 行の本数・印の本数。**黙って減らすと赤くなる**ように字で留める(増やすときは直す)
-EXPECT_ROWS = {"L": 48, "D": 32, "H": 11, "HD": 4, "P": 33, "Q": 7, "N": 13, "A": 11}
-EXPECT_CLAIMS = 691   # 2026-11-02: L-44(9)・P-30(4)で +13。同日(2) L-45(3)で +3。同日(3) L-46(8)・P-31(4)で +12。同日(4) L-47(9)・P-32(4)で +13(監査の REVISE で L-47 に D4 の余地の印 2 を足した)。同日(5) L-48(12)・P-33(4)で +16。 印の本数(表の行の印、§5 の本数の印 1、§6 の印 11)。2026-11-01: 候補の欄の系列 8 行で +67、同日(2) Q-03 → P-29 で +14
+EXPECT_ROWS = {"L": 49, "D": 32, "H": 11, "HD": 4, "P": 34, "Q": 7, "N": 13, "A": 11}
+EXPECT_CLAIMS = 707   # 2026-11-02: L-44(9)・P-30(4)で +13。同日(2) L-45(3)で +3。同日(3) L-46(8)・P-31(4)で +12。同日(4) L-47(9)・P-32(4)で +13(監査の REVISE で L-47 に D4 の余地の印 2 を足した)。同日(5) L-48(12)・P-33(4)で +16。同日(6) L-49(12)・P-34(4)で +16。 印の本数(表の行の印、§5 の本数の印 1、§6 の印 11)。2026-11-01: 候補の欄の系列 8 行で +67、同日(2) Q-03 → P-29 で +14
 
 FORBIDDEN = [u"精度", u"LLM より正確", u"世界で 1 社", u"金額", u"契約", u"税", u"USD"]
 ALLOWED_PATH_PREFIX = (u"fixtures/", u"tests/adapters/xbrl/mutations.json", u"core/py/audit_core/")
@@ -480,7 +480,9 @@ class NoApiNoNetworkTest(unittest.TestCase):
                                          # 2026-11-02(4): P-32(導出の検証の診断(後半)。封)
                                          u"42b51d3",
                                          # 2026-11-02(5): P-33(主語の制約つきの導出。封)
-                                         u"ab09aa6"]))
+                                         u"ab09aa6",
+                                         # 2026-11-02(6): P-34(近傍の深さ 2 と型 2 つ。封)
+                                         u"cb3ba0d"]))
         r = subprocess.run(["git", "cat-file", "-e", REV + "^{commit}"], cwd=ROOT,
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if r.returncode != 0:
