@@ -15,7 +15,7 @@
 
 | 漏れていた場所 | file | 本数 | なぜ |
 |---|---|---|---|
-| `tests/measure` | 191 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
+| `tests/measure` | 192 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
 | `measure/tests` | 1 | 96 | `measure/` が package でないので**丸ごと飛ぶ** |
 
 `tests/measure` は `-s tests/measure` で毎回別に走らせていたので**測り落としは無かった**。
@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **257 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **258 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -229,6 +229,8 @@ cache の無い clone で `README.en.md` の 3 節の手順が字どおりに動
 **2026-11-02 に +1(10)**(`tests/measure/test_xbrl_period_mark.py`。文の期の印と engine の context の門(封 `docs/XBRL_PERIOD_MARK_SEAL_2026-11-02.md`、結果 `docs/XBRL_PERIOD_MARK_2026-11-02.md`)。415 行の印・期・取り違え・中身を材料から作り直し・集計の数え直し・封の幅からの判定の求め直し・文書の 3 つの表と id・順序・変異 10 本。255 → **256**(`tests/measure` 189 → **190**)。)
 
 **2026-11-02 に +1(11)**(`tests/measure/test_xbrl_rerun_p27e.py`。AI の文を P27E と P27 で再判定する便の門(封 `docs/XBRL_P27E_RERUN_SEAL_2026-11-02.md`)。封の字(材料の sha256・幅)と script の定数の一致・script の engine を使わない部分を P16 の記録を流して確かめ・記録が在れば形と行の作り直しと集計と判定と文書の表(ラベル file が無い席では記録が無く skip)・順序・変異 11 本。256 → **257**(`tests/measure` 190 → **191**)。)
+
+**2026-11-02 に +1(12)**(`tests/measure/test_sales_sheet.py`。外向けの 1 枚 `docs/SALES_SHEET_2026-11-02.md` の数を台帳 `docs/FACTS_FOR_BUYERS_2026-10-20.md` の同じ行の数の欄に縛る門(印〔台帳 X-nn〕の行の数と比・印の無い行の 2 桁以上の数・禁止語・docID・変異 6 本)。257 → **258**(`tests/measure` 191 → **192**)。)
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
