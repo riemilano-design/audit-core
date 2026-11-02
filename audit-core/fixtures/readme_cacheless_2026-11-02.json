@@ -1,0 +1,158 @@
+{
+ "注意": "README.en.md の 3 節のコマンドを字のまま走らせた rc・書き出し・案内の字の記録。ラベルの取得(Step 0)とラベル有りの儀式は測っていない。1 文の判定は正しさの判定に使わない。",
+ "封": {
+  "file": "docs/README_CACHELESS_SEAL_2026-11-02.md",
+  "commit": "443a078"
+ },
+ "HEAD の commit": "443a0782283e7442ef189883830dc8d99d441930",
+ "この script の sha256": "bb2ce8c88930c289443fc90702fb57264c27ec587e94fb8ae494b1d3abdbaa25",
+ "環境": {
+  "python": "3.13.18",
+  "pip": "24.0",
+  "setuptools": "68.1.2",
+  "platform": "Linux-6.18.44-fc-v185-x86_64-with-glibc2.39",
+  "OS": "Ubuntu 24.04.5 LTS",
+  "setuptools の置き場": "/usr/lib/python3/dist-packages/setuptools",
+  "cache dir が在る": false,
+  "README の label dir が在る": false,
+  "EDINET_TAXONOMY_DIR": null
+ },
+ "固定した 1 文": "当連結会計年度の売上高は 1,234 百万円となりました。",
+ "1 儀式(ラベル無し)": {
+  "rc": 2,
+  "案内に TAXONOMY_LABELS_README.md": true,
+  "案内に EDINET_TAXONOMY_DIR": true,
+  "out dir に書かれた file": [],
+  "out dir の file 数": 0,
+  "案内(先頭 400 字)": "儀式を始められない: 標準タクソノミのラベル(jppfs・jpcrp の 2025-11-01 版、約 8 MB)が使えない ― jppfs_2025-11-01_lab.xml が /root/.cache/audit-core/edinet-taxonomy/2025-11-01 に無い。\n初回に 1 回だけ EDINET から取る(通信はこの 1 回だけ。鍵は要らない):\n  mkdir -p /root/.cache/audit-core/edinet-taxonomy/2025-11-01 && cd /root/.cache/audit-core/edinet-taxonomy/2025-11-01\n  curl -sS -O http://disclosure.edinet-fsa.go.jp/taxonomy/jppfs/2025-11-01/label/jppfs_202",
+  "秒": 0.09
+ },
+ "2 ラベルの名簿": {
+  "儀式が要求する本数": 2,
+  "名簿の本数": 3,
+  "TAXONOMY_LABELS_README の表の本数": 3,
+  "sha256 が 3 か所で同じ本数": 2,
+  "要求 2 本のバイト数の合計": 8362742,
+  "file ごと": [
+   {
+    "file": "jppfs_2025-11-01_lab.xml",
+    "sha256 が 3 か所で同じ": true,
+    "bytes(TAXONOMY_LABELS_README の表)": 5053378
+   },
+   {
+    "file": "jpcrp_2025-11-01_lab.xml",
+    "sha256 が 3 か所で同じ": true,
+    "bytes(TAXONOMY_LABELS_README の表)": 3309364
+   }
+  ],
+  "README.en.md の字": {
+   "本数の語": "two",
+   "MB": 8
+  }
+ },
+ "3 verify_document": {
+  "text あり": {
+   "rc": 1,
+   "out.json が在る": false,
+   "秒": 0.36,
+   "stderr(末尾 300 字)": "my_file\n    raise FileNotFoundError(\n        \"no taxonomy label file at %s (see fixtures/xbrl/TAXONOMY_LABELS_README.md)\" % (path,))\nFileNotFoundError: no taxonomy label file at /root/.cache/audit-core/edinet-taxonomy/2025-11-01/jppfs_2025-11-01_lab.xml (see fixtures/xbrl/TAXONOMY_LABELS_README.md)\n",
+   "例外の行": "FileNotFoundError: no taxonomy label file at /root/.cache/audit-core/edinet-taxonomy/2025-11-01/jppfs_2025-11-01_lab.xml (see fixtures/xbrl/TAXONOMY_LABELS_README.md)"
+  },
+  "text なし": {
+   "rc": 1,
+   "out.json が在る": false,
+   "秒": 0.24,
+   "stderr(末尾 300 字)": "my_file\n    raise FileNotFoundError(\n        \"no taxonomy label file at %s (see fixtures/xbrl/TAXONOMY_LABELS_README.md)\" % (path,))\nFileNotFoundError: no taxonomy label file at /root/.cache/audit-core/edinet-taxonomy/2025-11-01/jppfs_2025-11-01_lab.xml (see fixtures/xbrl/TAXONOMY_LABELS_README.md)\n",
+   "例外の行": "FileNotFoundError: no taxonomy label file at /root/.cache/audit-core/edinet-taxonomy/2025-11-01/jppfs_2025-11-01_lab.xml (see fixtures/xbrl/TAXONOMY_LABELS_README.md)"
+  }
+ },
+ "4 report_customer(ラベル dir 無し)": {
+  "rc": 1,
+  "labels dir が在る": false,
+  "report.md が在る": false,
+  "report.provenance.json が在る": false,
+  "秒": 0.05,
+  "stderr(末尾 300 字)": "py\", line 1030, in main\n    with io.open(args.inp, \"r\", encoding=\"utf-8\") as f:\n         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '<work>/out_notext.json'\n",
+  "例外の行": "FileNotFoundError: [Errno 2] No such file or directory: '<work>/out_notext.json'"
+ },
+ "5 install": {
+  "非 editable": {
+   "venv の pip": "26.2.2",
+   "install rc": 1,
+   "install stderr(末尾 300 字)": "l_platlib'?\n      [end of output]\n  \n  note: This error originates from a subprocess, and is likely not a problem with pip.\n  ERROR: Failed building wheel for audit-core\nerror: failed-wheel-build-for-install\n\n× Failed to build installable wheels for some pyproject.toml based projects\n╰─> audit-core\n",
+   "install の例外の行": "AttributeError: install_layout. Did you mean: 'install_platlib'?",
+   "combined import rc": 1,
+   "combined import stderr(末尾 300 字)": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import audit_core, adapters.xbrl.verify_external\nModuleNotFoundError: No module named 'audit_core'\n",
+   "--help": {
+    "audit-core-verify-document": {
+     "rc": 127,
+     "usage: が在る": false
+    },
+    "audit-core-verify-external": {
+     "rc": 127,
+     "usage: が在る": false
+    }
+   },
+   "秒(venv + install + import + help)": 3.65
+  },
+  "editable": {
+   "venv の pip": "26.2.2",
+   "install rc": 0,
+   "install stderr(末尾 300 字)": "",
+   "install の例外の行": null,
+   "combined import rc": 0,
+   "combined import stderr(末尾 300 字)": "",
+   "--help(判定には使わない)": {
+    "audit-core-verify-document": {
+     "rc": 0,
+     "usage: が在る": true
+    },
+    "audit-core-verify-external": {
+     "rc": 0,
+     "usage: が在る": true
+    }
+   },
+   "秒(venv + install + import)": 4.02
+  }
+ },
+ "6 壁時計の合計(秒)": 9.6,
+ "7 README の字": {
+  "exit code 2": {
+   "README に在る": true,
+   "実測の rc": 2,
+   "一致": true
+  },
+  "Python >= 3.9": {
+   "README に在る": true,
+   "setup.cfg python_requires": ">=3.9",
+   "一致": true
+  },
+  "zero runtime dependencies": {
+   "README に在る": true,
+   "setup.cfg install_requires の行": [],
+   "一致": true
+  },
+  "Two console scripts": {
+   "README に在る": true,
+   "setup.cfg console_scripts の本数": 2,
+   "--help が rc=0 の本数": 0,
+   "一致": false
+  },
+  "一致した数": 3
+ },
+ "予測の判定": {
+  "R-1": "当たり",
+  "R-2": "当たり",
+  "R-3": "外れ",
+  "R-4": "外れ",
+  "R-5": "外れ",
+  "R-6": "当たり",
+  "R-7": "外れ",
+  "当たり": 3,
+  "外れ": 4
+ },
+ "木に出た生成物(消した)": [
+  "build"
+ ],
+ "key_leaks": []
+}

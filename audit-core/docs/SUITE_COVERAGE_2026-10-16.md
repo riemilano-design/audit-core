@@ -15,7 +15,7 @@
 
 | 漏れていた場所 | file | 本数 | なぜ |
 |---|---|---|---|
-| `tests/measure` | 180 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
+| `tests/measure` | 181 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
 | `measure/tests` | 1 | 96 | `measure/` が package でないので**丸ごと飛ぶ** |
 
 `tests/measure` は `-s tests/measure` で毎回別に走らせていたので**測り落としは無かった**。
@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **246 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **247 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -206,6 +206,9 @@ P27 が「証拠が無く名指さない」で止めた行で、engine が内側
 
 **2026-11-01 に +1**(`tests/measure/test_xbrl_delta_decimals.py`。
 候補の要素の「当期末 − 前期末」と文の数の照合で、帯を fact の `decimals` の粒度にした版の門(封 `docs/XBRL_DELTA_DECIMALS_SEAL_2026-11-01.md` §5 の 5。結果の文書 `docs/XBRL_DELTA_DECIMALS_DIAG_2026-11-01.md` の表を記録 `fixtures/xbrl/delta_decimals_2026-11-01.json` と封から作り直し、段・k・符号を別実装で求め直す。engine は読まない)。245 → 246、`tests/measure` 179 → 180。
+
+**2026-11-02 に +1**(`tests/measure/test_readme_cacheless.py`。
+cache の無い clone で `README.en.md` の 3 節の手順が字どおりに動くかの門(封 `docs/README_CACHELESS_SEAL_2026-11-02.md`、結果 `docs/README_CACHELESS_RESULT_2026-11-02.md`)。記録の形・判定の求め直し・文書の数・封と README の不変・順序・変異 8 本。246 → **247**(`tests/measure` 180 → **181**)。)
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
