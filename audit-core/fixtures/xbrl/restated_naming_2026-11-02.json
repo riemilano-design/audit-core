@@ -1,0 +1,4036 @@
+{
+ "注意": "前年の有報の文の数を翌期の前期欄の値に差し替えた注入(段 2)と、名指しの規則 R の記録。会社名・原文の字・span の字は書かない。鍵の値は記録しない。engine は P27 のまま変えない。",
+ "封": {
+  "file": "docs/XBRL_RESTATED_PRIOR_SEAL_2026-11-02.md",
+  "commit": "3a099e7"
+ },
+ "HEAD の commit": "d49b46d60aa5b51fae8b8b1836d0b27ce9cb0f34",
+ "この script の sha256": "b1d8c343b2a3e8ef9843f0dc9479b735015912ee698b1b1ec08b5da9a947f26e",
+ "読んだ材料の sha256": {
+  "fixtures/xbrl/prior_pairs_2026-11-02.json": "b63dfb9ce535b555390d3115c64b7bddb29aa65228e5e6cdc44525364f5e2441",
+  "measure/xbrl_prior_pairs_2026-11-02.py": "e7a5e4641c07b216c01487ee57ac21034c26cfdd0aaad2cf6e3454616e4c01f8",
+  "measure/inject.py": "211e37d028f46cf71f44de5269b6aa1b14efcd4c8c18f18c0fc4c6409f27a9f0",
+  "fixtures/xbrl/taxonomy_labels_sha256.txt": "92fe4bcad0d91fcc8256f7f3132494eafd231de9039fa99da3939af11298a13e"
+ },
+ "engine の bundle の sha256(core/・adapters/)": "864b1f96292f1615c7e5b7e3bbd6924ebd9955b8354b3c5d51400ba9a01fb054",
+ "engine の file の数": 37,
+ "profile": "P27",
+ "定数": {
+  "予測の幅": {
+   "F-6": [
+    50,
+    600
+   ],
+   "F-7": 95,
+   "F-8": 85,
+   "F-9": 5
+  },
+  "procs の上限": 4,
+  "字の形": [
+   "[符号]数[.小数] 単位語",
+   "[符号]N兆M億円"
+  ],
+  "丸め": "四捨五入(0.5 は上へ)",
+  "項目": {
+   "営業利益": {
+    "要素": "jpigp_cor:OperatingProfitLossIFRS",
+    "書面の桁": "億円",
+    "書面の値(その桁の整数)": 12766
+   },
+   "減価償却費及び償却費": {
+    "要素": "jpigp_cor:DepreciationAndAmortizationOpeCFIFRS",
+    "書面の桁": "百万円",
+    "書面の値(その桁の整数)": 1125588
+   }
+  }
+ },
+ "procs": 4,
+ "配線の門": {
+  "(a) 段 1 の記録の配線の門が通った": true,
+  "(b) prev・next の ZIP の sha256 が段 1 の記録と一致した本数": {
+   "prev": 93,
+   "next": 93
+  },
+  "(c) ラベル file が名簿と一致(取り出しの場所は記録しない)": true,
+  "(d) engine の未 commit の file": 0,
+  "(d') engine の bundle の sha256 が段 1 の記録と同じ": true,
+  "(e) 文を渡した結果が渡さない結果と一致しなかった書類": 0,
+  "(e') W が不動点に届かなかった書類": 0,
+  "(参考) 文の切り方が渡さない経路と違う書類(門に入れない)": 22,
+  "(f) 戻して W と一致しなかった site": 0,
+  "(g) R の params を照らした回数": 2030,
+  "(g) R の params が engine の欄と一致しなかった回数": 0,
+  "(h) 既存の cache の件数が前後で同じ": true,
+  "通った": true
+ },
+ "site の行": [
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N002",
+   "注入後の claim の id": "N002",
+   "要素": "jppfs_cor:NetSales",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 72417000000.0,
+   "差し替えた値": 62828000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:NetSales",
+    "帯": "round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N003",
+   "注入後の claim の id": "N003",
+   "要素": "jppfs_cor:OperatingIncome",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 3602000000.0,
+   "差し替えた値": 2552000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:OperatingIncome",
+    "帯": "round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N004",
+   "注入後の claim の id": "N004",
+   "要素": "jppfs_cor:OrdinaryIncome",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 3737000000.0,
+   "差し替えた値": 2454000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:OrdinaryIncome",
+    "帯": "round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N005",
+   "注入後の claim の id": "N005",
+   "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 951000000.0,
+   "差し替えた値": -314000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": false,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+    "帯": "abs+round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N015",
+   "注入後の claim の id": "N015",
+   "要素": "jppfs_cor:CashAndCashEquivalents",
+   "枠": "CurrentYearInstant",
+   "期の型": "Instant",
+   "単位": "JPY",
+   "元の値": 25924000000.0,
+   "差し替えた値": 25925000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "VALUE_MISMATCH",
+   "reason": null,
+   "注入後の pointer の要素": "jppfs_cor:CashAndCashEquivalents",
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:CashAndCashEquivalents",
+    "帯": "round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N016",
+   "注入後の claim の id": "N016",
+   "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": -10361000000.0,
+   "差し替えた値": -10341000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": false,
+    "理由": "語彙で引けず(手書きの行に無い)",
+    "要素": null,
+    "帯": null
+   },
+   "名指しの要素が注入した要素と同じ": false
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N018",
+   "注入後の claim の id": "N018",
+   "要素": "jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": -3824000000.0,
+   "差し替えた値": -2835000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+    "帯": "abs+round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N033",
+   "注入後の claim の id": "N033",
+   "要素": "jppfs_cor:CurrentAssets",
+   "枠": "CurrentYearInstant",
+   "期の型": "Instant",
+   "単位": "JPY",
+   "元の値": 89038000000.0,
+   "差し替えた値": 90680000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": false,
+    "理由": "語彙で引けず(手書きの行に無い)",
+    "要素": null,
+    "帯": null
+   },
+   "名指しの要素が注入した要素と同じ": false
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N040",
+   "注入後の claim の id": "N040",
+   "要素": "jppfs_cor:NoncurrentAssets",
+   "枠": "CurrentYearInstant",
+   "期の型": "Instant",
+   "単位": "JPY",
+   "元の値": 56763000000.0,
+   "差し替えた値": 56128000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": false,
+    "理由": "語彙で引けず(手書きの行に無い)",
+    "要素": null,
+    "帯": null
+   },
+   "名指しの要素が注入した要素と同じ": false
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N044",
+   "注入後の claim の id": "N044",
+   "要素": "jppfs_cor:Assets",
+   "枠": "CurrentYearInstant",
+   "期の型": "Instant",
+   "単位": "JPY",
+   "元の値": 145802000000.0,
+   "差し替えた値": 146809000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:Assets",
+    "帯": "round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N046",
+   "注入後の claim の id": "N046",
+   "要素": "jppfs_cor:CurrentLiabilities",
+   "枠": "CurrentYearInstant",
+   "期の型": "Instant",
+   "単位": "JPY",
+   "元の値": 80286000000.0,
+   "差し替えた値": 81015000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:CurrentLiabilities",
+    "帯": "round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N051",
+   "注入後の claim の id": "N051",
+   "要素": "jppfs_cor:NoncurrentLiabilities",
+   "枠": "CurrentYearInstant",
+   "期の型": "Instant",
+   "単位": "JPY",
+   "元の値": 22176000000.0,
+   "差し替えた値": 20791000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:NoncurrentLiabilities",
+    "帯": "round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N054",
+   "注入後の claim の id": "N054",
+   "要素": "jppfs_cor:Liabilities",
+   "枠": "CurrentYearInstant",
+   "期の型": "Instant",
+   "単位": "JPY",
+   "元の値": 102463000000.0,
+   "差し替えた値": 101807000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:Liabilities",
+    "帯": "round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N056",
+   "注入後の claim の id": "N056",
+   "要素": "jppfs_cor:NetAssets",
+   "枠": "CurrentYearInstant",
+   "期の型": "Instant",
+   "単位": "JPY",
+   "元の値": 43338000000.0,
+   "差し替えた値": 45002000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:NetAssets",
+    "帯": "round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "基準の claim の id": "N058",
+   "注入後の claim の id": "N058",
+   "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 951000000.0,
+   "差し替えた値": -314000000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": false,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+    "帯": "abs+round"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100WLJD",
+   "next の docID": "S100YYFP",
+   "基準の claim の id": "N009",
+   "注入後の claim の id": "N009",
+   "要素": "jppfs_cor:OperatingIncome",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 1159040000.0,
+   "差し替えた値": 1157006000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:OperatingIncome",
+    "帯": "truncate"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100WLJD",
+   "next の docID": "S100YYFP",
+   "基準の claim の id": "N010",
+   "注入後の claim の id": "N010",
+   "要素": "jppfs_cor:OrdinaryIncome",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 1450099000.0,
+   "差し替えた値": 1448065000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:OrdinaryIncome",
+    "帯": "truncate"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100WLJD",
+   "next の docID": "S100YYFP",
+   "基準の claim の id": "N014",
+   "注入後の claim の id": "N014",
+   "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 2418131000.0,
+   "差し替えた値": 2416097000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+    "帯": "truncate"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100WLJD",
+   "next の docID": "S100YYFP",
+   "基準の claim の id": "N015",
+   "注入後の claim の id": "N015",
+   "要素": "jppfs_cor:DepreciationAndAmortizationOpeCF",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 264441000.0,
+   "差し替えた値": 274173000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": false,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:DepreciationAndAmortizationOpeCF",
+    "帯": "truncate"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100WLJD",
+   "next の docID": "S100YYFP",
+   "基準の claim の id": "N056",
+   "注入後の claim の id": "N056",
+   "要素": "jppfs_cor:OperatingIncome",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 1159040000.0,
+   "差し替えた値": 1157006000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:OperatingIncome",
+    "帯": "truncate"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100WLJD",
+   "next の docID": "S100YYFP",
+   "基準の claim の id": "N057",
+   "注入後の claim の id": "N057",
+   "要素": "jppfs_cor:OrdinaryIncome",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 1450099000.0,
+   "差し替えた値": 1448065000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:OrdinaryIncome",
+    "帯": "truncate"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100WLJD",
+   "next の docID": "S100YYFP",
+   "基準の claim の id": "N065",
+   "注入後の claim の id": "N065",
+   "要素": "jppfs_cor:OperatingIncome",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 1159040000.0,
+   "差し替えた値": 1157006000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:OperatingIncome",
+    "帯": "truncate"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  },
+  {
+   "prev の docID": "S100WLJD",
+   "next の docID": "S100YYFP",
+   "基準の claim の id": "N066",
+   "注入後の claim の id": "N066",
+   "要素": "jppfs_cor:OrdinaryIncome",
+   "枠": "CurrentYearDuration",
+   "期の型": "Duration",
+   "単位": "JPY",
+   "元の値": 1450099000.0,
+   "差し替えた値": 1448065000.0,
+   "字の形": {
+    "形": "simple",
+    "桁区切り": true,
+    "小数の桁数": 0,
+    "単位語": "百万円"
+   },
+   "対応": "付いた",
+   "state": "POINTER_NOT_FOUND",
+   "reason": "no_same_value",
+   "注入後の pointer の要素": null,
+   "R": {
+    "言う": true,
+    "理由": "翌期の有報の前期欄と一致",
+    "要素": "jppfs_cor:OrdinaryIncome",
+    "帯": "truncate"
+   },
+   "名指しの要素が注入した要素と同じ": true
+  }
+ ],
+ "書類ごと": [
+  {
+   "prev の docID": "S100WLVW",
+   "next の docID": "S100YMFV",
+   "site の絞り込み": {
+    "数の claim": 92,
+    "GROUNDED の数の claim": 64,
+    "形・単位・pointer の本数が条件外": 28,
+    "要素が段 1 の違うに入らない": 35,
+    "pointer の枠が当期(member なし)でない": 1
+   },
+   "秒": 3.3
+  },
+  {
+   "prev の docID": "S100WH8K",
+   "next の docID": "S100YUHC",
+   "site の絞り込み": {
+    "数の claim": 99,
+    "GROUNDED の数の claim": 54,
+    "形・単位・pointer の本数が条件外": 25,
+    "要素が段 1 の違うに入らない": 23,
+    "pointer の枠が当期(member なし)でない": 6
+   },
+   "秒": 3.6
+  },
+  {
+   "prev の docID": "S100WJZQ",
+   "next の docID": "S100YW7F",
+   "site の絞り込み": {
+    "数の claim": 187,
+    "GROUNDED の数の claim": 41,
+    "要素が段 1 の違うに入らない": 14,
+    "形・単位・pointer の本数が条件外": 13,
+    "pointer の枠が当期(member なし)でない": 14
+   },
+   "秒": 7.0
+  },
+  {
+   "prev の docID": "S100WJSD",
+   "next の docID": "S100YWGX",
+   "site の絞り込み": {
+    "数の claim": 94,
+    "GROUNDED の数の claim": 28,
+    "要素が段 1 の違うに入らない": 19,
+    "pointer の枠が当期(member なし)でない": 4,
+    "形・単位・pointer の本数が条件外": 5
+   },
+   "秒": 3.9
+  },
+  {
+   "prev の docID": "S100WJ4B",
+   "next の docID": "S100YX88",
+   "site の絞り込み": {
+    "数の claim": 107,
+    "GROUNDED の数の claim": 62,
+    "形・単位・pointer の本数が条件外": 23,
+    "要素が段 1 の違うに入らない": 26,
+    "pointer の枠が当期(member なし)でない": 13
+   },
+   "秒": 4.4
+  },
+  {
+   "prev の docID": "S100WJXT",
+   "next の docID": "S100YXF5",
+   "site の絞り込み": {
+    "数の claim": 74,
+    "GROUNDED の数の claim": 29,
+    "形・単位・pointer の本数が条件外": 9,
+    "要素が段 1 の違うに入らない": 17,
+    "pointer の枠が当期(member なし)でない": 3
+   },
+   "秒": 3.4
+  },
+  {
+   "prev の docID": "S100WKZJ",
+   "next の docID": "S100YXFQ",
+   "site の絞り込み": {
+    "数の claim": 124,
+    "GROUNDED の数の claim": 47,
+    "形・単位・pointer の本数が条件外": 18,
+    "要素が段 1 の違うに入らない": 26,
+    "pointer の枠が当期(member なし)でない": 3
+   },
+   "秒": 4.3
+  },
+  {
+   "prev の docID": "S100WK01",
+   "next の docID": "S100YXG0",
+   "site の絞り込み": {
+    "数の claim": 88,
+    "GROUNDED の数の claim": 54,
+    "形・単位・pointer の本数が条件外": 17,
+    "pointer の枠が当期(member なし)でない": 37
+   },
+   "秒": 3.5
+  },
+  {
+   "prev の docID": "S100VW9D",
+   "next の docID": "S100YXGH",
+   "site の絞り込み": {
+    "数の claim": 89,
+    "GROUNDED の数の claim": 55,
+    "pointer の枠が当期(member なし)でない": 44,
+    "形・単位・pointer の本数が条件外": 11
+   },
+   "秒": 3.1
+  },
+  {
+   "prev の docID": "S100WKOH",
+   "next の docID": "S100YXLE",
+   "site の絞り込み": {
+    "数の claim": 83,
+    "GROUNDED の数の claim": 43,
+    "pointer の枠が当期(member なし)でない": 26,
+    "形・単位・pointer の本数が条件外": 17
+   },
+   "秒": 3.8
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "next の docID": "S100YXMA",
+   "site の絞り込み": {
+    "数の claim": 62,
+    "GROUNDED の数の claim": 33,
+    "注入した": 15,
+    "pointer の枠が当期(member なし)でない": 3,
+    "要素が段 1 の違うに入らない": 5,
+    "形・単位・pointer の本数が条件外": 10
+   },
+   "秒": 37.0
+  },
+  {
+   "prev の docID": "S100WLC9",
+   "next の docID": "S100YXXB",
+   "site の絞り込み": {
+    "数の claim": 104,
+    "GROUNDED の数の claim": 69,
+    "要素が段 1 の違うに入らない": 35,
+    "形・単位・pointer の本数が条件外": 24,
+    "pointer の枠が当期(member なし)でない": 10
+   },
+   "秒": 3.9
+  },
+  {
+   "prev の docID": "S100WKSA",
+   "next の docID": "S100YXZQ",
+   "site の絞り込み": {
+    "数の claim": 92,
+    "GROUNDED の数の claim": 51,
+    "形・単位・pointer の本数が条件外": 21,
+    "pointer の枠が当期(member なし)でない": 30
+   },
+   "秒": 3.1
+  },
+  {
+   "prev の docID": "S100WKTA",
+   "next の docID": "S100YY3A",
+   "site の絞り込み": {
+    "数の claim": 109,
+    "GROUNDED の数の claim": 57,
+    "要素が段 1 の違うに入らない": 26,
+    "形・単位・pointer の本数が条件外": 24,
+    "pointer の枠が当期(member なし)でない": 7
+   },
+   "秒": 3.9
+  },
+  {
+   "prev の docID": "S100WLY3",
+   "next の docID": "S100YYAI",
+   "site の絞り込み": {
+    "数の claim": 76,
+    "GROUNDED の数の claim": 65,
+    "差が桁の中": 37,
+    "形・単位・pointer の本数が条件外": 19,
+    "pointer の枠が当期(member なし)でない": 9
+   },
+   "秒": 3.3
+  },
+  {
+   "prev の docID": "S100WLSP",
+   "next の docID": "S100YYDI",
+   "site の絞り込み": {
+    "数の claim": 99,
+    "GROUNDED の数の claim": 47,
+    "要素が段 1 の違うに入らない": 25,
+    "形・単位・pointer の本数が条件外": 22
+   },
+   "秒": 3.7
+  },
+  {
+   "prev の docID": "S100WL4U",
+   "next の docID": "S100YYEO",
+   "site の絞り込み": {
+    "数の claim": 79,
+    "GROUNDED の数の claim": 42,
+    "pointer の枠が当期(member なし)でない": 8,
+    "形・単位・pointer の本数が条件外": 15,
+    "要素が段 1 の違うに入らない": 19
+   },
+   "秒": 3.4
+  },
+  {
+   "prev の docID": "S100WM3R",
+   "next の docID": "S100YYF5",
+   "site の絞り込み": {
+    "数の claim": 113,
+    "GROUNDED の数の claim": 53,
+    "pointer の枠が当期(member なし)でない": 33,
+    "形・単位・pointer の本数が条件外": 20
+   },
+   "秒": 4.5
+  },
+  {
+   "prev の docID": "S100WLJD",
+   "next の docID": "S100YYFP",
+   "site の絞り込み": {
+    "数の claim": 70,
+    "GROUNDED の数の claim": 48,
+    "要素が段 1 の違うに入らない": 39,
+    "注入した": 8,
+    "形・単位・pointer の本数が条件外": 1
+   },
+   "秒": 11.9
+  },
+  {
+   "prev の docID": "S100WKV4",
+   "next の docID": "S100YYGF",
+   "site の絞り込み": {
+    "数の claim": 118,
+    "GROUNDED の数の claim": 56,
+    "pointer の枠が当期(member なし)でない": 35,
+    "形・単位・pointer の本数が条件外": 21
+   },
+   "秒": 5.1
+  },
+  {
+   "prev の docID": "S100WLAB",
+   "next の docID": "S100YYH7",
+   "site の絞り込み": {
+    "数の claim": 82,
+    "GROUNDED の数の claim": 53,
+    "要素が段 1 の違うに入らない": 30,
+    "形・単位・pointer の本数が条件外": 16,
+    "pointer の枠が当期(member なし)でない": 7
+   },
+   "秒": 4.0
+  },
+  {
+   "prev の docID": "S100WK2E",
+   "next の docID": "S100YYHK",
+   "site の絞り込み": {
+    "数の claim": 145,
+    "GROUNDED の数の claim": 73,
+    "形・単位・pointer の本数が条件外": 16,
+    "要素が段 1 の違うに入らない": 42,
+    "pointer の枠が当期(member なし)でない": 15
+   },
+   "秒": 5.5
+  },
+  {
+   "prev の docID": "S100WL8L",
+   "next の docID": "S100YYIA",
+   "site の絞り込み": {
+    "数の claim": 107,
+    "GROUNDED の数の claim": 83,
+    "pointer の枠が当期(member なし)でない": 72,
+    "形・単位・pointer の本数が条件外": 11
+   },
+   "秒": 3.7
+  },
+  {
+   "prev の docID": "S100WLI3",
+   "next の docID": "S100YYIV",
+   "site の絞り込み": {
+    "数の claim": 66,
+    "GROUNDED の数の claim": 39,
+    "要素が段 1 の違うに入らない": 24,
+    "形・単位・pointer の本数が条件外": 15
+   },
+   "秒": 3.7
+  },
+  {
+   "prev の docID": "S100WL6P",
+   "next の docID": "S100YYK8",
+   "site の絞り込み": {
+    "数の claim": 83,
+    "GROUNDED の数の claim": 50,
+    "要素が段 1 の違うに入らない": 30,
+    "形・単位・pointer の本数が条件外": 16,
+    "pointer の枠が当期(member なし)でない": 4
+   },
+   "秒": 4.8
+  },
+  {
+   "prev の docID": "S100WLMH",
+   "next の docID": "S100YYKZ",
+   "site の絞り込み": {
+    "数の claim": 80,
+    "GROUNDED の数の claim": 55,
+    "要素が段 1 の違うに入らない": 35,
+    "形・単位・pointer の本数が条件外": 12,
+    "pointer の枠が当期(member なし)でない": 8
+   },
+   "秒": 3.3
+  },
+  {
+   "prev の docID": "S100WL3G",
+   "next の docID": "S100YYMC",
+   "site の絞り込み": {
+    "数の claim": 64,
+    "GROUNDED の数の claim": 45,
+    "pointer の枠が当期(member なし)でない": 30,
+    "形・単位・pointer の本数が条件外": 15
+   },
+   "秒": 2.5
+  },
+  {
+   "prev の docID": "S100WL0G",
+   "next の docID": "S100YYMP",
+   "site の絞り込み": {
+    "数の claim": 61,
+    "GROUNDED の数の claim": 34,
+    "要素が段 1 の違うに入らない": 15,
+    "形・単位・pointer の本数が条件外": 18,
+    "pointer の枠が当期(member なし)でない": 1
+   },
+   "秒": 3.3
+  },
+  {
+   "prev の docID": "S100WJUP",
+   "next の docID": "S100YYN7",
+   "site の絞り込み": {
+    "数の claim": 94,
+    "GROUNDED の数の claim": 35,
+    "形・単位・pointer の本数が条件外": 14,
+    "要素が段 1 の違うに入らない": 20,
+    "字の形を保てない": 1
+   },
+   "秒": 6.2
+  },
+  {
+   "prev の docID": "S100WL6X",
+   "next の docID": "S100YYOS",
+   "site の絞り込み": {
+    "数の claim": 54,
+    "GROUNDED の数の claim": 21,
+    "形・単位・pointer の本数が条件外": 10,
+    "要素が段 1 の違うに入らない": 10,
+    "pointer の枠が当期(member なし)でない": 1
+   },
+   "秒": 4.4
+  },
+  {
+   "prev の docID": "S100VZ8E",
+   "next の docID": "S100YYQN",
+   "site の絞り込み": {
+    "数の claim": 97,
+    "GROUNDED の数の claim": 70,
+    "pointer の枠が当期(member なし)でない": 30,
+    "形・単位・pointer の本数が条件外": 40
+   },
+   "秒": 4.5
+  },
+  {
+   "prev の docID": "S100WL0T",
+   "next の docID": "S100YYQQ",
+   "site の絞り込み": {
+    "数の claim": 89,
+    "GROUNDED の数の claim": 50,
+    "要素が段 1 の違うに入らない": 22,
+    "形・単位・pointer の本数が条件外": 27,
+    "pointer の枠が当期(member なし)でない": 1
+   },
+   "秒": 3.5
+  },
+  {
+   "prev の docID": "S100WLJK",
+   "next の docID": "S100YYQX",
+   "site の絞り込み": {
+    "数の claim": 73,
+    "GROUNDED の数の claim": 59,
+    "要素が段 1 の違うに入らない": 31,
+    "形・単位・pointer の本数が条件外": 24,
+    "pointer の枠が当期(member なし)でない": 4
+   },
+   "秒": 3.2
+  },
+  {
+   "prev の docID": "S100WLIX",
+   "next の docID": "S100YYRG",
+   "site の絞り込み": {
+    "数の claim": 73,
+    "GROUNDED の数の claim": 35,
+    "要素が段 1 の違うに入らない": 20,
+    "形・単位・pointer の本数が条件外": 15
+   },
+   "秒": 2.9
+  },
+  {
+   "prev の docID": "S100WL1X",
+   "next の docID": "S100YYRV",
+   "site の絞り込み": {
+    "数の claim": 109,
+    "GROUNDED の数の claim": 50,
+    "要素が段 1 の違うに入らない": 30,
+    "形・単位・pointer の本数が条件外": 18,
+    "pointer の枠が当期(member なし)でない": 2
+   },
+   "秒": 3.9
+  },
+  {
+   "prev の docID": "S100WLO9",
+   "next の docID": "S100YYS4",
+   "site の絞り込み": {
+    "数の claim": 85,
+    "GROUNDED の数の claim": 41,
+    "要素が段 1 の違うに入らない": 15,
+    "形・単位・pointer の本数が条件外": 21,
+    "pointer の枠が当期(member なし)でない": 5
+   },
+   "秒": 3.9
+  },
+  {
+   "prev の docID": "S100WLAF",
+   "next の docID": "S100YYT4",
+   "site の絞り込み": {
+    "数の claim": 86,
+    "GROUNDED の数の claim": 49,
+    "要素が段 1 の違うに入らない": 30,
+    "形・単位・pointer の本数が条件外": 19
+   },
+   "秒": 3.8
+  },
+  {
+   "prev の docID": "S100WLXE",
+   "next の docID": "S100YYUD",
+   "site の絞り込み": {
+    "数の claim": 42,
+    "GROUNDED の数の claim": 31,
+    "要素が段 1 の違うに入らない": 31
+   },
+   "秒": 2.1
+  },
+  {
+   "prev の docID": "S100WLLK",
+   "next の docID": "S100YYUS",
+   "site の絞り込み": {
+    "数の claim": 92,
+    "GROUNDED の数の claim": 68,
+    "pointer の枠が当期(member なし)でない": 39,
+    "形・単位・pointer の本数が条件外": 29
+   },
+   "秒": 2.8
+  },
+  {
+   "prev の docID": "S100WKFZ",
+   "next の docID": "S100YYVJ",
+   "site の絞り込み": {
+    "数の claim": 82,
+    "GROUNDED の数の claim": 52,
+    "要素が段 1 の違うに入らない": 24,
+    "形・単位・pointer の本数が条件外": 25,
+    "pointer の枠が当期(member なし)でない": 3
+   },
+   "秒": 3.6
+  },
+  {
+   "prev の docID": "S100WLEX",
+   "next の docID": "S100YYVN",
+   "site の絞り込み": {
+    "数の claim": 60,
+    "GROUNDED の数の claim": 16,
+    "要素が段 1 の違うに入らない": 9,
+    "形・単位・pointer の本数が条件外": 5,
+    "pointer の枠が当期(member なし)でない": 2
+   },
+   "秒": 4.8
+  },
+  {
+   "prev の docID": "S100WLI2",
+   "next の docID": "S100YYYH",
+   "site の絞り込み": {
+    "数の claim": 101,
+    "GROUNDED の数の claim": 52,
+    "形・単位・pointer の本数が条件外": 19,
+    "pointer の枠が当期(member なし)でない": 33
+   },
+   "秒": 2.7
+  },
+  {
+   "prev の docID": "S100WLZJ",
+   "next の docID": "S100YZ2B",
+   "site の絞り込み": {
+    "数の claim": 98,
+    "GROUNDED の数の claim": 50,
+    "要素が段 1 の違うに入らない": 31,
+    "形・単位・pointer の本数が条件外": 19
+   },
+   "秒": 4.3
+  },
+  {
+   "prev の docID": "S100WLQL",
+   "next の docID": "S100YZ31",
+   "site の絞り込み": {
+    "数の claim": 66,
+    "GROUNDED の数の claim": 39,
+    "要素が段 1 の違うに入らない": 22,
+    "形・単位・pointer の本数が条件外": 17
+   },
+   "秒": 3.1
+  },
+  {
+   "prev の docID": "S100WLY9",
+   "next の docID": "S100YZ4E",
+   "site の絞り込み": {
+    "数の claim": 44,
+    "GROUNDED の数の claim": 39,
+    "要素が段 1 の違うに入らない": 38,
+    "形・単位・pointer の本数が条件外": 1
+   },
+   "秒": 1.9
+  },
+  {
+   "prev の docID": "S100WLR3",
+   "next の docID": "S100YZ4M",
+   "site の絞り込み": {
+    "数の claim": 113,
+    "GROUNDED の数の claim": 68,
+    "要素が段 1 の違うに入らない": 26,
+    "形・単位・pointer の本数が条件外": 34,
+    "pointer の枠が当期(member なし)でない": 8
+   },
+   "秒": 4.2
+  },
+  {
+   "prev の docID": "S100WKS0",
+   "next の docID": "S100YZ57",
+   "site の絞り込み": {
+    "数の claim": 72,
+    "GROUNDED の数の claim": 38,
+    "形・単位・pointer の本数が条件外": 14,
+    "要素が段 1 の違うに入らない": 20,
+    "pointer の枠が当期(member なし)でない": 4
+   },
+   "秒": 3.0
+  },
+  {
+   "prev の docID": "S100WLNY",
+   "next の docID": "S100YZ7E",
+   "site の絞り込み": {
+    "数の claim": 55,
+    "GROUNDED の数の claim": 23,
+    "形・単位・pointer の本数が条件外": 8,
+    "pointer の枠が当期(member なし)でない": 15
+   },
+   "秒": 2.5
+  },
+  {
+   "prev の docID": "S100WM4B",
+   "next の docID": "S100YZ9G",
+   "site の絞り込み": {
+    "数の claim": 72,
+    "GROUNDED の数の claim": 47,
+    "pointer の枠が当期(member なし)でない": 33,
+    "形・単位・pointer の本数が条件外": 14
+   },
+   "秒": 2.7
+  },
+  {
+   "prev の docID": "S100WM70",
+   "next の docID": "S100YZC8",
+   "site の絞り込み": {
+    "数の claim": 52,
+    "GROUNDED の数の claim": 29,
+    "要素が段 1 の違うに入らない": 19,
+    "形・単位・pointer の本数が条件外": 6,
+    "pointer の枠が当期(member なし)でない": 4
+   },
+   "秒": 3.1
+  },
+  {
+   "prev の docID": "S100WLRT",
+   "next の docID": "S100YZCT",
+   "site の絞り込み": {
+    "数の claim": 121,
+    "GROUNDED の数の claim": 62,
+    "要素が段 1 の違うに入らない": 34,
+    "形・単位・pointer の本数が条件外": 28
+   },
+   "秒": 4.8
+  },
+  {
+   "prev の docID": "S100WLX8",
+   "next の docID": "S100YZEV",
+   "site の絞り込み": {
+    "数の claim": 51,
+    "GROUNDED の数の claim": 26,
+    "pointer の枠が当期(member なし)でない": 18,
+    "形・単位・pointer の本数が条件外": 8
+   },
+   "秒": 2.0
+  },
+  {
+   "prev の docID": "S100WLYW",
+   "next の docID": "S100YZFP",
+   "site の絞り込み": {
+    "数の claim": 73,
+    "GROUNDED の数の claim": 35,
+    "pointer の枠が当期(member なし)でない": 16,
+    "形・単位・pointer の本数が条件外": 19
+   },
+   "秒": 5.1
+  },
+  {
+   "prev の docID": "S100WNXO",
+   "next の docID": "S100Z0OS",
+   "site の絞り込み": {
+    "数の claim": 83,
+    "GROUNDED の数の claim": 34,
+    "形・単位・pointer の本数が条件外": 11,
+    "要素が段 1 の違うに入らない": 20,
+    "pointer の枠が当期(member なし)でない": 3
+   },
+   "秒": 3.9
+  },
+  {
+   "prev の docID": "S100WOVG",
+   "next の docID": "S100Z1WR",
+   "site の絞り込み": {
+    "数の claim": 65,
+    "GROUNDED の数の claim": 31,
+    "要素が段 1 の違うに入らない": 19,
+    "形・単位・pointer の本数が条件外": 12
+   },
+   "秒": 4.3
+  },
+  {
+   "prev の docID": "S100WQCA",
+   "next の docID": "S100Z35K",
+   "site の絞り込み": {
+    "数の claim": 82,
+    "GROUNDED の数の claim": 19,
+    "要素が段 1 の違うに入らない": 11,
+    "形・単位・pointer の本数が条件外": 5,
+    "pointer の枠が当期(member なし)でない": 3
+   },
+   "秒": 6.1
+  },
+  {
+   "prev の docID": "S100WQT7",
+   "next の docID": "S100Z37J",
+   "site の絞り込み": {
+    "数の claim": 82,
+    "GROUNDED の数の claim": 57,
+    "要素が段 1 の違うに入らない": 22,
+    "形・単位・pointer の本数が条件外": 27,
+    "pointer の枠が当期(member なし)でない": 8
+   },
+   "秒": 4.6
+  },
+  {
+   "prev の docID": "S100WPOP",
+   "next の docID": "S100Z38F",
+   "site の絞り込み": {
+    "数の claim": 91,
+    "GROUNDED の数の claim": 44,
+    "形・単位・pointer の本数が条件外": 16,
+    "pointer の枠が当期(member なし)でない": 6,
+    "要素が段 1 の違うに入らない": 22
+   },
+   "秒": 5.0
+  },
+  {
+   "prev の docID": "S100WQAK",
+   "next の docID": "S100Z39P",
+   "site の絞り込み": {
+    "数の claim": 55,
+    "GROUNDED の数の claim": 49,
+    "要素が段 1 の違うに入らない": 12,
+    "形・単位・pointer の本数が条件外": 31,
+    "pointer の枠が当期(member なし)でない": 6
+   },
+   "秒": 4.6
+  },
+  {
+   "prev の docID": "S100WQQN",
+   "next の docID": "S100Z3BW",
+   "site の絞り込み": {
+    "数の claim": 105,
+    "GROUNDED の数の claim": 74,
+    "形・単位・pointer の本数が条件外": 33,
+    "要素が段 1 の違うに入らない": 28,
+    "pointer の枠が当期(member なし)でない": 13
+   },
+   "秒": 4.9
+  },
+  {
+   "prev の docID": "S100WRZV",
+   "next の docID": "S100Z3CI",
+   "site の絞り込み": {
+    "数の claim": 96,
+    "GROUNDED の数の claim": 72,
+    "要素が段 1 の違うに入らない": 41,
+    "形・単位・pointer の本数が条件外": 24,
+    "pointer の枠が当期(member なし)でない": 7
+   },
+   "秒": 4.7
+  },
+  {
+   "prev の docID": "S100WQEO",
+   "next の docID": "S100Z3CO",
+   "site の絞り込み": {
+    "数の claim": 97,
+    "GROUNDED の数の claim": 56,
+    "要素が段 1 の違うに入らない": 34,
+    "形・単位・pointer の本数が条件外": 18,
+    "pointer の枠が当期(member なし)でない": 4
+   },
+   "秒": 4.4
+  },
+  {
+   "prev の docID": "S100WQ92",
+   "next の docID": "S100Z3DU",
+   "site の絞り込み": {
+    "数の claim": 64,
+    "GROUNDED の数の claim": 32,
+    "要素が段 1 の違うに入らない": 21,
+    "形・単位・pointer の本数が条件外": 6,
+    "pointer の枠が当期(member なし)でない": 5
+   },
+   "秒": 3.9
+  },
+  {
+   "prev の docID": "S100WQVH",
+   "next の docID": "S100Z3FB",
+   "site の絞り込み": {
+    "数の claim": 98,
+    "GROUNDED の数の claim": 51,
+    "要素が段 1 の違うに入らない": 24,
+    "形・単位・pointer の本数が条件外": 27
+   },
+   "秒": 5.6
+  },
+  {
+   "prev の docID": "S100WQFV",
+   "next の docID": "S100Z3H2",
+   "site の絞り込み": {
+    "数の claim": 127,
+    "GROUNDED の数の claim": 71,
+    "要素が段 1 の違うに入らない": 33,
+    "pointer の枠が当期(member なし)でない": 10,
+    "形・単位・pointer の本数が条件外": 28
+   },
+   "秒": 5.5
+  },
+  {
+   "prev の docID": "S100WRQD",
+   "next の docID": "S100Z3HP",
+   "site の絞り込み": {
+    "数の claim": 62,
+    "GROUNDED の数の claim": 38,
+    "形・単位・pointer の本数が条件外": 12,
+    "pointer の枠が当期(member なし)でない": 26
+   },
+   "秒": 3.4
+  },
+  {
+   "prev の docID": "S100WQIM",
+   "next の docID": "S100Z3IZ",
+   "site の絞り込み": {
+    "数の claim": 83,
+    "GROUNDED の数の claim": 61,
+    "要素が段 1 の違うに入らない": 30,
+    "形・単位・pointer の本数が条件外": 28,
+    "pointer の枠が当期(member なし)でない": 3
+   },
+   "秒": 4.6
+  },
+  {
+   "prev の docID": "S100WQAL",
+   "next の docID": "S100Z3JY",
+   "site の絞り込み": {
+    "数の claim": 106,
+    "GROUNDED の数の claim": 58,
+    "pointer の枠が当期(member なし)でない": 18,
+    "形・単位・pointer の本数が条件外": 19,
+    "要素が段 1 の違うに入らない": 21
+   },
+   "秒": 3.7
+  },
+  {
+   "prev の docID": "S100WRZ3",
+   "next の docID": "S100Z3L6",
+   "site の絞り込み": {
+    "数の claim": 72,
+    "GROUNDED の数の claim": 41,
+    "pointer の枠が当期(member なし)でない": 7,
+    "形・単位・pointer の本数が条件外": 12,
+    "要素が段 1 の違うに入らない": 22
+   },
+   "秒": 3.9
+  },
+  {
+   "prev の docID": "S100WR24",
+   "next の docID": "S100Z3PS",
+   "site の絞り込み": {
+    "数の claim": 70,
+    "GROUNDED の数の claim": 48,
+    "要素が段 1 の違うに入らない": 31,
+    "形・単位・pointer の本数が条件外": 17
+   },
+   "秒": 3.0
+  },
+  {
+   "prev の docID": "S100WQZF",
+   "next の docID": "S100Z3V1",
+   "site の絞り込み": {
+    "数の claim": 83,
+    "GROUNDED の数の claim": 44,
+    "要素が段 1 の違うに入らない": 18,
+    "形・単位・pointer の本数が条件外": 20,
+    "pointer の枠が当期(member なし)でない": 6
+   },
+   "秒": 4.0
+  },
+  {
+   "prev の docID": "S100WRP5",
+   "next の docID": "S100Z404",
+   "site の絞り込み": {
+    "数の claim": 56,
+    "GROUNDED の数の claim": 31,
+    "要素が段 1 の違うに入らない": 24,
+    "形・単位・pointer の本数が条件外": 7
+   },
+   "秒": 3.4
+  },
+  {
+   "prev の docID": "S100WQCJ",
+   "next の docID": "S100Z40G",
+   "site の絞り込み": {
+    "数の claim": 94,
+    "GROUNDED の数の claim": 44,
+    "pointer の枠が当期(member なし)でない": 28,
+    "形・単位・pointer の本数が条件外": 16
+   },
+   "秒": 4.2
+  },
+  {
+   "prev の docID": "S100WQBH",
+   "next の docID": "S100Z40H",
+   "site の絞り込み": {
+    "数の claim": 117,
+    "GROUNDED の数の claim": 60,
+    "形・単位・pointer の本数が条件外": 32,
+    "要素が段 1 の違うに入らない": 27,
+    "pointer の枠が当期(member なし)でない": 1
+   },
+   "秒": 5.4
+  },
+  {
+   "prev の docID": "S100WRTP",
+   "next の docID": "S100Z42X",
+   "site の絞り込み": {
+    "数の claim": 53,
+    "GROUNDED の数の claim": 36,
+    "要素が段 1 の違うに入らない": 17,
+    "形・単位・pointer の本数が条件外": 12,
+    "pointer の枠が当期(member なし)でない": 7
+   },
+   "秒": 2.9
+  },
+  {
+   "prev の docID": "S100WRLD",
+   "next の docID": "S100Z433",
+   "site の絞り込み": {
+    "数の claim": 63,
+    "GROUNDED の数の claim": 40,
+    "形・単位・pointer の本数が条件外": 14,
+    "pointer の枠が当期(member なし)でない": 26
+   },
+   "秒": 3.6
+  },
+  {
+   "prev の docID": "S100WR2U",
+   "next の docID": "S100Z448",
+   "site の絞り込み": {
+    "数の claim": 35,
+    "GROUNDED の数の claim": 21,
+    "pointer の枠が当期(member なし)でない": 12,
+    "形・単位・pointer の本数が条件外": 9
+   },
+   "秒": 2.4
+  },
+  {
+   "prev の docID": "S100WQTJ",
+   "next の docID": "S100Z461",
+   "site の絞り込み": {
+    "数の claim": 34,
+    "GROUNDED の数の claim": 18,
+    "要素が段 1 の違うに入らない": 9,
+    "pointer の枠が当期(member なし)でない": 1,
+    "形・単位・pointer の本数が条件外": 8
+   },
+   "秒": 2.8
+  },
+  {
+   "prev の docID": "S100WRCL",
+   "next の docID": "S100Z46V",
+   "site の絞り込み": {
+    "数の claim": 46,
+    "GROUNDED の数の claim": 29,
+    "pointer の枠が当期(member なし)でない": 20,
+    "形・単位・pointer の本数が条件外": 9
+   },
+   "秒": 3.5
+  },
+  {
+   "prev の docID": "S100WQP5",
+   "next の docID": "S100Z48T",
+   "site の絞り込み": {
+    "数の claim": 83,
+    "GROUNDED の数の claim": 66,
+    "要素が段 1 の違うに入らない": 31,
+    "形・単位・pointer の本数が条件外": 32,
+    "pointer の枠が当期(member なし)でない": 3
+   },
+   "秒": 5.4
+  },
+  {
+   "prev の docID": "S100WQPM",
+   "next の docID": "S100Z492",
+   "site の絞り込み": {
+    "数の claim": 66,
+    "GROUNDED の数の claim": 45,
+    "要素が段 1 の違うに入らない": 28,
+    "形・単位・pointer の本数が条件外": 17
+   },
+   "秒": 4.0
+  },
+  {
+   "prev の docID": "S100WQ59",
+   "next の docID": "S100Z4B6",
+   "site の絞り込み": {
+    "数の claim": 83,
+    "GROUNDED の数の claim": 48,
+    "pointer の枠が当期(member なし)でない": 15,
+    "要素が段 1 の違うに入らない": 22,
+    "形・単位・pointer の本数が条件外": 11
+   },
+   "秒": 3.6
+  },
+  {
+   "prev の docID": "S100WRZI",
+   "next の docID": "S100Z4DE",
+   "site の絞り込み": {
+    "数の claim": 53,
+    "GROUNDED の数の claim": 33,
+    "要素が段 1 の違うに入らない": 28,
+    "pointer の枠が当期(member なし)でない": 5
+   },
+   "秒": 3.4
+  },
+  {
+   "prev の docID": "S100WR1U",
+   "next の docID": "S100Z4GF",
+   "site の絞り込み": {
+    "数の claim": 91,
+    "GROUNDED の数の claim": 47,
+    "pointer の枠が当期(member なし)でない": 42,
+    "形・単位・pointer の本数が条件外": 5
+   },
+   "秒": 3.8
+  },
+  {
+   "prev の docID": "S100WQUM",
+   "next の docID": "S100Z4J8",
+   "site の絞り込み": {
+    "数の claim": 60,
+    "GROUNDED の数の claim": 46,
+    "pointer の枠が当期(member なし)でない": 25,
+    "形・単位・pointer の本数が条件外": 21
+   },
+   "秒": 3.7
+  },
+  {
+   "prev の docID": "S100WS69",
+   "next の docID": "S100Z4LC",
+   "site の絞り込み": {
+    "数の claim": 75,
+    "GROUNDED の数の claim": 51,
+    "要素が段 1 の違うに入らない": 27,
+    "形・単位・pointer の本数が条件外": 16,
+    "pointer の枠が当期(member なし)でない": 8
+   },
+   "秒": 3.3
+  },
+  {
+   "prev の docID": "S100WQTF",
+   "next の docID": "S100Z4N9",
+   "site の絞り込み": {
+    "数の claim": 136,
+    "GROUNDED の数の claim": 71,
+    "要素が段 1 の違うに入らない": 35,
+    "形・単位・pointer の本数が条件外": 28,
+    "pointer の枠が当期(member なし)でない": 8
+   },
+   "秒": 5.5
+  },
+  {
+   "prev の docID": "S100WRCI",
+   "next の docID": "S100Z4PA",
+   "site の絞り込み": {
+    "数の claim": 91,
+    "GROUNDED の数の claim": 46,
+    "要素が段 1 の違うに入らない": 27,
+    "形・単位・pointer の本数が条件外": 15,
+    "pointer の枠が当期(member なし)でない": 4
+   },
+   "秒": 3.4
+  },
+  {
+   "prev の docID": "S100WQ3S",
+   "next の docID": "S100Z4Q1",
+   "site の絞り込み": {
+    "数の claim": 67,
+    "GROUNDED の数の claim": 59,
+    "要素が段 1 の違うに入らない": 28,
+    "形・単位・pointer の本数が条件外": 25,
+    "pointer の枠が当期(member なし)でない": 6
+   },
+   "秒": 3.9
+  },
+  {
+   "prev の docID": "S100WS5A",
+   "next の docID": "S100Z4R8",
+   "site の絞り込み": {
+    "数の claim": 58,
+    "GROUNDED の数の claim": 39,
+    "要素が段 1 の違うに入らない": 24,
+    "形・単位・pointer の本数が条件外": 15
+   },
+   "秒": 3.3
+  },
+  {
+   "prev の docID": "S100WRTG",
+   "next の docID": "S100Z5CH",
+   "site の絞り込み": {
+    "数の claim": 85,
+    "GROUNDED の数の claim": 65,
+    "pointer の枠が当期(member なし)でない": 50,
+    "形・単位・pointer の本数が条件外": 15
+   },
+   "秒": 2.7
+  },
+  {
+   "prev の docID": "S100WU40",
+   "next の docID": "S100Z6XO",
+   "site の絞り込み": {
+    "数の claim": 87,
+    "GROUNDED の数の claim": 42,
+    "形・単位・pointer の本数が条件外": 15,
+    "要素が段 1 の違うに入らない": 21,
+    "pointer の枠が当期(member なし)でない": 6
+   },
+   "秒": 4.7
+  }
+ ],
+ "対照の行": [
+  {
+   "prev の docID": "S100WLVW",
+   "止めた行": 47,
+   "止めた行の state": {
+    "UNVERIFIABLE": 34,
+    "POINTER_NOT_FOUND": 12,
+    "VALUE_MISMATCH": 1
+   },
+   "R が言える形の行": 1,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 35,
+    "語彙で引けず(主語なし)": 11,
+    "帯の外": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WH8K",
+   "止めた行": 64,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 29,
+    "VALUE_MISMATCH": 6,
+    "UNVERIFIABLE": 29
+   },
+   "R が言える形の行": 11,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 48,
+    "帯の外": 11,
+    "語彙で引けず(主語なし)": 3,
+    "語彙で引けず(手書きの行に無い)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WJZQ",
+   "止めた行": 203,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 67,
+    "UNVERIFIABLE": 106,
+    "VALUE_MISMATCH": 30
+   },
+   "R が言える形の行": 42,
+   "言えない理由": {
+    "語彙で引けず(主語なし)": 57,
+    "語彙で引けず(手書きの行に無い)": 4,
+    "帯の外": 37,
+    "対象外(形・単位・精度)": 100,
+    "next の前期欄に主語の要素の fact なし": 5
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WJSD",
+   "止めた行": 92,
+   "止めた行の state": {
+    "UNVERIFIABLE": 53,
+    "POINTER_NOT_FOUND": 30,
+    "VALUE_MISMATCH": 9
+   },
+   "R が言える形の行": 15,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 57,
+    "帯の外": 9,
+    "語彙で引けず(手書きの行に無い)": 9,
+    "語彙で引けず(主語なし)": 11
+   },
+   "名指した": 6,
+   "名指した行": [
+    {
+     "claim の id": "N001",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    },
+    {
+     "claim の id": "N003",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OrdinaryIncome"
+    },
+    {
+     "claim の id": "N005",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent"
+    },
+    {
+     "claim の id": "N067",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OrdinaryIncome"
+    },
+    {
+     "claim の id": "N069",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent"
+    },
+    {
+     "claim の id": "N071",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WJ4B",
+   "止めた行": 54,
+   "止めた行の state": {
+    "VALUE_MISMATCH": 13,
+    "POINTER_NOT_FOUND": 25,
+    "UNVERIFIABLE": 16
+   },
+   "R が言える形の行": 18,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 26,
+    "語彙で引けず(主語なし)": 3,
+    "語彙で引けず(手書きの行に無い)": 7,
+    "帯の外": 16
+   },
+   "名指した": 2,
+   "名指した行": [
+    {
+     "claim の id": "N059",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    },
+    {
+     "claim の id": "N065",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OrdinaryIncome"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WJXT",
+   "止めた行": 58,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 34,
+    "VALUE_MISMATCH": 11,
+    "UNVERIFIABLE": 13
+   },
+   "R が言える形の行": 17,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 37,
+    "帯の外": 17,
+    "語彙で引けず(手書きの行に無い)": 4
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WKZJ",
+   "止めた行": 88,
+   "止めた行の state": {
+    "UNVERIFIABLE": 49,
+    "POINTER_NOT_FOUND": 25,
+    "VALUE_MISMATCH": 14
+   },
+   "R が言える形の行": 3,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 67,
+    "語彙で引けず(手書きの行に無い)": 13,
+    "語彙で引けず(主語なし)": 5,
+    "帯の外": 3
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WK01",
+   "止めた行": 54,
+   "止めた行の state": {
+    "UNVERIFIABLE": 18,
+    "POINTER_NOT_FOUND": 35,
+    "VALUE_MISMATCH": 1
+   },
+   "R が言える形の行": 11,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 11,
+    "対象外(形・単位・精度)": 30,
+    "語彙で引けず(主語なし)": 8,
+    "語彙で引けず(手書きの行に無い)": 5
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100VW9D",
+   "止めた行": 60,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 31,
+    "VALUE_MISMATCH": 5,
+    "UNVERIFIABLE": 24
+   },
+   "R が言える形の行": 11,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 11,
+    "対象外(形・単位・精度)": 44,
+    "語彙で引けず(手書きの行に無い)": 4,
+    "語彙で引けず(主語なし)": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WKOH",
+   "止めた行": 52,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 29,
+    "UNVERIFIABLE": 10,
+    "VALUE_MISMATCH": 13
+   },
+   "R が言える形の行": 17,
+   "言えない理由": {
+    "語彙で引けず(主語なし)": 2,
+    "対象外(形・単位・精度)": 23,
+    "next の前期欄に主語の要素の fact なし": 16,
+    "語彙で引けず(手書きの行に無い)": 10,
+    "next の前期欄に同じ要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100W9LG",
+   "止めた行": 51,
+   "止めた行の state": {
+    "UNVERIFIABLE": 29,
+    "POINTER_NOT_FOUND": 18,
+    "VALUE_MISMATCH": 4
+   },
+   "R が言える形の行": 12,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 26,
+    "帯の外": 12,
+    "語彙で引けず(主語なし)": 3,
+    "語彙で引けず(手書きの行に無い)": 10
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLC9",
+   "止めた行": 44,
+   "止めた行の state": {
+    "UNVERIFIABLE": 16,
+    "POINTER_NOT_FOUND": 24,
+    "VALUE_MISMATCH": 4
+   },
+   "R が言える形の行": 12,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 25,
+    "next の前期欄に主語の要素の fact なし": 2,
+    "帯の外": 10,
+    "語彙で引けず(主語なし)": 2,
+    "語彙で引けず(手書きの行に無い)": 5
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WKSA",
+   "止めた行": 55,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 25,
+    "VALUE_MISMATCH": 9,
+    "UNVERIFIABLE": 21
+   },
+   "R が言える形の行": 10,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 10,
+    "対象外(形・単位・精度)": 30,
+    "語彙で引けず(主語なし)": 7,
+    "語彙で引けず(手書きの行に無い)": 8
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WKTA",
+   "止めた行": 65,
+   "止めた行の state": {
+    "UNVERIFIABLE": 21,
+    "POINTER_NOT_FOUND": 30,
+    "VALUE_MISMATCH": 14
+   },
+   "R が言える形の行": 18,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 35,
+    "帯の外": 15,
+    "語彙で引けず(主語なし)": 5,
+    "語彙で引けず(手書きの行に無い)": 7,
+    "next の前期欄に主語の要素の fact なし": 3
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLY3",
+   "止めた行": 38,
+   "止めた行の state": {
+    "UNVERIFIABLE": 26,
+    "POINTER_NOT_FOUND": 9,
+    "VALUE_MISMATCH": 3
+   },
+   "R が言える形の行": 0,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 34,
+    "語彙で引けず(主語なし)": 3,
+    "語彙で引けず(手書きの行に無い)": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLSP",
+   "止めた行": 65,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 29,
+    "VALUE_MISMATCH": 9,
+    "UNVERIFIABLE": 27
+   },
+   "R が言える形の行": 7,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 43,
+    "帯の外": 7,
+    "語彙で引けず(手書きの行に無い)": 6,
+    "語彙で引けず(主語なし)": 9
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WL4U",
+   "止めた行": 55,
+   "止めた行の state": {
+    "UNVERIFIABLE": 34,
+    "VALUE_MISMATCH": 6,
+    "POINTER_NOT_FOUND": 15
+   },
+   "R が言える形の行": 12,
+   "言えない理由": {
+    "帯の外": 7,
+    "対象外(形・単位・精度)": 37,
+    "語彙で引けず(主語なし)": 3,
+    "語彙で引けず(手書きの行に無い)": 3
+   },
+   "名指した": 5,
+   "名指した行": [
+    {
+     "claim の id": "N001",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    },
+    {
+     "claim の id": "N004",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OperatingIncome"
+    },
+    {
+     "claim の id": "N007",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OrdinaryIncome"
+    },
+    {
+     "claim の id": "N010",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent"
+    },
+    {
+     "claim の id": "N052",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WM3R",
+   "止めた行": 79,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 37,
+    "VALUE_MISMATCH": 22,
+    "UNVERIFIABLE": 20
+   },
+   "R が言える形の行": 22,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 21,
+    "対象外(形・単位・精度)": 41,
+    "語彙で引けず(手書きの行に無い)": 9,
+    "語彙で引けず(主語なし)": 7,
+    "next の前期欄に同じ要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLJD",
+   "止めた行": 31,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 21,
+    "UNVERIFIABLE": 10
+   },
+   "R が言える形の行": 18,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 5,
+    "帯の外": 12,
+    "語彙で引けず(手書きの行に無い)": 3,
+    "語彙で引けず(主語なし)": 1,
+    "対象外(形・単位・精度)": 9
+   },
+   "名指した": 1,
+   "名指した行": [
+    {
+     "claim の id": "N064",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WKV4",
+   "止めた行": 109,
+   "止めた行の state": {
+    "UNVERIFIABLE": 52,
+    "VALUE_MISMATCH": 23,
+    "POINTER_NOT_FOUND": 34
+   },
+   "R が言える形の行": 20,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 19,
+    "対象外(形・単位・精度)": 76,
+    "語彙で引けず(主語なし)": 8,
+    "next の前期欄に同じ要素の fact なし": 1,
+    "語彙で引けず(手書きの行に無い)": 5
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLAB",
+   "止めた行": 58,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 16,
+    "UNVERIFIABLE": 38,
+    "VALUE_MISMATCH": 4
+   },
+   "R が言える形の行": 13,
+   "言えない理由": {
+    "帯の外": 13,
+    "対象外(形・単位・精度)": 33,
+    "語彙で引けず(手書きの行に無い)": 4,
+    "語彙で引けず(主語なし)": 8
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WK2E",
+   "止めた行": 93,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 41,
+    "UNVERIFIABLE": 27,
+    "VALUE_MISMATCH": 25
+   },
+   "R が言える形の行": 15,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 55,
+    "帯の外": 14,
+    "語彙で引けず(手書きの行に無い)": 20,
+    "語彙で引けず(主語なし)": 3,
+    "next の前期欄に主語の要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WL8L",
+   "止めた行": 34,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 10,
+    "VALUE_MISMATCH": 5,
+    "UNVERIFIABLE": 19
+   },
+   "R が言える形の行": 5,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 5,
+    "語彙で引けず(手書きの行に無い)": 11,
+    "対象外(形・単位・精度)": 17,
+    "語彙で引けず(主語なし)": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLI3",
+   "止めた行": 50,
+   "止めた行の state": {
+    "UNVERIFIABLE": 41,
+    "POINTER_NOT_FOUND": 9
+   },
+   "R が言える形の行": 10,
+   "言えない理由": {
+    "帯の外": 10,
+    "対象外(形・単位・精度)": 33,
+    "語彙で引けず(手書きの行に無い)": 3,
+    "語彙で引けず(主語なし)": 4
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WL6P",
+   "止めた行": 52,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 18,
+    "VALUE_MISMATCH": 11,
+    "UNVERIFIABLE": 23
+   },
+   "R が言える形の行": 13,
+   "言えない理由": {
+    "帯の外": 13,
+    "対象外(形・単位・精度)": 25,
+    "語彙で引けず(手書きの行に無い)": 11,
+    "語彙で引けず(主語なし)": 3
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLMH",
+   "止めた行": 40,
+   "止めた行の state": {
+    "UNVERIFIABLE": 24,
+    "POINTER_NOT_FOUND": 13,
+    "VALUE_MISMATCH": 3
+   },
+   "R が言える形の行": 6,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 24,
+    "語彙で引けず(主語なし)": 8,
+    "帯の外": 6,
+    "語彙で引けず(手書きの行に無い)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WL3G",
+   "止めた行": 36,
+   "止めた行の state": {
+    "VALUE_MISMATCH": 7,
+    "UNVERIFIABLE": 25,
+    "POINTER_NOT_FOUND": 4
+   },
+   "R が言える形の行": 4,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 24,
+    "next の前期欄に主語の要素の fact なし": 4,
+    "語彙で引けず(手書きの行に無い)": 6,
+    "語彙で引けず(主語なし)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WL0G",
+   "止めた行": 36,
+   "止めた行の state": {
+    "UNVERIFIABLE": 24,
+    "VALUE_MISMATCH": 3,
+    "POINTER_NOT_FOUND": 9
+   },
+   "R が言える形の行": 5,
+   "言えない理由": {
+    "帯の外": 4,
+    "対象外(形・単位・精度)": 21,
+    "語彙で引けず(手書きの行に無い)": 3,
+    "語彙で引けず(主語なし)": 7,
+    "next の前期欄に主語の要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WJUP",
+   "止めた行": 82,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 28,
+    "UNVERIFIABLE": 41,
+    "VALUE_MISMATCH": 13
+   },
+   "R が言える形の行": 22,
+   "言えない理由": {
+    "帯の外": 22,
+    "語彙で引けず(主語なし)": 15,
+    "対象外(形・単位・精度)": 38,
+    "語彙で引けず(手書きの行に無い)": 7
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WL6X",
+   "止めた行": 47,
+   "止めた行の state": {
+    "UNVERIFIABLE": 20,
+    "POINTER_NOT_FOUND": 19,
+    "VALUE_MISMATCH": 8
+   },
+   "R が言える形の行": 17,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 29,
+    "next の前期欄に主語の要素の fact なし": 4,
+    "帯の外": 13,
+    "語彙で引けず(手書きの行に無い)": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100VZ8E",
+   "止めた行": 40,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 23,
+    "VALUE_MISMATCH": 8,
+    "UNVERIFIABLE": 9
+   },
+   "R が言える形の行": 16,
+   "言えない理由": {
+    "語彙で引けず(手書きの行に無い)": 1,
+    "next の前期欄に主語の要素の fact なし": 16,
+    "対象外(形・単位・精度)": 23
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WL0T",
+   "止めた行": 62,
+   "止めた行の state": {
+    "UNVERIFIABLE": 37,
+    "POINTER_NOT_FOUND": 18,
+    "VALUE_MISMATCH": 7
+   },
+   "R が言える形の行": 11,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 40,
+    "帯の外": 11,
+    "語彙で引けず(主語なし)": 10,
+    "語彙で引けず(手書きの行に無い)": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLJK",
+   "止めた行": 22,
+   "止めた行の state": {
+    "VALUE_MISMATCH": 1,
+    "POINTER_NOT_FOUND": 7,
+    "UNVERIFIABLE": 14
+   },
+   "R が言える形の行": 6,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 11,
+    "語彙で引けず(手書きの行に無い)": 5,
+    "帯の外": 6
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLIX",
+   "止めた行": 63,
+   "止めた行の state": {
+    "UNVERIFIABLE": 32,
+    "VALUE_MISMATCH": 10,
+    "POINTER_NOT_FOUND": 21
+   },
+   "R が言える形の行": 10,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 47,
+    "帯の外": 10,
+    "語彙で引けず(手書きの行に無い)": 3,
+    "語彙で引けず(主語なし)": 3
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WL1X",
+   "止めた行": 75,
+   "止めた行の state": {
+    "UNVERIFIABLE": 37,
+    "POINTER_NOT_FOUND": 30,
+    "VALUE_MISMATCH": 8
+   },
+   "R が言える形の行": 18,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 34,
+    "語彙で引けず(主語なし)": 10,
+    "帯の外": 18,
+    "語彙で引けず(手書きの行に無い)": 13
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLO9",
+   "止めた行": 63,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 18,
+    "UNVERIFIABLE": 34,
+    "VALUE_MISMATCH": 11
+   },
+   "R が言える形の行": 21,
+   "言えない理由": {
+    "帯の外": 21,
+    "対象外(形・単位・精度)": 33,
+    "語彙で引けず(主語なし)": 5,
+    "語彙で引けず(手書きの行に無い)": 4
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLAF",
+   "止めた行": 50,
+   "止めた行の state": {
+    "UNVERIFIABLE": 31,
+    "POINTER_NOT_FOUND": 13,
+    "VALUE_MISMATCH": 6
+   },
+   "R が言える形の行": 11,
+   "言えない理由": {
+    "帯の外": 9,
+    "語彙で引けず(主語なし)": 5,
+    "対象外(形・単位・精度)": 30,
+    "語彙で引けず(手書きの行に無い)": 4,
+    "next の前期欄に主語の要素の fact なし": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLXE",
+   "止めた行": 20,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 11,
+    "UNVERIFIABLE": 9
+   },
+   "R が言える形の行": 5,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 13,
+    "帯の外": 5,
+    "語彙で引けず(主語なし)": 1,
+    "語彙で引けず(手書きの行に無い)": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLLK",
+   "止めた行": 36,
+   "止めた行の state": {
+    "UNVERIFIABLE": 18,
+    "POINTER_NOT_FOUND": 17,
+    "VALUE_MISMATCH": 1
+   },
+   "R が言える形の行": 2,
+   "言えない理由": {
+    "語彙で引けず(手書きの行に無い)": 4,
+    "next の前期欄に主語の要素の fact なし": 1,
+    "対象外(形・単位・精度)": 26,
+    "語彙で引けず(主語なし)": 4,
+    "帯の外": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WKFZ",
+   "止めた行": 49,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 17,
+    "VALUE_MISMATCH": 6,
+    "UNVERIFIABLE": 26
+   },
+   "R が言える形の行": 13,
+   "言えない理由": {
+    "帯の外": 13,
+    "対象外(形・単位・精度)": 31,
+    "語彙で引けず(主語なし)": 5
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLEX",
+   "止めた行": 71,
+   "止めた行の state": {
+    "UNVERIFIABLE": 36,
+    "POINTER_NOT_FOUND": 19,
+    "VALUE_MISMATCH": 16
+   },
+   "R が言える形の行": 20,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 49,
+    "帯の外": 20,
+    "語彙で引けず(手書きの行に無い)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLI2",
+   "止めた行": 69,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 27,
+    "UNVERIFIABLE": 38,
+    "VALUE_MISMATCH": 4
+   },
+   "R が言える形の行": 6,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 50,
+    "next の前期欄に主語の要素の fact なし": 4,
+    "語彙で引けず(主語なし)": 12,
+    "next の前期欄に同じ要素の fact なし": 2,
+    "語彙で引けず(手書きの行に無い)": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLZJ",
+   "止めた行": 62,
+   "止めた行の state": {
+    "VALUE_MISMATCH": 8,
+    "POINTER_NOT_FOUND": 25,
+    "UNVERIFIABLE": 29
+   },
+   "R が言える形の行": 16,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 34,
+    "帯の外": 15,
+    "語彙で引けず(手書きの行に無い)": 8,
+    "語彙で引けず(主語なし)": 4,
+    "next の前期欄に主語の要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLQL",
+   "止めた行": 31,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 15,
+    "VALUE_MISMATCH": 7,
+    "UNVERIFIABLE": 9
+   },
+   "R が言える形の行": 5,
+   "言えない理由": {
+    "語彙で引けず(手書きの行に無い)": 6,
+    "対象外(形・単位・精度)": 13,
+    "帯の外": 4,
+    "語彙で引けず(主語なし)": 7,
+    "next の前期欄に主語の要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLY9",
+   "止めた行": 8,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 2,
+    "UNVERIFIABLE": 6
+   },
+   "R が言える形の行": 2,
+   "言えない理由": {
+    "語彙で引けず(主語なし)": 2,
+    "帯の外": 2,
+    "語彙で引けず(手書きの行に無い)": 1,
+    "対象外(形・単位・精度)": 3
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLR3",
+   "止めた行": 51,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 24,
+    "VALUE_MISMATCH": 15,
+    "UNVERIFIABLE": 12
+   },
+   "R が言える形の行": 16,
+   "言えない理由": {
+    "帯の外": 16,
+    "対象外(形・単位・精度)": 19,
+    "語彙で引けず(主語なし)": 12,
+    "語彙で引けず(手書きの行に無い)": 4
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WKS0",
+   "止めた行": 44,
+   "止めた行の state": {
+    "UNVERIFIABLE": 10,
+    "POINTER_NOT_FOUND": 19,
+    "VALUE_MISMATCH": 15
+   },
+   "R が言える形の行": 16,
+   "言えない理由": {
+    "帯の外": 15,
+    "語彙で引けず(手書きの行に無い)": 2,
+    "対象外(形・単位・精度)": 26,
+    "next の前期欄に主語の要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLNY",
+   "止めた行": 39,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 25,
+    "UNVERIFIABLE": 13,
+    "VALUE_MISMATCH": 1
+   },
+   "R が言える形の行": 10,
+   "言えない理由": {
+    "語彙で引けず(主語なし)": 14,
+    "対象外(形・単位・精度)": 11,
+    "next の前期欄に主語の要素の fact なし": 9,
+    "語彙で引けず(手書きの行に無い)": 4,
+    "next の前期欄に同じ要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WM4B",
+   "止めた行": 31,
+   "止めた行の state": {
+    "UNVERIFIABLE": 14,
+    "POINTER_NOT_FOUND": 11,
+    "VALUE_MISMATCH": 6
+   },
+   "R が言える形の行": 18,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 18,
+    "対象外(形・単位・精度)": 10,
+    "語彙で引けず(手書きの行に無い)": 3
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WM70",
+   "止めた行": 38,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 14,
+    "VALUE_MISMATCH": 7,
+    "UNVERIFIABLE": 17
+   },
+   "R が言える形の行": 9,
+   "言えない理由": {
+    "帯の外": 8,
+    "語彙で引けず(手書きの行に無い)": 7,
+    "対象外(形・単位・精度)": 19,
+    "next の前期欄に主語の要素の fact なし": 1,
+    "語彙で引けず(主語なし)": 3
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLRT",
+   "止めた行": 90,
+   "止めた行の state": {
+    "UNVERIFIABLE": 55,
+    "POINTER_NOT_FOUND": 25,
+    "VALUE_MISMATCH": 10
+   },
+   "R が言える形の行": 20,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 55,
+    "帯の外": 13,
+    "語彙で引けず(手書きの行に無い)": 14,
+    "next の前期欄に主語の要素の fact なし": 2,
+    "語彙で引けず(主語なし)": 1
+   },
+   "名指した": 5,
+   "名指した行": [
+    {
+     "claim の id": "N001",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    },
+    {
+     "claim の id": "N003",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OperatingIncome"
+    },
+    {
+     "claim の id": "N005",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OrdinaryIncome"
+    },
+    {
+     "claim の id": "N007",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent"
+    },
+    {
+     "claim の id": "N063",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WLX8",
+   "止めた行": 33,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 8,
+    "VALUE_MISMATCH": 7,
+    "UNVERIFIABLE": 18
+   },
+   "R が言える形の行": 7,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 18,
+    "next の前期欄に同じ要素の fact なし": 2,
+    "next の前期欄に主語の要素の fact なし": 5,
+    "語彙で引けず(手書きの行に無い)": 3,
+    "語彙で引けず(主語なし)": 5
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WLYW",
+   "止めた行": 42,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 28,
+    "UNVERIFIABLE": 8,
+    "VALUE_MISMATCH": 6
+   },
+   "R が言える形の行": 22,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 22,
+    "語彙で引けず(手書きの行に無い)": 5,
+    "語彙で引けず(主語なし)": 5,
+    "対象外(形・単位・精度)": 10
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WNXO",
+   "止めた行": 51,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 38,
+    "VALUE_MISMATCH": 7,
+    "UNVERIFIABLE": 6
+   },
+   "R が言える形の行": 20,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 18,
+    "帯の外": 19,
+    "語彙で引けず(主語なし)": 7,
+    "語彙で引けず(手書きの行に無い)": 6,
+    "next の前期欄に主語の要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WOVG",
+   "止めた行": 44,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 28,
+    "UNVERIFIABLE": 11,
+    "VALUE_MISMATCH": 5
+   },
+   "R が言える形の行": 10,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 21,
+    "帯の外": 10,
+    "語彙で引けず(手書きの行に無い)": 11,
+    "語彙で引けず(主語なし)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQCA",
+   "止めた行": 92,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 64,
+    "UNVERIFIABLE": 24,
+    "VALUE_MISMATCH": 4
+   },
+   "R が言える形の行": 31,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 51,
+    "帯の外": 16,
+    "next の前期欄に主語の要素の fact なし": 5,
+    "語彙で引けず(主語なし)": 5,
+    "語彙で引けず(手書きの行に無い)": 5
+   },
+   "名指した": 10,
+   "名指した行": [
+    {
+     "claim の id": "N001",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jpcrp_cor:RevenueIFRSSummaryOfBusinessResults"
+    },
+    {
+     "claim の id": "N007",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jpigp_cor:ProfitLossIFRS"
+    },
+    {
+     "claim の id": "N009",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentIFRSSummaryOfBusinessResults"
+    },
+    {
+     "claim の id": "N029",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jpcrp_cor:TotalAssetsIFRSSummaryOfBusinessResults"
+    },
+    {
+     "claim の id": "N034",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jpigp_cor:NetIncreaseDecreaseInCashAndCashEquivalentsIFRS"
+    },
+    {
+     "claim の id": "N045",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentIFRSSummaryOfBusinessResults"
+    },
+    {
+     "claim の id": "N054",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jpcrp_cor:ProfitLossBeforeTaxIFRSSummaryOfBusinessResults"
+    },
+    {
+     "claim の id": "N070",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jpigp_cor:NetIncreaseDecreaseInCashAndCashEquivalentsIFRS"
+    },
+    {
+     "claim の id": "N071",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jpcrp_cor:CashAndCashEquivalentsIFRSSummaryOfBusinessResults"
+    },
+    {
+     "claim の id": "N074",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jpigp_cor:OperatingProfitLossIFRS"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WQT7",
+   "止めた行": 46,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 19,
+    "VALUE_MISMATCH": 5,
+    "UNVERIFIABLE": 22
+   },
+   "R が言える形の行": 6,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 34,
+    "帯の外": 5,
+    "語彙で引けず(主語なし)": 4,
+    "next の前期欄に主語の要素の fact なし": 1,
+    "語彙で引けず(手書きの行に無い)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WPOP",
+   "止めた行": 75,
+   "止めた行の state": {
+    "UNVERIFIABLE": 38,
+    "POINTER_NOT_FOUND": 31,
+    "VALUE_MISMATCH": 6
+   },
+   "R が言える形の行": 14,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 55,
+    "帯の外": 5,
+    "語彙で引けず(手書きの行に無い)": 3,
+    "next の前期欄に主語の要素の fact なし": 3,
+    "語彙で引けず(主語なし)": 3
+   },
+   "名指した": 6,
+   "名指した行": [
+    {
+     "claim の id": "N005",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    },
+    {
+     "claim の id": "N008",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent"
+    },
+    {
+     "claim の id": "N032",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    },
+    {
+     "claim の id": "N034",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OperatingIncome"
+    },
+    {
+     "claim の id": "N036",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OrdinaryIncome"
+    },
+    {
+     "claim の id": "N038",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WQAK",
+   "止めた行": 22,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 5,
+    "UNVERIFIABLE": 15,
+    "VALUE_MISMATCH": 2
+   },
+   "R が言える形の行": 3,
+   "言えない理由": {
+    "帯の外": 2,
+    "語彙で引けず(手書きの行に無い)": 1,
+    "対象外(形・単位・精度)": 18
+   },
+   "名指した": 1,
+   "名指した行": [
+    {
+     "claim の id": "N040",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WQQN",
+   "止めた行": 52,
+   "止めた行の state": {
+    "UNVERIFIABLE": 41,
+    "POINTER_NOT_FOUND": 9,
+    "VALUE_MISMATCH": 2
+   },
+   "R が言える形の行": 9,
+   "言えない理由": {
+    "帯の外": 9,
+    "語彙で引けず(手書きの行に無い)": 9,
+    "対象外(形・単位・精度)": 30,
+    "語彙で引けず(主語なし)": 4
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WRZV",
+   "止めた行": 40,
+   "止めた行の state": {
+    "UNVERIFIABLE": 29,
+    "POINTER_NOT_FOUND": 6,
+    "VALUE_MISMATCH": 5
+   },
+   "R が言える形の行": 9,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 21,
+    "帯の外": 8,
+    "語彙で引けず(手書きの行に無い)": 8,
+    "語彙で引けず(主語なし)": 2
+   },
+   "名指した": 1,
+   "名指した行": [
+    {
+     "claim の id": "N001",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WQEO",
+   "止めた行": 58,
+   "止めた行の state": {
+    "UNVERIFIABLE": 42,
+    "POINTER_NOT_FOUND": 11,
+    "VALUE_MISMATCH": 5
+   },
+   "R が言える形の行": 11,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 34,
+    "帯の外": 7,
+    "語彙で引けず(手書きの行に無い)": 4,
+    "語彙で引けず(主語なし)": 9,
+    "next の前期欄に主語の要素の fact なし": 2
+   },
+   "名指した": 2,
+   "名指した行": [
+    {
+     "claim の id": "N019",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    },
+    {
+     "claim の id": "N021",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OperatingIncome"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WQ92",
+   "止めた行": 43,
+   "止めた行の state": {
+    "UNVERIFIABLE": 18,
+    "POINTER_NOT_FOUND": 17,
+    "VALUE_MISMATCH": 8
+   },
+   "R が言える形の行": 6,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 26,
+    "帯の外": 6,
+    "語彙で引けず(主語なし)": 6,
+    "語彙で引けず(手書きの行に無い)": 5
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQVH",
+   "止めた行": 69,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 27,
+    "UNVERIFIABLE": 31,
+    "VALUE_MISMATCH": 11
+   },
+   "R が言える形の行": 27,
+   "言えない理由": {
+    "語彙で引けず(主語なし)": 7,
+    "対象外(形・単位・精度)": 34,
+    "next の前期欄に主語の要素の fact なし": 1,
+    "帯の外": 22,
+    "語彙で引けず(手書きの行に無い)": 1
+   },
+   "名指した": 4,
+   "名指した行": [
+    {
+     "claim の id": "N074",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    },
+    {
+     "claim の id": "N076",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OperatingIncome"
+    },
+    {
+     "claim の id": "N078",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OrdinaryIncome"
+    },
+    {
+     "claim の id": "N081",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WQFV",
+   "止めた行": 64,
+   "止めた行の state": {
+    "UNVERIFIABLE": 25,
+    "POINTER_NOT_FOUND": 30,
+    "VALUE_MISMATCH": 9
+   },
+   "R が言える形の行": 20,
+   "言えない理由": {
+    "帯の外": 15,
+    "対象外(形・単位・精度)": 42,
+    "語彙で引けず(主語なし)": 1,
+    "next の前期欄に主語の要素の fact なし": 5,
+    "語彙で引けず(手書きの行に無い)": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WRQD",
+   "止めた行": 28,
+   "止めた行の state": {
+    "UNVERIFIABLE": 11,
+    "VALUE_MISMATCH": 7,
+    "POINTER_NOT_FOUND": 10
+   },
+   "R が言える形の行": 6,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 14,
+    "next の前期欄に主語の要素の fact なし": 5,
+    "語彙で引けず(手書きの行に無い)": 8,
+    "next の前期欄に同じ要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQIM",
+   "止めた行": 30,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 11,
+    "VALUE_MISMATCH": 9,
+    "UNVERIFIABLE": 10
+   },
+   "R が言える形の行": 7,
+   "言えない理由": {
+    "帯の外": 7,
+    "対象外(形・単位・精度)": 16,
+    "語彙で引けず(手書きの行に無い)": 5,
+    "語彙で引けず(主語なし)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQAL",
+   "止めた行": 60,
+   "止めた行の state": {
+    "UNVERIFIABLE": 18,
+    "POINTER_NOT_FOUND": 26,
+    "VALUE_MISMATCH": 16
+   },
+   "R が言える形の行": 18,
+   "言えない理由": {
+    "語彙で引けず(主語なし)": 7,
+    "対象外(形・単位・精度)": 27,
+    "next の前期欄に主語の要素の fact なし": 3,
+    "帯の外": 15,
+    "語彙で引けず(手書きの行に無い)": 8
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WRZ3",
+   "止めた行": 45,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 24,
+    "UNVERIFIABLE": 15,
+    "VALUE_MISMATCH": 6
+   },
+   "R が言える形の行": 7,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 31,
+    "語彙で引けず(手書きの行に無い)": 5,
+    "next の前期欄に主語の要素の fact なし": 1,
+    "帯の外": 2,
+    "語彙で引けず(主語なし)": 2
+   },
+   "名指した": 4,
+   "名指した行": [
+    {
+     "claim の id": "N002",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    },
+    {
+     "claim の id": "N004",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OperatingIncome"
+    },
+    {
+     "claim の id": "N006",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OrdinaryIncome"
+    },
+    {
+     "claim の id": "N008",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WR24",
+   "止めた行": 29,
+   "止めた行の state": {
+    "UNVERIFIABLE": 23,
+    "POINTER_NOT_FOUND": 4,
+    "VALUE_MISMATCH": 2
+   },
+   "R が言える形の行": 3,
+   "言えない理由": {
+    "帯の外": 2,
+    "語彙で引けず(手書きの行に無い)": 4,
+    "語彙で引けず(主語なし)": 8,
+    "対象外(形・単位・精度)": 14,
+    "next の前期欄に主語の要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQZF",
+   "止めた行": 66,
+   "止めた行の state": {
+    "UNVERIFIABLE": 49,
+    "POINTER_NOT_FOUND": 15,
+    "VALUE_MISMATCH": 2
+   },
+   "R が言える形の行": 2,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 48,
+    "語彙で引けず(手書きの行に無い)": 5,
+    "帯の外": 2,
+    "語彙で引けず(主語なし)": 11
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WRP5",
+   "止めた行": 35,
+   "止めた行の state": {
+    "UNVERIFIABLE": 26,
+    "POINTER_NOT_FOUND": 7,
+    "VALUE_MISMATCH": 2
+   },
+   "R が言える形の行": 10,
+   "言えない理由": {
+    "帯の外": 10,
+    "対象外(形・単位・精度)": 23,
+    "語彙で引けず(手書きの行に無い)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQCJ",
+   "止めた行": 72,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 41,
+    "UNVERIFIABLE": 21,
+    "VALUE_MISMATCH": 10
+   },
+   "R が言える形の行": 17,
+   "言えない理由": {
+    "語彙で引けず(主語なし)": 2,
+    "対象外(形・単位・精度)": 42,
+    "next の前期欄に主語の要素の fact なし": 15,
+    "語彙で引けず(手書きの行に無い)": 11,
+    "next の前期欄に同じ要素の fact なし": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQBH",
+   "止めた行": 100,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 39,
+    "UNVERIFIABLE": 46,
+    "VALUE_MISMATCH": 15
+   },
+   "R が言える形の行": 15,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 71,
+    "帯の外": 10,
+    "語彙で引けず(手書きの行に無い)": 7,
+    "語彙で引けず(主語なし)": 7,
+    "next の前期欄に主語の要素の fact なし": 1
+   },
+   "名指した": 4,
+   "名指した行": [
+    {
+     "claim の id": "N006",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    },
+    {
+     "claim の id": "N014",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:OrdinaryIncome"
+    },
+    {
+     "claim の id": "N018",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent"
+    },
+    {
+     "claim の id": "N071",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WRTP",
+   "止めた行": 23,
+   "止めた行の state": {
+    "VALUE_MISMATCH": 3,
+    "POINTER_NOT_FOUND": 9,
+    "UNVERIFIABLE": 11
+   },
+   "R が言える形の行": 9,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 10,
+    "帯の外": 9,
+    "語彙で引けず(手書きの行に無い)": 2,
+    "語彙で引けず(主語なし)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WRLD",
+   "止めた行": 31,
+   "止めた行の state": {
+    "UNVERIFIABLE": 7,
+    "POINTER_NOT_FOUND": 16,
+    "VALUE_MISMATCH": 8
+   },
+   "R が言える形の行": 9,
+   "言えない理由": {
+    "語彙で引けず(主語なし)": 2,
+    "next の前期欄に主語の要素の fact なし": 8,
+    "next の前期欄に同じ要素の fact なし": 1,
+    "対象外(形・単位・精度)": 20
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WR2U",
+   "止めた行": 24,
+   "止めた行の state": {
+    "UNVERIFIABLE": 12,
+    "POINTER_NOT_FOUND": 6,
+    "VALUE_MISMATCH": 6
+   },
+   "R が言える形の行": 4,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 18,
+    "next の前期欄に主語の要素の fact なし": 4,
+    "語彙で引けず(主語なし)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQTJ",
+   "止めた行": 22,
+   "止めた行の state": {
+    "UNVERIFIABLE": 14,
+    "POINTER_NOT_FOUND": 7,
+    "VALUE_MISMATCH": 1
+   },
+   "R が言える形の行": 5,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 10,
+    "帯の外": 3,
+    "語彙で引けず(主語なし)": 7
+   },
+   "名指した": 2,
+   "名指した行": [
+    {
+     "claim の id": "N001",
+     "state": "UNVERIFIABLE",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:NetSales"
+    },
+    {
+     "claim の id": "N003",
+     "state": "POINTER_NOT_FOUND",
+     "pointers の要素": null,
+     "R の要素": "jppfs_cor:GrossProfit"
+    }
+   ]
+  },
+  {
+   "prev の docID": "S100WRCL",
+   "止めた行": 26,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 16,
+    "UNVERIFIABLE": 6,
+    "VALUE_MISMATCH": 4
+   },
+   "R が言える形の行": 6,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 5,
+    "対象外(形・単位・精度)": 14,
+    "語彙で引けず(手書きの行に無い)": 5,
+    "帯の外": 1,
+    "語彙で引けず(主語なし)": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQP5",
+   "止めた行": 41,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 6,
+    "UNVERIFIABLE": 32,
+    "VALUE_MISMATCH": 3
+   },
+   "R が言える形の行": 8,
+   "言えない理由": {
+    "帯の外": 8,
+    "対象外(形・単位・精度)": 32,
+    "語彙で引けず(手書きの行に無い)": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQPM",
+   "止めた行": 36,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 18,
+    "VALUE_MISMATCH": 7,
+    "UNVERIFIABLE": 11
+   },
+   "R が言える形の行": 8,
+   "言えない理由": {
+    "帯の外": 5,
+    "対象外(形・単位・精度)": 20,
+    "next の前期欄に主語の要素の fact なし": 3,
+    "語彙で引けず(手書きの行に無い)": 5,
+    "語彙で引けず(主語なし)": 3
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQ59",
+   "止めた行": 50,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 23,
+    "VALUE_MISMATCH": 3,
+    "UNVERIFIABLE": 24
+   },
+   "R が言える形の行": 8,
+   "言えない理由": {
+    "帯の外": 8,
+    "対象外(形・単位・精度)": 32,
+    "語彙で引けず(主語なし)": 7,
+    "語彙で引けず(手書きの行に無い)": 3
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WRZI",
+   "止めた行": 24,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 12,
+    "UNVERIFIABLE": 12
+   },
+   "R が言える形の行": 13,
+   "言えない理由": {
+    "帯の外": 12,
+    "語彙で引けず(手書きの行に無い)": 3,
+    "next の前期欄に主語の要素の fact なし": 1,
+    "対象外(形・単位・精度)": 8
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WR1U",
+   "止めた行": 58,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 23,
+    "UNVERIFIABLE": 30,
+    "VALUE_MISMATCH": 5
+   },
+   "R が言える形の行": 13,
+   "言えない理由": {
+    "語彙で引けず(主語なし)": 21,
+    "対象外(形・単位・精度)": 17,
+    "next の前期欄に主語の要素の fact なし": 12,
+    "next の前期欄に同じ要素の fact なし": 1,
+    "語彙で引けず(手書きの行に無い)": 7
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQUM",
+   "止めた行": 25,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 11,
+    "VALUE_MISMATCH": 1,
+    "UNVERIFIABLE": 13
+   },
+   "R が言える形の行": 1,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 16,
+    "語彙で引けず(手書きの行に無い)": 2,
+    "語彙で引けず(主語なし)": 6,
+    "next の前期欄に主語の要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WS69",
+   "止めた行": 31,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 15,
+    "UNVERIFIABLE": 15,
+    "VALUE_MISMATCH": 1
+   },
+   "R が言える形の行": 11,
+   "言えない理由": {
+    "帯の外": 11,
+    "対象外(形・単位・精度)": 10,
+    "語彙で引けず(手書きの行に無い)": 7,
+    "語彙で引けず(主語なし)": 3
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQTF",
+   "止めた行": 86,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 27,
+    "UNVERIFIABLE": 40,
+    "VALUE_MISMATCH": 19
+   },
+   "R が言える形の行": 24,
+   "言えない理由": {
+    "帯の外": 24,
+    "対象外(形・単位・精度)": 41,
+    "語彙で引けず(主語なし)": 9,
+    "語彙で引けず(手書きの行に無い)": 12
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WRCI",
+   "止めた行": 71,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 27,
+    "UNVERIFIABLE": 43,
+    "VALUE_MISMATCH": 1
+   },
+   "R が言える形の行": 14,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 44,
+    "帯の外": 13,
+    "語彙で引けず(主語なし)": 10,
+    "語彙で引けず(手書きの行に無い)": 3,
+    "next の前期欄に主語の要素の fact なし": 1
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WQ3S",
+   "止めた行": 15,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 10,
+    "UNVERIFIABLE": 5
+   },
+   "R が言える形の行": 3,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 2,
+    "対象外(形・単位・精度)": 10,
+    "帯の外": 1,
+    "語彙で引けず(手書きの行に無い)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WS5A",
+   "止めた行": 28,
+   "止めた行の state": {
+    "VALUE_MISMATCH": 10,
+    "UNVERIFIABLE": 6,
+    "POINTER_NOT_FOUND": 12
+   },
+   "R が言える形の行": 6,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 18,
+    "語彙で引けず(主語なし)": 1,
+    "語彙で引けず(手書きの行に無い)": 3,
+    "帯の外": 6
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WRTG",
+   "止めた行": 26,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 11,
+    "UNVERIFIABLE": 14,
+    "VALUE_MISMATCH": 1
+   },
+   "R が言える形の行": 7,
+   "言えない理由": {
+    "対象外(形・単位・精度)": 9,
+    "next の前期欄に主語の要素の fact なし": 7,
+    "語彙で引けず(手書きの行に無い)": 4,
+    "語彙で引けず(主語なし)": 6
+   },
+   "名指した": 0,
+   "名指した行": []
+  },
+  {
+   "prev の docID": "S100WU40",
+   "止めた行": 90,
+   "止めた行の state": {
+    "POINTER_NOT_FOUND": 27,
+    "UNVERIFIABLE": 48,
+    "VALUE_MISMATCH": 15
+   },
+   "R が言える形の行": 23,
+   "言えない理由": {
+    "帯の外": 23,
+    "対象外(形・単位・精度)": 64,
+    "語彙で引けず(主語なし)": 1,
+    "語彙で引けず(手書きの行に無い)": 2
+   },
+   "名指した": 0,
+   "名指した行": []
+  }
+ ],
+ "固定の確認 F-10": {
+  "EDINET コード": "E01777",
+  "prev の docID": "S100W19Q",
+  "next の docID": "S100YE2C",
+  "site の絞り込み": {
+   "数の claim": 145,
+   "GROUNDED の数の claim": 19,
+   "注入した": 4,
+   "形・単位・pointer の本数が条件外": 8,
+   "要素が段 1 の違うに入らない": 5,
+   "pointer の枠が当期(member なし)でない": 2
+  },
+  "site の行": [
+   {
+    "prev の docID": "S100W19Q",
+    "next の docID": "S100YE2C",
+    "基準の claim の id": "N012",
+    "注入後の claim の id": "N012",
+    "要素": "jpcrp030000-asr_E01777-000:SalesAndFinancialServicesRevenueIFRSKeyFinancialData",
+    "枠": "CurrentYearDuration",
+    "期の型": "Duration",
+    "単位": "JPY",
+    "元の値": 12957064000000.0,
+    "差し替えた値": 12034917000000.0,
+    "字の形": {
+     "形": "cho_oku",
+     "桁区切り": true,
+     "小数の桁数": 0,
+     "単位語": "億円"
+    },
+    "対応": "付いた",
+    "state": "GROUNDED",
+    "reason": null,
+    "注入後の pointer の要素": "jpigp_cor:NetSalesIFRS",
+    "R": null,
+    "名指しの要素が注入した要素と同じ": null
+   },
+   {
+    "prev の docID": "S100W19Q",
+    "next の docID": "S100YE2C",
+    "基準の claim の id": "N032",
+    "注入後の claim の id": "N032",
+    "要素": "jpcrp030000-asr_E01777-000:OperatingProfitLossIFRSKeyFinancialData",
+    "枠": "CurrentYearDuration",
+    "期の型": "Duration",
+    "単位": "JPY",
+    "元の値": 1407163000000.0,
+    "差し替えた値": 1276635000000.0,
+    "字の形": {
+     "形": "cho_oku",
+     "桁区切り": true,
+     "小数の桁数": 0,
+     "単位語": "億円"
+    },
+    "対応": "付いた",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value",
+    "注入後の pointer の要素": null,
+    "R": {
+     "言う": true,
+     "理由": "翌期の有報の前期欄と一致",
+     "要素": "jpcrp030000-asr_E01777-000:OperatingProfitLossIFRSKeyFinancialData",
+     "帯": "round"
+    },
+    "名指しの要素が注入した要素と同じ": true
+   },
+   {
+    "prev の docID": "S100W19Q",
+    "next の docID": "S100YE2C",
+    "基準の claim の id": "N040",
+    "注入後の claim の id": "N040",
+    "要素": "jpcrp_cor:ProfitLossBeforeTaxIFRSSummaryOfBusinessResults",
+    "枠": "CurrentYearDuration",
+    "期の型": "Duration",
+    "単位": "JPY",
+    "元の値": 1473726000000.0,
+    "差し替えた値": 1343198000000.0,
+    "字の形": {
+     "形": "cho_oku",
+     "桁区切り": true,
+     "小数の桁数": 0,
+     "単位語": "億円"
+    },
+    "対応": "付いた",
+    "state": "POINTER_NOT_FOUND",
+    "reason": "no_same_value",
+    "注入後の pointer の要素": null,
+    "R": {
+     "言う": true,
+     "理由": "翌期の有報の前期欄と一致",
+     "要素": "jpcrp_cor:ProfitLossBeforeTaxIFRSSummaryOfBusinessResults",
+     "帯": "round"
+    },
+    "名指しの要素が注入した要素と同じ": true
+   },
+   {
+    "prev の docID": "S100W19Q",
+    "next の docID": "S100YE2C",
+    "基準の claim の id": "N109",
+    "注入後の claim の id": "N109",
+    "要素": "jpcrp030000-asr_E01777-000:SalesAndFinancialServicesRevenueIFRSKeyFinancialData",
+    "枠": "CurrentYearDuration",
+    "期の型": "Duration",
+    "単位": "JPY",
+    "元の値": 12957064000000.0,
+    "差し替えた値": 12034917000000.0,
+    "字の形": {
+     "形": "cho_oku",
+     "桁区切り": true,
+     "小数の桁数": 0,
+     "単位語": "億円"
+    },
+    "対応": "付いた",
+    "state": "GROUNDED",
+    "reason": null,
+    "注入後の pointer の要素": "jpigp_cor:NetSalesIFRS",
+    "R": null,
+    "名指しの要素が注入した要素と同じ": null
+   }
+  ],
+  "項目": {
+   "営業利益": {
+    "要素": "jpigp_cor:OperatingProfitLossIFRS",
+    "段 1 で違うに入る": true,
+    "next の前期の値を書面の桁に丸めた整数": 12766,
+    "書面の値と一致": true,
+    "site の数": 1,
+    "基準の claim の id": "N032",
+    "対応": "付いた",
+    "state": "POINTER_NOT_FOUND",
+    "止めた": true,
+    "R が名指した": true,
+    "名指した要素が注入した要素と同じ": true,
+    "結果": "止め・名指した"
+   },
+   "減価償却費及び償却費": {
+    "要素": "jpigp_cor:DepreciationAndAmortizationOpeCFIFRS",
+    "段 1 で違うに入る": true,
+    "next の前期の値を書面の桁に丸めた整数": 1125588,
+    "書面の値と一致": true,
+    "site の数": 0,
+    "結果": "site なし"
+   }
+  }
+ },
+ "集計": {
+  "prev の書類": 92,
+  "違う要素が 1 つ以上ある組": 42,
+  "site の絞り込み": {
+   "GROUNDED の数の claim": 4332,
+   "pointer の枠が当期(member なし)でない": 1033,
+   "字の形を保てない": 1,
+   "差が桁の中": 37,
+   "形・単位・pointer の本数が条件外": 1564,
+   "数の claim": 7655,
+   "注入した": 23,
+   "要素が段 1 の違うに入らない": 1674
+  },
+  "注入した site": 23,
+  "差が桁の中で除いた": 37,
+  "対応が付かない": 0,
+  "通した(GROUNDED)": 0,
+  "止めた": 23,
+  "止めた割合(%)": 100.0,
+  "止めた state の内訳": {
+   "VALUE_MISMATCH": 1,
+   "UNVERIFIABLE": 0,
+   "POINTER_NOT_FOUND": 22
+  },
+  "R が名指した": 20,
+  "名指しの割合(%)": 87.0,
+  "名指しの要素が注入した要素と同じ": 20,
+  "R が名指さなかった理由": {
+   "語彙で引けず(手書きの行に無い)": 3
+  },
+  "対照": {
+   "止めた行": 4809,
+   "止めた行の state": {
+    "VALUE_MISMATCH": 662,
+    "UNVERIFIABLE": 2266,
+    "POINTER_NOT_FOUND": 1881
+   },
+   "R が名指した": 53,
+   "名指しの割合(%)": 1.1,
+   "R が言える形の行": 1090,
+   "言える形の行での名指しの割合(%)(参考)": 4.9,
+   "言えない理由": {
+    "next の前期欄に主語の要素の fact なし": 289,
+    "next の前期欄に同じ要素の fact なし": 13,
+    "対象外(形・単位・精度)": 2790,
+    "帯の外": 735,
+    "語彙で引けず(主語なし)": 478,
+    "語彙で引けず(手書きの行に無い)": 451
+   }
+  }
+ },
+ "予測の判定": {
+  "F-6": "外れ",
+  "F-7": "当たり",
+  "F-8": "当たり",
+  "F-9": "当たり",
+  "F-10(段 2 の部分)": "判定しない(site なし: 減価償却費及び償却費)",
+  "当たり": 3,
+  "外れ": 1
+ },
+ "既存の cache の件数": {
+  "前": {
+   "edinet": 281,
+   "edinet-fresh-2026-10-21": 40,
+   "edinet-prior-2026-11-02": 94
+  },
+  "後": {
+   "edinet": 281,
+   "edinet-fresh-2026-10-21": 40,
+   "edinet-prior-2026-11-02": 94
+  }
+ },
+ "所要秒": 119.3,
+ "limits": [
+  "97 社は 2026 年提出の有報に偏る",
+  "「違う」は修正再表示・表示の組替え・会計方針の変更・誤りを区別しない",
+  "注入は翌期の前期欄の値を文の単位と桁に丸めて書く 1 型で、DB の値の実際の出方ではない",
+  "R は measure 側の規則で engine には入っていない",
+  "名指しは「翌期の前期欄と一致」までで、なぜ翌期で値が変わったかは言わない",
+  "字の形は 2 種だけ読む(千・百・万を混ぜた複合は site にしない)",
+  "R は direct_value で円族の単位の止めた行にしか言わない(対照の分母は止めた行の全部)",
+  "主語から要素を引くのは手書きの主語の行だけ(ラベルから足される行は使わない)"
+ ],
+ "key_leaks": []
+}

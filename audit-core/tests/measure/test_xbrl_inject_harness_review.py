@@ -938,6 +938,7 @@ LATER_HARNESS_FILES = (
     ("measure/xbrl_unnamed_candidate_2026-10-29.py", u"使う側", u"有", "run_doc", u"return WIRING[\"RE\"].work_doc(a)", "2026-10-30"),
     ("measure/xbrl_candidate_eyes_2026-10-30.py", u"対象外", u"不要", "build_row", u"out = VD.verify_document(zb, \"P27C\", None)", "2026-10-30"),
     ("measure/xbrl_delta_naming_2026-10-30.py", u"対象外", u"不要", "doc_job", u"out = VD.verify_document(zb, PROFILE, None)", "2026-10-30"),
+    ("measure/xbrl_restated_naming_2026-11-02.py", u"仕掛け持ち + 使う側", u"有", "process_pair", u"if rcT is None or len(sentsT) != len(sents1) or tupT is None or sentsT[si][tupT[0]:tupT[1]] != want_tok or tupT[3] != tup[3]:", "2026-11-02"),  # 出所のずれの名指し 段 2(封 3a099e7。翌期の前期欄の値を文に差し替え、差し替えた字が届いたかを位置で確かめる)
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 

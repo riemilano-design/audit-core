@@ -427,5 +427,715 @@ class MutationTest(unittest.TestCase):
         self.assertEqual(self.mod.find_prior(u"E1", u"2026-03-31", Down(), {}), ([], 51))                     # 全日失敗 → 候補 0・失敗 51(前年なしと区別)
 
 
+# ================================================================ 段 2(注入と規則 R。封 §2・§3 の F-6〜F-10)
+
+S2_SCRIPT_REL = "measure/xbrl_restated_naming_2026-11-02.py"
+S2_REC_REL = "fixtures/xbrl/restated_naming_2026-11-02.json"
+RESULT_REL = "docs/XBRL_RESTATED_PRIOR_RESULT_2026-11-02.md"
+S2_SCRIPT, S2_REC, RESULT = (os.path.join(ROOT, r) for r in (S2_SCRIPT_REL, S2_REC_REL, RESULT_REL))
+S2_ALLOWED_IMPORTS = {"argparse", "collections", "decimal", "hashlib", "importlib", "io", "json", "multiprocessing", "os", "re", "sys", "time", "types", "unicodedata", "__future__", "adapters"}
+S2_ALLOWED_ENGINE = {"adapters.xbrl", "adapters.xbrl.comparators", "adapters.xbrl.extract", "adapters.xbrl.instance", "adapters.xbrl.prose", "adapters.xbrl.recipes",
+                     "adapters.xbrl.verify_document", "adapters.xbrl.vocabulary"}
+S2_BANNED_NAMES = {"ENGINE_LATER", "UNTOUCHED", "PIN_DEF", "LATER_ENGINE_COMMITS", "FROZEN_LATER", "ENGINE_TRANSITIONS"}
+FORBIDDEN_WORDS = (u"精度", u"ハルシネーション", u"証明", u"LLM より正確", u"世界で 1 社", u"唯一", u"正確", u"保証", u"貴社の DB の誤り")
+COMPANY_NAMES = (u"ソニー", u"Sony", u"SONY", u"Cabocia", u"カボシア")
+
+
+def seal_bounds_s2(seal):
+    rows = seal_rows(seal)
+    b = collections.OrderedDict()
+    m = re.search(r"\*\*(\d+)〜(\d+)\*\*", rows[u"F-6"][0])
+    b[u"F-6"] = (int(m.group(1)), int(m.group(2)))
+    for k, w in ((u"F-7", u"以上"), (u"F-8", u"以上"), (u"F-9", u"以下")):
+        m = re.search(r"\*\*(\d+)%% %s\*\*" % w, rows[k][0])
+        b[k] = int(m.group(1))
+    return b
+
+
+def script2_problems(src):
+    u"""段 2 の script の import・通信・書く先。"""
+    p = []
+    for node in ast.walk(ast.parse(src)):
+        if isinstance(node, ast.Import):
+            for a in node.names:
+                if a.name.split(".")[0] not in S2_ALLOWED_IMPORTS or (a.name.startswith("adapters") and a.name not in S2_ALLOWED_ENGINE):
+                    p.append(u"import %s" % a.name)
+        elif isinstance(node, ast.ImportFrom):
+            mod = node.module or ""
+            if mod.split(".")[0] not in S2_ALLOWED_IMPORTS or (mod.startswith("adapters") and mod not in S2_ALLOWED_ENGINE):
+                p.append(u"from %s import" % mod)
+            elif mod.startswith("adapters"):
+                for a in node.names:
+                    if "%s.%s" % (mod, a.name) not in S2_ALLOWED_ENGINE:
+                        p.append(u"from %s import %s" % (mod, a.name))
+    for bad in ("core", "audit_core", "requests", "socket", "http", "urllib", "shutil"):
+        if re.search(r"^\s*(import|from)\s+%s\b" % bad, src, re.M):
+            p.append(u"%s を import" % bad)
+    if re.findall(r"https?://", src):
+        p.append(u"通信先の字")
+    for node in ast.walk(ast.parse(src)):
+        if not isinstance(node, ast.Call):
+            continue
+        is_open = (isinstance(node.func, ast.Attribute) and node.func.attr == "open") or (isinstance(node.func, ast.Name) and node.func.id == "open")
+        if is_open and node.args:
+            modes = [a.value for a in node.args[1:2] if isinstance(a, ast.Constant)] + [k.value.value for k in node.keywords if k.arg == "mode" and isinstance(k.value, ast.Constant)]
+            if any(str(m).startswith(("w", "a", "x")) or "+" in str(m) for m in modes):
+                target = ast.get_source_segment(src, node.args[0])
+                if target != "out_path":
+                    p.append(u"決めた出力の外に書く: %s" % target)
+        if isinstance(node.func, ast.Attribute) and node.func.attr in ("makedirs", "mkdir", "remove", "unlink", "rename", "rmtree", "write_text", "write_bytes"):
+            p.append(u"file を作る・消す呼び出し: %s" % node.func.attr)
+    return p
+
+
+def make_doc2(fy_end, lines, facts):
+    u"""作り物の有報: MD&A の文(lines)と facts([(要素, 枠の id, 値)])。"""
+    from xml.sax.saxutils import escape
+    head = XBRL_HEAD.replace(u'xmlns:link=', u'xmlns:jpcrp_cor="http://disclosure.edinet-fsa.go.jp/taxonomy/jpcrp/2025-11-01/jpcrp_cor" xmlns:link=')
+    ctxs = (_ctx(u"CurrentYearDuration", u"E1", start=u"2024-04-01", end=fy_end) + _ctx(u"CurrentYearInstant", u"E1", instant=fy_end)
+            + _ctx(u"Prior1YearDuration", u"E1", start=u"2023-04-01", end=u"2024-03-31") + _ctx(u"Prior1YearInstant", u"E1", instant=u"2024-03-31"))
+    body = u"".join(u'<%s contextRef="%s" unitRef="JPY" decimals="-6">%s</%s>' % (n, c, v, n) for n, c, v in facts)
+    tb = escape(u"\n".join(u"<p>%s</p>" % escape(l) for l in lines))
+    name = u"jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock"
+    xml = head + ctxs + u'<%s contextRef="CurrentYearDuration">%s</%s>' % (name, tb, name) + body + u"</xbrli:xbrl>"
+    bio = io.BytesIO()
+    z = zipfile.ZipFile(bio, "w")
+    z.writestr("XBRL/PublicDoc/jpcrp030000-asr-001_E1-000_%s_01.xbrl" % fy_end, xml)
+    z.close()
+    return bio.getvalue()
+
+
+STUB_LINES = [u"当連結会計年度の売上高は309,240百万円となりました。", u"営業利益は1,159百万円となりました。", u"経常利益は2,000百万円となりました。",
+              u"売上総利益は5,000百万円となりました。", u"当期純利益は9,999百万円となりました。"]
+
+
+def build_stub2(d, mod):
+    u"""prev 1 書類・next 1 書類。営業利益は next で値が違い(site)、経常利益は違うが百万円の桁では同じ(差が桁の中)、売上総利益は文が prev の値と合わず(止まる)
+    next の前期の値と合う(対照で名指す)、当期純利益は止まるが next とも合わない(対照で名指さない)。next の file の先頭に要約の要素(jpcrp_cor)を置く(並びの確認)。"""
+    os.makedirs(os.path.join(d, "prev"))
+    os.makedirs(os.path.join(d, "next"))
+    D = u"jppfs_cor:"
+    prevb = make_doc2(u"2025-03-31", STUB_LINES, [(D + u"NetSales", u"CurrentYearDuration", u"309240000000"), (D + u"OperatingIncome", u"CurrentYearDuration", u"1159040000"),
+                                                (D + u"OrdinaryIncome", u"CurrentYearDuration", u"2000300000"), (D + u"GrossProfit", u"CurrentYearDuration", u"4000000000"),
+                                                (D + u"ProfitLoss", u"CurrentYearDuration", u"1000000000")])
+    nextb = make_doc2(u"2026-03-31", [u"本文は使わない。"], [(u"jpcrp_cor:OperatingIncomeSummaryOfBusinessResults", u"Prior1YearDuration", u"1157006000"),
+                                                       (D + u"NetSales", u"Prior1YearDuration", u"309240000000"), (D + u"OperatingIncome", u"Prior1YearDuration", u"1157006000"),
+                                                       (D + u"OrdinaryIncome", u"Prior1YearDuration", u"2000400000"), (D + u"GrossProfit", u"Prior1YearDuration", u"5000000000"),
+                                                       (D + u"ProfitLoss", u"Prior1YearDuration", u"1000000000")])
+    for name, b in ((u"prev/X200PREV.zip", prevb), (u"next/X200NEXT.zip", nextb)):
+        with io.open(os.path.join(d, name), "wb") as fh:
+            fh.write(b)
+    from adapters.xbrl import instance as I
+    pair = mod.P1.pair_elements(I.load_instance(prevb), I.load_instance(nextb))
+    stage1 = {u"配線の門": {u"通った": True}, u"engine の bundle の sha256(core/・adapters/)": mod.P1.engine_bundle()[0],
+              u"取得": [{u"docID": u"X200PREV", u"sha256": hashlib.sha256(prevb).hexdigest()}],
+              u"書類(手元の 97)": [{u"docID": u"X200NEXT", u"標本": u"手元の 67", u"sha256(記録)": hashlib.sha256(nextb).hexdigest()}],
+              u"組": [{u"状態": u"組", u"prev の docID": u"X200PREV", u"next の docID": u"X200NEXT", u"突き合わせ": pair}], u"固定の確認": []}
+    with io.open(os.path.join(d, "stage1.json"), "w", encoding="utf-8") as fh:
+        json.dump(stage1, fh, ensure_ascii=False)
+    return d
+
+
+def labels_missing(mod):
+    return bool(mod.check_labels(os.path.join(ROOT, "fixtures/xbrl/taxonomy_labels_sha256.txt"))[1])
+
+
+def walk_numbers(obj, ints, decs):
+    if isinstance(obj, bool):
+        return
+    if isinstance(obj, (int, float)):
+        if float(obj).is_integer():
+            ints.add(int(obj))
+        if isinstance(obj, float):
+            decs.add(repr(obj))
+    elif isinstance(obj, dict):
+        for k, v in obj.items():
+            walk_numbers(v, ints, decs)
+    elif isinstance(obj, list):
+        for v in obj:
+            walk_numbers(v, ints, decs)
+
+
+def doc_cells(doc):
+    u"""2 列の表の行: ラベル → 値の字。"""
+    out = collections.OrderedDict()
+    for l in doc.splitlines():
+        m = re.match(r"^\| ([^|]+?) \| ([^|]+?) \|$", l)
+        if m and not set(m.group(1)) <= set(u"-") and m.group(1) not in (u"項目",):
+            out[m.group(1)] = m.group(2)
+    return out
+
+
+def doc_keyrows(r1, r2):
+    u"""文書の 2 列の表のうち、記録の字と照らす行(ラベル → 記録の字)。"""
+    T1, T2 = r1[u"集計"], r2[u"集計"]
+    C, SG, G2, F10 = T2[u"対照"], T2[u"site の絞り込み"], r2[u"配線の門"], r2[u"固定の確認 F-10"][u"項目"]
+    D = T1[u"差の分布(件)"]
+    sit_docs = len(set(s[u"prev の docID"] for s in r2[u"site の行"]))
+    inb_docs = sum(1 for d in r2[u"書類ごと"] if d[u"site の絞り込み"].get(u"差が桁の中"))
+    g = G2[u"(b) prev・next の ZIP の sha256 が段 1 の記録と一致した本数"]
+    return collections.OrderedDict([
+        (u"prev の ZIP の sha256 が段 1 の記録と一致した本数(92 + E01777 の 1)", g[u"prev"]),
+        (u"next の ZIP の sha256 が段 1 の記録と一致した本数(92 + E01777 の 1)", g[u"next"]),
+        (u"ラベル file が名簿と一致", G2[u"(c) ラベル file が名簿と一致(取り出しの場所は記録しない)"]),
+        (u"engine の未 commit の file", G2[u"(d) engine の未 commit の file"]),
+        (u"engine の bundle の sha256 が段 1 の記録と同じ", G2[u"(d') engine の bundle の sha256 が段 1 の記録と同じ"]),
+        (u"文を渡した結果が渡さない結果と一致しなかった書類", G2[u"(e) 文を渡した結果が渡さない結果と一致しなかった書類"]),
+        (u"本文 W が不動点に届かなかった書類", G2[u"(e') W が不動点に届かなかった書類"]),
+        (u"戻して W と一致しなかった site", G2[u"(f) 戻して W と一致しなかった site"]),
+        (u"R の params を engine の欄と照らした回数", G2[u"(g) R の params を照らした回数"]),
+        (u"R の params が engine の欄と一致しなかった回数", G2[u"(g) R の params が engine の欄と一致しなかった回数"]),
+        (u"既存の cache の件数が前後で同じ", G2[u"(h) 既存の cache の件数が前後で同じ"]),
+        (u"通った", G2[u"通った"]),
+        (u"前年の有報が見つかった会社(組)", T1[u"前年の有報が見つかった会社"]), (u"前年なし", T1[u"前年なし"]), (u"結べた要素の中央値(組ごと)", T1[u"結べた要素の中央値"]),
+        (u"結べた要素の合計", T1[u"結べた要素の合計"]), (u"同じの合計", T1[u"同じの合計"]), (u"違うの合計", T1[u"違うの合計"]), (u"違う割合(%)", T1[u"違う割合(%)"]),
+        (u"違う要素が 1 つ以上ある組", T1[u"違う要素が 1 つ以上ある組"]), (u"違う要素が 1 つ以上ある組の割合(%)", T1[u"違う要素が 1 つ以上ある組の割合(%)"]),
+        (u"違う要素のうち差が比べられる", T1[u"違う要素のうち差が比べられる"]), (u"違う要素のうち差が 5% 未満", T1[u"違う要素のうち差が 5% 未満"]),
+        (u"違う要素のうち差が 5% 未満の割合(%)", T1[u"違う要素のうち差が 5% 未満の割合(%)"]),
+        (u"差 1% 未満", D[u"1% 未満"]), (u"差 1〜5% 未満", D[u"1〜5% 未満"]), (u"差 5〜20% 未満", D[u"5〜20% 未満"]), (u"差 20% 以上", D[u"20% 以上"]),
+        (u"数の claim", SG[u"数の claim"]), (u"GROUNDED の数の claim", SG[u"GROUNDED の数の claim"]), (u"形・単位・pointer の本数が条件外", SG[u"形・単位・pointer の本数が条件外"]),
+        (u"pointer の枠が当期(member なし)でない", SG[u"pointer の枠が当期(member なし)でない"]), (u"要素が段 1 の違うに入らない", SG[u"要素が段 1 の違うに入らない"]),
+        (u"差が桁の中で除いた", T2[u"差が桁の中で除いた"]), (u"字の形を保てない", SG[u"字の形を保てない"]), (u"注入した site", T2[u"注入した site"]),
+        (u"site が出た書類", sit_docs), (u"差が桁の中が出た書類", inb_docs),
+        (u"対応が付かない", T2[u"対応が付かない"]), (u"通した(GROUNDED)", T2[u"通した(GROUNDED)"]), (u"止めた", T2[u"止めた"]), (u"止めた割合(%)", T2[u"止めた割合(%)"]),
+        (u"止めた VALUE_MISMATCH", T2[u"止めた state の内訳"][u"VALUE_MISMATCH"]), (u"止めた UNVERIFIABLE", T2[u"止めた state の内訳"][u"UNVERIFIABLE"]),
+        (u"止めた POINTER_NOT_FOUND", T2[u"止めた state の内訳"][u"POINTER_NOT_FOUND"]), (u"R が名指した", T2[u"R が名指した"]), (u"名指しの割合(%)", T2[u"名指しの割合(%)"]),
+        (u"名指しの要素が注入した要素と同じ", T2[u"名指しの要素が注入した要素と同じ"]), (u"R が名指さなかった(手書きの主語の行に無い)", T2[u"止めた"] - T2[u"R が名指した"]),
+        (u"対照: 止めた行", C[u"止めた行"]), (u"対照: VALUE_MISMATCH", C[u"止めた行の state"][u"VALUE_MISMATCH"]), (u"対照: UNVERIFIABLE", C[u"止めた行の state"][u"UNVERIFIABLE"]),
+        (u"対照: POINTER_NOT_FOUND", C[u"止めた行の state"][u"POINTER_NOT_FOUND"]), (u"対照: R が名指した", C[u"R が名指した"]), (u"対照: 名指しの割合(%)", C[u"名指しの割合(%)"]),
+        (u"対照: R が言える形の行", C[u"R が言える形の行"]), (u"対照: 言える形の行での名指しの割合(%)(参考)", C[u"言える形の行での名指しの割合(%)(参考)"]),
+    ])
+
+
+def doc_judgments(r1, r2):
+    J1, J2 = r1[u"予測の判定"], r2[u"予測の判定"]
+    return collections.OrderedDict([(u"F-1", J1[u"F-1"]), (u"F-2", J1[u"F-2"]), (u"F-3", J1[u"F-3"]), (u"F-4", J1[u"F-4"]), (u"F-5", J1[u"F-5"]), (u"F-6", J2[u"F-6"]),
+                                    (u"F-7", J2[u"F-7"]), (u"F-8", J2[u"F-8"]), (u"F-9", J2[u"F-9"]), (u"F-11", J1[u"F-11"])])
+
+
+def doc_problems(doc, r1, r2, seal):
+    u"""結果の文書の数・判定・禁止語。問題の列。"""
+    p = []
+    for w in FORBIDDEN_WORDS + COMPANY_NAMES:
+        if w in doc:
+            p.append(u"禁止語・会社名: %s" % w)
+    for h in (u"## §1 ", u"## §2 ", u"## §3 ", u"## §4 ", u"## §5 ", u"## §6 ", u"## §7 ", u"### 独立監査の結果"):
+        if h not in doc:
+            p.append(u"見出し %s が無い" % h)
+    cells = doc_cells(doc)
+    for label, want in doc_keyrows(r1, r2).items():
+        got = cells.get(label)
+        if got is None:
+            p.append(u"表の行が無い: %s" % label)
+            continue
+        if isinstance(want, bool):
+            ok = got == str(want)
+        else:
+            try:
+                ok = float(got.replace(",", "")) == float(want)
+            except ValueError:
+                ok = False
+        if not ok:
+            p.append(u"表の数が記録と違う: %s = %s(記録 %s)" % (label, got, want))
+    for k, w in doc_judgments(r1, r2).items():
+        m = re.search(r"^\| %s \|.*\| ([^|]+) \|$" % re.escape(k), doc, re.M)
+        if not m or m.group(1).strip() != w:
+            p.append(u"判定が記録と違う: %s" % k)
+    ints, decs = set(), set()
+    for src in (r1, r2):
+        walk_numbers(src, ints, decs)
+    for tok in re.findall(r"(?<![A-Za-z0-9_.])\d[\d,]*(?:\.\d+)?", seal):
+        n = tok.replace(",", "")
+        (decs.add(n) if "." in n else ints.add(int(n)))
+    t = doc
+    t = re.sub(r"\bS100[0-9A-Z]{4}\b", " ", t)
+    t = re.sub(r"\bE\d{5}\b", " ", t)
+    t = re.sub(r"\b(?=[0-9a-f]*[a-f])[0-9a-f]{7,40}\b", " ", t)
+    t = re.sub(r"\d{4}-\d{2}-\d{2}", " ", t)
+    t = re.sub(r"\b20\d\d\b", " ", t)
+    for line in t.splitlines():
+        if u"【門なし】" in line:
+            continue
+        for tok in re.findall(r"(?<![A-Za-z0-9_.])\d[\d,]*(?:\.\d+)?", line):
+            n = tok.replace(",", "")
+            if "." in n:
+                if n not in decs:
+                    p.append(u"記録に無い小数: %s" % tok)
+            elif len(n.lstrip("0")) >= 3 and int(n) not in ints:
+                p.append(u"記録に無い 3 桁以上の数: %s" % tok)
+    return p
+
+
+def order_problems_s2():
+    p = []
+    s = added_commits(PREFIX + SEAL_REL)
+    if len(s) != 1 or not HEX40.match(s[0]):
+        return [u"封を足した commit がちょうど 1 つに決まらない(%d)" % len(s)]
+    S = s[0]
+    prev = None
+    for rel in (REC_REL, S2_SCRIPT_REL, S2_REC_REL, RESULT_REL):
+        if not os.path.exists(os.path.join(ROOT, rel)):
+            prev = None
+            continue
+        a = added_commits(PREFIX + rel)
+        if not a:
+            p.append(u"%s を足した commit が無い(未 commit)" % rel)
+            prev = None
+            continue
+        c = a[-1]
+        if c == S or not is_anc(S, c):
+            p.append(u"%s が封の後でない" % rel)
+        if prev is not None and (c == prev[1] or not is_anc(prev[1], c)):
+            p.append(u"%s が %s の後でない" % (rel, prev[0]))
+        prev = (rel, c)
+    return p
+
+
+class Stage2ScriptTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = load(S2_SCRIPT, "restated_naming_under_test")
+        if labels_missing(cls.mod):
+            raise unittest.SkipTest(u"ラベル file が無いか名簿と違う(P27 は走らない)")
+        cls.seal = jtext(SEAL)
+        cls.tmp = tempfile.mkdtemp(prefix="restated_stub_")
+        build_stub2(cls.tmp, cls.mod)
+        cls.stage1 = os.path.join(cls.tmp, "stage1.json")
+        cls.out = os.path.join(cls.tmp, "out1.json")
+        cls.rec = cls.mod.run(cls.out, cls.stage1, 1, prev_dir=os.path.join(cls.tmp, "prev"), next_dir=os.path.join(cls.tmp, "next"), cache_dirs={}, say=lambda *a: None)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def stop_without_output(self, out, **kw):
+        args = dict(prev_dir=os.path.join(self.tmp, "prev"), next_dir=os.path.join(self.tmp, "next"), cache_dirs={}, say=lambda *a: None)
+        args.update(kw)
+        existed = os.path.exists(out)
+        before = hashlib.sha256(open(out, "rb").read()).hexdigest() if existed else None
+        with self.assertRaises(self.mod.Stop):
+            self.mod.run(out, args.pop("stage1", self.stage1), args.pop("procs", 1), **args)
+        if existed:
+            self.assertEqual(hashlib.sha256(open(out, "rb").read()).hexdigest(), before, u"既に在る出力は書き換えない")
+        else:
+            self.assertFalse(os.path.exists(out), u"止めるときは何も書かない")
+
+    def test_a_1_seal_widths_and_script_constants(self):
+        m = self.mod
+        self.assertEqual(dict(seal_bounds_s2(self.seal)), {u"F-6": (50, 600), u"F-7": 95, u"F-8": 85, u"F-9": 5})
+        self.assertEqual(dict(m.BOUNDS), dict(seal_bounds_s2(self.seal)))
+        self.assertEqual((m.SEAL_COMMIT, m.SEAL_REL, m.OUT_REL, m.STAGE1_REL, m.PROFILE, m.MAX_PROCS), (SEAL_COMMIT_SHORT, SEAL_REL, S2_REC_REL, REC_REL, "P27", 4))
+        self.assertIn(u"1 兆 2,766 億円", self.seal)
+        self.assertIn(u"1,125,588 百万円", self.seal)
+        self.assertEqual([(k, v[u"要素"], v[u"書面の桁"], v[u"書面の値(その桁の整数)"]) for k, v in m.ITEMS.items()],
+                         [(u"営業利益", u"jpigp_cor:OperatingProfitLossIFRS", u"億円", 12766), (u"減価償却費及び償却費", u"jpigp_cor:DepreciationAndAmortizationOpeCFIFRS", u"百万円", 1125588)])
+        self.assertEqual(list(m.P1.EXTRA_ELEMENTS), [v[u"要素"] for v in m.ITEMS.values()])
+        self.assertEqual(m.P1.EXTRA, {u"E01777": [u"2025-03-31", u"2026-03-31"]})
+
+    def test_a_2_script_imports_writes_and_banned_names(self):
+        src = jtext(S2_SCRIPT)
+        self.assertEqual(script2_problems(src), [])
+        self.assertEqual(DOCID_RE.findall(src), [])
+        self.assertNotIn(u"print(os.environ", src)
+        tree = ast.parse(jtext(os.path.join(ROOT, GATE_REL)))
+        names = set(t.id for n in tree.body if isinstance(n, ast.Assign) for t in n.targets if isinstance(t, ast.Name))
+        names |= set(t.id for n in tree.body if isinstance(n, ast.Assign) for tt in n.targets if isinstance(tt, ast.Tuple) for t in tt.elts if isinstance(t, ast.Name))
+        self.assertEqual(names & S2_BANNED_NAMES, set())
+
+    def test_b_1_token_forms_and_rounding(self):
+        m = self.mod
+        f = m.parse_token(u"1,159百万円")
+        self.assertEqual((f[u"形"], f[u"桁区切り"], f[u"小数の桁数"], f[u"単位語"], f[u"body"]), (u"simple", True, 0, u"百万円", (0, 5)))
+        self.assertEqual(m.render_body(f, 1157006000.0), u"1,157")                                    # 桁区切りを保つ
+        self.assertEqual(m.new_token(u"1,159百万円", f, u"1,157"), u"1,157百万円")
+        g = m.parse_token(u"△1,237百万円")
+        self.assertEqual(g[u"body"], (1, 6))                                                              # 符号の字は body の外(動かさない)
+        self.assertEqual(m.new_token(u"△1,237百万円", g, m.render_body(g, -1500000000.0)), u"△1,500百万円")
+        h = m.parse_token(u"951百万円")
+        self.assertEqual(m.render_body(h, 1234567000.0), u"1235")                                      # 元に桁区切りが無ければ付けない
+        k = m.parse_token(u"12.5億円")
+        self.assertEqual((k[u"小数の桁数"], m.render_body(k, 1234567890.0)), (1, u"12.3"))
+        self.assertEqual(m.render_body(k, 125000000.0), u"1.3")                                         # 1.25 → 四捨五入(0.5 は上へ)
+        c = m.parse_token(u"1兆4,072億円")
+        self.assertEqual((c[u"形"], c[u"body"]), (u"cho_oku", (0, 8)))
+        self.assertEqual(m.new_token(u"1兆4,072億円", c, m.render_body(c, 1276635000000.0)), u"1兆2,766億円")
+        self.assertEqual(m.render_body(c, 53000000000.0), u"530億")                                    # 兆が 0 になれば兆を落とす
+        self.assertEqual(m.render_body(m.parse_token(u"2億円"), 450000000.0), u"5")                    # 4.5 → 5(0.5 は上へ。偶数丸めなら 4)
+        self.assertEqual(m.render_body(m.parse_token(u"1兆4億円"), 450000000.0), u"5億")
+        for bad in (u"19億49百万円", u"5千万円", u"3.5ポイント", u"abc"):
+            self.assertIsNone(m.parse_token(bad), bad)
+        self.assertEqual(m.render_body(f, 1159040000.0), u"1,159")                                    # 同じ値は同じ字(差が桁の中)
+
+    def test_b_2_rule_r_band_rounding_and_vocabulary(self):
+        m = self.mod
+        fact = lambda n, v: {"name": n, "value": v, "context": "Prior1YearDuration", "unit": "JPY"}
+        nv = {u"docID": u"X200NEXT", u"prior": [fact(u"jppfs_cor:OperatingIncome", 1157800000.0)], u"contexts": {"Prior1YearDuration": {"members": []}}}
+        claim = {"form": "direct_value", "unit": u"百万円", "value": 1157.0, "pointers": ["xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"], "subject": u"営業利益"}
+        tup = (0, 7, 1157.0, u"百万円", 1e6)
+        r, params = m.rule_r(claim, tup, "round", nv)                                                      # 差 8e5 > 5e5: 四捨五入では外れ
+        self.assertEqual((r[u"言う"], r[u"理由"]), (False, u"帯の外"))
+        self.assertEqual(params, (1e6, 1e6, False))
+        r, _ = m.rule_r(claim, tup, "truncate", nv)                                                        # 切り捨てなら 0 <= 8e5 < 1e6 で帯の中
+        self.assertEqual((r[u"言う"], r[u"要素"], r[u"帯"]), (True, u"jppfs_cor:OperatingIncome", u"truncate"))
+        nv[u"prior"] = [fact(u"jppfs_cor:OperatingIncome", 1157006000.0)]
+        r, _ = m.rule_r(claim, tup, "round", nv)
+        self.assertEqual((r[u"言う"], r[u"理由"], r[u"帯"]), (True, u"翌期の有報の前期欄と一致", u"round"))
+        nv[u"prior"] = [fact(u"jppfs_cor:OperatingIncome", 1158600000.0)]                                  # 差 1.6e6: どの丸めでも帯の外
+        for rounding in ("round", "truncate"):
+            self.assertFalse(m.rule_r(claim, tup, rounding, nv)[0][u"言う"])
+        nv[u"prior"] = [fact(u"jppfs_cor:OrdinaryIncome", 1157006000.0)]                                  # 別の要素の同じ値では名指さない
+        r, _ = m.rule_r(claim, tup, "round", nv)
+        self.assertEqual((r[u"言う"], r[u"理由"]), (False, u"next の前期欄に同じ要素の fact なし"))
+        nv[u"prior"] = [fact(u"jppfs_cor:OperatingIncome", 1157006000.0)]
+        self.assertEqual(m.rule_r(dict(claim, pointers=["xbrl:jppfs_cor:A@CurrentYearDuration", "xbrl:jppfs_cor:B@CurrentYearDuration"]), tup, "round", nv)[0][u"理由"], u"pointer が 2 本以上")
+        for bad in (dict(claim, form="derived_value"), dict(claim, unit=u"%")):
+            self.assertEqual(m.rule_r(bad, tup, "round", nv)[0][u"理由"], u"対象外(形・単位・精度)")
+        self.assertEqual(m.rule_r(claim, None, "round", nv)[0][u"理由"], u"対象外(形・単位・精度)")
+        sub = dict(claim, pointers=[])                                                                       # pointer が無ければ主語から(手書きの行)
+        r, _ = m.rule_r(sub, tup, "round", nv)
+        self.assertEqual((r[u"言う"], r[u"要素"]), (True, u"jppfs_cor:OperatingIncome"))
+        self.assertEqual(m.rule_r(dict(sub, subject=u"存在しない主語"), tup, "round", nv)[0][u"理由"], u"語彙で引けず(手書きの行に無い)")
+        self.assertEqual(m.rule_r(dict(sub, subject=None), tup, "round", nv)[0][u"理由"], u"語彙で引けず(主語なし)")
+        # 円の単位(prec が単位より細かい)・負の値(abs の梯子)
+        yen = {"form": "direct_value", "unit": u"円", "value": 1157006000.0, "pointers": ["xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"], "subject": u"営業利益"}
+        self.assertEqual(m.rule_r(yen, (0, 9, 1157006000.0, u"円", 1e6), "round", nv)[1], (1.0, 1e6, False))
+        nv[u"prior"] = [fact(u"jppfs_cor:OperatingIncome", -1157006000.0)]
+        self.assertTrue(m.rule_r(claim, tup, "round", nv)[0][u"言う"])
+
+    def test_b_3_stub_run_sites_rule_r_and_control(self):
+        r = self.rec
+        rows = r[u"site の行"]
+        self.assertEqual(len(rows), 1)                                                                     # 営業利益だけ(経常利益は桁の中で除く)
+        s = rows[0]
+        self.assertEqual((s[u"要素"], s[u"枠"], s[u"期の型"], s[u"対応"], s[u"元の値"], s[u"差し替えた値"]), (u"jppfs_cor:OperatingIncome", u"CurrentYearDuration", u"Duration", u"付いた", 1159040000.0, 1157006000.0))
+        self.assertIn(s[u"state"], (u"VALUE_MISMATCH", u"UNVERIFIABLE", u"POINTER_NOT_FOUND"))
+        self.assertEqual((s[u"R"][u"言う"], s[u"R"][u"要素"], s[u"名指しの要素が注入した要素と同じ"]), (True, u"jppfs_cor:OperatingIncome", True))     # 要約の要素ではなく計算書の要素
+        self.assertEqual(s[u"字の形"], {u"形": u"simple", u"桁区切り": True, u"小数の桁数": 0, u"単位語": u"百万円"})
+        T = r[u"集計"]
+        self.assertEqual((T[u"注入した site"], T[u"差が桁の中で除いた"], T[u"止めた"], T[u"R が名指した"], T[u"名指しの要素が注入した要素と同じ"], T[u"対応が付かない"], T[u"通した(GROUNDED)"]), (1, 1, 1, 1, 1, 0, 0))
+        self.assertEqual(dict(T[u"site の絞り込み"]), {u"数の claim": 5, u"GROUNDED の数の claim": 3, u"要素が段 1 の違うに入らない": 1, u"差が桁の中": 1, u"注入した": 1})
+        C = T[u"対照"]
+        self.assertEqual((C[u"止めた行"], C[u"R が名指した"], C[u"R が言える形の行"], C[u"名指しの割合(%)"], dict(C[u"言えない理由"])), (2, 1, 2, 50.0, {u"帯の外": 1}))
+        named = r[u"対照の行"][0][u"名指した行"]
+        self.assertEqual([(x[u"claim の id"], x[u"R の要素"]) for x in named], [(u"N004", u"jppfs_cor:GrossProfit")])
+        G = r[u"配線の門"]
+        self.assertTrue(G[u"通った"])
+        self.assertEqual((G[u"(e) 文を渡した結果が渡さない結果と一致しなかった書類"], G[u"(f) 戻して W と一致しなかった site"], G[u"(g) R の params が engine の欄と一致しなかった回数"]), (0, 0, 0))
+        self.assertGreater(G[u"(g) R の params を照らした回数"], 0)
+        self.assertEqual(r[u"key_leaks"], [])
+        self.assertEqual(r[u"予測の判定"][u"F-6"], u"外れ")                                              # 1 件は幅 50〜600 の外
+        self.assertEqual(r[u"予測の判定"][u"F-7"], u"当たり")
+        self.assertEqual(r[u"予測の判定"][u"F-10(段 2 の部分)"][:5], u"判定しない")                      # 固定の確認の組が無い
+        for k in (u"封", u"HEAD の commit", u"この script の sha256", u"読んだ材料の sha256", u"engine の bundle の sha256(core/・adapters/)", u"定数", u"配線の門", u"site の行", u"書類ごと",
+                  u"対照の行", u"固定の確認 F-10", u"集計", u"予測の判定", u"limits", u"key_leaks"):
+            self.assertIn(k, r)
+        self.assertEqual(r[u"封"], {u"file": SEAL_REL, u"commit": SEAL_COMMIT_SHORT})
+        self.assertNotIn(u"。", json.dumps(r[u"site の行"] + r[u"対照の行"], ensure_ascii=False))          # 原文の字を持たない
+
+    def test_b_4_text_is_replaced_by_the_rendered_digits_only(self):
+        m = self.mod
+        with io.open(os.path.join(self.tmp, "prev", "X200PREV.zip"), "rb") as fh:
+            zb = fh.read()
+        W, fixed = m.canonical_text(zb)
+        self.assertTrue(fixed)
+        self.assertIn(u"営業利益は1,159百万円となりました。", W)
+        out, raw, info, sents = m.prep_run(zb, W)
+        self.assertEqual(info["rounding"], "round")
+        offs = m.sentence_offsets(W, sents)
+        self.assertTrue(all(o >= 0 for o in offs))
+        si = [i for i, s in enumerate(sents) if s.startswith(u"営業利益")][0]
+        a, b = m.tuple_at(sents, raw["N002"]["sentence"], raw["N002"]["pos"])[:2]
+        self.assertEqual(si, raw["N002"]["sentence"])
+        self.assertEqual(W[offs[si] + a:offs[si] + b], u"1,159百万円")
+        inj = {"id": "x", "span": [offs[si] + a, offs[si] + a + 5], "replacement": u"1,157"}
+        tampered, pl = m.IJ.apply_edits(W, [inj])
+        self.assertEqual(tampered, W.replace(u"営業利益は1,159百万円", u"営業利益は1,157百万円"))
+        self.assertEqual(m.IJ.revert(tampered, [inj], pl, W), W)
+
+    def test_b_5_stop_conditions_write_nothing(self):
+        m = self.mod
+        self.stop_without_output(self.out)                                                                  # 出力が既に在る(上書きしない)
+        self.stop_without_output(os.path.join(self.tmp, "o2.json"), stage1=os.path.join(self.tmp, "none.json"))
+        self.stop_without_output(os.path.join(self.tmp, "o3.json"), procs=5)
+        self.stop_without_output(os.path.join(self.tmp, "o3b.json"), procs=0)
+        d2 = tempfile.mkdtemp(prefix="restated_stub2_")
+        try:
+            shutil.copytree(os.path.join(self.tmp, "next"), os.path.join(d2, "next"))
+            with io.open(os.path.join(d2, "next", "X200NEXT.zip"), "ab") as fh:
+                fh.write(b"x")                                                                              # next の ZIP の sha256 が段 1 の記録と違う
+            self.stop_without_output(os.path.join(self.tmp, "o4.json"), next_dir=os.path.join(d2, "next"))
+        finally:
+            shutil.rmtree(d2, ignore_errors=True)
+        orig_bundle, orig_labels = m.P1.engine_bundle, m.check_labels
+        try:
+            m.P1.engine_bundle = lambda: ("0" * 64, 1, 3)                                                    # engine に未 commit の変更
+            self.stop_without_output(os.path.join(self.tmp, "o5.json"))
+            m.P1.engine_bundle = orig_bundle
+            m.check_labels = lambda p: ("x", ["a.xml"])                                                      # ラベル file が名簿と違う
+            self.stop_without_output(os.path.join(self.tmp, "o6.json"))
+        finally:
+            m.P1.engine_bundle, m.check_labels = orig_bundle, orig_labels
+
+    def test_b_6_parallel_run_gives_the_same_rows(self):
+        out2 = os.path.join(self.tmp, "out_p2.json")
+        rec2 = self.mod.run(out2, self.stage1, 2, prev_dir=os.path.join(self.tmp, "prev"), next_dir=os.path.join(self.tmp, "next"), cache_dirs={}, say=lambda *a: None)
+        for k in (u"site の行", u"集計", u"対照の行", u"予測の判定"):
+            self.assertEqual(json.dumps(rec2[k], sort_keys=True), json.dumps(self.rec[k], sort_keys=True), k)
+
+    def run_patched(self, name, **patches):
+        u"""門が発火することを、故障を作って確かめる(正常な入力では発火しない守りは、故障を作って当てる)。"""
+        m = self.mod
+        saved = dict((k, getattr(m if k != "revert" else m.IJ, k)) for k in patches)
+        try:
+            for k, v in patches.items():
+                setattr(m if k != "revert" else m.IJ, k, v)
+            return m.run(os.path.join(self.tmp, name), self.stage1, 1, prev_dir=os.path.join(self.tmp, "prev"), next_dir=os.path.join(self.tmp, "next"), cache_dirs={}, say=lambda *a: None)
+        finally:
+            for k, v in saved.items():
+                setattr(m if k != "revert" else m.IJ, k, v)
+
+    def test_b_8_unmapped_when_the_injected_digits_are_not_where_expected(self):
+        orig = self.mod.prep_run
+
+        def fake(zb, text):
+            out, raw, info, sents = orig(zb, text)
+            if text is not None and u"1,157百万円" in text:
+                sents = [x.replace(u"1,157百万円", u"9,999百万円") for x in sents]                        # 注入後の文の字が「差し替えた字」と違う
+            return out, raw, info, sents
+        rec = self.run_patched("o_b8.json", prep_run=fake)
+        s = rec[u"site の行"][0]
+        self.assertEqual((s[u"対応"], s[u"state"], s[u"R"]), (u"付かない", None, None))
+        T = rec[u"集計"]
+        self.assertEqual((T[u"注入した site"], T[u"対応が付かない"], T[u"止めた"], T[u"通した(GROUNDED)"], T[u"R が名指した"]), (1, 1, 0, 0, 0))     # 分母には入り、止めた数にも通した数にも入らない
+        self.assertEqual(rec[u"予測の判定"][u"F-7"], u"外れ")
+
+    def test_b_9_wiring_gate_goes_red_when_the_checks_fail(self):
+        rec = self.run_patched("o_b9.json", revert=lambda *a, **k: u"x")                                      # 戻しが W と合わない
+        G = rec[u"配線の門"]
+        self.assertEqual(G[u"(f) 戻して W と一致しなかった site"], 1)
+        self.assertFalse(G[u"通った"])
+        self.assertIn(u"配線の門が通っていない", rec[u"注意"])
+        rec = self.run_patched("o_b9b.json", claim_keys=lambda out: [id(out)])                                  # 文を渡した結果が渡さない結果と合わない
+        G = rec[u"配線の門"]
+        self.assertEqual(G[u"(e) 文を渡した結果が渡さない結果と一致しなかった書類"], 1)
+        self.assertFalse(G[u"通った"])
+        self.assertTrue(self.rec[u"配線の門"][u"通った"])
+
+    def test_b_10_member_or_prior_frame_pointer_is_not_a_site(self):
+        orig = self.mod.P1.frame_of
+        try:
+            self.mod.P1.frame_of = lambda cid, ctx: u"前期"                                                     # pointer の枠が全部「当期でない」
+            rec = self.run_patched("o_b10.json")
+        finally:
+            self.mod.P1.frame_of = orig
+        T = rec[u"集計"]
+        self.assertEqual((T[u"注入した site"], T[u"site の絞り込み"].get(u"pointer の枠が当期(member なし)でない")), (0, 3))
+
+    def test_b_7_judge_boundaries_tally_and_f10(self):
+        m = self.mod
+
+        def T(n, st, nm, cs, cn):
+            return {u"注入した site": n, u"止めた": st, u"R が名指した": nm, u"対照": {u"止めた行": cs, u"R が名指した": cn}}
+        F10 = {u"営業利益": {u"結果": u"止め・名指した"}, u"減価償却費及び償却費": {u"結果": u"止め・名指した"}}
+        j = lambda *a, **kw: m.judge(T(*a), kw.get("f10", F10))
+        self.assertEqual([j(50, 50, 50, 100, 5)[k] for k in (u"F-6", u"F-7", u"F-8", u"F-9")], [u"当たり"] * 4)
+        self.assertEqual(j(600, 600, 600, 100, 5)[u"F-6"], u"当たり")
+        self.assertEqual((j(49, 49, 49, 100, 5)[u"F-6"], j(601, 601, 601, 100, 5)[u"F-6"]), (u"外れ", u"外れ"))
+        self.assertEqual((j(20, 19, 0, 100, 5)[u"F-7"], j(20, 18, 0, 100, 5)[u"F-7"]), (u"当たり", u"外れ"))              # 95% ちょうどは当たり
+        self.assertEqual((j(20, 20, 17, 100, 5)[u"F-8"], j(20, 20, 16, 100, 5)[u"F-8"]), (u"当たり", u"外れ"))          # 85% ちょうどは当たり
+        self.assertEqual((j(20, 20, 20, 100, 5)[u"F-9"], j(20, 20, 20, 100, 6)[u"F-9"]), (u"当たり", u"外れ"))          # 5% ちょうどは当たり
+        self.assertTrue(j(0, 0, 0, 0, 0)[u"F-7"].startswith(u"判定できず"))
+        self.assertEqual(j(50, 50, 50, 100, 5)[u"F-10(段 2 の部分)"], u"2 / 2")
+        nos = {u"営業利益": {u"結果": u"止め・名指した"}, u"減価償却費及び償却費": {u"結果": u"site なし"}}
+        self.assertEqual(j(50, 50, 50, 100, 5, f10=nos)[u"F-10(段 2 の部分)"], u"判定しない(site なし: 減価償却費及び償却費)")
+        self.assertEqual(j(50, 50, 50, 100, 5)[u"当たり"] + j(49, 49, 49, 100, 5)[u"外れ"], 4 + 1)
+        # 集計: 対照の分母は止めた行の全部(R が言える形の行ではない)
+        ctrl = lambda stopped, named, able, states: {u"止めた行": stopped, u"止めた行の state": collections.Counter(states), u"名指した": named, u"R が言える形の行": able, u"言えない理由": collections.Counter({u"x": stopped - named}), u"名指した行": []}
+        srow = lambda st, said, same: {u"対応": u"付いた", u"state": st, u"R": {u"言う": said, u"理由": u"x"} if st != u"GROUNDED" else None, u"名指しの要素が注入した要素と同じ": same}
+        res = [{u"違う要素の数": 1, u"site の絞り込み": {u"差が桁の中": 2, u"注入した": 2}, u"sites": [srow(u"VALUE_MISMATCH", True, True), srow(u"GROUNDED", False, None)],
+                u"control": ctrl(40, 3, 10, {u"UNVERIFIABLE": 30, u"POINTER_NOT_FOUND": 10})},
+               {u"違う要素の数": 0, u"site の絞り込み": {u"差が桁の中": 1}, u"sites": [{u"対応": u"付かない", u"state": None, u"R": None, u"名指しの要素が注入した要素と同じ": None}],
+                u"control": ctrl(60, 2, 20, {u"VALUE_MISMATCH": 60})}]
+        t = m.tally(res)
+        self.assertEqual((t[u"注入した site"], t[u"差が桁の中で除いた"], t[u"対応が付かない"], t[u"通した(GROUNDED)"], t[u"止めた"], t[u"R が名指した"], t[u"名指しの要素が注入した要素と同じ"], t[u"違う要素が 1 つ以上ある組"]),
+                         (3, 3, 1, 1, 1, 1, 1, 1))
+        self.assertEqual((t[u"止めた割合(%)"], t[u"名指しの割合(%)"]), (33.3, 100.0))
+        self.assertEqual((t[u"対照"][u"止めた行"], t[u"対照"][u"R が名指した"], t[u"対照"][u"名指しの割合(%)"], t[u"対照"][u"R が言える形の行"], t[u"対照"][u"言える形の行での名指しの割合(%)(参考)"]), (100, 5, 5.0, 30, 16.7))
+        self.assertEqual(dict(t[u"対照"][u"止めた行の state"]), {u"VALUE_MISMATCH": 60, u"UNVERIFIABLE": 30, u"POINTER_NOT_FOUND": 10})
+        # F-10: 項目ごと(site の元の値・差し替えた値を段 1 の違う要素の値と照らす)
+        ex = {u"突き合わせ": {u"違う要素": [{u"要素": u"jpigp_cor:OperatingProfitLossIFRS", u"prev の当期": 1407163000000.0, u"next の前期": 1276635000000.0},
+                                          {u"要素": u"jpigp_cor:DepreciationAndAmortizationOpeCFIFRS", u"prev の当期": 1152987000000.0, u"next の前期": 1125588000000.0}]}}
+        site = {u"元の値": 1407163000000.0, u"差し替えた値": 1276635000000.0, u"基準の claim の id": u"N032", u"対応": u"付いた", u"state": u"POINTER_NOT_FOUND",
+                u"R": {u"言う": True}, u"名指しの要素が注入した要素と同じ": True}
+        f = m.f10_eval([{u"sites": [site]}], ex)
+        self.assertEqual((f[u"営業利益"][u"結果"], f[u"営業利益"][u"書面の値と一致"], f[u"営業利益"][u"next の前期の値を書面の桁に丸めた整数"], f[u"減価償却費及び償却費"][u"結果"], f[u"減価償却費及び償却費"][u"書面の値と一致"]),
+                         (u"止め・名指した", True, 12766, u"site なし", True))
+        f2 = m.f10_eval([{u"sites": [dict(site, state=u"GROUNDED", R=None)]}], ex)
+        self.assertEqual(f2[u"営業利益"][u"結果"], u"外れ")
+
+
+class Stage2RecordTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        if not os.path.exists(S2_REC):
+            raise unittest.SkipTest(u"記録 %s が無い" % S2_REC_REL)
+        cls.rec = jload(S2_REC)
+        cls.r1 = jload(REC)
+        cls.mod = load(S2_SCRIPT, "restated_naming_under_test_rec")
+        cls.seal = jtext(SEAL)
+
+    def test_a_1_shape_and_wiring(self):
+        r = self.rec
+        self.assertEqual(r[u"封"], {u"file": SEAL_REL, u"commit": SEAL_COMMIT_SHORT})
+        self.assertTrue(HEX40.match(r[u"HEAD の commit"] or u""))
+        sha = lambda rel: hashlib.sha256(open(os.path.join(ROOT, rel), "rb").read()).hexdigest()
+        self.assertEqual(r[u"この script の sha256"], sha(S2_SCRIPT_REL))
+        self.assertEqual(dict(r[u"読んだ材料の sha256"]), {REC_REL: sha(REC_REL), SCRIPT_REL: sha(SCRIPT_REL), u"measure/inject.py": sha(u"measure/inject.py"),
+                                                       u"fixtures/xbrl/taxonomy_labels_sha256.txt": sha(u"fixtures/xbrl/taxonomy_labels_sha256.txt")})
+        self.assertEqual(r[u"key_leaks"], [])
+        self.assertTrue(r[u"配線の門"][u"通った"])
+        self.assertNotIn(u"配線の門が通っていない", r[u"注意"])
+        fb = load(os.path.join(ROOT, "fixtures", "frozen_bundle_sha.py"), "frozen_bundle_sha_for_restated_gate")
+        self.assertEqual(r[u"engine の bundle の sha256(core/・adapters/)"], fb.FROZEN_BUNDLE_SHA)
+        self.assertEqual(r[u"engine の bundle の sha256(core/・adapters/)"], self.r1[u"engine の bundle の sha256(core/・adapters/)"])
+        self.assertEqual((r[u"profile"], r[u"procs"] <= 4), (u"P27", True))
+        G = r[u"配線の門"]
+        self.assertEqual((G[u"(e) 文を渡した結果が渡さない結果と一致しなかった書類"], G[u"(e') W が不動点に届かなかった書類"], G[u"(f) 戻して W と一致しなかった site"],
+                          G[u"(g) R の params が engine の欄と一致しなかった回数"], G[u"(d) engine の未 commit の file"]), (0, 0, 0, 0, 0))
+        self.assertGreater(G[u"(g) R の params を照らした回数"], 0)
+        self.assertEqual(r[u"既存の cache の件数"][u"前"], r[u"既存の cache の件数"][u"後"])
+        self.assertEqual(dict(r[u"定数"][u"予測の幅"]), {u"F-6": [50, 600], u"F-7": 95, u"F-8": 85, u"F-9": 5})
+        self.assertNotIn(u"Subscription-Key", json.dumps(r, ensure_ascii=False))
+
+    def test_b_1_tally_recomputed_from_rows_and_judgment_rederived(self):
+        r = self.rec
+        rows, T = r[u"site の行"], r[u"集計"]
+        stopped = (u"VALUE_MISMATCH", u"UNVERIFIABLE", u"POINTER_NOT_FOUND")
+        mapped = [s for s in rows if s[u"対応"] == u"付いた"]
+        self.assertEqual(T[u"注入した site"], len(rows))
+        self.assertEqual(T[u"対応が付かない"], len(rows) - len(mapped))
+        self.assertEqual(T[u"通した(GROUNDED)"], sum(1 for s in mapped if s[u"state"] == u"GROUNDED"))
+        self.assertEqual(T[u"止めた"], sum(1 for s in mapped if s[u"state"] in stopped))
+        self.assertEqual(T[u"止めた"] + T[u"通した(GROUNDED)"] + T[u"対応が付かない"], T[u"注入した site"])
+        self.assertEqual(dict(T[u"止めた state の内訳"]), dict((k, sum(1 for s in mapped if s[u"state"] == k)) for k in stopped))
+        self.assertEqual(T[u"R が名指した"], sum(1 for s in mapped if s[u"R"] and s[u"R"][u"言う"]))
+        self.assertEqual(T[u"名指しの要素が注入した要素と同じ"], sum(1 for s in mapped if s[u"R"] and s[u"R"][u"言う"] and s[u"R"][u"要素"] == s[u"要素"]))
+        self.assertEqual(T[u"名指しの割合(%)"], round(100.0 * T[u"R が名指した"] / T[u"止めた"], 1))
+        self.assertEqual(T[u"止めた割合(%)"], round(100.0 * T[u"止めた"] / T[u"注入した site"], 1))
+        ct = r[u"対照の行"]
+        C = T[u"対照"]
+        self.assertEqual(C[u"止めた行"], sum(c[u"止めた行"] for c in ct))
+        self.assertEqual(C[u"R が名指した"], sum(c[u"名指した"] for c in ct))
+        self.assertEqual(C[u"R が名指した"], sum(len(c[u"名指した行"]) for c in ct))
+        self.assertEqual(C[u"R が言える形の行"], sum(c[u"R が言える形の行"] for c in ct))
+        for st in (u"VALUE_MISMATCH", u"UNVERIFIABLE", u"POINTER_NOT_FOUND"):
+            self.assertEqual(C[u"止めた行の state"][st], sum(c[u"止めた行の state"].get(st, 0) for c in ct))
+        for c in ct:
+            self.assertEqual(c[u"止めた行"], sum(c[u"止めた行の state"].values()))
+            self.assertEqual(c[u"止めた行"], c[u"名指した"] + sum(c[u"言えない理由"].values()))
+        self.assertEqual(C[u"名指しの割合(%)"], round(100.0 * C[u"R が名指した"] / C[u"止めた行"], 1))
+        self.assertEqual(sum(d[u"site の絞り込み"].get(u"差が桁の中", 0) for d in r[u"書類ごと"]), T[u"差が桁の中で除いた"])
+        self.assertEqual(sum(d[u"site の絞り込み"].get(u"注入した", 0) for d in r[u"書類ごと"]), T[u"注入した site"])
+        self.assertEqual(dict(self.mod.judge(T, r[u"固定の確認 F-10"][u"項目"])), dict(r[u"予測の判定"]))
+        self.assertEqual(dict(seal_bounds_s2(self.seal)), dict((k, tuple(v) if isinstance(v, list) else v) for k, v in r[u"定数"][u"予測の幅"].items()))
+
+    def test_b_2_rows_agree_with_stage1_and_have_no_prose(self):
+        r, r1 = self.rec, self.r1
+        pairs = dict((p[u"prev の docID"], p) for p in r1[u"組"] if p[u"状態"] == u"組")
+        self.assertEqual([d[u"prev の docID"] for d in r[u"書類ごと"]], [p[u"prev の docID"] for p in r1[u"組"] if p[u"状態"] == u"組"])
+        self.assertEqual([d[u"next の docID"] for d in r[u"書類ごと"]], [p[u"next の docID"] for p in r1[u"組"] if p[u"状態"] == u"組"])
+        seen = set()
+        for s in r[u"site の行"]:
+            key = (s[u"prev の docID"], s[u"基準の claim の id"])
+            self.assertNotIn(key, seen)
+            seen.add(key)
+            p = pairs[s[u"prev の docID"]]
+            self.assertEqual(s[u"next の docID"], p[u"next の docID"])
+            row = [x for x in p[u"突き合わせ"][u"違う要素"] if x[u"要素"] == s[u"要素"] and x[u"期の型"] == s[u"期の型"] and x[u"単位"] == s[u"単位"]]
+            self.assertEqual(len(row), 1)
+            self.assertEqual((s[u"元の値"], s[u"差し替えた値"]), (row[0][u"prev の当期"], row[0][u"next の前期"]))
+            self.assertTrue(s[u"枠"].startswith(u"CurrentYear"))
+            self.assertNotEqual(s[u"元の値"], s[u"差し替えた値"])
+            if s[u"R"] and s[u"R"][u"言う"]:
+                self.assertIn(s[u"state"], (u"VALUE_MISMATCH", u"UNVERIFIABLE", u"POINTER_NOT_FOUND"))
+                self.assertEqual(s[u"名指しの要素が注入した要素と同じ"], s[u"R"][u"要素"] == s[u"要素"])
+            if s[u"state"] == u"GROUNDED":
+                self.assertIsNone(s[u"R"])
+        text = json.dumps([r[u"site の行"], r[u"対照の行"], r[u"書類ごと"], r[u"固定の確認 F-10"]], ensure_ascii=False)
+        self.assertNotIn(u"。", text)
+        self.assertTrue(set(DOCID_RE.findall(json.dumps(r[u"対照の行"], ensure_ascii=False))) <= set(pairs))
+        for rows in (r[u"site の行"], r[u"対照の行"]):
+            for x in rows:
+                for v in x.values():
+                    if isinstance(v, str):
+                        self.assertLess(len(v), 120)
+
+    def test_b_3_fixed_check_f10_recomputed(self):
+        r, r1 = self.rec, self.r1
+        ex = r1[u"固定の確認"][0]
+        f10 = r[u"固定の確認 F-10"]
+        self.assertEqual((f10[u"EDINET コード"], f10[u"prev の docID"], f10[u"next の docID"]), (ex[u"EDINET コード"], ex[u"書類"][0][u"docID"], ex[u"書類"][1][u"docID"]))
+        res = self.mod.f10_eval([{u"sites": f10[u"site の行"]}], ex)
+        self.assertEqual(json.dumps(res, sort_keys=True), json.dumps(f10[u"項目"], sort_keys=True))
+        for k, it in self.mod.ITEMS.items():
+            self.assertEqual(f10[u"項目"][k][u"書面の値と一致"], True)
+
+    def test_b_4_every_case_shown_in_the_record_is_in_the_stage1_difference_set_only(self):
+        # 段 1 の「違う」に入る要素から外れた site は 1 つも無い(site の要素は段 1 の違う要素の中から)。上の b_2 が値まで照らす。ここでは site の数が絞り込みの数と合う。
+        r = self.rec
+        by_doc = collections.Counter(s[u"prev の docID"] for s in r[u"site の行"])
+        for d in r[u"書類ごと"]:
+            self.assertEqual(by_doc.get(d[u"prev の docID"], 0), d[u"site の絞り込み"].get(u"注入した", 0))
+
+
+class Stage2OrderAndDocTest(unittest.TestCase):
+    def test_order_seal_stage1_script_record_doc(self):
+        rc, _ = git("cat-file", "-e", SEAL_COMMIT_SHORT + "^{commit}")
+        if rc != 0:
+            self.skipTest(u"封の commit %s が無い clone" % SEAL_COMMIT_SHORT)
+        self.assertEqual(order_problems_s2(), [])
+
+    def test_result_document_numbers_judgments_and_words(self):
+        if not (os.path.exists(S2_REC) and os.path.exists(RESULT)):
+            self.skipTest(u"段 2 の記録か結果の文書が無い")
+        self.assertEqual(doc_problems(jtext(RESULT), jload(REC), jload(S2_REC), jtext(SEAL)), [])
+
+
+class Stage2MutationTest(unittest.TestCase):
+    u"""門そのものが赤くなること(入力の側の変異)。ファイルを書き換える変異は実行者が別に走らせて返事に書く。"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.seal = jtext(SEAL)
+
+    def test_m_1_seal_width_change_changes_bounds(self):
+        for old, new, k in ((u"**50〜600**", u"**50〜900**", u"F-6"), (u"**95% 以上**", u"**90% 以上**", u"F-7"), (u"**85% 以上**", u"**80% 以上**", u"F-8"), (u"**5% 以下**", u"**9% 以下**", u"F-9")):
+            bad = self.seal.replace(old, new)
+            self.assertNotEqual(bad, self.seal)
+            self.assertNotEqual(seal_bounds_s2(bad)[k], seal_bounds_s2(self.seal)[k], k)
+
+    def test_m_2_bad_imports_hosts_and_writes_are_caught(self):
+        src = jtext(S2_SCRIPT)
+        for extra in (u"\nimport urllib.request\n", u"\nimport requests\n", u"\nfrom adapters.xbrl import edinet\n", u"\nfrom adapters.xbrl.edinet import fetch\n", u'\nX = "https://example.com/x"\n',
+                      u'\nio.open(os.path.join(ROOT, "x"), "wb")\n', u"\nos.makedirs(ROOT)\n", u"\nimport shutil\n", u"\nimport socket\n"):
+            self.assertNotEqual(script2_problems(src + extra), [], extra)
+
+    def test_m_3_doc_problems_catch_changed_numbers_judgments_and_words(self):
+        if not (os.path.exists(S2_REC) and os.path.exists(RESULT)):
+            self.skipTest(u"段 2 の記録か結果の文書が無い")
+        doc, r1, r2 = jtext(RESULT), jload(REC), jload(S2_REC)
+        self.assertEqual(doc_problems(doc, r1, r2, self.seal), [])
+        T2 = r2[u"集計"]
+        muts = [doc.replace(u"| 注入した site | %d |" % T2[u"注入した site"], u"| 注入した site | %d |" % (T2[u"注入した site"] + 1)),
+                doc.replace(u"| 対照: 止めた行 | 4809 |", u"| 対照: 止めた行 | 4808 |"),
+                doc.replace(u"| 通った | True |", u"| 通った | False |"),
+                re.sub(r"(\| F-6 \|.*\| )外れ( \|)", r"\1当たり\2", doc),
+                doc + u"\n精度が高い。\n", doc + u"\nソニーグループ\n", doc + u"\n3,333 件。\n", doc.replace(u"## §5 ", u"## 5 ")]
+        for i, mut in enumerate(muts):
+            self.assertNotEqual(mut, doc, i)
+            self.assertNotEqual(doc_problems(mut, r1, r2, self.seal), [], i)
+        self.assertEqual(doc_problems(doc + u"\n3,333 件。【門なし】\n", r1, r2, self.seal), [])
+
+
 if __name__ == "__main__":
     unittest.main()
