@@ -8,6 +8,7 @@ u"""門: 外向けの 1 枚 docs/SALES_SHEET_2026-11-02.md の数を、台帳 do
 - 変異で赤くなる。
 限界(監査 2026-11-02 の指摘): 照合は「印の行の数の欄に在る数の集合」で見るので、同じ行の欄に在る別の数への差し替え
 (例: 254 → 255)は通る。比(a / b = c%)は字の全体で見るので、この限界は比に及ばない。
+電話番号の形(数-数-4 桁)と日付の形は実在を見ずに数と見ないので、その形の字に数を隠せる(同じ行の別の数は検査する)。
 """
 from __future__ import print_function
 
@@ -52,6 +53,7 @@ def strip_non_numbers(s):
     s = re.sub(r"^#+\s*\d+\.\s", u"# ", s)              # 見出しの番号「## 1. 」だけ落とす(見出しの中の数は見る)
     s = re.sub(r"`[^`]*`", u" ", s)
     s = re.sub(r"\d{4}-\d{2}-\d{2}", u" ", s)
+    s = re.sub(r"\b\d{2,4}-\d{2,4}-\d{4}\b", u" ", s)     # 電話番号(連絡先)
     s = TAG_RE.sub(u" ", s)
     s = re.sub(r"\b[A-Z]+-\d+\b", u" ", s)            # L-01・D-22 などの台帳の ID
     s = re.sub(r"\bP\d+[A-Z]?\b", u" ", s)              # profile の名(P16・P27E)
@@ -152,6 +154,8 @@ class MutationTest(unittest.TestCase):
     def test_m_4_untagged_number_is_caught(self):
         self.assertNotEqual(sheet_problems(self.sheet + u"\n- 記録に無い 42 件。\n", self.rows), [])
         self.assertEqual(sheet_problems(self.sheet + u"\n- 相手の数 42 件【門なし】。\n", self.rows), [])
+        self.assertEqual(sheet_problems(self.sheet + u"\n- 03-1234-5678\n", self.rows), [])                  # 電話番号は数と見ない
+        self.assertNotEqual(sheet_problems(self.sheet + u"\n- 03-1234-5678 の 42 件\n", self.rows), [])
 
     def test_m_5_forbidden_word_and_docid_are_caught(self):
         self.assertNotEqual(sheet_problems(self.sheet + u"\n- 他社より" + u"正確" + u"。\n", self.rows), [])
