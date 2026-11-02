@@ -15,7 +15,7 @@
 
 | 漏れていた場所 | file | 本数 | なぜ |
 |---|---|---|---|
-| `tests/measure` | 189 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
+| `tests/measure` | 190 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
 | `measure/tests` | 1 | 96 | `measure/` が package でないので**丸ごと飛ぶ** |
 
 `tests/measure` は `-s tests/measure` で毎回別に走らせていたので**測り落としは無かった**。
@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **255 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **256 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -225,6 +225,8 @@ cache の無い clone で `README.en.md` の 3 節の手順が字どおりに動
 **2026-11-02 に +1(8)**(`tests/measure/test_xbrl_derivation_stopped.py`。engine が止めた真の文 53 の中身の門(封 `docs/XBRL_DERIVATION_STOPPED_SEAL_2026-11-02.md`、結果 `docs/XBRL_DERIVATION_STOPPED_2026-11-02.md`)。53 行の型と根拠の照合を材料から作り直し・集計の数え直し・封の幅からの判定の求め直し・文書の表と id・順序・変異 10 本。253 → **254**(`tests/measure` 187 → **188**)。)
 
 **2026-11-02 に +1(9)**(`tests/measure/test_xbrl_other_rule.py`。「その他」の行の主語の結びつきの門(封 `docs/XBRL_OTHER_RULE_SEAL_2026-11-02.md`、結果 `docs/XBRL_OTHER_RULE_2026-11-02.md`)。415 行の数の位置・「同」の辿り・その他の行・R0・R1 を材料から作り直し・集計の数え直し・封の幅からの判定の求め直し・文書の 2 つの表と id・順序・変異 10 本。254 → **255**(`tests/measure` 188 → **189**)。)
+
+**2026-11-02 に +1(10)**(`tests/measure/test_xbrl_period_mark.py`。文の期の印と engine の context の門(封 `docs/XBRL_PERIOD_MARK_SEAL_2026-11-02.md`、結果 `docs/XBRL_PERIOD_MARK_2026-11-02.md`)。415 行の印・期・取り違え・中身を材料から作り直し・集計の数え直し・封の幅からの判定の求め直し・文書の 3 つの表と id・順序・変異 10 本。255 → **256**(`tests/measure` 189 → **190**)。)
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
