@@ -1,0 +1,1495 @@
+{
+ "seal": "docs/XBRL_AI_FORMS_F5_SEAL_2026-11-03.md",
+ "封の commit": "e564683",
+ "step": "AI の形 F5(標準ラベルなし)× model 2 ― 生成(有料。0 USD の部分と記録で分ける)",
+ "HEAD の commit": "1680b89767c3140c3cefafa4020e0b56205b0aee",
+ "この script の sha256": "9e47c1814d2c8d0504e62be0508061abe8b98473977b42ff6c16b999a283a848",
+ "会社の選び": {
+  "規則": "手元の 97 書類のうち P27 の調整用・評価用 20 社を除き、regress97 の claims が 60 以上のものを docID の昇順に並べ、random.Random('<seed>|AIFORMS_COMPANIES').shuffle の先頭 20(SEED.json の種)",
+  "種の確認": {
+   "seed_file": "audit-core/measure/SEED.json",
+   "seed_file_sha256": "f74146592f68b88dab89869a185d9f69bc68e8b4fa0c4eee1400581354b19f80",
+   "sealed_in_commit": "e945ee66a2b76789793a2e4163b95e06dc01ba74"
+  },
+  "数え": {
+   "手元の書類": 97,
+   "P27 の調整用・評価用(除く)": 20,
+   "除いた後の書類": 77,
+   "除いた理由 P27 の 20 社に当たる書類": 20,
+   "claims 60 未満で除いた書類": 4,
+   "母集団(claims 60 以上・docID の昇順)": 73,
+   "選んだ会社": 20
+  },
+  "docID": [
+   "S100YMFV",
+   "S100YZCT",
+   "S100Z4GF",
+   "S100Z4LC",
+   "S100Z5CH",
+   "S100Z3HP",
+   "S100YZEV",
+   "S100Z40G",
+   "S100YZ7E",
+   "S100Z6XO",
+   "S100YYOS",
+   "S100YW7F",
+   "S100Z1WR",
+   "S100YYUD",
+   "S100YYSK",
+   "S100YYF5",
+   "S100YYRG",
+   "S100Z3V1",
+   "S100YYS4",
+   "S100Z3CO"
+  ],
+  "標本": {
+   "S100YMFV": "手元の 67",
+   "S100YZCT": "手元の 67",
+   "S100Z4GF": "手元の 67",
+   "S100Z4LC": "手元の 67",
+   "S100Z5CH": "手元の 67",
+   "S100Z3HP": "手元の 67",
+   "S100YZEV": "手元の 67",
+   "S100Z40G": "手元の 67",
+   "S100YZ7E": "手元の 67",
+   "S100Z6XO": "手元の 67",
+   "S100YYOS": "手元の 67",
+   "S100YW7F": "新しい標本 30",
+   "S100Z1WR": "手元の 67",
+   "S100YYUD": "手元の 67",
+   "S100YYSK": "新しい標本 30",
+   "S100YYF5": "新しい標本 30",
+   "S100YYRG": "手元の 67",
+   "S100Z3V1": "手元の 67",
+   "S100YYS4": "手元の 67",
+   "S100Z3CO": "手元の 67"
+  },
+  "zip の sha256": {
+   "S100YMFV": "4a5982e7447d6e0614c6ad12e7c091d462ca61a0128c2ce2af957a8bdfe1d52c",
+   "S100YZCT": "b31651903185ef1afe2c8141b96646a947721b2333311a183d2f49348af7659e",
+   "S100Z4GF": "778a6a113f4ee1e2fc40b64375e55273cd38a15906271e08bd95415cf49d4a9e",
+   "S100Z4LC": "13cf3587a467a0af3869d0ecaa8d8a921e4d9fcb881b6bf369a5734a4060714d",
+   "S100Z5CH": "818194e233e7ceea8f3070289776425a8f314ed647310d917a180a5bf3d5d30e",
+   "S100Z3HP": "a3170c66ce46185f02e8f5274c9d4f646ef97b089d13e6f7f4e65539e8d69719",
+   "S100YZEV": "1ca23bba5f21e83d0d8784dbb0f7ece069e59c43d9f81c192918223a90cf6f70",
+   "S100Z40G": "4cfd8ff692f81692cf79f9acfc71af0265e161dd4852755e01d84ebdd934c322",
+   "S100YZ7E": "bd2fe7969c31528f9c1609c85cb2dd8bb26aad2469ee060e3227b7f9367353f3",
+   "S100Z6XO": "d94d447b6f8182d770179d58e60c03962ccb1f9a6251dff793239e8e4663ac85",
+   "S100YYOS": "7993b5ff710ccd33dde89aa363438ef1c7b52f4e47d8af28ce841ee2bcac3bbd",
+   "S100YW7F": "73b4aa4f001455b07337ada7deb2ddfe0389969207760996985f44d22776c7a9",
+   "S100Z1WR": "1d67d1910fa96fa0465206480400e99f7c9fb3c66c577171a833699ec3682278",
+   "S100YYUD": "944ed61c7b78dc48722f34796f520d6dbc86bbeaaf82a151913f0840133ffcd4",
+   "S100YYSK": "cd8940d3d48997819dabfff2bca306d55b6323c928a3cfca247c8a8902bd9aae",
+   "S100YYF5": "528e757682c7aad4876d92c444fa49323bab28c86077bdfa1eb061eccd3f1d77",
+   "S100YYRG": "e1fdf292e146deb540a634b7c0bab060b19d29f08552f1276617a9e8309702fe",
+   "S100Z3V1": "79ae06b59b670e21bcd00883d58dc37399d06a5d27490e04d7bf75f6dd55cbf6",
+   "S100YYS4": "02fcaa9a52e52943108f905abc115daea2243eba97bfdc5f56f51f783fe792de",
+   "S100Z3CO": "45a71507465dbf9c1cbf82f23d378aca7a0330f78809c403ac23c82f9c7d8d06"
+  }
+ },
+ "fact の表": {
+  "S100YMFV": {
+   "fact の数(素の context)": 393,
+   "instance の fact の数": 960,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 33710,
+   "表の sha256": "7d206b1fcdab8c7a0b37bf69385d35eddb497cf0ce60f5f1598c7fe4363c4812"
+  },
+  "S100YZCT": {
+   "fact の数(素の context)": 456,
+   "instance の fact の数": 1097,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 38769,
+   "表の sha256": "5b5fbfadcc2def585383350b2090e80ed7036e816bb18f650c91df03291e50e3"
+  },
+  "S100Z4GF": {
+   "fact の数(素の context)": 325,
+   "instance の fact の数": 509,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 27319,
+   "表の sha256": "bd7090cb3084222bf0a7743e69a8c64bb20a96cf4be41d69d87984a16bf6228f"
+  },
+  "S100Z4LC": {
+   "fact の数(素の context)": 337,
+   "instance の fact の数": 789,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 28670,
+   "表の sha256": "5356f3f7ae610aa549fac890b98d2642946ab52031e44169aecc7ca8b420c9e1"
+  },
+  "S100Z5CH": {
+   "fact の数(素の context)": 365,
+   "instance の fact の数": 423,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 29474,
+   "表の sha256": "ae766bf071d2592fd1c772fafc51c0604b2606138572edb7b9fb1f01c07d2898"
+  },
+  "S100Z3HP": {
+   "fact の数(素の context)": 419,
+   "instance の fact の数": 552,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 35215,
+   "表の sha256": "c31fc6b19a1b7abe470fda987b5e3d7fbc12b547476f7e862d49f73fb73b81f4"
+  },
+  "S100YZEV": {
+   "fact の数(素の context)": 277,
+   "instance の fact の数": 397,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 23011,
+   "表の sha256": "4317d6cb07c5cd00d9d855fdf273a737ad6738b7d40f5dba45991b5da0444c61"
+  },
+  "S100Z40G": {
+   "fact の数(素の context)": 400,
+   "instance の fact の数": 613,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 34222,
+   "表の sha256": "eb2afa335e621f6be99eeb93038a2022c290f13d24dd488aeb58acaf2ba5e8c4"
+  },
+  "S100YZ7E": {
+   "fact の数(素の context)": 343,
+   "instance の fact の数": 502,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 29288,
+   "表の sha256": "ebae5251c5d1f315df41e11f1b2709fd79fed52d9bbc933d33eec667d8ee927f"
+  },
+  "S100Z6XO": {
+   "fact の数(素の context)": 491,
+   "instance の fact の数": 1370,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 42781,
+   "表の sha256": "f191e711438a4867e4238ee14e0a9b66b64474290ccf5019133edb3c01157787"
+  },
+  "S100YYOS": {
+   "fact の数(素の context)": 460,
+   "instance の fact の数": 1230,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 39732,
+   "表の sha256": "d72b239306dd57ca0057588e28d13bc50e161910b6c71360f1510bdd4a7b99d6"
+  },
+  "S100YW7F": {
+   "fact の数(素の context)": 580,
+   "instance の fact の数": 1403,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 50420,
+   "表の sha256": "0fa1acfdf3ab711ab0281a3181b5695f3721ca85f7241de1d239ff9e7c9b972c"
+  },
+  "S100Z1WR": {
+   "fact の数(素の context)": 428,
+   "instance の fact の数": 1024,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 37098,
+   "表の sha256": "0f43d4213a630d02e4ba9d1815a5def3a2cc28a14af2ca04d52b93637fe64514"
+  },
+  "S100YYUD": {
+   "fact の数(素の context)": 338,
+   "instance の fact の数": 874,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 28725,
+   "表の sha256": "158cdf113ad7c638322f797103d785e0912a89c1979b1649464e1c36bb66bf22"
+  },
+  "S100YYSK": {
+   "fact の数(素の context)": 421,
+   "instance の fact の数": 600,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 36128,
+   "表の sha256": "463b82f152ec5bc57314e8b1571c482d6ca308d3b3cd97ec4d89c0c43a8b4a5f"
+  },
+  "S100YYF5": {
+   "fact の数(素の context)": 468,
+   "instance の fact の数": 638,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 39073,
+   "表の sha256": "168edc7b6f9402c33463f122c35c98c60df7fb5dbf3888d9c2c2b731b1cb05b2"
+  },
+  "S100YYRG": {
+   "fact の数(素の context)": 354,
+   "instance の fact の数": 777,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 29504,
+   "表の sha256": "25b7f2a89e4453bcc61186c04f2eeb091f033d82f8d7a997bb72e326c59f1c20"
+  },
+  "S100Z3V1": {
+   "fact の数(素の context)": 452,
+   "instance の fact の数": 1085,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 38859,
+   "表の sha256": "319a4b32ade70cfb2a7d8613b6aa881dd0b71568c751a58c50684539c56a5ea3"
+  },
+  "S100YYS4": {
+   "fact の数(素の context)": 405,
+   "instance の fact の数": 1024,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 34380,
+   "表の sha256": "4a35b0a00d86e2f69877bdd65c714ad72051fc45dbb876334d56a69f15fc6386"
+  },
+  "S100Z3CO": {
+   "fact の数(素の context)": 434,
+   "instance の fact の数": 986,
+   "標準ラベルが付いた行": 0,
+   "表の字数": 36822,
+   "表の sha256": "3b52ec7f921de0fa0e45d1a80af8016b621a8c581b3776a238fd9fead8be675f"
+  }
+ },
+ "指示文の sha256": {
+  "WRITER_COMMON": "2a23bcd8fcdbf7b672485994ee9af893405891586c329922815d55773c515312",
+  "WRITER_FORMS": {
+   "F5": "0bb0c05b82cceb8a35ed73c33ed0ded75596fa50ac96888768f52b3fc69f66b7"
+  }
+ },
+ "model": [
+  "claude-sonnet-5-5",
+  "claude-haiku-5-5"
+ ],
+ "max_tokens": 4000,
+ "API の版": "2023-06-01",
+ "再試行": "429 / 5xx のときだけ最大 2 回(待ち [2, 8] 秒)",
+ "費用": {
+  "上限 USD": 50.0,
+  "単価 入力 USD / M tokens": 5.0,
+  "単価 出力 USD / M tokens": 25.0,
+  "見積りの規則": "入力の字数 × 1.0 を token とみなし、出力は max_tokens の全部(保守的な単価を両 model に当てる)"
+ },
+ "cache の前後": {
+  "前": {
+   "edinet": {
+    "存在": true,
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "edinet-fresh-2026-10-21": {
+    "存在": true,
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   },
+   "edinet-prior-2026-11-02": {
+    "存在": true,
+    "件数": 94,
+    "名前の一覧の sha256": "de611b3805b5d8087eea119c0d341e126f9f0ed152edba940cefbed743ecc110"
+   },
+   "aiforms-2026-11-03": {
+    "存在": true,
+    "件数": 4,
+    "名前の一覧の sha256": "d3a16fd012a4c08641e7dbd69c557b089d66384f5683949fedf41e18b265dcc8"
+   }
+  },
+  "後": {
+   "edinet": {
+    "存在": true,
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "edinet-fresh-2026-10-21": {
+    "存在": true,
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   },
+   "edinet-prior-2026-11-02": {
+    "存在": true,
+    "件数": 94,
+    "名前の一覧の sha256": "de611b3805b5d8087eea119c0d341e126f9f0ed152edba940cefbed743ecc110"
+   },
+   "aiforms-2026-11-03": {
+    "存在": true,
+    "件数": 4,
+    "名前の一覧の sha256": "d3a16fd012a4c08641e7dbd69c557b089d66384f5683949fedf41e18b265dcc8"
+   }
+  },
+  "変化なし": true
+ },
+ "thinking": {
+  "claude-sonnet-5-5": {
+   "type": "between_tools"
+  },
+  "claude-haiku-5-5": {
+   "type": "disabled"
+  }
+ },
+ "記録の外の呼び出し": [
+  {
+   "番号": "前の便の累計",
+   "確かめ": "前の便(gen_2026-11-03.json)の 累計.費用 USD 合計(記録の外を含む)。実験の全体の上限 50 USD の計算に入れる",
+   "cost_usd": 29.46516
+  }
+ ],
+ "script の履歴": [],
+ "呼び出し": [
+  {
+   "name": "S100YMFV_F5_claude-sonnet-5-5",
+   "docID": "S100YMFV",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 34149,
+   "prompt_sha256": "30ef5bd4910d69cf7a828889635b266cfbc449fb94fcba2b89e5fa29d6c05ecb",
+   "est_usd": 0.270745,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "8b902b45b0fc992210cd3057ae30634f21bf93190dd628b52a28d774b590e8b4",
+   "chars": 2526,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 21692,
+    "output_tokens": 2139
+   },
+   "cost_usd": 0.161935,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YMFV_F5_claude-haiku-5-5",
+   "docID": "S100YMFV",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 34149,
+   "prompt_sha256": "30ef5bd4910d69cf7a828889635b266cfbc449fb94fcba2b89e5fa29d6c05ecb",
+   "est_usd": 0.270745,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "9d9677dfed8bdbebd45d07d30c24e5fe91bb07d042c13e6c746d3844d7273027",
+   "chars": 1523,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 21692,
+    "output_tokens": 1290
+   },
+   "cost_usd": 0.14071,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YZCT_F5_claude-sonnet-5-5",
+   "docID": "S100YZCT",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 39208,
+   "prompt_sha256": "ab1a1655ad980568c7adab76e0bf84f1e695279b33383c6debff8ee98659eb2a",
+   "est_usd": 0.29604,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "01bc3332d6754abf96087bf64f80a3c22bbc384810747be270aaebd154bc1ebd",
+   "chars": 2535,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 24922,
+    "output_tokens": 2237
+   },
+   "cost_usd": 0.180535,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YZCT_F5_claude-haiku-5-5",
+   "docID": "S100YZCT",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 39208,
+   "prompt_sha256": "ab1a1655ad980568c7adab76e0bf84f1e695279b33383c6debff8ee98659eb2a",
+   "est_usd": 0.29604,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "b555f2828b4c27a1f2f1eb7210db247d5b9dc201507ca5b7740e71e58cb4501a",
+   "chars": 1431,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 24922,
+    "output_tokens": 1173
+   },
+   "cost_usd": 0.153935,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z4GF_F5_claude-sonnet-5-5",
+   "docID": "S100Z4GF",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 27758,
+   "prompt_sha256": "22be744043d41522ab0ce67125f9be5cade00ffa1e9e7e43123eabdabc97582d",
+   "est_usd": 0.23879,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "4ce41e7d9fcbc7d7177c2d6789667cb378471b302da1546c7c31f27a8d82a452",
+   "chars": 2431,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 17699,
+    "output_tokens": 2086
+   },
+   "cost_usd": 0.140645,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z4GF_F5_claude-haiku-5-5",
+   "docID": "S100Z4GF",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 27758,
+   "prompt_sha256": "22be744043d41522ab0ce67125f9be5cade00ffa1e9e7e43123eabdabc97582d",
+   "est_usd": 0.23879,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "2d9f94516f51087b73068918c098dd741ce464ab88245cc23a666338593770d5",
+   "chars": 1794,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 17699,
+    "output_tokens": 1484
+   },
+   "cost_usd": 0.125595,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z4LC_F5_claude-sonnet-5-5",
+   "docID": "S100Z4LC",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 29109,
+   "prompt_sha256": "daa66ddf15002e34bb35584c690e76978f88987473a9e64ca22f62ac4e57898e",
+   "est_usd": 0.245545,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "777a426ba3c4bfa69145fe939222b54bb56e13a670f626e09dca486595694c8c",
+   "chars": 2367,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 18555,
+    "output_tokens": 2037
+   },
+   "cost_usd": 0.1437,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z4LC_F5_claude-haiku-5-5",
+   "docID": "S100Z4LC",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 29109,
+   "prompt_sha256": "daa66ddf15002e34bb35584c690e76978f88987473a9e64ca22f62ac4e57898e",
+   "est_usd": 0.245545,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "b4b7033d592f6aad98fe3a82ff3581c52b150a34114b0658193f219cec0e4645",
+   "chars": 1549,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 18555,
+    "output_tokens": 1311
+   },
+   "cost_usd": 0.12555,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z5CH_F5_claude-sonnet-5-5",
+   "docID": "S100Z5CH",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 29913,
+   "prompt_sha256": "aa1fd37db09ed183a84d99d71c333394acecfcb9f192bff6d46e8f6522e6c0b7",
+   "est_usd": 0.249565,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "3960049a6d336f562a37e063ad51e9775548049a128f2871c543fcc447349828",
+   "chars": 2519,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 19304,
+    "output_tokens": 2139
+   },
+   "cost_usd": 0.149995,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z5CH_F5_claude-haiku-5-5",
+   "docID": "S100Z5CH",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 29913,
+   "prompt_sha256": "aa1fd37db09ed183a84d99d71c333394acecfcb9f192bff6d46e8f6522e6c0b7",
+   "est_usd": 0.249565,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "dd894678da6548ff89280a8f0c373bf485256103c4b69780dfc732b76881641c",
+   "chars": 1966,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 19304,
+    "output_tokens": 1695
+   },
+   "cost_usd": 0.138895,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z3HP_F5_claude-sonnet-5-5",
+   "docID": "S100Z3HP",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 35654,
+   "prompt_sha256": "e2f6d0633b6676a31583a980c878c3f33691df6a9b776d0b9af234916d19f6f6",
+   "est_usd": 0.27827,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "2b3cc8558434ec0984b530304dbf01ca09b709a2c5f6e38e06a42536afb40d3d",
+   "chars": 2477,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 22562,
+    "output_tokens": 2078
+   },
+   "cost_usd": 0.16476,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z3HP_F5_claude-haiku-5-5",
+   "docID": "S100Z3HP",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 35654,
+   "prompt_sha256": "e2f6d0633b6676a31583a980c878c3f33691df6a9b776d0b9af234916d19f6f6",
+   "est_usd": 0.27827,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "8273ec6dab199e0e163fbd4c5286191a89928f8a6ebbbbf5fbb2e69058e7a312",
+   "chars": 1307,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 22562,
+    "output_tokens": 1068
+   },
+   "cost_usd": 0.13951,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YZEV_F5_claude-sonnet-5-5",
+   "docID": "S100YZEV",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 23450,
+   "prompt_sha256": "323929333d739e200df9a78757eb8ba45e57cf3a9a54b06b03801611af8a45b9",
+   "est_usd": 0.21725,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "2e2884b29b537906745407bbb84621ba9b3c1c7ad0b1ec4f05fe349c3c1c8d7d",
+   "chars": 2287,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 14981,
+    "output_tokens": 1929
+   },
+   "cost_usd": 0.12313,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YZEV_F5_claude-haiku-5-5",
+   "docID": "S100YZEV",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 23450,
+   "prompt_sha256": "323929333d739e200df9a78757eb8ba45e57cf3a9a54b06b03801611af8a45b9",
+   "est_usd": 0.21725,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "badae4654e22deed9d6f238bef7ec0352f1d8f0d84538435fa24f569e88338f2",
+   "chars": 1826,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 14981,
+    "output_tokens": 1551
+   },
+   "cost_usd": 0.11368,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z40G_F5_claude-sonnet-5-5",
+   "docID": "S100Z40G",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 34661,
+   "prompt_sha256": "71c8e6f0838db0c17c7590536174a14343c0ca4f689003647ad043e3000ce947",
+   "est_usd": 0.273305,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "e8d797743123188396ae7ff62bb00c3bcc17b925e9206d2a699326c8b1ddef37",
+   "chars": 2635,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 22026,
+    "output_tokens": 2289
+   },
+   "cost_usd": 0.167355,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z40G_F5_claude-haiku-5-5",
+   "docID": "S100Z40G",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 34661,
+   "prompt_sha256": "71c8e6f0838db0c17c7590536174a14343c0ca4f689003647ad043e3000ce947",
+   "est_usd": 0.273305,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "e1c6db4e627a2017ded3d54c0e80504783c2250c491c6cf8f9137f6016234eb8",
+   "chars": 1293,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 22026,
+    "output_tokens": 1066
+   },
+   "cost_usd": 0.13678,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YZ7E_F5_claude-sonnet-5-5",
+   "docID": "S100YZ7E",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 29727,
+   "prompt_sha256": "24f371d1c3a2bdbe3fa9a1c98744801f760694a3fedc723fcf7f78a0cee86bb5",
+   "est_usd": 0.248635,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "c496b502043f71ecbb80400eba2ad077d9c53592ca863dc607d3c3f6df007d17",
+   "chars": 2515,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 18800,
+    "output_tokens": 2173
+   },
+   "cost_usd": 0.148325,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YZ7E_F5_claude-haiku-5-5",
+   "docID": "S100YZ7E",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 29727,
+   "prompt_sha256": "24f371d1c3a2bdbe3fa9a1c98744801f760694a3fedc723fcf7f78a0cee86bb5",
+   "est_usd": 0.248635,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "a212036a89313b9a82888f69c0608a3b4065fc953fd8f226fed465c1798728f9",
+   "chars": 1646,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 18800,
+    "output_tokens": 1443
+   },
+   "cost_usd": 0.130075,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z6XO_F5_claude-sonnet-5-5",
+   "docID": "S100Z6XO",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 43220,
+   "prompt_sha256": "719e84c67f5a5c7754c15eea0c6a31d106f346cb58f5da3d7b0379afe5e3778c",
+   "est_usd": 0.3161,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "2dc3af094bf667900caa88b71784bf5c32aaa5c3c139ca561d55f84fa0359f0d",
+   "chars": 2295,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 27253,
+    "output_tokens": 2027
+   },
+   "cost_usd": 0.18694,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z6XO_F5_claude-haiku-5-5",
+   "docID": "S100Z6XO",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 43220,
+   "prompt_sha256": "719e84c67f5a5c7754c15eea0c6a31d106f346cb58f5da3d7b0379afe5e3778c",
+   "est_usd": 0.3161,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "fd0594e07d1b189313b1b966b9ccbb22bb6c1d44264a6afe5302188bfafe245e",
+   "chars": 1375,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 27253,
+    "output_tokens": 1184
+   },
+   "cost_usd": 0.165865,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYOS_F5_claude-sonnet-5-5",
+   "docID": "S100YYOS",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 40171,
+   "prompt_sha256": "4c20a48c3db98dddbf71ecbe5cb2db5f36f3e748537b154dac4f9faed844cecc",
+   "est_usd": 0.300855,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "0b6a01d57ac453e1f789c8a2ec5d9a5ee9d6b7694c1854b8f6244da1a92c1dcb",
+   "chars": 2444,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 25400,
+    "output_tokens": 2095
+   },
+   "cost_usd": 0.179375,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYOS_F5_claude-haiku-5-5",
+   "docID": "S100YYOS",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 40171,
+   "prompt_sha256": "4c20a48c3db98dddbf71ecbe5cb2db5f36f3e748537b154dac4f9faed844cecc",
+   "est_usd": 0.300855,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "53d27b322635989b27b075c81cb2bb97fca708b4aca96fca226464214d240cd1",
+   "chars": 1825,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 25400,
+    "output_tokens": 1590
+   },
+   "cost_usd": 0.16675,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YW7F_F5_claude-sonnet-5-5",
+   "docID": "S100YW7F",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 50859,
+   "prompt_sha256": "b80d82ed1a491f1f2fb8fa484e3ea1840d2c54cbbfce35f7a0f4a7c344273388",
+   "est_usd": 0.354295,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "70f69451379ff62f2ec0eceed424a91d7bab6539754bb1a72f0fc9b351e4ef32",
+   "chars": 2805,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 32142,
+    "output_tokens": 2288
+   },
+   "cost_usd": 0.21791,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YW7F_F5_claude-haiku-5-5",
+   "docID": "S100YW7F",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 50859,
+   "prompt_sha256": "b80d82ed1a491f1f2fb8fa484e3ea1840d2c54cbbfce35f7a0f4a7c344273388",
+   "est_usd": 0.354295,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "248b4d68c4f03933c832d46bce1d5d6cdf94f4c140e92a4469be59e40e523ab4",
+   "chars": 2061,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 32142,
+    "output_tokens": 1737
+   },
+   "cost_usd": 0.204135,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z1WR_F5_claude-sonnet-5-5",
+   "docID": "S100Z1WR",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 37537,
+   "prompt_sha256": "d7a29f5b110c0af914784e7581fe8adb0b25319b5a8170703229558f82c3f102",
+   "est_usd": 0.287685,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "8ffa490da9c2871db7fd999c41bcd99bf1c461ba1fed56bc361a0f8c8f7baac1",
+   "chars": 2328,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 23789,
+    "output_tokens": 1980
+   },
+   "cost_usd": 0.168445,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z1WR_F5_claude-haiku-5-5",
+   "docID": "S100Z1WR",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 37537,
+   "prompt_sha256": "d7a29f5b110c0af914784e7581fe8adb0b25319b5a8170703229558f82c3f102",
+   "est_usd": 0.287685,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "ff2b5cbc055745c688531dec562c78e9881435d6de14da6f90d8f722333e933d",
+   "chars": 1655,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 23789,
+    "output_tokens": 1344
+   },
+   "cost_usd": 0.152545,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYUD_F5_claude-sonnet-5-5",
+   "docID": "S100YYUD",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 29164,
+   "prompt_sha256": "57560322bdef3bd4898ba0aee1d166448baff574c52fd335732fc6db911dc09f",
+   "est_usd": 0.24582,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "29381faaa2ba0349d84df1c13107973d84994abefc3ccb3e1c031da52508b44f",
+   "chars": 2340,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 18572,
+    "output_tokens": 1959
+   },
+   "cost_usd": 0.141835,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYUD_F5_claude-haiku-5-5",
+   "docID": "S100YYUD",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 29164,
+   "prompt_sha256": "57560322bdef3bd4898ba0aee1d166448baff574c52fd335732fc6db911dc09f",
+   "est_usd": 0.24582,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "3a1620ecf0b3560213f7597461a55c84c3c45a9bc7c9db48b7b49c3fdda994f2",
+   "chars": 1740,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 18572,
+    "output_tokens": 1463
+   },
+   "cost_usd": 0.129435,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYSK_F5_claude-sonnet-5-5",
+   "docID": "S100YYSK",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 36567,
+   "prompt_sha256": "a8afd608c278a2b526de40e9bace83638bf816e63eeef1e3dbbd56ec7260f836",
+   "est_usd": 0.282835,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "60fa1d966e2cc4c72ddf662d9bc7e934d904c7e82d25f7950a7b402e0336e9d0",
+   "chars": 2520,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 23213,
+    "output_tokens": 2236
+   },
+   "cost_usd": 0.171965,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYSK_F5_claude-haiku-5-5",
+   "docID": "S100YYSK",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 36567,
+   "prompt_sha256": "a8afd608c278a2b526de40e9bace83638bf816e63eeef1e3dbbd56ec7260f836",
+   "est_usd": 0.282835,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "06459deb68d8af07bd346e170cd4d6a22a39692c6140cdff34f048533a9526a1",
+   "chars": 1395,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 23213,
+    "output_tokens": 1172
+   },
+   "cost_usd": 0.145365,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYF5_F5_claude-sonnet-5-5",
+   "docID": "S100YYF5",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 39512,
+   "prompt_sha256": "fe58b748c28b791688489da87feb0b97746fbcd31dc23a729cb11631eed47401",
+   "est_usd": 0.29756,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "eca32772ec445105b554ee27e5df5999f0ac657e5c3a2a0775bbde79780df38f",
+   "chars": 2590,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 25088,
+    "output_tokens": 2171
+   },
+   "cost_usd": 0.179715,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYF5_F5_claude-haiku-5-5",
+   "docID": "S100YYF5",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 39512,
+   "prompt_sha256": "fe58b748c28b791688489da87feb0b97746fbcd31dc23a729cb11631eed47401",
+   "est_usd": 0.29756,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "c4d320687819f0a7d710a1e5fde953e3ef1a76189271520627f1dba3a29351f7",
+   "chars": 1749,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 25088,
+    "output_tokens": 1463
+   },
+   "cost_usd": 0.162015,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYRG_F5_claude-sonnet-5-5",
+   "docID": "S100YYRG",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 29943,
+   "prompt_sha256": "37e8e46673b61adbe865290420faab16d2e9f8e04244f2d8bef4b54088adff95",
+   "est_usd": 0.249715,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "4c1969ed80ac5c7f8619dce409e661ea945a2e498ed0d298e790c2dabb625b6a",
+   "chars": 2600,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 19119,
+    "output_tokens": 2193
+   },
+   "cost_usd": 0.15042,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYRG_F5_claude-haiku-5-5",
+   "docID": "S100YYRG",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 29943,
+   "prompt_sha256": "37e8e46673b61adbe865290420faab16d2e9f8e04244f2d8bef4b54088adff95",
+   "est_usd": 0.249715,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "49151ba85a9fdc8fa30007f79b2c8c9d72351801c492a4e08733223fd4a1c6f0",
+   "chars": 1273,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 19119,
+    "output_tokens": 1058
+   },
+   "cost_usd": 0.122045,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z3V1_F5_claude-sonnet-5-5",
+   "docID": "S100Z3V1",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 39298,
+   "prompt_sha256": "9ed44ce249c20edbd2df901437c5f850d5e6db1bfc7d9bef4fbdc0e3a800ebc9",
+   "est_usd": 0.29649,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "aea07e5e18b90d25ec59f8df8b9c5a04908de6cf41a11510814af936b389ed0c",
+   "chars": 2642,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 24946,
+    "output_tokens": 2240
+   },
+   "cost_usd": 0.18073,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z3V1_F5_claude-haiku-5-5",
+   "docID": "S100Z3V1",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 39298,
+   "prompt_sha256": "9ed44ce249c20edbd2df901437c5f850d5e6db1bfc7d9bef4fbdc0e3a800ebc9",
+   "est_usd": 0.29649,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "bff463c2adaa9510339b34da9e74d31fcef6a5a53cd78fbb9a693c643cf318bb",
+   "chars": 1843,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 24946,
+    "output_tokens": 1522
+   },
+   "cost_usd": 0.16278,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYS4_F5_claude-sonnet-5-5",
+   "docID": "S100YYS4",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 34819,
+   "prompt_sha256": "f604592b3697fdf2d6dfb3f4c72bb90b0464671bd788b1ae79499e8bbe9ffa87",
+   "est_usd": 0.274095,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "7f50c5ab6d5cc03d26951eb55f77bc2374a8dbd23064de45f8f91c1672ba54e7",
+   "chars": 2830,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 22239,
+    "output_tokens": 2408
+   },
+   "cost_usd": 0.171395,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100YYS4_F5_claude-haiku-5-5",
+   "docID": "S100YYS4",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 34819,
+   "prompt_sha256": "f604592b3697fdf2d6dfb3f4c72bb90b0464671bd788b1ae79499e8bbe9ffa87",
+   "est_usd": 0.274095,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "013954b4b26ff8efdc6c1924bce267dc3cd49b28a429764afa90131dbdeda617",
+   "chars": 1545,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 22239,
+    "output_tokens": 1273
+   },
+   "cost_usd": 0.14302,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z3CO_F5_claude-sonnet-5-5",
+   "docID": "S100Z3CO",
+   "form": "F5",
+   "model": "claude-sonnet-5-5",
+   "writer": "W1",
+   "prompt_chars": 37261,
+   "prompt_sha256": "b608c521906b375c4b073e4edcfa07fc83c8c167fc729d5b0494ee24cd035b5f",
+   "est_usd": 0.286305,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "between_tools"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "ba61e57036c66f6b791ab1d7347cb707f57d271e00059db4710a65ed0df923cf",
+   "chars": 2865,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 23701,
+    "output_tokens": 2453
+   },
+   "cost_usd": 0.17983,
+   "stop_reason": "end_turn"
+  },
+  {
+   "name": "S100Z3CO_F5_claude-haiku-5-5",
+   "docID": "S100Z3CO",
+   "form": "F5",
+   "model": "claude-haiku-5-5",
+   "writer": "W2",
+   "prompt_chars": 37261,
+   "prompt_sha256": "b608c521906b375c4b073e4edcfa07fc83c8c167fc729d5b0494ee24cd035b5f",
+   "est_usd": 0.286305,
+   "script_sha256": "9e47c1814d2c8d05",
+   "thinking": {
+    "type": "disabled"
+   },
+   "retries": 0,
+   "http_status": 200,
+   "ok": true,
+   "sha256": "e436b88afef36b23e84a367732f405c2674db766a23fc0e2e6d093af5f55bdc9",
+   "chars": 1621,
+   "blocks": [
+    "text"
+   ],
+   "usage": {
+    "input_tokens": 23701,
+    "output_tokens": 1351
+   },
+   "cost_usd": 0.15228,
+   "stop_reason": "end_turn"
+  }
+ ],
+ "文の移動": [],
+ "累計": {
+  "呼び出しの数": 40,
+  "成功": 40,
+  "失敗": 0,
+  "費用 USD": 6.219905,
+  "記録の外の費用 USD": 29.46516,
+  "費用 USD 合計(記録の外を含む)": 35.685065,
+  "現行の ok の本数": 40,
+  "現行でない ok の呼び出し": 0
+ },
+ "止めた理由": null,
+ "key_leaks": [],
+ "差し替え": {
+  "差し替えた名前": [
+   "GEN.FORMS",
+   "GEN.WRITER_FORMS",
+   "GEN.WRITER_COMMON",
+   "GEN.build_facts_table",
+   "GEN.NEW_CACHE",
+   "GEN.GEN_REL",
+   "GEN.SEAL_REL",
+   "GEN.SEAL_COMMIT",
+   "GEN.SEAT2_N",
+   "GEN.key_leaks",
+   "GEN.outside_calls",
+   "GEN.outside_cost",
+   "GEN.select_companies",
+   "RUN.CLAIMS_REL",
+   "RUN.INJECT_REL",
+   "RUN.SEAL_REL",
+   "RUN.SEAL_COMMIT",
+   "LAB.LABELS_REL",
+   "TAL.TALLY_REL",
+   "TAL.FORMS",
+   "RUN.GEN",
+   "RUN.Stop",
+   "LAB.GEN",
+   "LAB.RUN",
+   "LAB.Stop",
+   "TAL.GEN",
+   "TAL.RUN",
+   "TAL.LAB",
+   "TAL.Stop",
+   "GEN.EXISTING_CACHES",
+   "GEN.new_record",
+   "RUN.header",
+   "TAL.REC_REL"
+  ],
+  "指示文の sha256": {
+   "WRITER_COMMON_F5": "2a23bcd8fcdbf7b672485994ee9af893405891586c329922815d55773c515312",
+   "WRITER_FORMS": {
+    "F5": "0bb0c05b82cceb8a35ed73c33ed0ded75596fa50ac96888768f52b3fc69f66b7"
+   }
+  },
+  "前の便の gen script の sha256": "9e47c1814d2c8d0504e62be0508061abe8b98473977b42ff6c16b999a283a848",
+  "駆動 script の sha256": "60499c9e0065d0683fd5a94770bda65547b2c9f632a83f2e299b510979b3f290",
+  "前の便の累計 USD": 29.46516
+ }
+}
