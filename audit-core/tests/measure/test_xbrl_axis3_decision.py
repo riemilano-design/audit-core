@@ -96,6 +96,7 @@ LATER_ENGINE_COMMITS = {
     "6a34db5": "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md",         # P27 の段 2 ― 既定 P26 -> P27(vocabulary.py +5/−1・verify_document.py の docstring +1/−1。宣言 2026-10-28)
     "cb8612f": "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md",   # 候補の欄 candidate ― engine(vocabulary.py +5: 旗と P27C、verify_document.py +11/−1: 13 欄目、report_customer.py +22/−1: 案 A。既定は P27 のまま。人間の承認 db68a2c。宣言 2026-10-30)
     "6ac3911": "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md",   # 「その他」の主語の結び直し O ― engine(recipes.py +65、vocabulary.py +6: 旗 other_subject_2026_11_02 と P28。既定は P27 のまま。封 c6cbfae。宣言 2026-11-03)
+    "526a865": "docs/XBRL_P28E_SEAL_2026-11-03.md",                 # 外部の数の文の profile P28E = P27E + O ― engine(vocabulary.py +5/−0: P28E と日付つきの注記。新しい旗なし。既定は P27 のまま。封 7bfad77。宣言 2026-11-03)
 }
 
 
