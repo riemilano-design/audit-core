@@ -300,14 +300,17 @@ P28_FP_TO = "d72c0cfb7cd74761144a935867a6ed798c952e2e04303b894d98ab358265ad7c"
 # 2026-11-03(P28E): 封 docs/XBRL_P28E_SEAL_2026-11-03.md §2-3 が宣言した遷移の後の値(vocabulary.py に profile 1 つ P28E と注記の挿入だけ。人間の承認 2026-11-03)。上の P28_FP_TO は測った時点の値として残す。
 P28E_SEAL_REL = "docs/XBRL_P28E_SEAL_2026-11-03.md"
 P28E_FP_TO = "e23f982f072dbb4282b22f9feeb9f9f6eb2c123a9d69c96c3974ac021b9ef11d"
+# 2026-11-04(数の読み取り N): 封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §2-3 が宣言した遷移の後の値(extract.py・vocabulary.py・recipes.py への挿入だけ。人間の GO 2026-11-04)。上の P28E_FP_TO は測った時点の値として残す。
+N_SEAL_REL = "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md"
+N_FP_TO = "f1d97a2abe447a09df3a48d905056b08261089bec32e6b920bf2250a2b7053b3"
 
 
 def default_p27_declared_for(rec_sha, now_sha):
     import subprocess
     if rec_sha == now_sha:
         return True
-    assert rec_sha == DEFAULT_P27_FP_FROM and now_sha in (DEFAULT_P27_FP_TO, CAND_FP_TO, P28_FP_TO, P28E_FP_TO), u"記録が測った engine がいまの engine と違う(宣言された遷移の値でもない)"
-    seal_rel = P28E_SEAL_REL if now_sha == P28E_FP_TO else P28_SEAL_REL if now_sha == P28_FP_TO else (CAND_SEAL_REL if now_sha == CAND_FP_TO else DEFAULT_P27_SEAL_REL)      # 2026-10-30: 候補の欄の遷移の後は、その封が履歴に在ること
+    assert rec_sha == DEFAULT_P27_FP_FROM and now_sha in (DEFAULT_P27_FP_TO, CAND_FP_TO, P28_FP_TO, P28E_FP_TO, N_FP_TO), u"記録が測った engine がいまの engine と違う(宣言された遷移の値でもない)"
+    seal_rel = N_SEAL_REL if now_sha == N_FP_TO else P28E_SEAL_REL if now_sha == P28E_FP_TO else P28_SEAL_REL if now_sha == P28_FP_TO else (CAND_SEAL_REL if now_sha == CAND_FP_TO else DEFAULT_P27_SEAL_REL)      # 2026-10-30: 候補の欄の遷移の後は、その封が履歴に在ること
     added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal_rel], cwd=ROOT, capture_output=True, text=True).stdout.split()
     assert added, u"engine が動いているのに、遷移を宣言した封が履歴に無い"
     return True

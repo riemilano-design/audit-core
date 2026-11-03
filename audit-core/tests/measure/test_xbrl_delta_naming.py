@@ -89,8 +89,10 @@ ENGINE_AT_MEASURE = {
 #: 宣言された遷移 {file: (遷移の後の sha16, その遷移を宣言した封)}。今は 0 件。足すときは、封が履歴に在り、値が宣言の値のときだけ受け入れる。測った時点の値は消さない。
 # 2026-11-02(「その他」の主語の結び直し O): 封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §2-3 が宣言した遷移(人間の承認 2026-11-02)。vocabulary.py(旗 1 つ・P28・PROFILES の登録。180125cd94053a94)と recipes.py(定数 3 つ・関数 2 つ・呼び出し 2 行・provenance の 2 行。89eee7eca15480c6)に挿入だけを足した。測った時点の値は ENGINE_AT_MEASURE に残す。
 # 2026-11-03(P28E): 封 docs/XBRL_P28E_SEAL_2026-11-03.md §2-3 が宣言した遷移(人間の承認 2026-11-03)。vocabulary.py に profile 1 つ P28E と注記(+5 行・-0 行。180125cd94053a94 → 2dd3f03e777224b4)。recipes.py ほかは不変。直前の値は測った時点の値として上に残す
-ENGINE_DECLARED = {"adapters/xbrl/vocabulary.py": ("2dd3f03e777224b4", "docs/XBRL_P28E_SEAL_2026-11-03.md"),
-                   "adapters/xbrl/recipes.py": ("89eee7eca15480c6", "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md")}
+# 2026-11-04(数の読み取り N): 封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §2-3 が宣言した遷移(人間の GO 2026-11-04)。extract.py に数の読み取りの新しい関数 1 つ(3cf55966f12919f0 → a61da3fc3c336e80)、vocabulary.py に旗 1 つ・P29・P29E(2dd3f03e777224b4 → ca0367520f04cf87)、recipes.py に旗の 2 行(89eee7eca15480c6 → f1f344a9e2bb364a)を足した。挿入だけ。直前の値は測った時点の値として上に残す
+ENGINE_DECLARED = {"adapters/xbrl/extract.py": ("a61da3fc3c336e80", "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md"),
+                   "adapters/xbrl/vocabulary.py": ("ca0367520f04cf87", "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md"),
+                   "adapters/xbrl/recipes.py": ("f1f344a9e2bb364a", "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md")}
 
 #: 行頭に置いてはいけない名前(過去の門が数える)。この file の中で行頭に出る字を f の試験が見る
 RESERVED_HEADS = ("ENGINE_LATER", "UNTOUCHED", "PIN_DEF", "LATER_ENGINE_COMMITS", "FROZEN_LATER", "ENGINE_TRANSITIONS", "LATER_FINGERPRINT", "FINGERPRINT_",

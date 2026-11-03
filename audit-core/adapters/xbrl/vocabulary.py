@@ -439,6 +439,8 @@ class Profile:
     cause_item_direction: bool = False
     # G5: 数の読み取りで「兆」と「億(カンマ)」、「万」と「千」、「円」と「銭」を 1 つの数に読む(extract.iter_numbers_2026_10_21)。
     numbers_2026_10_21: bool = False
+    # N(封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §1): 万・億の数のコンマ(「1,234万円」「12億3,456万円」「1万2,345円」)を 1 つの数に読む(extract.iter_numbers_2026_11_04)。偽(既定)なら 1 行も変わらない。
+    numbers_man_comma_2026_11_04: bool = False
     # P27(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-5): 外部の数の文のための直しの旗 5 つ。どれも偽(既定)なら P1〜P26 の振る舞いは 1 行も変わらない。
     # A 書かれた精度で照合する(extract.iter_numbers_2026_10_27 と recipes._direct_value_claim の scale)。
     written_precision_2026_10_27: bool = False
@@ -822,3 +824,8 @@ PROFILES["P28"] = P28
 # P28E = P27E + O(封 docs/XBRL_P28E_SEAL_2026-11-03.md §1)。外部の数の文のための候補。新しい旗は無い。既定にしない(DEFAULT_PROFILE は P27 のまま)。
 P28E = dataclasses.replace(P27E, name="P28E", other_subject_2026_11_02=True)
 PROFILES["P28E"] = P28E
+# P29 = P28 + N・P29E = P28E + N(封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §0-2)。既定にしない(DEFAULT_PROFILE は P27 のまま)。
+P29 = dataclasses.replace(P28, name="P29", numbers_man_comma_2026_11_04=True)
+PROFILES["P29"] = P29
+P29E = dataclasses.replace(P28E, name="P29E", numbers_man_comma_2026_11_04=True)
+PROFILES["P29E"] = P29E

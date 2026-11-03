@@ -1575,6 +1575,8 @@ def _cause_item_gate(claim, sentences):
 def _numbers_of(profile, s):
     """G5: 旗が真なら extract.iter_numbers_2026_10_21、偽なら extract.iter_numbers(今までどおり)。"""
 
+    if getattr(profile, "numbers_man_comma_2026_11_04", False):
+        return E.iter_numbers_2026_11_04(s)   # 数の読み取り N(封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §1)
     if getattr(profile, "written_precision_2026_10_27", False):
         return E.iter_numbers_2026_10_27(s)   # P27 A(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-1)
     if getattr(profile, "numbers_2026_10_21", False):

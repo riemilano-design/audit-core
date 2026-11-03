@@ -159,6 +159,12 @@ FROZEN_BUNDLE_GENERATIONS = (
      "recipes.py・verify_document.py・comparators.py・extract.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
      "人間の承認 2026-11-03「君に任せる進めて」(profile 1 つ・新しい旗なし・挿入だけ。既定にしない)、封 docs/XBRL_P28E_SEAL_2026-11-03.md(commit 7bfad77)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("31bfb9b6e2288b2e48e53e981fa40da7a404cf4f661fd8ff35315c12d8a39acc",
+     "2026-11-04 feature/audit-core-final-eval-8(数の読み取り N ― 万・億の数のコンマを 1 つの数に読む): extract.py に正規表現 2 つ・関数 2 つ(_man_comma_numbers_2026_11_04・iter_numbers_2026_11_04)と注記(+35 行・-0 行)、"
+     "vocabulary.py に旗 numbers_man_comma_2026_11_04・P29・P29E・PROFILES の登録(+7 行・-0 行。DEFAULT_PROFILE は P27 のまま)、recipes.py の _numbers_of に旗の 2 行(+2 行・-0 行)を足した。"
+     "verify_document.py・comparators.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
+     "人間の GO 2026-11-04「寝るから全て君に任せる進めて」(旗 1 つ・profile 2 つ・挿入だけ。既定にしない)、封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md(commit 48e7078)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

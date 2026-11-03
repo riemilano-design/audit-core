@@ -147,6 +147,41 @@ def iter_numbers_2026_10_27(s):
     return out
 
 
+# 数の読み取り N(封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §1): 万・億の数のコンマ(「1,234万円」「12億3,456万円」「1万2,345円」)を 1 つの数に読む。
+# profile.numbers_man_comma_2026_11_04 が真のときだけ recipes から呼ばれる。``iter_numbers``・``iter_numbers_2026_10_21``・``iter_numbers_2026_10_27`` の字は変えない。
+# 兆・億・万のどれか 1 つ以上の組がある当たりだけを使う。既存の読みが当たりの範囲を全部覆うなら使わず(既存のまま)、使う当たりと重なる既存の読みは捨てる。
+_X_2026_11_04 = r"(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?"
+_MAN_COMMA_RE_2026_11_04 = re.compile(
+    _SIGN_2026_10_21 + r"(?:(" + _X_2026_11_04 + r")兆)?(?:(" + _X_2026_11_04 + r")億)?"
+    r"(?:(" + _X_2026_11_04 + r")万)?(?:(" + _X_2026_11_04 + r"))?円")
+
+
+def _man_comma_numbers_2026_11_04(s):
+    for m in _MAN_COMMA_RE_2026_11_04.finditer(s):
+        if not any(m.group(i) for i in (2, 3, 4)):
+            continue
+        yen = 0.0
+        smallest = None
+        for i, mult in ((2, 1e12), (3, 1e8), (4, 1e4), (5, 1.0)):
+            if m.group(i):
+                yen += float(m.group(i).replace(",", "")) * mult
+                smallest = (m.group(i), mult)
+        digits, prec = smallest
+        if "." in digits:
+            prec = prec / (10 ** len(digits.split(".")[1]))
+        yield m.start(), m.end(), (-1 if m.group(1) else 1) * yen, "円", prec
+
+
+def iter_numbers_2026_11_04(s):
+    """``iter_numbers_2026_10_27`` に N(万・億の数のコンマ)を足した読み。既存の読みが全部覆う当たりは使わず、使う当たりと重なる既存の読みは捨てる。"""
+
+    base = iter_numbers_2026_10_27(s)
+    used = [t for t in _man_comma_numbers_2026_11_04(s)
+            if not any(a <= t[0] and t[1] <= b for a, b, _v, _u, _p in base)]
+    rest = [t for t in base if not any(a < t[1] and t[0] < b for a, b, _v, _u, _p in used)]
+    return sorted(used + rest, key=lambda t: t[0])
+
+
 # P17 B1(計画 docs/P17_PLAN_2026-10-14.md §1): 原因の印。字で書く。
 CAUSE_MARK_RE = re.compile(r"により|による|によって")
 
