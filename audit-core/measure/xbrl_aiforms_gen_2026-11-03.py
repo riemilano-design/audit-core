@@ -14,6 +14,10 @@ u"""封 docs/XBRL_AI_FORMS_SEAL_2026-11-03.md §0-2・§4 ― AI の文の生成
   - 文は ``~/.cache/audit-core/aiforms-2026-11-03/texts/``、fact の表は ``.../facts/``(repo の外。既存の cache 3 folder には 1 file も書かない。前後の件数と名前の一覧の sha256 を記録し、変われば止める)。
     repo に置く記録 ``fixtures/xbrl/aiforms/gen_2026-11-03.json`` は sha256・字数・usage・費用・stop_reason・再試行の数だけ(文なし)。
   - 既に在る文は ``--resume`` を付けたときだけ飛ばす(付けずに在れば止める。有料の呼び出しを二度しない)。
+  - 思考の指定 ``THINKING`` を body に入れる。呼び出しの記録に ``thinking``(送った指定)と ``blocks``(返った block の type の並び)を書く。text が 0 字なら ok にしない。
+    ok の呼び出しでも ``thinking`` が無いか今の ``THINKING`` と違うものは「済み」に数えない(``--resume`` で作り直す。文は呼ぶ前に ``texts_superseded/`` へ移す。消さない)。
+    集計が読むのは名前ごとの最後の「現行の ok」だけ(``current_ok_by_name``)。古い呼び出しは記録に残り、``cost_usd`` は累計に入る。
+  - 記録の外の確かめの呼び出し(``OUTSIDE_CALLS``)の費用も累計と上限の計算に入る。走らせる前に「記録の累計 + 残りの本の見積り」が上限を超えるなら 1 回も呼ばない。
 
 engine(``core/``・``adapters/``)は 1 行も変えない。他の script は ``load()`` でなく importlib でこの file を読み、会社の選び・fact の表・置き場を使う。
 """
@@ -71,6 +75,9 @@ FORMS = ("F1", "F2", "F3", "F4")
 MODELS = ("claude-sonnet-5-5", "claude-haiku-5-5")            # W1・W2
 MODEL_TAG = {"claude-sonnet-5-5": "W1", "claude-haiku-5-5": "W2"}
 MAX_TOKENS = 4000
+# 思考を止める指定(2026-11-03 の実測: 5.5 の model は大きい指示文で既定で考え、その token が max_tokens を食って text が 0 字になる)。
+# sonnet は {"type":"disabled"} を HTTP 400 で断る(between_tools を送れ、と返事)ので model ごとに字で留める。request の body の "thinking" にそのまま入る。
+THINKING = {"claude-sonnet-5-5": {"type": "between_tools"}, "claude-haiku-5-5": {"type": "disabled"}}
 COST_CAP_USD = 50.0
 PRICE_IN = 5.0                  # USD / M tokens(両 model に当てる保守的な字)
 PRICE_OUT = 25.0
@@ -80,6 +87,7 @@ RETRY_WAITS = (2, 8)                                         # 429 / 5xx のと�
 TIMEOUT_SEC = 300
 KEY_ENV = "ANTHROPIC_API_KEY"
 NONCONSOLIDATED_FALLBACK = True                            # fact の表の「素の context」に engine の単体フォールバックを使う(封に無い決定。報告に書く)
+SUPERSEDED_DIR = "texts_superseded"                          # 作り直しで古くなった文の移し先(NEW_CACHE の下。消さない)
 SEAT2_N = 32                                                 # 2 席目を立てる本数(160 の 20%)
 
 # ---- 指示文(封 §0-2 の 2。字は固定し、封の門が照らす。SYSTEM は無し = user の 1 message)
@@ -302,11 +310,64 @@ def jobs(docs):
     return [(d, f, m) for d in docs for f in FORMS for m in MODELS]
 
 
+# 記録の外の呼び出し(2026-11-03 に司令塔が思考の食い込みを確かめた呼び出し。記録 gen_2026-11-03.json の外で払った分を字で留める。費用は cost_usd と同じ単価)
+#   (番号, 確かめ, model, max_tokens, 送った thinking(None = 送らない), http_status, input_tokens, output_tokens)
+OUTSIDE_CALLS = (
+    (u"1-a", u"短い問い・thinking を送らない", "claude-haiku-5-5", 400, None, 200, 35, 36),
+    (u"1-b", u"短い問い・disabled", "claude-haiku-5-5", 400, {"type": "disabled"}, 200, 33, 31),
+    (u"1-c", u"短い問い・thinking を送らない", "claude-sonnet-5-5", 400, None, 200, 35, 40),
+    (u"1-d", u"短い問い・disabled(HTTP 400。between_tools を送れと返事。費用なし)", "claude-sonnet-5-5", 400, {"type": "disabled"}, 400, None, None),
+    (u"2-a", u"本番の指示文(S100YMFV・F1)・thinking を送らない(thinking の block だけで text なし・max_tokens)", "claude-haiku-5-5", 4000, None, 200, 26437, 4000),
+    (u"2-b", u"本番の指示文(S100YMFV・F1)・disabled(text 1,594 字・end_turn)", "claude-haiku-5-5", 4000, {"type": "disabled"}, 200, 26435, 1326),
+    (u"2-c", u"本番の指示文(S100YMFV・F1)・between_tools(text 2,900 字・end_turn)", "claude-sonnet-5-5", 4000, {"type": "between_tools"}, 200, 26435, 2483),
+)
+
+
+def outside_calls():
+    u"""記録の欄 ``記録の外の呼び出し`` の中身。費用は usage から ``cost_usd`` で計算する(HTTP 400 は usage なしで 0)。"""
+    out = []
+    for no, what, model, mt, th, st, tin, tout in OUTSIDE_CALLS:
+        out.append(collections.OrderedDict([
+            (u"番号", no), (u"確かめ", what), (u"model", model), (u"max_tokens", mt), (u"thinking", th), (u"http_status", st),
+            (u"usage", None if tin is None else collections.OrderedDict([(u"input_tokens", tin), (u"output_tokens", tout)])),
+            (u"cost_usd", round(cost_usd(tin, tout), 6))]))
+    return out
+
+
+def outside_cost():
+    return round(sum(c[u"cost_usd"] for c in outside_calls()), 6)
+
+
+def is_current_ok(c):
+    u"""「済み」に数える呼び出し = ok で、送った thinking が今の THINKING と同じで、text が 1 字以上。"""
+    want = THINKING.get(c.get(u"model"))
+    return bool(c.get(u"ok")) and want is not None and c.get(u"thinking") == want and (c.get(u"chars") or 0) > 0
+
+
+def current_ok_by_name(calls):
+    u"""名前 → その名前の最後の現行の ok の呼び出し。集計(run・tally)が読むのはこれだけ。"""
+    out = collections.OrderedDict()
+    for c in calls:
+        if is_current_ok(c):
+            out[c[u"name"]] = c
+    return out
+
+
+def last_stale_ok(calls, name):
+    u"""名前の最後の ok の呼び出しのうち現行でないもの(無ければ None)。作り直しで文を移す相手。"""
+    hit = None
+    for c in calls:
+        if c[u"name"] == name and c.get(u"ok"):
+            hit = c
+    return hit if hit is not None and not is_current_ok(hit) else None
+
+
 # ======================================================================================================
 # API(通信する唯一の所)
 def call_api(prompt, model, key):
     u"""(status, body)。HTTP の 4xx・5xx は例外にせず status で返す。例外の文には鍵を通さない(型だけ)。"""
-    body = json.dumps({"model": model, "max_tokens": MAX_TOKENS, "messages": [{"role": "user", "content": prompt}]}).encode("utf-8")
+    body = json.dumps({"model": model, "max_tokens": MAX_TOKENS, "thinking": THINKING[model],
+                       "messages": [{"role": "user", "content": prompt}]}).encode("utf-8")
     req = urllib.request.Request(API_URL, data=body, method="POST",
                                  headers={"content-type": "application/json", "x-api-key": key, "anthropic-version": API_VERSION})
     try:
@@ -353,18 +414,54 @@ def new_record(head, chosen, counts, seed_meta, tables, before):
         (u"費用", collections.OrderedDict([(u"上限 USD", COST_CAP_USD), (u"単価 入力 USD / M tokens", PRICE_IN), (u"単価 出力 USD / M tokens", PRICE_OUT),
                                           (u"見積りの規則", u"入力の字数 × 1.0 を token とみなし、出力は max_tokens の全部(保守的な単価を両 model に当てる)")])),
         (u"cache の前後", collections.OrderedDict([(u"前", before), (u"後", None), (u"変化なし", None)])),
+        (u"thinking", collections.OrderedDict((m, THINKING[m]) for m in MODELS)),
+        (u"記録の外の呼び出し", outside_calls()),
+        (u"script の履歴", []),
         (u"呼び出し", []),
+        (u"文の移動", []),
         (u"累計", collections.OrderedDict([(u"呼び出しの数", 0), (u"成功", 0), (u"失敗", 0), (u"費用 USD", 0.0)])),
         (u"止めた理由", None),
         (u"key_leaks", []),
     ])
 
 
+def recorded_cost(rec):
+    u"""上限の計算に入れる累計 = 記録の呼び出し(古いものも)の cost_usd + 記録の外の呼び出しの費用。"""
+    return round(sum(c[u"cost_usd"] for c in rec[u"呼び出し"]) + outside_cost(), 6)
+
+
+def script_prefix(sha):
+    return sha[:16]
+
+
+def note_script(rec, head, script_sha):
+    u"""``--resume`` で呼ぶ回の前に: 記録の上の 2 欄(この script の sha256・HEAD の commit)を今の script・HEAD に更新し、前の値を ``script の履歴`` に追記する。
+    履歴の行 = {sha256, HEAD, 呼び出しの番号の範囲 [始め, 終わり](1 始まり・両端を含む。その script で呼んだ呼び出し)}。同じ script・HEAD なら何も変えない。"""
+    if rec.get(u"この script の sha256") == script_sha and rec.get(u"HEAD の commit") == head:
+        return False
+    hist = rec.setdefault(u"script の履歴", [])
+    start = (hist[-1][u"呼び出しの番号の範囲"][1] + 1) if hist and hist[-1][u"呼び出しの番号の範囲"] else 1
+    n = len(rec[u"呼び出し"])
+    hist.append(collections.OrderedDict([(u"sha256", rec.get(u"この script の sha256")), (u"HEAD", rec.get(u"HEAD の commit")),
+                                         (u"呼び出しの番号の範囲", [start, n] if start <= n else [])]))
+    rec[u"この script の sha256"] = script_sha
+    rec[u"HEAD の commit"] = head
+    return True
+
+
 def refresh_totals(rec):
     calls = rec[u"呼び出し"]
+    rec[u"thinking"] = collections.OrderedDict((m, THINKING[m]) for m in MODELS)
+    rec[u"記録の外の呼び出し"] = outside_calls()                       # 定数から書く(記録に書かれた値を信じない)
+    rec.setdefault(u"文の移動", [])
+    rec.setdefault(u"script の履歴", [])
+    cur = current_ok_by_name(calls)
     rec[u"累計"] = collections.OrderedDict([(u"呼び出しの数", len(calls)), (u"成功", sum(1 for c in calls if c[u"ok"])),
                                           (u"失敗", sum(1 for c in calls if not c[u"ok"])),
-                                          (u"費用 USD", round(sum(c[u"cost_usd"] for c in calls), 6))])
+                                          (u"費用 USD", round(sum(c[u"cost_usd"] for c in calls), 6)),
+                                          (u"記録の外の費用 USD", outside_cost()), (u"費用 USD 合計(記録の外を含む)", recorded_cost(rec)),
+                                          (u"現行の ok の本数", len(cur)),
+                                          (u"現行でない ok の呼び出し", sum(1 for c in calls if c[u"ok"] and not is_current_ok(c)))])
     return rec
 
 
@@ -409,6 +506,19 @@ def prepare(root, caches, new_cache, say, check_replace=True):
     return chosen, counts, seed_meta, tables, prompts, est_total
 
 
+def plan_problem(rec, all_jobs, prompts, say):
+    u"""走らせる前の止め。記録の累計(古い呼び出し・記録の外を含む)+ まだ「済み」でない本の見積りが上限を超えるなら理由の文、超えなければ None。"""
+    cur = current_ok_by_name(rec[u"呼び出し"]) if rec is not None else {}
+    base = recorded_cost(rec) if rec is not None else outside_cost()
+    rest = [(d, f, m) for d, f, m in all_jobs if text_key(d, f, m) not in cur]
+    est = sum(estimate_usd(len(prompts[(d, f)])) for d, f, m in rest)
+    say(u"走らせる前の確かめ: 記録の累計 %.4f USD(うち記録の外 %.4f)+ 残り %d 本の見積り %.4f USD = %.4f USD(上限 %.2f)" % (
+        base, outside_cost(), len(rest), est, base + est, COST_CAP_USD))
+    if base + est > COST_CAP_USD:
+        return u"**記録の累計 %.4f + 残りの見積り %.4f = %.4f USD が上限 %.2f USD を超える。1 回も呼ばずに止める**" % (base, est, base + est, COST_CAP_USD)
+    return None
+
+
 def run(root=ROOT, dry_run=False, only=None, resume=False, caches=None, new_cache=None, out=None, key_value=None,
         transport=call_api, sleep=time.sleep, say=print, head=None):
     caches = caches or EXISTING_CACHES
@@ -426,20 +536,26 @@ def run(root=ROOT, dry_run=False, only=None, resume=False, caches=None, new_cach
         say(u"  %s %s claims=%d fact=%d/%d 標準ラベル付き=%d 表=%d字 見積り(model 2 本・形 4 つ)=%.4f USD" % (
             r["docID"], r[u"標本"], r["claims"], t[u"fact の数(素の context)"], t[u"instance の fact の数"], t[u"標準ラベルが付いた行"], t[u"表の字数"],
             sum(estimate_usd(len(prompts[(r["docID"], f)])) for f in FORMS) * len(MODELS)))
+    if only is not None:                                  # --only は --dry-run にも効く(その社の本だけの見積り・確かめ)
+        if only not in docs:
+            raise Stop(u"**--only の docID が選んだ 20 社に無い。止める**")
+        all_jobs = [j for j in all_jobs if j[0] == only]
+        est_total = sum(estimate_usd(len(prompts[(d, f)])) for d, f, m in all_jobs)
+        say(u"--only %s: %d 本" % (only, len(all_jobs)))
     say(u"見積り(保守的な単価 入力 %.1f / 出力 %.1f USD / M tokens・入力 = 字数 × 1.0・出力 = max_tokens %d): %.4f USD(上限 %.2f)" % (PRICE_IN, PRICE_OUT, MAX_TOKENS, est_total, COST_CAP_USD))
     if est_total > COST_CAP_USD:
         raise Stop(u"**見積り %.4f USD が上限 %.2f USD を超える。1 回も呼ばずに止める**" % (est_total, COST_CAP_USD))
     if dry_run:
+        prev = jload(out) if os.path.exists(out) else None
+        stop = plan_problem(prev, all_jobs, prompts, say)
+        if stop:
+            raise Stop(stop)
         say(u"--dry-run: 見積りだけ。通信していない・鍵は読んでいない。fact の表は %s に書いた。" % os.path.join(new_cache, "facts"))
         return {"docs": docs, "jobs": len(all_jobs), "est_usd": est_total, "tables": tables, "counts": counts}
 
     key = os.environ.get(KEY_ENV)
     if not key:
         raise Stop(u"**環境変数 %s が無い。止める**" % KEY_ENV)
-    if only is not None:
-        if only not in docs:
-            raise Stop(u"**--only の docID が選んだ 20 社に無い。止める**")
-        all_jobs = [j for j in all_jobs if j[0] == only]
     rec_exists = os.path.exists(out)
     if rec_exists and not resume:
         raise Stop(u"**記録が既に在る。続きは --resume を付ける(有料の呼び出しを二度しない)。止める**")
@@ -454,47 +570,73 @@ def run(root=ROOT, dry_run=False, only=None, resume=False, caches=None, new_cach
         existing = [n for n in (os.listdir(texts_dir) if os.path.isdir(texts_dir) else []) if n.endswith(".txt")]
         if existing:
             raise Stop(u"**文の folder に文が在るが記録が無い。止める**")
-    done = set(c[u"name"] for c in rec[u"呼び出し"] if c[u"ok"])
-    cum = sum(c[u"cost_usd"] for c in rec[u"呼び出し"])
+    # 走らせる前の止め: 記録の累計(古い呼び出し・記録の外を含む)+ 残りの本の見積りが上限を超えるなら 1 回も呼ばない(文も動かさない)
+    stop = plan_problem(rec, all_jobs, prompts, say)
+    if stop:
+        raise Stop(stop)
+    cur = current_ok_by_name(rec[u"呼び出し"])
+    cum = recorded_cost(rec)
+    this_sha = sha256_file(os.path.abspath(__file__))
+    this_head = head or git_head()
     n_new = 0
     for doc, form, model in all_jobs:
         k = text_key(doc, form, model)
         path = os.path.join(texts_dir, k + ".txt")
-        if k in done:
-            # 記録に ok で在る本は飛ばす。文の file が在り sha256 が記録と合うことを確かめる(合わなければ止める)
-            if not os.path.exists(path) or sha256_file(path) != next(c[u"sha256"] for c in rec[u"呼び出し"] if c[u"ok"] and c[u"name"] == k):
+        if k in cur:
+            # 現行の ok で在る本は飛ばす。文の file が在り sha256 が記録と合うことを確かめる(合わなければ止める)
+            if not os.path.exists(path) or sha256_file(path) != cur[k][u"sha256"]:
                 raise Stop(u"**記録に ok の本の文が無いか sha256 が記録と違う: %s。止める**" % k)
             continue
-        if os.path.exists(path):
-            raise Stop(u"**文が既に在るが記録に ok が無い: %s。二度呼ばない(記録を直してから)。止める**" % k)
         prompt = prompts[(doc, form)]
         est = estimate_usd(len(prompt))
         if cum + est > COST_CAP_USD:
             rec[u"止めた理由"] = u"累計 %.4f + 次の見積り %.4f が上限 %.2f USD を超える(%s の前)" % (cum, est, COST_CAP_USD, k)
             write_record(out, rec, key)
             raise Stop(u"**%s**" % rec[u"止めた理由"])
+        if os.path.exists(path):
+            # 文が在る: 記録に現行でない ok が在り sha256 が合うときだけ、呼ぶ前に texts_superseded/ へ移す(消さない)。ほかは二度呼ばずに止める
+            old = last_stale_ok(rec[u"呼び出し"], k)
+            if old is None:
+                raise Stop(u"**文が既に在るが記録に ok が無い: %s。二度呼ばない(記録を直してから)。止める**" % k)
+            if sha256_file(path) != old[u"sha256"]:
+                raise Stop(u"**作り直す本の古い文の sha256 が記録と違う: %s。止める**" % k)
+            dest = os.path.join(new_cache, SUPERSEDED_DIR, k + ".txt")
+            if os.path.exists(dest):
+                raise Stop(u"**古い文の移し先が既に在る: %s。止める**" % k)
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            os.replace(path, dest)
+            rec.setdefault(u"文の移動", []).append(collections.OrderedDict([
+                (u"name", k), (u"sha256", old[u"sha256"]), (u"移した先", SUPERSEDED_DIR + u"/" + k + u".txt"),
+                (u"移した訳", u"古い呼び出しの thinking が無いか今の THINKING と違う(作り直し)")]))
+            write_record(out, rec, key)                    # 移した事実を呼ぶ前に残す
+        if note_script(rec, this_head, this_sha):
+            write_record(out, rec, key)                    # 呼ぶ前に、今の script・HEAD と前の値の履歴を残す
         status, body, retries = call_with_retry(prompt, model, key, transport, sleep)
         item = collections.OrderedDict([(u"name", k), (u"docID", doc), (u"form", form), (u"model", model), (u"writer", MODEL_TAG[model]),
                                         (u"prompt_chars", len(prompt)), (u"prompt_sha256", sha256_text(prompt)), (u"est_usd", round(est, 6)),
-                                        (u"retries", retries), (u"http_status", status), (u"ok", False), (u"sha256", None), (u"chars", None),
-                                        (u"usage", None), (u"cost_usd", 0.0), (u"stop_reason", None)])
+                                        (u"script_sha256", script_prefix(this_sha)), (u"thinking", THINKING[model]), (u"retries", retries), (u"http_status", status), (u"ok", False), (u"sha256", None), (u"chars", None),
+                                        (u"blocks", None), (u"usage", None), (u"cost_usd", 0.0), (u"stop_reason", None)])
         if status == 200:
             try:
                 res = json.loads(body.decode("utf-8"))
-                text = u"".join(b.get("text", u"") for b in res.get("content", []) if isinstance(b, dict))
+                content = [b for b in res.get("content", []) if isinstance(b, dict)]
+                text = u"".join(b.get("text", u"") for b in content)
                 usage = res.get("usage", {}) or {}
                 tin, tout = usage.get("input_tokens"), usage.get("output_tokens")
-                item.update({u"ok": True, u"sha256": sha256_text(text), u"chars": len(text),
-                             u"usage": {u"input_tokens": tin, u"output_tokens": tout}, u"cost_usd": round(cost_usd(tin, tout), 6),
-                             u"stop_reason": res.get("stop_reason")})
-                write_text(os.path.join(texts_dir, k + ".txt"), text)
+                item.update({u"blocks": [b.get("type") for b in content], u"usage": {u"input_tokens": tin, u"output_tokens": tout},
+                             u"cost_usd": round(cost_usd(tin, tout), 6), u"stop_reason": res.get("stop_reason"), u"chars": len(text)})
+                if text:
+                    item.update({u"ok": True, u"sha256": sha256_text(text)})
+                    write_text(os.path.join(texts_dir, k + ".txt"), text)
+                else:                                   # text が 0 字(思考が枠を食った等)は ok にしない。費用は usage どおり残す
+                    item[u"error"] = u"text が 0 字(blocks=%s・stop_reason=%s)" % (item[u"blocks"], item[u"stop_reason"])
             except Exception as e:                       # noqa: BLE001  形が違う返事。文は捨てる
                 item[u"error"] = u"返事の形が読めない(%s)" % type(e).__name__
                 item[u"ok"] = False
         else:
             item[u"error"] = u"HTTP %s" % status if status is not None else u"通信の失敗(%s)" % body.decode("ascii", "replace")
         rec[u"呼び出し"].append(item)
-        cum = sum(c[u"cost_usd"] for c in rec[u"呼び出し"])
+        cum = recorded_cost(rec)
         write_record(out, rec, key)                     # 呼ぶたびに追記(止まっても累計が残る)
         n_new += 1
         say(u"  %s %s retries=%d %s 累計 %.4f USD" % (k, u"ok" if item[u"ok"] else item.get(u"error", u"失敗"), retries,

@@ -137,13 +137,14 @@ def groups(rows):
 # §1 の集計
 def sec_wiring(records):
     gen, claims = records["gen"], records["claims"]
-    ok = dict((c[u"name"], c) for c in gen[u"呼び出し"] if c[u"ok"])
+    ok = dict(GEN.current_ok_by_name(gen[u"呼び出し"]))          # 名前ごとの最後の現行の ok だけ
     books = [b for b in claims[u"本"] if not b.get(u"欠け")]
     out = collections.OrderedDict()
     out[u"本数(予定)"] = len(GEN.FORMS) * len(GEN.MODELS) * len(gen[u"会社の選び"][u"docID"])
     out[u"生成できた本"] = len(ok)
     out[u"生成できて P27 の数の claim が %d 以上ある本" % A1_MIN_CLAIMS] = sum(1 for b in books if b[u"数の claim の数(P27)"] >= A1_MIN_CLAIMS)
     out[u"費用 USD(記録の cost_usd の合計)"] = round(sum(c[u"cost_usd"] for c in gen[u"呼び出し"]), 4)
+    out[u"記録の外の費用 USD(司令塔の確かめ。上の費用に含まない)"] = GEN.outside_cost()
     out[u"呼び出しの数"] = len(gen[u"呼び出し"])
     out[u"失敗した呼び出し"] = sum(1 for c in gen[u"呼び出し"] if not c[u"ok"])
     out[u"再試行の合計"] = sum(c[u"retries"] for c in gen[u"呼び出し"])
@@ -286,7 +287,7 @@ def sec_a12(records, rows):
             if r["P28E"][u"state"] == "GROUNDED":
                 elems[pt.split("@")[0]] += 1
     out[u"要素名の分布(P28E で GROUNDED の行の pointers。上位 30)"] = collections.OrderedDict(elems.most_common(30))
-    ok = [c for c in records["gen"][u"呼び出し"] if c[u"ok"]]
+    ok = list(GEN.current_ok_by_name(records["gen"][u"呼び出し"]).values())
     out[u"max_tokens で打ち切られた本"] = sum(1 for c in ok if c[u"stop_reason"] == "max_tokens")
     nj = [r for r in labelled(rows) if r[u"label"][0] == u"判定不能"]
     out[u"札 判定不能の中身"] = collections.OrderedDict([

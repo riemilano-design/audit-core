@@ -114,12 +114,8 @@ def load_gen(root=ROOT, gen_path=None):
 
 
 def gen_items(gen):
-    u"""生成できた本(ok)の name → 記録の行。同じ name が複数あれば後の ok を採る(--resume の再試行)。"""
-    out = collections.OrderedDict()
-    for c in gen[u"呼び出し"]:
-        if c[u"ok"]:
-            out[c[u"name"]] = c
-    return out
+    u"""生成できた本の name → 記録の行。名前ごとの最後の現行の ok(thinking が今の THINKING と同じ・text が 1 字以上)だけ。古い呼び出しは読まない。"""
+    return GEN.current_ok_by_name(gen[u"呼び出し"])
 
 
 def read_text(name, item, new_cache):

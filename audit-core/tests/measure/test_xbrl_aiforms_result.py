@@ -20,6 +20,7 @@ import collections
 import copy
 import hashlib
 import importlib.util
+import io
 import json
 import os
 import re
@@ -28,6 +29,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
@@ -307,6 +309,39 @@ def record_problems(R, full=True, root=ROOT, scripts=None):
     return out
 
 
+def script_history_problems(gen):
+    u"""記録の上の欄 = 最後の script。``script の履歴`` の各行 {sha256, HEAD, 呼び出しの番号の範囲} の形と、呼び出しの ``script_sha256``(先頭 16 字)が範囲の script と合うこと。"""
+    out = []
+    hist, calls, top = gen.get(u"script の履歴"), gen[u"呼び出し"], gen.get(u"この script の sha256")
+    if not isinstance(hist, list):
+        return [u"gen: script の履歴が無い"]
+    spans, prev_end = [], 0
+    for row in hist:
+        if not isinstance(row, dict) or set(row) != set([u"sha256", u"HEAD", u"呼び出しの番号の範囲"]):
+            out.append(u"gen: script の履歴の行の欄がおかしい")
+            continue
+        if not sha_ok(row[u"sha256"]) or not (isinstance(row[u"HEAD"], str) and row[u"HEAD"]):
+            out.append(u"gen: script の履歴の sha256 か HEAD がおかしい")
+        rng = row[u"呼び出しの番号の範囲"]
+        if rng == []:
+            continue
+        if not (isinstance(rng, list) and len(rng) == 2 and all(isinstance(x, int) for x in rng)) or rng[0] != prev_end + 1 or not (rng[0] <= rng[1] <= len(calls)):
+            out.append(u"gen: script の履歴の番号の範囲が 1 から途切れず並んでいない")
+            continue
+        spans.append((rng[0], rng[1], row[u"sha256"]))
+        prev_end = rng[1]
+    for i, c in enumerate(calls, 1):
+        owner = next((sha for a, b, sha in spans if a <= i <= b), None)
+        want = (owner if owner is not None else top)
+        got = c.get(u"script_sha256")
+        if got is None:
+            if owner is None:
+                out.append(u"gen: 呼び出し %d に script_sha256 が無い(履歴の範囲の外)" % i)
+        elif not isinstance(want, str) or got != want[:16]:
+            out.append(u"gen: 呼び出し %d の script_sha256 が、その番号を持つ script(履歴か記録の上の欄)と合わない" % i)
+    return out
+
+
 def gen_problems(gen, full, root):
     out = []
     docs = gen[u"会社の選び"][u"docID"]
@@ -347,7 +382,11 @@ def gen_problems(gen, full, root):
     ish = GEN.instruction_shas()
     if gen[u"指示文の sha256"] != json.loads(json.dumps(ish)):
         out.append(u"gen: 指示文の sha256 が現物の定数と違う")
-    seen, total = set(), 0.0
+    if gen.get(u"記録の外の呼び出し") != json.loads(json.dumps(GEN.outside_calls())):
+        out.append(u"gen: 記録の外の呼び出しが script の定数と違う")
+    if gen.get(u"thinking") != dict((m, GEN.THINKING[m]) for m in GEN.MODELS):
+        out.append(u"gen: thinking の欄が script の定数と違う")
+    seen, total, n_ok = set(), 0.0, 0
     for c in gen[u"呼び出し"]:
         n = c[u"name"]
         if n != GEN.text_key(c[u"docID"], c[u"form"], c[u"model"]) or c[u"form"] not in GEN.FORMS or c[u"model"] not in GEN.MODELS or c[u"docID"] not in docs:
@@ -356,9 +395,13 @@ def gen_problems(gen, full, root):
         if c[u"writer"] != GEN.MODEL_TAG[c[u"model"]] or not (0 <= c[u"retries"] <= len(GEN.RETRY_WAITS)):
             out.append(u"gen: writer か retries がおかしい")
         if c[u"ok"]:
-            if n in seen:
-                out.append(u"gen: 成功した呼び出しが同じ名前で 2 回ある")
-            seen.add(n)
+            n_ok += 1
+            if GEN.is_current_ok(c):
+                if n in seen:
+                    out.append(u"gen: 現行の成功した呼び出しが同じ名前で 2 回ある")
+                seen.add(n)
+                if not isinstance(c.get(u"blocks"), list) or u"text" not in c[u"blocks"]:
+                    out.append(u"gen: 現行の成功した呼び出しの blocks に text が無い")
             u = c[u"usage"]
             if not sha_ok(c[u"sha256"]) or not isinstance(c[u"chars"], int) or not (isinstance(u[u"input_tokens"], int) and isinstance(u[u"output_tokens"], int)):
                 out.append(u"gen: 成功した呼び出しの欄がおかしい")
@@ -366,14 +409,30 @@ def gen_problems(gen, full, root):
                 out.append(u"gen: 費用が usage と単価から作り直した値と違う")
             if u[u"output_tokens"] is not None and u[u"output_tokens"] > GEN.MAX_TOKENS:
                 out.append(u"gen: 出力が max_tokens を超えている")
-        elif c[u"cost_usd"] != 0 or c[u"sha256"] is not None:
-            out.append(u"gen: 失敗した呼び出しに費用か sha256 がある")
+        else:
+            u = c.get(u"usage")
+            want = round(GEN.cost_usd(u[u"input_tokens"], u[u"output_tokens"]), 6) if u else 0.0
+            if c[u"sha256"] is not None or abs(c[u"cost_usd"] - want) > 1e-9:
+                out.append(u"gen: 失敗した呼び出しに sha256 がある。費用が usage と合わない")
+            if u and not c.get(u"error"):
+                out.append(u"gen: usage があるのに ok でない呼び出しに理由(error)が無い")
         total += c[u"cost_usd"]
+    out += script_history_problems(gen)
     t = gen[u"累計"]
-    if (t[u"呼び出しの数"], t[u"成功"], t[u"失敗"]) != (len(gen[u"呼び出し"]), len(seen), sum(1 for c in gen[u"呼び出し"] if not c[u"ok"])) or abs(t[u"費用 USD"] - round(total, 6)) > 1e-5:
+    if (t[u"呼び出しの数"], t[u"成功"], t[u"失敗"]) != (len(gen[u"呼び出し"]), n_ok, sum(1 for c in gen[u"呼び出し"] if not c[u"ok"])) or abs(t[u"費用 USD"] - round(total, 6)) > 1e-5:
         out.append(u"gen: 累計が呼び出しの行と合わない")
-    if total > GEN.COST_CAP_USD + 1e-9:
-        out.append(u"gen: 累計の費用が上限を超えている")
+    if abs(t.get(u"記録の外の費用 USD", -1) - GEN.outside_cost()) > 1e-9 or abs(t.get(u"費用 USD 合計(記録の外を含む)", -1) - round(total + GEN.outside_cost(), 6)) > 1e-5 or t.get(u"現行の ok の本数") != len(seen):
+        out.append(u"gen: 累計に記録の外の費用か現行の本数が入っていない")
+    if total + GEN.outside_cost() > GEN.COST_CAP_USD + 1e-9:
+        out.append(u"gen: 累計の費用(記録の外を含む)が上限を超えている")
+    for m in gen.get(u"文の移動", []):
+        old = [c for c in gen[u"呼び出し"] if c[u"name"] == m[u"name"] and c[u"ok"] and not GEN.is_current_ok(c) and c[u"sha256"] == m[u"sha256"]]
+        if not old or m[u"移した先"] != GEN.SUPERSEDED_DIR + u"/" + m[u"name"] + u".txt":
+            out.append(u"gen: 文の移動の行が現行でない ok の呼び出しと合わない(%s)" % m[u"name"])
+    if full:
+        stale_names = set(c[u"name"] for c in gen[u"呼び出し"] if c[u"ok"]) - seen
+        if stale_names:
+            out.append(u"gen: 現行の ok が無い本がある(作り直しが終わっていない)")
     if full and len(seen) > len(docs) * len(GEN.FORMS) * len(GEN.MODELS):
         out.append(u"gen: 成功が 160 を超えている")
     return out
@@ -812,6 +871,370 @@ class GenBehaviourTest(unittest.TestCase):
             self.assertTrue(c[u"ok"])
             self.assertAlmostEqual(c[u"cost_usd"], GEN.cost_usd(c[u"usage"][u"input_tokens"], c[u"usage"][u"output_tokens"]), places=6)
         self.assertEqual([], gen_problems(rec, False, ROOT))
+
+
+def thinking_body(prompt, text=u"新しい文", tin=26435, tout=1326, stop="end_turn", blocks=("thinking", "text")):
+    u"""5.5 の model の返事の形(thinking の block + text の block)。blocks に text が無ければ text なし。"""
+    content = []
+    for b in blocks:
+        content.append({"type": "thinking", "thinking": u""} if b == "thinking" else {"type": "text", "text": text})
+    return json.dumps({"content": content, "usage": {"input_tokens": tin, "output_tokens": tout}, "stop_reason": stop}).encode("utf-8")
+
+
+class FakeResponse(object):
+    def __init__(self, status=200, body=b"{}"):
+        self.status, self.body = status, body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+    def getcode(self):
+        return self.status
+
+    def read(self):
+        return self.body
+
+
+@unittest.skipUnless(HAVE_CACHE, "cache の ZIP が無い")
+class ThinkingTest(unittest.TestCase):
+    u"""(th) 2026-11-03 の直し: 思考の指定・text 0 字は ok にしない・作り直し・記録の外の費用。偽の transport / 偽の urlopen。通信しない。"""
+
+    @classmethod
+    def setUpClass(cls):
+        seed, cls.seed_meta = GEN.seed_value(ROOT)
+        cls.chosen, cls.counts = GEN.select_companies(ROOT, seed)
+        cls.one = cls.chosen[:1]
+        cls.doc = cls.one[0]["docID"]
+
+    def setUp(self):
+        self.p = Patch()
+        self.p.set(GEN, "select_companies", lambda root, seed=None: (self.one, self.counts))
+        self.tmp = tempfile.mkdtemp(prefix="aiforms_th_", dir=os.environ.get("TMPDIR"))
+        self.out = os.path.join(self.tmp, "gen.json")
+        self.cache = os.path.join(self.tmp, "cache")
+        os.environ.pop(GEN.KEY_ENV, None)
+
+    def tearDown(self):
+        self.p.undo()
+        shutil.rmtree(self.tmp, ignore_errors=True)
+        os.environ.pop(GEN.KEY_ENV, None)
+
+    def go(self, transport, key="SECRETKEY-aaaaaaaaaaaaaaaaaaaa", resume=False, dry_run=False, only="default", head=None):
+        os.environ[GEN.KEY_ENV] = key
+        only = (None if dry_run else self.doc) if only == "default" else only
+        return GEN.run(root=ROOT, dry_run=dry_run, only=only, resume=resume, out=self.out, new_cache=self.cache, key_value=key,
+                       transport=transport, sleep=lambda s: None, say=lambda *a: None, head=head)
+
+    def rec(self):
+        return json.load(open(self.out, encoding="utf-8"))
+
+    def put(self, rec):
+        GEN.write_text(self.out, GEN.dumps(rec))
+
+    def texts(self, sub="texts"):
+        d = os.path.join(self.cache, sub)
+        return sorted(os.listdir(d)) if os.path.isdir(d) else []
+
+    def test_th_1_the_thinking_literal_per_model(self):
+        self.assertEqual({"claude-sonnet-5-5": {"type": "between_tools"}, "claude-haiku-5-5": {"type": "disabled"}}, GEN.THINKING)
+        self.assertEqual((4000, "2023-06-01", "https://api.anthropic.com/v1/messages"), (GEN.MAX_TOKENS, GEN.API_VERSION, GEN.API_URL))
+        self.assertEqual(set(GEN.MODELS), set(GEN.THINKING))
+
+    def test_th_2_the_thinking_goes_into_the_request_body(self):
+        sent = []
+
+        def fake_urlopen(req, timeout=None):
+            sent.append((req.full_url, json.loads(req.data.decode("utf-8"))))
+            return FakeResponse(200, b"{}")
+        self.p.set(urllib.request, "urlopen", fake_urlopen)
+        for model, want in (("claude-sonnet-5-5", {"type": "between_tools"}), ("claude-haiku-5-5", {"type": "disabled"})):
+            self.assertEqual((200, b"{}"), GEN.call_api(u"問い", model, "KEY-not-a-secret"))
+            url, body = sent[-1]
+            self.assertEqual("https://api.anthropic.com/v1/messages", url)
+            self.assertEqual(want, body["thinking"])
+            self.assertEqual((model, 4000, [{"role": "user", "content": u"問い"}]), (body["model"], body["max_tokens"], body["messages"]))
+
+    def test_th_3_text_of_zero_chars_is_not_ok_and_the_cost_stays(self):
+        calls = []
+
+        def tr(prompt, model, key):
+            calls.append(model)
+            if len(calls) == 1:                                    # 思考の block だけで text なし・max_tokens
+                return 200, thinking_body(prompt, tin=26437, tout=4000, stop="max_tokens", blocks=("thinking",))
+            return 200, thinking_body(prompt, text=u"文 %d" % len(calls))
+        self.go(tr)
+        rec = self.rec()
+        first, second = rec[u"呼び出し"][0], rec[u"呼び出し"][1]
+        self.assertFalse(first[u"ok"])
+        self.assertIn(u"0 字", first[u"error"])
+        self.assertEqual((["thinking"], 0, None, "max_tokens", GEN.THINKING[first[u"model"]]), (first[u"blocks"], first[u"chars"], first[u"sha256"], first[u"stop_reason"], first[u"thinking"]))
+        self.assertAlmostEqual(0.232185, first[u"cost_usd"], places=6)          # usage どおり(26437 × 5 + 4000 × 25)/ 1e6
+        self.assertNotIn(first[u"name"] + ".txt", self.texts())
+        self.assertTrue(second[u"ok"])
+        self.assertEqual((["thinking", "text"], GEN.THINKING[second[u"model"]]), (second[u"blocks"], second[u"thinking"]))
+        self.assertEqual(7, len(self.texts()))
+        self.assertEqual([], gen_problems(rec, False, ROOT))
+        # 続きでは ok でなかった本をもう一度呼ぶ(文が無いので二度呼びの止めに当たらない)
+        n = len(calls)
+        self.go(tr, resume=True)
+        self.assertEqual(n + 1, len(calls))
+        self.assertEqual(8, len(self.texts()))
+        self.assertEqual([], gen_problems(self.rec(), False, ROOT))
+
+    def make_legacy(self):
+        u"""8 本を作り、呼び出しのうち 0 番目の thinking を消し(古い記録)、3 番目の thinking を今の指定と違う値にする。"""
+        calls = []
+        self.go(fake_transport_factory(calls))
+        rec = self.rec()
+        a, b = rec[u"呼び出し"][0], rec[u"呼び出し"][3]
+        del a[u"thinking"]
+        b[u"thinking"] = {"type": "disabled"} if b[u"model"] == "claude-sonnet-5-5" else {"type": "between_tools"}
+        self.put(rec)
+        return rec, a, b
+
+    def test_th_4_a_stale_ok_is_rebuilt_and_its_text_is_moved_before_the_call(self):
+        rec0, a, b = self.make_legacy()
+        self.assertEqual(8, len(self.texts()))
+        self.assertEqual(6, len(GEN.current_ok_by_name(rec0[u"呼び出し"])))
+        before_cost = GEN.recorded_cost(rec0)
+        seen = []
+
+        def tr(prompt, model, key):
+            i = len(seen)
+            on_disk = self.rec()
+            seen.append(1)
+            # 呼ぶ前に: 古い文は texts から texts_superseded へ移り済み、移した事実は記録に書き済み
+            if len(self.texts()) != 7 or len(self.texts("texts_superseded")) != i + 1 or len(on_disk[u"文の移動"]) != i + 1:
+                raise AssertionError("移動が呼ぶ前に済んでいない")
+            return 200, thinking_body(prompt, text=u"新しい文 %d" % i)
+        self.go(tr, resume=True)
+        self.assertEqual(2, len(seen))
+        rec = self.rec()
+        self.assertEqual(10, len(rec[u"呼び出し"]))                                # 古い 8 つは残る
+        self.assertEqual(sorted([a[u"name"], b[u"name"]]), sorted(self.texts("texts_superseded")[i][:-4] for i in range(2)))
+        self.assertEqual(sorted([a[u"name"], b[u"name"]]), sorted(m[u"name"] for m in rec[u"文の移動"]))
+        for m in rec[u"文の移動"]:
+            moved = io.open(os.path.join(self.cache, "texts_superseded", m[u"name"] + ".txt"), encoding="utf-8").read()
+            self.assertEqual(m[u"sha256"], GEN.sha256_text(moved))                    # 消さずに移した(中身が古い呼び出しの sha256 と同じ)
+            self.assertTrue(os.path.exists(os.path.join(self.cache, "texts", m[u"name"] + ".txt")))
+        cur = GEN.current_ok_by_name(rec[u"呼び出し"])
+        self.assertEqual(8, len(cur))
+        for n in (a[u"name"], b[u"name"]):
+            self.assertEqual(GEN.THINKING[cur[n][u"model"]], cur[n][u"thinking"])
+            self.assertNotEqual((a if n == a[u"name"] else b)[u"sha256"], cur[n][u"sha256"])
+        self.assertEqual(8, len(self.texts()))
+        # 古い呼び出しの cost_usd は累計と上限の計算に入ったまま
+        t = rec[u"累計"]
+        self.assertAlmostEqual(before_cost + sum(c[u"cost_usd"] for c in rec[u"呼び出し"][8:]), GEN.recorded_cost(rec), places=6)
+        self.assertEqual((10, 10, 8, 2), (t[u"呼び出しの数"], t[u"成功"], t[u"現行の ok の本数"], t[u"現行でない ok の呼び出し"]))
+        self.assertEqual([], gen_problems(rec, False, ROOT))
+        n = []
+        self.go(lambda prompt, model, key: n.append(1) or (200, thinking_body(prompt)), resume=True)          # 全部現行 = 何も呼ばない
+        self.assertEqual([], n)
+
+    def test_th_5_a_stale_text_that_does_not_match_the_record_stops_with_no_move_and_no_call(self):
+        rec0, a, b = self.make_legacy()
+        with open(os.path.join(self.cache, "texts", a[u"name"] + ".txt"), "a", encoding="utf-8") as fh:
+            fh.write(u"改ざん")
+        calls = []
+        with self.assertRaises(GEN.Stop):
+            self.go(fake_transport_factory(calls), resume=True)
+        self.assertEqual([], calls)
+        self.assertEqual([], self.texts("texts_superseded"))
+        # 記録に ok が無い本の文は、古くなった ok も無いので二度呼ばずに止める
+        rec = self.rec()
+        rec[u"呼び出し"] = [c for c in rec[u"呼び出し"] if c[u"name"] != b[u"name"]]
+        self.put(rec)
+        with self.assertRaises(GEN.Stop):
+            self.go(fake_transport_factory(calls), resume=True)
+        self.assertEqual([], calls)
+
+    def test_th_6_before_any_call_recorded_cost_plus_remaining_estimate_over_the_cap_stops(self):
+        rec0, a, b = self.make_legacy()
+        recorded = GEN.recorded_cost(rec0)
+        self.p.set(GEN, "COST_CAP_USD", recorded + a[u"est_usd"] + b[u"est_usd"] / 2.0)      # 1 本目までは入るが 2 本合わせると超える
+        calls = []
+        with self.assertRaises(GEN.Stop):
+            self.go(fake_transport_factory(calls), resume=True)
+        self.assertEqual([], calls)                                                          # 1 回も呼ばない
+        self.assertEqual([], self.texts("texts_superseded"))                                 # 文も動かさない
+        self.assertEqual(8, len(self.texts()))
+        self.assertEqual(rec0[u"呼び出し"], self.rec()[u"呼び出し"])
+
+    def test_th_7_the_outside_calls_are_written_from_the_constants_and_enter_the_total(self):
+        calls = []
+        self.go(fake_transport_factory(calls))
+        rec = self.rec()
+        out = rec[u"記録の外の呼び出し"]
+        self.assertEqual(["1-a", "1-b", "1-c", "1-d", "2-a", "2-b", "2-c"], [c[u"番号"] for c in out])
+        by = dict((c[u"番号"], c) for c in out)
+        self.assertEqual((400, None, 0.0), (by["1-d"][u"http_status"], by["1-d"][u"usage"], by["1-d"][u"cost_usd"]))      # HTTP 400 は費用なし
+        self.assertEqual({"input_tokens": 26437, "output_tokens": 4000}, by["2-a"][u"usage"])
+        self.assertAlmostEqual(0.232185, by["2-a"][u"cost_usd"], places=6)
+        self.assertAlmostEqual(0.165325, by["2-b"][u"cost_usd"], places=6)
+        self.assertAlmostEqual(0.19425, by["2-c"][u"cost_usd"], places=6)
+        self.assertAlmostEqual(0.59495, GEN.outside_cost(), places=6)
+        t = rec[u"累計"]
+        self.assertAlmostEqual(0.59495, t[u"記録の外の費用 USD"], places=6)
+        self.assertAlmostEqual(t[u"費用 USD"] + 0.59495, t[u"費用 USD 合計(記録の外を含む)"], places=5)
+        # 記録に書かれた値を信じない: 書き換えた記録でも次に書くとき定数に戻る
+        rec[u"記録の外の呼び出し"] = []
+        self.put(rec)
+        self.go(fake_transport_factory(calls), resume=True)
+        self.assertEqual(json.loads(json.dumps(GEN.outside_calls())), self.rec()[u"記録の外の呼び出し"])
+
+    def test_th_8_the_outside_cost_counts_for_the_cap_before_and_during_the_run(self):
+        calls = []
+        r = self.go(fake_transport_factory(calls), dry_run=True)
+        est_total = r["est_usd"]
+        # 走らせる前: 見積りだけなら入るが、記録の外を足すと超える
+        self.p.set(GEN, "COST_CAP_USD", est_total + GEN.outside_cost() / 2.0)
+        with self.assertRaises(GEN.Stop):
+            self.go(fake_transport_factory(calls))
+        self.assertEqual([], calls)
+        self.assertFalse(os.path.exists(self.out))
+        self.p.undo()
+        self.tearDown()
+        self.setUp()
+        # 走っている間: 1 本目の費用 c1(見積りの合計より大きい)。記録の外を数えなければ 2 本目の前の累計 + 見積りは上限に入ってしまう
+        probe = []
+        self.go(fake_transport_factory(probe))
+        ests = [c[u"est_usd"] for c in self.rec()[u"呼び出し"]]
+        self.tearDown()
+        self.setUp()
+        c1 = est_total + 1.0
+        self.p.set(GEN, "COST_CAP_USD", c1 + ests[1] + GEN.outside_cost() / 2.0)
+        n = []
+
+        def tr(prompt, model, key):
+            n.append(1)
+            return 200, thinking_body(prompt, tin=0, tout=int(round(c1 / GEN.PRICE_OUT * 1e6)))
+        with self.assertRaises(GEN.Stop):
+            self.go(tr)
+        self.assertEqual(1, len(n))
+        self.assertIsNotNone(self.rec()[u"止めた理由"])
+
+    def test_th_9_run_and_tally_read_only_the_last_current_ok_per_name(self):
+        def call(name, model, ok, thinking, sha, chars, cost=0.5, stop="end_turn"):
+            return {"name": name, "docID": "S100AAAA", "form": "F1", "model": model, "ok": ok, "thinking": thinking, "sha256": sha, "chars": chars,
+                    "cost_usd": cost, "stop_reason": stop, "retries": 0, "usage": {"input_tokens": 1, "output_tokens": 1}}
+        h, s_ = "claude-haiku-5-5", "claude-sonnet-5-5"
+        good_h, good_s = GEN.THINKING[h], GEN.THINKING[s_]
+        calls = [call("S100AAAA_F1_" + h, h, True, None, "a" * 64, 100),                         # 古い(thinking の欄なし)
+                 call("S100AAAA_F1_" + h, h, True, good_h, "b" * 64, 200),                        # 現行
+                 call("S100AAAA_F1_" + h, h, True, good_h, "e" * 64, 250),                        # 現行(同じ名前でもう 1 つ = こちらが最後)
+                 call("S100AAAA_F1_" + s_, s_, True, {"type": "disabled"}, "c" * 64, 300),        # 今の指定と違う = 古い。これしか無い
+                 call("S100AAAA_F2_" + h, h, True, good_h, "d" * 64, 0)]                           # text 0 字 = 現行でない
+        calls[3]["name"] = "S100AAAA_F2_" + h
+        gen = {u"呼び出し": calls, u"会社の選び": {u"docID": ["S100AAAA"]}}
+        cur = GEN.current_ok_by_name(calls)
+        self.assertEqual(["S100AAAA_F1_" + h], list(cur))
+        self.assertEqual("e" * 64, cur["S100AAAA_F1_" + h][u"sha256"])                           # 名前ごとに最後の現行
+        self.assertEqual(list(cur), list(RUN.gen_items(gen)))
+        w = TAL.sec_wiring({"gen": gen, "claims": {u"本": []}})
+        self.assertEqual(1, w[u"生成できた本"])
+        self.assertEqual(0, w[u"max_tokens で打ち切られた本"])
+        self.assertEqual(2.5, w[u"費用 USD(記録の cost_usd の合計)"])                              # 古い呼び出しの費用は残る
+        self.assertAlmostEqual(0.59495, w[u"記録の外の費用 USD(司令塔の確かめ。上の費用に含まない)"], places=6)
+
+    def test_th_10_a_rebuild_flow_record_passes_the_record_checks_and_keeps_the_script_history(self):
+        # 古い script が作った記録(script_sha256 の欄なし・script の sha256 と HEAD は別の値)を、今の script で作り直す。本番と同じ形に record_problems を当てる
+        rec0, a, b = self.make_legacy()
+        rec = self.rec()
+        old_sha, old_head = "3fc95b6d" + "0" * 56, "6c08572" + "0" * 33
+        rec[u"この script の sha256"], rec[u"HEAD の commit"] = old_sha, old_head
+        for c in rec[u"呼び出し"]:
+            c.pop(u"script_sha256", None)
+        rec.pop(u"script の履歴", None)
+        rec.pop(u"文の移動", None)
+        self.put(rec)
+        self.go(lambda prompt, model, key: (200, thinking_body(prompt, text=u"新しい文")), resume=True, head="a" * 40)
+        rec = self.rec()
+        now = GEN.sha256_file(os.path.abspath(GEN.__file__))
+        self.assertEqual((now, "a" * 40), (rec[u"この script の sha256"], rec[u"HEAD の commit"]))                  # 記録の上の欄 = 最後の script
+        self.assertEqual([{"sha256": old_sha, "HEAD": old_head, "呼び出しの番号の範囲": [1, 8]}], rec[u"script の履歴"])
+        self.assertEqual([None] * 8 + [now[:16]] * 2, [c.get(u"script_sha256") for c in rec[u"呼び出し"]])
+        self.assertEqual(2, len(rec[u"文の移動"]))
+        for m in rec[u"文の移動"]:
+            self.assertEqual(set([u"name", u"sha256", u"移した先", u"移した訳"]), set(m))
+        self.assertEqual([], record_problems({"gen": rec}, full=False, root=ROOT))
+        # もう一度(同じ script・同じ HEAD)呼ぶ回では履歴を増やさない
+        rec[u"呼び出し"][1][u"thinking"] = {"type": "other"}                                     # もう 1 本古い ok にして再び呼ばせる
+        self.put(rec)
+        self.go(lambda prompt, model, key: (200, thinking_body(prompt, text=u"さらに新しい文")), resume=True, head="a" * 40)
+        rec2 = self.rec()
+        self.assertEqual(rec[u"script の履歴"], rec2[u"script の履歴"])
+        self.assertEqual([], record_problems({"gen": rec2}, full=False, root=ROOT))
+        # 履歴の形が壊れた記録・script_sha256 が合わない記録は赤
+        bad = json.loads(json.dumps(rec2))
+        bad[u"script の履歴"][0][u"呼び出しの番号の範囲"] = [2, 8]
+        self.assertTrue(any(u"途切れず" in x for x in record_problems({"gen": bad}, full=False, root=ROOT)))
+        bad = json.loads(json.dumps(rec2))
+        bad[u"呼び出し"][-1][u"script_sha256"] = u"0" * 16
+        self.assertTrue(any(u"script_sha256" in x for x in record_problems({"gen": bad}, full=False, root=ROOT)))
+        bad = json.loads(json.dumps(rec2))
+        bad[u"この script の sha256"] = old_sha
+        self.assertTrue(any(u"現物と違う" in x for x in record_problems({"gen": bad}, full=False, root=ROOT)))
+
+    def test_th_11_the_stop_before_a_call_is_at_the_boundary_cum_plus_estimate(self):
+        calls = []
+        est_total = self.go(fake_transport_factory(calls), dry_run=True)["est_usd"]
+        probe = []
+        self.go(fake_transport_factory(probe))
+        ests = [c[u"est_usd"] for c in self.rec()[u"呼び出し"]]
+        self.tearDown()
+        self.setUp()
+        tout = int(est_total * 1e6 / GEN.PRICE_OUT) + 40000                              # 1 本 est_total より大きい費用
+        cum1 = GEN.outside_cost() + tout * GEN.PRICE_OUT / 1e6
+        for delta, want in ((-0.0005, 1), (+0.0005, 2)):                                  # 累計 ≤ 上限 < 累計 + 次の見積り なら止まる / 見積りぎりぎり入るなら呼ぶ
+            n = []
+            self.p.set(GEN, "COST_CAP_USD", cum1 + ests[1] + delta)
+
+            def tr(prompt, model, key):
+                n.append(1)
+                return 200, thinking_body(prompt, tin=0, tout=tout)
+            with self.assertRaises(GEN.Stop):
+                self.go(tr)
+            self.assertEqual(want, len(n), delta)
+            self.p.undo()
+            self.tearDown()
+            self.setUp()
+
+    def test_th_12_the_stale_ok_to_move_is_the_last_ok_of_the_name(self):
+        rec0, a, b = self.make_legacy()
+        rec = self.rec()
+        older = json.loads(json.dumps(rec[u"呼び出し"][0]))
+        older[u"sha256"] = u"f" * 64                                                        # 同じ名前のもっと古い ok(文の sha256 はこちらと合わない)
+        rec[u"呼び出し"].insert(0, older)
+        self.put(rec)
+        self.assertEqual(a[u"sha256"], GEN.last_stale_ok(rec[u"呼び出し"], a[u"name"])[u"sha256"])
+        n = []
+        self.go(lambda prompt, model, key: n.append(1) or (200, thinking_body(prompt)), resume=True)
+        self.assertEqual(2, len(n))
+        self.assertIn(a[u"name"], [m[u"name"] for m in self.rec()[u"文の移動"]])
+
+    def test_th_13_only_works_on_dry_run_too(self):
+        seed_chosen = self.chosen[:2]
+        self.p.set(GEN, "select_companies", lambda root, seed=None: (seed_chosen, self.counts))
+        doc_a, doc_b = seed_chosen[0]["docID"], seed_chosen[1]["docID"]
+        r_a = self.go(lambda *a: (500, b""), dry_run=True, only=doc_a)
+        r_b = self.go(lambda *a: (500, b""), dry_run=True, only=doc_b)
+        self.assertEqual((8, 8), (r_a["jobs"], r_b["jobs"]))
+        self.assertAlmostEqual(r_a["est_usd"] + r_b["est_usd"], self.go(lambda *a: (500, b""), dry_run=True)["est_usd"], places=6)
+        # 記録が在る: 1 社目は済み(1 本 0.5 USD)。上限は 済み + 2 社目の見積りの半分 → 全部の下見は止まり、--only 1 社目 の下見は通る
+        self.go(lambda prompt, model, key: (200, thinking_body(prompt, tin=0, tout=20000)), only=doc_a)
+        rec = self.rec()
+        self.p.set(GEN, "COST_CAP_USD", GEN.recorded_cost(rec) + r_b["est_usd"] / 2.0)
+        with self.assertRaises(GEN.Stop):
+            self.go(lambda *a: (500, b""), dry_run=True)
+        r = self.go(lambda *a: (500, b""), dry_run=True, only=doc_a)
+        self.assertEqual(8, r["jobs"])
+        self.assertAlmostEqual(r_a["est_usd"], r["est_usd"], places=6)
+        with self.assertRaises(GEN.Stop):
+            self.go(lambda *a: (500, b""), dry_run=True, only="S100NOPE")
 
 
 class SelectionTest(unittest.TestCase):
