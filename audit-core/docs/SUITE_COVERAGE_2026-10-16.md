@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **262 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **263 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 195 |
+| `tests/measure` | 196 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -238,6 +238,9 @@ cache の無い clone で `README.en.md` の 3 節の手順が字どおりに動
 
 **2026-11-03 に +3**(`tests/adapters/xbrl/test_recipes_p28.py`・`tests/measure/test_xbrl_p28_seal.py`・`tests/measure/test_xbrl_p28_result.py`。
 「その他」の主語の結び直し O(P28 = P27 + O。封 `docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md`)の engine の試験と、封の門と、結果の門。結果は `docs/XBRL_OTHER_SUBJECT_ENGINE_RESULT_2026-11-02.md`)。
+
+**2026-11-03 に +1**(`tests/measure/test_xbrl_p28e_result.py`。
+P28E(= P27E + O。封 `docs/XBRL_P28E_SEAL_2026-11-03.md`)の結果の門。結果は `docs/XBRL_P28E_RESULT_2026-11-03.md`)。262 → 263(`tests/measure` 195 → 196)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

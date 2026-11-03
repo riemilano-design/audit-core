@@ -48,7 +48,8 @@ class ProfileShapeTest(unittest.TestCase):
         self.assertIs(V.PROFILES["P28"], V.P28)
 
     def test_only_p28_has_the_flag(self):
-        self.assertEqual(["P28"], sorted(n for n, p in V.PROFILES.items() if p.other_subject_2026_11_02))
+        # 2026-11-03: 旗が真の profile は P28 と P28E(= P27E + O。封 docs/XBRL_P28E_SEAL_2026-11-03.md §1)の 2 つ。ほかは偽。
+        self.assertEqual(["P28", "P28E"], sorted(n for n, p in V.PROFILES.items() if p.other_subject_2026_11_02))
         self.assertFalse(V.P27.other_subject_2026_11_02)
         self.assertFalse(V.P27E.other_subject_2026_11_02)
         self.assertFalse(V.P27C.other_subject_2026_11_02)
@@ -277,6 +278,191 @@ class DecideTest(unittest.TestCase):
         self.assertEqual({"前期": False, "候補": 1, "決まった": True}, r.claim.provenance[KEY])
         raw2 = pick(claims("P27", "売上高は820百万円、営業利益は3百万円でした。", fs), 3000000)
         self.assertNotIn(KEY, R.claim_to_recipe(raw2, "num").claim.provenance)
+
+
+# ====================================================================================================
+# P28E(= P27E + O)。封 docs/XBRL_P28E_SEAL_2026-11-03.md §1・§2-1。engine は変えない(旗は新しくない)。独立監査の注意 3 本(符号・stale keys・mag_trunc)の振る舞いの試験。
+# 作り物の facts。変異: 符号に敏感にする / 消去(_P27_STALE_KEYS の pop)を外す / mag_trunc を偽に固定する、で赤くなる(便の結果の文書の変異の節)。
+EXPECT_STALE = ("match", "no_same_value", "other_frame", "rounded_diff_hold", "last_branch_evidence", "last_branch_digit_floor", "ambiguous_count")
+
+
+def claims_rounding(p, sentence, facts, rounding):
+    """``rounding``(書類の丸め方の 2 周目)を渡して数の主張を作る(test_recipes_p24.num_claims は渡せない)。"""
+    return R._build_raw_num_claims([sentence], facts, contexts_for(facts), V.PROFILES[p], lambda si, pos: (None, "test"), rounding=rounding)
+
+
+def direct_claim(**extra):
+    """``_other_subject_2026_11_02`` を直接呼ぶための、engine が GROUNDED にしなかった行の形(unit_scale 1.0・claim_scale 百万円)。"""
+    c = {"unit_scale": 1.0, "claim_scale": 1000000.0, "result": None, "reason": "no_same_value", "pointer": None, "bound": False, "recomputed": None}
+    c.update(extra)
+    return c
+
+
+class P28EProfileTest(unittest.TestCase):
+    def test_p28e_is_p27e_plus_exactly_the_other_flag(self):
+        self.assertEqual(dataclasses.replace(V.P27E, name="P28E", other_subject_2026_11_02=True), V.P28E)
+        self.assertIs(V.PROFILES["P28E"], V.P28E)
+
+    def test_p28e_has_the_flag_set_of_p27e_plus_the_other_flag(self):
+        names = [f.name for f in dataclasses.fields(V.Profile) if f.type in (bool, "bool")]
+        on = lambda p: set(n for n in names if getattr(p, n))
+        self.assertEqual(on(V.P27E) | {KEY}, on(V.P28E))
+        self.assertEqual(on(V.P28) | {"last_branch_relative_2026_10_27"}, on(V.P28E))
+        self.assertTrue(V.P28E.last_branch_relative_2026_10_27)
+        self.assertFalse(V.P28.last_branch_relative_2026_10_27)
+
+    def test_p28e_flag_off_is_p27e_except_name(self):
+        off = dataclasses.replace(V.P28E, other_subject_2026_11_02=False)
+        self.assertEqual(dataclasses.replace(V.P27E, name="P28E"), off)
+
+    def test_default_is_still_p27(self):
+        self.assertEqual("P27", V.DEFAULT_PROFILE)
+        self.assertNotEqual("P28E", V.DEFAULT_PROFILE)
+
+
+class P28ESignTest(unittest.TestCase):
+    """符号: O は ``V.match_value`` の既存の帯(符号を見ない ― 同じ符号か絶対値で当たる)で候補を引く。符号つきの数でも決まる fact は +1 と -1 の入力で同じ。"""
+
+    def decided(self, fact_value, sentence, value):
+        fs = [NS, fact("OtherNOI", CUR, fact_value), fact("OtherNOE", CUR, 999000000)]
+        return pick(claims("P28E", sentence, fs), value)
+
+    def test_signed_sentence_binds_the_same_fact_as_the_unsigned_one_for_both_fact_signs(self):
+        for fv in (146000000, -146000000):
+            plus = self.decided(fv, "売上高は820百万円、その他は146百万円でした。", 146000000)
+            minus = self.decided(fv, "売上高は820百万円、その他は△146百万円でした。", -146000000)
+            for c in (plus, minus):
+                self.assertEqual("GROUNDED", c["result"], (fv, c[KEY]))
+                self.assertEqual("xbrl:jppfs_cor:OtherNOI@" + CUR, c["pointer"])
+                self.assertEqual(float(fv), c["recomputed"])
+                self.assertEqual({"前期": False, "候補": 1, "決まった": True}, c[KEY])
+            self.assertEqual(plus["pointer"], minus["pointer"])
+            self.assertEqual(-146000000.0, minus["value"])
+            self.assertEqual(146000000.0, plus["value"])
+
+    def test_direct_call_sign_minus_one_and_plus_one_pick_the_same_fact(self):
+        s = "その他は146百万円でした。"
+        a = s.index("146")
+        b = a + len("146百万円")
+        for fv in (146000000.0, -146000000.0):
+            facts = [fact("OtherNOI", CUR, fv), fact("OtherNOE", CUR, 5000000)]
+            got = []
+            for sign in (1, -1):
+                c = direct_claim()
+                R._other_subject_2026_11_02(c, s, a, b, sign, 146000000.0, "円", facts, contexts_for(facts), V.P28E, None)
+                got.append((c["result"], c["pointer"], c["recomputed"], c[KEY]["候補"], c[KEY]["決まった"]))
+            self.assertEqual(got[0], got[1], fv)
+            self.assertEqual(("GROUNDED", "xbrl:jppfs_cor:OtherNOI@" + CUR, fv, 1, True), got[0])
+
+    def test_sign_is_not_a_condition_a_wrong_sign_fact_of_another_size_is_not_picked(self):
+        # 絶対値が合わなければ、符号が合っても結ばない(符号が条件になったのでも、符号を落としただけでもない)
+        facts = [fact("OtherNOI", CUR, -147000000)]
+        s = "その他は146百万円でした。"
+        a = s.index("146")
+        for sign in (1, -1):
+            c = direct_claim()
+            R._other_subject_2026_11_02(c, s, a, a + 6, sign, 146000000.0, "円", facts, contexts_for(facts), V.P28E, None)
+            self.assertNotEqual("GROUNDED", c["result"], sign)
+            self.assertEqual(0, c[KEY]["候補"])
+
+
+class P28EStaleKeysTest(unittest.TestCase):
+    """stale keys: 最後の枝の欄を置いた claim に O が当たって決まったら、その欄と reason が消え、GROUNDED の形になる。"""
+
+    def test_pipeline_row_loses_the_last_branch_fields_when_o_decides(self):
+        fs = [NS, fact("OtherNOI", CUR, 3000000)]
+        s = "売上高は820百万円、その他は3百万円でした。"
+        before = pick(claims("P27E", s, fs), 3000000)
+        self.assertIn("no_same_value", before)             # O を当てる前は最後の枝の欄が在る(試験が空振りでないこと)
+        self.assertIn("last_branch_evidence", before)
+        self.assertEqual("no_same_value", before["reason"])
+        c = pick(claims("P28E", s, fs), 3000000)
+        for k in R._P27_STALE_KEYS:
+            if k != "match":                                  # match は消してから O の一致の仕方で置き直す
+                self.assertNotIn(k, c, k)
+        self.assertEqual("GROUNDED", c["result"])
+        self.assertIsNone(c["reason"])
+        self.assertEqual("xbrl:jppfs_cor:OtherNOI@" + CUR, c["pointer"])
+        self.assertIs(True, c["bound"])
+        self.assertEqual(3000000.0, c["recomputed"])
+        self.assertTrue(c["match"])
+        self.assertEqual({"前期": False, "候補": 1, "決まった": True}, c[KEY])
+
+    def test_the_stale_key_list_is_the_seven_fields_of_the_last_branch(self):
+        self.assertEqual(EXPECT_STALE, tuple(R._P27_STALE_KEYS))
+
+    def test_direct_call_removes_every_stale_key_and_the_reason(self):
+        fs = [fact("OtherNOI", CUR, 3000000)]
+        s = "その他は3百万円でした。"
+        a = s.index("3")
+        stale = dict((k, {"x": 1}) for k in EXPECT_STALE)
+        stale["match"] = "round"
+        stale["ambiguous_count"] = 2
+        c = direct_claim(**stale)
+        self.assertEqual(set(EXPECT_STALE), set(c) & set(EXPECT_STALE))
+        R._other_subject_2026_11_02(c, s, a, a + 5, 1, 3000000.0, "円", fs, contexts_for(fs), V.P28E, None)
+        for k in EXPECT_STALE:
+            if k != "match":
+                self.assertNotIn(k, c, k)
+        self.assertIsNone(c["reason"])
+        self.assertEqual("GROUNDED", c["result"])
+        self.assertEqual("xbrl:jppfs_cor:OtherNOI@" + CUR, c["pointer"])
+        self.assertIs(True, c["bound"])
+        self.assertEqual(3000000.0, c["recomputed"])
+        self.assertEqual("round", c["match"])             # match は消してから O の一致の仕方で置き直す(古い値が残るのでなく、新しい値)
+
+    def test_direct_call_with_stale_keys_but_no_decision_leaves_them_alone(self):
+        # 決まらない(候補 0)ときは claim を変えない(欄の消去は決まったときだけ)
+        fs = [fact("OtherNOI", CUR, 9000000)]
+        s = "その他は3百万円でした。"
+        a = s.index("3")
+        c = direct_claim(no_same_value={"x": 1}, last_branch_evidence=None)
+        R._other_subject_2026_11_02(c, s, a, a + 5, 1, 3000000.0, "円", fs, contexts_for(fs), V.P28E, None)
+        self.assertIn("no_same_value", c)
+        self.assertIn("last_branch_evidence", c)
+        self.assertEqual("no_same_value", c["reason"])
+        self.assertNotEqual("GROUNDED", c["result"])
+
+
+class P28EMagTruncTest(unittest.TestCase):
+    """mag_trunc: 書類の丸めが切り捨てのとき(rounding = truncate・claim の magnitude_truncate 真)の帯を O が使う。"""
+
+    S = "売上高は820百万円、その他は146百万円でした。"
+
+    def test_truncate_band_value_is_decided_only_under_truncate(self):
+        fs = [NS, fact("OtherNOI", CUR, 146999999)]
+        trunc = pick(claims_rounding("P28E", self.S, fs, "truncate"), 146000000)
+        self.assertIs(True, trunc.get("magnitude_truncate"))                 # rounding = truncate で claim が絶対値の帯の札を持つ
+        self.assertEqual("GROUNDED", trunc["result"], trunc[KEY])
+        self.assertEqual("xbrl:jppfs_cor:OtherNOI@" + CUR, trunc["pointer"])
+        self.assertEqual(146999999.0, trunc["recomputed"])
+        self.assertIn("truncate", trunc["match"])
+        rnd = pick(claims_rounding("P28E", self.S, fs, "round"), 146000000)
+        self.assertNotIn("magnitude_truncate", rnd)
+        self.assertNotEqual("GROUNDED", rnd["result"])                        # 四捨五入の書類なら 146,999,999 は帯の外
+        self.assertEqual({"前期": False, "候補": 0, "決まった": False}, rnd[KEY])
+
+    def test_negative_fact_outside_the_magnitude_band_is_not_decided_under_truncate(self):
+        # fact -300,297,000 を「△4億円」(-400,000,000)の切り捨ての帯に符号つきのまま当てると 99,703,000 < 1 億で通ってしまう(P19 の実測)。
+        # 絶対値で当てれば 300,297,000 < 4 億で帯の外。claim の札(magnitude_truncate)を O が使うことを字で留める。
+        fs = [NS, fact("OtherNOI", CUR, -300297000)]
+        s = "売上高は820百万円、その他は△4億円でした。"
+        cs = claims_rounding("P28E", s, fs, "truncate")
+        c = pick(cs, -400000000)
+        self.assertIs(True, c.get("magnitude_truncate"))
+        self.assertNotEqual("GROUNDED", c["result"], c.get(KEY))
+        self.assertEqual({"前期": False, "候補": 0, "決まった": False}, c[KEY])
+
+    def test_direct_call_uses_the_magnitude_flag_of_the_claim_not_the_profile(self):
+        fs = [fact("OtherNOI", CUR, -300297000)]
+        s = "その他は△4億円でした。"
+        a = s.index("△")
+        b = len(s) - len("でした。")
+        for flag, want in ((True, 0), (False, 1)):
+            c = direct_claim(claim_scale=100000000.0, **({"magnitude_truncate": True} if flag else {}))
+            R._other_subject_2026_11_02(c, s, a, b, 1, -400000000.0, "円", fs, contexts_for(fs), V.P28E, "truncate")
+            self.assertEqual(want, c[KEY]["候補"], flag)
+            self.assertEqual(bool(want), c[KEY]["決まった"], flag)
 
 
 if __name__ == "__main__":

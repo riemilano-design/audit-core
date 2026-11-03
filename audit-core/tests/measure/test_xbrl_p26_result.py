@@ -72,10 +72,11 @@ SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段
 SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 SEAL_CAND = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"    # 2026-10-30 追記: 候補の欄を足す(下の遷移)
 SEAL_P28 = "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"    # 2026-11-02 追記: 「その他」の主語の結び直し O を足す(下の遷移。vocabulary.py 7fbcfbf0e472f366 → 180125cd94053a94・recipes.py 52d645e713c53c1c → 89eee7eca15480c6。直前の値は測った時点の値としてここに残す)
+SEAL_P28E = "docs/XBRL_P28E_SEAL_2026-11-03.md"    # 2026-11-03 追記: P28E(= P27E + O)を足す(下の遷移。vocabulary.py 180125cd94053a94 → 2dd3f03e777224b4。直前の値は測った時点の値として SEAL_P28 の行に残す)
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
 # 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-ENGINE_TRANSITIONS = {"adapters/xbrl/vocabulary.py": ("180125cd94053a94", SEAL_P28),
+ENGINE_TRANSITIONS = {"adapters/xbrl/vocabulary.py": ("2dd3f03e777224b4", SEAL_P28E),
                       "adapters/xbrl/recipes.py": ("89eee7eca15480c6", SEAL_P28),
                       "adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
                       "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),

@@ -599,9 +599,10 @@ SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"
 SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 SEAL_CAND = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"    # 2026-10-30 追記: 候補の欄を足す(下の遷移)
 SEAL_P28 = "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"    # 2026-11-02 追記: 「その他」の主語の結び直し O を足す(下の遷移。vocabulary.py 7fbcfbf0e472f366 → 180125cd94053a94・recipes.py 52d645e713c53c1c → 89eee7eca15480c6。直前の値は測った時点の値としてここに残す)
+SEAL_P28E = "docs/XBRL_P28E_SEAL_2026-11-03.md"    # 2026-11-03 追記: P28E(= P27E + O)を足す(下の遷移。vocabulary.py 180125cd94053a94 → 2dd3f03e777224b4。直前の値は測った時点の値として SEAL_P28 の行に残す)
 # 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-P27_LATER = {"adapters/xbrl/vocabulary.py": ("180125cd94053a94", SEAL_P28),
+P27_LATER = {"adapters/xbrl/vocabulary.py": ("2dd3f03e777224b4", SEAL_P28E),
              "adapters/xbrl/recipes.py": ("89eee7eca15480c6", SEAL_P28),
              "adapters/xbrl/extract.py": ("3cf55966f12919f0", SEAL_P27),
              "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
@@ -618,12 +619,14 @@ P27_LATER = {"adapters/xbrl/vocabulary.py": ("180125cd94053a94", SEAL_P28),
 #: report_customer.py は 2 行・-0 から 24 行・-1(candidate_ja と理由の欄の描き直し)、verify_document.py は 1 行・-1 から 12 行・-2(Claim の欄 candidate)。直前の値(27・125・19・2・2・1 と 1・0・0・0・0・1)は残す。
 #: 2026-11-02(「その他」の主語の結び直し O): 封 SEAL_P28 §2-3 が宣言した遷移の後の値(同じ封の commit 6a78b42 からの numstat)。vocabulary.py は 32 行・-1 から 38 行・-1(旗 1 つ・P28・PROFILES の登録 +6)、
 #: recipes.py は 125 行・-0 から 190 行・-0(定数 3 つ・関数 2 つ・呼び出し 2 行・provenance の 2 行 +65)。直前の値(32・125)は測った時点の値として残す。
-P27_HEAVY_S7 = {"adapters/xbrl/vocabulary.py": (38, 1), "adapters/xbrl/recipes.py": (190, 0), "adapters/xbrl/extract.py": (19, 0),
+#: 2026-11-03(P28E): vocabulary.py は 38 行・-1 から 43 行・-1(profile 1 つ P28E と注記 +5。封 SEAL_P28E §2-3)。直前の値(38)は測った時点の値として残す。
+P27_HEAVY_S7 = {"adapters/xbrl/vocabulary.py": (43, 1), "adapters/xbrl/recipes.py": (190, 0), "adapters/xbrl/extract.py": (19, 0),
                 "adapters/xbrl/registry_setup.py": (2, 0), "adapters/xbrl/report_customer.py": (24, 1), "adapters/xbrl/verify_document.py": (12, 2)}
 #: 9dd27fab…(P27 の段 2 の後の値。残す)から、既定を P27 に切り替える 段 2 の後の値(ritual の engine_bundle_sha256)。
 #: 2026-10-30(候補の欄を足す): 49bcd3ac…(既定を P27 に切り替える 段 2 の後の値。残す)から、候補の欄を足した後の値(ritual の engine_bundle_sha256。37 file)。
 #: 2026-11-02(「その他」の主語の結び直し O): 4f972be3…(候補の欄を足した後の値。残す)から、vocabulary.py・recipes.py に挿入だけを足した後の値(ritual の engine_bundle_sha256。37 file)。
-P27_HEAVY_BUNDLE = "94e93f3f41c39bf700fbbe7aba5b2e5b4d68900e8a15e09378bfd8b453823b16"
+#: 2026-11-03(P28E): 94e93f3f…(「その他」の主語の結び直しの後の値。残す)から、封 SEAL_P28E §2-3 が宣言した遷移の値(vocabulary.py に P28E と注記の挿入だけ。ritual の engine_bundle_sha256。37 file)。
+P27_HEAVY_BUNDLE = "950ab35468642d253516b11f17246ce7fe5bffd349c09c9a66e9efebb804bb55"
 
 
 def p27_declared(rel):

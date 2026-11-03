@@ -1,0 +1,2395 @@
+{
+ "注意": "同梱の AI の文の書類(1 書類・243 件前後の注入)を P27E と P28E で走らせた記録。外部の数の実際の分布ではない。注入の字は入れない。",
+ "封": {
+  "file": "docs/XBRL_P28E_SEAL_2026-11-03.md",
+  "commit": "7bfad77"
+ },
+ "HEAD の commit": "7bfad77cdb493ee7819c0c63b35f357508d8a2e0",
+ "この script の sha256": "1676ff363b89c0fad2cefe944f2c40033855be0374184843307cf62a9ea9e8d8",
+ "儀式の script の sha256": "28677260887b138cb5c310285f45401a978b39e06dce2c320afcf170dd2b424d",
+ "入力": {
+  "path": "fixtures/xbrl/ai_prose_instance_2026-10-09.zip",
+  "sha256": "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799",
+  "bytes": 580260,
+  "profile": [
+   "P27E",
+   "P28E"
+  ]
+ },
+ "engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く)": "950ab35468642d253516b11f17246ce7fe5bffd349c09c9a66e9efebb804bb55",
+ "engine の file 数": 37,
+ "ラベル 2 file の sha256(起動時に照合)": {
+  "jppfs_2025-11-01_lab.xml": "bf56ea1585afe426b398a9053ec4de4dbeafc211a53675b5d6d19453e4e04bf4",
+  "jpcrp_2025-11-01_lab.xml": "df9c23764ec9a63cb65b5ef62e79a2907c590523797421442ea2a60e334cd684"
+ },
+ "鍵の名前の有無(値は読まない)": {
+  "ANTHROPIC_API_KEY": false,
+  "ANTHROPIC_AUTH_TOKEN": false,
+  "ANTHROPIC_BASE_URL": true,
+  "EDINET_API_KEY": false,
+  "OPENAI_API_KEY": false
+ },
+ "profile ごとの集計": {
+  "P27E": {
+   "注入の対象": 243,
+   "通した": 2,
+   "止めた(VALUE_MISMATCH)": 214,
+   "止めた でも 通した でもない結果": {
+    "detected:POINTER_NOT_FOUND": 27
+   },
+   "素の書類の state の分布": {
+    "GROUNDED": 340,
+    "POINTER_NOT_FOUND": 24,
+    "UNVERIFIABLE": 33,
+    "VALUE_MISMATCH": 15
+   },
+   "素の書類の claim": 412,
+   "型別": {
+    "V1(最小の桁の 1 字を変える)": {
+     "対象": 119,
+     "通した": 1,
+     "止めた": 101
+    },
+    "V2(値を ±1 最小単位)": {
+     "対象": 124,
+     "通した": 1,
+     "止めた": 113
+    }
+   },
+   "通した の分け方": {
+    "丸めの帯の中(±1 最小単位)": 1,
+    "退化値(字は変わるが値が変わらない)": 1,
+    "帯の外(±1 最小単位より大きい)": 0
+   },
+   "通した のうち参照先が動いた": 0,
+   "通した の id": [
+    "N069",
+    "N096"
+   ]
+  },
+  "P28E": {
+   "注入の対象": 250,
+   "通した": 2,
+   "止めた(VALUE_MISMATCH)": 217,
+   "止めた でも 通した でもない結果": {
+    "detected:POINTER_NOT_FOUND": 31
+   },
+   "素の書類の state の分布": {
+    "GROUNDED": 347,
+    "POINTER_NOT_FOUND": 20,
+    "UNVERIFIABLE": 33,
+    "VALUE_MISMATCH": 12
+   },
+   "素の書類の claim": 412,
+   "型別": {
+    "V1(最小の桁の 1 字を変える)": {
+     "対象": 122,
+     "通した": 1,
+     "止めた": 101
+    },
+    "V2(値を ±1 最小単位)": {
+     "対象": 128,
+     "通した": 1,
+     "止めた": 116
+    }
+   },
+   "通した の分け方": {
+    "丸めの帯の中(±1 最小単位)": 1,
+    "退化値(字は変わるが値が変わらない)": 1,
+    "帯の外(±1 最小単位より大きい)": 0
+   },
+   "通した のうち参照先が動いた": 0,
+   "通した の id": [
+    "N069",
+    "N096"
+   ]
+  }
+ },
+ "注入の対象の集合": {
+  "2 つの profile に共通の id": 243,
+  "P28E だけの id": [
+   "N080",
+   "N081",
+   "N144",
+   "N145",
+   "N213",
+   "N290",
+   "N299"
+  ],
+  "P27E だけの id": []
+ },
+ "共通の id だけで数えた件数(参考。判定に使わない)": {
+  "通した": {
+   "P27E": 2,
+   "P28E": 2
+  },
+  "止めた(VALUE_MISMATCH)": {
+   "P27E": 214,
+   "P28E": 214
+  }
+ },
+ "P28E で通して P27E で通さなかった id(E-8 の外れの場合に見る)": [],
+ "注入ごとの結果": [
+  {
+   "id": "N001",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetSales",
+   "P28E の参照先(注入後)の要素": "NetSales",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N002",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetSales",
+   "P28E の参照先(注入後)の要素": "NetSales",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N003",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OperatingIncome",
+   "P28E の参照先(注入後)の要素": "OperatingIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N005",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OrdinaryIncome",
+   "P28E の参照先(注入後)の要素": "OrdinaryIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N007",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProfitLossAttributableToOwnersOfParent",
+   "P28E の参照先(注入後)の要素": "ProfitLossAttributableToOwnersOfParent",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N009",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "Assets",
+   "P28E の参照先(注入後)の要素": "Assets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N010",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetAssets",
+   "P28E の参照先(注入後)の要素": "NetAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N011",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "EquityToAssetRatioSummaryOfBusinessResults",
+   "P28E の参照先(注入後)の要素": "EquityToAssetRatioSummaryOfBusinessResults",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N012",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "EquityToAssetRatioSummaryOfBusinessResults",
+   "P28E の参照先(注入後)の要素": "EquityToAssetRatioSummaryOfBusinessResults",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N013",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ComprehensiveIncome",
+   "P28E の参照先(注入後)の要素": "ComprehensiveIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N014",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetSales",
+   "P28E の参照先(注入後)の要素": "NetSales",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N015",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetSales",
+   "P28E の参照先(注入後)の要素": "NetSales",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N016",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "NetSales",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N017",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetSales",
+   "P28E の参照先(注入後)の要素": "NetSales",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N018",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetSales",
+   "P28E の参照先(注入後)の要素": "NetSales",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N021",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の参照先(注入後)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N022",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の参照先(注入後)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N023",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の参照先(注入後)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N024",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "GrossProfit",
+   "P28E の参照先(注入後)の要素": "GrossProfit",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N025",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "GrossProfit",
+   "P28E の参照先(注入後)の要素": "GrossProfit",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N026",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "GrossProfit",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N028",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CostOfSales",
+   "P28E の参照先(注入後)の要素": "CostOfSales",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N029",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CostOfSales",
+   "P28E の参照先(注入後)の要素": "CostOfSales",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N030",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "CostOfSales",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N031",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CostOfSales",
+   "P28E の参照先(注入後)の要素": "CostOfSales",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N033",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CostOfSales",
+   "P28E の参照先(注入後)の要素": "CostOfSales",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N034",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CostOfSales",
+   "P28E の参照先(注入後)の要素": "CostOfSales",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N036",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "GrossProfit",
+   "P28E の参照先(注入後)の要素": "GrossProfit",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N037",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "GrossProfit",
+   "P28E の参照先(注入後)の要素": "GrossProfit",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N038",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NumberOfEmployees",
+   "P28E の参照先(注入後)の要素": "NumberOfEmployees",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N042",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "SellingGeneralAndAdministrativeExpenses",
+   "P28E の参照先(注入後)の要素": "SellingGeneralAndAdministrativeExpenses",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N043",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "SellingGeneralAndAdministrativeExpenses",
+   "P28E の参照先(注入後)の要素": "SellingGeneralAndAdministrativeExpenses",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N044",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "SellingGeneralAndAdministrativeExpenses",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N045",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "SellingGeneralAndAdministrativeExpenses",
+   "P28E の参照先(注入後)の要素": "SellingGeneralAndAdministrativeExpenses",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N046",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "EmployeesSalariesAndAllowancesSGA",
+   "P28E の参照先(注入後)の要素": "EmployeesSalariesAndAllowancesSGA",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N047",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "EmployeesSalariesAndAllowancesSGA",
+   "P28E の参照先(注入後)の要素": "EmployeesSalariesAndAllowancesSGA",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N048",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "EmployeesSalariesAndAllowancesSGA",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N049",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ResearchAndDevelopmentExpensesSGA",
+   "P28E の参照先(注入後)の要素": "ResearchAndDevelopmentExpensesSGA",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N050",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ResearchAndDevelopmentExpensesSGA",
+   "P28E の参照先(注入後)の要素": "ResearchAndDevelopmentExpensesSGA",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N051",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RetirementBenefitExpensesSGA",
+   "P28E の参照先(注入後)の要素": "RetirementBenefitExpensesSGA",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N052",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RetirementBenefitExpensesSGA",
+   "P28E の参照先(注入後)の要素": "RetirementBenefitExpensesSGA",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N053",
+   "型": "V2",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "RetirementBenefitExpensesSGA",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N059",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の参照先(注入後)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N060",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の参照先(注入後)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N061",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の参照先(注入後)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N063",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OperatingIncome",
+   "P28E の参照先(注入後)の要素": "OperatingIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N064",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OperatingIncome",
+   "P28E の参照先(注入後)の要素": "OperatingIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N065",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OperatingIncome",
+   "P28E の参照先(注入後)の要素": "OperatingIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N066",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "OperatingIncome",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N068",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OperatingIncome",
+   "P28E の参照先(注入後)の要素": "OperatingIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N069",
+   "型": "V2",
+   "P27E の結果": "PASSED",
+   "P28E の結果": "PASSED",
+   "P28E の参照先(注入前)の要素": "OperatingIncome",
+   "P28E の参照先(注入後)の要素": "OperatingIncome",
+   "P28E の分類(通した行のみ)": "丸めの帯の中(±1 最小単位)"
+  },
+  {
+   "id": "N071",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NonOperatingIncome",
+   "P28E の参照先(注入後)の要素": "NonOperatingIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N072",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NonOperatingIncome",
+   "P28E の参照先(注入後)の要素": "NonOperatingIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N073",
+   "型": "V2",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "NonOperatingIncome",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N074",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InterestIncomeNOI",
+   "P28E の参照先(注入後)の要素": "InterestIncomeNOI",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N075",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InterestIncomeNOI",
+   "P28E の参照先(注入後)の要素": "InterestIncomeNOI",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N076",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "DividendsIncomeNOI",
+   "P28E の参照先(注入後)の要素": "DividendsIncomeNOI",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N077",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "DividendsIncomeNOI",
+   "P28E の参照先(注入後)の要素": "DividendsIncomeNOI",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N078",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RealEstateRentNOI",
+   "P28E の参照先(注入後)の要素": "RealEstateRentNOI",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N079",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RealEstateRentNOI",
+   "P28E の参照先(注入後)の要素": "RealEstateRentNOI",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N080",
+   "型": "V1",
+   "P27E の結果": null,
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "OtherNOI",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N081",
+   "型": "V2",
+   "P27E の結果": null,
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OtherNOI",
+   "P28E の参照先(注入後)の要素": "RealEstateRentNOI",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N082",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NonOperatingExpenses",
+   "P28E の参照先(注入後)の要素": "NonOperatingExpenses",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N083",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NonOperatingExpenses",
+   "P28E の参照先(注入後)の要素": "NonOperatingExpenses",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N084",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "NonOperatingExpenses",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N085",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InterestExpensesNOE",
+   "P28E の参照先(注入後)の要素": "InterestExpensesNOE",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N086",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InterestExpensesNOE",
+   "P28E の参照先(注入後)の要素": "InterestExpensesNOE",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N087",
+   "型": "V2",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "InterestExpensesNOE",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N088",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OrdinaryIncome",
+   "P28E の参照先(注入後)の要素": "OrdinaryIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N089",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OrdinaryIncome",
+   "P28E の参照先(注入後)の要素": "OrdinaryIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N090",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "OrdinaryIncome",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N092",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ExtraordinaryIncome",
+   "P28E の参照先(注入後)の要素": "ExtraordinaryIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N093",
+   "型": "V2",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "GainOnSalesOfNoncurrentAssetsEI",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N094",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ExtraordinaryLoss",
+   "P28E の参照先(注入後)の要素": "ExtraordinaryLoss",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N095",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "LossOnSalesOfStocksOfSubsidiariesAndAffiliatesEL",
+   "P28E の参照先(注入後)の要素": "LossOnSalesOfStocksOfSubsidiariesAndAffiliatesEL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N096",
+   "型": "V1",
+   "P27E の結果": "PASSED",
+   "P28E の結果": "PASSED",
+   "P28E の参照先(注入前)の要素": "ImpairmentLossEL",
+   "P28E の参照先(注入後)の要素": "ImpairmentLossEL",
+   "P28E の分類(通した行のみ)": "退化値(字は変わるが値が変わらない)"
+  },
+  {
+   "id": "N097",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncomeBeforeIncomeTaxes",
+   "P28E の参照先(注入後)の要素": "IncomeBeforeIncomeTaxes",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N098",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncomeBeforeIncomeTaxes",
+   "P28E の参照先(注入後)の要素": "IncomeBeforeIncomeTaxes",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N099",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncomeTaxes",
+   "P28E の参照先(注入後)の要素": "IncomeTaxes",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N100",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncomeTaxes",
+   "P28E の参照先(注入後)の要素": "IncomeTaxes",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N101",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncomeTaxesCurrent",
+   "P28E の参照先(注入後)の要素": "IncomeTaxesCurrent",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N102",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncomeTaxesDeferred",
+   "P28E の参照先(注入後)の要素": "IncomeTaxesDeferred",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N105",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProfitLossAttributableToOwnersOfParent",
+   "P28E の参照先(注入後)の要素": "ProfitLossAttributableToOwnersOfParent",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N106",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProfitLossAttributableToOwnersOfParent",
+   "P28E の参照先(注入後)の要素": "ProfitLossAttributableToOwnersOfParent",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N107",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProfitLossAttributableToOwnersOfParent",
+   "P28E の参照先(注入後)の要素": "ProfitLossAttributableToOwnersOfParent",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N112",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RateOfReturnOnEquitySummaryOfBusinessResults",
+   "P28E の参照先(注入後)の要素": "RateOfReturnOnEquitySummaryOfBusinessResults",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N113",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RateOfReturnOnEquitySummaryOfBusinessResults",
+   "P28E の参照先(注入後)の要素": "RateOfReturnOnEquitySummaryOfBusinessResults",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N114",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ComprehensiveIncome",
+   "P28E の参照先(注入後)の要素": "ComprehensiveIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N115",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ComprehensiveIncome",
+   "P28E の参照先(注入後)の要素": "ComprehensiveIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N116",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ComprehensiveIncome",
+   "P28E の参照先(注入後)の要素": "ComprehensiveIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N118",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OtherComprehensiveIncome",
+   "P28E の参照先(注入後)の要素": "OtherComprehensiveIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N119",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OtherComprehensiveIncome",
+   "P28E の参照先(注入後)の要素": "OtherComprehensiveIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N121",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI",
+   "P28E の参照先(注入後)の要素": "RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N122",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI",
+   "P28E の参照先(注入後)の要素": "RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N123",
+   "型": "V2",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "ValuationDifferenceOnAvailableForSaleSecurities",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N125",
+   "型": "V2",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "ForeignCurrencyTranslationAdjustmentNetOfTaxOCI",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N126",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ForeignCurrencyTranslationAdjustmentNetOfTaxOCI",
+   "P28E の参照先(注入後)の要素": "ForeignCurrencyTranslationAdjustment",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N127",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "DeferredGainsOrLossesOnHedges",
+   "P28E の参照先(注入後)の要素": "DeferredGainsOrLossesOnHedges",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N128",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "Assets",
+   "P28E の参照先(注入後)の要素": "Assets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N129",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "Assets",
+   "P28E の参照先(注入後)の要素": "Assets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N130",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "Assets",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N131",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "Assets",
+   "P28E の参照先(注入後)の要素": "Assets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N132",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CurrentAssets",
+   "P28E の参照先(注入後)の要素": "CurrentAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N133",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CurrentAssets",
+   "P28E の参照先(注入後)の要素": "CurrentAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N134",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CurrentAssets",
+   "P28E の参照先(注入後)の要素": "CurrentAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N135",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CashAndDeposits",
+   "P28E の参照先(注入後)の要素": "CashAndDeposits",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N136",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CashAndDeposits",
+   "P28E の参照先(注入後)の要素": "CashAndDeposits",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N137",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CashAndDeposits",
+   "P28E の参照先(注入後)の要素": "CashAndDeposits",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N138",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の参照先(注入後)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N139",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の参照先(注入後)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N140",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の参照先(注入後)の要素": "NotesAndAccountsReceivableTrade",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N141",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ContractAssets",
+   "P28E の参照先(注入後)の要素": "ContractAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N142",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ContractAssets",
+   "P28E の参照先(注入後)の要素": "ContractAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N143",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ContractAssets",
+   "P28E の参照先(注入後)の要素": "ContractAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N144",
+   "型": "V1",
+   "P27E の結果": null,
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "OtherCA",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N145",
+   "型": "V2",
+   "P27E の結果": null,
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OtherCA",
+   "P28E の参照先(注入後)の要素": "CurrentAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N147",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ContractAssets",
+   "P28E の参照先(注入後)の要素": "ContractAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N149",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NoncurrentAssets",
+   "P28E の参照先(注入後)の要素": "NoncurrentAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N150",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NoncurrentAssets",
+   "P28E の参照先(注入後)の要素": "NoncurrentAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N151",
+   "型": "V2",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "NoncurrentAssets",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N152",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NoncurrentAssets",
+   "P28E の参照先(注入後)の要素": "NoncurrentAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N153",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "PropertyPlantAndEquipment",
+   "P28E の参照先(注入後)の要素": "PropertyPlantAndEquipment",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N154",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "PropertyPlantAndEquipment",
+   "P28E の参照先(注入後)の要素": "PropertyPlantAndEquipment",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N155",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "PropertyPlantAndEquipment",
+   "P28E の参照先(注入後)の要素": "PropertyPlantAndEquipment",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N156",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IntangibleAssets",
+   "P28E の参照先(注入後)の要素": "IntangibleAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N157",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IntangibleAssets",
+   "P28E の参照先(注入後)の要素": "IntangibleAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N158",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IntangibleAssets",
+   "P28E の参照先(注入後)の要素": "IntangibleAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N159",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "Goodwill",
+   "P28E の参照先(注入後)の要素": "Goodwill",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N160",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "Goodwill",
+   "P28E の参照先(注入後)の要素": "Goodwill",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N161",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "Goodwill",
+   "P28E の参照先(注入後)の要素": "Goodwill",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N162",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InvestmentsAndOtherAssets",
+   "P28E の参照先(注入後)の要素": "InvestmentsAndOtherAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N163",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InvestmentsAndOtherAssets",
+   "P28E の参照先(注入後)の要素": "InvestmentsAndOtherAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N164",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InvestmentsAndOtherAssets",
+   "P28E の参照先(注入後)の要素": "InvestmentsAndOtherAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N165",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetDefinedBenefitAsset",
+   "P28E の参照先(注入後)の要素": "NetDefinedBenefitAsset",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N166",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetDefinedBenefitAsset",
+   "P28E の参照先(注入後)の要素": "NetDefinedBenefitAsset",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N167",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetDefinedBenefitAsset",
+   "P28E の参照先(注入後)の要素": "NetDefinedBenefitAsset",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N168",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InvestmentSecurities",
+   "P28E の参照先(注入後)の要素": "InvestmentSecurities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N169",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InvestmentSecurities",
+   "P28E の参照先(注入後)の要素": "InvestmentSecurities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N170",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InvestmentSecurities",
+   "P28E の参照先(注入後)の要素": "InvestmentSecurities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N171",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ValuationDifferenceOnAvailableForSaleSecurities",
+   "P28E の参照先(注入後)の要素": "ValuationDifferenceOnAvailableForSaleSecurities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N172",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ValuationDifferenceOnAvailableForSaleSecurities",
+   "P28E の参照先(注入後)の要素": "ValuationDifferenceOnAvailableForSaleSecurities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N174",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "Liabilities",
+   "P28E の参照先(注入後)の要素": "Liabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N175",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "Liabilities",
+   "P28E の参照先(注入後)の要素": "Liabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N176",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "Liabilities",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N177",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "Liabilities",
+   "P28E の参照先(注入後)の要素": "Liabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N178",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CurrentLiabilities",
+   "P28E の参照先(注入後)の要素": "CurrentLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N179",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CurrentLiabilities",
+   "P28E の参照先(注入後)の要素": "CurrentLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N180",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CurrentLiabilities",
+   "P28E の参照先(注入後)の要素": "CurrentLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N181",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "AccountsPayableOperatingSpecific",
+   "P28E の参照先(注入後)の要素": "AccountsPayableOperatingSpecific",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N182",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "AccountsPayableOperatingSpecific",
+   "P28E の参照先(注入後)の要素": "AccountsPayableOperatingSpecific",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N183",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "AccountsPayableOperatingSpecific",
+   "P28E の参照先(注入後)の要素": "AccountsPayableOperatingSpecific",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N184",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "AccruedConsumptionTaxes",
+   "P28E の参照先(注入後)の要素": "AccruedConsumptionTaxes",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N185",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "AccruedConsumptionTaxes",
+   "P28E の参照先(注入後)の要素": "AccruedConsumptionTaxes",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N186",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "AccruedConsumptionTaxes",
+   "P28E の参照先(注入後)の要素": "AccruedConsumptionTaxes",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N187",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncomeTaxesPayable",
+   "P28E の参照先(注入後)の要素": "IncomeTaxesPayable",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N188",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncomeTaxesPayable",
+   "P28E の参照先(注入後)の要素": "IncomeTaxesPayable",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N189",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncomeTaxesPayable",
+   "P28E の参照先(注入後)の要素": "IncomeTaxesPayable",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N190",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ContractLiabilities",
+   "P28E の参照先(注入後)の要素": "ContractLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N191",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ContractLiabilities",
+   "P28E の参照先(注入後)の要素": "ContractLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N192",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ContractLiabilities",
+   "P28E の参照先(注入後)の要素": "ContractLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N193",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CurrentPortionOfLongTermLoansPayable",
+   "P28E の参照先(注入後)の要素": "CurrentPortionOfLongTermLoansPayable",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N194",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CurrentPortionOfLongTermLoansPayable",
+   "P28E の参照先(注入後)の要素": "CurrentPortionOfLongTermLoansPayable",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N195",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CurrentPortionOfLongTermLoansPayable",
+   "P28E の参照先(注入後)の要素": "CurrentPortionOfLongTermLoansPayable",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N199",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProvisionForLossOnOrderReceivedCL",
+   "P28E の参照先(注入後)の要素": "ProvisionForLossOnOrderReceivedCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N200",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProvisionForLossOnOrderReceivedCL",
+   "P28E の参照先(注入後)の要素": "ProvisionForLossOnOrderReceivedCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N201",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProvisionForLossOnOrderReceivedCL",
+   "P28E の参照先(注入後)の要素": "ProvisionForLossOnOrderReceivedCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N202",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NoncurrentLiabilities",
+   "P28E の参照先(注入後)の要素": "NoncurrentLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N203",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NoncurrentLiabilities",
+   "P28E の参照先(注入後)の要素": "NoncurrentLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N204",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NoncurrentLiabilities",
+   "P28E の参照先(注入後)の要素": "NoncurrentLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N205",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "DeferredTaxLiabilities",
+   "P28E の参照先(注入後)の要素": "DeferredTaxLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N206",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "DeferredTaxLiabilities",
+   "P28E の参照先(注入後)の要素": "DeferredTaxLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N207",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "DeferredTaxLiabilities",
+   "P28E の参照先(注入後)の要素": "DeferredTaxLiabilities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N208",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "LongTermLoansPayable",
+   "P28E の参照先(注入後)の要素": "LongTermLoansPayable",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N209",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "LongTermLoansPayable",
+   "P28E の参照先(注入後)の要素": "LongTermLoansPayable",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N210",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "LongTermLoansPayable",
+   "P28E の参照先(注入後)の要素": "LongTermLoansPayable",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N211",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "AssetRetirementObligationsNCL",
+   "P28E の参照先(注入後)の要素": "AssetRetirementObligationsNCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N212",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "AssetRetirementObligationsNCL",
+   "P28E の参照先(注入後)の要素": "AssetRetirementObligationsNCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N213",
+   "型": "V2",
+   "P27E の結果": null,
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OtherNCL",
+   "P28E の参照先(注入後)の要素": "AssetRetirementObligationsNCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N214",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の参照先(注入後)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N215",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の参照先(注入後)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N216",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の参照先(注入後)の要素": "ProvisionForWarrantiesForCompletedOperationCL",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N218",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "LongTermLoansPayable",
+   "P28E の参照先(注入後)の要素": "LongTermLoansPayable",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N222",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetAssets",
+   "P28E の参照先(注入後)の要素": "NetAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N223",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetAssets",
+   "P28E の参照先(注入後)の要素": "NetAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N224",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetAssets",
+   "P28E の参照先(注入後)の要素": "NetAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N225",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetAssets",
+   "P28E の参照先(注入後)の要素": "NetAssets",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N226",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ShareholdersEquity",
+   "P28E の参照先(注入後)の要素": "ShareholdersEquity",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N227",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ShareholdersEquity",
+   "P28E の参照先(注入後)の要素": "ShareholdersEquity",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N228",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ShareholdersEquity",
+   "P28E の参照先(注入後)の要素": "ShareholdersEquity",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N229",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CapitalStock",
+   "P28E の参照先(注入後)の要素": "CapitalStock",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N230",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CapitalSurplus",
+   "P28E の参照先(注入後)の要素": "CapitalSurplus",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N231",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CapitalSurplus",
+   "P28E の参照先(注入後)の要素": "CapitalSurplus",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N232",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CapitalSurplus",
+   "P28E の参照先(注入後)の要素": "CapitalSurplus",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N233",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RetainedEarnings",
+   "P28E の参照先(注入後)の要素": "RetainedEarnings",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N234",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RetainedEarnings",
+   "P28E の参照先(注入後)の要素": "RetainedEarnings",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N235",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RetainedEarnings",
+   "P28E の参照先(注入後)の要素": "RetainedEarnings",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N236",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "TreasuryStock",
+   "P28E の参照先(注入後)の要素": "TreasuryStock",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N237",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "TreasuryStock",
+   "P28E の参照先(注入後)の要素": "TreasuryStock",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N240",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "OtherComprehensiveIncome",
+   "P28E の参照先(注入後)の要素": "OtherComprehensiveIncome",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N241",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ValuationDifferenceOnAvailableForSaleSecurities",
+   "P28E の参照先(注入後)の要素": "ValuationDifferenceOnAvailableForSaleSecurities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N242",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ValuationDifferenceOnAvailableForSaleSecurities",
+   "P28E の参照先(注入後)の要素": "ValuationDifferenceOnAvailableForSaleSecurities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N243",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "DeferredGainsOrLossesOnHedges",
+   "P28E の参照先(注入後)の要素": "DeferredGainsOrLossesOnHedges",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N244",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ForeignCurrencyTranslationAdjustment",
+   "P28E の参照先(注入後)の要素": "ForeignCurrencyTranslationAdjustment",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N245",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ForeignCurrencyTranslationAdjustment",
+   "P28E の参照先(注入後)の要素": "ForeignCurrencyTranslationAdjustment",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N246",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RemeasurementsOfDefinedBenefitPlans",
+   "P28E の参照先(注入後)の要素": "RemeasurementsOfDefinedBenefitPlans",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N247",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RemeasurementsOfDefinedBenefitPlans",
+   "P28E の参照先(注入後)の要素": "RemeasurementsOfDefinedBenefitPlans",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N248",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProfitLoss",
+   "P28E の参照先(注入後)の要素": "ProfitLoss",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N249",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "DividendsFromSurplus",
+   "P28E の参照先(注入後)の要素": "DividendsFromSurplus",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N251",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "EquityToAssetRatioSummaryOfBusinessResults",
+   "P28E の参照先(注入後)の要素": "EquityToAssetRatioSummaryOfBusinessResults",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N252",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "EquityToAssetRatioSummaryOfBusinessResults",
+   "P28E の参照先(注入後)の要素": "EquityToAssetRatioSummaryOfBusinessResults",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N257",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetAssetsPerShareSummaryOfBusinessResults",
+   "P28E の参照先(注入後)の要素": "NetAssetsPerShareSummaryOfBusinessResults",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N258",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CashAndCashEquivalents",
+   "P28E の参照先(注入後)の要素": "CashAndCashEquivalents",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N259",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CashAndCashEquivalents",
+   "P28E の参照先(注入後)の要素": "CashAndCashEquivalents",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N260",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CashAndCashEquivalents",
+   "P28E の参照先(注入後)の要素": "CashAndCashEquivalents",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N261",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetCashProvidedByUsedInOperatingActivities",
+   "P28E の参照先(注入後)の要素": "NetCashProvidedByUsedInOperatingActivities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N262",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "NetCashProvidedByUsedInOperatingActivities",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N263",
+   "型": "V2",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "NetCashProvidedByUsedInOperatingActivities",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N264",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncomeBeforeIncomeTaxes",
+   "P28E の参照先(注入後)の要素": "IncomeBeforeIncomeTaxes",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N265",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "DepreciationAndAmortizationOpeCF",
+   "P28E の参照先(注入後)の要素": "DepreciationAndAmortizationOpeCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N266",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "AmortizationOfGoodwillOpeCF",
+   "P28E の参照先(注入後)の要素": "AmortizationOfGoodwillOpeCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N267",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+   "P28E の参照先(注入後)の要素": "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N268",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "DecreaseIncreaseInContractAssetsOpeCF",
+   "P28E の参照先(注入後)の要素": "DecreaseIncreaseInContractAssetsOpeCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N269",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+   "P28E の参照先(注入後)の要素": "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N270",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+   "P28E の参照先(注入後)の要素": "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N271",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+   "P28E の参照先(注入後)の要素": "IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N272",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncreaseDecreaseInContractLiabilitiesOpeCF",
+   "P28E の参照先(注入後)の要素": "IncreaseDecreaseInContractLiabilitiesOpeCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N275",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InterestAndDividendsIncomeReceivedOpeCFInvCF",
+   "P28E の参照先(注入後)の要素": "InterestAndDividendsIncomeReceivedOpeCFInvCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N276",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "InterestExpensesPaidOpeCFFinCF",
+   "P28E の参照先(注入後)の要素": "InterestExpensesPaidOpeCFFinCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N277",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncomeTaxesPaidOpeCF",
+   "P28E の参照先(注入後)の要素": "IncomeTaxesPaidOpeCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N278",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "IncomeBeforeIncomeTaxes",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N279",
+   "型": "V2",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N280",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+   "P28E の参照先(注入後)の要素": "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N281",
+   "型": "V2",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N282",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N284",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N285",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+   "P28E の参照先(注入後)の要素": "NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N286",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N287",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "PurchaseOfPropertyPlantAndEquipmentInvCF",
+   "P28E の参照先(注入後)の要素": "PurchaseOfPropertyPlantAndEquipmentInvCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N288",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "PurchaseOfIntangibleAssetsInvCF",
+   "P28E の参照先(注入後)の要素": "PurchaseOfIntangibleAssetsInvCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N289",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF",
+   "P28E の参照先(注入後)の要素": "ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N290",
+   "型": "V1",
+   "P27E の結果": null,
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "OtherNetInvCF",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N291",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+   "P28E の参照先(注入後)の要素": "CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N295",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "NetCashProvidedByUsedInFinancingActivities",
+   "P28E の参照先(注入後)の要素": "NetCashProvidedByUsedInFinancingActivities",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N296",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "NetCashProvidedByUsedInFinancingActivities",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N297",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "RepaymentOfLongTermLoansPayableFinCF",
+   "P28E の参照先(注入後)の要素": "RepaymentOfLongTermLoansPayableFinCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N298",
+   "型": "V1",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CashDividendsPaidFinCF",
+   "P28E の参照先(注入後)の要素": "CashDividendsPaidFinCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N299",
+   "型": "V2",
+   "P27E の結果": null,
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "OtherNetFinCF",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N301",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CashDividendsPaidFinCF",
+   "P28E の参照先(注入後)の要素": "CashDividendsPaidFinCF",
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N302",
+   "型": "V1",
+   "P27E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の結果": "detected:POINTER_NOT_FOUND",
+   "P28E の参照先(注入前)の要素": "CashDividendsPaidFinCF",
+   "P28E の参照先(注入後)の要素": null,
+   "P28E の分類(通した行のみ)": null
+  },
+  {
+   "id": "N303",
+   "型": "V2",
+   "P27E の結果": "detected:VALUE_MISMATCH",
+   "P28E の結果": "detected:VALUE_MISMATCH",
+   "P28E の参照先(注入前)の要素": "CashAndDeposits",
+   "P28E の参照先(注入後)の要素": "CashAndDeposits",
+   "P28E の分類(通した行のみ)": null
+  }
+ ],
+ "予測の判定": {
+  "E-7": "当たり",
+  "E-8": "当たり",
+  "E-9": "当たり",
+  "E-10": "判定しない"
+ },
+ "限界": [
+  "1 書類・243 件前後の注入。外部の数の実際の分布ではない。E-8 が当たっても「偽の一致が無い」証拠は 1 書類の範囲",
+  "engine の変更は本便の vocabulary.py への挿入だけ。既定は P27 のまま"
+ ],
+ "key_leaks": []
+}

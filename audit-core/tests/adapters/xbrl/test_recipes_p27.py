@@ -112,7 +112,7 @@ class FlagShapeTest(unittest.TestCase):
             have = [f for f in FLAGS if getattr(p, f)]
             if n in ("P27", "P27C", "P28"):      # 2026-10-30 P27C = P27 + 候補の旗(封 XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29。この 5 つの旗の外)。2026-11-02 P28 = P27 + 旗 1 つ(封 XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02。同じく外)
                 want = [f for f in FLAGS if f != "last_branch_relative_2026_10_27"]
-            elif n == "P27E":
+            elif n in ("P27E", "P28E"):      # 2026-11-03 P28E = P27E + 旗 1 つ(封 XBRL_P28E_SEAL_2026-11-03。この 5 つの旗は P27E と同じ)
                 want = list(FLAGS)
             else:
                 want = []

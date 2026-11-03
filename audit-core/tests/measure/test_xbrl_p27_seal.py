@@ -58,7 +58,10 @@ CAND_DELETIONS = {"adapters/xbrl/vocabulary.py": 1, "adapters/xbrl/verify_docume
 #: recipes.py に定数 3 つ・関数 2 つ・呼び出し 2 行・provenance の 2 行(+65 行)。削除は 0(挿入だけ)。上の CAND_AFTER16(候補の欄を足す遷移の後の値)は測った時点の値として残す
 #: (verify_document.py・report_customer.py は CAND_AFTER16 のまま)。受け入れるのは、その封が履歴に在り、vocabulary.py・recipes.py が下の値のときだけ(封の commit 43fe0e3 からの削除は累計のまま: 1・2・1)。
 P28_SEAL_REL = "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"
-P28_AFTER16 = {"vocabulary.py": "180125cd94053a94", "recipes.py": "89eee7eca15480c6"}
+#: 2026-11-03(P28E): 封 docs/XBRL_P28E_SEAL_2026-11-03.md §2-3 が宣言した遷移(人間の承認 2026-11-03)。vocabulary.py に profile 1 つ P28E と注記(+5 行・-0 行。180125cd94053a94 → 2dd3f03e777224b4)。
+#: recipes.py は 89eee7eca15480c6 のまま。180125cd94053a94 は測った時点の値としてここに残す。受け入れるのは、P28E の封も履歴に在るときだけ(下の p28_declared)。
+P28E_SEAL_REL = "docs/XBRL_P28E_SEAL_2026-11-03.md"
+P28_AFTER16 = {"vocabulary.py": "2dd3f03e777224b4", "recipes.py": "89eee7eca15480c6"}
 #: 既存の門が行頭の名前を数える変数名(封 §2-3 の言い分け)。新しい門はこれらを行頭に置かない。
 RESERVED_PREFIXES = ("ENGINE_LATER", "UNTOUCHED", "PIN_DEF", "LATER_ENGINE_COMMITS", "FROZEN_LATER", "ENGINE_TRANSITIONS", "LATER_FINGERPRINT",
                      "FINGERPRINT_", "LATER_TARGET", "LATER_FROZEN", "FROZEN_BUNDLE_AT_SEAL", "TARGET_AT_SEAL", "ENGINE_AT_SEAL")
@@ -90,7 +93,7 @@ def p28_declared():
     u"""「その他」の主語の結び直しの遷移(封 P28_SEAL_REL §2-3)が宣言されているか。封が履歴に在り、作業木の vocabulary.py・recipes.py が P28_AFTER16 の値で、
     verify_document.py・report_customer.py が CAND_AFTER16 の値のときだけ True。"""
     added = git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + P28_SEAL_REL).stdout.split()
-    if not added:
+    if not added or not git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + P28E_SEAL_REL).stdout.split():    # 2026-11-03: P28E の封も履歴に在るとき
         return False
     if dict((n, sha16_of("adapters/xbrl/" + n)) for n in P28_AFTER16) != P28_AFTER16:
         return False
@@ -339,7 +342,7 @@ class EngineDiffTest(unittest.TestCase):
         # 削除は累計 vocabulary.py 1・verify_document.py 2・report_customer.py 1(CLAIM_FIELDS の 1 行・理由の欄の 1 行が加わる)。
         extra = (13 if cand else 8) if declared else 0
         p28 = p28_declared()
-        extra_vocab, extra_recipes = (6, 65) if p28 else (0, 0)       # 2026-11-02: 「その他」の主語の結び直し(封 P28_SEAL_REL §2-3)。vocabulary.py +6・recipes.py +65(削除は 0)
+        extra_vocab, extra_recipes = (11, 65) if p28 else (0, 0)       # 2026-11-02: 「その他」の主語の結び直し(封 P28_SEAL_REL §2-3)。vocabulary.py +6・recipes.py +65(削除は 0)。2026-11-03: P28E(封 P28E_SEAL_REL §2-3)で vocabulary.py +5 を足して +11
         self.assertEqual(sum(CAND_DELETIONS.values()) if cand else (sum(DEFAULT_P27_DELETIONS.values()) if declared else 0), sum(d for _a, d in rows.values()))
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 10)
         self.assertLessEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 20 + extra + extra_vocab)

@@ -63,7 +63,8 @@ ENGINE_AT_MEASURE = {
 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。この 6 本のうち動くのは vocabulary.py(旗 1 つ・P27C・PROFILES の登録)と
 # verify_document.py(Claim の欄 candidate)。測った時点の値は ENGINE_AT_MEASURE に残す。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
 # 2026-11-02(「その他」の主語の結び直し O): 封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §2-3 が宣言した遷移(人間の承認 2026-11-02)。vocabulary.py(旗 1 つ・P28・PROFILES の登録。180125cd94053a94)と recipes.py(定数 3 つ・関数 2 つ・呼び出し 2 行・provenance の 2 行。89eee7eca15480c6)に挿入だけを足した。測った時点の値は ENGINE_AT_MEASURE に残す。
-ENGINE_DECLARED = {"adapters/xbrl/vocabulary.py": ("180125cd94053a94", "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"),
+# 2026-11-03(P28E): 封 docs/XBRL_P28E_SEAL_2026-11-03.md §2-3 が宣言した遷移(人間の承認 2026-11-03)。vocabulary.py に profile 1 つ P28E と注記(+5 行・-0 行。180125cd94053a94 → 2dd3f03e777224b4)。recipes.py ほかは不変。直前の値は測った時点の値として上に残す
+ENGINE_DECLARED = {"adapters/xbrl/vocabulary.py": ("2dd3f03e777224b4", "docs/XBRL_P28E_SEAL_2026-11-03.md"),
                    "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"),
                    "adapters/xbrl/recipes.py": ("89eee7eca15480c6", "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md")}
 

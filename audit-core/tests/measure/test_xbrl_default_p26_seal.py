@@ -41,6 +41,7 @@ SEAL_P27 = "docs/XBRL_P27_SEAL_2026-10-27.md"    # 2026-10-27 追記: P27 の段
 SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"    # 2026-10-28 追記: 既定を P26 -> P27 に切り替える 段 2(下の遷移。vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)
 SEAL_CAND = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"    # 2026-10-30 追記: 候補の欄を足す(下の遷移)
 SEAL_P28 = "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"    # 2026-11-02 追記: 「その他」の主語の結び直し O を足す(下の遷移。vocabulary.py 7fbcfbf0e472f366 → 180125cd94053a94・recipes.py 52d645e713c53c1c → 89eee7eca15480c6。直前の値は測った時点の値としてここに残す)
+SEAL_P28E = "docs/XBRL_P28E_SEAL_2026-11-03.md"    # 2026-11-03 追記: P28E(= P27E + O)を足す(下の遷移。vocabulary.py 180125cd94053a94 → 2dd3f03e777224b4。直前の値は測った時点の値として SEAL_P28 の行に残す)
 SEAL = os.path.join(ROOT, SEAL_REL)
 BASE = "52289c46acdb60b450c71c5bf80774eccdb91fd7"        # 判定の commit。封の数はこの木の記録
 BASE7 = "52289c4"
@@ -96,14 +97,14 @@ FROZEN_COUNT_AT_BASE = 37
 # 2026-10-27(P27 の段 2): vocabulary_sha16 は段 2 の値 e28733067b1f17f5 から、P27 の封の遷移の値に動いた(下の P27_LATER も同じ封)。段 2 の値は残す(この封が測った時点の値)。
 # 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-DECLARED = {"vocabulary_sha16": ("180125cd94053a94", SEAL_P28),
+DECLARED = {"vocabulary_sha16": ("2dd3f03e777224b4", SEAL_P28E),
             # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
             # 0e51211a8aed2151(P27 の段 2) は残す(測った時点の値。束ねた指紋 adapter_xbrl_py_sha256 の頭 16 字)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 92326a0f4dcefd21。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
             # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-            "adapter_xbrl_py_sha256": ("d72c0cfb7cd74761144a935867a6ed798c952e2e04303b894d98ab358265ad7c", SEAL_P28),
+            "adapter_xbrl_py_sha256": ("e23f982f072dbb4282b22f9feeb9f9f6eb2c123a9d69c96c3974ac021b9ef11d", SEAL_P28E),
             # 29fd733c8988164a(P27 の段 2) は残す(測った時点の値。frozen_bundle の束ねた sha の頭 16 字)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 030455282c89661b。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
             # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-            "frozen_bundle": ("66a3e5f187ff64d5b94aaf884f43a7c6f541cf6f6a20423e4a5da7e1df165b1e", SEAL_P28)}
+            "frozen_bundle": ("6b23ae41f9b96e21b5c6fc9dc882728a3a7f62e82ab70c93d07e42a2af6b8ca0", SEAL_P28E)}
 
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。ADAPTERS_AT_BASE の「vocabulary.py 以外は動いたら赤」は、engine の 4 file
 # (recipes・extract・registry_setup・report_customer)に挿入だけを足した P27 の封の遷移の値に限って受け入れる(封が履歴に在り、値が下の値のときだけ)。

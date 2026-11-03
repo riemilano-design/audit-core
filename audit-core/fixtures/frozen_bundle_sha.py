@@ -154,6 +154,11 @@ FROZEN_BUNDLE_GENERATIONS = (
      "verify_document.py・comparators.py・extract.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
      "人間の承認 2026-11-02「君に任せる課題解決に向けて進めて」(旗 1 つ・profile 1 つ・挿入だけ。既定にしない)、封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md(commit c6cbfae)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("6b23ae41f9b96e21b5c6fc9dc882728a3a7f62e82ab70c93d07e42a2af6b8ca0",
+     "2026-11-03 feature/audit-core-final-eval-8(P28E = P27E + O を足す): vocabulary.py に profile 1 つ P28E・PROFILES の登録と、P27E の注記の後ろの日付つきの注記 2 行を足した(+5 行・-0 行。DEFAULT_PROFILE は P27 のまま)。"
+     "recipes.py・verify_document.py・comparators.py・extract.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
+     "人間の承認 2026-11-03「君に任せる進めて」(profile 1 つ・新しい旗なし・挿入だけ。既定にしない)、封 docs/XBRL_P28E_SEAL_2026-11-03.md(commit 7bfad77)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

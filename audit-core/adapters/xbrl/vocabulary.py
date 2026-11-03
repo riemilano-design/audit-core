@@ -794,6 +794,8 @@ PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10":
 # 判定の出どころは docs/XBRL_P27_RESULT_2026-10-27.md(commit aeae608)が封 docs/XBRL_P27_SEAL_2026-10-27.md §4 の条件を記録の数から機械で求めた「P27 を既定の候補として記録する」。
 # 段 2 の封は docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md、結果は docs/XBRL_DEFAULT_P27_RESULT_2026-10-28.md。**P26 の字は消さず**、P26 を明示した呼び出しは変えない。
 # **P27E は既定にしない**(B は有報の原文で偽の「違う」を増やす。外部の数の文を点検する客には P27E を明示して使う)。
+# 2026-11-03: 外部の数の文の推奨は結果の文書 docs/XBRL_P28E_RESULT_2026-11-03.md の判定による(採用なら P28E = P27E + O。封 docs/XBRL_P28E_SEAL_2026-11-03.md)。
+# 既定は P27 のまま(P28E も既定にしない)。
 DEFAULT_PROFILE = "P27"
 
 # P25 = P24 + 最後の枝は証拠があるときだけ名指す。段 1 では既定にしない。PROFILES の行(P24 まで)は字を変えず、ここで足す。
@@ -817,3 +819,6 @@ PROFILES["P27C"] = P27C
 # P28 = P27 + O(封 docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md §1-3)。既定にしない(DEFAULT_PROFILE は P27 のまま)。
 P28 = dataclasses.replace(P27, name="P28", other_subject_2026_11_02=True)
 PROFILES["P28"] = P28
+# P28E = P27E + O(封 docs/XBRL_P28E_SEAL_2026-11-03.md §1)。外部の数の文のための候補。新しい旗は無い。既定にしない(DEFAULT_PROFILE は P27 のまま)。
+P28E = dataclasses.replace(P27E, name="P28E", other_subject_2026_11_02=True)
+PROFILES["P28E"] = P28E

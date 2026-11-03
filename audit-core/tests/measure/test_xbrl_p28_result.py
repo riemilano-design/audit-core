@@ -60,6 +60,20 @@ def jload(rel):
     return json.loads(read(rel))
 
 
+#: 2026-11-03(P28E): 封 docs/XBRL_P28E_SEAL_2026-11-03.md §2-3 が宣言した遷移(vocabulary.py に profile 1 つ P28E と注記の挿入だけ。180125cd94053a94 → 2dd3f03e777224b4)。
+#: この結果の文書の表は測った時点の値(180125cd94053a94)を持つ。作業木の値が宣言の値で、P28E の封が履歴に在るときだけ、測った時点の値として表に出す(それ以外の値はそのまま出して赤にする)。
+P28E_SEAL_REL = "docs/XBRL_P28E_SEAL_2026-11-03.md"
+P28E_DECLARED_SHA16 = {"adapters/xbrl/vocabulary.py": ("2dd3f03e777224b4", "180125cd94053a94")}
+
+
+def measured_sha16(rel):
+    got = sha256_rel(rel)[:16]
+    decl = P28E_DECLARED_SHA16.get(rel)
+    if decl and got == decl[0] and subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", PREFIX + P28E_SEAL_REL], cwd=REPO, capture_output=True, text=True).stdout.split():
+        return decl[1]
+    return got
+
+
 def sha256_rel(rel):
     with open(os.path.join(ROOT, rel), "rb") as fh:
         return hashlib.sha256(fh.read()).hexdigest()
@@ -284,7 +298,7 @@ def build_all(R, seal):
     blocks["wiring"] = wt
     et = [u"| engine の file(測った時点の作業木) | sha16 |", u"|---|---|"]
     for rel in IMPL_FILES:
-        et.append(u"| `%s` | `%s` |" % (rel, sha256_rel(rel)[:16]))
+        et.append(u"| `%s` | `%s` |" % (rel, measured_sha16(rel)))
     blocks["engine"] = et
     return blocks, Jo, Jn, Jk, d, dr
 
