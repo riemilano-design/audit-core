@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **264 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **265 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 197 |
+| `tests/measure` | 198 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -244,6 +244,9 @@ P28E(= P27E + O。封 `docs/XBRL_P28E_SEAL_2026-11-03.md`)の結果の門。結�
 
 **2026-11-03 に +1**(`tests/measure/test_xbrl_aiforms_result.py`。
 AI が作った様々な形のレポート(20 社 × 形 4 × model 2 = 160 本。封 `docs/XBRL_AI_FORMS_SEAL_2026-11-03.md`)の測定の門。結果は `docs/XBRL_AI_FORMS_RESULT_2026-11-03.md`)。263 → 264(`tests/measure` 196 → 197)。
+
+**2026-11-03 に +1**(`tests/measure/test_xbrl_aiforms_f5_result.py`。
+F5(標準ラベルを見せない書き手。20 社 × 形 1 × model 2 = 40 本。封 `docs/XBRL_AI_FORMS_F5_SEAL_2026-11-03.md`)の駆動 script `measure/xbrl_aiforms_f5_2026-11-03.py` と測定の門。結果は `docs/XBRL_AI_FORMS_F5_RESULT_2026-11-03.md`)。264 → 265(`tests/measure` 197 → 198)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

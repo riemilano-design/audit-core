@@ -173,7 +173,11 @@ LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixt
                       # 2026-11-03: AI の形 4 × model 2(封 docs/XBRL_AI_FORMS_SEAL_2026-11-03.md)。手元の 97 のうち選んだ 20 社の docID を材料の名として持つ記録 5 つ(gen・claims・labels・inject・tally)。
                       # script 4 本・門・結果の文書は docID を持たない
                       "fixtures/xbrl/aiforms/gen_2026-11-03.json", "fixtures/xbrl/aiforms/claims_2026-11-03.json", "fixtures/xbrl/aiforms/labels_2026-11-03.json",
-                      "fixtures/xbrl/aiforms/inject_2026-11-03.json", "fixtures/xbrl/aiforms/tally_2026-11-03.json")
+                      "fixtures/xbrl/aiforms/inject_2026-11-03.json", "fixtures/xbrl/aiforms/tally_2026-11-03.json",
+                      # 2026-11-03: F5(標準ラベルを見せない書き手。封 docs/XBRL_AI_FORMS_F5_SEAL_2026-11-03.md)。同じ選んだ 20 社の docID を材料の名として持つ記録 5 つ(f5_ の gen・claims・labels・inject・tally)。
+                      # 駆動 script・門・結果の文書は docID を持たない
+                      "fixtures/xbrl/aiforms/f5_gen_2026-11-03.json", "fixtures/xbrl/aiforms/f5_claims_2026-11-03.json", "fixtures/xbrl/aiforms/f5_labels_2026-11-03.json",
+                      "fixtures/xbrl/aiforms/f5_inject_2026-11-03.json", "fixtures/xbrl/aiforms/f5_tally_2026-11-03.json")
 
 
 def drop_later_naming_files(named):
