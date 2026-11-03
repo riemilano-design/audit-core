@@ -83,3 +83,10 @@ script を作った席が、封の字では 1 通りに決まらない所を次�
 4. 会社の混ぜは `random.Random("<seed>|AIFORMS_COMPANIES").shuffle`、2 席目の 32 本は `random.Random("<seed>|AIFORMS_SEAT2").sample`。
 5. A-1〜A-11 の「厳密に最低・最多」などの読みは `measure/xbrl_aiforms_tally_2026-11-03.py` の docstring に字で固定した。
 6. 言えないことに 1 つ足す: 費用の累計は API が返した usage で数える。途中で切れた呼び出し(timeout など)は usage が無く累計に入らないので、請求は記録の累計より多くありうる。
+
+## 追記 2 2026-11-03(生成の途中。1 社 8 本の試しのあと・残り 152 本の前。§0〜§4 の字と予測は変えていない)
+
+1. **試しの 8 本は文にならなかった。** `--only` で 1 社 8 本を呼んだ(HTTP 200・ok 8)が、6 本が `max_tokens` で切れ、文は 0〜1,895 字だった。確かめの呼び出し(記録の外 5 回)で原因を見た: 本番の大きい指示文では、model が既定で思考の block(中身は返らない)を出し、その token が `max_tokens` 4,000 を使い切る。短い問いでは考えない。2026-10-09 の生成(`claude-opus-5`)には無かった振る舞い。
+2. **思考を止めて作り直す。** request に model ごとの指定を足す(`claude-sonnet-5-5` は `{"type": "between_tools"}`、`claude-haiku-5-5` は `{"type": "disabled"}`。API が model ごとに求める字)。本番の指示文での確かめでは、haiku 1,594 字・sonnet 2,900 字で、どちらも `end_turn`。`max_tokens` 4,000・model・宛先は変えない。文が 0 字の呼び出しは ok にしない。
+3. **試しの 8 本は数えない。** 記録には残し、文は `texts_superseded/` に移す(消さない)。払った費用(記録で 1.8140 USD)と記録の外の確かめ 5 回の費用は、累計と上限 50 USD の計算に入れる。集計が読むのは本ごとに最後の ok の呼び出しだけ。
+4. この便の script の直しは独立監査 GO のあとで commit し、それから 160 本を `--resume` で呼ぶ(作り直す 8 本を含む)。
