@@ -335,7 +335,7 @@ def judge(T):
     n_books = w[u"生成できて P27 の数の claim が %d 以上ある本" % A1_MIN_CLAIMS]
     cost = w[u"費用 USD(記録の cost_usd の合計)"]
     ok1 = n_books >= A1_MIN_BOOKS and between(cost, A1_COST) and not is_cap_stop(w[u"止めた理由"])
-    J["A-1"] = {u"判定": HIT if ok1 else MISS, u"値": collections.OrderedDict([(u"数の claim が 10 以上の本", n_books), (u"生成できた本", w[u"生成できた本"]), (u"費用 USD", cost), (u"止めた理由", w[u"止めた理由"])])}
+    J["A-1"] = {u"判定": HIT if ok1 else MISS, u"値": collections.OrderedDict([(u"数の claim が 10 以上の本", n_books), (u"生成できた本", w[u"生成できた本"]), (u"費用 USD", cost), (u"上限で止まった", w[u"上限で止まった"]), (u"上限でない停止(字)", w[u"上限でない停止(字)"])])}
     med = collections.OrderedDict((f, (w[u"形 × model"][f][u"P27 の数の claim の数"] or {}).get(u"中央値")) for f in FORMS)
     J["A-2"] = {u"判定": HIT if all(between(med[f], A2_BOUNDS[f]) for f in FORMS) else MISS, u"値": med}
     L = T[u"2 札"]

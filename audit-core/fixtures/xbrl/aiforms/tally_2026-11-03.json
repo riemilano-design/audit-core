@@ -1,0 +1,7566 @@
+{
+ "seal": "docs/XBRL_AI_FORMS_SEAL_2026-11-03.md",
+ "封の commit": "0b43a03",
+ "step": "AI の形 4 × model 2 ― 集計と §2 の判定(0 USD)",
+ "HEAD の commit": "78bd133b03c62946e1fa92740382cbb0143bb715",
+ "この script の sha256": "48e659c9d976b1d31fed44a5e1bae5dec6cd446d5b688c45d623f2ffc73609d1",
+ "入力の記録の sha256": {
+  "gen": "6be9e252f36dfeea5c5babf8986067fea223c715ef1a3dd2e7aaed606faa4e83",
+  "claims": "445bb77ce2a4aaae02655bc0af86d2b207856cd6d14bf8e23dd4112ba70c707b",
+  "labels": "9c11559f6bd65690632f991074e59fd46ad6012d256bbb31a27abeb434433415",
+  "inject": "3b2536f356ad7c4b3f64b3cce1ffa848634443317f8845b408ba3192ef8cc493"
+ },
+ "集計": {
+  "1 配線": {
+   "本数(予定)": 160,
+   "生成できた本": 160,
+   "生成できて P27 の数の claim が 10 以上ある本": 160,
+   "費用 USD(記録の cost_usd の合計)": 28.8702,
+   "記録の外の費用 USD(司令塔の確かめ。上の費用に含まない)": 0.59495,
+   "呼び出しの数": 169,
+   "失敗した呼び出し": 1,
+   "再試行の合計": 0,
+   "止めた理由": "HTTP 401(鍵の問題)",
+   "上限で止まった": false,
+   "上限でない停止(字)": "HTTP 401(鍵の問題)",
+   "max_tokens で打ち切られた本": 0,
+   "形 × model": {
+    "全体": {
+     "本": 160,
+     "P27 の数の claim の数": {
+      "本": 160,
+      "最小": 10,
+      "中央値": 42.5,
+      "最大": 141
+     },
+     "文の字数": {
+      "本": 160,
+      "最小": 771,
+      "中央値": 1454.0,
+      "最大": 3329
+     },
+     "費用 USD": 27.0562
+    },
+    "F1": {
+     "本": 40,
+     "P27 の数の claim の数": {
+      "本": 40,
+      "最小": 16,
+      "中央値": 40.0,
+      "最大": 141
+     },
+     "文の字数": {
+      "本": 40,
+      "最小": 1421,
+      "中央値": 2306.0,
+      "最大": 3329
+     },
+     "費用 USD": 7.2607
+    },
+    "F2": {
+     "本": 40,
+     "P27 の数の claim の数": {
+      "本": 40,
+      "最小": 12,
+      "中央値": 31.0,
+      "最大": 86
+     },
+     "文の字数": {
+      "本": 40,
+      "最小": 771,
+      "中央値": 1105.5,
+      "最大": 1589
+     },
+     "費用 USD": 6.3518
+    },
+    "F3": {
+     "本": 40,
+     "P27 の数の claim の数": {
+      "本": 40,
+      "最小": 19,
+      "中央値": 70.5,
+      "最大": 116
+     },
+     "文の字数": {
+      "本": 40,
+      "最小": 1140,
+      "中央値": 1443.5,
+      "最大": 1936
+     },
+     "費用 USD": 6.6878
+    },
+    "F4": {
+     "本": 40,
+     "P27 の数の claim の数": {
+      "本": 40,
+      "最小": 10,
+      "中央値": 42.5,
+      "最大": 120
+     },
+     "文の字数": {
+      "本": 40,
+      "最小": 894,
+      "中央値": 1533.0,
+      "最大": 2456
+     },
+     "費用 USD": 6.7558
+    },
+    "W1": {
+     "本": 80,
+     "P27 の数の claim の数": {
+      "本": 80,
+      "最小": 25,
+      "中央値": 60.0,
+      "最大": 141
+     },
+     "文の字数": {
+      "本": 80,
+      "最小": 1017,
+      "中央値": 1756.5,
+      "最大": 3329
+     },
+     "費用 USD": 14.0541
+    },
+    "W2": {
+     "本": 80,
+     "P27 の数の claim の数": {
+      "本": 80,
+      "最小": 10,
+      "中央値": 29.0,
+      "最大": 94
+     },
+     "文の字数": {
+      "本": 80,
+      "最小": 771,
+      "中央値": 1240.5,
+      "最大": 2250
+     },
+     "費用 USD": 13.0021
+    },
+    "F1×W1": {
+     "本": 20,
+     "P27 の数の claim の数": {
+      "本": 20,
+      "最小": 29,
+      "中央値": 63.5,
+      "最大": 141
+     },
+     "文の字数": {
+      "本": 20,
+      "最小": 2362,
+      "中央値": 2550.0,
+      "最大": 3329
+     },
+     "費用 USD": 3.8381
+    },
+    "F1×W2": {
+     "本": 20,
+     "P27 の数の claim の数": {
+      "本": 20,
+      "最小": 16,
+      "中央値": 24.5,
+      "最大": 94
+     },
+     "文の字数": {
+      "本": 20,
+      "最小": 1421,
+      "中央値": 1713.0,
+      "最大": 2250
+     },
+     "費用 USD": 3.4226
+    },
+    "F2×W1": {
+     "本": 20,
+     "P27 の数の claim の数": {
+      "本": 20,
+      "最小": 25,
+      "中央値": 33.5,
+      "最大": 86
+     },
+     "文の字数": {
+      "本": 20,
+      "最小": 1017,
+      "中央値": 1275.0,
+      "最大": 1589
+     },
+     "費用 USD": 3.2602
+    },
+    "F2×W2": {
+     "本": 20,
+     "P27 の数の claim の数": {
+      "本": 20,
+      "最小": 12,
+      "中央値": 26.5,
+      "最大": 62
+     },
+     "文の字数": {
+      "本": 20,
+      "最小": 771,
+      "中央値": 898.5,
+      "最大": 1212
+     },
+     "費用 USD": 3.0916
+    },
+    "F3×W1": {
+     "本": 20,
+     "P27 の数の claim の数": {
+      "本": 20,
+      "最小": 28,
+      "中央値": 93.0,
+      "最大": 116
+     },
+     "文の字数": {
+      "本": 20,
+      "最小": 1391,
+      "中央値": 1628.5,
+      "最大": 1936
+     },
+     "費用 USD": 3.4236
+    },
+    "F3×W2": {
+     "本": 20,
+     "P27 の数の claim の数": {
+      "本": 20,
+      "最小": 19,
+      "中央値": 45.0,
+      "最大": 75
+     },
+     "文の字数": {
+      "本": 20,
+      "最小": 1140,
+      "中央値": 1328.0,
+      "最大": 1485
+     },
+     "費用 USD": 3.2642
+    },
+    "F4×W1": {
+     "本": 20,
+     "P27 の数の claim の数": {
+      "本": 20,
+      "最小": 27,
+      "中央値": 51.0,
+      "最大": 120
+     },
+     "文の字数": {
+      "本": 20,
+      "最小": 1575,
+      "中央値": 1883.0,
+      "最大": 2456
+     },
+     "費用 USD": 3.5321
+    },
+    "F4×W2": {
+     "本": 20,
+     "P27 の数の claim の数": {
+      "本": 20,
+      "最小": 10,
+      "中央値": 20.5,
+      "最大": 70
+     },
+     "文の字数": {
+      "本": 20,
+      "最小": 894,
+      "中央値": 1188.0,
+      "最大": 1491
+     },
+     "費用 USD": 3.2236
+    }
+   }
+  },
+  "2 札": {
+   "札の分布": {
+    "全体": {
+     "数の claim": 8290,
+     "真": {
+      "件": 7673,
+      "分母": 8290,
+      "率": 92.6
+     },
+     "偽": {
+      "件": 255,
+      "分母": 8290,
+      "率": 3.1
+     },
+     "判定不能": {
+      "件": 362,
+      "分母": 8290,
+      "率": 4.4
+     }
+    },
+    "F1": {
+     "数の claim": 2313,
+     "真": {
+      "件": 2161,
+      "分母": 2313,
+      "率": 93.4
+     },
+     "偽": {
+      "件": 57,
+      "分母": 2313,
+      "率": 2.5
+     },
+     "判定不能": {
+      "件": 95,
+      "分母": 2313,
+      "率": 4.1
+     }
+    },
+    "F2": {
+     "数の claim": 1511,
+     "真": {
+      "件": 1354,
+      "分母": 1511,
+      "率": 89.6
+     },
+     "偽": {
+      "件": 82,
+      "分母": 1511,
+      "率": 5.4
+     },
+     "判定不能": {
+      "件": 75,
+      "分母": 1511,
+      "率": 5.0
+     }
+    },
+    "F3": {
+     "数の claim": 2623,
+     "真": {
+      "件": 2465,
+      "分母": 2623,
+      "率": 94.0
+     },
+     "偽": {
+      "件": 72,
+      "分母": 2623,
+      "率": 2.7
+     },
+     "判定不能": {
+      "件": 86,
+      "分母": 2623,
+      "率": 3.3
+     }
+    },
+    "F4": {
+     "数の claim": 1843,
+     "真": {
+      "件": 1693,
+      "分母": 1843,
+      "率": 91.9
+     },
+     "偽": {
+      "件": 44,
+      "分母": 1843,
+      "率": 2.4
+     },
+     "判定不能": {
+      "件": 106,
+      "分母": 1843,
+      "率": 5.8
+     }
+    },
+    "W1": {
+     "数の claim": 5398,
+     "真": {
+      "件": 5121,
+      "分母": 5398,
+      "率": 94.9
+     },
+     "偽": {
+      "件": 80,
+      "分母": 5398,
+      "率": 1.5
+     },
+     "判定不能": {
+      "件": 197,
+      "分母": 5398,
+      "率": 3.6
+     }
+    },
+    "W2": {
+     "数の claim": 2892,
+     "真": {
+      "件": 2552,
+      "分母": 2892,
+      "率": 88.2
+     },
+     "偽": {
+      "件": 175,
+      "分母": 2892,
+      "率": 6.1
+     },
+     "判定不能": {
+      "件": 165,
+      "分母": 2892,
+      "率": 5.7
+     }
+    },
+    "F1×W1": {
+     "数の claim": 1568,
+     "真": {
+      "件": 1500,
+      "分母": 1568,
+      "率": 95.7
+     },
+     "偽": {
+      "件": 13,
+      "分母": 1568,
+      "率": 0.8
+     },
+     "判定不能": {
+      "件": 55,
+      "分母": 1568,
+      "率": 3.5
+     }
+    },
+    "F1×W2": {
+     "数の claim": 745,
+     "真": {
+      "件": 661,
+      "分母": 745,
+      "率": 88.7
+     },
+     "偽": {
+      "件": 44,
+      "分母": 745,
+      "率": 5.9
+     },
+     "判定不能": {
+      "件": 40,
+      "分母": 745,
+      "率": 5.4
+     }
+    },
+    "F2×W1": {
+     "数の claim": 885,
+     "真": {
+      "件": 816,
+      "分母": 885,
+      "率": 92.2
+     },
+     "偽": {
+      "件": 30,
+      "分母": 885,
+      "率": 3.4
+     },
+     "判定不能": {
+      "件": 39,
+      "分母": 885,
+      "率": 4.4
+     }
+    },
+    "F2×W2": {
+     "数の claim": 626,
+     "真": {
+      "件": 538,
+      "分母": 626,
+      "率": 85.9
+     },
+     "偽": {
+      "件": 52,
+      "分母": 626,
+      "率": 8.3
+     },
+     "判定不能": {
+      "件": 36,
+      "分母": 626,
+      "率": 5.8
+     }
+    },
+    "F3×W1": {
+     "数の claim": 1714,
+     "真": {
+      "件": 1649,
+      "分母": 1714,
+      "率": 96.2
+     },
+     "偽": {
+      "件": 20,
+      "分母": 1714,
+      "率": 1.2
+     },
+     "判定不能": {
+      "件": 45,
+      "分母": 1714,
+      "率": 2.6
+     }
+    },
+    "F3×W2": {
+     "数の claim": 909,
+     "真": {
+      "件": 816,
+      "分母": 909,
+      "率": 89.8
+     },
+     "偽": {
+      "件": 52,
+      "分母": 909,
+      "率": 5.7
+     },
+     "判定不能": {
+      "件": 41,
+      "分母": 909,
+      "率": 4.5
+     }
+    },
+    "F4×W1": {
+     "数の claim": 1231,
+     "真": {
+      "件": 1156,
+      "分母": 1231,
+      "率": 93.9
+     },
+     "偽": {
+      "件": 17,
+      "分母": 1231,
+      "率": 1.4
+     },
+     "判定不能": {
+      "件": 58,
+      "分母": 1231,
+      "率": 4.7
+     }
+    },
+    "F4×W2": {
+     "数の claim": 612,
+     "真": {
+      "件": 537,
+      "分母": 612,
+      "率": 87.7
+     },
+     "偽": {
+      "件": 27,
+      "分母": 612,
+      "率": 4.4
+     },
+     "判定不能": {
+      "件": 48,
+      "分母": 612,
+      "率": 7.8
+     }
+    }
+   },
+   "2 席目との一致": {
+    "2 席目を立てた本": 32,
+    "claim": 1602,
+    "一致": 1591,
+    "一致率": 99.3,
+    "1 席目 → 2 席目の札の組": {
+     "偽→偽": 47,
+     "偽→真": 7,
+     "判定不能→判定不能": 75,
+     "判定不能→真": 2,
+     "真→偽": 1,
+     "真→判定不能": 1,
+     "真→真": 1469
+    }
+   }
+  },
+  "3 engine の判定(無改変)": {
+   "P27": {
+    "全体": {
+     "claim": 11399,
+     "4 state": {
+      "GROUNDED": 7699,
+      "VALUE_MISMATCH": 1008,
+      "UNVERIFIABLE": 1067,
+      "POINTER_NOT_FOUND": 1625
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 5285,
+      "分母": 7673,
+      "率": 68.9
+     },
+     "札 真で止めた率": {
+      "件": 2388,
+      "分母": 7673,
+      "率": 31.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 676,
+      "ambiguous(elements)/UNVERIFIABLE": 161,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 83,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 561,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 112,
+      "no_element/POINTER_NOT_FOUND": 183,
+      "no_same_value/POINTER_NOT_FOUND": 331,
+      "no_subject/UNVERIFIABLE": 233,
+      "other_concept/POINTER_NOT_FOUND": 43,
+      "per_unit_counter/UNVERIFIABLE": 5
+     },
+     "札 偽の行で止めた率": {
+      "件": 225,
+      "分母": 255,
+      "率": 88.2
+     },
+     "札 偽の行で通した数": 30
+    },
+    "F1": {
+     "claim": 3407,
+     "4 state": {
+      "GROUNDED": 2444,
+      "VALUE_MISMATCH": 236,
+      "UNVERIFIABLE": 318,
+      "POINTER_NOT_FOUND": 409
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1598,
+      "分母": 2161,
+      "率": 73.9
+     },
+     "札 真で止めた率": {
+      "件": 563,
+      "分母": 2161,
+      "率": 26.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 125,
+      "ambiguous(elements)/UNVERIFIABLE": 42,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 22,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 110,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 32,
+      "no_element/POINTER_NOT_FOUND": 47,
+      "no_same_value/POINTER_NOT_FOUND": 104,
+      "no_subject/UNVERIFIABLE": 67,
+      "other_concept/POINTER_NOT_FOUND": 12,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 52,
+      "分母": 57,
+      "率": 91.2
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F2": {
+     "claim": 2180,
+     "4 state": {
+      "GROUNDED": 1622,
+      "VALUE_MISMATCH": 157,
+      "UNVERIFIABLE": 149,
+      "POINTER_NOT_FOUND": 252
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1073,
+      "分母": 1354,
+      "率": 79.2
+     },
+     "札 真で止めた率": {
+      "件": 281,
+      "分母": 1354,
+      "率": 20.8
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 70,
+      "ambiguous(elements)/UNVERIFIABLE": 11,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 8,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 54,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 19,
+      "no_element/POINTER_NOT_FOUND": 29,
+      "no_same_value/POINTER_NOT_FOUND": 51,
+      "no_subject/UNVERIFIABLE": 33,
+      "other_concept/POINTER_NOT_FOUND": 5,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 74,
+      "分母": 82,
+      "率": 90.2
+     },
+     "札 偽の行で通した数": 8
+    },
+    "F3": {
+     "claim": 3236,
+     "4 state": {
+      "GROUNDED": 1960,
+      "VALUE_MISMATCH": 438,
+      "UNVERIFIABLE": 224,
+      "POINTER_NOT_FOUND": 614
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1476,
+      "分母": 2465,
+      "率": 59.9
+     },
+     "札 真で止めた率": {
+      "件": 989,
+      "分母": 2465,
+      "率": 40.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 356,
+      "ambiguous(elements)/UNVERIFIABLE": 38,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 41,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 318,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 8,
+      "no_element/POINTER_NOT_FOUND": 61,
+      "no_same_value/POINTER_NOT_FOUND": 99,
+      "no_subject/UNVERIFIABLE": 56,
+      "other_concept/POINTER_NOT_FOUND": 10,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 61,
+      "分母": 72,
+      "率": 84.7
+     },
+     "札 偽の行で通した数": 11
+    },
+    "F4": {
+     "claim": 2576,
+     "4 state": {
+      "GROUNDED": 1673,
+      "VALUE_MISMATCH": 177,
+      "UNVERIFIABLE": 376,
+      "POINTER_NOT_FOUND": 350
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1138,
+      "分母": 1693,
+      "率": 67.2
+     },
+     "札 真で止めた率": {
+      "件": 555,
+      "分母": 1693,
+      "率": 32.8
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 125,
+      "ambiguous(elements)/UNVERIFIABLE": 70,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 12,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 79,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 53,
+      "no_element/POINTER_NOT_FOUND": 46,
+      "no_same_value/POINTER_NOT_FOUND": 77,
+      "no_subject/UNVERIFIABLE": 77,
+      "other_concept/POINTER_NOT_FOUND": 16
+     },
+     "札 偽の行で止めた率": {
+      "件": 38,
+      "分母": 44,
+      "率": 86.4
+     },
+     "札 偽の行で通した数": 6
+    },
+    "W1": {
+     "claim": 7225,
+     "4 state": {
+      "GROUNDED": 4815,
+      "VALUE_MISMATCH": 637,
+      "UNVERIFIABLE": 620,
+      "POINTER_NOT_FOUND": 1153
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 3399,
+      "分母": 5121,
+      "率": 66.4
+     },
+     "札 真で止めた率": {
+      "件": 1722,
+      "分母": 5121,
+      "率": 33.6
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 466,
+      "ambiguous(elements)/UNVERIFIABLE": 110,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 59,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 372,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 100,
+      "no_element/POINTER_NOT_FOUND": 143,
+      "no_same_value/POINTER_NOT_FOUND": 267,
+      "no_subject/UNVERIFIABLE": 161,
+      "other_concept/POINTER_NOT_FOUND": 43,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 64,
+      "分母": 80,
+      "率": 80.0
+     },
+     "札 偽の行で通した数": 16
+    },
+    "W2": {
+     "claim": 4174,
+     "4 state": {
+      "GROUNDED": 2884,
+      "VALUE_MISMATCH": 371,
+      "UNVERIFIABLE": 447,
+      "POINTER_NOT_FOUND": 472
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1886,
+      "分母": 2552,
+      "率": 73.9
+     },
+     "札 真で止めた率": {
+      "件": 666,
+      "分母": 2552,
+      "率": 26.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 210,
+      "ambiguous(elements)/UNVERIFIABLE": 51,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 24,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 189,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 12,
+      "no_element/POINTER_NOT_FOUND": 40,
+      "no_same_value/POINTER_NOT_FOUND": 64,
+      "no_subject/UNVERIFIABLE": 72,
+      "per_unit_counter/UNVERIFIABLE": 4
+     },
+     "札 偽の行で止めた率": {
+      "件": 161,
+      "分母": 175,
+      "率": 92.0
+     },
+     "札 偽の行で通した数": 14
+    },
+    "F1×W1": {
+     "claim": 2221,
+     "4 state": {
+      "GROUNDED": 1563,
+      "VALUE_MISMATCH": 164,
+      "UNVERIFIABLE": 188,
+      "POINTER_NOT_FOUND": 306
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1062,
+      "分母": 1500,
+      "率": 70.8
+     },
+     "札 真で止めた率": {
+      "件": 438,
+      "分母": 1500,
+      "率": 29.2
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 99,
+      "ambiguous(elements)/UNVERIFIABLE": 23,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 19,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 75,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 32,
+      "no_element/POINTER_NOT_FOUND": 36,
+      "no_same_value/POINTER_NOT_FOUND": 88,
+      "no_subject/UNVERIFIABLE": 54,
+      "other_concept/POINTER_NOT_FOUND": 12
+     },
+     "札 偽の行で止めた率": {
+      "件": 11,
+      "分母": 13,
+      "率": 84.6
+     },
+     "札 偽の行で通した数": 2
+    },
+    "F1×W2": {
+     "claim": 1186,
+     "4 state": {
+      "GROUNDED": 881,
+      "VALUE_MISMATCH": 72,
+      "UNVERIFIABLE": 130,
+      "POINTER_NOT_FOUND": 103
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 536,
+      "分母": 661,
+      "率": 81.1
+     },
+     "札 真で止めた率": {
+      "件": 125,
+      "分母": 661,
+      "率": 18.9
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 26,
+      "ambiguous(elements)/UNVERIFIABLE": 19,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 3,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 35,
+      "no_element/POINTER_NOT_FOUND": 11,
+      "no_same_value/POINTER_NOT_FOUND": 16,
+      "no_subject/UNVERIFIABLE": 13,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 41,
+      "分母": 44,
+      "率": 93.2
+     },
+     "札 偽の行で通した数": 3
+    },
+    "F2×W1": {
+     "claim": 1262,
+     "4 state": {
+      "GROUNDED": 912,
+      "VALUE_MISMATCH": 89,
+      "UNVERIFIABLE": 75,
+      "POINTER_NOT_FOUND": 186
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 612,
+      "分母": 816,
+      "率": 75.0
+     },
+     "札 真で止めた率": {
+      "件": 204,
+      "分母": 816,
+      "率": 25.0
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 47,
+      "ambiguous(elements)/UNVERIFIABLE": 4,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 8,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 37,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 19,
+      "no_element/POINTER_NOT_FOUND": 23,
+      "no_same_value/POINTER_NOT_FOUND": 40,
+      "no_subject/UNVERIFIABLE": 20,
+      "other_concept/POINTER_NOT_FOUND": 5,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 25,
+      "分母": 30,
+      "率": 83.3
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F2×W2": {
+     "claim": 918,
+     "4 state": {
+      "GROUNDED": 710,
+      "VALUE_MISMATCH": 68,
+      "UNVERIFIABLE": 74,
+      "POINTER_NOT_FOUND": 66
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 461,
+      "分母": 538,
+      "率": 85.7
+     },
+     "札 真で止めた率": {
+      "件": 77,
+      "分母": 538,
+      "率": 14.3
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 23,
+      "ambiguous(elements)/UNVERIFIABLE": 7,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 17,
+      "no_element/POINTER_NOT_FOUND": 6,
+      "no_same_value/POINTER_NOT_FOUND": 11,
+      "no_subject/UNVERIFIABLE": 13
+     },
+     "札 偽の行で止めた率": {
+      "件": 49,
+      "分母": 52,
+      "率": 94.2
+     },
+     "札 偽の行で通した数": 3
+    },
+    "F3×W1": {
+     "claim": 2068,
+     "4 state": {
+      "GROUNDED": 1272,
+      "VALUE_MISMATCH": 253,
+      "UNVERIFIABLE": 142,
+      "POINTER_NOT_FOUND": 401
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 995,
+      "分母": 1649,
+      "率": 60.3
+     },
+     "札 真で止めた率": {
+      "件": 654,
+      "分母": 1649,
+      "率": 39.7
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 215,
+      "ambiguous(elements)/UNVERIFIABLE": 31,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 23,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 209,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 5,
+      "no_element/POINTER_NOT_FOUND": 48,
+      "no_same_value/POINTER_NOT_FOUND": 74,
+      "no_subject/UNVERIFIABLE": 39,
+      "other_concept/POINTER_NOT_FOUND": 10
+     },
+     "札 偽の行で止めた率": {
+      "件": 15,
+      "分母": 20,
+      "率": 75.0
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F3×W2": {
+     "claim": 1168,
+     "4 state": {
+      "GROUNDED": 688,
+      "VALUE_MISMATCH": 185,
+      "UNVERIFIABLE": 82,
+      "POINTER_NOT_FOUND": 213
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 481,
+      "分母": 816,
+      "率": 58.9
+     },
+     "札 真で止めた率": {
+      "件": 335,
+      "分母": 816,
+      "率": 41.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 141,
+      "ambiguous(elements)/UNVERIFIABLE": 7,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 18,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 109,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 3,
+      "no_element/POINTER_NOT_FOUND": 13,
+      "no_same_value/POINTER_NOT_FOUND": 25,
+      "no_subject/UNVERIFIABLE": 17,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 46,
+      "分母": 52,
+      "率": 88.5
+     },
+     "札 偽の行で通した数": 6
+    },
+    "F4×W1": {
+     "claim": 1674,
+     "4 state": {
+      "GROUNDED": 1068,
+      "VALUE_MISMATCH": 131,
+      "UNVERIFIABLE": 215,
+      "POINTER_NOT_FOUND": 260
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 730,
+      "分母": 1156,
+      "率": 63.1
+     },
+     "札 真で止めた率": {
+      "件": 426,
+      "分母": 1156,
+      "率": 36.9
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 105,
+      "ambiguous(elements)/UNVERIFIABLE": 52,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 9,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 51,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 44,
+      "no_element/POINTER_NOT_FOUND": 36,
+      "no_same_value/POINTER_NOT_FOUND": 65,
+      "no_subject/UNVERIFIABLE": 48,
+      "other_concept/POINTER_NOT_FOUND": 16
+     },
+     "札 偽の行で止めた率": {
+      "件": 13,
+      "分母": 17,
+      "率": 76.5
+     },
+     "札 偽の行で通した数": 4
+    },
+    "F4×W2": {
+     "claim": 902,
+     "4 state": {
+      "GROUNDED": 605,
+      "VALUE_MISMATCH": 46,
+      "UNVERIFIABLE": 161,
+      "POINTER_NOT_FOUND": 90
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 408,
+      "分母": 537,
+      "率": 76.0
+     },
+     "札 真で止めた率": {
+      "件": 129,
+      "分母": 537,
+      "率": 24.0
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 20,
+      "ambiguous(elements)/UNVERIFIABLE": 18,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 3,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 28,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 9,
+      "no_element/POINTER_NOT_FOUND": 10,
+      "no_same_value/POINTER_NOT_FOUND": 12,
+      "no_subject/UNVERIFIABLE": 29
+     },
+     "札 偽の行で止めた率": {
+      "件": 25,
+      "分母": 27,
+      "率": 92.6
+     },
+     "札 偽の行で通した数": 2
+    }
+   },
+   "P27E": {
+    "全体": {
+     "claim": 11399,
+     "4 state": {
+      "GROUNDED": 7699,
+      "VALUE_MISMATCH": 1086,
+      "UNVERIFIABLE": 1067,
+      "POINTER_NOT_FOUND": 1547
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 5285,
+      "分母": 7673,
+      "率": 68.9
+     },
+     "札 真で止めた率": {
+      "件": 2388,
+      "分母": 7673,
+      "率": 31.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 710,
+      "ambiguous(elements)/UNVERIFIABLE": 161,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 83,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 561,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 112,
+      "no_element/POINTER_NOT_FOUND": 183,
+      "no_same_value/POINTER_NOT_FOUND": 297,
+      "no_subject/UNVERIFIABLE": 233,
+      "other_concept/POINTER_NOT_FOUND": 43,
+      "per_unit_counter/UNVERIFIABLE": 5
+     },
+     "札 偽の行で止めた率": {
+      "件": 225,
+      "分母": 255,
+      "率": 88.2
+     },
+     "札 偽の行で通した数": 30
+    },
+    "F1": {
+     "claim": 3407,
+     "4 state": {
+      "GROUNDED": 2444,
+      "VALUE_MISMATCH": 263,
+      "UNVERIFIABLE": 318,
+      "POINTER_NOT_FOUND": 382
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1598,
+      "分母": 2161,
+      "率": 73.9
+     },
+     "札 真で止めた率": {
+      "件": 563,
+      "分母": 2161,
+      "率": 26.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 136,
+      "ambiguous(elements)/UNVERIFIABLE": 42,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 22,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 110,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 32,
+      "no_element/POINTER_NOT_FOUND": 47,
+      "no_same_value/POINTER_NOT_FOUND": 93,
+      "no_subject/UNVERIFIABLE": 67,
+      "other_concept/POINTER_NOT_FOUND": 12,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 52,
+      "分母": 57,
+      "率": 91.2
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F2": {
+     "claim": 2180,
+     "4 state": {
+      "GROUNDED": 1622,
+      "VALUE_MISMATCH": 171,
+      "UNVERIFIABLE": 149,
+      "POINTER_NOT_FOUND": 238
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1073,
+      "分母": 1354,
+      "率": 79.2
+     },
+     "札 真で止めた率": {
+      "件": 281,
+      "分母": 1354,
+      "率": 20.8
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 76,
+      "ambiguous(elements)/UNVERIFIABLE": 11,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 8,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 54,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 19,
+      "no_element/POINTER_NOT_FOUND": 29,
+      "no_same_value/POINTER_NOT_FOUND": 45,
+      "no_subject/UNVERIFIABLE": 33,
+      "other_concept/POINTER_NOT_FOUND": 5,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 74,
+      "分母": 82,
+      "率": 90.2
+     },
+     "札 偽の行で通した数": 8
+    },
+    "F3": {
+     "claim": 3236,
+     "4 state": {
+      "GROUNDED": 1960,
+      "VALUE_MISMATCH": 457,
+      "UNVERIFIABLE": 224,
+      "POINTER_NOT_FOUND": 595
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1476,
+      "分母": 2465,
+      "率": 59.9
+     },
+     "札 真で止めた率": {
+      "件": 989,
+      "分母": 2465,
+      "率": 40.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 364,
+      "ambiguous(elements)/UNVERIFIABLE": 38,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 41,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 318,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 8,
+      "no_element/POINTER_NOT_FOUND": 61,
+      "no_same_value/POINTER_NOT_FOUND": 91,
+      "no_subject/UNVERIFIABLE": 56,
+      "other_concept/POINTER_NOT_FOUND": 10,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 61,
+      "分母": 72,
+      "率": 84.7
+     },
+     "札 偽の行で通した数": 11
+    },
+    "F4": {
+     "claim": 2576,
+     "4 state": {
+      "GROUNDED": 1673,
+      "VALUE_MISMATCH": 195,
+      "UNVERIFIABLE": 376,
+      "POINTER_NOT_FOUND": 332
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1138,
+      "分母": 1693,
+      "率": 67.2
+     },
+     "札 真で止めた率": {
+      "件": 555,
+      "分母": 1693,
+      "率": 32.8
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 134,
+      "ambiguous(elements)/UNVERIFIABLE": 70,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 12,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 79,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 53,
+      "no_element/POINTER_NOT_FOUND": 46,
+      "no_same_value/POINTER_NOT_FOUND": 68,
+      "no_subject/UNVERIFIABLE": 77,
+      "other_concept/POINTER_NOT_FOUND": 16
+     },
+     "札 偽の行で止めた率": {
+      "件": 38,
+      "分母": 44,
+      "率": 86.4
+     },
+     "札 偽の行で通した数": 6
+    },
+    "W1": {
+     "claim": 7225,
+     "4 state": {
+      "GROUNDED": 4815,
+      "VALUE_MISMATCH": 664,
+      "UNVERIFIABLE": 620,
+      "POINTER_NOT_FOUND": 1126
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 3399,
+      "分母": 5121,
+      "率": 66.4
+     },
+     "札 真で止めた率": {
+      "件": 1722,
+      "分母": 5121,
+      "率": 33.6
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 486,
+      "ambiguous(elements)/UNVERIFIABLE": 110,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 59,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 372,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 100,
+      "no_element/POINTER_NOT_FOUND": 143,
+      "no_same_value/POINTER_NOT_FOUND": 247,
+      "no_subject/UNVERIFIABLE": 161,
+      "other_concept/POINTER_NOT_FOUND": 43,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 64,
+      "分母": 80,
+      "率": 80.0
+     },
+     "札 偽の行で通した数": 16
+    },
+    "W2": {
+     "claim": 4174,
+     "4 state": {
+      "GROUNDED": 2884,
+      "VALUE_MISMATCH": 422,
+      "UNVERIFIABLE": 447,
+      "POINTER_NOT_FOUND": 421
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1886,
+      "分母": 2552,
+      "率": 73.9
+     },
+     "札 真で止めた率": {
+      "件": 666,
+      "分母": 2552,
+      "率": 26.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 224,
+      "ambiguous(elements)/UNVERIFIABLE": 51,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 24,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 189,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 12,
+      "no_element/POINTER_NOT_FOUND": 40,
+      "no_same_value/POINTER_NOT_FOUND": 50,
+      "no_subject/UNVERIFIABLE": 72,
+      "per_unit_counter/UNVERIFIABLE": 4
+     },
+     "札 偽の行で止めた率": {
+      "件": 161,
+      "分母": 175,
+      "率": 92.0
+     },
+     "札 偽の行で通した数": 14
+    },
+    "F1×W1": {
+     "claim": 2221,
+     "4 state": {
+      "GROUNDED": 1563,
+      "VALUE_MISMATCH": 175,
+      "UNVERIFIABLE": 188,
+      "POINTER_NOT_FOUND": 295
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1062,
+      "分母": 1500,
+      "率": 70.8
+     },
+     "札 真で止めた率": {
+      "件": 438,
+      "分母": 1500,
+      "率": 29.2
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 107,
+      "ambiguous(elements)/UNVERIFIABLE": 23,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 19,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 75,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 32,
+      "no_element/POINTER_NOT_FOUND": 36,
+      "no_same_value/POINTER_NOT_FOUND": 80,
+      "no_subject/UNVERIFIABLE": 54,
+      "other_concept/POINTER_NOT_FOUND": 12
+     },
+     "札 偽の行で止めた率": {
+      "件": 11,
+      "分母": 13,
+      "率": 84.6
+     },
+     "札 偽の行で通した数": 2
+    },
+    "F1×W2": {
+     "claim": 1186,
+     "4 state": {
+      "GROUNDED": 881,
+      "VALUE_MISMATCH": 88,
+      "UNVERIFIABLE": 130,
+      "POINTER_NOT_FOUND": 87
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 536,
+      "分母": 661,
+      "率": 81.1
+     },
+     "札 真で止めた率": {
+      "件": 125,
+      "分母": 661,
+      "率": 18.9
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 29,
+      "ambiguous(elements)/UNVERIFIABLE": 19,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 3,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 35,
+      "no_element/POINTER_NOT_FOUND": 11,
+      "no_same_value/POINTER_NOT_FOUND": 13,
+      "no_subject/UNVERIFIABLE": 13,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 41,
+      "分母": 44,
+      "率": 93.2
+     },
+     "札 偽の行で通した数": 3
+    },
+    "F2×W1": {
+     "claim": 1262,
+     "4 state": {
+      "GROUNDED": 912,
+      "VALUE_MISMATCH": 93,
+      "UNVERIFIABLE": 75,
+      "POINTER_NOT_FOUND": 182
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 612,
+      "分母": 816,
+      "率": 75.0
+     },
+     "札 真で止めた率": {
+      "件": 204,
+      "分母": 816,
+      "率": 25.0
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 50,
+      "ambiguous(elements)/UNVERIFIABLE": 4,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 8,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 37,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 19,
+      "no_element/POINTER_NOT_FOUND": 23,
+      "no_same_value/POINTER_NOT_FOUND": 37,
+      "no_subject/UNVERIFIABLE": 20,
+      "other_concept/POINTER_NOT_FOUND": 5,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 25,
+      "分母": 30,
+      "率": 83.3
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F2×W2": {
+     "claim": 918,
+     "4 state": {
+      "GROUNDED": 710,
+      "VALUE_MISMATCH": 78,
+      "UNVERIFIABLE": 74,
+      "POINTER_NOT_FOUND": 56
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 461,
+      "分母": 538,
+      "率": 85.7
+     },
+     "札 真で止めた率": {
+      "件": 77,
+      "分母": 538,
+      "率": 14.3
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 26,
+      "ambiguous(elements)/UNVERIFIABLE": 7,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 17,
+      "no_element/POINTER_NOT_FOUND": 6,
+      "no_same_value/POINTER_NOT_FOUND": 8,
+      "no_subject/UNVERIFIABLE": 13
+     },
+     "札 偽の行で止めた率": {
+      "件": 49,
+      "分母": 52,
+      "率": 94.2
+     },
+     "札 偽の行で通した数": 3
+    },
+    "F3×W1": {
+     "claim": 2068,
+     "4 state": {
+      "GROUNDED": 1272,
+      "VALUE_MISMATCH": 257,
+      "UNVERIFIABLE": 142,
+      "POINTER_NOT_FOUND": 397
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 995,
+      "分母": 1649,
+      "率": 60.3
+     },
+     "札 真で止めた率": {
+      "件": 654,
+      "分母": 1649,
+      "率": 39.7
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 218,
+      "ambiguous(elements)/UNVERIFIABLE": 31,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 23,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 209,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 5,
+      "no_element/POINTER_NOT_FOUND": 48,
+      "no_same_value/POINTER_NOT_FOUND": 71,
+      "no_subject/UNVERIFIABLE": 39,
+      "other_concept/POINTER_NOT_FOUND": 10
+     },
+     "札 偽の行で止めた率": {
+      "件": 15,
+      "分母": 20,
+      "率": 75.0
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F3×W2": {
+     "claim": 1168,
+     "4 state": {
+      "GROUNDED": 688,
+      "VALUE_MISMATCH": 200,
+      "UNVERIFIABLE": 82,
+      "POINTER_NOT_FOUND": 198
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 481,
+      "分母": 816,
+      "率": 58.9
+     },
+     "札 真で止めた率": {
+      "件": 335,
+      "分母": 816,
+      "率": 41.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 146,
+      "ambiguous(elements)/UNVERIFIABLE": 7,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 18,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 109,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 3,
+      "no_element/POINTER_NOT_FOUND": 13,
+      "no_same_value/POINTER_NOT_FOUND": 20,
+      "no_subject/UNVERIFIABLE": 17,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 46,
+      "分母": 52,
+      "率": 88.5
+     },
+     "札 偽の行で通した数": 6
+    },
+    "F4×W1": {
+     "claim": 1674,
+     "4 state": {
+      "GROUNDED": 1068,
+      "VALUE_MISMATCH": 139,
+      "UNVERIFIABLE": 215,
+      "POINTER_NOT_FOUND": 252
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 730,
+      "分母": 1156,
+      "率": 63.1
+     },
+     "札 真で止めた率": {
+      "件": 426,
+      "分母": 1156,
+      "率": 36.9
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 111,
+      "ambiguous(elements)/UNVERIFIABLE": 52,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 9,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 51,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 44,
+      "no_element/POINTER_NOT_FOUND": 36,
+      "no_same_value/POINTER_NOT_FOUND": 59,
+      "no_subject/UNVERIFIABLE": 48,
+      "other_concept/POINTER_NOT_FOUND": 16
+     },
+     "札 偽の行で止めた率": {
+      "件": 13,
+      "分母": 17,
+      "率": 76.5
+     },
+     "札 偽の行で通した数": 4
+    },
+    "F4×W2": {
+     "claim": 902,
+     "4 state": {
+      "GROUNDED": 605,
+      "VALUE_MISMATCH": 56,
+      "UNVERIFIABLE": 161,
+      "POINTER_NOT_FOUND": 80
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 408,
+      "分母": 537,
+      "率": 76.0
+     },
+     "札 真で止めた率": {
+      "件": 129,
+      "分母": 537,
+      "率": 24.0
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 23,
+      "ambiguous(elements)/UNVERIFIABLE": 18,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 3,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 28,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 9,
+      "no_element/POINTER_NOT_FOUND": 10,
+      "no_same_value/POINTER_NOT_FOUND": 9,
+      "no_subject/UNVERIFIABLE": 29
+     },
+     "札 偽の行で止めた率": {
+      "件": 25,
+      "分母": 27,
+      "率": 92.6
+     },
+     "札 偽の行で通した数": 2
+    }
+   },
+   "P28": {
+    "全体": {
+     "claim": 11399,
+     "4 state": {
+      "GROUNDED": 7699,
+      "VALUE_MISMATCH": 1008,
+      "UNVERIFIABLE": 1067,
+      "POINTER_NOT_FOUND": 1625
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 5285,
+      "分母": 7673,
+      "率": 68.9
+     },
+     "札 真で止めた率": {
+      "件": 2388,
+      "分母": 7673,
+      "率": 31.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 676,
+      "ambiguous(elements)/UNVERIFIABLE": 161,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 83,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 561,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 112,
+      "no_element/POINTER_NOT_FOUND": 183,
+      "no_same_value/POINTER_NOT_FOUND": 331,
+      "no_subject/UNVERIFIABLE": 233,
+      "other_concept/POINTER_NOT_FOUND": 43,
+      "per_unit_counter/UNVERIFIABLE": 5
+     },
+     "札 偽の行で止めた率": {
+      "件": 225,
+      "分母": 255,
+      "率": 88.2
+     },
+     "札 偽の行で通した数": 30
+    },
+    "F1": {
+     "claim": 3407,
+     "4 state": {
+      "GROUNDED": 2444,
+      "VALUE_MISMATCH": 236,
+      "UNVERIFIABLE": 318,
+      "POINTER_NOT_FOUND": 409
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1598,
+      "分母": 2161,
+      "率": 73.9
+     },
+     "札 真で止めた率": {
+      "件": 563,
+      "分母": 2161,
+      "率": 26.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 125,
+      "ambiguous(elements)/UNVERIFIABLE": 42,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 22,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 110,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 32,
+      "no_element/POINTER_NOT_FOUND": 47,
+      "no_same_value/POINTER_NOT_FOUND": 104,
+      "no_subject/UNVERIFIABLE": 67,
+      "other_concept/POINTER_NOT_FOUND": 12,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 52,
+      "分母": 57,
+      "率": 91.2
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F2": {
+     "claim": 2180,
+     "4 state": {
+      "GROUNDED": 1622,
+      "VALUE_MISMATCH": 157,
+      "UNVERIFIABLE": 149,
+      "POINTER_NOT_FOUND": 252
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1073,
+      "分母": 1354,
+      "率": 79.2
+     },
+     "札 真で止めた率": {
+      "件": 281,
+      "分母": 1354,
+      "率": 20.8
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 70,
+      "ambiguous(elements)/UNVERIFIABLE": 11,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 8,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 54,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 19,
+      "no_element/POINTER_NOT_FOUND": 29,
+      "no_same_value/POINTER_NOT_FOUND": 51,
+      "no_subject/UNVERIFIABLE": 33,
+      "other_concept/POINTER_NOT_FOUND": 5,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 74,
+      "分母": 82,
+      "率": 90.2
+     },
+     "札 偽の行で通した数": 8
+    },
+    "F3": {
+     "claim": 3236,
+     "4 state": {
+      "GROUNDED": 1960,
+      "VALUE_MISMATCH": 438,
+      "UNVERIFIABLE": 224,
+      "POINTER_NOT_FOUND": 614
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1476,
+      "分母": 2465,
+      "率": 59.9
+     },
+     "札 真で止めた率": {
+      "件": 989,
+      "分母": 2465,
+      "率": 40.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 356,
+      "ambiguous(elements)/UNVERIFIABLE": 38,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 41,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 318,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 8,
+      "no_element/POINTER_NOT_FOUND": 61,
+      "no_same_value/POINTER_NOT_FOUND": 99,
+      "no_subject/UNVERIFIABLE": 56,
+      "other_concept/POINTER_NOT_FOUND": 10,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 61,
+      "分母": 72,
+      "率": 84.7
+     },
+     "札 偽の行で通した数": 11
+    },
+    "F4": {
+     "claim": 2576,
+     "4 state": {
+      "GROUNDED": 1673,
+      "VALUE_MISMATCH": 177,
+      "UNVERIFIABLE": 376,
+      "POINTER_NOT_FOUND": 350
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1138,
+      "分母": 1693,
+      "率": 67.2
+     },
+     "札 真で止めた率": {
+      "件": 555,
+      "分母": 1693,
+      "率": 32.8
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 125,
+      "ambiguous(elements)/UNVERIFIABLE": 70,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 12,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 79,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 53,
+      "no_element/POINTER_NOT_FOUND": 46,
+      "no_same_value/POINTER_NOT_FOUND": 77,
+      "no_subject/UNVERIFIABLE": 77,
+      "other_concept/POINTER_NOT_FOUND": 16
+     },
+     "札 偽の行で止めた率": {
+      "件": 38,
+      "分母": 44,
+      "率": 86.4
+     },
+     "札 偽の行で通した数": 6
+    },
+    "W1": {
+     "claim": 7225,
+     "4 state": {
+      "GROUNDED": 4815,
+      "VALUE_MISMATCH": 637,
+      "UNVERIFIABLE": 620,
+      "POINTER_NOT_FOUND": 1153
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 3399,
+      "分母": 5121,
+      "率": 66.4
+     },
+     "札 真で止めた率": {
+      "件": 1722,
+      "分母": 5121,
+      "率": 33.6
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 466,
+      "ambiguous(elements)/UNVERIFIABLE": 110,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 59,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 372,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 100,
+      "no_element/POINTER_NOT_FOUND": 143,
+      "no_same_value/POINTER_NOT_FOUND": 267,
+      "no_subject/UNVERIFIABLE": 161,
+      "other_concept/POINTER_NOT_FOUND": 43,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 64,
+      "分母": 80,
+      "率": 80.0
+     },
+     "札 偽の行で通した数": 16
+    },
+    "W2": {
+     "claim": 4174,
+     "4 state": {
+      "GROUNDED": 2884,
+      "VALUE_MISMATCH": 371,
+      "UNVERIFIABLE": 447,
+      "POINTER_NOT_FOUND": 472
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1886,
+      "分母": 2552,
+      "率": 73.9
+     },
+     "札 真で止めた率": {
+      "件": 666,
+      "分母": 2552,
+      "率": 26.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 210,
+      "ambiguous(elements)/UNVERIFIABLE": 51,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 24,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 189,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 12,
+      "no_element/POINTER_NOT_FOUND": 40,
+      "no_same_value/POINTER_NOT_FOUND": 64,
+      "no_subject/UNVERIFIABLE": 72,
+      "per_unit_counter/UNVERIFIABLE": 4
+     },
+     "札 偽の行で止めた率": {
+      "件": 161,
+      "分母": 175,
+      "率": 92.0
+     },
+     "札 偽の行で通した数": 14
+    },
+    "F1×W1": {
+     "claim": 2221,
+     "4 state": {
+      "GROUNDED": 1563,
+      "VALUE_MISMATCH": 164,
+      "UNVERIFIABLE": 188,
+      "POINTER_NOT_FOUND": 306
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1062,
+      "分母": 1500,
+      "率": 70.8
+     },
+     "札 真で止めた率": {
+      "件": 438,
+      "分母": 1500,
+      "率": 29.2
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 99,
+      "ambiguous(elements)/UNVERIFIABLE": 23,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 19,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 75,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 32,
+      "no_element/POINTER_NOT_FOUND": 36,
+      "no_same_value/POINTER_NOT_FOUND": 88,
+      "no_subject/UNVERIFIABLE": 54,
+      "other_concept/POINTER_NOT_FOUND": 12
+     },
+     "札 偽の行で止めた率": {
+      "件": 11,
+      "分母": 13,
+      "率": 84.6
+     },
+     "札 偽の行で通した数": 2
+    },
+    "F1×W2": {
+     "claim": 1186,
+     "4 state": {
+      "GROUNDED": 881,
+      "VALUE_MISMATCH": 72,
+      "UNVERIFIABLE": 130,
+      "POINTER_NOT_FOUND": 103
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 536,
+      "分母": 661,
+      "率": 81.1
+     },
+     "札 真で止めた率": {
+      "件": 125,
+      "分母": 661,
+      "率": 18.9
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 26,
+      "ambiguous(elements)/UNVERIFIABLE": 19,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 3,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 35,
+      "no_element/POINTER_NOT_FOUND": 11,
+      "no_same_value/POINTER_NOT_FOUND": 16,
+      "no_subject/UNVERIFIABLE": 13,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 41,
+      "分母": 44,
+      "率": 93.2
+     },
+     "札 偽の行で通した数": 3
+    },
+    "F2×W1": {
+     "claim": 1262,
+     "4 state": {
+      "GROUNDED": 912,
+      "VALUE_MISMATCH": 89,
+      "UNVERIFIABLE": 75,
+      "POINTER_NOT_FOUND": 186
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 612,
+      "分母": 816,
+      "率": 75.0
+     },
+     "札 真で止めた率": {
+      "件": 204,
+      "分母": 816,
+      "率": 25.0
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 47,
+      "ambiguous(elements)/UNVERIFIABLE": 4,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 8,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 37,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 19,
+      "no_element/POINTER_NOT_FOUND": 23,
+      "no_same_value/POINTER_NOT_FOUND": 40,
+      "no_subject/UNVERIFIABLE": 20,
+      "other_concept/POINTER_NOT_FOUND": 5,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 25,
+      "分母": 30,
+      "率": 83.3
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F2×W2": {
+     "claim": 918,
+     "4 state": {
+      "GROUNDED": 710,
+      "VALUE_MISMATCH": 68,
+      "UNVERIFIABLE": 74,
+      "POINTER_NOT_FOUND": 66
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 461,
+      "分母": 538,
+      "率": 85.7
+     },
+     "札 真で止めた率": {
+      "件": 77,
+      "分母": 538,
+      "率": 14.3
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 23,
+      "ambiguous(elements)/UNVERIFIABLE": 7,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 17,
+      "no_element/POINTER_NOT_FOUND": 6,
+      "no_same_value/POINTER_NOT_FOUND": 11,
+      "no_subject/UNVERIFIABLE": 13
+     },
+     "札 偽の行で止めた率": {
+      "件": 49,
+      "分母": 52,
+      "率": 94.2
+     },
+     "札 偽の行で通した数": 3
+    },
+    "F3×W1": {
+     "claim": 2068,
+     "4 state": {
+      "GROUNDED": 1272,
+      "VALUE_MISMATCH": 253,
+      "UNVERIFIABLE": 142,
+      "POINTER_NOT_FOUND": 401
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 995,
+      "分母": 1649,
+      "率": 60.3
+     },
+     "札 真で止めた率": {
+      "件": 654,
+      "分母": 1649,
+      "率": 39.7
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 215,
+      "ambiguous(elements)/UNVERIFIABLE": 31,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 23,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 209,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 5,
+      "no_element/POINTER_NOT_FOUND": 48,
+      "no_same_value/POINTER_NOT_FOUND": 74,
+      "no_subject/UNVERIFIABLE": 39,
+      "other_concept/POINTER_NOT_FOUND": 10
+     },
+     "札 偽の行で止めた率": {
+      "件": 15,
+      "分母": 20,
+      "率": 75.0
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F3×W2": {
+     "claim": 1168,
+     "4 state": {
+      "GROUNDED": 688,
+      "VALUE_MISMATCH": 185,
+      "UNVERIFIABLE": 82,
+      "POINTER_NOT_FOUND": 213
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 481,
+      "分母": 816,
+      "率": 58.9
+     },
+     "札 真で止めた率": {
+      "件": 335,
+      "分母": 816,
+      "率": 41.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 141,
+      "ambiguous(elements)/UNVERIFIABLE": 7,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 18,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 109,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 3,
+      "no_element/POINTER_NOT_FOUND": 13,
+      "no_same_value/POINTER_NOT_FOUND": 25,
+      "no_subject/UNVERIFIABLE": 17,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 46,
+      "分母": 52,
+      "率": 88.5
+     },
+     "札 偽の行で通した数": 6
+    },
+    "F4×W1": {
+     "claim": 1674,
+     "4 state": {
+      "GROUNDED": 1068,
+      "VALUE_MISMATCH": 131,
+      "UNVERIFIABLE": 215,
+      "POINTER_NOT_FOUND": 260
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 730,
+      "分母": 1156,
+      "率": 63.1
+     },
+     "札 真で止めた率": {
+      "件": 426,
+      "分母": 1156,
+      "率": 36.9
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 105,
+      "ambiguous(elements)/UNVERIFIABLE": 52,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 9,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 51,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 44,
+      "no_element/POINTER_NOT_FOUND": 36,
+      "no_same_value/POINTER_NOT_FOUND": 65,
+      "no_subject/UNVERIFIABLE": 48,
+      "other_concept/POINTER_NOT_FOUND": 16
+     },
+     "札 偽の行で止めた率": {
+      "件": 13,
+      "分母": 17,
+      "率": 76.5
+     },
+     "札 偽の行で通した数": 4
+    },
+    "F4×W2": {
+     "claim": 902,
+     "4 state": {
+      "GROUNDED": 605,
+      "VALUE_MISMATCH": 46,
+      "UNVERIFIABLE": 161,
+      "POINTER_NOT_FOUND": 90
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 408,
+      "分母": 537,
+      "率": 76.0
+     },
+     "札 真で止めた率": {
+      "件": 129,
+      "分母": 537,
+      "率": 24.0
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 20,
+      "ambiguous(elements)/UNVERIFIABLE": 18,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 3,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 28,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 9,
+      "no_element/POINTER_NOT_FOUND": 10,
+      "no_same_value/POINTER_NOT_FOUND": 12,
+      "no_subject/UNVERIFIABLE": 29
+     },
+     "札 偽の行で止めた率": {
+      "件": 25,
+      "分母": 27,
+      "率": 92.6
+     },
+     "札 偽の行で通した数": 2
+    }
+   },
+   "P28E": {
+    "全体": {
+     "claim": 11399,
+     "4 state": {
+      "GROUNDED": 7699,
+      "VALUE_MISMATCH": 1086,
+      "UNVERIFIABLE": 1067,
+      "POINTER_NOT_FOUND": 1547
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 5285,
+      "分母": 7673,
+      "率": 68.9
+     },
+     "札 真で止めた率": {
+      "件": 2388,
+      "分母": 7673,
+      "率": 31.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 710,
+      "ambiguous(elements)/UNVERIFIABLE": 161,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 83,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 561,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 112,
+      "no_element/POINTER_NOT_FOUND": 183,
+      "no_same_value/POINTER_NOT_FOUND": 297,
+      "no_subject/UNVERIFIABLE": 233,
+      "other_concept/POINTER_NOT_FOUND": 43,
+      "per_unit_counter/UNVERIFIABLE": 5
+     },
+     "札 偽の行で止めた率": {
+      "件": 225,
+      "分母": 255,
+      "率": 88.2
+     },
+     "札 偽の行で通した数": 30
+    },
+    "F1": {
+     "claim": 3407,
+     "4 state": {
+      "GROUNDED": 2444,
+      "VALUE_MISMATCH": 263,
+      "UNVERIFIABLE": 318,
+      "POINTER_NOT_FOUND": 382
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1598,
+      "分母": 2161,
+      "率": 73.9
+     },
+     "札 真で止めた率": {
+      "件": 563,
+      "分母": 2161,
+      "率": 26.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 136,
+      "ambiguous(elements)/UNVERIFIABLE": 42,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 22,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 110,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 32,
+      "no_element/POINTER_NOT_FOUND": 47,
+      "no_same_value/POINTER_NOT_FOUND": 93,
+      "no_subject/UNVERIFIABLE": 67,
+      "other_concept/POINTER_NOT_FOUND": 12,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 52,
+      "分母": 57,
+      "率": 91.2
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F2": {
+     "claim": 2180,
+     "4 state": {
+      "GROUNDED": 1622,
+      "VALUE_MISMATCH": 171,
+      "UNVERIFIABLE": 149,
+      "POINTER_NOT_FOUND": 238
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1073,
+      "分母": 1354,
+      "率": 79.2
+     },
+     "札 真で止めた率": {
+      "件": 281,
+      "分母": 1354,
+      "率": 20.8
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 76,
+      "ambiguous(elements)/UNVERIFIABLE": 11,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 8,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 54,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 19,
+      "no_element/POINTER_NOT_FOUND": 29,
+      "no_same_value/POINTER_NOT_FOUND": 45,
+      "no_subject/UNVERIFIABLE": 33,
+      "other_concept/POINTER_NOT_FOUND": 5,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 74,
+      "分母": 82,
+      "率": 90.2
+     },
+     "札 偽の行で通した数": 8
+    },
+    "F3": {
+     "claim": 3236,
+     "4 state": {
+      "GROUNDED": 1960,
+      "VALUE_MISMATCH": 457,
+      "UNVERIFIABLE": 224,
+      "POINTER_NOT_FOUND": 595
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1476,
+      "分母": 2465,
+      "率": 59.9
+     },
+     "札 真で止めた率": {
+      "件": 989,
+      "分母": 2465,
+      "率": 40.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 364,
+      "ambiguous(elements)/UNVERIFIABLE": 38,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 41,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 318,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 8,
+      "no_element/POINTER_NOT_FOUND": 61,
+      "no_same_value/POINTER_NOT_FOUND": 91,
+      "no_subject/UNVERIFIABLE": 56,
+      "other_concept/POINTER_NOT_FOUND": 10,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 61,
+      "分母": 72,
+      "率": 84.7
+     },
+     "札 偽の行で通した数": 11
+    },
+    "F4": {
+     "claim": 2576,
+     "4 state": {
+      "GROUNDED": 1673,
+      "VALUE_MISMATCH": 195,
+      "UNVERIFIABLE": 376,
+      "POINTER_NOT_FOUND": 332
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1138,
+      "分母": 1693,
+      "率": 67.2
+     },
+     "札 真で止めた率": {
+      "件": 555,
+      "分母": 1693,
+      "率": 32.8
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 134,
+      "ambiguous(elements)/UNVERIFIABLE": 70,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 12,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 79,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 53,
+      "no_element/POINTER_NOT_FOUND": 46,
+      "no_same_value/POINTER_NOT_FOUND": 68,
+      "no_subject/UNVERIFIABLE": 77,
+      "other_concept/POINTER_NOT_FOUND": 16
+     },
+     "札 偽の行で止めた率": {
+      "件": 38,
+      "分母": 44,
+      "率": 86.4
+     },
+     "札 偽の行で通した数": 6
+    },
+    "W1": {
+     "claim": 7225,
+     "4 state": {
+      "GROUNDED": 4815,
+      "VALUE_MISMATCH": 664,
+      "UNVERIFIABLE": 620,
+      "POINTER_NOT_FOUND": 1126
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 3399,
+      "分母": 5121,
+      "率": 66.4
+     },
+     "札 真で止めた率": {
+      "件": 1722,
+      "分母": 5121,
+      "率": 33.6
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 486,
+      "ambiguous(elements)/UNVERIFIABLE": 110,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 59,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 372,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 100,
+      "no_element/POINTER_NOT_FOUND": 143,
+      "no_same_value/POINTER_NOT_FOUND": 247,
+      "no_subject/UNVERIFIABLE": 161,
+      "other_concept/POINTER_NOT_FOUND": 43,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 64,
+      "分母": 80,
+      "率": 80.0
+     },
+     "札 偽の行で通した数": 16
+    },
+    "W2": {
+     "claim": 4174,
+     "4 state": {
+      "GROUNDED": 2884,
+      "VALUE_MISMATCH": 422,
+      "UNVERIFIABLE": 447,
+      "POINTER_NOT_FOUND": 421
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1886,
+      "分母": 2552,
+      "率": 73.9
+     },
+     "札 真で止めた率": {
+      "件": 666,
+      "分母": 2552,
+      "率": 26.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 224,
+      "ambiguous(elements)/UNVERIFIABLE": 51,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 24,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 189,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 12,
+      "no_element/POINTER_NOT_FOUND": 40,
+      "no_same_value/POINTER_NOT_FOUND": 50,
+      "no_subject/UNVERIFIABLE": 72,
+      "per_unit_counter/UNVERIFIABLE": 4
+     },
+     "札 偽の行で止めた率": {
+      "件": 161,
+      "分母": 175,
+      "率": 92.0
+     },
+     "札 偽の行で通した数": 14
+    },
+    "F1×W1": {
+     "claim": 2221,
+     "4 state": {
+      "GROUNDED": 1563,
+      "VALUE_MISMATCH": 175,
+      "UNVERIFIABLE": 188,
+      "POINTER_NOT_FOUND": 295
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 1062,
+      "分母": 1500,
+      "率": 70.8
+     },
+     "札 真で止めた率": {
+      "件": 438,
+      "分母": 1500,
+      "率": 29.2
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 107,
+      "ambiguous(elements)/UNVERIFIABLE": 23,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 19,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 75,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 32,
+      "no_element/POINTER_NOT_FOUND": 36,
+      "no_same_value/POINTER_NOT_FOUND": 80,
+      "no_subject/UNVERIFIABLE": 54,
+      "other_concept/POINTER_NOT_FOUND": 12
+     },
+     "札 偽の行で止めた率": {
+      "件": 11,
+      "分母": 13,
+      "率": 84.6
+     },
+     "札 偽の行で通した数": 2
+    },
+    "F1×W2": {
+     "claim": 1186,
+     "4 state": {
+      "GROUNDED": 881,
+      "VALUE_MISMATCH": 88,
+      "UNVERIFIABLE": 130,
+      "POINTER_NOT_FOUND": 87
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 536,
+      "分母": 661,
+      "率": 81.1
+     },
+     "札 真で止めた率": {
+      "件": 125,
+      "分母": 661,
+      "率": 18.9
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 29,
+      "ambiguous(elements)/UNVERIFIABLE": 19,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 3,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 35,
+      "no_element/POINTER_NOT_FOUND": 11,
+      "no_same_value/POINTER_NOT_FOUND": 13,
+      "no_subject/UNVERIFIABLE": 13,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 41,
+      "分母": 44,
+      "率": 93.2
+     },
+     "札 偽の行で通した数": 3
+    },
+    "F2×W1": {
+     "claim": 1262,
+     "4 state": {
+      "GROUNDED": 912,
+      "VALUE_MISMATCH": 93,
+      "UNVERIFIABLE": 75,
+      "POINTER_NOT_FOUND": 182
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 612,
+      "分母": 816,
+      "率": 75.0
+     },
+     "札 真で止めた率": {
+      "件": 204,
+      "分母": 816,
+      "率": 25.0
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 50,
+      "ambiguous(elements)/UNVERIFIABLE": 4,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 8,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 37,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 19,
+      "no_element/POINTER_NOT_FOUND": 23,
+      "no_same_value/POINTER_NOT_FOUND": 37,
+      "no_subject/UNVERIFIABLE": 20,
+      "other_concept/POINTER_NOT_FOUND": 5,
+      "per_unit_counter/UNVERIFIABLE": 1
+     },
+     "札 偽の行で止めた率": {
+      "件": 25,
+      "分母": 30,
+      "率": 83.3
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F2×W2": {
+     "claim": 918,
+     "4 state": {
+      "GROUNDED": 710,
+      "VALUE_MISMATCH": 78,
+      "UNVERIFIABLE": 74,
+      "POINTER_NOT_FOUND": 56
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 461,
+      "分母": 538,
+      "率": 85.7
+     },
+     "札 真で止めた率": {
+      "件": 77,
+      "分母": 538,
+      "率": 14.3
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 26,
+      "ambiguous(elements)/UNVERIFIABLE": 7,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 17,
+      "no_element/POINTER_NOT_FOUND": 6,
+      "no_same_value/POINTER_NOT_FOUND": 8,
+      "no_subject/UNVERIFIABLE": 13
+     },
+     "札 偽の行で止めた率": {
+      "件": 49,
+      "分母": 52,
+      "率": 94.2
+     },
+     "札 偽の行で通した数": 3
+    },
+    "F3×W1": {
+     "claim": 2068,
+     "4 state": {
+      "GROUNDED": 1272,
+      "VALUE_MISMATCH": 257,
+      "UNVERIFIABLE": 142,
+      "POINTER_NOT_FOUND": 397
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 995,
+      "分母": 1649,
+      "率": 60.3
+     },
+     "札 真で止めた率": {
+      "件": 654,
+      "分母": 1649,
+      "率": 39.7
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 218,
+      "ambiguous(elements)/UNVERIFIABLE": 31,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 23,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 209,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 5,
+      "no_element/POINTER_NOT_FOUND": 48,
+      "no_same_value/POINTER_NOT_FOUND": 71,
+      "no_subject/UNVERIFIABLE": 39,
+      "other_concept/POINTER_NOT_FOUND": 10
+     },
+     "札 偽の行で止めた率": {
+      "件": 15,
+      "分母": 20,
+      "率": 75.0
+     },
+     "札 偽の行で通した数": 5
+    },
+    "F3×W2": {
+     "claim": 1168,
+     "4 state": {
+      "GROUNDED": 688,
+      "VALUE_MISMATCH": 200,
+      "UNVERIFIABLE": 82,
+      "POINTER_NOT_FOUND": 198
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 481,
+      "分母": 816,
+      "率": 58.9
+     },
+     "札 真で止めた率": {
+      "件": 335,
+      "分母": 816,
+      "率": 41.1
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 146,
+      "ambiguous(elements)/UNVERIFIABLE": 7,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 18,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 109,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 3,
+      "no_element/POINTER_NOT_FOUND": 13,
+      "no_same_value/POINTER_NOT_FOUND": 20,
+      "no_subject/UNVERIFIABLE": 17,
+      "per_unit_counter/UNVERIFIABLE": 2
+     },
+     "札 偽の行で止めた率": {
+      "件": 46,
+      "分母": 52,
+      "率": 88.5
+     },
+     "札 偽の行で通した数": 6
+    },
+    "F4×W1": {
+     "claim": 1674,
+     "4 state": {
+      "GROUNDED": 1068,
+      "VALUE_MISMATCH": 139,
+      "UNVERIFIABLE": 215,
+      "POINTER_NOT_FOUND": 252
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 730,
+      "分母": 1156,
+      "率": 63.1
+     },
+     "札 真で止めた率": {
+      "件": 426,
+      "分母": 1156,
+      "率": 36.9
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 111,
+      "ambiguous(elements)/UNVERIFIABLE": 52,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 9,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 51,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 44,
+      "no_element/POINTER_NOT_FOUND": 36,
+      "no_same_value/POINTER_NOT_FOUND": 59,
+      "no_subject/UNVERIFIABLE": 48,
+      "other_concept/POINTER_NOT_FOUND": 16
+     },
+     "札 偽の行で止めた率": {
+      "件": 13,
+      "分母": 17,
+      "率": 76.5
+     },
+     "札 偽の行で通した数": 4
+    },
+    "F4×W2": {
+     "claim": 902,
+     "4 state": {
+      "GROUNDED": 605,
+      "VALUE_MISMATCH": 56,
+      "UNVERIFIABLE": 161,
+      "POINTER_NOT_FOUND": 80
+     },
+     "札 真の行の GROUNDED 率": {
+      "件": 408,
+      "分母": 537,
+      "率": 76.0
+     },
+     "札 真で止めた率": {
+      "件": 129,
+      "分母": 537,
+      "率": 24.0
+     },
+     "札 真で止めた行の reason/state の内訳": {
+      "(reason なし)/VALUE_MISMATCH": 23,
+      "ambiguous(elements)/UNVERIFIABLE": 18,
+      "no_element(point without prior phrase)/POINTER_NOT_FOUND": 3,
+      "no_element(ratio without fact)/POINTER_NOT_FOUND": 28,
+      "no_element(unit not in XBRL)/POINTER_NOT_FOUND": 9,
+      "no_element/POINTER_NOT_FOUND": 10,
+      "no_same_value/POINTER_NOT_FOUND": 9,
+      "no_subject/UNVERIFIABLE": 29
+     },
+     "札 偽の行で止めた率": {
+      "件": 25,
+      "分母": 27,
+      "率": 92.6
+     },
+     "札 偽の行で通した数": 2
+    }
+   }
+  },
+  "4 profile の差": {
+   "P27 → P28E の state の動き(向き別)": {
+    "全体": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 78
+    },
+    "F1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 27
+    },
+    "F2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 14
+    },
+    "F3": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 19
+    },
+    "F4": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 18
+    },
+    "W1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 27
+    },
+    "W2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 51
+    },
+    "F1×W1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 11
+    },
+    "F1×W2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 16
+    },
+    "F2×W1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 4
+    },
+    "F2×W2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 10
+    },
+    "F3×W1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 4
+    },
+    "F3×W2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 15
+    },
+    "F4×W1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 8
+    },
+    "F4×W2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 10
+    }
+   },
+   "P27E → P28E の state の動き(向き別)": {
+    "全体": {},
+    "F1": {},
+    "F2": {},
+    "F3": {},
+    "F4": {},
+    "W1": {},
+    "W2": {},
+    "F1×W1": {},
+    "F1×W2": {},
+    "F2×W1": {},
+    "F2×W2": {},
+    "F3×W1": {},
+    "F3×W2": {},
+    "F4×W1": {},
+    "F4×W2": {}
+   },
+   "P27 → P27E の state の動き(向き別)": {
+    "全体": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 78
+    },
+    "F1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 27
+    },
+    "F2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 14
+    },
+    "F3": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 19
+    },
+    "F4": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 18
+    },
+    "W1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 27
+    },
+    "W2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 51
+    },
+    "F1×W1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 11
+    },
+    "F1×W2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 16
+    },
+    "F2×W1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 4
+    },
+    "F2×W2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 10
+    },
+    "F3×W1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 4
+    },
+    "F3×W2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 15
+    },
+    "F4×W1": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 8
+    },
+    "F4×W2": {
+     "POINTER_NOT_FOUND → VALUE_MISMATCH": 10
+    }
+   },
+   "「その他」の形の行(provenance)": {
+    "P28": {
+     "全体": {
+      "「その他」の形の行": 11,
+      "決まった": {
+       "件": 0,
+       "分母": 11,
+       "率": 0.0
+      }
+     },
+     "F1": {
+      "「その他」の形の行": 9,
+      "決まった": {
+       "件": 0,
+       "分母": 9,
+       "率": 0.0
+      }
+     },
+     "F2": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "F3": {
+      "「その他」の形の行": 0,
+      "決まった": {
+       "件": 0,
+       "分母": 0,
+       "率": null
+      }
+     },
+     "F4": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "W1": {
+      "「その他」の形の行": 10,
+      "決まった": {
+       "件": 0,
+       "分母": 10,
+       "率": 0.0
+      }
+     },
+     "W2": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "F1×W1": {
+      "「その他」の形の行": 8,
+      "決まった": {
+       "件": 0,
+       "分母": 8,
+       "率": 0.0
+      }
+     },
+     "F1×W2": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "F2×W1": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "F2×W2": {
+      "「その他」の形の行": 0,
+      "決まった": {
+       "件": 0,
+       "分母": 0,
+       "率": null
+      }
+     },
+     "F3×W1": {
+      "「その他」の形の行": 0,
+      "決まった": {
+       "件": 0,
+       "分母": 0,
+       "率": null
+      }
+     },
+     "F3×W2": {
+      "「その他」の形の行": 0,
+      "決まった": {
+       "件": 0,
+       "分母": 0,
+       "率": null
+      }
+     },
+     "F4×W1": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "F4×W2": {
+      "「その他」の形の行": 0,
+      "決まった": {
+       "件": 0,
+       "分母": 0,
+       "率": null
+      }
+     }
+    },
+    "P28E": {
+     "全体": {
+      "「その他」の形の行": 11,
+      "決まった": {
+       "件": 0,
+       "分母": 11,
+       "率": 0.0
+      }
+     },
+     "F1": {
+      "「その他」の形の行": 9,
+      "決まった": {
+       "件": 0,
+       "分母": 9,
+       "率": 0.0
+      }
+     },
+     "F2": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "F3": {
+      "「その他」の形の行": 0,
+      "決まった": {
+       "件": 0,
+       "分母": 0,
+       "率": null
+      }
+     },
+     "F4": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "W1": {
+      "「その他」の形の行": 10,
+      "決まった": {
+       "件": 0,
+       "分母": 10,
+       "率": 0.0
+      }
+     },
+     "W2": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "F1×W1": {
+      "「その他」の形の行": 8,
+      "決まった": {
+       "件": 0,
+       "分母": 8,
+       "率": 0.0
+      }
+     },
+     "F1×W2": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "F2×W1": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "F2×W2": {
+      "「その他」の形の行": 0,
+      "決まった": {
+       "件": 0,
+       "分母": 0,
+       "率": null
+      }
+     },
+     "F3×W1": {
+      "「その他」の形の行": 0,
+      "決まった": {
+       "件": 0,
+       "分母": 0,
+       "率": null
+      }
+     },
+     "F3×W2": {
+      "「その他」の形の行": 0,
+      "決まった": {
+       "件": 0,
+       "分母": 0,
+       "率": null
+      }
+     },
+     "F4×W1": {
+      "「その他」の形の行": 1,
+      "決まった": {
+       "件": 0,
+       "分母": 1,
+       "率": 0.0
+      }
+     },
+     "F4×W2": {
+      "「その他」の形の行": 0,
+      "決まった": {
+       "件": 0,
+       "分母": 0,
+       "率": null
+      }
+     }
+    }
+   },
+   "O の効き(P27E → P28E で GROUNDED になった行)": {
+    "全体": 0,
+    "F1": 0,
+    "F2": 0,
+    "F3": 0,
+    "F4": 0,
+    "W1": 0,
+    "W2": 0,
+    "F1×W1": 0,
+    "F1×W2": 0,
+    "F2×W1": 0,
+    "F2×W2": 0,
+    "F3×W1": 0,
+    "F3×W2": 0,
+    "F4×W1": 0,
+    "F4×W2": 0
+   },
+   "B の効き(P27 → P27E で no_same_value → VALUE_MISMATCH)": {
+    "全体": 78,
+    "F1": 27,
+    "F2": 14,
+    "F3": 19,
+    "F4": 18,
+    "W1": 27,
+    "W2": 51,
+    "F1×W1": 11,
+    "F1×W2": 16,
+    "F2×W1": 4,
+    "F2×W2": 10,
+    "F3×W1": 4,
+    "F3×W2": 15,
+    "F4×W1": 8,
+    "F4×W2": 10
+   }
+  },
+  "5 注入": {
+   "T1_VALUE": {
+    "P27": {
+     "全体": {
+      "注入の行": 223,
+      "対応が付く": 208,
+      "対応が付かない": 15,
+      "通した": {
+       "件": 0,
+       "分母": 208,
+       "率": 0.0
+      },
+      "名指して原本の値を返した": {
+       "件": 130,
+       "分母": 208,
+       "率": 62.5
+      },
+      "名指したが別の値": {
+       "件": 10,
+       "分母": 208,
+       "率": 4.8
+      },
+      "止めたが名指さない(POINTER_NOT_FOUND)": {
+       "件": 68,
+       "分母": 208,
+       "率": 32.7
+      },
+      "止めたが名指さない(UNVERIFIABLE)": {
+       "件": 0,
+       "分母": 208,
+       "率": 0.0
+      }
+     },
+     "形別": {
+      "F1": {
+       "注入の行": 53,
+       "対応が付く": 48,
+       "対応が付かない": 5,
+       "通した": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 24,
+        "分母": 48,
+        "率": 50.0
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 48,
+        "率": 6.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 21,
+        "分母": 48,
+        "率": 43.8
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       }
+      },
+      "F2": {
+       "注入の行": 42,
+       "対応が付く": 40,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 32,
+        "分母": 40,
+        "率": 80.0
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 40,
+        "率": 5.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 6,
+        "分母": 40,
+        "率": 15.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       }
+      },
+      "F3": {
+       "注入の行": 54,
+       "対応が付く": 48,
+       "対応が付かない": 6,
+       "通した": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 27,
+        "分母": 48,
+        "率": 56.2
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 48,
+        "率": 6.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 18,
+        "分母": 48,
+        "率": 37.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       }
+      },
+      "F4": {
+       "注入の行": 74,
+       "対応が付く": 72,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 72,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 47,
+        "分母": 72,
+        "率": 65.3
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 72,
+        "率": 2.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 23,
+        "分母": 72,
+        "率": 31.9
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 72,
+        "率": 0.0
+       }
+      }
+     },
+     "model 別": {
+      "W1": {
+       "注入の行": 147,
+       "対応が付く": 138,
+       "対応が付かない": 9,
+       "通した": {
+        "件": 0,
+        "分母": 138,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 86,
+        "分母": 138,
+        "率": 62.3
+       },
+       "名指したが別の値": {
+        "件": 6,
+        "分母": 138,
+        "率": 4.3
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 46,
+        "分母": 138,
+        "率": 33.3
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 138,
+        "率": 0.0
+       }
+      },
+      "W2": {
+       "注入の行": 76,
+       "対応が付く": 70,
+       "対応が付かない": 6,
+       "通した": {
+        "件": 0,
+        "分母": 70,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 44,
+        "分母": 70,
+        "率": 62.9
+       },
+       "名指したが別の値": {
+        "件": 4,
+        "分母": 70,
+        "率": 5.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 22,
+        "分母": 70,
+        "率": 31.4
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 70,
+        "率": 0.0
+       }
+      }
+     },
+     "形 × model": {
+      "F1×W1": {
+       "注入の行": 33,
+       "対応が付く": 29,
+       "対応が付かない": 4,
+       "通した": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 13,
+        "分母": 29,
+        "率": 44.8
+       },
+       "名指したが別の値": {
+        "件": 1,
+        "分母": 29,
+        "率": 3.4
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 15,
+        "分母": 29,
+        "率": 51.7
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       }
+      },
+      "F1×W2": {
+       "注入の行": 20,
+       "対応が付く": 19,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 19,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 11,
+        "分母": 19,
+        "率": 57.9
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 19,
+        "率": 10.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 6,
+        "分母": 19,
+        "率": 31.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 19,
+        "率": 0.0
+       }
+      },
+      "F2×W1": {
+       "注入の行": 28,
+       "対応が付く": 26,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 26,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 22,
+        "分母": 26,
+        "率": 84.6
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 26,
+        "率": 7.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 2,
+        "分母": 26,
+        "率": 7.7
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 26,
+        "率": 0.0
+       }
+      },
+      "F2×W2": {
+       "注入の行": 14,
+       "対応が付く": 14,
+       "対応が付かない": 0,
+       "通した": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 10,
+        "分母": 14,
+        "率": 71.4
+       },
+       "名指したが別の値": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 4,
+        "分母": 14,
+        "率": 28.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       }
+      },
+      "F3×W1": {
+       "注入の行": 42,
+       "対応が付く": 40,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 20,
+        "分母": 40,
+        "率": 50.0
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 40,
+        "率": 7.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 17,
+        "分母": 40,
+        "率": 42.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       }
+      },
+      "F3×W2": {
+       "注入の行": 12,
+       "対応が付く": 8,
+       "対応が付かない": 4,
+       "通した": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 7,
+        "分母": 8,
+        "率": 87.5
+       },
+       "名指したが別の値": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 1,
+        "分母": 8,
+        "率": 12.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       }
+      },
+      "F4×W1": {
+       "注入の行": 44,
+       "対応が付く": 43,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 43,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 31,
+        "分母": 43,
+        "率": 72.1
+       },
+       "名指したが別の値": {
+        "件": 0,
+        "分母": 43,
+        "率": 0.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 12,
+        "分母": 43,
+        "率": 27.9
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 43,
+        "率": 0.0
+       }
+      },
+      "F4×W2": {
+       "注入の行": 30,
+       "対応が付く": 29,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 16,
+        "分母": 29,
+        "率": 55.2
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 29,
+        "率": 6.9
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 11,
+        "分母": 29,
+        "率": 37.9
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       }
+      }
+     }
+    },
+    "P27E": {
+     "全体": {
+      "注入の行": 223,
+      "対応が付く": 208,
+      "対応が付かない": 15,
+      "通した": {
+       "件": 0,
+       "分母": 208,
+       "率": 0.0
+      },
+      "名指して原本の値を返した": {
+       "件": 160,
+       "分母": 208,
+       "率": 76.9
+      },
+      "名指したが別の値": {
+       "件": 11,
+       "分母": 208,
+       "率": 5.3
+      },
+      "止めたが名指さない(POINTER_NOT_FOUND)": {
+       "件": 37,
+       "分母": 208,
+       "率": 17.8
+      },
+      "止めたが名指さない(UNVERIFIABLE)": {
+       "件": 0,
+       "分母": 208,
+       "率": 0.0
+      }
+     },
+     "形別": {
+      "F1": {
+       "注入の行": 53,
+       "対応が付く": 48,
+       "対応が付かない": 5,
+       "通した": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 31,
+        "分母": 48,
+        "率": 64.6
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 48,
+        "率": 6.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 14,
+        "分母": 48,
+        "率": 29.2
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       }
+      },
+      "F2": {
+       "注入の行": 42,
+       "対応が付く": 40,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 35,
+        "分母": 40,
+        "率": 87.5
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 40,
+        "率": 5.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 3,
+        "分母": 40,
+        "率": 7.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       }
+      },
+      "F3": {
+       "注入の行": 54,
+       "対応が付く": 48,
+       "対応が付かない": 6,
+       "通した": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 33,
+        "分母": 48,
+        "率": 68.8
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 48,
+        "率": 6.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 12,
+        "分母": 48,
+        "率": 25.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       }
+      },
+      "F4": {
+       "注入の行": 74,
+       "対応が付く": 72,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 72,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 61,
+        "分母": 72,
+        "率": 84.7
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 72,
+        "率": 4.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 8,
+        "分母": 72,
+        "率": 11.1
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 72,
+        "率": 0.0
+       }
+      }
+     },
+     "model 別": {
+      "W1": {
+       "注入の行": 147,
+       "対応が付く": 138,
+       "対応が付かない": 9,
+       "通した": {
+        "件": 0,
+        "分母": 138,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 105,
+        "分母": 138,
+        "率": 76.1
+       },
+       "名指したが別の値": {
+        "件": 7,
+        "分母": 138,
+        "率": 5.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 26,
+        "分母": 138,
+        "率": 18.8
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 138,
+        "率": 0.0
+       }
+      },
+      "W2": {
+       "注入の行": 76,
+       "対応が付く": 70,
+       "対応が付かない": 6,
+       "通した": {
+        "件": 0,
+        "分母": 70,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 55,
+        "分母": 70,
+        "率": 78.6
+       },
+       "名指したが別の値": {
+        "件": 4,
+        "分母": 70,
+        "率": 5.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 11,
+        "分母": 70,
+        "率": 15.7
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 70,
+        "率": 0.0
+       }
+      }
+     },
+     "形 × model": {
+      "F1×W1": {
+       "注入の行": 33,
+       "対応が付く": 29,
+       "対応が付かない": 4,
+       "通した": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 20,
+        "分母": 29,
+        "率": 69.0
+       },
+       "名指したが別の値": {
+        "件": 1,
+        "分母": 29,
+        "率": 3.4
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 8,
+        "分母": 29,
+        "率": 27.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       }
+      },
+      "F1×W2": {
+       "注入の行": 20,
+       "対応が付く": 19,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 19,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 11,
+        "分母": 19,
+        "率": 57.9
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 19,
+        "率": 10.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 6,
+        "分母": 19,
+        "率": 31.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 19,
+        "率": 0.0
+       }
+      },
+      "F2×W1": {
+       "注入の行": 28,
+       "対応が付く": 26,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 26,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 23,
+        "分母": 26,
+        "率": 88.5
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 26,
+        "率": 7.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 1,
+        "分母": 26,
+        "率": 3.8
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 26,
+        "率": 0.0
+       }
+      },
+      "F2×W2": {
+       "注入の行": 14,
+       "対応が付く": 14,
+       "対応が付かない": 0,
+       "通した": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 12,
+        "分母": 14,
+        "率": 85.7
+       },
+       "名指したが別の値": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 2,
+        "分母": 14,
+        "率": 14.3
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       }
+      },
+      "F3×W1": {
+       "注入の行": 42,
+       "対応が付く": 40,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 26,
+        "分母": 40,
+        "率": 65.0
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 40,
+        "率": 7.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 11,
+        "分母": 40,
+        "率": 27.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       }
+      },
+      "F3×W2": {
+       "注入の行": 12,
+       "対応が付く": 8,
+       "対応が付かない": 4,
+       "通した": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 7,
+        "分母": 8,
+        "率": 87.5
+       },
+       "名指したが別の値": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 1,
+        "分母": 8,
+        "率": 12.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       }
+      },
+      "F4×W1": {
+       "注入の行": 44,
+       "対応が付く": 43,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 43,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 36,
+        "分母": 43,
+        "率": 83.7
+       },
+       "名指したが別の値": {
+        "件": 1,
+        "分母": 43,
+        "率": 2.3
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 6,
+        "分母": 43,
+        "率": 14.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 43,
+        "率": 0.0
+       }
+      },
+      "F4×W2": {
+       "注入の行": 30,
+       "対応が付く": 29,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 25,
+        "分母": 29,
+        "率": 86.2
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 29,
+        "率": 6.9
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 2,
+        "分母": 29,
+        "率": 6.9
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       }
+      }
+     }
+    },
+    "P28": {
+     "全体": {
+      "注入の行": 223,
+      "対応が付く": 208,
+      "対応が付かない": 15,
+      "通した": {
+       "件": 0,
+       "分母": 208,
+       "率": 0.0
+      },
+      "名指して原本の値を返した": {
+       "件": 130,
+       "分母": 208,
+       "率": 62.5
+      },
+      "名指したが別の値": {
+       "件": 10,
+       "分母": 208,
+       "率": 4.8
+      },
+      "止めたが名指さない(POINTER_NOT_FOUND)": {
+       "件": 68,
+       "分母": 208,
+       "率": 32.7
+      },
+      "止めたが名指さない(UNVERIFIABLE)": {
+       "件": 0,
+       "分母": 208,
+       "率": 0.0
+      }
+     },
+     "形別": {
+      "F1": {
+       "注入の行": 53,
+       "対応が付く": 48,
+       "対応が付かない": 5,
+       "通した": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 24,
+        "分母": 48,
+        "率": 50.0
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 48,
+        "率": 6.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 21,
+        "分母": 48,
+        "率": 43.8
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       }
+      },
+      "F2": {
+       "注入の行": 42,
+       "対応が付く": 40,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 32,
+        "分母": 40,
+        "率": 80.0
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 40,
+        "率": 5.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 6,
+        "分母": 40,
+        "率": 15.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       }
+      },
+      "F3": {
+       "注入の行": 54,
+       "対応が付く": 48,
+       "対応が付かない": 6,
+       "通した": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 27,
+        "分母": 48,
+        "率": 56.2
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 48,
+        "率": 6.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 18,
+        "分母": 48,
+        "率": 37.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       }
+      },
+      "F4": {
+       "注入の行": 74,
+       "対応が付く": 72,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 72,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 47,
+        "分母": 72,
+        "率": 65.3
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 72,
+        "率": 2.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 23,
+        "分母": 72,
+        "率": 31.9
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 72,
+        "率": 0.0
+       }
+      }
+     },
+     "model 別": {
+      "W1": {
+       "注入の行": 147,
+       "対応が付く": 138,
+       "対応が付かない": 9,
+       "通した": {
+        "件": 0,
+        "分母": 138,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 86,
+        "分母": 138,
+        "率": 62.3
+       },
+       "名指したが別の値": {
+        "件": 6,
+        "分母": 138,
+        "率": 4.3
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 46,
+        "分母": 138,
+        "率": 33.3
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 138,
+        "率": 0.0
+       }
+      },
+      "W2": {
+       "注入の行": 76,
+       "対応が付く": 70,
+       "対応が付かない": 6,
+       "通した": {
+        "件": 0,
+        "分母": 70,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 44,
+        "分母": 70,
+        "率": 62.9
+       },
+       "名指したが別の値": {
+        "件": 4,
+        "分母": 70,
+        "率": 5.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 22,
+        "分母": 70,
+        "率": 31.4
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 70,
+        "率": 0.0
+       }
+      }
+     },
+     "形 × model": {
+      "F1×W1": {
+       "注入の行": 33,
+       "対応が付く": 29,
+       "対応が付かない": 4,
+       "通した": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 13,
+        "分母": 29,
+        "率": 44.8
+       },
+       "名指したが別の値": {
+        "件": 1,
+        "分母": 29,
+        "率": 3.4
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 15,
+        "分母": 29,
+        "率": 51.7
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       }
+      },
+      "F1×W2": {
+       "注入の行": 20,
+       "対応が付く": 19,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 19,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 11,
+        "分母": 19,
+        "率": 57.9
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 19,
+        "率": 10.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 6,
+        "分母": 19,
+        "率": 31.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 19,
+        "率": 0.0
+       }
+      },
+      "F2×W1": {
+       "注入の行": 28,
+       "対応が付く": 26,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 26,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 22,
+        "分母": 26,
+        "率": 84.6
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 26,
+        "率": 7.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 2,
+        "分母": 26,
+        "率": 7.7
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 26,
+        "率": 0.0
+       }
+      },
+      "F2×W2": {
+       "注入の行": 14,
+       "対応が付く": 14,
+       "対応が付かない": 0,
+       "通した": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 10,
+        "分母": 14,
+        "率": 71.4
+       },
+       "名指したが別の値": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 4,
+        "分母": 14,
+        "率": 28.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       }
+      },
+      "F3×W1": {
+       "注入の行": 42,
+       "対応が付く": 40,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 20,
+        "分母": 40,
+        "率": 50.0
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 40,
+        "率": 7.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 17,
+        "分母": 40,
+        "率": 42.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       }
+      },
+      "F3×W2": {
+       "注入の行": 12,
+       "対応が付く": 8,
+       "対応が付かない": 4,
+       "通した": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 7,
+        "分母": 8,
+        "率": 87.5
+       },
+       "名指したが別の値": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 1,
+        "分母": 8,
+        "率": 12.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       }
+      },
+      "F4×W1": {
+       "注入の行": 44,
+       "対応が付く": 43,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 43,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 31,
+        "分母": 43,
+        "率": 72.1
+       },
+       "名指したが別の値": {
+        "件": 0,
+        "分母": 43,
+        "率": 0.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 12,
+        "分母": 43,
+        "率": 27.9
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 43,
+        "率": 0.0
+       }
+      },
+      "F4×W2": {
+       "注入の行": 30,
+       "対応が付く": 29,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 16,
+        "分母": 29,
+        "率": 55.2
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 29,
+        "率": 6.9
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 11,
+        "分母": 29,
+        "率": 37.9
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       }
+      }
+     }
+    },
+    "P28E": {
+     "全体": {
+      "注入の行": 223,
+      "対応が付く": 208,
+      "対応が付かない": 15,
+      "通した": {
+       "件": 0,
+       "分母": 208,
+       "率": 0.0
+      },
+      "名指して原本の値を返した": {
+       "件": 160,
+       "分母": 208,
+       "率": 76.9
+      },
+      "名指したが別の値": {
+       "件": 11,
+       "分母": 208,
+       "率": 5.3
+      },
+      "止めたが名指さない(POINTER_NOT_FOUND)": {
+       "件": 37,
+       "分母": 208,
+       "率": 17.8
+      },
+      "止めたが名指さない(UNVERIFIABLE)": {
+       "件": 0,
+       "分母": 208,
+       "率": 0.0
+      }
+     },
+     "形別": {
+      "F1": {
+       "注入の行": 53,
+       "対応が付く": 48,
+       "対応が付かない": 5,
+       "通した": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 31,
+        "分母": 48,
+        "率": 64.6
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 48,
+        "率": 6.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 14,
+        "分母": 48,
+        "率": 29.2
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       }
+      },
+      "F2": {
+       "注入の行": 42,
+       "対応が付く": 40,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 35,
+        "分母": 40,
+        "率": 87.5
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 40,
+        "率": 5.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 3,
+        "分母": 40,
+        "率": 7.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       }
+      },
+      "F3": {
+       "注入の行": 54,
+       "対応が付く": 48,
+       "対応が付かない": 6,
+       "通した": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 33,
+        "分母": 48,
+        "率": 68.8
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 48,
+        "率": 6.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 12,
+        "分母": 48,
+        "率": 25.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 48,
+        "率": 0.0
+       }
+      },
+      "F4": {
+       "注入の行": 74,
+       "対応が付く": 72,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 72,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 61,
+        "分母": 72,
+        "率": 84.7
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 72,
+        "率": 4.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 8,
+        "分母": 72,
+        "率": 11.1
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 72,
+        "率": 0.0
+       }
+      }
+     },
+     "model 別": {
+      "W1": {
+       "注入の行": 147,
+       "対応が付く": 138,
+       "対応が付かない": 9,
+       "通した": {
+        "件": 0,
+        "分母": 138,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 105,
+        "分母": 138,
+        "率": 76.1
+       },
+       "名指したが別の値": {
+        "件": 7,
+        "分母": 138,
+        "率": 5.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 26,
+        "分母": 138,
+        "率": 18.8
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 138,
+        "率": 0.0
+       }
+      },
+      "W2": {
+       "注入の行": 76,
+       "対応が付く": 70,
+       "対応が付かない": 6,
+       "通した": {
+        "件": 0,
+        "分母": 70,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 55,
+        "分母": 70,
+        "率": 78.6
+       },
+       "名指したが別の値": {
+        "件": 4,
+        "分母": 70,
+        "率": 5.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 11,
+        "分母": 70,
+        "率": 15.7
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 70,
+        "率": 0.0
+       }
+      }
+     },
+     "形 × model": {
+      "F1×W1": {
+       "注入の行": 33,
+       "対応が付く": 29,
+       "対応が付かない": 4,
+       "通した": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 20,
+        "分母": 29,
+        "率": 69.0
+       },
+       "名指したが別の値": {
+        "件": 1,
+        "分母": 29,
+        "率": 3.4
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 8,
+        "分母": 29,
+        "率": 27.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       }
+      },
+      "F1×W2": {
+       "注入の行": 20,
+       "対応が付く": 19,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 19,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 11,
+        "分母": 19,
+        "率": 57.9
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 19,
+        "率": 10.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 6,
+        "分母": 19,
+        "率": 31.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 19,
+        "率": 0.0
+       }
+      },
+      "F2×W1": {
+       "注入の行": 28,
+       "対応が付く": 26,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 26,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 23,
+        "分母": 26,
+        "率": 88.5
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 26,
+        "率": 7.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 1,
+        "分母": 26,
+        "率": 3.8
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 26,
+        "率": 0.0
+       }
+      },
+      "F2×W2": {
+       "注入の行": 14,
+       "対応が付く": 14,
+       "対応が付かない": 0,
+       "通した": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 12,
+        "分母": 14,
+        "率": 85.7
+       },
+       "名指したが別の値": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 2,
+        "分母": 14,
+        "率": 14.3
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 14,
+        "率": 0.0
+       }
+      },
+      "F3×W1": {
+       "注入の行": 42,
+       "対応が付く": 40,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 26,
+        "分母": 40,
+        "率": 65.0
+       },
+       "名指したが別の値": {
+        "件": 3,
+        "分母": 40,
+        "率": 7.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 11,
+        "分母": 40,
+        "率": 27.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 40,
+        "率": 0.0
+       }
+      },
+      "F3×W2": {
+       "注入の行": 12,
+       "対応が付く": 8,
+       "対応が付かない": 4,
+       "通した": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 7,
+        "分母": 8,
+        "率": 87.5
+       },
+       "名指したが別の値": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 1,
+        "分母": 8,
+        "率": 12.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 8,
+        "率": 0.0
+       }
+      },
+      "F4×W1": {
+       "注入の行": 44,
+       "対応が付く": 43,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 43,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 36,
+        "分母": 43,
+        "率": 83.7
+       },
+       "名指したが別の値": {
+        "件": 1,
+        "分母": 43,
+        "率": 2.3
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 6,
+        "分母": 43,
+        "率": 14.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 43,
+        "率": 0.0
+       }
+      },
+      "F4×W2": {
+       "注入の行": 30,
+       "対応が付く": 29,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 25,
+        "分母": 29,
+        "率": 86.2
+       },
+       "名指したが別の値": {
+        "件": 2,
+        "分母": 29,
+        "率": 6.9
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 2,
+        "分母": 29,
+        "率": 6.9
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 29,
+        "率": 0.0
+       }
+      }
+     }
+    }
+   },
+   "T8_REL": {
+    "P27": {
+     "全体": {
+      "注入の行": 921,
+      "対応が付く": 868,
+      "対応が付かない": 53,
+      "通した": {
+       "件": 6,
+       "分母": 868,
+       "率": 0.7
+      },
+      "名指して原本の値を返した": {
+       "件": 317,
+       "分母": 868,
+       "率": 36.5
+      },
+      "名指したが別の値": {
+       "件": 57,
+       "分母": 868,
+       "率": 6.6
+      },
+      "止めたが名指さない(POINTER_NOT_FOUND)": {
+       "件": 484,
+       "分母": 868,
+       "率": 55.8
+      },
+      "止めたが名指さない(UNVERIFIABLE)": {
+       "件": 4,
+       "分母": 868,
+       "率": 0.5
+      }
+     },
+     "形別": {
+      "F1": {
+       "注入の行": 225,
+       "対応が付く": 214,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 214,
+        "率": 0.5
+       },
+       "名指して原本の値を返した": {
+        "件": 91,
+        "分母": 214,
+        "率": 42.5
+       },
+       "名指したが別の値": {
+        "件": 13,
+        "分母": 214,
+        "率": 6.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 107,
+        "分母": 214,
+        "率": 50.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 2,
+        "分母": 214,
+        "率": 0.9
+       }
+      },
+      "F2": {
+       "注入の行": 200,
+       "対応が付く": 197,
+       "対応が付かない": 3,
+       "通した": {
+        "件": 1,
+        "分母": 197,
+        "率": 0.5
+       },
+       "名指して原本の値を返した": {
+        "件": 82,
+        "分母": 197,
+        "率": 41.6
+       },
+       "名指したが別の値": {
+        "件": 17,
+        "分母": 197,
+        "率": 8.6
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 97,
+        "分母": 197,
+        "率": 49.2
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 197,
+        "率": 0.0
+       }
+      },
+      "F3": {
+       "注入の行": 286,
+       "対応が付く": 260,
+       "対応が付かない": 26,
+       "通した": {
+        "件": 2,
+        "分母": 260,
+        "率": 0.8
+       },
+       "名指して原本の値を返した": {
+        "件": 69,
+        "分母": 260,
+        "率": 26.5
+       },
+       "名指したが別の値": {
+        "件": 15,
+        "分母": 260,
+        "率": 5.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 173,
+        "分母": 260,
+        "率": 66.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 260,
+        "率": 0.4
+       }
+      },
+      "F4": {
+       "注入の行": 210,
+       "対応が付く": 197,
+       "対応が付かない": 13,
+       "通した": {
+        "件": 2,
+        "分母": 197,
+        "率": 1.0
+       },
+       "名指して原本の値を返した": {
+        "件": 75,
+        "分母": 197,
+        "率": 38.1
+       },
+       "名指したが別の値": {
+        "件": 12,
+        "分母": 197,
+        "率": 6.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 107,
+        "分母": 197,
+        "率": 54.3
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 197,
+        "率": 0.5
+       }
+      }
+     },
+     "model 別": {
+      "W1": {
+       "注入の行": 481,
+       "対応が付く": 446,
+       "対応が付かない": 35,
+       "通した": {
+        "件": 3,
+        "分母": 446,
+        "率": 0.7
+       },
+       "名指して原本の値を返した": {
+        "件": 159,
+        "分母": 446,
+        "率": 35.7
+       },
+       "名指したが別の値": {
+        "件": 32,
+        "分母": 446,
+        "率": 7.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 248,
+        "分母": 446,
+        "率": 55.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 4,
+        "分母": 446,
+        "率": 0.9
+       }
+      },
+      "W2": {
+       "注入の行": 440,
+       "対応が付く": 422,
+       "対応が付かない": 18,
+       "通した": {
+        "件": 3,
+        "分母": 422,
+        "率": 0.7
+       },
+       "名指して原本の値を返した": {
+        "件": 158,
+        "分母": 422,
+        "率": 37.4
+       },
+       "名指したが別の値": {
+        "件": 25,
+        "分母": 422,
+        "率": 5.9
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 236,
+        "分母": 422,
+        "率": 55.9
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 422,
+        "率": 0.0
+       }
+      }
+     },
+     "形 × model": {
+      "F1×W1": {
+       "注入の行": 119,
+       "対応が付く": 111,
+       "対応が付かない": 8,
+       "通した": {
+        "件": 0,
+        "分母": 111,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 48,
+        "分母": 111,
+        "率": 43.2
+       },
+       "名指したが別の値": {
+        "件": 7,
+        "分母": 111,
+        "率": 6.3
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 54,
+        "分母": 111,
+        "率": 48.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 2,
+        "分母": 111,
+        "率": 1.8
+       }
+      },
+      "F1×W2": {
+       "注入の行": 106,
+       "対応が付く": 103,
+       "対応が付かない": 3,
+       "通した": {
+        "件": 1,
+        "分母": 103,
+        "率": 1.0
+       },
+       "名指して原本の値を返した": {
+        "件": 43,
+        "分母": 103,
+        "率": 41.7
+       },
+       "名指したが別の値": {
+        "件": 6,
+        "分母": 103,
+        "率": 5.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 53,
+        "分母": 103,
+        "率": 51.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 103,
+        "率": 0.0
+       }
+      },
+      "F2×W1": {
+       "注入の行": 92,
+       "対応が付く": 91,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 1,
+        "分母": 91,
+        "率": 1.1
+       },
+       "名指して原本の値を返した": {
+        "件": 33,
+        "分母": 91,
+        "率": 36.3
+       },
+       "名指したが別の値": {
+        "件": 6,
+        "分母": 91,
+        "率": 6.6
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 51,
+        "分母": 91,
+        "率": 56.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 91,
+        "率": 0.0
+       }
+      },
+      "F2×W2": {
+       "注入の行": 108,
+       "対応が付く": 106,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 49,
+        "分母": 106,
+        "率": 46.2
+       },
+       "名指したが別の値": {
+        "件": 11,
+        "分母": 106,
+        "率": 10.4
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 46,
+        "分母": 106,
+        "率": 43.4
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       }
+      },
+      "F3×W1": {
+       "注入の行": 169,
+       "対応が付く": 154,
+       "対応が付かない": 15,
+       "通した": {
+        "件": 1,
+        "分母": 154,
+        "率": 0.6
+       },
+       "名指して原本の値を返した": {
+        "件": 46,
+        "分母": 154,
+        "率": 29.9
+       },
+       "名指したが別の値": {
+        "件": 11,
+        "分母": 154,
+        "率": 7.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 95,
+        "分母": 154,
+        "率": 61.7
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 154,
+        "率": 0.6
+       }
+      },
+      "F3×W2": {
+       "注入の行": 117,
+       "対応が付く": 106,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 106,
+        "率": 0.9
+       },
+       "名指して原本の値を返した": {
+        "件": 23,
+        "分母": 106,
+        "率": 21.7
+       },
+       "名指したが別の値": {
+        "件": 4,
+        "分母": 106,
+        "率": 3.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 78,
+        "分母": 106,
+        "率": 73.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       }
+      },
+      "F4×W1": {
+       "注入の行": 101,
+       "対応が付く": 90,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 90,
+        "率": 1.1
+       },
+       "名指して原本の値を返した": {
+        "件": 32,
+        "分母": 90,
+        "率": 35.6
+       },
+       "名指したが別の値": {
+        "件": 8,
+        "分母": 90,
+        "率": 8.9
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 48,
+        "分母": 90,
+        "率": 53.3
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 90,
+        "率": 1.1
+       }
+      },
+      "F4×W2": {
+       "注入の行": 109,
+       "対応が付く": 107,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 1,
+        "分母": 107,
+        "率": 0.9
+       },
+       "名指して原本の値を返した": {
+        "件": 43,
+        "分母": 107,
+        "率": 40.2
+       },
+       "名指したが別の値": {
+        "件": 4,
+        "分母": 107,
+        "率": 3.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 59,
+        "分母": 107,
+        "率": 55.1
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 107,
+        "率": 0.0
+       }
+      }
+     }
+    },
+    "P27E": {
+     "全体": {
+      "注入の行": 921,
+      "対応が付く": 868,
+      "対応が付かない": 53,
+      "通した": {
+       "件": 6,
+       "分母": 868,
+       "率": 0.7
+      },
+      "名指して原本の値を返した": {
+       "件": 716,
+       "分母": 868,
+       "率": 82.5
+      },
+      "名指したが別の値": {
+       "件": 76,
+       "分母": 868,
+       "率": 8.8
+      },
+      "止めたが名指さない(POINTER_NOT_FOUND)": {
+       "件": 66,
+       "分母": 868,
+       "率": 7.6
+      },
+      "止めたが名指さない(UNVERIFIABLE)": {
+       "件": 4,
+       "分母": 868,
+       "率": 0.5
+      }
+     },
+     "形別": {
+      "F1": {
+       "注入の行": 225,
+       "対応が付く": 214,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 214,
+        "率": 0.5
+       },
+       "名指して原本の値を返した": {
+        "件": 186,
+        "分母": 214,
+        "率": 86.9
+       },
+       "名指したが別の値": {
+        "件": 16,
+        "分母": 214,
+        "率": 7.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 9,
+        "分母": 214,
+        "率": 4.2
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 2,
+        "分母": 214,
+        "率": 0.9
+       }
+      },
+      "F2": {
+       "注入の行": 200,
+       "対応が付く": 197,
+       "対応が付かない": 3,
+       "通した": {
+        "件": 1,
+        "分母": 197,
+        "率": 0.5
+       },
+       "名指して原本の値を返した": {
+        "件": 164,
+        "分母": 197,
+        "率": 83.2
+       },
+       "名指したが別の値": {
+        "件": 23,
+        "分母": 197,
+        "率": 11.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 9,
+        "分母": 197,
+        "率": 4.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 197,
+        "率": 0.0
+       }
+      },
+      "F3": {
+       "注入の行": 286,
+       "対応が付く": 260,
+       "対応が付かない": 26,
+       "通した": {
+        "件": 2,
+        "分母": 260,
+        "率": 0.8
+       },
+       "名指して原本の値を返した": {
+        "件": 204,
+        "分母": 260,
+        "率": 78.5
+       },
+       "名指したが別の値": {
+        "件": 21,
+        "分母": 260,
+        "率": 8.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 32,
+        "分母": 260,
+        "率": 12.3
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 260,
+        "率": 0.4
+       }
+      },
+      "F4": {
+       "注入の行": 210,
+       "対応が付く": 197,
+       "対応が付かない": 13,
+       "通した": {
+        "件": 2,
+        "分母": 197,
+        "率": 1.0
+       },
+       "名指して原本の値を返した": {
+        "件": 162,
+        "分母": 197,
+        "率": 82.2
+       },
+       "名指したが別の値": {
+        "件": 16,
+        "分母": 197,
+        "率": 8.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 16,
+        "分母": 197,
+        "率": 8.1
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 197,
+        "率": 0.5
+       }
+      }
+     },
+     "model 別": {
+      "W1": {
+       "注入の行": 481,
+       "対応が付く": 446,
+       "対応が付かない": 35,
+       "通した": {
+        "件": 3,
+        "分母": 446,
+        "率": 0.7
+       },
+       "名指して原本の値を返した": {
+        "件": 363,
+        "分母": 446,
+        "率": 81.4
+       },
+       "名指したが別の値": {
+        "件": 43,
+        "分母": 446,
+        "率": 9.6
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 33,
+        "分母": 446,
+        "率": 7.4
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 4,
+        "分母": 446,
+        "率": 0.9
+       }
+      },
+      "W2": {
+       "注入の行": 440,
+       "対応が付く": 422,
+       "対応が付かない": 18,
+       "通した": {
+        "件": 3,
+        "分母": 422,
+        "率": 0.7
+       },
+       "名指して原本の値を返した": {
+        "件": 353,
+        "分母": 422,
+        "率": 83.6
+       },
+       "名指したが別の値": {
+        "件": 33,
+        "分母": 422,
+        "率": 7.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 33,
+        "分母": 422,
+        "率": 7.8
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 422,
+        "率": 0.0
+       }
+      }
+     },
+     "形 × model": {
+      "F1×W1": {
+       "注入の行": 119,
+       "対応が付く": 111,
+       "対応が付かない": 8,
+       "通した": {
+        "件": 0,
+        "分母": 111,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 91,
+        "分母": 111,
+        "率": 82.0
+       },
+       "名指したが別の値": {
+        "件": 10,
+        "分母": 111,
+        "率": 9.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 8,
+        "分母": 111,
+        "率": 7.2
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 2,
+        "分母": 111,
+        "率": 1.8
+       }
+      },
+      "F1×W2": {
+       "注入の行": 106,
+       "対応が付く": 103,
+       "対応が付かない": 3,
+       "通した": {
+        "件": 1,
+        "分母": 103,
+        "率": 1.0
+       },
+       "名指して原本の値を返した": {
+        "件": 95,
+        "分母": 103,
+        "率": 92.2
+       },
+       "名指したが別の値": {
+        "件": 6,
+        "分母": 103,
+        "率": 5.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 1,
+        "分母": 103,
+        "率": 1.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 103,
+        "率": 0.0
+       }
+      },
+      "F2×W1": {
+       "注入の行": 92,
+       "対応が付く": 91,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 1,
+        "分母": 91,
+        "率": 1.1
+       },
+       "名指して原本の値を返した": {
+        "件": 76,
+        "分母": 91,
+        "率": 83.5
+       },
+       "名指したが別の値": {
+        "件": 10,
+        "分母": 91,
+        "率": 11.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 4,
+        "分母": 91,
+        "率": 4.4
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 91,
+        "率": 0.0
+       }
+      },
+      "F2×W2": {
+       "注入の行": 108,
+       "対応が付く": 106,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 88,
+        "分母": 106,
+        "率": 83.0
+       },
+       "名指したが別の値": {
+        "件": 13,
+        "分母": 106,
+        "率": 12.3
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 5,
+        "分母": 106,
+        "率": 4.7
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       }
+      },
+      "F3×W1": {
+       "注入の行": 169,
+       "対応が付く": 154,
+       "対応が付かない": 15,
+       "通した": {
+        "件": 1,
+        "分母": 154,
+        "率": 0.6
+       },
+       "名指して原本の値を返した": {
+        "件": 128,
+        "分母": 154,
+        "率": 83.1
+       },
+       "名指したが別の値": {
+        "件": 13,
+        "分母": 154,
+        "率": 8.4
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 11,
+        "分母": 154,
+        "率": 7.1
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 154,
+        "率": 0.6
+       }
+      },
+      "F3×W2": {
+       "注入の行": 117,
+       "対応が付く": 106,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 106,
+        "率": 0.9
+       },
+       "名指して原本の値を返した": {
+        "件": 76,
+        "分母": 106,
+        "率": 71.7
+       },
+       "名指したが別の値": {
+        "件": 8,
+        "分母": 106,
+        "率": 7.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 21,
+        "分母": 106,
+        "率": 19.8
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       }
+      },
+      "F4×W1": {
+       "注入の行": 101,
+       "対応が付く": 90,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 90,
+        "率": 1.1
+       },
+       "名指して原本の値を返した": {
+        "件": 68,
+        "分母": 90,
+        "率": 75.6
+       },
+       "名指したが別の値": {
+        "件": 10,
+        "分母": 90,
+        "率": 11.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 10,
+        "分母": 90,
+        "率": 11.1
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 90,
+        "率": 1.1
+       }
+      },
+      "F4×W2": {
+       "注入の行": 109,
+       "対応が付く": 107,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 1,
+        "分母": 107,
+        "率": 0.9
+       },
+       "名指して原本の値を返した": {
+        "件": 94,
+        "分母": 107,
+        "率": 87.9
+       },
+       "名指したが別の値": {
+        "件": 6,
+        "分母": 107,
+        "率": 5.6
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 6,
+        "分母": 107,
+        "率": 5.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 107,
+        "率": 0.0
+       }
+      }
+     }
+    },
+    "P28": {
+     "全体": {
+      "注入の行": 921,
+      "対応が付く": 868,
+      "対応が付かない": 53,
+      "通した": {
+       "件": 6,
+       "分母": 868,
+       "率": 0.7
+      },
+      "名指して原本の値を返した": {
+       "件": 317,
+       "分母": 868,
+       "率": 36.5
+      },
+      "名指したが別の値": {
+       "件": 57,
+       "分母": 868,
+       "率": 6.6
+      },
+      "止めたが名指さない(POINTER_NOT_FOUND)": {
+       "件": 484,
+       "分母": 868,
+       "率": 55.8
+      },
+      "止めたが名指さない(UNVERIFIABLE)": {
+       "件": 4,
+       "分母": 868,
+       "率": 0.5
+      }
+     },
+     "形別": {
+      "F1": {
+       "注入の行": 225,
+       "対応が付く": 214,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 214,
+        "率": 0.5
+       },
+       "名指して原本の値を返した": {
+        "件": 91,
+        "分母": 214,
+        "率": 42.5
+       },
+       "名指したが別の値": {
+        "件": 13,
+        "分母": 214,
+        "率": 6.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 107,
+        "分母": 214,
+        "率": 50.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 2,
+        "分母": 214,
+        "率": 0.9
+       }
+      },
+      "F2": {
+       "注入の行": 200,
+       "対応が付く": 197,
+       "対応が付かない": 3,
+       "通した": {
+        "件": 1,
+        "分母": 197,
+        "率": 0.5
+       },
+       "名指して原本の値を返した": {
+        "件": 82,
+        "分母": 197,
+        "率": 41.6
+       },
+       "名指したが別の値": {
+        "件": 17,
+        "分母": 197,
+        "率": 8.6
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 97,
+        "分母": 197,
+        "率": 49.2
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 197,
+        "率": 0.0
+       }
+      },
+      "F3": {
+       "注入の行": 286,
+       "対応が付く": 260,
+       "対応が付かない": 26,
+       "通した": {
+        "件": 2,
+        "分母": 260,
+        "率": 0.8
+       },
+       "名指して原本の値を返した": {
+        "件": 69,
+        "分母": 260,
+        "率": 26.5
+       },
+       "名指したが別の値": {
+        "件": 15,
+        "分母": 260,
+        "率": 5.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 173,
+        "分母": 260,
+        "率": 66.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 260,
+        "率": 0.4
+       }
+      },
+      "F4": {
+       "注入の行": 210,
+       "対応が付く": 197,
+       "対応が付かない": 13,
+       "通した": {
+        "件": 2,
+        "分母": 197,
+        "率": 1.0
+       },
+       "名指して原本の値を返した": {
+        "件": 75,
+        "分母": 197,
+        "率": 38.1
+       },
+       "名指したが別の値": {
+        "件": 12,
+        "分母": 197,
+        "率": 6.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 107,
+        "分母": 197,
+        "率": 54.3
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 197,
+        "率": 0.5
+       }
+      }
+     },
+     "model 別": {
+      "W1": {
+       "注入の行": 481,
+       "対応が付く": 446,
+       "対応が付かない": 35,
+       "通した": {
+        "件": 3,
+        "分母": 446,
+        "率": 0.7
+       },
+       "名指して原本の値を返した": {
+        "件": 159,
+        "分母": 446,
+        "率": 35.7
+       },
+       "名指したが別の値": {
+        "件": 32,
+        "分母": 446,
+        "率": 7.2
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 248,
+        "分母": 446,
+        "率": 55.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 4,
+        "分母": 446,
+        "率": 0.9
+       }
+      },
+      "W2": {
+       "注入の行": 440,
+       "対応が付く": 422,
+       "対応が付かない": 18,
+       "通した": {
+        "件": 3,
+        "分母": 422,
+        "率": 0.7
+       },
+       "名指して原本の値を返した": {
+        "件": 158,
+        "分母": 422,
+        "率": 37.4
+       },
+       "名指したが別の値": {
+        "件": 25,
+        "分母": 422,
+        "率": 5.9
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 236,
+        "分母": 422,
+        "率": 55.9
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 422,
+        "率": 0.0
+       }
+      }
+     },
+     "形 × model": {
+      "F1×W1": {
+       "注入の行": 119,
+       "対応が付く": 111,
+       "対応が付かない": 8,
+       "通した": {
+        "件": 0,
+        "分母": 111,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 48,
+        "分母": 111,
+        "率": 43.2
+       },
+       "名指したが別の値": {
+        "件": 7,
+        "分母": 111,
+        "率": 6.3
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 54,
+        "分母": 111,
+        "率": 48.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 2,
+        "分母": 111,
+        "率": 1.8
+       }
+      },
+      "F1×W2": {
+       "注入の行": 106,
+       "対応が付く": 103,
+       "対応が付かない": 3,
+       "通した": {
+        "件": 1,
+        "分母": 103,
+        "率": 1.0
+       },
+       "名指して原本の値を返した": {
+        "件": 43,
+        "分母": 103,
+        "率": 41.7
+       },
+       "名指したが別の値": {
+        "件": 6,
+        "分母": 103,
+        "率": 5.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 53,
+        "分母": 103,
+        "率": 51.5
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 103,
+        "率": 0.0
+       }
+      },
+      "F2×W1": {
+       "注入の行": 92,
+       "対応が付く": 91,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 1,
+        "分母": 91,
+        "率": 1.1
+       },
+       "名指して原本の値を返した": {
+        "件": 33,
+        "分母": 91,
+        "率": 36.3
+       },
+       "名指したが別の値": {
+        "件": 6,
+        "分母": 91,
+        "率": 6.6
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 51,
+        "分母": 91,
+        "率": 56.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 91,
+        "率": 0.0
+       }
+      },
+      "F2×W2": {
+       "注入の行": 108,
+       "対応が付く": 106,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 49,
+        "分母": 106,
+        "率": 46.2
+       },
+       "名指したが別の値": {
+        "件": 11,
+        "分母": 106,
+        "率": 10.4
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 46,
+        "分母": 106,
+        "率": 43.4
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       }
+      },
+      "F3×W1": {
+       "注入の行": 169,
+       "対応が付く": 154,
+       "対応が付かない": 15,
+       "通した": {
+        "件": 1,
+        "分母": 154,
+        "率": 0.6
+       },
+       "名指して原本の値を返した": {
+        "件": 46,
+        "分母": 154,
+        "率": 29.9
+       },
+       "名指したが別の値": {
+        "件": 11,
+        "分母": 154,
+        "率": 7.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 95,
+        "分母": 154,
+        "率": 61.7
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 154,
+        "率": 0.6
+       }
+      },
+      "F3×W2": {
+       "注入の行": 117,
+       "対応が付く": 106,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 106,
+        "率": 0.9
+       },
+       "名指して原本の値を返した": {
+        "件": 23,
+        "分母": 106,
+        "率": 21.7
+       },
+       "名指したが別の値": {
+        "件": 4,
+        "分母": 106,
+        "率": 3.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 78,
+        "分母": 106,
+        "率": 73.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       }
+      },
+      "F4×W1": {
+       "注入の行": 101,
+       "対応が付く": 90,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 90,
+        "率": 1.1
+       },
+       "名指して原本の値を返した": {
+        "件": 32,
+        "分母": 90,
+        "率": 35.6
+       },
+       "名指したが別の値": {
+        "件": 8,
+        "分母": 90,
+        "率": 8.9
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 48,
+        "分母": 90,
+        "率": 53.3
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 90,
+        "率": 1.1
+       }
+      },
+      "F4×W2": {
+       "注入の行": 109,
+       "対応が付く": 107,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 1,
+        "分母": 107,
+        "率": 0.9
+       },
+       "名指して原本の値を返した": {
+        "件": 43,
+        "分母": 107,
+        "率": 40.2
+       },
+       "名指したが別の値": {
+        "件": 4,
+        "分母": 107,
+        "率": 3.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 59,
+        "分母": 107,
+        "率": 55.1
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 107,
+        "率": 0.0
+       }
+      }
+     }
+    },
+    "P28E": {
+     "全体": {
+      "注入の行": 921,
+      "対応が付く": 868,
+      "対応が付かない": 53,
+      "通した": {
+       "件": 6,
+       "分母": 868,
+       "率": 0.7
+      },
+      "名指して原本の値を返した": {
+       "件": 716,
+       "分母": 868,
+       "率": 82.5
+      },
+      "名指したが別の値": {
+       "件": 76,
+       "分母": 868,
+       "率": 8.8
+      },
+      "止めたが名指さない(POINTER_NOT_FOUND)": {
+       "件": 66,
+       "分母": 868,
+       "率": 7.6
+      },
+      "止めたが名指さない(UNVERIFIABLE)": {
+       "件": 4,
+       "分母": 868,
+       "率": 0.5
+      }
+     },
+     "形別": {
+      "F1": {
+       "注入の行": 225,
+       "対応が付く": 214,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 214,
+        "率": 0.5
+       },
+       "名指して原本の値を返した": {
+        "件": 186,
+        "分母": 214,
+        "率": 86.9
+       },
+       "名指したが別の値": {
+        "件": 16,
+        "分母": 214,
+        "率": 7.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 9,
+        "分母": 214,
+        "率": 4.2
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 2,
+        "分母": 214,
+        "率": 0.9
+       }
+      },
+      "F2": {
+       "注入の行": 200,
+       "対応が付く": 197,
+       "対応が付かない": 3,
+       "通した": {
+        "件": 1,
+        "分母": 197,
+        "率": 0.5
+       },
+       "名指して原本の値を返した": {
+        "件": 164,
+        "分母": 197,
+        "率": 83.2
+       },
+       "名指したが別の値": {
+        "件": 23,
+        "分母": 197,
+        "率": 11.7
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 9,
+        "分母": 197,
+        "率": 4.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 197,
+        "率": 0.0
+       }
+      },
+      "F3": {
+       "注入の行": 286,
+       "対応が付く": 260,
+       "対応が付かない": 26,
+       "通した": {
+        "件": 2,
+        "分母": 260,
+        "率": 0.8
+       },
+       "名指して原本の値を返した": {
+        "件": 204,
+        "分母": 260,
+        "率": 78.5
+       },
+       "名指したが別の値": {
+        "件": 21,
+        "分母": 260,
+        "率": 8.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 32,
+        "分母": 260,
+        "率": 12.3
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 260,
+        "率": 0.4
+       }
+      },
+      "F4": {
+       "注入の行": 210,
+       "対応が付く": 197,
+       "対応が付かない": 13,
+       "通した": {
+        "件": 2,
+        "分母": 197,
+        "率": 1.0
+       },
+       "名指して原本の値を返した": {
+        "件": 162,
+        "分母": 197,
+        "率": 82.2
+       },
+       "名指したが別の値": {
+        "件": 16,
+        "分母": 197,
+        "率": 8.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 16,
+        "分母": 197,
+        "率": 8.1
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 197,
+        "率": 0.5
+       }
+      }
+     },
+     "model 別": {
+      "W1": {
+       "注入の行": 481,
+       "対応が付く": 446,
+       "対応が付かない": 35,
+       "通した": {
+        "件": 3,
+        "分母": 446,
+        "率": 0.7
+       },
+       "名指して原本の値を返した": {
+        "件": 363,
+        "分母": 446,
+        "率": 81.4
+       },
+       "名指したが別の値": {
+        "件": 43,
+        "分母": 446,
+        "率": 9.6
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 33,
+        "分母": 446,
+        "率": 7.4
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 4,
+        "分母": 446,
+        "率": 0.9
+       }
+      },
+      "W2": {
+       "注入の行": 440,
+       "対応が付く": 422,
+       "対応が付かない": 18,
+       "通した": {
+        "件": 3,
+        "分母": 422,
+        "率": 0.7
+       },
+       "名指して原本の値を返した": {
+        "件": 353,
+        "分母": 422,
+        "率": 83.6
+       },
+       "名指したが別の値": {
+        "件": 33,
+        "分母": 422,
+        "率": 7.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 33,
+        "分母": 422,
+        "率": 7.8
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 422,
+        "率": 0.0
+       }
+      }
+     },
+     "形 × model": {
+      "F1×W1": {
+       "注入の行": 119,
+       "対応が付く": 111,
+       "対応が付かない": 8,
+       "通した": {
+        "件": 0,
+        "分母": 111,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 91,
+        "分母": 111,
+        "率": 82.0
+       },
+       "名指したが別の値": {
+        "件": 10,
+        "分母": 111,
+        "率": 9.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 8,
+        "分母": 111,
+        "率": 7.2
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 2,
+        "分母": 111,
+        "率": 1.8
+       }
+      },
+      "F1×W2": {
+       "注入の行": 106,
+       "対応が付く": 103,
+       "対応が付かない": 3,
+       "通した": {
+        "件": 1,
+        "分母": 103,
+        "率": 1.0
+       },
+       "名指して原本の値を返した": {
+        "件": 95,
+        "分母": 103,
+        "率": 92.2
+       },
+       "名指したが別の値": {
+        "件": 6,
+        "分母": 103,
+        "率": 5.8
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 1,
+        "分母": 103,
+        "率": 1.0
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 103,
+        "率": 0.0
+       }
+      },
+      "F2×W1": {
+       "注入の行": 92,
+       "対応が付く": 91,
+       "対応が付かない": 1,
+       "通した": {
+        "件": 1,
+        "分母": 91,
+        "率": 1.1
+       },
+       "名指して原本の値を返した": {
+        "件": 76,
+        "分母": 91,
+        "率": 83.5
+       },
+       "名指したが別の値": {
+        "件": 10,
+        "分母": 91,
+        "率": 11.0
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 4,
+        "分母": 91,
+        "率": 4.4
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 91,
+        "率": 0.0
+       }
+      },
+      "F2×W2": {
+       "注入の行": 108,
+       "対応が付く": 106,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       },
+       "名指して原本の値を返した": {
+        "件": 88,
+        "分母": 106,
+        "率": 83.0
+       },
+       "名指したが別の値": {
+        "件": 13,
+        "分母": 106,
+        "率": 12.3
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 5,
+        "分母": 106,
+        "率": 4.7
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       }
+      },
+      "F3×W1": {
+       "注入の行": 169,
+       "対応が付く": 154,
+       "対応が付かない": 15,
+       "通した": {
+        "件": 1,
+        "分母": 154,
+        "率": 0.6
+       },
+       "名指して原本の値を返した": {
+        "件": 128,
+        "分母": 154,
+        "率": 83.1
+       },
+       "名指したが別の値": {
+        "件": 13,
+        "分母": 154,
+        "率": 8.4
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 11,
+        "分母": 154,
+        "率": 7.1
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 154,
+        "率": 0.6
+       }
+      },
+      "F3×W2": {
+       "注入の行": 117,
+       "対応が付く": 106,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 106,
+        "率": 0.9
+       },
+       "名指して原本の値を返した": {
+        "件": 76,
+        "分母": 106,
+        "率": 71.7
+       },
+       "名指したが別の値": {
+        "件": 8,
+        "分母": 106,
+        "率": 7.5
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 21,
+        "分母": 106,
+        "率": 19.8
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 106,
+        "率": 0.0
+       }
+      },
+      "F4×W1": {
+       "注入の行": 101,
+       "対応が付く": 90,
+       "対応が付かない": 11,
+       "通した": {
+        "件": 1,
+        "分母": 90,
+        "率": 1.1
+       },
+       "名指して原本の値を返した": {
+        "件": 68,
+        "分母": 90,
+        "率": 75.6
+       },
+       "名指したが別の値": {
+        "件": 10,
+        "分母": 90,
+        "率": 11.1
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 10,
+        "分母": 90,
+        "率": 11.1
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 1,
+        "分母": 90,
+        "率": 1.1
+       }
+      },
+      "F4×W2": {
+       "注入の行": 109,
+       "対応が付く": 107,
+       "対応が付かない": 2,
+       "通した": {
+        "件": 1,
+        "分母": 107,
+        "率": 0.9
+       },
+       "名指して原本の値を返した": {
+        "件": 94,
+        "分母": 107,
+        "率": 87.9
+       },
+       "名指したが別の値": {
+        "件": 6,
+        "分母": 107,
+        "率": 5.6
+       },
+       "止めたが名指さない(POINTER_NOT_FOUND)": {
+        "件": 6,
+        "分母": 107,
+        "率": 5.6
+       },
+       "止めたが名指さない(UNVERIFIABLE)": {
+        "件": 0,
+        "分母": 107,
+        "率": 0.0
+       }
+      }
+     }
+    }
+   }
+  },
+  "6 形の性質": {
+   "全体": {
+    "数の claim": 8290,
+    "1 行に数が 2 つ以上": {
+     "件": 7107,
+     "分母": 8290,
+     "率": 85.7
+    },
+    "主語が取れた(P28E)": {
+     "件": 7533,
+     "分母": 8290,
+     "率": 90.9
+    },
+    "行頭が記号(・|QA)": {
+     "件": 4432,
+     "分母": 8290,
+     "率": 53.5
+    },
+    "行頭の内訳": {
+     "A": 1824,
+     "Q": 19,
+     "|": 1078,
+     "・": 1511,
+     "他": 3858
+    }
+   },
+   "F1": {
+    "数の claim": 2313,
+    "1 行に数が 2 つ以上": {
+     "件": 1995,
+     "分母": 2313,
+     "率": 86.3
+    },
+    "主語が取れた(P28E)": {
+     "件": 2107,
+     "分母": 2313,
+     "率": 91.1
+    },
+    "行頭が記号(・|QA)": {
+     "件": 0,
+     "分母": 2313,
+     "率": 0.0
+    },
+    "行頭の内訳": {
+     "他": 2313
+    }
+   },
+   "F2": {
+    "数の claim": 1511,
+    "1 行に数が 2 つ以上": {
+     "件": 1095,
+     "分母": 1511,
+     "率": 72.5
+    },
+    "主語が取れた(P28E)": {
+     "件": 1414,
+     "分母": 1511,
+     "率": 93.6
+    },
+    "行頭が記号(・|QA)": {
+     "件": 1511,
+     "分母": 1511,
+     "率": 100.0
+    },
+    "行頭の内訳": {
+     "・": 1511
+    }
+   },
+   "F3": {
+    "数の claim": 2623,
+    "1 行に数が 2 つ以上": {
+     "件": 2381,
+     "分母": 2623,
+     "率": 90.8
+    },
+    "主語が取れた(P28E)": {
+     "件": 2448,
+     "分母": 2623,
+     "率": 93.3
+    },
+    "行頭が記号(・|QA)": {
+     "件": 1078,
+     "分母": 2623,
+     "率": 41.1
+    },
+    "行頭の内訳": {
+     "|": 1078,
+     "他": 1545
+    }
+   },
+   "F4": {
+    "数の claim": 1843,
+    "1 行に数が 2 つ以上": {
+     "件": 1636,
+     "分母": 1843,
+     "率": 88.8
+    },
+    "主語が取れた(P28E)": {
+     "件": 1564,
+     "分母": 1843,
+     "率": 84.9
+    },
+    "行頭が記号(・|QA)": {
+     "件": 1843,
+     "分母": 1843,
+     "率": 100.0
+    },
+    "行頭の内訳": {
+     "A": 1824,
+     "Q": 19
+    }
+   },
+   "W1": {
+    "数の claim": 5398,
+    "1 行に数が 2 つ以上": {
+     "件": 4691,
+     "分母": 5398,
+     "率": 86.9
+    },
+    "主語が取れた(P28E)": {
+     "件": 4949,
+     "分母": 5398,
+     "率": 91.7
+    },
+    "行頭が記号(・|QA)": {
+     "件": 2703,
+     "分母": 5398,
+     "率": 50.1
+    },
+    "行頭の内訳": {
+     "A": 1221,
+     "Q": 10,
+     "|": 587,
+     "・": 885,
+     "他": 2695
+    }
+   },
+   "W2": {
+    "数の claim": 2892,
+    "1 行に数が 2 つ以上": {
+     "件": 2416,
+     "分母": 2892,
+     "率": 83.5
+    },
+    "主語が取れた(P28E)": {
+     "件": 2584,
+     "分母": 2892,
+     "率": 89.3
+    },
+    "行頭が記号(・|QA)": {
+     "件": 1729,
+     "分母": 2892,
+     "率": 59.8
+    },
+    "行頭の内訳": {
+     "A": 603,
+     "Q": 9,
+     "|": 491,
+     "・": 626,
+     "他": 1163
+    }
+   },
+   "F1×W1": {
+    "数の claim": 1568,
+    "1 行に数が 2 つ以上": {
+     "件": 1365,
+     "分母": 1568,
+     "率": 87.1
+    },
+    "主語が取れた(P28E)": {
+     "件": 1440,
+     "分母": 1568,
+     "率": 91.8
+    },
+    "行頭が記号(・|QA)": {
+     "件": 0,
+     "分母": 1568,
+     "率": 0.0
+    },
+    "行頭の内訳": {
+     "他": 1568
+    }
+   },
+   "F1×W2": {
+    "数の claim": 745,
+    "1 行に数が 2 つ以上": {
+     "件": 630,
+     "分母": 745,
+     "率": 84.6
+    },
+    "主語が取れた(P28E)": {
+     "件": 667,
+     "分母": 745,
+     "率": 89.5
+    },
+    "行頭が記号(・|QA)": {
+     "件": 0,
+     "分母": 745,
+     "率": 0.0
+    },
+    "行頭の内訳": {
+     "他": 745
+    }
+   },
+   "F2×W1": {
+    "数の claim": 885,
+    "1 行に数が 2 つ以上": {
+     "件": 596,
+     "分母": 885,
+     "率": 67.3
+    },
+    "主語が取れた(P28E)": {
+     "件": 845,
+     "分母": 885,
+     "率": 95.5
+    },
+    "行頭が記号(・|QA)": {
+     "件": 885,
+     "分母": 885,
+     "率": 100.0
+    },
+    "行頭の内訳": {
+     "・": 885
+    }
+   },
+   "F2×W2": {
+    "数の claim": 626,
+    "1 行に数が 2 つ以上": {
+     "件": 499,
+     "分母": 626,
+     "率": 79.7
+    },
+    "主語が取れた(P28E)": {
+     "件": 569,
+     "分母": 626,
+     "率": 90.9
+    },
+    "行頭が記号(・|QA)": {
+     "件": 626,
+     "分母": 626,
+     "率": 100.0
+    },
+    "行頭の内訳": {
+     "・": 626
+    }
+   },
+   "F3×W1": {
+    "数の claim": 1714,
+    "1 行に数が 2 つ以上": {
+     "件": 1623,
+     "分母": 1714,
+     "率": 94.7
+    },
+    "主語が取れた(P28E)": {
+     "件": 1604,
+     "分母": 1714,
+     "率": 93.6
+    },
+    "行頭が記号(・|QA)": {
+     "件": 587,
+     "分母": 1714,
+     "率": 34.2
+    },
+    "行頭の内訳": {
+     "|": 587,
+     "他": 1127
+    }
+   },
+   "F3×W2": {
+    "数の claim": 909,
+    "1 行に数が 2 つ以上": {
+     "件": 758,
+     "分母": 909,
+     "率": 83.4
+    },
+    "主語が取れた(P28E)": {
+     "件": 844,
+     "分母": 909,
+     "率": 92.8
+    },
+    "行頭が記号(・|QA)": {
+     "件": 491,
+     "分母": 909,
+     "率": 54.0
+    },
+    "行頭の内訳": {
+     "|": 491,
+     "他": 418
+    }
+   },
+   "F4×W1": {
+    "数の claim": 1231,
+    "1 行に数が 2 つ以上": {
+     "件": 1107,
+     "分母": 1231,
+     "率": 89.9
+    },
+    "主語が取れた(P28E)": {
+     "件": 1060,
+     "分母": 1231,
+     "率": 86.1
+    },
+    "行頭が記号(・|QA)": {
+     "件": 1231,
+     "分母": 1231,
+     "率": 100.0
+    },
+    "行頭の内訳": {
+     "A": 1221,
+     "Q": 10
+    }
+   },
+   "F4×W2": {
+    "数の claim": 612,
+    "1 行に数が 2 つ以上": {
+     "件": 529,
+     "分母": 612,
+     "率": 86.4
+    },
+    "主語が取れた(P28E)": {
+     "件": 504,
+     "分母": 612,
+     "率": 82.4
+    },
+    "行頭が記号(・|QA)": {
+     "件": 612,
+     "分母": 612,
+     "率": 100.0
+    },
+    "行頭の内訳": {
+     "A": 603,
+     "Q": 9
+    }
+   }
+  },
+  "A-12 判定しない": {
+   "会社ごと": {
+    "S100YMFV": {
+     "本": 8,
+     "claim": 424,
+     "数の claim": 278,
+     "札 偽": 6,
+     "札 判定不能": 16,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 149,
+      "分母": 256,
+      "率": 58.2
+     }
+    },
+    "S100YZCT": {
+     "本": 8,
+     "claim": 716,
+     "数の claim": 543,
+     "札 偽": 14,
+     "札 判定不能": 15,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 349,
+      "分母": 514,
+      "率": 67.9
+     }
+    },
+    "S100Z4GF": {
+     "本": 8,
+     "claim": 349,
+     "数の claim": 207,
+     "札 偽": 5,
+     "札 判定不能": 19,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 87,
+      "分母": 183,
+      "率": 47.5
+     }
+    },
+    "S100Z4LC": {
+     "本": 8,
+     "claim": 328,
+     "数の claim": 184,
+     "札 偽": 13,
+     "札 判定不能": 16,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 91,
+      "分母": 155,
+      "率": 58.7
+     }
+    },
+    "S100Z5CH": {
+     "本": 8,
+     "claim": 542,
+     "数の claim": 385,
+     "札 偽": 21,
+     "札 判定不能": 15,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 213,
+      "分母": 349,
+      "率": 61.0
+     }
+    },
+    "S100Z3HP": {
+     "本": 8,
+     "claim": 529,
+     "数の claim": 384,
+     "札 偽": 2,
+     "札 判定不能": 22,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 240,
+      "分母": 360,
+      "率": 66.7
+     }
+    },
+    "S100YZEV": {
+     "本": 8,
+     "claim": 507,
+     "数の claim": 356,
+     "札 偽": 13,
+     "札 判定不能": 22,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 237,
+      "分母": 321,
+      "率": 73.8
+     }
+    },
+    "S100Z40G": {
+     "本": 8,
+     "claim": 540,
+     "数の claim": 394,
+     "札 偽": 9,
+     "札 判定不能": 17,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 236,
+      "分母": 368,
+      "率": 64.1
+     }
+    },
+    "S100YZ7E": {
+     "本": 8,
+     "claim": 600,
+     "数の claim": 473,
+     "札 偽": 6,
+     "札 判定不能": 25,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 311,
+      "分母": 442,
+      "率": 70.4
+     }
+    },
+    "S100Z6XO": {
+     "本": 8,
+     "claim": 784,
+     "数の claim": 612,
+     "札 偽": 14,
+     "札 判定不能": 19,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 437,
+      "分母": 579,
+      "率": 75.5
+     }
+    },
+    "S100YYOS": {
+     "本": 8,
+     "claim": 575,
+     "数の claim": 406,
+     "札 偽": 4,
+     "札 判定不能": 14,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 277,
+      "分母": 388,
+      "率": 71.4
+     }
+    },
+    "S100YW7F": {
+     "本": 8,
+     "claim": 744,
+     "数の claim": 568,
+     "札 偽": 5,
+     "札 判定不能": 16,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 353,
+      "分母": 547,
+      "率": 64.5
+     }
+    },
+    "S100Z1WR": {
+     "本": 8,
+     "claim": 797,
+     "数の claim": 649,
+     "札 偽": 17,
+     "札 判定不能": 17,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 445,
+      "分母": 615,
+      "率": 72.4
+     }
+    },
+    "S100YYUD": {
+     "本": 8,
+     "claim": 548,
+     "数の claim": 396,
+     "札 偽": 41,
+     "札 判定不能": 17,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 240,
+      "分母": 338,
+      "率": 71.0
+     }
+    },
+    "S100YYSK": {
+     "本": 8,
+     "claim": 514,
+     "数の claim": 362,
+     "札 偽": 15,
+     "札 判定不能": 21,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 228,
+      "分母": 326,
+      "率": 69.9
+     }
+    },
+    "S100YYF5": {
+     "本": 8,
+     "claim": 603,
+     "数の claim": 463,
+     "札 偽": 14,
+     "札 判定不能": 27,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 320,
+      "分母": 422,
+      "率": 75.8
+     }
+    },
+    "S100YYRG": {
+     "本": 8,
+     "claim": 568,
+     "数の claim": 404,
+     "札 偽": 17,
+     "札 判定不能": 15,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 260,
+      "分母": 372,
+      "率": 69.9
+     }
+    },
+    "S100Z3V1": {
+     "本": 8,
+     "claim": 487,
+     "数の claim": 328,
+     "札 偽": 10,
+     "札 判定不能": 14,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 194,
+      "分母": 304,
+      "率": 63.8
+     }
+    },
+    "S100YYS4": {
+     "本": 8,
+     "claim": 519,
+     "数の claim": 366,
+     "札 偽": 8,
+     "札 判定不能": 18,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 247,
+      "分母": 340,
+      "率": 72.6
+     }
+    },
+    "S100Z3CO": {
+     "本": 8,
+     "claim": 725,
+     "数の claim": 532,
+     "札 偽": 21,
+     "札 判定不能": 17,
+     "札 真の行の GROUNDED 率(P28E)": {
+      "件": 371,
+      "分母": 494,
+      "率": 75.1
+     }
+    }
+   },
+   "要素名の分布(P28E で GROUNDED の行の pointers。上位 30)": {
+    "(xbrl 以外)": 2851,
+    "jppfs_cor:NetSales": 877,
+    "jppfs_cor:GrossProfit": 641,
+    "jppfs_cor:OperatingIncome": 609,
+    "jppfs_cor:CashAndCashEquivalents": 569,
+    "jppfs_cor:SellingGeneralAndAdministrativeExpenses": 552,
+    "jppfs_cor:Assets": 512,
+    "jppfs_cor:NetAssets": 453,
+    "jppfs_cor:OrdinaryIncome": 451,
+    "jppfs_cor:NetCashProvidedByUsedInOperatingActivities": 435,
+    "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults": 357,
+    "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults": 327,
+    "jppfs_cor:Liabilities": 321,
+    "jppfs_cor:ProfitLoss": 310,
+    "jppfs_cor:ProfitLossAttributableToOwnersOfParent": 258,
+    "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults": 175,
+    "jppfs_cor:ShortTermLoansPayable": 166,
+    "jppfs_cor:CostOfSales": 165,
+    "jppfs_cor:CashAndDeposits": 164,
+    "jppfs_cor:LongTermLoansPayable": 157,
+    "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults": 132,
+    "jppfs_cor:IncomeBeforeIncomeTaxes": 116,
+    "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults": 116,
+    "jppfs_cor:RetainedEarnings": 112,
+    "jppfs_cor:NonOperatingIncome": 107,
+    "jppfs_cor:NetCashProvidedByUsedInFinancingActivities": 104,
+    "jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults": 90,
+    "jppfs_cor:AccountsReceivableTrade": 87,
+    "jppfs_cor:CurrentAssets": 85,
+    "jppfs_cor:PropertyPlantAndEquipment": 83
+   },
+   "max_tokens で打ち切られた本": 0,
+   "札 判定不能の中身": {
+    "件": 362,
+    "確信の内訳": {
+     "中": 320,
+     "低": 6,
+     "高": 36
+    },
+    "形別": {
+     "F1": 95,
+     "F2": 75,
+     "F3": 86,
+     "F4": 106
+    },
+    "P28E の state": {
+     "GROUNDED": 1,
+     "POINTER_NOT_FOUND": 5,
+     "UNVERIFIABLE": 349,
+     "VALUE_MISMATCH": 7
+    },
+    "根拠の要素名 上位 20": {
+     "jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults": 15,
+     "jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults": 7,
+     "jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults": 6,
+     "jppfs_cor:LegalCapitalSurplus": 1,
+     "jppfs_cor:PurchaseOfTreasuryStock": 1,
+     "jppfs_cor:RepaymentOfLongTermLoansPayableFinCF": 1,
+     "jppfs_cor:Assets": 1,
+     "jppfs_cor:ExtraordinaryIncome": 1,
+     "jppfs_cor:DecreaseIncreaseInInventoriesOpeCF": 1,
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults": 1,
+     "jpcrp_cor:NumberOfSharesHeldInOwnNameTreasurySharesEtc": 1,
+     "jppfs_cor:Liabilities": 1,
+     "jppfs_cor:CurrentAssets": 1,
+     "jppfs_cor:CurrentLiabilities": 1,
+     "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities": 1,
+     "jppfs_cor:PurchaseOfPropertyPlantAndEquipmentAndIntangibleAssetsInvCF": 1,
+     "jppfs_cor:SellingGeneralAndAdministrativeExpenses": 1,
+     "jppfs_cor:NonOperatingIncome": 1,
+     "jppfs_cor:MerchandiseAndFinishedGoods": 1,
+     "jppfs_cor:RawMaterialsAndSupplies": 1
+    }
+   }
+  }
+ },
+ "予測の判定": {
+  "A-1": {
+   "判定": "外れ",
+   "値": {
+    "数の claim が 10 以上の本": 160,
+    "生成できた本": 160,
+    "費用 USD": 28.8702,
+    "上限で止まった": false,
+    "上限でない停止(字)": "HTTP 401(鍵の問題)"
+   }
+  },
+  "A-2": {
+   "判定": "外れ",
+   "値": {
+    "F1": 40.0,
+    "F2": 31.0,
+    "F3": 70.5,
+    "F4": 42.5
+   }
+  },
+  "A-3": {
+   "判定": "当たり",
+   "値": {
+    "真の率": 92.6,
+    "偽の率": 3.1,
+    "2 席目との一致率": 99.3
+   }
+  },
+  "A-4": {
+   "判定": "外れ",
+   "値": {
+    "F1": 73.9,
+    "F2": 79.2,
+    "F3": 59.9,
+    "F4": 67.2,
+    "F3 が最も低い": true
+   }
+  },
+  "A-5": {
+   "判定": "外れ",
+   "値": {
+    "F2": 11.7,
+    "F3": 5.7
+   }
+  },
+  "A-6": {
+   "判定": "外れ",
+   "値": {
+    "止める率": 88.2,
+    "通した偽の行": 30
+   }
+  },
+  "A-7": {
+   "判定": "外れ",
+   "値": {
+    "全体": 0,
+    "F1": 0,
+    "F2": 0,
+    "F3": 0,
+    "F4": 0,
+    "F2 が最多": false
+   }
+  },
+  "A-8": {
+   "判定": "外れ",
+   "値": {
+    "全体": 78
+   }
+  },
+  "A-9": {
+   "判定": "当たり",
+   "値": {
+    "T1_VALUE P27 通した率": 0.0,
+    "T1_VALUE P28E 通した率": 0.0,
+    "T8_REL P27 通した率": 0.7,
+    "T8_REL P28E 通した率": 0.7,
+    "T8_REL 名指して原本 P28E": 82.5,
+    "T8_REL 名指して原本 P27": 36.5
+   }
+  },
+  "A-10": {
+   "判定": "外れ",
+   "値": {
+    "形ごとの W1 と W2 の差の絶対値": {
+     "F1": 10.3,
+     "F2": 10.7,
+     "F3": 1.4,
+     "F4": 12.9
+    },
+    "model ごとの形の幅": {
+     "W1": 14.7,
+     "W2": 26.8
+    }
+   }
+  },
+  "A-11": {
+   "判定": "外れ",
+   "値": {
+    "「その他」の形の行": 11,
+    "決まった": 0,
+    "決まった率": 0.0
+   }
+  },
+  "A-12": {
+   "判定": "判定しない",
+   "値": {
+    "打ち切り": 0,
+    "札 判定不能": 362
+   }
+  }
+ },
+ "当たり": 2,
+ "外れ": 9,
+ "判定しない": 1,
+ "key_leaks": []
+}
