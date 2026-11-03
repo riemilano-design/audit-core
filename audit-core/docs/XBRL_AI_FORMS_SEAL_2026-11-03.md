@@ -72,3 +72,14 @@
 - 鍵: `ANTHROPIC_API_KEY="$(security find-generic-password -s ANTHROPIC_API_KEY -w)" env -u OPENAI_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY -u EDINET_API_KEY -u EDINETDB_API_KEY python3 measure/xbrl_aiforms_gen_2026-11-03.py ...` の形でだけ渡す。script は鍵を印字・記録しない(`key_leaks` の検査)。席(subagent)には鍵を渡さない。
 - 席の指示文(書き手 4 形・札付け)は script の定数で字を固定。札付けの席は `~/Desktop/sgogi-coach-handoff/`・`~/.cache/audit-core/edinetdb-p27/`・repo の engine の出力を開かない。
 - 0 USD の部分(engine・注入・札)と有料の部分(生成)を記録で分ける。cache 3 folder(281・40・94)は不変。
+
+## 追記 2026-11-03(生成の前。下見 `--dry-run` のあと・有料の呼び出しの前に書いた。§0〜§4 の字と予測は変えていない)
+
+script を作った席が、封の字では 1 通りに決まらない所を次のとおり決めた。司令塔が読んで承認した。生成・判定の結果はまだ 1 本も無い。
+
+1. **fact の表の「素の context」に単体のフォールバックを使う**(封 §1 の「2026-10-09 と同じ作り」から外れる)。2026-10-09 の規則(member なしの context だけ)をそのまま当てると、20 社のうち単体だけの 8 社(docID は追跡しない下見の出力にだけ書く)は表が 3〜27 行しか無く、書き手に材料が無い。engine が使う `instance.with_nonconsolidated_fallback`(単体の member だけの枠を素として扱う)を表の組み立てに当て、定数 `NONCONSOLIDATED_FALLBACK = True` で留めた。下見で 20 本の表は 277〜579 行。見積りは 37.09 → **47.9247 USD**(上限 50 の 95.8%。入力 = 字数 × 1.0 の保守的な見積り)。
+2. **書き手の指示文の字**は script の定数 `WRITER_COMMON`・`WRITER_FORMS` に固定した(封は各形の中身だけ)。F3 の表の列は「項目・当期・前期・増減」、F4 は「Q:」「A:」で始まる行。「検証」「正確」は書かない。
+3. **札**: 本の札は 1 席目の答え。2 席目は一致率にだけ使う。誤りの型は閉じた 6 語、確信は 高 / 中 / 低。札を付けるのは数の claim(`kind == num`)だけ。札付けの束は `<docID>_<名前の sha256 先頭 10>` の鍵で形と model を席に見せず、claim ごとに id・文・数・単位と engine の抽出の窓の字を入れる(engine の判定は入れない)。
+4. 会社の混ぜは `random.Random("<seed>|AIFORMS_COMPANIES").shuffle`、2 席目の 32 本は `random.Random("<seed>|AIFORMS_SEAT2").sample`。
+5. A-1〜A-11 の「厳密に最低・最多」などの読みは `measure/xbrl_aiforms_tally_2026-11-03.py` の docstring に字で固定した。
+6. 言えないことに 1 つ足す: 費用の累計は API が返した usage で数える。途中で切れた呼び出し(timeout など)は usage が無く累計に入らないので、請求は記録の累計より多くありうる。
