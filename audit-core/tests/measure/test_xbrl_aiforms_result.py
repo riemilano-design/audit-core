@@ -16,6 +16,7 @@ u"""AI の形 4 × model 2(20 社 × 形 4 × model 2 = 160 本)の測定の結�
 
 記録が無いときは (c)(d)(e) の記録の試験を skip する(a)(b)(g) は走る。この file は docID の字を持たない。
 """
+import ast
 import collections
 import copy
 import hashlib
@@ -71,6 +72,9 @@ FORBIDDEN_KEYS = ("span", "value", "recomputed", u"文", u"理由", u"根拠", u
 COMPANY_WORDS = (u"株式会社", u"有限会社", u"合同会社", u"㈱", u"(株)")
 DOCID_RE = re.compile(r"S100[A-Z0-9]{4}")
 EXPECT_CACHES = collections.OrderedDict([("edinet", 281), ("edinet-fresh-2026-10-21", 40), ("edinet-prior-2026-11-02", 94)])
+# 上限の停止の字の例(gen script の 2 つの止めの書式に値を入れた形。実物との一致は test_th_15 が gen の source で照らす)
+CAP_STOP_ESTIMATE_EXAMPLE = u"見積り 50.3000 USD が上限 50.00 USD を超える。1 回も呼ばずに止める"
+CAP_STOP_RUNNING_EXAMPLE = u"累計 49.9000 + 次の見積り 0.3000 が上限 50.00 USD を超える(S100AAAA_F1_x の前)"
 FOR_RESULT_WORDS = (u"精度", u"ハルシネーション", u"証明した", u"LLM より正確", u"世界で 1 社")
 HAVE_CACHE = all(os.path.isdir(p) for p in GEN.EXISTING_CACHES.values()) and os.path.isdir(GEN.EXISTING_CACHES["edinet"])
 
@@ -491,7 +495,7 @@ def claims_problems(gen, claims, full):
                 cnt[p][c[u"state"]] += 1
                 if c[u"state"] not in RUN.STATES:
                     out.append(u"claims: state が語でない")
-                if c[u"reason"] is not None and not RUN.SAFE_REASON.fullmatch(c[u"reason"]):
+                if not RUN.reason_ok(c[u"reason"]):
                     out.append(u"claims: reason が符号の形でない")
                 for ptr in c[u"pointers"]:
                     if ptr != u"(xbrl 以外)" and not re.fullmatch(r"[A-Za-z0-9_\-]+:[A-Za-z0-9_\-]+@(当期|前期|他)", ptr):
@@ -605,7 +609,7 @@ def inject_problems(claims, inj):
             c = r[p]
             if c[u"結果"] not in (RUN.TUNE.LABEL_PASS, RUN.TUNE.LABEL_NAMED_ORIGINAL, RUN.TUNE.LABEL_NAMED_OTHER, RUN.TUNE.LABEL_PNF, RUN.TUNE.LABEL_UNV, RUN.TUNE.LABEL_UNMAPPED):
                 out.append(u"inject: 結果が classify の語でない")
-            if c[u"reason"] is not None and not RUN.SAFE_REASON.fullmatch(c[u"reason"]):
+            if not RUN.reason_ok(c[u"reason"]):
                 out.append(u"inject: reason が符号の形でない")
     if any(n > RUN.INJECT_CAP for n in cnt.values()):
         out.append(u"inject: 1 本あたり型ごとの上限 %d を超えている" % RUN.INJECT_CAP)
@@ -1236,6 +1240,142 @@ class ThinkingTest(unittest.TestCase):
         with self.assertRaises(GEN.Stop):
             self.go(lambda *a: (500, b""), dry_run=True, only="S100NOPE")
 
+    def test_th_14_the_recorded_stop_words_match_the_constants_tally_reads(self):
+        # 上限の停止: 記録の止めた理由は gen の止めの字で、tally の is_cap_stop に当たる
+        self.p.set(GEN, "COST_CAP_USD", 5.0)
+
+        def tr(prompt, model, key):
+            return 200, fake_body(prompt, tin=0, tout=120000)
+        with self.assertRaises(GEN.Stop):
+            self.go(tr)
+        why = self.rec()[u"止めた理由"]
+        self.assertTrue(TAL.is_cap_stop(why), why)
+        self.assertTrue(why.startswith(TAL.CAP_STOP_STARTS[1]))
+        self.p.undo()
+        self.tearDown()
+        self.setUp()
+        # 401: 記録の止めた理由は上限の停止でない
+        with self.assertRaises(GEN.Stop):
+            self.go(fake_transport_factory([], [(401, b"{}")]))
+        why = self.rec()[u"止めた理由"]
+        self.assertTrue(why.startswith(u"HTTP 401"))
+        self.assertFalse(TAL.is_cap_stop(why))
+        self.tearDown()
+        self.setUp()
+        # 走らせる前の見積りの止め: 例外の字が見積りの止めの字で、その始まりは tally の定数に入っている
+        self.p.set(GEN, "COST_CAP_USD", 0.5)
+        with self.assertRaises(GEN.Stop) as cm:
+            self.go(fake_transport_factory([]))
+        self.assertTrue(str(cm.exception.code if hasattr(cm.exception, "code") else cm.exception).lstrip("*").startswith(TAL.CAP_STOP_STARTS[0]))
+        self.assertTrue((CAP_STOP_ESTIMATE_EXAMPLE).startswith(TAL.CAP_STOP_STARTS[0]))
+        self.assertTrue((CAP_STOP_RUNNING_EXAMPLE).startswith(TAL.CAP_STOP_STARTS[1]))
+        self.assertFalse(TAL.is_cap_stop(None))
+        self.assertFalse(TAL.is_cap_stop(u"HTTP 401(鍵の問題)"))
+
+
+class ReasonTest(unittest.TestCase):
+    u"""(r) judge が止まった件(2026-11-03): reason は None・SAFE_REASON・engine が宣言した固定の符号のどれかなら通し、それ以外(数を含む任意の字)は止める。"""
+
+    def test_r_1_none_and_engine_codes_pass(self):
+        self.assertIsNone(RUN.safe_reason(None))
+        self.assertTrue(RUN.reason_ok(None))                                                            # GROUNDED の行は reason を持たない = 記録の検査も通す
+        for r in (u"no_element(no prior2 for prior-year diff)", u"no_element", u"no_subject", u"ambiguous(member)", u"prior is 0", u"no_same_value", u"other_concept",
+                  u"no_element(unit not in XBRL)", u"other_frame", u"per_unit_counter", u"no_prior_member_context"):
+            self.assertEqual(r, RUN.safe_reason(r), r)
+            self.assertTrue(RUN.reason_ok(r), r)
+        for r in sorted(RUN.engine_reasons()):                                                           # engine が宣言した固定の符号は全部通る
+            self.assertEqual(r, RUN.safe_reason(r), r)
+        self.assertGreaterEqual(len(RUN.engine_reasons()), 20)
+
+    def test_r_2_a_number_in_a_free_string_still_stops(self):
+        for r in (u"no_element(12345)", u"no_element(no prior2 for prior-year diff) 3", u"値は 1234 です", u"", 5, b"no_element", [u"no_element"]):
+            with self.assertRaises(RUN.Stop):
+                RUN.safe_reason(r)
+            self.assertFalse(RUN.reason_ok(r), r)
+
+    def test_r_3_safe_reason_itself_is_not_loosened_and_the_engine_set_is_read_not_copied(self):
+        self.assertIsNone(RUN.SAFE_REASON.fullmatch(u"no_element(no prior2 for prior-year diff)"))      # 数字の 2 は SAFE_REASON に当たらない(緩めない)
+        self.assertIsNone(RUN.SAFE_REASON.fullmatch(u"no_element(12345)"))
+        from adapters.xbrl import recipes as R
+        self.assertTrue(set(R.UNBOUND_REASON_STATE) <= RUN.engine_reasons())
+        self.assertIn(u"no_element(no prior2 for prior-year diff)", R.UNBOUND_REASON_STATE)
+        src = io.open(os.path.join(ROOT, "measure", "xbrl_aiforms_run_2026-11-03.py"), encoding="utf-8").read()
+        self.assertNotIn(u"prior2 for prior-year diff", src)                                              # 字をコピーしていない
+
+
+class WorkFolderTest(unittest.TestCase):
+    u"""(w) inject を --procs 8 で 160 本に回したとき JSONDecodeError で止まった件: 同じ書類の本を別の worker が同時に取ると、reference_numbers.json の作業 folder が衝突する。"""
+
+    def test_w_1_the_refs_work_folder_differs_per_process(self):
+        seen = []
+
+        class FakeBackend(object):
+            def refs(self, zip_path, doc, work):
+                seen.append(work)
+                return []
+        p = Patch()
+        tmp = tempfile.mkdtemp(prefix="aiforms_w_", dir=os.environ.get("TMPDIR"))
+        try:
+            p.set(RUN.TUNE, "RealBackend", FakeBackend)
+            p.set(RUN.GEN, "zip_path", lambda row, caches: "zip")
+            for pid in (1111, 2222):
+                RUN._REFS.clear()
+                p.set(os, "getpid", lambda pid=pid: pid)
+                RUN.refs_for({"docID": "S100AAAA"}, {}, tmp)
+                p.undo()
+                p.set(RUN.TUNE, "RealBackend", FakeBackend)
+                p.set(RUN.GEN, "zip_path", lambda row, caches: "zip")
+            self.assertEqual(2, len(seen))
+            self.assertNotEqual(seen[0], seen[1])
+            self.assertTrue(all(w.startswith(os.path.join(tmp, "S100AAAA")) for w in seen))
+        finally:
+            p.undo()
+            RUN._REFS.clear()
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
+def cap_words_problems(gen_source, starts):
+    u"""gen script の source(ast)に、tally の ``CAP_STOP_STARTS`` の 2 つの字で始まる(1)走らせる前の見積りの ``Stop(...)`` と(2)記録の ``rec["止めた理由"] = ...`` の文言が在り、
+    ほかの ``止めた理由`` の代入(401 など)はどちらの字でも始まらないこと。問題の列。"""
+    out = []
+    tree = ast.parse(gen_source)
+
+    def consts(node):
+        return [n.value for n in ast.walk(node) if isinstance(n, ast.Constant) and isinstance(n.value, str)]
+    stops = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and getattr(n.func, "id", None) == "Stop"]
+    if not any(c.lstrip("*").startswith(starts[0]) and u"上限" in c for call in stops for c in consts(call)):
+        out.append(u"gen に %r で始まる上限の Stop が無い" % starts[0])
+    cap, other = [], []
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Assign) and any(isinstance(t, ast.Subscript) and isinstance(getattr(t, "slice", None), ast.Constant) and t.slice.value == u"止めた理由" for t in n.targets):
+            for c in consts(n.value):
+                (cap if c.startswith(starts[1]) and u"上限" in c else other).append(c)
+    if not cap:
+        out.append(u"gen に %r で始まる 止めた理由 の代入が無い" % starts[1])
+    if any(c.startswith(tuple(starts)) for c in other):
+        out.append(u"上限でない止めた理由が上限の停止の字で始まっている")
+    return out
+
+
+class CapStopWordsTest(unittest.TestCase):
+    u"""(c) A-1 の「上限で止まる」の字は tally の定数。gen script(生成の後は変えない)の実在の文言と照らす。"""
+
+    def src(self):
+        return io.open(os.path.join(ROOT, "measure", "xbrl_aiforms_gen_2026-11-03.py"), encoding="utf-8").read()
+
+    def test_c_1_gen_source_has_the_stop_words_tally_reads(self):
+        self.assertEqual((u"見積り ", u"累計 "), TAL.CAP_STOP_STARTS)
+        self.assertEqual([], cap_words_problems(self.src(), TAL.CAP_STOP_STARTS))
+
+    def test_c_2_a_changed_stop_word_in_gen_or_tally_turns_it_red(self):
+        src = self.src()
+        for a, b in ((u'u"累計 %.4f + 次の見積り', u'u"合計 %.4f + 次の見積り'), (u'u"**見積り %.4f USD が上限', u'u"**予想 %.4f USD が上限'),
+                     (u'rec[u"止めた理由"] = u"HTTP %s(鍵の問題)"', u'rec[u"止めた理由"] = u"累計 HTTP %s(鍵の問題)"')):
+            self.assertEqual(1, src.count(a), a)
+            self.assertNotEqual([], cap_words_problems(src.replace(a, b), TAL.CAP_STOP_STARTS), a)
+        for starts in ((u"見積り", u"合計 "), (u"予想 ", u"累計 ")):
+            self.assertNotEqual([], cap_words_problems(src, starts))
+
 
 class SelectionTest(unittest.TestCase):
     u"""会社の選び(封 §0-2 の 1)。記録だけを読む(cache の ZIP は読まない)。"""
@@ -1609,10 +1749,33 @@ class SmokeFlow(unittest.TestCase):
             for r in b[u"札"]:
                 r[1], r[2] = u"偽", u"計算の誤り"
         self.assertEqual(MISS, TAL.judge(TAL.build(R))["A-3"][u"判定"])
-        R = copy.deepcopy(self.R)
-        R["gen"][u"止めた理由"] = u"x"
-        self.assertEqual(MISS, TAL.judge(TAL.build(R))["A-1"][u"判定"])
         self.assertEqual(NOJ, base["A-12"][u"判定"])
+
+    def a1_with_stop(self, why):
+        u"""A-1 の他の条件(150 本以上・費用 3〜25)を満たす表に、gen の記録の止めた理由だけを替えて判定する。"""
+        R = copy.deepcopy(self.R)
+        R["gen"][u"止めた理由"] = why
+        T = TAL.build(R)
+        T[u"1 配線"][u"生成できて P27 の数の claim が %d 以上ある本" % TAL.A1_MIN_CLAIMS] = 160
+        T[u"1 配線"][u"費用 USD(記録の cost_usd の合計)"] = 10.0
+        return T, TAL.judge(T)["A-1"][u"判定"]
+
+    def test_g_6a_a_cap_stop_makes_a1_a_miss(self):
+        _T, base = self.a1_with_stop(None)
+        self.assertEqual(HIT, base)
+        for why in (CAP_STOP_RUNNING_EXAMPLE, CAP_STOP_ESTIMATE_EXAMPLE):
+            T, j = self.a1_with_stop(why)
+            self.assertEqual(MISS, j, why)
+            self.assertTrue(T[u"1 配線"][u"上限で止まった"])
+            self.assertIsNone(T[u"1 配線"][u"上限でない停止(字)"])
+
+    def test_g_6b_a_non_cap_stop_does_not_make_a1_a_miss_and_is_shown(self):
+        for why in (u"HTTP 401(鍵の問題)", u"x", u"HTTP 403(鍵の問題)"):
+            T, j = self.a1_with_stop(why)
+            self.assertEqual(HIT, j, why)
+            self.assertFalse(T[u"1 配線"][u"上限で止まった"])
+            self.assertEqual(why, T[u"1 配線"][u"上限でない停止(字)"])             # 表示欄に出す
+        self.assertEqual(u"x", self.a1_with_stop(u"x")[0][u"1 配線"][u"止めた理由"])           # 記録の字そのものも残る
 
     def test_g_8_each_judgment_flips_at_the_seal_boundary(self):
         T0 = TAL.build(self.R)
@@ -1631,7 +1794,7 @@ class SmokeFlow(unittest.TestCase):
                 w(T)[key_books], w(T)[cost_key], w(T)[u"止めた理由"] = n, c, why
             return judged(e)["A-1"][u"判定"]
         self.assertEqual((HIT, MISS, HIT, MISS, MISS, HIT, MISS),
-                         (a1(150, 3.0), a1(149, 3.0), a1(150, 25.0), a1(150, 25.01), a1(150, 2.99), a1(160, 10.0), a1(160, 10.0, u"上限")))
+                         (a1(150, 3.0), a1(149, 3.0), a1(150, 25.0), a1(150, 25.01), a1(150, 2.99), a1(160, 10.0), a1(160, 10.0, CAP_STOP_RUNNING_EXAMPLE)))
 
         def a2(f, x):
             def e(T):

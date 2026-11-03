@@ -199,10 +199,29 @@ def other_subject_cell(raw):
     return [o.get(u"前期"), o.get(u"候補"), o.get(u"決まった")]
 
 
+_ENGINE_REASONS = []
+
+
+def engine_reasons():
+    u"""engine が宣言した reason の字の集合(字をコピーしない。``recipes.UNBOUND_REASON_STATE`` の key + 登録簿 ``registry_setup`` の 2 つの tuple)。値や文が混ざらない固定の符号。"""
+    if not _ENGINE_REASONS:
+        from adapters.xbrl import recipes as R
+        from adapters.xbrl import registry_setup as RS
+        _ENGINE_REASONS.append(frozenset(R.UNBOUND_REASON_STATE) | frozenset(RS._POINTER_NOT_FOUND_REASONS) | frozenset(RS._UNVERIFIABLE_REASONS))
+    return _ENGINE_REASONS[0]
+
+
+def reason_ok(r):
+    u"""None(GROUNDED の行は reason を持たない)・SAFE_REASON(括弧の中に数字を許さない = 値が漏れない)・engine が宣言した固定の符号、のどれか。"""
+    if r is None:
+        return True
+    return isinstance(r, str) and (SAFE_REASON.fullmatch(r) is not None or r in engine_reasons())
+
+
 def safe_reason(r):
     if r is None:
         return None
-    if not isinstance(r, str) or not SAFE_REASON.fullmatch(r):
+    if not reason_ok(r):
         raise Stop(u"**reason の字が符号の形でない。止める**")
     return r
 
@@ -444,7 +463,7 @@ def inject_text(zb, text, refs, seed, key, cap=INJECT_CAP, verify=None):
 def refs_for(row, zip_caches, work_root):
     doc = row["docID"]
     if doc not in _REFS:
-        work = os.path.join(work_root, doc)
+        work = os.path.join(work_root, "%s_%d" % (doc, os.getpid()))          # process ごと(同じ書類の本を別の worker が同時に取ると、同じ folder の JSON を書き読みして JSONDecodeError になる)
         os.makedirs(work, exist_ok=True)
         _REFS[doc] = TUNE.RealBackend().refs(GEN.zip_path(row, zip_caches), doc, work)
     return _REFS[doc]

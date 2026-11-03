@@ -9,7 +9,7 @@ u"""封 docs/XBRL_AI_FORMS_SEAL_2026-11-03.md §1・§2 ― 記録 4 つ(gen・c
 - 「形」= F1〜F4、「model」= W1(claude-sonnet-5-5)・W2(claude-haiku-5-5)。率は ``{件, 分母, 率(小数 1 桁の %)}``。
 - 「数の claim」= kind が num の claim。札(真 / 偽 / 判定不能)は 1 席目の札。「札 真の行」= 札付けされた数の claim で札が 真。
 - 「止めた」= P28E(など、見ている profile)の state が GROUNDED でない。「通した」= GROUNDED。
-- A-1: 生成できた本(gen の呼び出しが ok)で P27 の数の claim が 10 以上ある本が 150 以上、かつ費用の合計(記録の cost_usd。API の返した usage に保守的な単価を当てた値)が 3〜25 USD、かつ上限で止まっていない。
+- A-1: 生成できた本(gen の呼び出しが ok)で P27 の数の claim が 10 以上ある本が 150 以上、かつ費用の合計(記録の cost_usd。API の返した usage に保守的な単価を当てた値)が 3〜25 USD、かつ上限で止まっていない(gen の記録の ``止めた理由`` が gen script の上限の停止の字(tally の ``CAP_STOP_STARTS``) で始まるときだけ「止まった」。401 など他の停止は数えず、表示欄 ``上限でない停止(字)`` に出す)。
 - A-2: 形ごと(両 model の本をまとめた)の P27 の数の claim の数の中央値(生成できた本。claim 0 の本も入れる)が、F1 30〜80・F2 20〜60・F3 5〜35・F4 15〜50 の全部に入る。
 - A-3: 札 真の率 85% 以上・偽の率 1〜8%(分母は札付けされた数の claim の全部)・2 席目との一致率 90% 以上、の全部。
 - A-4: P28E の 札 真の行の GROUNDED 率が F1 55〜80・F2 40〜75・F3 25〜65・F4 45〜75 の全部に入り、F3 が 4 形で最も低い(同率は最も低いに数えない)。
@@ -62,6 +62,15 @@ HIT, MISS, NOJ = u"当たり", u"外れ", u"判定しない"
 # 封 §2 の幅(字で留める。門が封の文書の字と照らす)
 A2_BOUNDS = collections.OrderedDict([("F1", (30, 80)), ("F2", (20, 60)), ("F3", (5, 35)), ("F4", (15, 50))])
 A4_BOUNDS = collections.OrderedDict([("F1", (55, 80)), ("F2", (40, 75)), ("F3", (25, 65)), ("F4", (45, 75))])
+# 上限の停止の字(gen script の 2 つの止めの文言の頭。gen script は生成の後に変えない = こちらに留め、門が gen の source に同じ頭の文言が在ることを照らす)。
+# 記録の ``止めた理由`` がこの頭で始まるときだけ A-1 の外れ方「上限で止まる」に数える(401 など他の停止は数えない)。
+CAP_STOP_STARTS = (u"見積り ", u"累計 ")
+
+
+def is_cap_stop(reason):
+    return isinstance(reason, str) and reason.startswith(CAP_STOP_STARTS)
+
+
 A1_MIN_BOOKS, A1_MIN_CLAIMS, A1_COST = 150, 10, (3.0, 25.0)
 A3_TRUE_MIN, A3_FALSE = 85.0, (1.0, 8.0)
 A3_AGREE_MIN = 90.0
@@ -149,6 +158,8 @@ def sec_wiring(records):
     out[u"失敗した呼び出し"] = sum(1 for c in gen[u"呼び出し"] if not c[u"ok"])
     out[u"再試行の合計"] = sum(c[u"retries"] for c in gen[u"呼び出し"])
     out[u"止めた理由"] = gen.get(u"止めた理由")
+    out[u"上限で止まった"] = is_cap_stop(gen.get(u"止めた理由"))
+    out[u"上限でない停止(字)"] = gen.get(u"止めた理由") if gen.get(u"止めた理由") and not is_cap_stop(gen.get(u"止めた理由")) else None
     out[u"max_tokens で打ち切られた本"] = sum(1 for c in ok.values() if c[u"stop_reason"] == "max_tokens")
 
     def dist(vals):
@@ -323,7 +334,7 @@ def judge(T):
     w = T[u"1 配線"]
     n_books = w[u"生成できて P27 の数の claim が %d 以上ある本" % A1_MIN_CLAIMS]
     cost = w[u"費用 USD(記録の cost_usd の合計)"]
-    ok1 = n_books >= A1_MIN_BOOKS and between(cost, A1_COST) and not w[u"止めた理由"]
+    ok1 = n_books >= A1_MIN_BOOKS and between(cost, A1_COST) and not is_cap_stop(w[u"止めた理由"])
     J["A-1"] = {u"判定": HIT if ok1 else MISS, u"値": collections.OrderedDict([(u"数の claim が 10 以上の本", n_books), (u"生成できた本", w[u"生成できた本"]), (u"費用 USD", cost), (u"止めた理由", w[u"止めた理由"])])}
     med = collections.OrderedDict((f, (w[u"形 × model"][f][u"P27 の数の claim の数"] or {}).get(u"中央値")) for f in FORMS)
     J["A-2"] = {u"判定": HIT if all(between(med[f], A2_BOUNDS[f]) for f in FORMS) else MISS, u"値": med}
