@@ -941,6 +941,8 @@ LATER_HARNESS_FILES = (
     ("measure/xbrl_restated_naming_2026-11-02.py", u"仕掛け持ち + 使う側", u"有", "process_pair", u"if rcT is None or len(sentsT) != len(sents1) or tupT is None or sentsT[si][tupT[0]:tupT[1]] != want_tok or tupT[3] != tup[3]:", "2026-11-02"),  # 出所のずれの名指し 段 2(封 3a099e7。翌期の前期欄の値を文に差し替え、差し替えた字が届いたかを位置で確かめる)
     # 2026-11-03: AI の形 4 × model 2 の注入(封 docs/XBRL_AI_FORMS_SEAL_2026-11-03.md §0-2 の 6 (b))。前例 xbrl_p27_tune の T8_REL の site の作りを土台 4 profile 版にした仕掛け持ち + 使う側。差し替えが基準の claim に届いたかは claim_for_p27 が新しい値で 1 件に決まるときだけ採る
     ("measure/xbrl_aiforms_run_2026-11-03.py", u"仕掛け持ち + 使う側", u"有", "inject_text", u"res = TUNE.claim_for_p27(verify(zb, p, tampered)[\"claims\"], inj, tok.unit)", "2026-11-03"),
+    # 2026-11-04: 数の読み取り N の注入(封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §5-1)。上の 2026-11-03 の行の inject_text と同じ手順で、土台の対応だけ profile ごとの claim id にした版(P29E は新しい数の claim で id がずれる)。差し替えが基準の claim に届いたかは claim_for_p27 が新しい値で 1 件に決まるときだけ採る
+    ("measure/xbrl_numfix_2026-11-04.py", u"仕掛け持ち + 使う側", u"有", "inject_text_n", u"res = TUNE.claim_for_p27(verify(zb, p, tampered)[\"claims\"], inj, tok.unit)", "2026-11-04"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
