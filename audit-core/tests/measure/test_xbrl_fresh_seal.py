@@ -175,6 +175,9 @@ LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixt
                       # (この 4 つは tuple の末尾でなくここに置く: F5 の門 test_xbrl_aiforms_f5_result.py が tuple の末尾の f5_tally の字に続けて字を足す変異を使うため)
                       "fixtures/xbrl/numfix/ai200_2026-11-04.json", "fixtures/xbrl/numfix/inject_2026-11-04.json",
                       "fixtures/xbrl/numfix/regress97_2026-11-04.json", "fixtures/xbrl/numfix/shapes_2026-11-04.json",
+                      # 2026-11-04: RB(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md)。AI の文 200 本の判定(ai200)・注入(inject)は選んだ 20 社の docID を、97 書類の記録(regress97)は手元の 97 の docID を持つ。
+                      # script 2 本・門 2 本・結果の文書は docID を持たない。(上の N の 4 つと同じ理由で tuple の末尾でなくここに置く)
+                      "fixtures/xbrl/rmix/ai200_2026-11-04.json", "fixtures/xbrl/rmix/inject_2026-11-04.json", "fixtures/xbrl/rmix/regress97_2026-11-04.json",
                       # 2026-11-03: AI の形 4 × model 2(封 docs/XBRL_AI_FORMS_SEAL_2026-11-03.md)。手元の 97 のうち選んだ 20 社の docID を材料の名として持つ記録 5 つ(gen・claims・labels・inject・tally)。
                       # script 4 本・門・結果の文書は docID を持たない
                       "fixtures/xbrl/aiforms/gen_2026-11-03.json", "fixtures/xbrl/aiforms/claims_2026-11-03.json", "fixtures/xbrl/aiforms/labels_2026-11-03.json",

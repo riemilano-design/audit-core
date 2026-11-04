@@ -943,6 +943,8 @@ LATER_HARNESS_FILES = (
     ("measure/xbrl_aiforms_run_2026-11-03.py", u"仕掛け持ち + 使う側", u"有", "inject_text", u"res = TUNE.claim_for_p27(verify(zb, p, tampered)[\"claims\"], inj, tok.unit)", "2026-11-03"),
     # 2026-11-04: 数の読み取り N の注入(封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §5-1)。上の 2026-11-03 の行の inject_text と同じ手順で、土台の対応だけ profile ごとの claim id にした版(P29E は新しい数の claim で id がずれる)。差し替えが基準の claim に届いたかは claim_for_p27 が新しい値で 1 件に決まるときだけ採る
     ("measure/xbrl_numfix_2026-11-04.py", u"仕掛け持ち + 使う側", u"有", "inject_text_n", u"res = TUNE.claim_for_p27(verify(zb, p, tampered)[\"claims\"], inj, tok.unit)", "2026-11-04"),
+    # 2026-11-04: RB の注入(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §5)。上の数の読み取り N の行の inject_text_n と同じ手順で、土台を P30E が GROUNDED の claim にし、比較を P29E にした版(状態の字・行の欄の名前を P29E・P30E に揃えた)。差し替えが基準の claim に届いたかは claim_for_p27 が新しい値を持つ 1 件に決まるかで見る。
+    ("measure/xbrl_rmix_2026-11-04.py", u"仕掛け持ち + 使う側", u"有", "inject_text_rb", u"res = TUNE.claim_for_p27(verify(zb, p, tampered)[\"claims\"], inj, tok.unit)", "2026-11-04"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
