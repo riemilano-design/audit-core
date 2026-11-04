@@ -77,6 +77,8 @@ FACTS_ROWS_2026_11_03 = (u"L-56", u"D-33")
 FACTS_ROWS_2026_11_03B = (u"L-57", u"D-34")
 # 2026-11-04: 数の読み取り N(P29・P29E)の便の行。旗が偽の P22・P26 を含む 6 profile の byte 一致(C-2)を印に持つので P22・P26 の字が在る(宣言された遷移。P-43 は P22・P26 の字を持たない)
 FACTS_ROWS_2026_11_04 = (u"L-58", u"D-35")
+# 2026-11-04(2): 丸め方の根拠が混ざる桁 RB(P30E)の便の行。旗が偽の P22・P26 を含む 8 profile の byte 一致(D-1)を印に持つので P22・P26 の字が在る(宣言された遷移。P-44 は P22・P26 の字を持たない)
+FACTS_ROWS_2026_11_04B = (u"L-59", u"D-36")
 STEP_NAMES = (u"S-1", u"S-2", u"S-3", u"S-4", u"S-5", u"S-6", u"S-7", u"S-8", u"S-9", u"S-10", u"S-11", u"S-12")
 
 #: **字で留める**(測った事実。定数から作らない)。変えたら記録も文書も作り直す。
@@ -782,7 +784,9 @@ class RecordTest(unittest.TestCase):
             self.assertIn(len(present_1103b), (0, len(FACTS_ROWS_2026_11_03B)), u"2026-11-03 の便(2。P28E)の行が一部だけ在る(中途の遷移)")
             present_1104 = [i for i in FACTS_ROWS_2026_11_04 if any(l.startswith(u"| %s |" % i) for l in lines)]
             self.assertIn(len(present_1104), (0, len(FACTS_ROWS_2026_11_04)), u"2026-11-04 の便(数の読み取り N)の行が一部だけ在る(中途の遷移)")
-            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b) + tuple(present_1101) + tuple(present_1103) + tuple(present_1103b) + tuple(present_1104))
+            present_1104b = [i for i in FACTS_ROWS_2026_11_04B if any(l.startswith(u"| %s |" % i) for l in lines)]
+            self.assertIn(len(present_1104b), (0, len(FACTS_ROWS_2026_11_04B)), u"2026-11-04 の便(2。丸め方の根拠が混ざる桁 RB)の行が一部だけ在る(中途の遷移)")
+            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b) + tuple(present_1101) + tuple(present_1103) + tuple(present_1103b) + tuple(present_1104) + tuple(present_1104b))
             stray = [l[:60] for l in lines if (u"P22" in l or u"P26" in l) and not l.startswith(row_heads) and u"2026-10-28" not in l]
             self.assertEqual(stray, [], u"遷移の外の行に P22・P26 の字がある")
         n = 0
