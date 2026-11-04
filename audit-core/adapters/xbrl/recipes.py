@@ -2019,8 +2019,26 @@ def build_raw_claims(zb, profile, info=None):
     if profile.doc_rounding:
         # XBRL 直し §2: 1 周目(今までの梯子)で根拠を数え、書類の丸め方を
         # 1 つに決め、2 周目はその 1 つだけで照合し直す。
+        _first_2026_11_04 = num_claims   # RB(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §1): 1 周目の claim を 2 周目の後ろで使う
         rounding, r_only, t_only = V.decide_rounding(_rounding_evidence(num_claims))
         num_claims = _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rounding, flow_base=flow_base)
+        if getattr(profile, "rounding_mixed_2026_11_04", False):
+            # RB(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §1): 1 周目の根拠を桁 claim_scale ごとに分け、round しか説明できない件(R)と
+            # truncate しか説明できない件(T)の両方が在る桁を「混ざる桁」とする。混ざる桁の claim だけ、両方の帯("both")で照らした結果に差し替える。
+            # 書類の決定(decide_rounding)・他の桁・文字の claim・G3 の保留は 2 周目のまま。
+            _by_scale_2026_11_04 = {}
+            for _d_2026_11_04, _u_2026_11_04 in _rounding_evidence(_first_2026_11_04):
+                _by_scale_2026_11_04.setdefault(_u_2026_11_04, []).append((_d_2026_11_04, _u_2026_11_04))
+            _mixed_2026_11_04 = sorted(u for u, rows in _by_scale_2026_11_04.items()
+                                       if V.decide_rounding(rows)[1] > 0 and V.decide_rounding(rows)[2] > 0)
+            if _mixed_2026_11_04:
+                _third_2026_11_04 = _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, "both", flow_base=flow_base)
+                if len(_third_2026_11_04) != len(num_claims):
+                    raise ValueError("RB: 3 周目の claim の数が 2 周目と違う")
+                num_claims = [_third_2026_11_04[i] if c.get("claim_scale") in _mixed_2026_11_04 else c
+                              for i, c in enumerate(num_claims)]
+            if info is not None:
+                info["rounding_mixed_scales_2026_11_04"] = list(_mixed_2026_11_04)
         if info is not None:
             info["rounding_round_only"] = r_only
             info["rounding_truncate_only"] = t_only

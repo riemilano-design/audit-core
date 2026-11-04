@@ -121,7 +121,9 @@ def profile_problems(V=None, fields=None, numbers_of=None):
     if FLAG not in names:
         return [u"Profile に旗 %s が無い" % FLAG]
     i = names.index(FLAG)
-    if names[i - 1] != "numbers_2026_10_21" or names[i + 1] != "written_precision_2026_10_27":
+    # 2026-11-04: RB(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §0-2 の 3)が旗 rounding_mixed_2026_11_04 をこの旗の直後に足した: この旗 → RB の旗 → written_precision_2026_10_27(RB の旗が在るときだけ)
+    after = names[i + 2] if names[i + 1:i + 2] == ["rounding_mixed_2026_11_04"] else names[i + 1]
+    if names[i - 1] != "numbers_2026_10_21" or after != "written_precision_2026_10_27":
         out.append(u"旗の位置が numbers_2026_10_21 の直後・written_precision_2026_10_27 の前でない")
     if dataclasses.fields(V.Profile)[names.index(FLAG)].default is not False:
         out.append(u"旗の既定が偽でない")
@@ -137,7 +139,8 @@ def profile_problems(V=None, fields=None, numbers_of=None):
         if getattr(b, FLAG) is not False:
             out.append(u"%s の旗が偽でない(既存の profile を変えた)" % base)
     on = sorted(k for k, p in V.PROFILES.items() if getattr(p, FLAG, False))
-    if on != ["P29", "P29E"]:
+    # 2026-11-04: RB の旗が Profile に在るときは P30E(= P29E + RB)も N の旗を引き継いで真
+    if on != ["P29", "P29E"] + (["P30E"] if "rounding_mixed_2026_11_04" in names else []):
         out.append(u"旗が真の profile が P29・P29E だけでない: %s" % on)
     s = u"売上高は1,234万円でした。"
     got_off = [(a, b) for (a, b, _v, _u, _p) in numbers_of(V.PROFILES["P28"], s)]

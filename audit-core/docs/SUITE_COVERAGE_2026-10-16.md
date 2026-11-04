@@ -32,14 +32,14 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **268 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **269 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
 | `measure/tests` | 1 |
 | `tests/adapters/kokkai` | 11 |
 | `tests/adapters/shogi` | 8 |
-| `tests/adapters/xbrl` | 35 |
+| `tests/adapters/xbrl` | 36 |
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
@@ -253,6 +253,9 @@ F5(標準ラベルを見せない書き手。20 社 × 形 1 × model 2 = 40 本
 
 **2026-11-04 に +2**(`tests/measure/test_xbrl_numfix_seal.py`・`tests/measure/test_xbrl_numfix_result.py`。
 数の読み取り N(封 `docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md`)の測定 script 3 本の封の門と結果の門。結果は `docs/XBRL_NUMBER_READER_ENGINE_RESULT_2026-11-04.md`)。266 → 268(`tests/measure` 198 → 200)。
+
+**2026-11-04 に +1**(`tests/adapters/xbrl/test_recipes_p30e.py`。
+丸め方の根拠が混ざる桁は両方の帯で照らす RB(封 `docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md`)の engine の試験。`tests/measure` は変わらない)。268 → 269(`tests/adapters/xbrl` 35 → 36)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

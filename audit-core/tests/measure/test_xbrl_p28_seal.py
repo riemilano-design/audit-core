@@ -36,6 +36,7 @@ GREP_COMMIT = "c4b8221"          # 封 §2-3 の ``git grep -l -F <sha16> c4b822
 SEAL_COMMIT_PREFIX = "c6cbfae"   # 封を足した commit
 P28E_SEAL_COMMIT_PREFIX = "7bfad77"   # 2026-11-03 追記: P28E の封(docs/XBRL_P28E_SEAL_2026-11-03.md)を足した commit。旗が真の profile の遷移(下の check_profile)
 N_SEAL_COMMIT_PREFIX = "48e7078"   # 2026-11-04 追記: 数の読み取り N の封(docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md)を足した commit。旗が真の profile の遷移(下の check_profile)
+RB_SEAL_COMMIT_PREFIX = "de23edc"   # 2026-11-04 追記: 丸め方の根拠が混ざる桁は両方の帯で照らす RB の封(docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md)を足した commit。旗が真の profile の遷移(下の check_profile)
 #: 既存の門が行頭の名前を数える変数名(封 §2-3 の言い分け)。新しい門はこれらを行頭に置かない。
 RESERVED_PREFIXES = ("ENGINE_LATER", "UNTOUCHED", "PIN_DEF", "LATER_ENGINE_COMMITS", "FROZEN_LATER", "ENGINE_TRANSITIONS", "LATER_FINGERPRINT",
                      "FINGERPRINT_", "LATER_TARGET", "LATER_FROZEN", "FROZEN_BUNDLE_AT_SEAL", "TARGET_AT_SEAL", "ENGINE_AT_SEAL", "ENGINE_AT_MEASURE", "ENGINE_DECLARED")
@@ -99,7 +100,9 @@ def check_profile():
     with_p28e = commit_of(P28E_SEAL_COMMIT_PREFIX) is not None
     # 2026-11-04 の遷移: 数の読み取り N の封 48e7078(docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md)が履歴に在るとき、P29(= P28 + N)と P29E(= P28E + N)も O の旗を引き継いで真(新しい旗は N の 1 つだけ)。
     with_n = commit_of(N_SEAL_COMMIT_PREFIX) is not None
-    assert [n for n, p in V.PROFILES.items() if getattr(p, flag)] == (["P28", "P28E"] + (["P29", "P29E"] if with_n else []) if with_p28e else ["P28"]), u"旗が真の profile が封の字(P28 だけ。P28E の封が履歴に在れば P28 と P28E。N の封が履歴に在れば P29 と P29E も)と違う"
+    # 2026-11-04 の遷移: RB の封 de23edc(docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md)が履歴に在るとき、P30E(= P29E + RB)も O の旗を引き継いで真(新しい旗は RB の 1 つだけ)。
+    with_rb = commit_of(RB_SEAL_COMMIT_PREFIX) is not None
+    assert [n for n, p in V.PROFILES.items() if getattr(p, flag)] == (["P28", "P28E"] + (["P29", "P29E"] + (["P30E"] if with_rb else []) if with_n else []) if with_p28e else ["P28"]), u"旗が真の profile が封の字(P28 だけ。P28E の封が履歴に在れば P28 と P28E。N の封が履歴に在れば P29 と P29E も。RB の封が履歴に在れば P30E も)と違う"
     if with_p28e:
         assert V.P28E == dataclasses.replace(V.P27E, name="P28E", **{flag: True}), u"P28E の作り方が封 7bfad77 の字と違う"
         assert V.PROFILES["P28E"] is V.P28E

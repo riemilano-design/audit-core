@@ -66,6 +66,7 @@ SEAL_CAND = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"    # 2026-10-30 追
 SEAL_P28 = "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"    # 2026-11-02 追記: 「その他」の主語の結び直し O を足す(下の遷移。vocabulary.py 7fbcfbf0e472f366 → 180125cd94053a94・recipes.py 52d645e713c53c1c → 89eee7eca15480c6。直前の値は測った時点の値としてここに残す)
 SEAL_P28E = "docs/XBRL_P28E_SEAL_2026-11-03.md"    # 2026-11-03 追記: P28E(= P27E + O)を足す(下の遷移。vocabulary.py 180125cd94053a94 → 2dd3f03e777224b4。直前の値は測った時点の値として SEAL_P28 の行に残す)
 SEAL_N = "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md"    # 2026-11-04 追記: 数の読み取り N(万・億の数のコンマ。P29・P29E)を足す(下の遷移。extract.py 3cf55966f12919f0 → a61da3fc3c336e80・vocabulary.py 2dd3f03e777224b4 → ca0367520f04cf87・recipes.py 89eee7eca15480c6 → f1f344a9e2bb364a。挿入だけ。直前の値は測った時点の値として上の SEAL の行に残す)
+SEAL_RB = "docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md"    # 2026-11-04 追記: 丸め方の根拠が混ざる桁は両方の帯で照らす RB(P30E)を足す(下の遷移。vocabulary.py ca0367520f04cf87 → 5b9fe3711a00fce3・recipes.py f1f344a9e2bb364a → 86fd620840807ed7・comparators.py d8706338325e725b → 9d65945efab20089。挿入だけ。直前の値は測った時点の値として上の SEAL の行に残す)
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
 LATER_TARGET = {TARGET: ("bdbaa00a419219fe", SEAL_CAND)}
@@ -101,13 +102,14 @@ UNTOUCHED = {"adapters/xbrl/__init__.py": "65474b49e6b84626",
 # comparators.py・report.py・verify_document.py は 0 行)。上の UNTOUCHED は「この封は触らない」の値(封の commit 時点)で消さない。
 # 受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ(comparators.py ほかの 11 file は遷移を持たない: 動いたら赤のまま)。
 UNTOUCHED_LATER = {"adapters/xbrl/extract.py": ("a61da3fc3c336e80", SEAL_N),
-                   "adapters/xbrl/recipes.py": ("f1f344a9e2bb364a", SEAL_N),
+                   "adapters/xbrl/recipes.py": ("86fd620840807ed7", SEAL_RB),
+                   "adapters/xbrl/comparators.py": ("9d65945efab20089", SEAL_RB),
                    "adapters/xbrl/registry_setup.py": ("d6f25750bcd73c0a", SEAL_P27),
                    # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
                    # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
                    # 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
                    # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-                   "adapters/xbrl/vocabulary.py": ("ca0367520f04cf87", SEAL_N),
+                   "adapters/xbrl/vocabulary.py": ("5b9fe3711a00fce3", SEAL_RB),
                    # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行。実行の字は変えない)。67e7639de3f5f2ad(UNTOUCHED。測った時点の値)は残す。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
                    # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
                    "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", SEAL_CAND)}
@@ -125,13 +127,13 @@ FROZEN_COUNT_AT_SEAL = 37
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 束ねた指紋が 498993e2…(P26 の段 1。残す)から 5aba7749… に動いた(file の数 16 は動かない)。受け入れるのは、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が履歴に在り、値が段 2 の後の値のときだけ。
 # 0e51211a8aed2151(P27 の段 2) は残す(測った時点の値。束ねた指紋 adapter_xbrl_py_sha256 の頭 16 字)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 92326a0f4dcefd21。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("f1d97a2abe447a09df3a48d905056b08261089bec32e6b920bf2250a2b7053b3", SEAL_N)}
+LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("4ea77c93b9521e634dc0ec2c445917e86793e6f6e8460ac9d69a302d925c2611", SEAL_RB)}
 # 2026-10-21 実装の便: frozen_bundle に新しい世代(5c4da2e2…)。本数は 37 のまま(module の中身だけが動く)。封の commit 時点の世代(FROZEN_BUNDLE_AT_SEAL)は消さない。
 # 2026-10-22(P26 の段 1): frozen_bundle の世代がもう 1 つ増えた(a97ecf7c…。本数は 37 のまま)。5c4da2e2…(この封の実装の便の世代)は消さない。
 # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): frozen_bundle の世代がもう 1 つ増えた(26b52706…。本数は 37 のまま)。a97ecf7c…(P26 の段 1 の世代)は消さない。
 # 29fd733c8988164a(P27 の段 2) は残す(測った時点の値。frozen_bundle の束ねた sha の頭 16 字)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 030455282c89661b。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-LATER_FROZEN = {"bundle": ("31bfb9b6e2288b2e48e53e981fa40da7a404cf4f661fd8ff35315c12d8a39acc", SEAL_N)}
+LATER_FROZEN = {"bundle": ("77a9c999e69080ecda3184df7dbf8d14ff377d27dd5afa423efeabb1697e3d42", SEAL_RB)}
 FROZEN_BUNDLE_FIX = "5c4da2e2ff3f30b7dcb6ebcbc84a5c68b074e8dc495f2d260551d7e10a4ce66c"
 # 名簿に jpigp が入る遷移: 封の commit 時点は名簿 2 行・README に jpigp 無し。後は {"roster": (行, 封の path), "readme_has_jpigp": True}
 # 2026-10-21 実装の便: 名簿に jpigp の 1 行、README に jpigp の取り方。封の commit 時点(名簿 2 行・README に jpigp 無し)は test_8 の docstring と上の定数が残す。
@@ -468,11 +470,13 @@ class SealTest(unittest.TestCase):
             self.assertEqual(got, want, u"**%s が動いている(この封は触らない)**" % rel)
         # 遷移を持つのは P26 の封が書き換えた engine の 4 file だけ(comparators.py・report.py・verify_document.py ほかは遷移を持たない)
         # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): verify_document.py だけは docstring の 1 行の直しとして封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md が遷移を宣言した
-        self.assertEqual(sorted(UNTOUCHED_LATER), ["adapters/xbrl/extract.py", "adapters/xbrl/recipes.py", "adapters/xbrl/registry_setup.py", "adapters/xbrl/verify_document.py", "adapters/xbrl/vocabulary.py"])
+        # 2026-11-04(RB): 封 SEAL_RB §2-3 が comparators.py の遷移(梯子の mode "both" の 2 行の挿入だけ。d8706338325e725b → 9d65945efab20089)を宣言した: 遷移を持つのは 6 file
+        self.assertEqual(sorted(UNTOUCHED_LATER), ["adapters/xbrl/comparators.py", "adapters/xbrl/extract.py", "adapters/xbrl/recipes.py", "adapters/xbrl/registry_setup.py", "adapters/xbrl/verify_document.py", "adapters/xbrl/vocabulary.py"])
         # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
         self.assertEqual(UNTOUCHED_LATER["adapters/xbrl/verify_document.py"], ("6c76c8ade6c7b1c8", SEAL_CAND))
-        for rel in ("comparators", "report"):
+        for rel in ("report",):      # 2026-11-04: comparators は RB の遷移を持つ(上)
             self.assertNotIn("adapters/xbrl/%s.py" % rel, UNTOUCHED_LATER)
+        self.assertEqual(UNTOUCHED_LATER["adapters/xbrl/comparators.py"], ("9d65945efab20089", SEAL_RB))
         # R2-7 が名指す 7 つ(core/ は fingerprint の core_py_sha256 が縛る)
         for rel in ("report", "verify_document", "vocabulary", "recipes", "registry_setup", "comparators"):
             self.assertIn("adapters/xbrl/%s.py" % rel, UNTOUCHED)

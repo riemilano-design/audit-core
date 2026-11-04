@@ -650,11 +650,15 @@ P28E_SEAL_REL = "docs/XBRL_P28E_SEAL_2026-11-03.md"
 # vocabulary.py は 21 → 28 行(旗 1 つ・P29・P29E・PROFILES の登録 +7。削除は 1 のまま、2dd3f03e777224b4 → ca0367520f04cf87)、recipes.py は 65 → 67 行・削除 0(旗の 2 行、89eee7eca15480c6 → f1f344a9e2bb364a)。
 # 直前の値(vocabulary.py 21 行・recipes.py 65 行)は測った時点の値としてここに残す。受け入れるのは、その封が履歴に在るときだけ(下の engine_ok)。
 N_SEAL_REL = "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md"
-ENGINE_DECL = {"adapters/xbrl/vocabulary.py": ("ca0367520f04cf87", 28, 1), "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", 12, 2),
-               "adapters/xbrl/report_customer.py": ("bdbaa00a419219fe", 22, 1), "adapters/xbrl/recipes.py": ("f1f344a9e2bb364a", 67, 0),
-               "adapters/xbrl/extract.py": ("a61da3fc3c336e80", 35, 0)}
+# 2026-11-04(RB): 封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §2-3 が宣言した遷移(司令塔の決定 2026-11-04)。vocabulary.py は 28 → 35 行(旗 1 つ・梯子の "both" の 2 行・P30E・PROFILES の登録 +7、削除は 1 のまま、ca0367520f04cf87 → 5b9fe3711a00fce3)、
+# recipes.py は 67 → 85 行・削除 0(build_raw_claims の混ざる桁の block +18、f1f344a9e2bb364a → 86fd620840807ed7)、comparators.py は 0 → 2 行・削除 0(梯子の "both" の 2 行、d8706338325e725b → 9d65945efab20089)。
+# 直前の値(vocabulary.py 28 行・recipes.py 67 行)は測った時点の値としてここに残す。受け入れるのは、その封が履歴に在るときだけ(下の engine_ok)。
+RB_SEAL_REL = "docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md"
+ENGINE_DECL = {"adapters/xbrl/vocabulary.py": ("5b9fe3711a00fce3", 35, 1), "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", 12, 2),
+               "adapters/xbrl/report_customer.py": ("bdbaa00a419219fe", 22, 1), "adapters/xbrl/recipes.py": ("86fd620840807ed7", 85, 0),
+               "adapters/xbrl/extract.py": ("a61da3fc3c336e80", 35, 0), "adapters/xbrl/comparators.py": ("9d65945efab20089", 2, 0)}
 #: 束ねた指紋(adapter_xbrl_py_sha256)の、候補の欄の後の値。EXPECT["fingerprint"](この結果が測った時点の値)は残す。
-ENGINE_FP_LATER = "f1d97a2abe447a09df3a48d905056b08261089bec32e6b920bf2250a2b7053b3"      # 2026-11-04: N の後の値(封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §2-3)。直前の値(2026-11-03 の P28E の後) e23f982f072dbb4282b22f9feeb9f9f6eb2c123a9d69c96c3974ac021b9ef11d は測った時点の値としてここに残す。直前の値(2026-11-02 の「その他」の主語の結び直しの後) d72c0cfb7cd74761144a935867a6ed798c952e2e04303b894d98ab358265ad7c は測った時点の値としてここに残す。直前の値(候補の欄の後) dc7e35fbfb0f56ca6410bb7bfa8b8a366cc3ec19d6614c4cb866400cd9994ff6 は測った時点の値としてここに残す
+ENGINE_FP_LATER = "4ea77c93b9521e634dc0ec2c445917e86793e6f6e8460ac9d69a302d925c2611"      # 2026-11-04: RB の後の値(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §2-3)。直前の値(2026-11-04 の N の後) f1d97a2abe447a09df3a48d905056b08261089bec32e6b920bf2250a2b7053b3 は測った時点の値としてここに残す。(N の封は docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §2-3)。直前の値(2026-11-03 の P28E の後) e23f982f072dbb4282b22f9feeb9f9f6eb2c123a9d69c96c3974ac021b9ef11d は測った時点の値としてここに残す。直前の値(2026-11-02 の「その他」の主語の結び直しの後) d72c0cfb7cd74761144a935867a6ed798c952e2e04303b894d98ab358265ad7c は測った時点の値としてここに残す。直前の値(候補の欄の後) dc7e35fbfb0f56ca6410bb7bfa8b8a366cc3ec19d6614c4cb866400cd9994ff6 は測った時点の値としてここに残す
 
 
 def engine_ok():
@@ -663,6 +667,7 @@ def engine_ok():
     assert git("log", "--diff-filter=A", "--format=%H", "--", P28_SEAL_REL).stdout.split(), u"遷移を宣言した封が履歴に無い: " + P28_SEAL_REL
     assert git("log", "--diff-filter=A", "--format=%H", "--", P28E_SEAL_REL).stdout.split(), u"遷移を宣言した封が履歴に無い: " + P28E_SEAL_REL
     assert git("log", "--diff-filter=A", "--format=%H", "--", N_SEAL_REL).stdout.split(), u"遷移を宣言した封が履歴に無い: " + N_SEAL_REL
+    assert git("log", "--diff-filter=A", "--format=%H", "--", RB_SEAL_REL).stdout.split(), u"遷移を宣言した封が履歴に無い: " + RB_SEAL_REL
     from adapters.xbrl import vocabulary as V
     assert V.DEFAULT_PROFILE == "P27", V.DEFAULT_PROFILE
     for rel, (want, ins_max, dele) in sorted(ENGINE_DECL.items()):

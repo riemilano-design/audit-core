@@ -28,7 +28,9 @@ ENGINE_SHA = {"core/py/audit_core/verify.py": "d29b21dccec8af24",
 SEAL_DEFAULT_P27 = "docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md"
 SEAL_CAND = "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"    # 2026-10-30 追記: 候補の欄を足す(下の遷移)
 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-VD_DOCSTRING_DECLARED = {"adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", SEAL_CAND)}
+SEAL_RB = "docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md"    # 2026-11-04 追記: 丸め方の根拠が混ざる桁は両方の帯で照らす RB(P30E)を足す(下の遷移。comparators.py d8706338325e725b → 9d65945efab20089。梯子の mode "both" の 2 行の挿入だけ。直前の値は測った時点の値として上の ENGINE_SHA に残す)
+VD_DOCSTRING_DECLARED = {"adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", SEAL_CAND),
+                         "adapters/xbrl/comparators.py": ("9d65945efab20089", SEAL_RB)}
 
 
 def text(p):

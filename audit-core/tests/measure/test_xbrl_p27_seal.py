@@ -65,7 +65,11 @@ P28E_SEAL_REL = "docs/XBRL_P28E_SEAL_2026-11-03.md"
 #: vocabulary.py に旗 1 つ・P29・P29E(2dd3f03e777224b4 → ca0367520f04cf87)、recipes.py に旗の 2 行(89eee7eca15480c6 → f1f344a9e2bb364a)を挿入だけで足した。直前の値は測った時点の値としてここに残す。
 #: 受け入れるのは、N の封も履歴に在るときだけ(下の p28_declared)。
 N_SEAL_REL = "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md"
-P28_AFTER16 = {"vocabulary.py": "ca0367520f04cf87", "recipes.py": "f1f344a9e2bb364a", "extract.py": "a61da3fc3c336e80"}
+#: 2026-11-04(RB): 封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §2-3 が宣言した遷移(司令塔の決定 2026-11-04)。vocabulary.py に旗 1 つ・梯子の "both" の 2 行・P30E(ca0367520f04cf87 → 5b9fe3711a00fce3。+7)、
+#: recipes.py に build_raw_claims の混ざる桁の block(f1f344a9e2bb364a → 86fd620840807ed7。+18)、comparators.py に梯子の "both" の 2 行(d8706338325e725b → 9d65945efab20089。+2)を挿入だけで足した。直前の値は測った時点の値としてここに残す。
+#: 受け入れるのは、RB の封も履歴に在るときだけ(下の p28_declared)。comparators.py は P27 の封の「0 行」(UNCHANGED_ENGINE)から、この遷移の分(+2・削除 0)だけ動いてよい。
+RB_SEAL_REL = "docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md"
+P28_AFTER16 = {"vocabulary.py": "5b9fe3711a00fce3", "recipes.py": "86fd620840807ed7", "extract.py": "a61da3fc3c336e80", "comparators.py": "9d65945efab20089"}
 #: 既存の門が行頭の名前を数える変数名(封 §2-3 の言い分け)。新しい門はこれらを行頭に置かない。
 RESERVED_PREFIXES = ("ENGINE_LATER", "UNTOUCHED", "PIN_DEF", "LATER_ENGINE_COMMITS", "FROZEN_LATER", "ENGINE_TRANSITIONS", "LATER_FINGERPRINT",
                      "FINGERPRINT_", "LATER_TARGET", "LATER_FROZEN", "FROZEN_BUNDLE_AT_SEAL", "TARGET_AT_SEAL", "ENGINE_AT_SEAL")
@@ -100,6 +104,8 @@ def p28_declared():
     if not added or not git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + P28E_SEAL_REL).stdout.split():    # 2026-11-03: P28E の封も履歴に在るとき
         return False
     if not git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + N_SEAL_REL).stdout.split():    # 2026-11-04: N の封も履歴に在るとき
+        return False
+    if not git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + RB_SEAL_REL).stdout.split():    # 2026-11-04: RB の封も履歴に在るとき
         return False
     if dict((n, sha16_of("adapters/xbrl/" + n)) for n in P28_AFTER16) != P28_AFTER16:
         return False
@@ -263,7 +269,9 @@ def check_insertion_only(numstat_text, allowed_deletions=None):
         if rel.startswith("core/") or rel.startswith("adapters/xbrl/"):
             if rel.startswith("adapters/xbrl/"):
                 name = os.path.basename(rel)
-                assert name in ENGINE5 or rel in allowed, u"**封の範囲の外の engine の file が動いている: %s**" % p
+                # 2026-11-04(RB): 封 RB_SEAL_REL §2-3 が comparators.py に梯子の mode "both" の 2 行(+2 行・削除 0)を宣言した。封が履歴に在り作業木が宣言の値のとき(p28_declared)だけ、挿入 2 行以内で許す
+                rb_ok = name == "comparators.py" and p28_declared() and a <= 2
+                assert name in ENGINE5 or rel in allowed or rb_ok, u"**封の範囲の外の engine の file が動いている: %s**" % p
             else:
                 raise AssertionError(u"**core/ が動いている: %s**" % p)
         elif rel.startswith("adapters/"):
@@ -348,7 +356,7 @@ class EngineDiffTest(unittest.TestCase):
         # 削除は累計 vocabulary.py 1・verify_document.py 2・report_customer.py 1(CLAIM_FIELDS の 1 行・理由の欄の 1 行が加わる)。
         extra = (13 if cand else 8) if declared else 0
         p28 = p28_declared()
-        extra_vocab, extra_recipes, extra_extract = (18, 67, 35) if p28 else (0, 0, 0)       # 2026-11-04: 数の読み取り N(封 N_SEAL_REL §2-3)で vocabulary.py +7(11 → 18)・recipes.py +2(65 → 67)・extract.py +35(削除は 0)。2026-11-02: 「その他」の主語の結び直し(封 P28_SEAL_REL §2-3)。vocabulary.py +6・recipes.py +65(削除は 0)。2026-11-03: P28E(封 P28E_SEAL_REL §2-3)で vocabulary.py +5 を足して +11
+        extra_vocab, extra_recipes, extra_extract = (25, 85, 35) if p28 else (0, 0, 0)       # 2026-11-04: RB(封 RB_SEAL_REL §2-3)で vocabulary.py +7(18 → 25)・recipes.py +18(67 → 85)・comparators.py +2(下の test_8)。同日の数の読み取り N(封 N_SEAL_REL §2-3)で vocabulary.py +7(11 → 18)・recipes.py +2(65 → 67)・extract.py +35(削除は 0)。2026-11-02: 「その他」の主語の結び直し(封 P28_SEAL_REL §2-3)。vocabulary.py +6・recipes.py +65(削除は 0)。2026-11-03: P28E(封 P28E_SEAL_REL §2-3)で vocabulary.py +5 を足して +11
         self.assertEqual(sum(CAND_DELETIONS.values()) if cand else (sum(DEFAULT_P27_DELETIONS.values()) if declared else 0), sum(d for _a, d in rows.values()))
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 10)
         self.assertLessEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 20 + extra + extra_vocab)
@@ -371,6 +379,10 @@ class EngineDiffTest(unittest.TestCase):
             if name == "verify_document.py" and default_p27_declared():
                 # 2026-10-28: docstring の 1 行(+1 行・-1 行)だけ。他の 3 file は 0 行のまま
                 self.assertEqual("1\t1\taudit-core/adapters/xbrl/verify_document.py", got, name)
+                continue
+            if name == "comparators.py" and p28_declared():
+                # 2026-11-04: RB(封 RB_SEAL_REL §2-3)が梯子の mode "both" の 2 行を挿入だけで足した(+2 行・-0 行)。他の 3 file は 0 行のまま
+                self.assertEqual("2\t0\taudit-core/adapters/xbrl/comparators.py", got, name)
                 continue
             self.assertEqual("", got, name)
         self.assertEqual("", git("diff", self.s2, "--numstat", "--", "audit-core/core").stdout.strip())

@@ -66,15 +66,18 @@ P28E_SEAL_REL = "docs/XBRL_P28E_SEAL_2026-11-03.md"
 #: 2026-11-04(数の読み取り N): 封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §2-3 が宣言した遷移(extract.py・vocabulary.py・recipes.py への挿入だけ)。表が持つ測った時点の値は、vocabulary.py 180125cd94053a94・
 #: recipes.py 89eee7eca15480c6・extract.py 3cf55966f12919f0。作業木の値が宣言の値で、P28E の封と N の封の両方が履歴に在るときだけ、測った時点の値として表に出す。
 N_SEAL_REL = "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md"
-P28E_DECLARED_SHA16 = {"adapters/xbrl/vocabulary.py": ("ca0367520f04cf87", "180125cd94053a94"),
-                       "adapters/xbrl/recipes.py": ("f1f344a9e2bb364a", "89eee7eca15480c6"),
+#: 2026-11-04(RB): 封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §2-3 が宣言した遷移(recipes.py・vocabulary.py・comparators.py への挿入だけ)。作業木の値は vocabulary.py 5b9fe3711a00fce3・recipes.py 86fd620840807ed7(N の後の値 ca0367520f04cf87・f1f344a9e2bb364a は測った時点の値としてここに残す)。
+#: 表が持つ測った時点の値(180125cd94053a94・89eee7eca15480c6・3cf55966f12919f0)は変えない。P28E の封・N の封・RB の封の 3 つが履歴に在るときだけ、測った時点の値として表に出す。
+RB_SEAL_REL = "docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md"
+P28E_DECLARED_SHA16 = {"adapters/xbrl/vocabulary.py": ("5b9fe3711a00fce3", "180125cd94053a94"),
+                       "adapters/xbrl/recipes.py": ("86fd620840807ed7", "89eee7eca15480c6"),
                        "adapters/xbrl/extract.py": ("a61da3fc3c336e80", "3cf55966f12919f0")}
 
 
 def measured_sha16(rel):
     got = sha256_rel(rel)[:16]
     decl = P28E_DECLARED_SHA16.get(rel)
-    if decl and got == decl[0] and all(subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", PREFIX + rel_], cwd=REPO, capture_output=True, text=True).stdout.split() for rel_ in (P28E_SEAL_REL, N_SEAL_REL)):
+    if decl and got == decl[0] and all(subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", PREFIX + rel_], cwd=REPO, capture_output=True, text=True).stdout.split() for rel_ in (P28E_SEAL_REL, N_SEAL_REL, RB_SEAL_REL)):
         return decl[1]
     return got
 

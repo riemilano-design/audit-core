@@ -55,6 +55,8 @@ def _match_value(fact_value, target, unit, mode=None, magnitude_truncate=False):
     ``test_lineage`` が ``mode`` ごとに照合する。
     """
 
+    if mode == "both":   # RB(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §0-2 の 2): 両方の帯 = 写し元の梯子(None)と同じ
+        mode = None
     for sign_mode, fv in (("", fact_value), ("abs", abs(fact_value))):
         t = abs(target) if sign_mode else target
         if mode in (None, "round") and abs(fv - t) <= unit / 2:

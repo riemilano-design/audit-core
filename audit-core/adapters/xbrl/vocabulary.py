@@ -188,6 +188,8 @@ def match_value(fact_value, target, unit, mode=None, magnitude_truncate=False):
     ``-unit/2 .. +unit/2``、``"truncate"`` なら ``0 .. +unit`` に狭まる。
     """
 
+    if mode == "both":   # RB(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §0-2 の 2): 両方の帯 = 写し元の梯子(None)と同じ
+        mode = None
     for sign_mode, fv in (("", fact_value), ("abs", abs(fact_value))):
         t = abs(target) if sign_mode else target
         if mode in (None, "round") and abs(fv - t) <= unit / 2:
@@ -441,6 +443,8 @@ class Profile:
     numbers_2026_10_21: bool = False
     # N(封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §1): 万・億の数のコンマ(「1,234万円」「12億3,456万円」「1万2,345円」)を 1 つの数に読む(extract.iter_numbers_2026_11_04)。偽(既定)なら 1 行も変わらない。
     numbers_man_comma_2026_11_04: bool = False
+    # RB(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §1): 丸め方の根拠が桁ごとに round と truncate で混ざる桁の数の claim を、両方の帯(mode "both")で照らし直す。偽(既定)なら 1 行も変わらない。
+    rounding_mixed_2026_11_04: bool = False
     # P27(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-5): 外部の数の文のための直しの旗 5 つ。どれも偽(既定)なら P1〜P26 の振る舞いは 1 行も変わらない。
     # A 書かれた精度で照合する(extract.iter_numbers_2026_10_27 と recipes._direct_value_claim の scale)。
     written_precision_2026_10_27: bool = False
@@ -829,3 +833,6 @@ P29 = dataclasses.replace(P28, name="P29", numbers_man_comma_2026_11_04=True)
 PROFILES["P29"] = P29
 P29E = dataclasses.replace(P28E, name="P29E", numbers_man_comma_2026_11_04=True)
 PROFILES["P29E"] = P29E
+# P30E = P29E + RB(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §0-2 の 3)。外部の文の E 系だけ(P30 は作らない)。既定にしない(DEFAULT_PROFILE は P27 のまま)。
+P30E = dataclasses.replace(P29E, name="P30E", rounding_mixed_2026_11_04=True)
+PROFILES["P30E"] = P30E

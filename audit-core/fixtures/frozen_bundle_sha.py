@@ -165,6 +165,13 @@ FROZEN_BUNDLE_GENERATIONS = (
      "verify_document.py・comparators.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
      "人間の GO 2026-11-04「寝るから全て君に任せる進めて」(旗 1 つ・profile 2 つ・挿入だけ。既定にしない)、封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md(commit 48e7078)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("77a9c999e69080ecda3184df7dbf8d14ff377d27dd5afa423efeabb1697e3d42",
+     "2026-11-04 feature/audit-core-final-eval-8(丸め方の根拠が混ざる桁は両方の帯で照らす RB): recipes.py の build_raw_claims に混ざる桁の block(+18 行・-0 行。_first_2026_11_04 の 1 行と 2 周目の後ろの block)、"
+     "vocabulary.py に旗 rounding_mixed_2026_11_04・match_value の梯子の mode \"both\" の 2 行・P30E・PROFILES の登録(+7 行・-0 行。DEFAULT_PROFILE は P27 のまま)、"
+     "comparators.py の _match_value の梯子に mode \"both\" の 2 行(+2 行・-0 行)を足した。"
+     "verify_document.py・extract.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
+     "人間の問い §5 の 1 への返事「君に任せる課題解決に向けて進めて」(2026-11-04)= 司令塔が選んだ (イ)(旗 1 つ・profile 1 つ・挿入だけ。既定にしない)、封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md(commit de23edc)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

@@ -144,7 +144,7 @@ class ProfileTest(unittest.TestCase):
         self.assertTrue(getattr(V.P29E, KEY))
         for p in (V.P27, V.P27E, V.P28, V.P28E):
             self.assertFalse(getattr(p, KEY), p.name)
-        self.assertEqual(["P29", "P29E"], sorted(n for n, p in V.PROFILES.items() if getattr(p, KEY)))
+        self.assertEqual(["P29", "P29E", "P30E"], sorted(n for n, p in V.PROFILES.items() if getattr(p, KEY)))
 
     def test_registered_and_composed(self):
         self.assertIs(V.PROFILES["P29"], V.P29)
@@ -160,7 +160,9 @@ class ProfileTest(unittest.TestCase):
     def test_flag_position(self):
         order = [f.name for f in dataclasses.fields(V.Profile)]
         self.assertEqual(order.index("numbers_2026_10_21") + 1, order.index(KEY))
-        self.assertEqual(order.index(KEY) + 1, order.index("written_precision_2026_10_27"))
+        # 2026-11-04 RB(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §0-2 の 3)が旗 rounding_mixed_2026_11_04 をこの旗の直後に足した: この旗 → RB の旗 → written_precision_2026_10_27 の順
+        self.assertEqual(order.index(KEY) + 1, order.index("rounding_mixed_2026_11_04"))
+        self.assertEqual(order.index(KEY) + 2, order.index("written_precision_2026_10_27"))
 
     def test_flag_off_p29_equals_p28_except_name(self):
         off = dataclasses.replace(V.P29, **{KEY: False})
