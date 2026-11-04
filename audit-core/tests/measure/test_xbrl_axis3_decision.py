@@ -100,6 +100,7 @@ LATER_ENGINE_COMMITS = {
     "6ac3911": "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md",   # 「その他」の主語の結び直し O ― engine(recipes.py +65、vocabulary.py +6: 旗 other_subject_2026_11_02 と P28。既定は P27 のまま。封 c6cbfae。宣言 2026-11-03)
     "526a865": "docs/XBRL_P28E_SEAL_2026-11-03.md",                 # 外部の数の文の profile P28E = P27E + O ― engine(vocabulary.py +5/−0: P28E と日付つきの注記。新しい旗なし。既定は P27 のまま。封 7bfad77。宣言 2026-11-03)
     "c43517d": "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md",  # 数の読み取り N(万・億のコンマ)― engine(extract.py +35/−0: iter_numbers_2026_11_04、recipes.py +2/−0: _numbers_of の旗の 2 行、vocabulary.py +7/−0: 旗 numbers_man_comma_2026_11_04 と P29・P29E。既定は P27 のまま。封 48e7078。宣言 2026-11-04)
+    "d81d35f": "docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md",  # 丸め方の根拠が混ざる桁は両方の帯 RB ― engine(recipes.py +18/−0: build_raw_claims の 3 周目 "both"、vocabulary.py +7/−0: 旗・match_value の "both" = None・P30E、comparators.py +2/−0: _match_value の同じ 2 行。既定は P27 のまま。宣言 2026-11-04)
 }
 
 
