@@ -81,6 +81,8 @@ FACTS_ROWS_2026_11_04 = (u"L-58", u"D-35")
 FACTS_ROWS_2026_11_04B = (u"L-59", u"D-36")
 # 2026-11-05: 注入の仕掛けの数の読み H(切り替え yen_scan_2026_11_05)の便の行。P22・P26 の字は持たない(L-60・D-37・P-45 とも)が、前例と同じ形で遷移の検査に並べる
 FACTS_ROWS_2026_11_05 = (u"L-60", u"D-37")
+# 2026-11-05(2): AI の文への注入の型を広げる J(T2_UNIT・T6_PRIOR・T7_ROUND)の便の行。P22・P26 の字は持たない(L-61・D-38・P-46 とも)が、前例と同じ形で遷移の検査に並べる
+FACTS_ROWS_2026_11_05B = (u"L-61", u"D-38")
 STEP_NAMES = (u"S-1", u"S-2", u"S-3", u"S-4", u"S-5", u"S-6", u"S-7", u"S-8", u"S-9", u"S-10", u"S-11", u"S-12")
 
 #: **字で留める**(測った事実。定数から作らない)。変えたら記録も文書も作り直す。
@@ -790,7 +792,9 @@ class RecordTest(unittest.TestCase):
             self.assertIn(len(present_1104b), (0, len(FACTS_ROWS_2026_11_04B)), u"2026-11-04 の便(2。丸め方の根拠が混ざる桁 RB)の行が一部だけ在る(中途の遷移)")
             present_1105 = [i for i in FACTS_ROWS_2026_11_05 if any(l.startswith(u"| %s |" % i) for l in lines)]
             self.assertIn(len(present_1105), (0, len(FACTS_ROWS_2026_11_05)), u"2026-11-05 の便(注入の仕掛けの数の読み H)の行が一部だけ在る(中途の遷移)")
-            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b) + tuple(present_1101) + tuple(present_1103) + tuple(present_1103b) + tuple(present_1104) + tuple(present_1104b) + tuple(present_1105))
+            present_1105b = [i for i in FACTS_ROWS_2026_11_05B if any(l.startswith(u"| %s |" % i) for l in lines)]
+            self.assertIn(len(present_1105b), (0, len(FACTS_ROWS_2026_11_05B)), u"2026-11-05 の便(2。AI の文への注入の型を広げる J)の行が一部だけ在る(中途の遷移)")
+            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b) + tuple(present_1101) + tuple(present_1103) + tuple(present_1103b) + tuple(present_1104) + tuple(present_1104b) + tuple(present_1105) + tuple(present_1105b))
             stray = [l[:60] for l in lines if (u"P22" in l or u"P26" in l) and not l.startswith(row_heads) and u"2026-10-28" not in l]
             self.assertEqual(stray, [], u"遷移の外の行に P22・P26 の字がある")
         n = 0
