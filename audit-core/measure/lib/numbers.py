@@ -65,6 +65,24 @@ _ALL_UNITS = sorted(
     reverse=True,
 )
 
+# ---- 規則 H(封 docs/XBRL_INJECT_SCAN_FIX_SEAL_2026-11-05.md §1)---------------
+# 注入の仕掛けの数の読みに「万円」と「億+万などの複合の数」を足す。切り替えは
+# 1 つ。既定は偽で、偽のとき ``scan`` / ``_unit_after`` / ``unit_family`` /
+# ``render_value`` の出力は 1 byte も変えない(``select`` を記録と突き合わせて
+# 再計算する門と前の便の記録を壊さないため)。真にするのは H の測定 script の
+# process の中だけ。真のとき: 複合 token(12億3,456万円・1,234万円・5兆1,234億円)
+# を 1 つの token にし、万円 を単位・金額の族に数え、複合 token を位の構造で描く。
+yen_scan_2026_11_05 = False
+
+_YEN_SCAN_EXP = {"兆": 12, "億": 8, "万": 4}
+_YEN_SCAN_UNIT = {"億": "億円", "万": "万円"}
+_YEN_SCAN_X = r"(\d{1,3}(?:,\d{3})+|\d+)"
+YEN_SCAN_RE = re.compile(
+    r"(?<![0-9.,])(?=\d)(?:" + _YEN_SCAN_X + r"兆)?(?:" + _YEN_SCAN_X + r"億)?(?:" + _YEN_SCAN_X + r"万)?円"
+)
+# 元の集合 + 万円、長い順(``_unit_after`` が真のときだけ使う)。
+_ALL_UNITS_YEN_SCAN = sorted(set(_ALL_UNITS) | {"万円"}, key=len, reverse=True)
+
 
 def normalize_digits(text):
     """Fold full-width digits/punctuation to ASCII, preserving length.
@@ -87,6 +105,8 @@ def normalize_digits(text):
 
 
 def unit_family(unit):
+    if yen_scan_2026_11_05 and unit == "万円":
+        return "money"
     for fam, members in UNIT_FAMILIES.items():
         if unit in members:
             return fam
@@ -110,6 +130,10 @@ def _unit_after(text, pos):
     for bad in NON_UNIT_AFTER:
         if rest.startswith(bad):
             return None, pos
+    if yen_scan_2026_11_05:
+        for u in _ALL_UNITS_YEN_SCAN:
+            if rest.startswith(u):
+                return u, gap + len(u)
     for u in _ALL_UNITS:
         if rest.startswith(u):
             return u, gap + len(u)
@@ -142,6 +166,9 @@ class NumberToken(object):
     """
 
     __slots__ = ("start", "end", "text", "value", "unit", "unit_end", "sentence_index", "has_comma", "has_frac")
+    # 規則 H: 複合 token だけが ((位の字, その group にコンマがあるか), ...) を持つ。既存の token は None。
+    # ``as_dict`` には出さない。
+    __slots__ = __slots__ + ("groups",)
 
     def __init__(self, start, end, text, value, unit, unit_end, sentence_index, has_comma, has_frac):
         self.start = start
@@ -153,6 +180,7 @@ class NumberToken(object):
         self.sentence_index = sentence_index
         self.has_comma = has_comma
         self.has_frac = has_frac
+        self.groups = None
 
     def as_dict(self):
         return {
@@ -321,6 +349,8 @@ def scan(text):
                 has_frac=frac is not None,
             )
         )
+    if yen_scan_2026_11_05:
+        tokens = _yen_scan_merge(text, spans, tokens)
     return tokens
 
 
@@ -331,6 +361,8 @@ def render_value(value, like):
     an injected error must differ from the original in its *value*, not in a
     typographic tell that would let the decomposer spot it for free.
     """
+    if getattr(like, "groups", None) is not None:
+        return render_groups(value, like)
     if like.has_frac:
         places = len(like.text.split(".")[1])
         s = "%.*f" % (places, value)
@@ -348,3 +380,84 @@ def render_value(value, like):
         body = ",".join(chunks) + (("." + rest) if rest else "")
         s = ("-" if neg else "") + body
     return s
+
+
+def _yen_scan_tokens(text, spans):
+    """規則 H: 兆・億・万 の group が「万を含む」または「2 つ以上」の「円」の金額を
+    1 つの :class:`NumberToken` にして返す(億だけ・兆だけの 1 group は作らない =
+    既存の token のまま)。値は数詞の仕組みから決める: 各 group の数 ×
+    10^(その位の指数 - いちばん小さい書かれた位の指数) の和(整数で足して float)。"""
+    out = []
+    for m in YEN_SCAN_RE.finditer(text):
+        groups = [(ch, i) for i, ch in enumerate(("兆", "億", "万"), 1) if m.group(i) is not None]
+        if not groups:
+            continue
+        if not (any(ch == "万" for ch, _i in groups) or len(groups) >= 2):
+            continue
+        smallest = min(_YEN_SCAN_EXP[ch] for ch, _i in groups)
+        total = 0
+        for ch, i in groups:
+            total += int(m.group(i).replace(",", "")) * 10 ** (_YEN_SCAN_EXP[ch] - smallest)
+        start = m.start(groups[0][1])
+        end = m.end(groups[-1][1])
+        si = next((k for k, (a, b) in enumerate(spans) if a <= start < b), -1)
+        tok = NumberToken(
+            start=start,
+            end=end,
+            text=text[start:end],
+            value=float(total),
+            unit=_YEN_SCAN_UNIT[groups[-1][0]],
+            unit_end=m.end(),
+            sentence_index=si,
+            has_comma="," in text[start:end],
+            has_frac=False,
+        )
+        tok.groups = tuple((ch, "," in m.group(i)) for ch, i in groups)
+        out.append(tok)
+    return out
+
+
+def _yen_scan_merge(text, spans, tokens):
+    """既存の token のうち複合 token の [start, unit_end) に start がある物を捨て、
+    複合 token を足して位置順に返す。"""
+    compound = _yen_scan_tokens(text, spans)
+    if not compound:
+        return tokens
+    kept = [t for t in tokens if not any(c.start <= t.start < c.unit_end for c in compound)]
+    return sorted(kept + compound, key=lambda t: t.start)
+
+
+def _yen_scan_group(q, comma):
+    s = "%d" % q
+    if comma:
+        chunks = []
+        while len(s) > 3:
+            chunks.insert(0, s[-3:])
+            s = s[:-3]
+        chunks.insert(0, s)
+        s = ",".join(chunks)
+    return s
+
+
+def render_groups(value, like):
+    """規則 H: ``like`` の位の構造(group の並び)で ``value``(like の単位の数)を描く。
+
+    ``value`` を整数に丸め、大きい位から divmod(位の比 = 10^(指数差))で分け、
+    いちばん小さい group に余りを全部入れる。先頭の 0 の group は落とす。先頭以外の
+    0 の group は「0」で描く。group ごとに like の同じ位の group と同じコンマの
+    有無(ありなら 3 桁区切り、なしなら区切らない)。単位の字は描かない。"""
+    smallest = min(_YEN_SCAN_EXP[ch] for ch, _c in like.groups)
+    rem = int(round(value))
+    parts = []
+    for i, (ch, comma) in enumerate(like.groups):
+        if i == len(like.groups) - 1:
+            q = rem
+        else:
+            q, rem = divmod(rem, 10 ** (_YEN_SCAN_EXP[ch] - smallest))
+        parts.append((ch, q, comma))
+    while len(parts) > 1 and parts[0][1] == 0:
+        parts.pop(0)
+    out = ""
+    for j, (ch, q, comma) in enumerate(parts):
+        out += _yen_scan_group(q, comma) + (ch if j < len(parts) - 1 else "")
+    return out
