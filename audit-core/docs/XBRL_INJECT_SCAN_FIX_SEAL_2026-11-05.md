@@ -101,3 +101,9 @@ K-1〜K-4 を全部満たせば「採用」= 切り替えは既定 偽のまま 
 1. この封を commit(文書だけ)→ 実装(step-implementer、worktree。`measure/lib` 2 file + `measure/tests/test_inject.py`)→ 試験と変異 → 独立監査 GO → commit(パス指定)。
 2. 測定 script 1 本と門 2 本 → 監査 GO → commit → 記録 2 つ → 結果の文書 → 監査 GO → commit → 台帳の行。
 3. 使わない: `git add -A`・`stash`・`reset`・`checkout`。cache に file を足さない。`edinetdb-p27`・`sgogi-coach-handoff` は開かない。
+
+## 追記 1(2026-11-05。実装の便で見つけた封の書き損じと門との食い違い。§1〜§7 の字は変えない)
+
+1. **切り替えの名前**: §1 の `yen_scan_2026_11_05` が正。§0-2 の 3 と §5 の `compound_yen_2026_11_05` は書き損じ(試作の名前が残った)。測定 script は `N.yen_scan_2026_11_05 = True` を立てる。
+2. **試験の置き場**: §2-1 は「`measure/tests/test_inject.py` に試験を足す」と書いたが、門 `tests/measure/test_xbrl_inject_harness_review.py` は file 名に `inject` を含む file を仕掛けの file として数え、封の commit の木に在る file が 1 byte でも変わると宣言を求め(test_h_1・test_g_5b)、かつ木に在る file の宣言を許さない(test_h_3)。門を変えないので、H の試験は **新しい file `measure/tests/test_yen_scan.py`** に置く(名前に `inject`・`false_pass` を含まず、本文に仕掛けの規準の字と副産物の検査の呼び出しを持たない)。`TestMoneyScaleTable` の 万円 の行は既存の class に混ぜず(既存の試験は切り替え 偽で `scan` するので 万円 が 12,340,000 にならない)、新しい file に「真で scan → scaled_value」の同じ仕組みの表の試験として置く。`test_inject.py` は byte 不変。試験 file は 271 → 272 で、覆いの数と「discover の漏れ」(measure/tests の既知の 1 本 → 2 本)を直す。
+3. 実装の便で封に無かった決め(実装の報告 §5): 0 の group は keep のみ・兆円 の分岐は到達不能なので無し・`render_groups` は負の値を扱わない(round-trip の止めは呼ぶ側の責務)・「1,000万円〜2,000万円」の前の端は `is_quantity` 真(既存の規則の挙動。億円 でも同じ)・空白入り「5 万円」は複合でなく既存の経路の token(unit 万円・groups None)。
