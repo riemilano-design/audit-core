@@ -181,6 +181,9 @@ LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixt
                       # 2026-11-05: H(封 docs/XBRL_INJECT_SCAN_FIX_SEAL_2026-11-05.md)。切り替え 偽 の不変の記録(offcheck)と新しい token の site だけの注入の記録(inject)は選んだ 20 社の docID を持つ。
                       # script 1 本・門 2 本・結果の文書は docID を持たない。(上の RB と同じ理由で tuple の末尾でなくここに置く)
                       "fixtures/xbrl/nscan/offcheck_2026-11-05.json", "fixtures/xbrl/nscan/inject_2026-11-05.json",
+                      # 2026-11-05: J(封 docs/XBRL_INJECT_TYPES_SEAL_2026-11-05.md)。T2・T6・T7 の注入の記録(inject)は選んだ 20 社の docID を持つ。
+                      # script 1 本・門 2 本・結果の文書は docID を持たない。(上の H と同じ理由で tuple の末尾でなくここに置く)
+                      "fixtures/xbrl/jtypes/inject_2026-11-05.json",
                       # 2026-11-03: AI の形 4 × model 2(封 docs/XBRL_AI_FORMS_SEAL_2026-11-03.md)。手元の 97 のうち選んだ 20 社の docID を材料の名として持つ記録 5 つ(gen・claims・labels・inject・tally)。
                       # script 4 本・門・結果の文書は docID を持たない
                       "fixtures/xbrl/aiforms/gen_2026-11-03.json", "fixtures/xbrl/aiforms/claims_2026-11-03.json", "fixtures/xbrl/aiforms/labels_2026-11-03.json",

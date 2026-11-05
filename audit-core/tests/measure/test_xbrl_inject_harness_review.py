@@ -947,6 +947,8 @@ LATER_HARNESS_FILES = (
     ("measure/xbrl_rmix_2026-11-04.py", u"仕掛け持ち + 使う側", u"有", "inject_text_rb", u"res = TUNE.claim_for_p27(verify(zb, p, tampered)[\"claims\"], inj, tok.unit)", "2026-11-04"),
     # 2026-11-05: H の注入(封 docs/XBRL_INJECT_SCAN_FIX_SEAL_2026-11-05.md §5)。上の RB の行の inject_text_rb と同じ手順で、site を新しい token(複合の数・万円。groups が None でない token)だけに絞った版(T1 は sites.t1_sites を with の中だけ差し替え、T8 は t8_candidates4 の写し)。差し替えが基準の claim に届いたかは claim_for_p27 が新しい値を持つ 1 件に決まるかで見る。
     ("measure/xbrl_nscan_2026-11-05.py", u"仕掛け持ち + 使う側", u"有", "inject_text_h", u"res = TUNE.claim_for_p27(verify(zb, p, tampered)[\"claims\"], inj, tok.unit)", "2026-11-05"),
+    # 2026-11-05: J の注入(封 docs/XBRL_INJECT_TYPES_SEAL_2026-11-05.md §5)。T2_UNIT・T6_PRIOR・T7_ROUND。T2 は inject.select(types=[T2_UNIT]) に複合を除く差し替え、T6・T7 は IJ.t6_sites・IJ.t7_sites(複合を除く差し替え)+ 複合の写し。注入後の claim は claim_for_p27 が引く(T2 は後の単位。新しい値を持つ 1 件に決まるかで見る)。
+    ("measure/xbrl_jtypes_2026-11-05.py", u"仕掛け持ち + 使う側", u"有", "inject_text_j", u"res = TUNE.claim_for_p27(verify(zb, p, tampered)[\"claims\"], inj, unit_q)", "2026-11-05"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
