@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **272 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **274 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 202 |
+| `tests/measure` | 204 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -262,6 +262,9 @@ F5(標準ラベルを見せない書き手。20 社 × 形 1 × model 2 = 40 本
 
 **2026-11-05 に +1**(`measure/tests/test_yen_scan.py`。
 注入の仕掛けの数の読みに 万円 と億+万の複合を足す H(封 `docs/XBRL_INJECT_SCAN_FIX_SEAL_2026-11-05.md` 追記 1 の 2)の試験。`test_inject.py` は名前で仕掛けの file に数えられ変えられないので新しい file に置いた)。271 → 272(`measure/tests` 1 → 2)。`unittest discover` が数え落とす file は 1 本から 2 本になる(`measure/` が package でないため、`test_inject.py` と同じ)。
+
+**2026-11-05 に +2**(`tests/measure/test_xbrl_nscan_seal.py`・`tests/measure/test_xbrl_nscan_result.py`。
+注入の仕掛けの数の読みに 万円 と億+万の複合を足す H(封 `docs/XBRL_INJECT_SCAN_FIX_SEAL_2026-11-05.md`)の測定 script の封の門と結果の門。結果は `docs/XBRL_INJECT_SCAN_FIX_RESULT_2026-11-05.md`)。272 → 274(`tests/measure` 202 → 204)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
