@@ -123,6 +123,9 @@ def profile_problems(V=None, fields=None, numbers_of=None):
     i = names.index(FLAG)
     # 2026-11-04: RB(封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md §0-2 の 3)が旗 rounding_mixed_2026_11_04 をこの旗の直後に足した: この旗 → RB の旗 → written_precision_2026_10_27(RB の旗が在るときだけ)
     after = names[i + 2] if names[i + 1:i + 2] == ["rounding_mixed_2026_11_04"] else names[i + 1]
+    # 2026-11-06: PB(封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §1)が旗 prior_cue_bind_2026_11_06 を RB の旗の直後に足した: この旗 → RB の旗 → PB の旗 → written_precision_2026_10_27(PB の旗が在るときだけ)
+    if after == "prior_cue_bind_2026_11_06":
+        after = names[i + 3]
     if names[i - 1] != "numbers_2026_10_21" or after != "written_precision_2026_10_27":
         out.append(u"旗の位置が numbers_2026_10_21 の直後・written_precision_2026_10_27 の前でない")
     if dataclasses.fields(V.Profile)[names.index(FLAG)].default is not False:
@@ -140,7 +143,8 @@ def profile_problems(V=None, fields=None, numbers_of=None):
             out.append(u"%s の旗が偽でない(既存の profile を変えた)" % base)
     on = sorted(k for k, p in V.PROFILES.items() if getattr(p, FLAG, False))
     # 2026-11-04: RB の旗が Profile に在るときは P30E(= P29E + RB)も N の旗を引き継いで真
-    if on != ["P29", "P29E"] + (["P30E"] if "rounding_mixed_2026_11_04" in names else []):
+    # 2026-11-06: PB の旗が Profile に在るときは P32E(= P30E + PB)も N の旗を引き継いで真
+    if on != ["P29", "P29E"] + (["P30E"] if "rounding_mixed_2026_11_04" in names else []) + (["P32E"] if "prior_cue_bind_2026_11_06" in names else []):
         out.append(u"旗が真の profile が P29・P29E だけでない: %s" % on)
     s = u"売上高は1,234万円でした。"
     got_off = [(a, b) for (a, b, _v, _u, _p) in numbers_of(V.PROFILES["P28"], s)]

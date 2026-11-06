@@ -317,6 +317,11 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
         # P24 vocab_2026_10_21(v3.1、司令塔の決定 5): 新しく登録した資金の主語の句は、当期と Prior1Year の fact にだけ値で結ぶ
         # (経営指標の要約の Prior2Year 以前には結ばない)。既存 6 句は不変。
         hits = [(f, how) for f, how in hits if f["context"].startswith(("CurrentYear", "Prior1Year"))]
+    if getattr(profile, "prior_cue_bind_2026_11_06", False) and _prior_cue_window_2026_11_06(s, a) and hits \
+            and not any(f["context"].startswith("Prior1Year") for f, how in hits):
+        # PB(封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §1 の 2)A: 前期の手がかり(窓)がある数は、Prior1Year の fact に値が合わないとき CurrentYear の fact に落とさない(外す)。
+        # 外した後は従来の枝(導出 a-b → 最後の枝)に落ちる。旗が偽なら 1 行も変わらない。
+        hits = [(f, how) for f, how in hits if not f["context"].startswith("CurrentYear")]
     if hits and not (is_diff and subj):
         fams = sorted({f["name"] for f, _ in hits})
         if subj or len(fams) == 1:
@@ -394,6 +399,17 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                     # 最初の実装がその 2 件を誤って止めたので枝を狭めた。
                     claim["reason"] = "no_element(no prior2 for prior-year diff)"
                     return
+                if getattr(profile, "prior_cue_bind_2026_11_06", False) and _prior_cue_window_2026_11_06(s, a):
+                    # PB(封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §1 の 3)B: 前期の手がかり(窓)がある数は、増減の語があっても前期の fact を名指して VALUE_MISMATCH(F1′ と同じ名指し。
+                    # 下の P27E B・P26 G2・P25 で当期の fact を名指す前に効かせる)。前期の fact が無ければ従来どおり下へ。
+                    _pri_pb = [f for f in fs if f["context"].startswith("Prior1Year")]
+                    if _pri_pb:
+                        claim["pointer"] = "xbrl:%s@%s" % (_pri_pb[0]["name"], _pri_pb[0]["context"])
+                        claim["bound"] = True
+                        claim["result"] = "VALUE_MISMATCH"
+                        claim["recomputed"] = _pri_pb[0]["value"]
+                        claim["reason"] = "value differs(segment/other period?)"
+                        return
                 if profile is not None and getattr(profile, "last_branch_cues", False):
                     # P21(封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md §0)。この枝は従来、CurrentYear の先頭の
                     # fact を 1 本名指すだけだった。旗が真のときだけ、セグメントの名・期の手がかり・増減の語を
@@ -1147,6 +1163,14 @@ def _prior_cue(s, a, b=None):
     if _PRIOR_CUE_RE.search(w) or _PRIOR_PAREN_RE.search(w):
         return True
     return b is not None and s[b:b + 2] == "から"
+
+
+def _prior_cue_window_2026_11_06(s, a):
+    """PB(封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §1 の 1): 数の直前(12 字)が「前期」「前期末」「(同」などで終わるか。``_prior_cue`` の窓の枝と同じ語・同じ窓で、
+    「から」の枝(「32.5%から29.8%へ」の前の数)は持たない(「A から B を」の A に当たる偽陽性 3 行を避ける。封 §0-1 の 2)。"""
+
+    w = s[max(0, a - 12):a]
+    return bool(_PRIOR_CUE_RE.search(w) or _PRIOR_PAREN_RE.search(w))
 
 
 def _prior_cue_clause(s, pos):

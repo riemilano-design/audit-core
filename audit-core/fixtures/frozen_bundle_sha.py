@@ -172,6 +172,12 @@ FROZEN_BUNDLE_GENERATIONS = (
      "verify_document.py・extract.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
      "人間の問い §5 の 1 への返事「君に任せる課題解決に向けて進めて」(2026-11-04)= 司令塔が選んだ (イ)(旗 1 つ・profile 1 つ・挿入だけ。既定にしない)、封 docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md(commit de23edc)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("175f11c7522dbbbb6f02ac5258f0faf48a02030281b32841fd6eec16c89d3d4b",
+     "2026-11-06 feature/audit-core-final-eval-8(前期の手がかりがある数を当期の fact に落とさない PB): recipes.py に関数 _prior_cue_window_2026_11_06 と _direct_value_claim の block A・B(+24 行・-0 行)、"
+     "vocabulary.py に旗 prior_cue_bind_2026_11_06・P32E・PROFILES の登録(+5 行・-0 行。DEFAULT_PROFILE は P27 のまま)を足した。"
+     "comparators.py・verify_document.py・extract.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
+     "人間の言葉「それで任せる進めて」(2026-11-06)= 司令塔の意見 1〜7 の順で進める委任(旗 1 つ・profile 1 つ・挿入だけ。既定にしない)、封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md(commit b7824e6)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

@@ -369,12 +369,13 @@ SEAL_P28 = "docs/XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02.md"    # 2026-11-02 �
 SEAL_P28E = "docs/XBRL_P28E_SEAL_2026-11-03.md"    # 2026-11-03 追記: P28E(= P27E + O)を足す(下の遷移。vocabulary.py 180125cd94053a94 → 2dd3f03e777224b4。直前の値は測った時点の値として SEAL_P28 の行に残す)
 SEAL_N = "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md"    # 2026-11-04 追記: 数の読み取り N(万・億の数のコンマ。P29・P29E)を足す(下の遷移。extract.py 3cf55966f12919f0 → a61da3fc3c336e80・vocabulary.py 2dd3f03e777224b4 → ca0367520f04cf87・recipes.py 89eee7eca15480c6 → f1f344a9e2bb364a。挿入だけ。直前の値は測った時点の値として上の SEAL の行に残す)
 SEAL_RB = "docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md"    # 2026-11-04 追記: 丸め方の根拠が混ざる桁は両方の帯で照らす RB(P30E)を足す(下の遷移。vocabulary.py ca0367520f04cf87 → 5b9fe3711a00fce3・recipes.py f1f344a9e2bb364a → 86fd620840807ed7・comparators.py d8706338325e725b → 9d65945efab20089。挿入だけ。直前の値は測った時点の値として上の SEAL の行に残す)
+SEAL_PB = "docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md"    # 2026-11-06 追記: 前期の手がかりがある数を当期の fact に落とさない PB(P32E)を足す(下の遷移。vocabulary.py 5b9fe3711a00fce3 → e35b7fea2463818f・recipes.py 86fd620840807ed7 → 0add35e7aa77d86b。挿入だけ。comparators.py は触らない。直前の値は測った時点の値として上の SEAL の行に残す)
 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に旗 vocab_2026_10_21・frame_rebind の塊(+224 行・既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
 # d5308700eae78c10(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 3461c3f8b7af6675。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)、vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)、registry_setup.py に理由 no_same_value(+2 行)を足した(DEFAULT_PROFILE は P22 のまま)。
 # recipes.py の 3461c3f8b7af6675・vocabulary.py の 83498c04a7b70396・registry_setup.py の 9a0b08954cf22639(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/recipes.py": ("86fd620840807ed7", SEAL_RB),
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("0add35e7aa77d86b", SEAL_PB),
                 "adapters/xbrl/comparators.py": ("9d65945efab20089", SEAL_RB),
                 # 2026-10-20 追記(段 2): vocabulary.py の sha は 段 1 3320c8c で 1fdb48e7e3ba58ce(残す。測った時点の値)、段 2(DEFAULT_PROFILE を
                 # P21 -> P22 にし、決定の注記を足した。vocabulary.py だけ・recipes.py は 0 行。同じ封 SEAL_PERIOD_BIND の段 2)で 25a3c0992e10daaa。
@@ -386,7 +387,7 @@ ENGINE_LATER = {"adapters/xbrl/recipes.py": ("86fd620840807ed7", SEAL_RB),
                 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
                 # 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
                 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-                "adapters/xbrl/vocabulary.py": ("5b9fe3711a00fce3", SEAL_RB),
+                "adapters/xbrl/vocabulary.py": ("e35b7fea2463818f", SEAL_PB),
                 # 2026-10-21(P24 の段 1): registry_setup.py に理由 other_frame を足した(+2 行)。この file はこの門が測った時点では動いていない(封の commit から 0 行だった)。
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で registry_setup.py に理由 3 つ(+6 行) を足した。
                 # f42ffe23aaa7673b(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 7f2cbded9c830211。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。

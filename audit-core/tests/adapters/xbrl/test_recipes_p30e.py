@@ -286,7 +286,8 @@ class ProfileShapeTest(unittest.TestCase):
         self.assertNotIn("P30", V.PROFILES)
 
     def test_flag_true_only_for_p30e(self):
-        self.assertEqual(["P30E"], sorted(n for n, p in V.PROFILES.items() if p.rounding_mixed_2026_11_04))
+        # 2026-11-06: P32E(= P30E + PB。封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md)も RB の旗を引き継ぐ
+        self.assertEqual(["P30E", "P32E"], sorted(n for n, p in V.PROFILES.items() if p.rounding_mixed_2026_11_04))
         for p in (V.P29E, V.P29, V.P28E, V.P28, V.P27E, V.P27):
             self.assertFalse(p.rounding_mixed_2026_11_04, p.name)
         self.assertIs(False, {f.name: f for f in dataclasses.fields(V.Profile)}["rounding_mixed_2026_11_04"].default)

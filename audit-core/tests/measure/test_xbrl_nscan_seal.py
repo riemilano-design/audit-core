@@ -264,7 +264,8 @@ def real_untouched_problems(root=REPO):
     if sh is None:
         return [u"封の commit が履歴に 1 つに決まらない"]
     paths = [PREFIX + p for p in NOT_TOUCHED_RELS]
-    return untouched_problems([x for x in PR.git_in(root, "diff", "--numstat", sh, "--", *paths)[1].splitlines() if x])
+    # 2026-11-06(PB): 封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §2-3 が宣言した遷移(recipes.py +24・vocabulary.py +5。削除 0)だけは触らない file から外す(SGR.pb_declared_numstat。他の行・他の値は赤のまま)
+    return untouched_problems([x for x in PR.git_in(root, "diff", "--numstat", sh, "--", *paths)[1].splitlines() if x and not SGR.pb_declared_numstat(x, root)])
 
 
 # ---------------------------------------------------------------- 7. 行頭の名前

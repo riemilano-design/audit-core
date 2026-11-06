@@ -226,6 +226,8 @@ def header_problems(k, rec, full):
     fp = rec.get(u"engine の指紋") or {}
     want_fp = engine_fingerprint_at_seal()
     for name in want_fp:
+        if name == "adapter_xbrl_py_sha256" and SG.SGR.pb_declared_fingerprint(fp.get(name)):      # 2026-11-06(PB): 封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §2-3 が宣言した遷移の指紋(封が履歴に在るときだけ)
+            continue
         if fp.get(name) != want_fp[name]:
             out.append(u"%s: engine の指紋 %s が封の commit の木から作り直した値と違う" % (k, name))
     cb = rec.get(u"cache の前後") or {}

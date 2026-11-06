@@ -184,7 +184,9 @@ def profile_problems(V=None, fields=None):
     if FLAG not in names:
         return [u"Profile に旗 %s が無い" % FLAG]
     i = names.index(FLAG)
-    if names[i - 1] != PREV_FLAG or names[i + 1:i + 2] != [NEXT_FLAG]:
+    # 2026-11-06: PB(封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §1)が旗 prior_cue_bind_2026_11_06 をこの旗の直後に足した: この旗 → PB の旗 → written_precision_2026_10_27(PB の旗が在るときだけ)
+    nxt = names[i + 2:i + 3] if names[i + 1:i + 2] == ["prior_cue_bind_2026_11_06"] else names[i + 1:i + 2]
+    if names[i - 1] != PREV_FLAG or nxt != [NEXT_FLAG]:
         out.append(u"旗の位置が %s の直後・%s の前でない" % (PREV_FLAG, NEXT_FLAG))
     if dataclasses.fields(V.Profile)[[f.name for f in dataclasses.fields(V.Profile)].index(FLAG)].default is not False:
         out.append(u"旗の既定が偽でない")
@@ -199,7 +201,7 @@ def profile_problems(V=None, fields=None):
         if getattr(b, FLAG) is not False:
             out.append(u"P29E の旗が偽でない(既存の profile を変えた)")
     on = sorted(k for k, pr in V.PROFILES.items() if getattr(pr, FLAG, False))
-    if on != ["P30E"]:
+    if on != ["P30E"] + (["P32E"] if "prior_cue_bind_2026_11_06" in names else []):      # 2026-11-06: P32E(= P30E + PB)も RB の旗を引き継ぐ
         out.append(u"RB の旗が真の profile が P30E だけでない: %s" % on)
     if "P30" in V.PROFILES:
         out.append(u"P30(E 系でない)が在る(封は P30E だけ)")
@@ -252,6 +254,56 @@ def real_numstat_problems(root=REPO, seal=None):
 
 
 # ---------------------------------------------------------------- 4. 前の便の file は byte 不変
+#: 2026-11-06(PB): 封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §2-3 が宣言した遷移(司令塔の決定 2026-11-06)。PB の engine の commit が recipes.py に +24 行・vocabulary.py に +5 行(削除 0)を足し、
+#: 束ねた指紋が PB_FP になる。engine を「封の commit から変えない」と留めた後の便の門(この file の frozen_problems・untouched の numstat・記録の頭の engine の指紋を使う便)は、この遷移だけを許す。
+#: 許すのは、PB の封が履歴に 1 つ在り、numstat・sha16・指紋が下の宣言と同じときだけ。他の file・他の行数・他の値は今までどおり赤。
+PB_SEAL_REL = "docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md"
+PB_ENGINE_FILES = ("adapters/xbrl/recipes.py", "adapters/xbrl/vocabulary.py")
+PB_NUMSTAT = {"adapters/xbrl/recipes.py": ("24", "0"), "adapters/xbrl/vocabulary.py": ("5", "0")}
+PB_SHA16 = {"adapters/xbrl/recipes.py": "0add35e7aa77d86b", "adapters/xbrl/vocabulary.py": "e35b7fea2463818f"}
+PB_FP = "dc13edfee7a9ac6b900ae610d056424b622b8447491113b78c4debf902bcfee8"
+
+
+def pb_seal_in_history(root=REPO):
+    return len(PR.added_commits(root, PREFIX + PB_SEAL_REL)) == 1
+
+
+def pb_sha16(rel, base=ROOT):
+    import hashlib
+    with open(os.path.join(base, rel), "rb") as fh:
+        return hashlib.sha256(fh.read()).hexdigest()[:16]
+
+
+def pb_declared_numstat(line, root=REPO, base=ROOT):
+    u"""``git diff --numstat`` の 1 行が PB の宣言した遷移の行か(封が履歴に在り、行数と作業木の sha16 が宣言と同じ)。"""
+    parts = line.split("\t")
+    if len(parts) != 3 or not parts[2].startswith(PREFIX):
+        return False
+    rel = parts[2][len(PREFIX):]
+    return (rel in PB_NUMSTAT and (parts[0], parts[1]) == PB_NUMSTAT[rel] and pb_sha16(rel, base) == PB_SHA16[rel] and pb_seal_in_history(root))
+
+
+def pb_declared_fingerprint(value, root=REPO):
+    u"""記録の頭の ``adapter_xbrl_py_sha256`` の値が PB の宣言した遷移の値か(封が履歴に在るときだけ)。"""
+    return value == PB_FP and pb_seal_in_history(root)
+
+
+def pb_declared_file_change(root, seal_commit, rel, base=ROOT):
+    u"""封の commit から ``rel`` が変わったのが、PB の engine の commit(PB の封の後に recipes.py と vocabulary.py を最初に触った commit のうち子孫の最後。履歴から探す)だけか。
+    作業木が HEAD の blob と同じ(commit 済み)ことも見る。"""
+    s, e = engine_commit(root, PREFIX, PB_SEAL_REL, PB_ENGINE_FILES)
+    if s is None or e is None:
+        return False
+    log = [c for c in PR.git_in(root, "log", "--format=%H", seal_commit + "..HEAD", "--", PREFIX + rel)[1].split() if c]
+    if log != [e]:
+        return False
+    head = subprocess.run(["git", "show", "HEAD:%s%s" % (PREFIX, rel)], cwd=root, capture_output=True)
+    if head.returncode != 0:
+        return False
+    with open(os.path.join(base, rel), "rb") as fh:
+        return head.stdout == fh.read()
+
+
 def frozen_problems(rels=READ_ONLY_RELS, root=REPO, base=ROOT, seal_rel=SEAL_REL):
     u"""root = git の木、base = 作業木の audit-core の folder。封の commit の blob と作業木の byte を比べる。"""
     seal = PR.added_commits(root, PREFIX + seal_rel)
@@ -265,6 +317,8 @@ def frozen_problems(rels=READ_ONLY_RELS, root=REPO, base=ROOT, seal_rel=SEAL_REL
             continue
         with open(os.path.join(base, rel), "rb") as fh:
             if blob.stdout != fh.read():
+                if pb_declared_file_change(root, seal[0], rel, base):      # 2026-11-06(PB): PB の engine の commit だけが触った file は宣言された遷移
+                    continue
                 out.append(u"封の commit の blob と byte が違う: %s" % rel)
     return out
 
@@ -435,6 +489,102 @@ class EngineAndFrozenTest(unittest.TestCase):
     def test_f_2_scripts_name_the_seal(self):
         for rel in SCRIPT_RELS:
             self.assertIn("XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md", read(rel), rel)
+
+
+class PbTransitionTest(unittest.TestCase):
+    u"""2026-11-06(PB): 後の便の門が使う「PB の宣言された遷移」の部品(``pb_declared_numstat``・``pb_declared_fingerprint``・``pb_declared_file_change``)。許すのは宣言の字だけで、他は赤。"""
+
+    REC = "%sadapters/xbrl/recipes.py" % PREFIX
+    VOC = "%sadapters/xbrl/vocabulary.py" % PREFIX
+
+    def test_pb_1_the_declared_numstat_lines_are_accepted_in_this_repo(self):
+        self.assertTrue(pb_seal_in_history())
+        self.assertTrue(pb_declared_numstat("24\t0\t" + self.REC))
+        self.assertTrue(pb_declared_numstat("5\t0\t" + self.VOC))
+        self.assertEqual(PB_SHA16["adapters/xbrl/recipes.py"], pb_sha16("adapters/xbrl/recipes.py"))
+        self.assertEqual(PB_SHA16["adapters/xbrl/vocabulary.py"], pb_sha16("adapters/xbrl/vocabulary.py"))
+
+    def test_pb_2_any_other_numstat_line_is_not_accepted(self):
+        for bad in ("25\t0\t" + self.REC, "24\t1\t" + self.REC, "23\t0\t" + self.REC, "6\t0\t" + self.VOC, "5\t1\t" + self.VOC,
+                    "24\t0\t%sadapters/xbrl/comparators.py" % PREFIX, "24\t0\t%sadapters/xbrl/extract.py" % PREFIX, "2\t0\t%smeasure/inject.py" % PREFIX,
+                    "24\t0\t%score/py/audit_core/verify.py" % PREFIX, "24\t0\tadapters/xbrl/recipes.py", "24\t0", ""):
+            self.assertFalse(pb_declared_numstat(bad), bad)
+
+    def test_pb_3_a_file_that_is_not_the_declared_sha16_is_not_accepted(self):
+        with tempfile.TemporaryDirectory(dir=os.environ.get("TMPDIR")) as d:
+            os.makedirs(os.path.join(d, "adapters", "xbrl"))
+            for rel in PB_ENGINE_FILES:
+                with open(os.path.join(d, rel), "w", encoding="utf-8") as fh:
+                    fh.write("x = 1\n")
+            self.assertFalse(pb_declared_numstat("24\t0\t" + self.REC, base=d))
+            self.assertFalse(pb_declared_numstat("5\t0\t" + self.VOC, base=d))
+
+    def test_pb_4_without_the_pb_seal_in_history_nothing_is_accepted(self):
+        r = PR.Repo()
+        r.put("measure/prev.py")
+        r.commit("measure/prev.py")
+        self.assertFalse(pb_seal_in_history(r.d))
+        self.assertFalse(pb_declared_numstat("24\t0\t" + self.REC, root=r.d))
+        self.assertFalse(pb_declared_fingerprint(PB_FP, root=r.d))
+
+    def test_pb_5_only_the_declared_fingerprint_is_accepted(self):
+        self.assertTrue(pb_declared_fingerprint(PB_FP))
+        self.assertFalse(pb_declared_fingerprint(PB_FP[:-1] + "0"))
+        self.assertFalse(pb_declared_fingerprint("4ea77c93b9521e634dc0ec2c445917e86793e6f6e8460ac9d69a302d925c2611"))
+        self.assertFalse(pb_declared_fingerprint(None))
+
+    def _repo(self, extra_commit=False, dirty=False, engine=True):
+        u"""封(前の便の file を足す)→ PB の封 → (engine の commit = recipes・vocabulary と前の便の file を触る)→ ..."""
+        r = PR.Repo()
+        r.put("measure/gate.py")
+        r.put(SEAL_REL)
+        seal = r.commit("measure/gate.py", SEAL_REL)
+        r.put(PB_SEAL_REL)
+        r.commit(PB_SEAL_REL)
+        r.put("adapters/xbrl/recipes.py")
+        r.put("adapters/xbrl/vocabulary.py")
+        r.put("measure/gate.py")
+        files = ["measure/gate.py"] + (list(PB_ENGINE_FILES) if engine else [])
+        e = r.commit(*files)
+        if extra_commit:
+            r.put("measure/gate.py")
+            r.commit("measure/gate.py")
+        if dirty:
+            r.put("measure/gate.py")
+        return r, seal, e
+
+    def test_pb_6_a_file_changed_only_by_the_engine_commit_is_accepted(self):
+        r, seal, e = self._repo()
+        self.assertTrue(pb_declared_file_change(r.d, seal, "measure/gate.py", base=os.path.join(r.d, "audit-core")))
+        self.assertEqual([], frozen_problems(rels=("measure/gate.py",), root=r.d, base=os.path.join(r.d, "audit-core")))
+
+    def test_pb_7_a_file_changed_again_after_the_engine_commit_is_not_accepted(self):
+        r, seal, e = self._repo(extra_commit=True)
+        self.assertFalse(pb_declared_file_change(r.d, seal, "measure/gate.py", base=os.path.join(r.d, "audit-core")))
+        self.assertEqual([u"封の commit の blob と byte が違う: measure/gate.py"], frozen_problems(rels=("measure/gate.py",), root=r.d, base=os.path.join(r.d, "audit-core")))
+
+    def test_pb_8_an_uncommitted_change_is_not_accepted(self):
+        r, seal, e = self._repo(dirty=True)
+        self.assertFalse(pb_declared_file_change(r.d, seal, "measure/gate.py", base=os.path.join(r.d, "audit-core")))
+
+    def test_pb_9_a_change_by_a_commit_that_does_not_touch_the_engine_is_not_accepted(self):
+        r, seal, e = self._repo(engine=False)
+        self.assertFalse(pb_declared_file_change(r.d, seal, "measure/gate.py", base=os.path.join(r.d, "audit-core")))
+        self.assertNotEqual([], frozen_problems(rels=("measure/gate.py",), root=r.d, base=os.path.join(r.d, "audit-core")))
+
+    def test_pb_10_a_file_changed_before_the_pb_seal_is_not_accepted(self):
+        r = PR.Repo()
+        r.put("measure/gate.py")
+        r.put(SEAL_REL)
+        seal = r.commit("measure/gate.py", SEAL_REL)
+        r.put("measure/gate.py")
+        r.commit("measure/gate.py")
+        r.put(PB_SEAL_REL)
+        r.commit(PB_SEAL_REL)
+        r.put("adapters/xbrl/recipes.py")
+        r.put("adapters/xbrl/vocabulary.py")
+        r.commit(*PB_ENGINE_FILES)
+        self.assertFalse(pb_declared_file_change(r.d, seal, "measure/gate.py", base=os.path.join(r.d, "audit-core")))
 
 
 class OrderTest(unittest.TestCase):
