@@ -105,3 +105,9 @@ K-1〜K-5 を全部満たせば「採用」= 記録を正本にし、README の�
 2. **§2-3 の列挙に無かった門 12 本**: nscan・jtypes・pswap・pswap_idmap の 4 家族(seal 門の untouched・前の便の門の blob の byte 一致・result 門の記録の頭の指紋)は sha16 でなく「封の commit から 0 行」で engine を留めていたため、`git grep` の列挙に出なかった。実装席は `test_xbrl_rmix_seal.py` に PB の宣言された遷移(行数 +24 / 0・+5 / 0、sha16 2 値、指紋 1 値、封の path が履歴に在る、PB の封の後に recipes と vocabulary を最初に触った commit ただ 1 つ)だけを許す部品を足した。封に無い決めなので、監査で「許す枝が宣言の字に限られている」ことを見る(監査の依頼 9)。§2-3 の見込み「直す試験 file 40〜75」の中(変更 72・新規 1)。
 3. **§0-1 の 1 の「a, b は単位を含まない」は誤り**: 本番の `iter_numbers` の b は単位の終わり(「5,000千円」なら 4〜11)。PB の窓は a だけを使うので §1 の規則は変わらない。
 4. **Prior2Year**: 当期・前期・前々期に同じ値が在る要素の「前期の X」は P32E では Prior2Year の fact に GROUNDED になる(§1 の 2 の字どおり。P30E は当期)。E-10 の予測「全部 Prior1Year」はそのまま置き、測定で Prior2Year が出れば外れとして残す。
+
+## 追記 2(2026-11-06 夜、測定 script の実装席の報告を読んだ後・本番の記録の前。§1〜§4 の字は変えない)
+
+1. **E-3・E-10 の「動いた行」は state が変わった行で数える。** §0-1 の 3 の 97 書類の数(19 行・5 書類)は、試作の script(scratchpad の `pbind/pass1_pb_97.py`)が P30E と P32E の claim を index で対応させ、state が違う行だけを数えた値で、E-3 の幅はこの数から作った。だから E-3 の定義も同じにする。E-4(200 本)は §3 の字どおり「state か pointer が違う行」のまま。
+2. **この決めは盲検ではない。** 測定 script の実装席は、定義を script の docstring に書いた後、使い捨ての下調べで「state か pointers が違う行」の定義だと 97 書類で 27 行・9 書類になることを見て報告した(E-3 の幅の外)。結果の文書には 2 つの定義の数を並べ、どちらで判定したかを書く。採用の基準 K-1〜K-5 に E-3 の動いた行の数は入っていない(K-2 は GROUNDED を失う行だけ)。
+3. **後の便への連絡**: この便の封の門は `measure/lib/` と `measure/inject.py` が engine の commit の blob と byte 同じことを見る。T5Y の便(`docs/XBRL_T5_YEN_SEAL_2026-11-06.md`)は `sites.py` と `inject.py` を変えるので、T5Y の commit でこの門に宣言された遷移を足す。
