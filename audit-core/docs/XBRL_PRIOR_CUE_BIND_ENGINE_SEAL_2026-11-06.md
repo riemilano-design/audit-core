@@ -98,3 +98,10 @@ K-1〜K-5 を全部満たせば「採用」= 記録を正本にし、README の�
 
 1. この封を commit(文書だけ。fresh_seal・facts・boundary の門を走らせてから)→ engine の実装と試験(step-implementer、worktree。留めの連動も同じ便)→ 変異 → 独立監査 GO → engine の commit(パス指定)→ 測定 script と門(step-implementer)→ 監査 GO → commit → 記録 3 つ(本番)→ 結果の文書 → 門 → 監査 GO → commit → README(採用なら)→ 台帳 → 監査 → commit → axis3 の宣言は次の便。
 2. 使わない: `git add -A`・`stash`・`reset`・`checkout`。cache に file を足さない。`edinetdb-p27`・`sgogi-coach-handoff` は開かない。鍵は全部 unset。
+
+## 追記 1(2026-11-06、engine の実装席の報告を読んだ後・測定の前。§1〜§4 の字は変えない)
+
+1. **前期の fact が無い要素**: 実装の依頼文の (カ) で司令塔は「前期の fact が無い要素は P30E と同じ出力」と見込んだが、§1 の 2 の字(hits に Prior1Year が無ければ CurrentYear を外す)では、その要素に前期の fact がそもそも無くても CurrentYear の hit は外れ、最後の枝が当期の fact を名指して VALUE_MISMATCH(recomputed は当期の値と同じ)になる。主語の無い数は no_subject から no_element になる。実装は封の字のまま(司令塔の見込みの方が封に無い)。97 書類の原文で GROUNDED を失う行は 0(§0-1 の 3)なので E-3 は据え置き。前期の fact が無い会社(新規上場など)の「前期は …」の数に当たる型で、この便では件数を測らず、測定 script の動いた行の内訳で「前期の fact が無い要素」を別に数えられるなら数える(数えられなくても予測は変えない)。
+2. **§2-3 の列挙に無かった門 12 本**: nscan・jtypes・pswap・pswap_idmap の 4 家族(seal 門の untouched・前の便の門の blob の byte 一致・result 門の記録の頭の指紋)は sha16 でなく「封の commit から 0 行」で engine を留めていたため、`git grep` の列挙に出なかった。実装席は `test_xbrl_rmix_seal.py` に PB の宣言された遷移(行数 +24 / 0・+5 / 0、sha16 2 値、指紋 1 値、封の path が履歴に在る、PB の封の後に recipes と vocabulary を最初に触った commit ただ 1 つ)だけを許す部品を足した。封に無い決めなので、監査で「許す枝が宣言の字に限られている」ことを見る(監査の依頼 9)。§2-3 の見込み「直す試験 file 40〜75」の中(変更 72・新規 1)。
+3. **§0-1 の 1 の「a, b は単位を含まない」は誤り**: 本番の `iter_numbers` の b は単位の終わり(「5,000千円」なら 4〜11)。PB の窓は a だけを使うので §1 の規則は変わらない。
+4. **Prior2Year**: 当期・前期・前々期に同じ値が在る要素の「前期の X」は P32E では Prior2Year の fact に GROUNDED になる(§1 の 2 の字どおり。P30E は当期)。E-10 の予測「全部 Prior1Year」はそのまま置き、測定で Prior2Year が出れば外れとして残す。
