@@ -206,6 +206,8 @@ def frozen_since_engine_problems(rels=READ_ONLY_RELS, root=REPO, base=ROOT, seal
             continue
         with open(path, "rb") as fh:
             if blob.stdout != fh.read():
+                if SGR.t5y_declared_file_change(root, e, rel, base):      # 2026-11-06(T5Y): 仕掛けの 2 file と、T5Y の便の commit だけが触った前の便の門は宣言された遷移
+                    continue
                 out.append(u"engine の commit の blob と byte が違う: %s" % rel)
     return out
 
@@ -218,7 +220,8 @@ def untouched_since_engine_problems(rels=NOT_TOUCHED_RELS, root=REPO, seal_rel=S
     code, text = PR.git_in(root, "diff", "--numstat", e, "--", *[PREFIX + p for p in rels])
     if code != 0:
         return [u"git diff が失敗"]
-    return [u"engine の commit から変わった: %s" % ln for ln in text.splitlines() if ln]
+    # 2026-11-06(T5Y): 仕掛けの 2 file(measure/inject.py・measure/lib/sites.py)に挿入だけを足した宣言された遷移(行数・sha16・封が履歴に在る、の全部が宣言と同じ行)だけを許す
+    return [u"engine の commit から変わった: %s" % ln for ln in text.splitlines() if ln and not SGR.t5y_declared_numstat(ln, root=root)]
 
 
 reserved_problems = SGR.reserved_problems
@@ -419,6 +422,97 @@ class NotTouchedAndFrozenTest(unittest.TestCase):
         r.put("adapters/xbrl/vocabulary.py")
         r.commit("measure/gate.py", *ENGINE_FILES)
         self.assertEqual([], frozen_since_engine_problems(rels=("measure/gate.py",), root=r.d, base=os.path.join(r.d, "audit-core")))
+
+    # ------------------------------------------------ 2026-11-06(T5Y): 仕掛けの 2 file と T5Y の便の門への宣言された遷移(部品は rmix の門の t5y_*)
+    def _t5y_repo(self, extra_commit=False, dirty=False, touch_device=True, t5y_seal=True, gate_in_engine=False):
+        u"""封 → engine の commit → (T5Y の封)→ T5Y の便の commit(仕掛けの 2 file と前の便の門を触る)→ ..."""
+        r = PR.Repo()
+        r.put("measure/gate.py")
+        for rel in SGR.T5Y_FILES:
+            r.put(rel)
+        r.put(SEAL_REL)
+        r.commit("measure/gate.py", SEAL_REL, *SGR.T5Y_FILES)
+        r.put("adapters/xbrl/recipes.py")
+        r.put("adapters/xbrl/vocabulary.py")
+        if gate_in_engine:
+            r.put("measure/gate.py")                                                                                   # PB の engine の commit も触った門(封の後)
+        r.commit(*(ENGINE_FILES + (("measure/gate.py",) if gate_in_engine else ())))
+        if t5y_seal:
+            r.put(SGR.T5Y_SEAL_REL)
+            r.commit(SGR.T5Y_SEAL_REL)
+        r.put("measure/gate.py")
+        files = ["measure/gate.py"] + (list(SGR.T5Y_FILES) if touch_device else [])
+        for rel in files:
+            r.put(rel)
+        r.commit(*files)
+        if extra_commit:
+            r.put("measure/gate.py")
+            r.commit("measure/gate.py")
+        if dirty:
+            r.put("measure/gate.py")
+        return r
+
+    def test_t5y_1_the_declared_transition_of_the_device_is_accepted_and_it_really_differs_from_the_engine_commit(self):
+        s, e = seal_and_engine()
+        for rel in SGR.T5Y_FILES:
+            blob = subprocess.run(["git", "show", "%s:%s%s" % (e, PREFIX, rel)], cwd=REPO, capture_output=True).stdout
+            with open(os.path.join(ROOT, rel), "rb") as fh:
+                self.assertNotEqual(blob, fh.read(), rel)                                                          # 遷移は実際に起きている(空の門にしない)
+        self.assertEqual([], frozen_since_engine_problems(rels=SGR.T5Y_FILES))
+        self.assertEqual([], untouched_since_engine_problems(rels=("measure/lib", "measure/inject.py")))
+
+    def test_t5y_2_a_gate_changed_only_by_the_t5y_commit_is_accepted(self):
+        r = self._t5y_repo()
+        base = os.path.join(r.d, "audit-core")
+        self.assertEqual([], frozen_since_engine_problems(rels=("measure/gate.py",), root=r.d, base=base))
+
+    def test_t5y_2b_a_gate_changed_by_the_engine_commit_and_then_by_the_t5y_commit_is_compared_from_the_engine_commit(self):
+        r = self._t5y_repo(gate_in_engine=True)
+        self.assertEqual([], frozen_since_engine_problems(rels=("measure/gate.py",), root=r.d, base=os.path.join(r.d, "audit-core")))
+        r2 = self._t5y_repo(gate_in_engine=True, extra_commit=True)
+        self.assertNotEqual([], frozen_since_engine_problems(rels=("measure/gate.py",), root=r2.d, base=os.path.join(r2.d, "audit-core")))
+
+    def test_t5y_3_a_gate_changed_again_or_uncommitted_or_without_the_device_is_red(self):
+        for kw in ({"extra_commit": True}, {"dirty": True}, {"touch_device": False}, {"t5y_seal": False}):
+            r = self._t5y_repo(**kw)
+            base = os.path.join(r.d, "audit-core")
+            self.assertEqual([u"engine の commit の blob と byte が違う: measure/gate.py"], frozen_since_engine_problems(rels=("measure/gate.py",), root=r.d, base=base), kw)
+
+    def test_t5y_4_the_untouched_check_does_not_accept_other_changes_of_lib_and_inject(self):
+        r = self._t5y_repo()
+        base = os.path.join(r.d, "audit-core")
+        self.assertNotEqual([], untouched_since_engine_problems(rels=("measure/lib", "measure/inject.py"), root=r.d))        # 宣言の行数・sha16 と違う変更(この repo の file は宣言の値でない)
+        self.assertNotEqual([], untouched_since_engine_problems(rels=("adapters",), root=self._t5y_adapter_change().d))
+        self.assertNotEqual([], untouched_since_engine_problems(rels=("measure/lib",), root=self._t5y_repo(t5y_seal=False).d))
+
+    def _t5y_adapter_change(self):
+        r = self._t5y_repo()
+        r.put("adapters/xbrl/recipes.py")                                                                                # engine は T5Y の宣言に入らない
+        return r
+
+    def test_t5y_5_the_declared_numstat_of_the_device_is_not_accepted_for_the_engine_files(self):
+        for rel in ("adapters/xbrl/recipes.py", "adapters/xbrl/vocabulary.py", "core/py/audit_core/verify.py", "measure/lib/numbers.py", "measure/lib/scales.py"):
+            self.assertFalse(SGR.t5y_declared_numstat("81\t0\t%s%s" % (PREFIX, rel)), rel)
+            self.assertFalse(SGR.t5y_declared_numstat("30\t0\t%s%s" % (PREFIX, rel)), rel)
+
+    def test_t5y_6_the_declared_numstat_is_accepted_only_when_the_t5y_seal_is_in_the_history_of_the_tree_checked(self):
+        u"""宣言の行数(81 / 0)と同じ変更でも、調べる木の履歴に T5Y の封が無ければ赤(``root`` を渡して履歴を見る)。sha16 は現物(この木)の file で見る。"""
+        def repo(with_seal):
+            r = PR.Repo()
+            r.put("measure/lib/sites.py")
+            r.put(SEAL_REL)
+            r.commit("measure/lib/sites.py", SEAL_REL)
+            r.put("adapters/xbrl/recipes.py")
+            r.put("adapters/xbrl/vocabulary.py")
+            r.commit(*ENGINE_FILES)
+            if with_seal:
+                r.put(SGR.T5Y_SEAL_REL)
+                r.commit(SGR.T5Y_SEAL_REL)
+            with open(os.path.join(r.d, PREFIX, "measure/lib/sites.py"), "a", encoding="utf-8") as fh:
+                fh.write(u"y = 1\n" * 81)                                                 # 挿入 81・削除 0
+            return r
+        self.assertNotEqual([], untouched_since_engine_problems(rels=("measure/lib",), root=repo(False).d))
+        self.assertEqual([], untouched_since_engine_problems(rels=("measure/lib",), root=repo(True).d))
 
     def test_e_1_gate_files_do_not_use_the_reserved_names(self):
         self.assertEqual([], reserved_problems(rels=tuple(r for r in GATE_RELS if os.path.exists(os.path.join(ROOT, r))), base=ROOT))

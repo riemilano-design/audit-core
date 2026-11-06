@@ -776,7 +776,8 @@ class JudgeTest(unittest.TestCase):
         self.assertEqual([1], calls)
 
     def test_c_9_the_numstat_since_the_seal_is_empty_in_the_real_tree_and_not_in_a_changed_one(self):
-        self.assertEqual([], PI.git_numstat_since_seal(ROOT))
+        # 2026-11-06(T5Y): 封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §2-1 が宣言した遷移(仕掛けの 2 file に挿入だけ)は実物の木の numstat から外す(SGR.t5y_declared_numstat)
+        self.assertEqual([], [x for x in PI.git_numstat_since_seal(ROOT) if not SG.SGR.t5y_declared_numstat(x)])
         self.assertEqual(list(PI.UNTOUCHED_FOR_Q1), ["measure/inject.py", "measure/lib/sites.py", "measure/xbrl_pswap_2026-11-06.py"])
         r = PR.Repo()
         r.put("measure/inject.py")
@@ -1790,7 +1791,7 @@ class RealRecordsTest(unittest.TestCase):
     def test_r_3_the_result_document_follows_the_records(self):
         R = self.need()
         self.assertTrue(os.path.exists(os.path.join(ROOT, DOC_REL)), "結果の文書が無い")
-        self.assertEqual([], doc_problems(read(DOC_REL), R, self.seal, PI.git_numstat_since_seal(ROOT)))
+        self.assertEqual([], doc_problems(read(DOC_REL), R, self.seal, [x for x in PI.git_numstat_since_seal(ROOT) if not SG.SGR.t5y_declared_numstat(x)]))
 
     def test_r_4_order_is_seal_then_records_and_document(self):
         self.need()

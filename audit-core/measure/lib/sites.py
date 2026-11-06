@@ -24,6 +24,7 @@ reading of the text, not a transformation of it. Those sites are catalogued
 by :func:`human_sites` and handed to a person.
 """
 
+import contextlib
 import re
 
 from . import numbers as N
@@ -216,6 +217,84 @@ def t1_sites(text, refs):
 # by borrowing a cash-flow amount, which tests nothing.
 MAGNITUDE_RATIO = 10.0
 
+# ---- 規則 T5Y(封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §0-2・§1)-----------------
+# 注入の仕掛けの T5(値が偶然一致して参照先が違う)を、円族の数(12.3億円・14億3,300万円)
+# にも作れるようにする。切り替えは 1 つ。既定は偽で、偽のとき ``t5_sites`` は 1 byte も
+# 変えない(前の便の記録と、``select`` を記録と突き合わせて再計算する門を壊さないため)。
+# 真にするのは T5Y の測定 script の process の中だけ(``t5_yen_on`` の with の中)。
+# 真のとき: 篩と「値が違う」を書かれた単位の値でなく円に直した値(``_scaled``)で比べ、
+# さらに相手ごとに「倍率で割って token の形で描き、読み直した円の値が相手の値と
+# 書かれた桁の半分以内・描いた字が元の字と違う・読み直した値が元の値から桁の半分より
+# 離れる」相手だけを残す。
+t5_yen_2026_11_06 = False
+
+
+@contextlib.contextmanager
+def t5_yen_on():
+    """切り替え ``t5_yen_2026_11_06`` を with の中だけ真にする。出るときは必ず元の値に戻す。"""
+    global t5_yen_2026_11_06
+    old = t5_yen_2026_11_06
+    t5_yen_2026_11_06 = True
+    try:
+        yield
+    finally:
+        t5_yen_2026_11_06 = old
+
+
+def t5_precision(t):
+    """token の書かれた最後の桁の大きさ(円)。複合は最後の位の単位(groups の字 + 円 の倍率の最小)、
+    少数は 10^-小数の桁 × 倍率、整数は 1 × 倍率。"""
+    factor = SC.scale_of(t.unit) or 1
+    if getattr(t, "groups", None) is not None:
+        return min(SC.scale_of(g[0] + "円") or 1 for g in t.groups)
+    if t.has_frac:
+        return (10 ** -len(t.text.split(".")[1])) * factor
+    return 1 * factor
+
+
+def t5_readback(t, other_value):
+    """相手の値(円)を token の形で描いて読み直す。(描いた字, 読み直した円の値)。token が 1 つに
+    読めなければ (描いた字, None)。"""
+    cand = other_value / float(SC.scale_of(t.unit) or 1)
+    rendered = N.render_value(cand, t)
+    toks = N.scan(rendered + (t.unit or ""))
+    if len(toks) != 1:
+        return rendered, None
+    return rendered, _scaled(toks[0].value, toks[0].unit)
+
+
+def t5_readable(t, other_value):
+    """相手の値で T5 を作ったとき、読み直しが相手の値と書かれた桁の半分以内・描いた字が元の字と違い・
+    読み直した値が元の値から桁の半分より離れるか。"""
+    rendered, back = t5_readback(t, other_value)
+    if back is None or rendered == t.text:
+        return False
+    half = t5_precision(t) / 2.0
+    return abs(back - other_value) <= half + TOL and abs(back - _scaled(t.value, t.unit)) > half
+
+
+def t5_sites_yen(text, refs, readback=True):
+    """規則 T5Y の ``t5_sites``。``readback`` が偽なら篩(円に直した規模と値の違い)だけ。"""
+    out = []
+    for t, r in identified_sites(text, refs):
+        v = _scaled(t.value, t.unit)
+        lo, hi = v / MAGNITUDE_RATIO, v * MAGNITUDE_RATIO
+        others = [
+            o for o in refs
+            if o["key"] != r["key"]
+            and str(o.get("label")) != str(r.get("label"))
+            and abs(o["value"] - v) > TOL
+            and o["value"] > 0
+            and lo <= o["value"] <= hi
+            and _unit_compatible(t.unit, o.get("unit"))
+        ]
+        if readback:
+            others = [o for o in others if t5_readable(t, o["value"])]
+        if others:
+            out.append({"type": "T5_COINCIDENT", "token": t, "ref": r, "others": others})
+    return out
+
+
 
 def t5_sites(text, refs):
     """値が偶然一致して参照先が違う.
@@ -225,6 +304,8 @@ def t5_sites(text, refs):
     also carry a different label (the same element in another context reads
     as the same thing in the record) and a comparable magnitude.
     """
+    if t5_yen_2026_11_06:
+        return t5_sites_yen(text, refs)
     out = []
     for t, r in identified_sites(text, refs):
         lo, hi = t.value / MAGNITUDE_RATIO, t.value * MAGNITUDE_RATIO

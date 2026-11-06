@@ -187,6 +187,34 @@ def build_t1(site, refs, rng):
     return None
 
 
+def _build_t5_yen(site, other):
+    """規則 T5Y(封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §0-2 の 2): 相手の値(円)を token の単位の数に
+    直して(倍率で割って)token の形で描く。``new_value`` は描いた字を読み直した値(token の単位)。"""
+    t = site["token"]
+    rendered, back = S.t5_readback(t, other["value"])
+    if back is None:
+        raise ValueError("T5Y: the rendered replacement does not read back as one token")
+    toks = N.scan(rendered + (t.unit or ""))
+    return {
+        "new_value": toks[0].value,
+        "replacement": rendered,
+        "span": [t.start, t.end],
+        "detail": {
+            "true_ref_key": site["ref"]["key"],
+            "true_ref_label": site["ref"].get("label"),
+            "true_value": t.value,
+            "replacement_value": other["value"],
+            "coincident_ref_key": other["key"],
+            "coincident_ref_label": other.get("label"),
+            "replacement_absent_from_reference_numbers": False,
+        },
+        "expected": (
+            "値だけを探す照合は通る(別の事実が同じ値を持つ)。"
+            "参照先を解いてから比べる照合だけが止める ― 既知の一番の穴"
+        ),
+    }
+
+
 def build_t5(site, refs, rng):
     """値が偶然一致して参照先が違う: the replacement is another fact's value."""
     t = site["token"]
@@ -197,6 +225,8 @@ def build_t5(site, refs, rng):
     # borrowed a cash-flow amount for a subsidiary count.
     pool = [o for o in others if o.get("unit") == site["ref"].get("unit")] or others
     other = pool[rng.randrange(len(pool))]
+    if S.t5_yen_2026_11_06:
+        return _build_t5_yen(site, other)
     cand = other["value"]
     return {
         "new_value": cand,

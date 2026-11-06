@@ -193,6 +193,9 @@ LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixt
                       # 2026-11-06: PB(封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md)。前期の手がかりがある数を当期の fact に落とさない engine 規則の測定の記録 3 つ(moves_200・regress97・inject)は
                       # 選んだ 20 社の docID と 97 書類の docID を持つ。script 1 本・門 2 本・結果の文書は docID を持たない。(上の T9 と同じ理由で tuple の末尾でなくここに置く)
                       "fixtures/xbrl/pbind/moves_200_2026-11-06.json", "fixtures/xbrl/pbind/regress97_2026-11-06.json", "fixtures/xbrl/pbind/inject_2026-11-06.json",
+                      # 2026-11-06: T5Y(封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md)。注入の仕掛けの T5 を円族の数に作れるようにする切り替えの注入の記録(inject)は選んだ 20 社の docID を持つ。
+                      # script 1 本・門 2 本・試験 1 本・結果の文書は docID を持たない。(上の T9 と同じ理由で tuple の末尾でなくここに置く)
+                      "fixtures/xbrl/t5y/inject_2026-11-06.json",
                       # 2026-11-03: AI の形 4 × model 2(封 docs/XBRL_AI_FORMS_SEAL_2026-11-03.md)。手元の 97 のうち選んだ 20 社の docID を材料の名として持つ記録 5 つ(gen・claims・labels・inject・tally)。
                       # script 4 本・門・結果の文書は docID を持たない
                       "fixtures/xbrl/aiforms/gen_2026-11-03.json", "fixtures/xbrl/aiforms/claims_2026-11-03.json", "fixtures/xbrl/aiforms/labels_2026-11-03.json",

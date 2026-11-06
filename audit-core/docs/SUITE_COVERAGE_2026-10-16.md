@@ -32,18 +32,18 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **284 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **287 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
-| `measure/tests` | 2 |
+| `measure/tests` | 3 |
 | `tests/adapters/kokkai` | 11 |
 | `tests/adapters/shogi` | 8 |
 | `tests/adapters/xbrl` | 37 |
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 213 |
+| `tests/measure` | 215 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -281,6 +281,9 @@ T9 の第 2 便(注入後の claim を基準の claim の id で引く対応付�
 **2026-11-06 に +2**(`tests/measure/test_xbrl_pbind_seal.py`・`tests/measure/test_xbrl_pbind_result.py`。
 前期の手がかりがある数を当期の fact に落とさない PB(封 `docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md`)の測定 script の封の門と結果の門。結果は `docs/XBRL_PRIOR_CUE_BIND_ENGINE_RESULT_2026-11-06.md`)。282 → 284(`tests/measure` 211 → 213)。
 
+**2026-11-06 に +3**(`measure/tests/test_t5_yen.py`・`tests/measure/test_xbrl_t5y_seal.py`・`tests/measure/test_xbrl_t5y_result.py`。
+注入の仕掛けの T5 を円族の数に作れるようにする T5Y(封 `docs/XBRL_T5_YEN_SEAL_2026-11-06.md`)の仕掛けの試験と、測定 script の封の門と結果の門。`test_inject.py` は変えず、試験は新しい file に置いた。結果は `docs/XBRL_T5_YEN_RESULT_2026-11-06.md`)。284 → 287(`measure/tests` 2 → 3・`tests/measure` 213 → 215)。
+
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
 
@@ -355,13 +358,13 @@ T9 の第 2 便(注入後の claim を基準の claim の id で引く対応付�
 | 走らせ方 | 覆い |
 |---|---|
 | `pytest -q`(path 指定なし) | **全部**(漏れ 0 本) |
-| `unittest discover`(ルートから) | **`measure/tests` の 2 本が漏れる**(`measure/tests/test_inject.py`・`measure/tests/test_yen_scan.py`。2026-11-05 までは 1 本) |
+| `unittest discover`(ルートから) | **`measure/tests` の 3 本が漏れる**(`measure/tests/test_inject.py`・`measure/tests/test_t5_yen.py`・`measure/tests/test_yen_scan.py`。2026-11-05 までは 1 本・2026-11-06 の T5Y までは 2 本) |
 
 **本数はこの文書に書かない。**正本は `fixtures/suite_coverage_2026-10-16.json` で、
 **覆いの検査が記録と現実の食い違いで落ちる**(`--write` で更新する)。
 **文に書いた数は古くなる** ― 2026-10-16 に実際それで共有ツリーの完走が落ちた(§3-3)。
 
-**残る 2 本は `measure/tests/test_inject.py`(96 本)と `measure/tests/test_yen_scan.py`(23 本。2026-11-05 に追加)で、`pytest` でしか走らない。**
+**残る 3 本は `measure/tests/test_inject.py`(96 本)と `measure/tests/test_yen_scan.py`(23 本。2026-11-05 に追加)と `measure/tests/test_t5_yen.py`(22 本。2026-11-06 に追加)で、`pytest` でしか走らない。**
 `measure/__init__.py` を足せば discover にも入るが、**それは案 B で崩れる**(§3)。
 
 
@@ -393,7 +396,7 @@ T9 の第 2 便(注入後の claim を基準の claim の id で引く対応付�
   完走したかは §6 の 1 本の run だけが示す。
 - **1 つのコマンドで全部走るわけではない。**`run_tests.sh` が 2 つの runner を順に走らせる。
 - **`unittest discover` は案 A を入れても全部は覆わない。**
-  残る 2 本(`measure/tests/test_inject.py`・`measure/tests/test_yen_scan.py`)は `pytest` でしか走らない。
+  残る 3 本(`measure/tests/test_inject.py`・`measure/tests/test_yen_scan.py`・`measure/tests/test_t5_yen.py`)は `pytest` でしか走らない。
 - この整備は**試験の数を増やしていない。**漏れを検出できるようにしただけである。
 
 ---

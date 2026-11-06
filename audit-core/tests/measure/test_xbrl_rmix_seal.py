@@ -304,6 +304,61 @@ def pb_declared_file_change(root, seal_commit, rel, base=ROOT):
         return head.stdout == fh.read()
 
 
+#: 2026-11-06(T5Y): 封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §2-1 が宣言した遷移(司令塔の決定 2026-11-06)。注入の仕掛けの 2 file に挿入だけを足した
+#: (measure/inject.py に +30 行・measure/lib/sites.py に +81 行。削除 0。切り替え t5_yen_2026_11_06 は既定 偽で、偽のとき既存の出力は 1 byte も変わらない)。
+#: 「仕掛けを封の commit から変えない」と留めた前の便の門(frozen_problems・触らない file の numstat・記録が読んだ材料の sha256)は、この遷移だけを許す。
+#: 許すのは、T5Y の封が履歴に 1 つ在り、numstat・sha16 が下の宣言と同じときだけ(仕掛けの 2 file)。仕掛けの 2 file を触った commit の後に、その commit だけが
+#: 触った前の便の門(T5Y の便が宣言の字を足した門)も許す(``t5y_declared_file_change``。履歴で見る)。他の file・他の行数・他の値は今までどおり赤。
+T5Y_SEAL_REL = "docs/XBRL_T5_YEN_SEAL_2026-11-06.md"
+T5Y_FILES = ("measure/inject.py", "measure/lib/sites.py")
+T5Y_NUMSTAT = {"measure/inject.py": ("30", "0"), "measure/lib/sites.py": ("81", "0")}
+T5Y_SHA16 = {"measure/inject.py": "d545f1f5a65f1c53", "measure/lib/sites.py": "f26566bda34430ac"}
+
+
+def t5y_seal_in_history(root=REPO):
+    return len(PR.added_commits(root, PREFIX + T5Y_SEAL_REL)) == 1
+
+
+def t5y_declared_numstat(line, root=REPO, base=ROOT):
+    u"""``git diff --numstat`` の 1 行が T5Y の宣言した遷移の行か(封が履歴に在り、行数と作業木の sha16 が宣言と同じ)。"""
+    parts = line.split("\t")
+    if len(parts) != 3 or not parts[2].startswith(PREFIX):
+        return False
+    rel = parts[2][len(PREFIX):]
+    return (rel in T5Y_NUMSTAT and (parts[0], parts[1]) == T5Y_NUMSTAT[rel] and pb_sha16(rel, base) == T5Y_SHA16[rel] and t5y_seal_in_history(root))
+
+
+def t5y_pre_transition_sha256(rel, root=REPO, base=ROOT):
+    u"""仕掛けの file が T5Y の宣言した遷移の値のとき、その file の遷移の前(T5Y の封の commit の blob)の sha256。遷移していなければ None。
+    記録が読んだ材料の sha256(測った時点の値)を、遷移の前の値と照らすために使う。"""
+    if rel not in T5Y_FILES or not t5y_seal_in_history(root) or pb_sha16(rel, base) != T5Y_SHA16[rel]:
+        return None
+    import hashlib
+    seal = PR.added_commits(root, PREFIX + T5Y_SEAL_REL)[0]
+    blob = subprocess.run(["git", "show", "%s:%s%s" % (seal, PREFIX, rel)], cwd=root, capture_output=True)
+    return hashlib.sha256(blob.stdout).hexdigest() if blob.returncode == 0 else None
+
+
+def t5y_declared_file_change(root, seal_commit, rel, base=ROOT):
+    u"""封の commit から ``rel`` が変わったのが、T5Y の宣言した遷移か。仕掛けの 2 file は T5Y の封が履歴に在り作業木の sha16 が宣言の値のとき(commit の前でも)。
+    それ以外の file は、T5Y の便の commit(T5Y の封の後に仕掛けの 2 file を最初に触った commit のうち子孫の最後。履歴から探す)が封の commit の後に触り、触った commit が T5Y の便の commit と PB の engine の commit だけで、作業木が HEAD と同じ(commit 済み)のとき。"""
+    if rel in T5Y_FILES:
+        return t5y_seal_in_history(root) and pb_sha16(rel, base) == T5Y_SHA16[rel]
+    s, e = engine_commit(root, PREFIX, T5Y_SEAL_REL, T5Y_FILES)
+    if s is None or e is None:
+        return False
+    log = [c for c in PR.git_in(root, "log", "--format=%H", seal_commit + "..HEAD", "--", PREFIX + rel)[1].split() if c]
+    # T5Y の便の commit のほかに、PB の engine の commit(PB の封の後に recipes.py と vocabulary.py を最初に触った commit)も触った前の便の門は、この 2 つの commit だけが触ったときに限り許す
+    _pbs, pb_e = engine_commit(root, PREFIX, PB_SEAL_REL, PB_ENGINE_FILES)
+    if e not in log or not set(log) <= set(c for c in (e, pb_e) if c):
+        return False
+    head = subprocess.run(["git", "show", "HEAD:%s%s" % (PREFIX, rel)], cwd=root, capture_output=True)
+    if head.returncode != 0:
+        return False
+    with open(os.path.join(base, rel), "rb") as fh:
+        return head.stdout == fh.read()
+
+
 def frozen_problems(rels=READ_ONLY_RELS, root=REPO, base=ROOT, seal_rel=SEAL_REL):
     u"""root = git の木、base = 作業木の audit-core の folder。封の commit の blob と作業木の byte を比べる。"""
     seal = PR.added_commits(root, PREFIX + seal_rel)
@@ -318,6 +373,8 @@ def frozen_problems(rels=READ_ONLY_RELS, root=REPO, base=ROOT, seal_rel=SEAL_REL
         with open(os.path.join(base, rel), "rb") as fh:
             if blob.stdout != fh.read():
                 if pb_declared_file_change(root, seal[0], rel, base):      # 2026-11-06(PB): PB の engine の commit だけが触った file は宣言された遷移
+                    continue
+                if t5y_declared_file_change(root, seal[0], rel, base):      # 2026-11-06(T5Y): 仕掛けの 2 file と、T5Y の便の commit だけが触った前の便の門は宣言された遷移
                     continue
                 out.append(u"封の commit の blob と byte が違う: %s" % rel)
     return out
@@ -585,6 +642,179 @@ class PbTransitionTest(unittest.TestCase):
         r.put("adapters/xbrl/vocabulary.py")
         r.commit(*PB_ENGINE_FILES)
         self.assertFalse(pb_declared_file_change(r.d, seal, "measure/gate.py", base=os.path.join(r.d, "audit-core")))
+
+
+class T5yTransitionTest(unittest.TestCase):
+    u"""2026-11-06(T5Y): 後の便の門が使う「T5Y の宣言された遷移」の部品(``t5y_declared_numstat``・``t5y_pre_transition_sha256``・``t5y_declared_file_change``)。許すのは宣言の字だけで、他は赤。"""
+
+    INJ = "%smeasure/inject.py" % PREFIX
+    SIT = "%smeasure/lib/sites.py" % PREFIX
+
+    def test_t5y_1_the_declared_numstat_lines_are_accepted_in_this_repo(self):
+        self.assertTrue(t5y_seal_in_history())
+        self.assertTrue(t5y_declared_numstat("30\t0\t" + self.INJ))
+        self.assertTrue(t5y_declared_numstat("81\t0\t" + self.SIT))
+        for rel in T5Y_FILES:
+            self.assertEqual(T5Y_SHA16[rel], pb_sha16(rel))
+
+    def test_t5y_2_any_other_numstat_line_is_not_accepted(self):
+        for bad in ("31\t0\t" + self.INJ, "30\t1\t" + self.INJ, "29\t0\t" + self.INJ, "82\t0\t" + self.SIT, "81\t1\t" + self.SIT,
+                    "81\t0\t%smeasure/lib/numbers.py" % PREFIX, "30\t0\t%smeasure/xbrl_t5y_2026-11-06.py" % PREFIX, "24\t0\t%sadapters/xbrl/recipes.py" % PREFIX,
+                    "30\t0\tmeasure/inject.py", "30\t0", ""):
+            self.assertFalse(t5y_declared_numstat(bad), bad)
+
+    def test_t5y_3_a_file_that_is_not_the_declared_sha16_is_not_accepted(self):
+        with tempfile.TemporaryDirectory(dir=os.environ.get("TMPDIR")) as d:
+            os.makedirs(os.path.join(d, "measure", "lib"))
+            for rel in T5Y_FILES:
+                with open(os.path.join(d, rel), "w", encoding="utf-8") as fh:
+                    fh.write("x = 1\n")
+            self.assertFalse(t5y_declared_numstat("30\t0\t" + self.INJ, base=d))
+            self.assertFalse(t5y_declared_numstat("81\t0\t" + self.SIT, base=d))
+            for rel in T5Y_FILES:
+                self.assertFalse(t5y_declared_file_change(REPO, "0" * 40, rel, base=d), rel)
+                self.assertIsNone(t5y_pre_transition_sha256(rel, base=d), rel)
+
+    def test_t5y_4_without_the_t5y_seal_in_history_nothing_is_accepted(self):
+        r = PR.Repo()
+        r.put("measure/prev.py")
+        r.commit("measure/prev.py")
+        self.assertFalse(t5y_seal_in_history(r.d))
+        self.assertFalse(t5y_declared_numstat("30\t0\t" + self.INJ, root=r.d))
+        for rel in T5Y_FILES:
+            self.assertFalse(t5y_declared_file_change(r.d, "0" * 40, rel), rel)
+            self.assertIsNone(t5y_pre_transition_sha256(rel, root=r.d), rel)
+
+    def test_t5y_5_the_pre_transition_sha256_is_the_blob_at_the_t5y_seal_commit(self):
+        import hashlib
+        seal = PR.added_commits(REPO, PREFIX + T5Y_SEAL_REL)[0]
+        for rel in T5Y_FILES:
+            blob = subprocess.run(["git", "show", "%s:%s%s" % (seal, PREFIX, rel)], cwd=REPO, capture_output=True).stdout
+            self.assertEqual(hashlib.sha256(blob).hexdigest(), t5y_pre_transition_sha256(rel))
+            with open(os.path.join(ROOT, rel), "rb") as fh:
+                self.assertNotEqual(hashlib.sha256(fh.read()).hexdigest(), t5y_pre_transition_sha256(rel))      # 遷移の前と後は別の byte
+        self.assertIsNone(t5y_pre_transition_sha256("measure/xbrl_rmix_2026-11-04.py"))                           # 仕掛けの 2 file 以外は None
+
+    def _repo(self, extra_commit=False, dirty=False, touch_device=True, seal_first=True):
+        u"""封 → T5Y の封 → (T5Y の便の commit = 仕掛けの 2 file と前の便の門を触る)→ ..."""
+        r = PR.Repo()
+        r.put("measure/gate.py")
+        r.put(SEAL_REL)
+        seal = r.commit("measure/gate.py", SEAL_REL)
+        r.put(T5Y_SEAL_REL)
+        r.commit(T5Y_SEAL_REL)
+        for rel in T5Y_FILES:
+            r.put(rel)
+        r.put("measure/gate.py")
+        files = ["measure/gate.py"] + (list(T5Y_FILES) if touch_device else [])
+        e = r.commit(*files)
+        if extra_commit:
+            r.put("measure/gate.py")
+            r.commit("measure/gate.py")
+        if dirty:
+            r.put("measure/gate.py")
+        return r, seal, e
+
+    def test_t5y_6_a_gate_changed_only_by_the_t5y_commit_is_accepted(self):
+        r, seal, e = self._repo()
+        base = os.path.join(r.d, "audit-core")
+        self.assertTrue(t5y_declared_file_change(r.d, seal, "measure/gate.py", base=base))
+        self.assertEqual([], frozen_problems(rels=("measure/gate.py",), root=r.d, base=base))
+
+    def test_t5y_7_a_gate_changed_again_after_the_t5y_commit_is_not_accepted(self):
+        r, seal, e = self._repo(extra_commit=True)
+        base = os.path.join(r.d, "audit-core")
+        self.assertFalse(t5y_declared_file_change(r.d, seal, "measure/gate.py", base=base))
+        self.assertEqual([u"封の commit の blob と byte が違う: measure/gate.py"], frozen_problems(rels=("measure/gate.py",), root=r.d, base=base))
+
+    def test_t5y_8_an_uncommitted_change_is_not_accepted(self):
+        r, seal, e = self._repo(dirty=True)
+        self.assertFalse(t5y_declared_file_change(r.d, seal, "measure/gate.py", base=os.path.join(r.d, "audit-core")))
+
+    def test_t5y_9_a_change_by_a_commit_that_does_not_touch_the_device_is_not_accepted(self):
+        r, seal, e = self._repo(touch_device=False)
+        base = os.path.join(r.d, "audit-core")
+        self.assertFalse(t5y_declared_file_change(r.d, seal, "measure/gate.py", base=base))
+        self.assertNotEqual([], frozen_problems(rels=("measure/gate.py",), root=r.d, base=base))
+
+    def test_t5y_10_a_file_changed_before_the_t5y_seal_is_not_accepted(self):
+        r = PR.Repo()
+        r.put("measure/gate.py")
+        r.put(SEAL_REL)
+        seal = r.commit("measure/gate.py", SEAL_REL)
+        r.put("measure/gate.py")
+        r.commit("measure/gate.py")
+        r.put(T5Y_SEAL_REL)
+        r.commit(T5Y_SEAL_REL)
+        for rel in T5Y_FILES:
+            r.put(rel)
+        r.commit(*T5Y_FILES)
+        self.assertFalse(t5y_declared_file_change(r.d, seal, "measure/gate.py", base=os.path.join(r.d, "audit-core")))
+
+    def _repo_pb_then_t5y(self, other_between=False, pb_after_t5y=False):
+        u"""封 → PB の封 → PB の engine の commit(前の便の門を触る)→ (他の commit)→ T5Y の封 → T5Y の便の commit(同じ門を触る)。"""
+        r = PR.Repo()
+        r.put("measure/gate.py")
+        r.put(SEAL_REL)
+        seal = r.commit("measure/gate.py", SEAL_REL)
+        r.put(PB_SEAL_REL)
+        r.commit(PB_SEAL_REL)
+        for rel in PB_ENGINE_FILES:
+            r.put(rel)
+        r.put("measure/gate.py")
+        r.commit("measure/gate.py", *PB_ENGINE_FILES)
+        if other_between:
+            r.put("measure/gate.py")
+            r.commit("measure/gate.py")
+        r.put(T5Y_SEAL_REL)
+        r.commit(T5Y_SEAL_REL)
+        for rel in T5Y_FILES:
+            r.put(rel)
+        r.put("measure/gate.py")
+        r.commit("measure/gate.py", *T5Y_FILES)
+        return r, seal
+
+    def test_t5y_11_a_gate_changed_by_the_pb_commit_and_then_the_t5y_commit_is_accepted(self):
+        r, seal = self._repo_pb_then_t5y()
+        base = os.path.join(r.d, "audit-core")
+        self.assertTrue(t5y_declared_file_change(r.d, seal, "measure/gate.py", base=base))
+        self.assertEqual([], frozen_problems(rels=("measure/gate.py",), root=r.d, base=base))
+
+    def test_t5y_12_a_gate_also_changed_by_another_commit_between_is_not_accepted(self):
+        r, seal = self._repo_pb_then_t5y(other_between=True)
+        base = os.path.join(r.d, "audit-core")
+        self.assertFalse(t5y_declared_file_change(r.d, seal, "measure/gate.py", base=base))
+        self.assertNotEqual([], frozen_problems(rels=("measure/gate.py",), root=r.d, base=base))
+
+    def test_t5y_12b_a_gate_changed_only_by_the_pb_commit_is_not_a_t5y_transition(self):
+        r = PR.Repo()
+        r.put("measure/gate.py")
+        r.put(SEAL_REL)
+        seal = r.commit("measure/gate.py", SEAL_REL)
+        r.put(PB_SEAL_REL)
+        r.commit(PB_SEAL_REL)
+        for rel in PB_ENGINE_FILES:
+            r.put(rel)
+        r.put("measure/gate.py")
+        r.commit("measure/gate.py", *PB_ENGINE_FILES)
+        r.put(T5Y_SEAL_REL)
+        r.commit(T5Y_SEAL_REL)
+        for rel in T5Y_FILES:
+            r.put(rel)
+        r.commit(*T5Y_FILES)
+        base = os.path.join(r.d, "audit-core")
+        self.assertTrue(pb_declared_file_change(r.d, seal, "measure/gate.py", base=base))                 # PB の遷移としては許す
+        self.assertFalse(t5y_declared_file_change(r.d, seal, "measure/gate.py", base=base))               # T5Y の遷移とは言わない
+
+    def test_t5y_12c_an_uncommitted_change_after_the_pb_and_t5y_commits_is_not_accepted(self):
+        r, seal = self._repo_pb_then_t5y()
+        r.put("measure/gate.py")
+        self.assertFalse(t5y_declared_file_change(r.d, seal, "measure/gate.py", base=os.path.join(r.d, "audit-core")))
+
+    def test_t5y_13_the_pb_and_t5y_transitions_do_not_accept_each_other_files(self):
+        self.assertFalse(t5y_declared_numstat("24\t0\t%sadapters/xbrl/recipes.py" % PREFIX))
+        self.assertFalse(pb_declared_numstat("30\t0\t" + self.INJ))
+        self.assertFalse(pb_declared_numstat("81\t0\t" + self.SIT))
 
 
 class OrderTest(unittest.TestCase):

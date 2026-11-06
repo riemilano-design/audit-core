@@ -955,6 +955,10 @@ LATER_HARNESS_FILES = (
     ("measure/xbrl_pswap_idmap_2026-11-06.py", u"仕掛け持ち + 使う側", u"有", "inject_text_pi", u"res, conds[p], miss[p], found[p] = id_map(claims, bc[\"ids\"][p], target, inj[\"replacement\"])", "2026-11-06"),
     # 2026-11-06: PB の注入(封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §5)。T9 の第 2 便の script を importlib で読み込み、site・並べ替え・cap・差し替え・行の欄・id で引く対応付けは T9 の第 2 便のまま、profile を P30E・P32E にした版(土台は P30E が GROUNDED の claim、P32E の claim は (value, span, unit) が同じ 1 件で結ぶ)。行の欄に窓の手がかり(PB の _prior_cue_window_2026_11_06)と P32E の注入後の pointer の期(Prior2Year を分ける)を足す。旧の対応付け claim_for_p27 は使わない。
     ("measure/xbrl_pbind_2026-11-06.py", u"仕掛け持ち + 使う側", u"有", "inject_text_pb", u"res, _conds, miss[p], found = PI.id_map(claims, bc[\"ids\"][p], target, inj[\"replacement\"])", "2026-11-06"),
+    # 2026-11-06: T5Y の注入(封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §5)。T9 の第 2 便の script を importlib で読み込み、site は仕掛けの S.t5_sites(切り替え t5_yen_2026_11_06 真)、差し替えは仕掛けの IJ.build_t5 を通す。注入後の claim は基準の claim の id で引く(T9 の第 2 便と同じ 3 条件)。
+    ("measure/xbrl_t5y_2026-11-06.py", u"仕掛け持ち + 使う側", u"有", "inject_text_ty", u"res, conds[p], miss[p], found[p] = PI.id_map(claims, bc[\"ids\"][p], target, inj[\"replacement\"])", "2026-11-06"),
+    # 2026-11-06: T5Y の仕掛け(封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §2-1)。measure/inject.py に切り替え t5_yen_2026_11_06 が真のときだけ通る build_t5 の枝 _build_t5_yen(相手の値を倍率で割って token の形で描き、描いた字を読み直した値を new_value にする。挿入 +30 行・削除 0)。claim への対応付けは持たない共通部品のまま(役は表の 4 行目と同じ)。
+    ("measure/inject.py", u"共通部品", u"不要", "_build_t5_yen", u"rendered, back = S.t5_readback(t, other[\"value\"])", "2026-11-06"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
@@ -1281,7 +1285,9 @@ class LaterFilesTest(Base):
         pinned = pinned_measure()
         for d in LATER_HARNESS_FILES:
             self.assertTrue(os.path.exists(os.path.join(ROOT, d[0])), d[0])
-            self.assertNotIn(d[0], pinned, d[0])                               # この便の宣言は新しい file だけ(変わった file はまだ無い)
+            # 2026-11-06(T5Y): 宣言は新しい file か、封の commit の木の本文から変わった file(measure/inject.py。封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §2-1 の挿入だけの遷移)。変わっていない pinned の file の宣言は古い宣言として赤。
+            with io.open(os.path.join(ROOT, d[0]), encoding="utf-8") as fh:
+                self.assertTrue(d[0] not in pinned or pinned[d[0]] != fh.read(), d[0])
 
 
 class RecordsAndJudgmentTest(Base):

@@ -992,7 +992,10 @@ class Stage2RecordTest(unittest.TestCase):
         self.assertTrue(HEX40.match(r[u"HEAD の commit"] or u""))
         sha = lambda rel: hashlib.sha256(open(os.path.join(ROOT, rel), "rb").read()).hexdigest()
         self.assertEqual(r[u"この script の sha256"], sha(S2_SCRIPT_REL))
-        self.assertEqual(dict(r[u"読んだ材料の sha256"]), {REC_REL: sha(REC_REL), SCRIPT_REL: sha(SCRIPT_REL), u"measure/inject.py": sha(u"measure/inject.py"),
+        # 2026-11-06(T5Y): 記録の inject.py の sha256 は測った時点(遷移の前)の値。封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §2-1 が宣言した遷移の後の木では、T5Y の封の commit の blob の sha256 と照らす(SGR.t5y_pre_transition_sha256)
+        sgr = load(os.path.join(ROOT, "tests", "measure", "test_xbrl_rmix_seal.py"), "rmix_seal_gate_for_restated_prior_t5y")
+        inject_then = sgr.t5y_pre_transition_sha256(u"measure/inject.py") or sha(u"measure/inject.py")
+        self.assertEqual(dict(r[u"読んだ材料の sha256"]), {REC_REL: sha(REC_REL), SCRIPT_REL: sha(SCRIPT_REL), u"measure/inject.py": inject_then,
                                                        u"fixtures/xbrl/taxonomy_labels_sha256.txt": sha(u"fixtures/xbrl/taxonomy_labels_sha256.txt")})
         self.assertEqual(r[u"key_leaks"], [])
         self.assertTrue(r[u"配線の門"][u"通った"])

@@ -405,7 +405,10 @@ ENGINE_LATER = {"adapters/xbrl/recipes.py": ("0add35e7aa77d86b", SEAL_PB),
                 # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 が宣言した遷移。verify_document.py の docstring の 1 行(+1 行・-1 行。実行の字は変えない)。
                 # 受け入れるのは、その封が履歴に在り、値が下の値のときだけ。
                 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-                "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", SEAL_CAND)}
+                "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", SEAL_CAND),
+                # 2026-11-06(T5Y): 封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §2-1 が宣言した遷移(司令塔の決定 2026-11-06)。measure/inject.py に注入の仕掛けの T5 を円族の数に作れる切り替えの枝(+30 行・-0 行。既定 偽のとき既存の出力は 1 byte も変わらない)を足した。
+                # この file はこの門が測った時点では動いていない(封の commit から 0 行だった)。受け入れるのは、T5Y の封が履歴に在り、sha16 が下の値のときだけ。
+                "measure/inject.py": ("d545f1f5a65f1c53", "docs/XBRL_T5_YEN_SEAL_2026-11-06.md")}
 
 
 def only_declared_changes(numstat_out, status_out):

@@ -64,7 +64,9 @@ ENGINE_LATER = {
     # 2026-10-20(席と Core の一致の信頼 段 2): measure/inject.py に型 T6_PRIOR・T7_ROUND と select の quota・fallback を足した
     # (既存の型 T1/T2/T3/T5・MACHINE_TYPES・TYPE_POLICY・types を明示しない呼び出しの結果は不変。封 §4。司令塔の承認 2026-10-20)。
     # 92d34774c4cc76bb は FROZEN に残す(この記録が測った時点の値)。受け入れるのは、封が履歴に在り、値が足した後の値のときだけ。
-    "measure/inject.py": ("211e37d028f46cf7", "docs/XBRL_HYBRID_TRUST_SEAL_2026-10-20.md"),
+    # 2026-11-06(T5Y): 封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §2-1 が宣言した遷移(司令塔の決定 2026-11-06)。measure/inject.py に注入の仕掛けの T5 を円族の数に作れる切り替え t5_yen_2026_11_06 の枝(_build_t5_yen・build_t5 の 2 行。+30 行・-0 行。既定 偽のとき既存の出力は 1 byte も変わらない)を足した。
+    # 直前の値 211e37d028f46cf7(席と Core の一致の信頼 段 2。封 docs/XBRL_HYBRID_TRUST_SEAL_2026-10-20.md)は残す(測った時点の値)。受け入れるのは、T5Y の封が履歴に在り、値が T5Y の後の値のときだけ。
+    "measure/inject.py": ("d545f1f5a65f1c53", "docs/XBRL_T5_YEN_SEAL_2026-11-06.md"),
 }
 
 
