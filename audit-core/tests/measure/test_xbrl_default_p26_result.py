@@ -87,6 +87,8 @@ FACTS_ROWS_2026_11_05B = (u"L-61", u"D-38")
 FACTS_ROWS_2026_11_06 = (u"L-62", u"D-39")
 # 2026-11-06(2): T9 の第 2 便(注入後の claim を基準の claim の id で引く対応付け)の便の行。P22・P26 の字は持たない(L-63・D-40・P-48 とも)が、前例と同じ形で遷移の検査に並べる
 FACTS_ROWS_2026_11_06B = (u"L-63", u"D-40")
+# 2026-11-06(3): 期の手がかりを縛る engine 規則 PB(P32E)の便の行。P22・P26 の字は L-64・D-41 が持つ(P-49 は持たない)ので、前例と同じ形で遷移の検査に並べる
+FACTS_ROWS_2026_11_06C = (u"L-64", u"D-41")
 STEP_NAMES = (u"S-1", u"S-2", u"S-3", u"S-4", u"S-5", u"S-6", u"S-7", u"S-8", u"S-9", u"S-10", u"S-11", u"S-12")
 
 #: **字で留める**(測った事実。定数から作らない)。変えたら記録も文書も作り直す。
@@ -804,7 +806,9 @@ class RecordTest(unittest.TestCase):
             self.assertIn(len(present_1106), (0, len(FACTS_ROWS_2026_11_06)), u"2026-11-06 の便(前期の fact に結ばれた数に当期の値を入れる注入 T9)の行が一部だけ在る(中途の遷移)")
             present_1106b = [i for i in FACTS_ROWS_2026_11_06B if any(l.startswith(u"| %s |" % i) for l in lines)]
             self.assertIn(len(present_1106b), (0, len(FACTS_ROWS_2026_11_06B)), u"2026-11-06 の便(2。T9 の第 2 便 = id で引く対応付け)の行が一部だけ在る(中途の遷移)")
-            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b) + tuple(present_1101) + tuple(present_1103) + tuple(present_1103b) + tuple(present_1104) + tuple(present_1104b) + tuple(present_1105) + tuple(present_1105b) + tuple(present_1106) + tuple(present_1106b))
+            present_1106c = [i for i in FACTS_ROWS_2026_11_06C if any(l.startswith(u"| %s |" % i) for l in lines)]
+            self.assertIn(len(present_1106c), (0, len(FACTS_ROWS_2026_11_06C)), u"2026-11-06 の便(3。期の手がかりを縛る engine 規則 PB)の行が一部だけ在る(中途の遷移)")
+            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b) + tuple(present_1101) + tuple(present_1103) + tuple(present_1103b) + tuple(present_1104) + tuple(present_1104b) + tuple(present_1105) + tuple(present_1105b) + tuple(present_1106) + tuple(present_1106b) + tuple(present_1106c))
             stray = [l[:60] for l in lines if (u"P22" in l or u"P26" in l) and not l.startswith(row_heads) and u"2026-10-28" not in l]
             self.assertEqual(stray, [], u"遷移の外の行に P22・P26 の字がある")
         n = 0
