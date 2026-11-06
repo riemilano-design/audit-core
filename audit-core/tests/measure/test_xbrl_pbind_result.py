@@ -44,10 +44,20 @@ sys.path.insert(0, os.path.join(ROOT, "measure"))
 
 
 def load_module(rel, name):
+    u"""importlib で読み込む。読み込んだ file が中で読む前の便の script は、決まった名前で ``sys.modules`` に登録し直して**先に居た module を上書きする**
+    (RB の ``numfix_regress97_for_rmix`` など。``--procs 2`` の pickle は名前で引く)。読み込みの前に居た名前は、読み込みの後に元の object へ戻す
+    (さもないと pytest の引数で RB の結果の門を PB の門より先に並べたとき、RB の門が持つ object と ``sys.modules`` の object が別になって赤くなる)。
+    読み込んだ module 自身の名前 ``name`` は残す。"""
+    before = dict(sys.modules)
     spec = importlib.util.spec_from_file_location(name, os.path.join(ROOT, rel))
     mod = importlib.util.module_from_spec(spec)
     sys.modules[name] = mod
-    spec.loader.exec_module(mod)
+    try:
+        spec.loader.exec_module(mod)
+    finally:
+        for k, v in before.items():
+            if k != name and sys.modules.get(k) is not v:
+                sys.modules[k] = v
     return mod
 
 
@@ -1966,6 +1976,55 @@ class RunInjectTest(unittest.TestCase):
             self.assertNotIn(needle, seg.replace(needle, u"", 1), needle)                         # 1 回だけ使う(2 重に数えていない)
         self.assertIn(u"E-1・E-8 engine の差分", seg)
         self.assertIn(u"E-7・E-9 の写し", seg)
+
+
+# ================================================================ 並べる順に依らない(pytest の引数の順で RB の門が赤くならない)
+class OrderIndependenceTest(unittest.TestCase):
+    u"""PB の script・門を読み込むと、RB・T9 の script が決まった名前で ``sys.modules`` に登録した module(``--procs 2`` の pickle が引く)を上書きしてしまう。
+    RB の門(``test_xbrl_rmix_result.py``)を PB の門より先に並べると、RB の門が持つ object と ``sys.modules`` の object が別になり赤くなった(2026-11-06)。
+    PB の門の ``load_module`` は読み込みの前後で ``sys.modules`` に在った名前を元の object に戻す。"""
+
+    def _changed(self, before):
+        return sorted(k for k, v in before.items() if sys.modules.get(k) is not v)
+
+    def test_o_1_loading_the_pb_script_again_leaves_every_registered_name_as_it_was(self):
+        before = dict(sys.modules)
+        self.assertIn(RR.XR.__name__, before)                                                        # 前提: RB の script の登録名が在る
+        probe = "pbind_script_order_probe"
+        try:
+            mod = SG.load_module(SCRIPT_REL, probe)
+            self.assertIsNot(mod.XR, RR.XR)                                                           # 前提: 読み直しは別の object を作る(上書きの機会がある)
+            self.assertEqual([], self._changed(before))
+            self.assertIs(sys.modules.get(RR.XR.__name__), before[RR.XR.__name__])                  # 読み込みの前に居た object のまま(RB の門が先に読まれていればその object)
+        finally:
+            sys.modules.pop(probe, None)
+
+    def test_o_2_loading_another_gate_through_the_result_gate_loader_leaves_every_name_as_it_was(self):
+        before = dict(sys.modules)
+        probe = "t9_result_gate_order_probe"
+        try:
+            load_module("tests/measure/test_xbrl_pswap_result.py", probe)
+            self.assertEqual([], self._changed(before))
+        finally:
+            sys.modules.pop(probe, None)
+
+    def test_o_3_the_loader_does_not_hide_the_new_names_it_registers(self):
+        u"""読み込んだ module 自身の名前は残る(PB の script の ``--procs`` の pickle は自分の名前を引く)。"""
+        probe = "pbind_script_order_probe2"
+        try:
+            mod = SG.load_module(SCRIPT_REL, probe)
+            self.assertIs(sys.modules.get(probe), mod)
+        finally:
+            sys.modules.pop(probe, None)
+
+    def test_o_4_rb_gate_before_pb_gate_runs_green_in_a_fresh_process(self):
+        u"""pytest の引数で RB の結果の門を PB の結果の門より先に並べる(欠陥の再現)。cache が無いと RB の試験は skip になり意味が無いので skip。"""
+        if not HAVE_CACHE:
+            self.skipTest(u"cache が無い(RB の test_w_4 は skip になる)")
+        cmd = [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/measure/test_xbrl_rmix_result.py", "tests/measure/test_xbrl_pbind_result.py", "-k", "test_w_4_regress97"]
+        r = subprocess.run(cmd, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+        self.assertEqual(0, r.returncode, r.stdout[-1500:])
+        self.assertIn("1 passed", r.stdout)
 
 
 # ================================================================ 宣言(docID を持つ記録は LATER_NAMING_FILES に、script は LATER_HARNESS_FILES に宣言する)

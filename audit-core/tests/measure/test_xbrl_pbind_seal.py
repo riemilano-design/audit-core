@@ -38,10 +38,20 @@ sys.path.insert(0, os.path.join(ROOT, "measure"))
 
 
 def load_module(rel, name):
+    u"""importlib で読み込む。読み込んだ file が中で読む前の便の script は、決まった名前で ``sys.modules`` に登録し直して**先に居た module を上書きする**
+    (RB の ``numfix_regress97_for_rmix`` など。``--procs 2`` の pickle は名前で引く)。読み込みの前に居た名前は、読み込みの後に元の object へ戻す
+    (さもないと pytest の引数で RB の結果の門を PB の門より先に並べたとき、RB の門が持つ object と ``sys.modules`` の object が別になって赤くなる)。
+    読み込んだ module 自身の名前 ``name`` は残す。"""
+    before = dict(sys.modules)
     spec = importlib.util.spec_from_file_location(name, os.path.join(ROOT, rel))
     mod = importlib.util.module_from_spec(spec)
     sys.modules[name] = mod
-    spec.loader.exec_module(mod)
+    try:
+        spec.loader.exec_module(mod)
+    finally:
+        for k, v in before.items():
+            if k != name and sys.modules.get(k) is not v:
+                sys.modules[k] = v
     return mod
 
 
