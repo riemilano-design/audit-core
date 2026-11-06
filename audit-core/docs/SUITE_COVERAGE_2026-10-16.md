@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **282 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **284 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 211 |
+| `tests/measure` | 213 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -277,6 +277,9 @@ T9 の第 2 便(注入後の claim を基準の claim の id で引く対応付�
 
 **2026-11-06 に +1**(`tests/adapters/xbrl/test_recipes_p32e.py`。
 前期の手がかりがある数を当期の fact に落とさない PB(封 `docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md`)の engine の試験。`tests/measure` は変わらない)。281 → 282(`tests/adapters/xbrl` 36 → 37)。
+
+**2026-11-06 に +2**(`tests/measure/test_xbrl_pbind_seal.py`・`tests/measure/test_xbrl_pbind_result.py`。
+前期の手がかりがある数を当期の fact に落とさない PB(封 `docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md`)の測定 script の封の門と結果の門。結果は `docs/XBRL_PRIOR_CUE_BIND_ENGINE_RESULT_2026-11-06.md`)。282 → 284(`tests/measure` 211 → 213)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
