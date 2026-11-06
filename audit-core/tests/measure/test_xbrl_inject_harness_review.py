@@ -951,6 +951,8 @@ LATER_HARNESS_FILES = (
     ("measure/xbrl_jtypes_2026-11-05.py", u"仕掛け持ち + 使う側", u"有", "inject_text_j", u"res = TUNE.claim_for_p27(verify(zb, p, tampered)[\"claims\"], inj, unit_q)", "2026-11-05"),
     # 2026-11-06: T9 の注入(封 docs/XBRL_PERIOD_SWAP_SEAL_2026-11-06.md §5)。前期の fact に結ばれた数(S.identified_sites の参照先が Prior1Year)に当期の値を元の字の形で入れる。site と差し替えは測定 script が持ち(仕掛けの経路は使わない)、注入後の claim は claim_for_p27 が引く(新しい値を持つ 1 件に決まるときだけ)。engine の手がかり recipes._prior_cue は行の欄のため読むだけ。
     ("measure/xbrl_pswap_2026-11-06.py", u"仕掛け持ち + 使う側", u"有", "inject_text_ps", u"res = TUNE.claim_for_p27(verify(zb, p, tampered)[\"claims\"], inj, tok.unit)", "2026-11-06"),
+    # 2026-11-06: T9 の第 2 便の注入(封 docs/XBRL_PERIOD_SWAP_IDMAP_SEAL_2026-11-06.md §5)。T9 の script を importlib で読み込み、site・並べ替え・cap・差し替え・行の欄は T9 のまま、注入後の claim を基準の claim の id で引く(id が同じで値が注入した値で span に差し替えの字が在る、の 3 つ全部で対応)。旧の対応付け claim_for_p27 の結果は行の欄に持つだけで判定に使わない。
+    ("measure/xbrl_pswap_idmap_2026-11-06.py", u"仕掛け持ち + 使う側", u"有", "inject_text_pi", u"res, conds[p], miss[p], found[p] = id_map(claims, bc[\"ids\"][p], target, inj[\"replacement\"])", "2026-11-06"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
