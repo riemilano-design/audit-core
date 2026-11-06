@@ -1,0 +1,1560 @@
+{
+ "seal": "docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md",
+ "封の commit": "b7824e6",
+ "封の追記の commit": "56317fb",
+ "step": "PB(前期の手がかりがある数を当期の fact に落とさない)― T9 の id の対応付けの注入を P30E・P32E で(切り替え 真。0 USD)",
+ "HEAD の commit": "dae62f2f450704fb773cb489eddaf162c11e191c",
+ "engine の commit": "c2eb773928f9f9d2fe352ff1654ead3dfd3064b4",
+ "この script の sha256": "53490dfec93f3bb48e193c8761ec13228088479225eb196d6e680c13fb2b8e82",
+ "前の便の script の sha256": {
+  "measure/xbrl_rmix_2026-11-04.py": "e76dd37b4dd62ead0628a83bcee52e65b21292b6c96e4972b1e9b5193e1190b2",
+  "measure/xbrl_rmix_regress97_2026-11-04.py": "4874e8dad6afcd2366c379f6ba037a8db3a14becb74e3a3fd27a4237c0125d60",
+  "measure/xbrl_pswap_idmap_2026-11-06.py": "d987d82577d934a356df36b4aa8696e17b59732872321f6864dc7dae74f4418d",
+  "measure/xbrl_pswap_2026-11-06.py": "0cd8c5dc5f4c3a5d38fd0fa838e328b0d73b4f25a5c0eca5985f6593e9bab78f"
+ },
+ "入力の記録の sha256": {
+  "fixtures/xbrl/pswap/inject_idmap_2026-11-06.json": "47a8ccb198dd62ecbe86da4d95e0cf20297db221a64ef64dbc6c20ba1dbb3b06",
+  "fixtures/xbrl/aiforms/gen_2026-11-03.json": "6be9e252f36dfeea5c5babf8986067fea223c715ef1a3dd2e7aaed606faa4e83",
+  "fixtures/xbrl/aiforms/f5_gen_2026-11-03.json": "c4587e4bc0552014bd5f9b6c9e2b00616d4af8506895f0e1d53a95aac17db35a"
+ },
+ "engine の指紋": {
+  "adapter_xbrl_py_sha256": "dc13edfee7a9ac6b900ae610d056424b622b8447491113b78c4debf902bcfee8",
+  "adapter_xbrl_py_files": 16,
+  "core_py_sha256": "34e836bb39762d5af831a9aa11d4ea095e73221beb5bd4510d3b234363a2a6e8",
+  "core_py_files": 4,
+  "git_commit": "dae62f2f450704fb773cb489eddaf162c11e191c"
+ },
+ "lib の指紋": {
+  "measure/lib/numbers.py": "0c4a044c350d2aad6838fafc8b69a66f67e2fe9d041df789cbae1e0dbfca3caa",
+  "measure/lib/scales.py": "c4db942652467321aa67e60aaa3bacb17a963b3d9f373031ece031a9375557f3"
+ },
+ "profile": [
+  "P30E",
+  "P32E"
+ ],
+ "cache の前後": {
+  "前": {
+   "edinet": {
+    "存在": true,
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "edinet-fresh-2026-10-21": {
+    "存在": true,
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   },
+   "edinet-prior-2026-11-02": {
+    "存在": true,
+    "件数": 94,
+    "名前の一覧の sha256": "de611b3805b5d8087eea119c0d341e126f9f0ed152edba940cefbed743ecc110"
+   },
+   "aiforms-2026-11-03": {
+    "存在": true,
+    "件数": 4,
+    "名前の一覧の sha256": "d3a16fd012a4c08641e7dbd69c557b089d66384f5683949fedf41e18b265dcc8"
+   },
+   "aiforms-f5-2026-11-03": {
+    "存在": true,
+    "件数": 3,
+    "名前の一覧の sha256": "671544725c982e526d45943fa4c1af3f9d59f21b987d624bc7e320c313f96113"
+   }
+  },
+  "後": {
+   "edinet": {
+    "存在": true,
+    "件数": 281,
+    "名前の一覧の sha256": "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+   },
+   "edinet-fresh-2026-10-21": {
+    "存在": true,
+    "件数": 40,
+    "名前の一覧の sha256": "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+   },
+   "edinet-prior-2026-11-02": {
+    "存在": true,
+    "件数": 94,
+    "名前の一覧の sha256": "de611b3805b5d8087eea119c0d341e126f9f0ed152edba940cefbed743ecc110"
+   },
+   "aiforms-2026-11-03": {
+    "存在": true,
+    "件数": 4,
+    "名前の一覧の sha256": "d3a16fd012a4c08641e7dbd69c557b089d66384f5683949fedf41e18b265dcc8"
+   },
+   "aiforms-f5-2026-11-03": {
+    "存在": true,
+    "件数": 3,
+    "名前の一覧の sha256": "671544725c982e526d45943fa4c1af3f9d59f21b987d624bc7e320c313f96113"
+   }
+  },
+  "変化なし": true
+ },
+ "範囲": "全 200 本",
+ "切り替え": {
+  "名前": "yen_scan_2026_11_05",
+  "inject の中の値": true,
+  "出たあとの値": false,
+  "配線の問題": []
+ },
+ "種": {
+  "file": "measure/SEED.json",
+  "種の確認": {
+   "seed_file": "audit-core/measure/SEED.json",
+   "seed_file_sha256": "f74146592f68b88dab89869a185d9f69bc68e8b4fa0c4eee1400581354b19f80",
+   "sealed_in_commit": "e945ee66a2b76789793a2e4163b95e06dc01ba74"
+  }
+ },
+ "型": {
+  "T9_PRIOR_TO_CURRENT": "T9 の第 2 便と同じ site・並べ替え・cap・差し替え・対応付け(S.identified_sites の (token, ref) のうち ref の context が Prior1Year で始まり、同じ要素の CurrentYear の fact がちょうど 1 件の数に、その当期の値を元の字の形で入れる。注入後の claim は基準の claim と同じ id の claim を引く)",
+  "上限": "1 本あたり 10",
+  "site": "ref の context が Prior1Year で始まり、同じ要素の CurrentYear の fact がちょうど 1 件・単位が同じ・両方正・値が違い、当期の値を元の字の形で描ける数(既存・万だけ・複合の全部)",
+  "土台": "無改変の文で P30E が GROUNDED の claim",
+  "土台の結び方": "P30E の claim を find_base_claim で 1 件に決め、P32E の claim は (value, span, unit) が同じ 1 件があれば結ぶ。無ければその行の P32E の欄は対応なし(判定しない)",
+  "手がかり": "engine の手がかり = recipes._prior_cue(注入前の文, token.start, token.end)、窓の手がかり = recipes._prior_cue_window_2026_11_06(注入前の文, token.start)。どちらも読むだけ",
+  "期": "id で引いた claim の pointers の先頭の context の先頭の語: CurrentYear / Prior1Year / Prior2Year / 他 / なし。要素名は持たない",
+  "inject の docID の引数": "本の名前(<docID>_<形>_<model>)"
+ },
+ "本ごとの数え": {
+  "S100YMFV_F1_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100YMFV_F1_claude-haiku-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100YMFV_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YMFV_F2_claude-haiku-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100YMFV_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YMFV_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YMFV_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YMFV_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZCT_F1_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZCT_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZCT_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZCT_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZCT_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZCT_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZCT_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZCT_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4GF_F1_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4GF_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4GF_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4GF_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4GF_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4GF_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4GF_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4GF_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4LC_F1_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4LC_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4LC_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4LC_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4LC_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4LC_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4LC_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4LC_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z5CH_F1_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 0
+  },
+  "S100Z5CH_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z5CH_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z5CH_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z5CH_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z5CH_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z5CH_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z5CH_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3HP_F1_claude-sonnet-5-5": {
+   "作れる site": 2,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 2,
+   "採った": 0
+  },
+  "S100Z3HP_F1_claude-haiku-5-5": {
+   "作れる site": 5,
+   "土台 P30E が GROUNDED の site": 5,
+   "cap を基準で絞る前に掛けた数": 5,
+   "採った": 5
+  },
+  "S100Z3HP_F2_claude-sonnet-5-5": {
+   "作れる site": 3,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 3,
+   "採った": 1
+  },
+  "S100Z3HP_F2_claude-haiku-5-5": {
+   "作れる site": 3,
+   "土台 P30E が GROUNDED の site": 2,
+   "cap を基準で絞る前に掛けた数": 3,
+   "採った": 2
+  },
+  "S100Z3HP_F3_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z3HP_F3_claude-haiku-5-5": {
+   "作れる site": 2,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 2,
+   "採った": 0
+  },
+  "S100Z3HP_F4_claude-sonnet-5-5": {
+   "作れる site": 6,
+   "土台 P30E が GROUNDED の site": 2,
+   "cap を基準で絞る前に掛けた数": 6,
+   "採った": 2
+  },
+  "S100Z3HP_F4_claude-haiku-5-5": {
+   "作れる site": 3,
+   "土台 P30E が GROUNDED の site": 3,
+   "cap を基準で絞る前に掛けた数": 3,
+   "採った": 3
+  },
+  "S100YZEV_F1_claude-sonnet-5-5": {
+   "作れる site": 2,
+   "土台 P30E が GROUNDED の site": 2,
+   "cap を基準で絞る前に掛けた数": 2,
+   "採った": 2
+  },
+  "S100YZEV_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZEV_F2_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100YZEV_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZEV_F3_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100YZEV_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZEV_F4_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100YZEV_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z40G_F1_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z40G_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z40G_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z40G_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z40G_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z40G_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z40G_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z40G_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZ7E_F1_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 0
+  },
+  "S100YZ7E_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZ7E_F2_claude-sonnet-5-5": {
+   "作れる site": 2,
+   "土台 P30E が GROUNDED の site": 2,
+   "cap を基準で絞る前に掛けた数": 2,
+   "採った": 2
+  },
+  "S100YZ7E_F2_claude-haiku-5-5": {
+   "作れる site": 2,
+   "土台 P30E が GROUNDED の site": 2,
+   "cap を基準で絞る前に掛けた数": 2,
+   "採った": 2
+  },
+  "S100YZ7E_F3_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100YZ7E_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZ7E_F4_claude-sonnet-5-5": {
+   "作れる site": 2,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 2,
+   "採った": 1
+  },
+  "S100YZ7E_F4_claude-haiku-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z6XO_F1_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z6XO_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z6XO_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z6XO_F2_claude-haiku-5-5": {
+   "作れる site": 4,
+   "土台 P30E が GROUNDED の site": 4,
+   "cap を基準で絞る前に掛けた数": 4,
+   "採った": 4
+  },
+  "S100Z6XO_F3_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z6XO_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z6XO_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z6XO_F4_claude-haiku-5-5": {
+   "作れる site": 2,
+   "土台 P30E が GROUNDED の site": 2,
+   "cap を基準で絞る前に掛けた数": 2,
+   "採った": 2
+  },
+  "S100YYOS_F1_claude-sonnet-5-5": {
+   "作れる site": 23,
+   "土台 P30E が GROUNDED の site": 22,
+   "cap を基準で絞る前に掛けた数": 10,
+   "採った": 10
+  },
+  "S100YYOS_F1_claude-haiku-5-5": {
+   "作れる site": 9,
+   "土台 P30E が GROUNDED の site": 8,
+   "cap を基準で絞る前に掛けた数": 9,
+   "採った": 8
+  },
+  "S100YYOS_F2_claude-sonnet-5-5": {
+   "作れる site": 9,
+   "土台 P30E が GROUNDED の site": 9,
+   "cap を基準で絞る前に掛けた数": 9,
+   "採った": 9
+  },
+  "S100YYOS_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYOS_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYOS_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYOS_F4_claude-sonnet-5-5": {
+   "作れる site": 15,
+   "土台 P30E が GROUNDED の site": 15,
+   "cap を基準で絞る前に掛けた数": 10,
+   "採った": 10
+  },
+  "S100YYOS_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YW7F_F1_claude-sonnet-5-5": {
+   "作れる site": 22,
+   "土台 P30E が GROUNDED の site": 18,
+   "cap を基準で絞る前に掛けた数": 10,
+   "採った": 10
+  },
+  "S100YW7F_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YW7F_F2_claude-sonnet-5-5": {
+   "作れる site": 11,
+   "土台 P30E が GROUNDED の site": 7,
+   "cap を基準で絞る前に掛けた数": 10,
+   "採った": 7
+  },
+  "S100YW7F_F2_claude-haiku-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 0
+  },
+  "S100YW7F_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YW7F_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YW7F_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YW7F_F4_claude-haiku-5-5": {
+   "作れる site": 4,
+   "土台 P30E が GROUNDED の site": 3,
+   "cap を基準で絞る前に掛けた数": 4,
+   "採った": 3
+  },
+  "S100Z1WR_F1_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z1WR_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z1WR_F2_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z1WR_F2_claude-haiku-5-5": {
+   "作れる site": 4,
+   "土台 P30E が GROUNDED の site": 4,
+   "cap を基準で絞る前に掛けた数": 4,
+   "採った": 4
+  },
+  "S100Z1WR_F3_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z1WR_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z1WR_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z1WR_F4_claude-haiku-5-5": {
+   "作れる site": 3,
+   "土台 P30E が GROUNDED の site": 3,
+   "cap を基準で絞る前に掛けた数": 3,
+   "採った": 3
+  },
+  "S100YYUD_F1_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYUD_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYUD_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYUD_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYUD_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYUD_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYUD_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYUD_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYSK_F1_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 0
+  },
+  "S100YYSK_F1_claude-haiku-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100YYSK_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYSK_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYSK_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYSK_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYSK_F4_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 0
+  },
+  "S100YYSK_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYF5_F1_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYF5_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYF5_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYF5_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYF5_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYF5_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYF5_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYF5_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYRG_F1_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYRG_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYRG_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYRG_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYRG_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYRG_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYRG_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYRG_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3V1_F1_claude-sonnet-5-5": {
+   "作れる site": 2,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 2,
+   "採った": 1
+  },
+  "S100Z3V1_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3V1_F2_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z3V1_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3V1_F3_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z3V1_F3_claude-haiku-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 0
+  },
+  "S100Z3V1_F4_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z3V1_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYS4_F1_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYS4_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYS4_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYS4_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYS4_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYS4_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYS4_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYS4_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3CO_F1_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3CO_F1_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3CO_F2_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3CO_F2_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3CO_F3_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3CO_F3_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3CO_F4_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3CO_F4_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YMFV_F5_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100YMFV_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZCT_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZCT_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4GF_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4GF_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4LC_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z4LC_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z5CH_F5_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 0
+  },
+  "S100Z5CH_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3HP_F5_claude-sonnet-5-5": {
+   "作れる site": 10,
+   "土台 P30E が GROUNDED の site": 5,
+   "cap を基準で絞る前に掛けた数": 10,
+   "採った": 5
+  },
+  "S100Z3HP_F5_claude-haiku-5-5": {
+   "作れる site": 4,
+   "土台 P30E が GROUNDED の site": 2,
+   "cap を基準で絞る前に掛けた数": 4,
+   "採った": 2
+  },
+  "S100YZEV_F5_claude-sonnet-5-5": {
+   "作れる site": 2,
+   "土台 P30E が GROUNDED の site": 2,
+   "cap を基準で絞る前に掛けた数": 2,
+   "採った": 2
+  },
+  "S100YZEV_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z40G_F5_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z40G_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YZ7E_F5_claude-sonnet-5-5": {
+   "作れる site": 3,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 3,
+   "採った": 0
+  },
+  "S100YZ7E_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z6XO_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z6XO_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYOS_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYOS_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YW7F_F5_claude-sonnet-5-5": {
+   "作れる site": 21,
+   "土台 P30E が GROUNDED の site": 16,
+   "cap を基準で絞る前に掛けた数": 10,
+   "採った": 10
+  },
+  "S100YW7F_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z1WR_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z1WR_F5_claude-haiku-5-5": {
+   "作れる site": 8,
+   "土台 P30E が GROUNDED の site": 8,
+   "cap を基準で絞る前に掛けた数": 8,
+   "採った": 8
+  },
+  "S100YYUD_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYUD_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYSK_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYSK_F5_claude-haiku-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100YYF5_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYF5_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYRG_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYRG_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3V1_F5_claude-sonnet-5-5": {
+   "作れる site": 1,
+   "土台 P30E が GROUNDED の site": 1,
+   "cap を基準で絞る前に掛けた数": 1,
+   "採った": 1
+  },
+  "S100Z3V1_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYS4_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100YYS4_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3CO_F5_claude-sonnet-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  },
+  "S100Z3CO_F5_claude-haiku-5-5": {
+   "作れる site": 0,
+   "土台 P30E が GROUNDED の site": 0,
+   "cap を基準で絞る前に掛けた数": 0,
+   "採った": 0
+  }
+ },
+ "注入の行の数": 141,
+ "集計": {
+  "P30E": {
+   "注入の行": 141,
+   "通した": {
+    "件": 138,
+    "率": 97.9
+   },
+   "名指して原本の値を返した": {
+    "件": 3,
+    "率": 2.1
+   },
+   "名指したが別の値": {
+    "件": 0,
+    "率": 0.0
+   },
+   "止めたが名指さない(POINTER_NOT_FOUND)": {
+    "件": 0,
+    "率": 0.0
+   },
+   "止めたが名指さない(UNVERIFIABLE)": {
+    "件": 0,
+    "率": 0.0
+   },
+   "対応が付かない": {
+    "件": 0,
+    "率": 0.0
+   }
+  },
+  "P32E": {
+   "注入の行": 141,
+   "通した": {
+    "件": 12,
+    "率": 8.5
+   },
+   "名指して原本の値を返した": {
+    "件": 128,
+    "率": 90.8
+   },
+   "名指したが別の値": {
+    "件": 1,
+    "率": 0.7
+   },
+   "止めたが名指さない(POINTER_NOT_FOUND)": {
+    "件": 0,
+    "率": 0.0
+   },
+   "止めたが名指さない(UNVERIFIABLE)": {
+    "件": 0,
+    "率": 0.0
+   },
+   "対応が付かない": {
+    "件": 0,
+    "率": 0.0
+   }
+  }
+ },
+ "E の欄": {
+  "E-2 T9 の第 2 便の記録との照らし": {
+   "行の数": 141,
+   "T9 の第 2 便の記録の行の数": 141,
+   "id の集合が T9 の第 2 便の記録と同じ": true,
+   "P30E の結果と state が T9 の第 2 便の記録と同じ行": 141
+  },
+  "E-5 手がかり別の P32E": {
+   "手がかり真の行": 129,
+   "当期の fact に GROUNDED": 0,
+   "前期の fact を名指して VALUE_MISMATCH": 128,
+   "別の fact に GROUNDED": 1,
+   "その他": 0,
+   "手がかり偽の行": 12,
+   "手がかり偽の行のうち P30E と同じ行": 12
+  },
+  "E-6 通した率と名指して原本": {
+   "通した率(P32E)": 8.5,
+   "通した行": 12,
+   "注入の行": 141,
+   "止めた行": 129,
+   "うち名指して原本": 128,
+   "名指して原本の割合": 99.2
+  },
+  "参考": {
+   "P30E の通した行": 138,
+   "P32E に対応が付かない行": 0,
+   "engine の手がかりと窓の手がかりが違う行": 0,
+   "窓の手がかり真の行": 129,
+   "round-trip 不一致": 0,
+   "読み直し不一致": 0,
+   "P32E の注入後の期が Prior2Year の行": 0
+  }
+ },
+ "限界": [
+  "注入は T9 の 1 型だけ(前期の fact に結ばれた数に当期の値を入れる)。site・並べ替え・cap・差し替え・対応付け(id で引く 3 条件)は T9 の第 2 便のまま",
+  "土台は P30E が GROUNDED の claim。P32E の claim は (value, span, unit) が同じ 1 件があれば結ぶ(無ければ P32E の欄は対応なし)",
+  "engine の手がかりは T9 の recipes._prior_cue の真偽、窓の手がかりは PB の _prior_cue_window_2026_11_06 の真偽(どちらも注入前の文・token。読むだけで site の選びには使わない)",
+  "通した・止めたは engine の state で、札(人の目)は無い。pointer の期は id で引いた claim の pointers の先頭の context の先頭の語(要素名は持たない)"
+ ],
+ "key_leaks": [],
+ "行": [
+  {"docID": "S100YMFV", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YMFV_F1_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N005", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YMFV", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YMFV_F1_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N004", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YMFV", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YMFV_F2_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N005", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F1_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N010", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F1_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N008", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F1_claude-haiku-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N012", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F1_claude-haiku-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N033", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F1_claude-haiku-5-5-T9-05", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N004", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3HP_F2_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N010", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F2_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N009", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F2_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N011", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F3", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3HP_F3_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N065", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3HP_F4_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N056", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3HP_F4_claude-sonnet-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N054", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F4_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N011", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F4_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N029", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F4_claude-haiku-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N032", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZEV", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YZEV_F1_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N086", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZEV", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YZEV_F1_claude-sonnet-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "万だけ", "基準の claim": "N023", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZEV", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YZEV_F2_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N049", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZEV", "form": "F3", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YZEV_F3_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N057", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZEV", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YZEV_F4_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N043", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z40G", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z40G_F1_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "万だけ", "基準の claim": "N085", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZ7E", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YZ7E_F2_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N029", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "Prior1Year", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZ7E", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YZ7E_F2_claude-sonnet-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N002", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指したが別の値", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZ7E", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YZ7E_F2_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N026", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZ7E", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YZ7E_F2_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N002", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "Prior1Year", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZ7E", "form": "F3", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YZ7E_F3_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N068", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": true, "基準の pointer の期": "CurrentYear", "P30E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZ7E", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YZ7E_F4_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N005", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZ7E", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YZ7E_F4_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N004", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "Prior1Year", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z6XO", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z6XO_F1_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N089", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z6XO", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z6XO_F2_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N013", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z6XO", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z6XO_F2_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N047", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z6XO", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z6XO_F2_claude-haiku-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N010", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z6XO", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z6XO_F2_claude-haiku-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N004", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z6XO", "form": "F3", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z6XO_F3_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N087", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z6XO", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z6XO_F4_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N021", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z6XO", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z6XO_F4_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N005", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F1_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N096", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": false, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F1_claude-sonnet-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N083", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": false, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F1_claude-sonnet-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N068", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F1_claude-sonnet-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N137", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F1_claude-sonnet-5-5-T9-05", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N065", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F1_claude-sonnet-5-5-T9-06", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N089", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": false, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F1_claude-sonnet-5-5-T9-07", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N075", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F1_claude-sonnet-5-5-T9-08", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N015", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F1_claude-sonnet-5-5-T9-09", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N007", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F1_claude-sonnet-5-5-T9-10", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N064", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YYOS_F1_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N044", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YYOS_F1_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N005", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YYOS_F1_claude-haiku-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N013", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YYOS_F1_claude-haiku-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N047", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YYOS_F1_claude-haiku-5-5-T9-05", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N011", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YYOS_F1_claude-haiku-5-5-T9-06", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N038", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YYOS_F1_claude-haiku-5-5-T9-07", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N042", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YYOS_F1_claude-haiku-5-5-T9-08", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N040", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F2_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N045", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F2_claude-sonnet-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N013", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F2_claude-sonnet-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N005", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F2_claude-sonnet-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N048", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F2_claude-sonnet-5-5-T9-05", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N019", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F2_claude-sonnet-5-5-T9-06", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N010", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F2_claude-sonnet-5-5-T9-07", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N022", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F2_claude-sonnet-5-5-T9-08", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N039", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F2_claude-sonnet-5-5-T9-09", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N041", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F4_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N017", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F4_claude-sonnet-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N108", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F4_claude-sonnet-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N112", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F4_claude-sonnet-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N039", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F4_claude-sonnet-5-5-T9-05", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N062", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F4_claude-sonnet-5-5-T9-06", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N030", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F4_claude-sonnet-5-5-T9-07", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N114", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F4_claude-sonnet-5-5-T9-08", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N020", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F4_claude-sonnet-5-5-T9-09", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N025", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYOS", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YYOS_F4_claude-sonnet-5-5-T9-10", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N074", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F1_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N022", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F1_claude-sonnet-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N083", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F1_claude-sonnet-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N114", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F1_claude-sonnet-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N081", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F1_claude-sonnet-5-5-T9-05", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N073", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F1_claude-sonnet-5-5-T9-06", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N007", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F1_claude-sonnet-5-5-T9-07", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N110", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F1_claude-sonnet-5-5-T9-08", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N087", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F1_claude-sonnet-5-5-T9-09", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N030", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F1_claude-sonnet-5-5-T9-10", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N032", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F2_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N043", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F2_claude-sonnet-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N052", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F2_claude-sonnet-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N047", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F2_claude-sonnet-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N017", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F2_claude-sonnet-5-5-T9-05", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N023", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F2_claude-sonnet-5-5-T9-06", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N013", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F2_claude-sonnet-5-5-T9-07", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N045", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YW7F_F4_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N014", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YW7F_F4_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N039", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YW7F_F4_claude-haiku-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N049", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z1WR_F1_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N080", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z1WR_F2_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N060", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F2_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N031", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F2_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N005", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F2_claude-haiku-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N009", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F2", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F2_claude-haiku-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N012", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F3", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z1WR_F3_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N080", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F4_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N030", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": false, "窓の手がかり": false, "文に前期の語": false, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "CurrentYear", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F4_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N006", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F4", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F4_claude-haiku-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N010", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYSK", "form": "F1", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YYSK_F1_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N010", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3V1", "form": "F1", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3V1_F1_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "万だけ", "基準の claim": "N080", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3V1", "form": "F2", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3V1_F2_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "万だけ", "基準の claim": "N040", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3V1", "form": "F3", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3V1_F3_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N079", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3V1", "form": "F4", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3V1_F4_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "万だけ", "基準の claim": "N076", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YMFV", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YMFV_F5_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N007", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3HP_F5_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "万だけ", "基準の claim": "N029", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3HP_F5_claude-sonnet-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N081", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3HP_F5_claude-sonnet-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N066", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3HP_F5_claude-sonnet-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "既存", "基準の claim": "N079", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3HP_F5_claude-sonnet-5-5-T9-05", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N060", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F5", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F5_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N010", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3HP", "form": "F5", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z3HP_F5_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N030", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZEV", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YZEV_F5_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "万だけ", "基準の claim": "N025", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YZEV", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YZEV_F5_claude-sonnet-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N079", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z40G", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z40G_F5_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "万だけ", "基準の claim": "N077", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F5_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N065", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F5_claude-sonnet-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N077", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F5_claude-sonnet-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N063", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F5_claude-sonnet-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N036", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F5_claude-sonnet-5-5-T9-05", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N027", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F5_claude-sonnet-5-5-T9-06", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N059", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F5_claude-sonnet-5-5-T9-07", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N083", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F5_claude-sonnet-5-5-T9-08", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N019", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F5_claude-sonnet-5-5-T9-09", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N067", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YW7F", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100YW7F_F5_claude-sonnet-5-5-T9-10", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N081", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F5", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F5_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N035", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F5", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F5_claude-haiku-5-5-T9-02", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N037", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F5", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F5_claude-haiku-5-5-T9-03", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N012", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F5", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F5_claude-haiku-5-5-T9-04", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N049", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F5", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F5_claude-haiku-5-5-T9-05", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N006", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F5", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F5_claude-haiku-5-5-T9-06", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N009", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F5", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F5_claude-haiku-5-5-T9-07", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N042", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z1WR", "form": "F5", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100Z1WR_F5_claude-haiku-5-5-T9-08", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N021", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100YYSK", "form": "F5", "model": "claude-haiku-5-5", "writer": "W2", "id": "S100YYSK_F5_claude-haiku-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "複合", "基準の claim": "N008", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []},
+  {"docID": "S100Z3V1", "form": "F5", "model": "claude-sonnet-5-5", "writer": "W1", "id": "S100Z3V1_F5_claude-sonnet-5-5-T9-01", "型": "T9_PRIOR_TO_CURRENT", "形": "万だけ", "基準の claim": "N089", "P32E の土台に対応": true, "round-trip": true, "読み直し": true, "engine の手がかり": true, "窓の手がかり": true, "文に前期の語": true, "基準の pointer の期": "Prior1Year", "P30E": {"対応": true, "結果": "通した", "state": "GROUNDED", "reason": null}, "P32E": {"対応": true, "結果": "名指して原本の値を返した", "state": "VALUE_MISMATCH", "reason": null}, "P30E の注入後の pointer の期": "CurrentYear", "P32E の注入後の pointer の期": "Prior1Year", "P30E の欠けた条件": [], "P32E の欠けた条件": []}
+ ]
+}
