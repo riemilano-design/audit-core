@@ -192,7 +192,7 @@ def header_problems(rec, full):
     if rec.get(u"profile") != list(INJECT_PROFILES):
         out.append(u"profile が (P29E, P30E) でない")
     fp = rec.get(u"engine の指紋") or {}
-    if fp.get("adapter_xbrl_py_sha256") != ENGINE_ADAPTER_PIN:
+    if fp.get("adapter_xbrl_py_sha256") != ENGINE_ADAPTER_PIN and not SG.SGR.t_declared_fingerprint(fp.get("adapter_xbrl_py_sha256")):      # 2026-11-09(T): 封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §2-3 が宣言した遷移の指紋も(封が履歴に在るときだけ。SGR.t_declared_fingerprint)
         out.append(u"engine の指紋 adapter_xbrl_py_sha256 が PB の engine の commit の値(留めた値)と違う")
     if fp.get("core_py_sha256") != (fixed_records()["rb"].get(u"engine の指紋") or {}).get("core_py_sha256") or fp.get("core_py_sha256") is None:
         out.append(u"engine の指紋 core_py_sha256 が RB の記録の値(core は PB で不変)と違う")

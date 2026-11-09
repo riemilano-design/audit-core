@@ -221,7 +221,7 @@ def real_untouched_problems(root=REPO):
     paths = [PREFIX + p for p in NOT_TOUCHED_RELS]
     # 2026-11-06(PB): 封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §2-3 が宣言した遷移(recipes.py +24・vocabulary.py +5。削除 0)だけは触らない file から外す(SGR.pb_declared_numstat。他の行・他の値は赤のまま)
     # 2026-11-06(T5Y): 封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §2-1 が宣言した遷移(仕掛けの 2 file に挿入だけ: inject.py +30・sites.py +81。削除 0)も外す(SGR.t5y_declared_numstat。他の行・他の値は赤のまま)
-    return untouched_problems([x for x in PR.git_in(root, "diff", "--numstat", sh, "--", *paths)[1].splitlines() if x and not SGR.pb_declared_numstat(x, root) and not SGR.t5y_declared_numstat(x, root)])
+    return untouched_problems([x for x in PR.git_in(root, "diff", "--numstat", sh, "--", *paths)[1].splitlines() if x and not SGR.pb_declared_numstat(x, root) and not SGR.t_declared_numstat(x, root) and not SGR.t5y_declared_numstat(x, root)])      # 2026-11-09(T): 封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §2-3 が宣言した遷移(recipes.py +57・vocabulary.py +5。PB との合計 +81・+10。削除 0)も外す(SGR.t_declared_numstat)
 
 
 # ---------------------------------------------------------------- 7. 行頭の名前

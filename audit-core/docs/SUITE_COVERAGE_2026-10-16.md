@@ -32,14 +32,14 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **287 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **288 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
 | `measure/tests` | 3 |
 | `tests/adapters/kokkai` | 11 |
 | `tests/adapters/shogi` | 8 |
-| `tests/adapters/xbrl` | 37 |
+| `tests/adapters/xbrl` | 38 |
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
@@ -283,6 +283,9 @@ T9 の第 2 便(注入後の claim を基準の claim の id で引く対応付�
 
 **2026-11-06 に +3**(`measure/tests/test_t5_yen.py`・`tests/measure/test_xbrl_t5y_seal.py`・`tests/measure/test_xbrl_t5y_result.py`。
 注入の仕掛けの T5 を円族の数に作れるようにする T5Y(封 `docs/XBRL_T5_YEN_SEAL_2026-11-06.md`)の仕掛けの試験と、測定 script の封の門と結果の門。`test_inject.py` は変えず、試験は新しい file に置いた。結果は `docs/XBRL_T5_YEN_RESULT_2026-11-06.md`)。284 → 287(`measure/tests` 2 → 3・`tests/measure` 213 → 215)。
+
+**2026-11-09 に +1**(`tests/adapters/xbrl/test_recipes_p33e.py`。
+表の見出しの「前期」の列の数を前期の手がかりがある数として扱う T(封 `docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md`)の engine の試験。`tests/measure` は変わらない)。287 → 288(`tests/adapters/xbrl` 37 → 38)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

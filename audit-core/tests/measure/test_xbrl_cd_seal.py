@@ -85,7 +85,7 @@ FROZEN_LATER = {
     # 2026-10-28(既定を P26 -> P27 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md §1-1 が宣言した遷移(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と注記 +5 行・-1 行、verify_document.py の docstring の 1 行 +1 行・-1 行だけ)。
     # 85896a67913ce1e7(P27 の段 2)は残す(測った時点の値)、既定を P27 にした段 2 で下の値。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
     # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。直前の値 514ebb8104451c07 は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-    "adapters/xbrl/vocabulary.py": ("e35b7fea2463818f", "docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md"),
+    "adapters/xbrl/vocabulary.py": ("369891933a5876c4", "docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md"),
     # 67e7639de3f5f2ad(上の FROZEN。測った時点の値)は残す。docstring の「= P20」の 1 行を直した(実行の字は変えない)。同じ封が履歴に在り、値が段 2 の後の値のときだけ受け入れる。
     # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。直前の値 c3791080ab5aef2f は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
     "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"),

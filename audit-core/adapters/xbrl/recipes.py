@@ -814,6 +814,9 @@ def _direction_amount_check(claim, s, word_start, word_end, rounding, mag_trunc=
 
 def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rounding=None, flow_base=None):
     num_claims = []
+    _TABLE_PRIOR_SET_2026_11_09.clear()   # T(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §1 の 4): 呼び出しごとに空にし、旗が真のときだけ埋める
+    if getattr(profile, "table_period_2026_11_09", False):
+        _TABLE_PRIOR_SET_2026_11_09.update(_table_prior_keys_2026_11_09(sentences, profile))
     cf_ctx = _cf_context_flags(sentences) if flow_base else None
     for si, s in enumerate(sentences):
         for (a, b, signed, unit, prec) in _numbers_of(profile, s):
@@ -1154,11 +1157,63 @@ _PRIOR_PAREN_RE = re.compile(r"[(（]\s*同\s*$")
 _PRIOR_CLAUSE_RE = re.compile(r"(前期|前連結会計年度|前事業年度|前年同期)(は|には)")
 
 
+# 規則 T(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §1): 表の見出しの「前期」の列の数。
+_TABLE_PRIOR_SET_2026_11_09 = set()
+_TABLE_CUR_WORDS_2026_11_09 = (u"当期", u"当連結会計年度", u"当事業年度", u"当年度", u"当中間", u"今期")
+_TABLE_PRI_WORDS_2026_11_09 = (u"前期", u"前連結会計年度", u"前事業年度", u"前年度", u"前年同期", u"前年")
+_TABLE_NOT_WORDS_2026_11_09 = (u"比", u"増減", u"率", u"差")
+
+
+def _table_head_kind_2026_11_09(cell):
+    """T(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §1 の 2): 見出しのセルの種類。「比・増減・率・差」の字があれば None(「前年同期比」を前期の列にしない)。
+    前期の語だけなら "prior"、当期の語だけなら "current"、他は None。"""
+
+    if any(w in cell for w in _TABLE_NOT_WORDS_2026_11_09):
+        return None
+    p = any(w in cell for w in _TABLE_PRI_WORDS_2026_11_09)
+    q = any(w in cell for w in _TABLE_CUR_WORDS_2026_11_09)
+    if p and not q:
+        return "prior"
+    if q and not p:
+        return "current"
+    return None
+
+
+def _table_prior_keys_2026_11_09(sentences, profile):
+    """T(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §1 の 1・3): 行頭が | の文の連なりの最初の文を見出しにし、
+    「前期」がちょうど 1 列・「当期」が 1 列以下の表で、セルの数が見出しと同じ行の前期の列の数の (文の字, 位置) の集合を返す。"""
+
+    out = set()
+    head = None
+    in_table = False
+    for s in sentences:
+        t = s.strip()
+        if not t.startswith("|"):
+            in_table = False
+            head = None
+            continue
+        cells = t.strip("|").split("|")
+        if not in_table:
+            kinds = [_table_head_kind_2026_11_09(c) for c in cells]
+            head = None if (kinds.count("prior") != 1 or kinds.count("current") > 1) else kinds
+            in_table = True
+            continue
+        if head is None or len(cells) != len(head):
+            continue
+        for (a, b, signed, unit, prec) in _numbers_of(profile, s):
+            col = s[:a].count("|") - 1
+            if 0 <= col < len(head) and head[col] == "prior":
+                out.add((s, a))
+    return out
+
+
 def _prior_cue(s, a, b=None):
     """C2: 数の直前(12 字)が「前期」「前期末」「(同」などで終わるか、数の直後が
     「から」(「32.5%から29.8%へ」の前の数)か。「前期比 2.9%増」の 前期比 は当期の
     主張なので当たらない(末尾が 比)。"""
 
+    if (s, a) in _TABLE_PRIOR_SET_2026_11_09:   # T(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §1 の 4)
+        return True
     w = s[max(0, a - 12):a]
     if _PRIOR_CUE_RE.search(w) or _PRIOR_PAREN_RE.search(w):
         return True
@@ -1169,6 +1224,8 @@ def _prior_cue_window_2026_11_06(s, a):
     """PB(封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §1 の 1): 数の直前(12 字)が「前期」「前期末」「(同」などで終わるか。``_prior_cue`` の窓の枝と同じ語・同じ窓で、
     「から」の枝(「32.5%から29.8%へ」の前の数)は持たない(「A から B を」の A に当たる偽陽性 3 行を避ける。封 §0-1 の 2)。"""
 
+    if (s, a) in _TABLE_PRIOR_SET_2026_11_09:   # T(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §1 の 4)
+        return True
     w = s[max(0, a - 12):a]
     return bool(_PRIOR_CUE_RE.search(w) or _PRIOR_PAREN_RE.search(w))
 

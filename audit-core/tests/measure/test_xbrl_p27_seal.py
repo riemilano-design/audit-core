@@ -72,7 +72,10 @@ RB_SEAL_REL = "docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md"
 #: 2026-11-06(PB): 封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §2-3 が宣言した遷移(司令塔の決定 2026-11-06)。vocabulary.py に旗 1 つ・P32E・PROFILES の登録(5b9fe3711a00fce3 → e35b7fea2463818f。+5)、recipes.py に関数 1 つと block A・B(86fd620840807ed7 → 0add35e7aa77d86b。+24)を挿入だけで足した(comparators.py は触らない)。直前の値は測った時点の値としてここに残す。
 #: 受け入れるのは、PB の封も履歴に在るときだけ(下の p28_declared)。
 PB_SEAL_REL = "docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md"
-P28_AFTER16 = {"vocabulary.py": "e35b7fea2463818f", "recipes.py": "0add35e7aa77d86b", "extract.py": "a61da3fc3c336e80", "comparators.py": "9d65945efab20089"}
+#: 2026-11-09(T): 封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §2-3 が宣言した遷移(司令塔の決定 2026-11-09)。vocabulary.py に旗 1 つ・P33E・PROFILES の登録(e35b7fea2463818f → 369891933a5876c4。+5)、recipes.py に語の組と集合・関数 2 つ・先頭の 2 行ずつ・入口の 3 行(0add35e7aa77d86b → 346adb0d586e3af2。+57)を挿入だけで足した(comparators.py は触らない)。直前の値は測った時点の値としてここに残す。
+#: 受け入れるのは、T の封も履歴に在るときだけ(下の p28_declared)。
+T_SEAL_REL = "docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md"
+P28_AFTER16 = {"vocabulary.py": "369891933a5876c4", "recipes.py": "346adb0d586e3af2", "extract.py": "a61da3fc3c336e80", "comparators.py": "9d65945efab20089"}
 #: 既存の門が行頭の名前を数える変数名(封 §2-3 の言い分け)。新しい門はこれらを行頭に置かない。
 RESERVED_PREFIXES = ("ENGINE_LATER", "UNTOUCHED", "PIN_DEF", "LATER_ENGINE_COMMITS", "FROZEN_LATER", "ENGINE_TRANSITIONS", "LATER_FINGERPRINT",
                      "FINGERPRINT_", "LATER_TARGET", "LATER_FROZEN", "FROZEN_BUNDLE_AT_SEAL", "TARGET_AT_SEAL", "ENGINE_AT_SEAL")
@@ -111,6 +114,8 @@ def p28_declared():
     if not git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + RB_SEAL_REL).stdout.split():    # 2026-11-04: RB の封も履歴に在るとき
         return False
     if not git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + PB_SEAL_REL).stdout.split():    # 2026-11-06: PB の封も履歴に在るとき
+        return False
+    if not git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + T_SEAL_REL).stdout.split():    # 2026-11-09: T の封も履歴に在るとき
         return False
     if dict((n, sha16_of("adapters/xbrl/" + n)) for n in P28_AFTER16) != P28_AFTER16:
         return False
@@ -361,7 +366,7 @@ class EngineDiffTest(unittest.TestCase):
         # 削除は累計 vocabulary.py 1・verify_document.py 2・report_customer.py 1(CLAIM_FIELDS の 1 行・理由の欄の 1 行が加わる)。
         extra = (13 if cand else 8) if declared else 0
         p28 = p28_declared()
-        extra_vocab, extra_recipes, extra_extract = (30, 109, 35) if p28 else (0, 0, 0)       # 2026-11-06: PB(封 PB_SEAL_REL §2-3)で vocabulary.py +5(25 → 30)・recipes.py +24(85 → 109)。2026-11-04: RB(封 RB_SEAL_REL §2-3)で vocabulary.py +7(18 → 25)・recipes.py +18(67 → 85)・comparators.py +2(下の test_8)。同日の数の読み取り N(封 N_SEAL_REL §2-3)で vocabulary.py +7(11 → 18)・recipes.py +2(65 → 67)・extract.py +35(削除は 0)。2026-11-02: 「その他」の主語の結び直し(封 P28_SEAL_REL §2-3)。vocabulary.py +6・recipes.py +65(削除は 0)。2026-11-03: P28E(封 P28E_SEAL_REL §2-3)で vocabulary.py +5 を足して +11
+        extra_vocab, extra_recipes, extra_extract = (35, 166, 35) if p28 else (0, 0, 0)       # 2026-11-09: T(封 T_SEAL_REL §2-3)で vocabulary.py +5(30 → 35)・recipes.py +57(109 → 166)。2026-11-06: PB(封 PB_SEAL_REL §2-3)で vocabulary.py +5(25 → 30)・recipes.py +24(85 → 109)。2026-11-04: RB(封 RB_SEAL_REL §2-3)で vocabulary.py +7(18 → 25)・recipes.py +18(67 → 85)・comparators.py +2(下の test_8)。同日の数の読み取り N(封 N_SEAL_REL §2-3)で vocabulary.py +7(11 → 18)・recipes.py +2(65 → 67)・extract.py +35(削除は 0)。2026-11-02: 「その他」の主語の結び直し(封 P28_SEAL_REL §2-3)。vocabulary.py +6・recipes.py +65(削除は 0)。2026-11-03: P28E(封 P28E_SEAL_REL §2-3)で vocabulary.py +5 を足して +11
         self.assertEqual(sum(CAND_DELETIONS.values()) if cand else (sum(DEFAULT_P27_DELETIONS.values()) if declared else 0), sum(d for _a, d in rows.values()))
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 10)
         self.assertLessEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 20 + extra + extra_vocab)

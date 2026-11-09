@@ -309,14 +309,17 @@ RB_FP_TO = "4ea77c93b9521e634dc0ec2c445917e86793e6f6e8460ac9d69a302d925c2611"
 # 2026-11-06(PB): 封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §2-3 が宣言した遷移の後の値(recipes.py・vocabulary.py への挿入だけ。comparators.py は触らない)。上の RB_FP_TO は測った時点の値として残す。
 PB_SEAL_REL = "docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md"
 PB_FP_TO = "dc13edfee7a9ac6b900ae610d056424b622b8447491113b78c4debf902bcfee8"
+# 2026-11-09(T): 封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §2-3 が宣言した遷移の後の値(recipes.py・vocabulary.py への挿入だけ。comparators.py は触らない)。上の PB_FP_TO は測った時点の値として残す。
+T_SEAL_REL = "docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md"
+T_FP_TO = "5221d3c9a7bdb5c9833dee52490b0064255bdb54fb3210f1b19c1d19f28f9116"
 
 
 def default_p27_declared_for(rec_sha, now_sha):
     import subprocess
     if rec_sha == now_sha:
         return True
-    assert rec_sha == DEFAULT_P27_FP_FROM and now_sha in (DEFAULT_P27_FP_TO, CAND_FP_TO, P28_FP_TO, P28E_FP_TO, N_FP_TO, RB_FP_TO, PB_FP_TO), u"記録が測った engine がいまの engine と違う(宣言された遷移の値でもない)"
-    seal_rel = PB_SEAL_REL if now_sha == PB_FP_TO else RB_SEAL_REL if now_sha == RB_FP_TO else N_SEAL_REL if now_sha == N_FP_TO else P28E_SEAL_REL if now_sha == P28E_FP_TO else P28_SEAL_REL if now_sha == P28_FP_TO else (CAND_SEAL_REL if now_sha == CAND_FP_TO else DEFAULT_P27_SEAL_REL)      # 2026-10-30: 候補の欄の遷移の後は、その封が履歴に在ること
+    assert rec_sha == DEFAULT_P27_FP_FROM and now_sha in (DEFAULT_P27_FP_TO, CAND_FP_TO, P28_FP_TO, P28E_FP_TO, N_FP_TO, RB_FP_TO, PB_FP_TO, T_FP_TO), u"記録が測った engine がいまの engine と違う(宣言された遷移の値でもない)"
+    seal_rel = T_SEAL_REL if now_sha == T_FP_TO else PB_SEAL_REL if now_sha == PB_FP_TO else RB_SEAL_REL if now_sha == RB_FP_TO else N_SEAL_REL if now_sha == N_FP_TO else P28E_SEAL_REL if now_sha == P28E_FP_TO else P28_SEAL_REL if now_sha == P28_FP_TO else (CAND_SEAL_REL if now_sha == CAND_FP_TO else DEFAULT_P27_SEAL_REL)      # 2026-10-30: 候補の欄の遷移の後は、その封が履歴に在ること
     added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal_rel], cwd=ROOT, capture_output=True, text=True).stdout.split()
     assert added, u"engine が動いているのに、遷移を宣言した封が履歴に無い"
     return True

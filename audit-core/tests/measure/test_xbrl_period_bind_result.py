@@ -89,12 +89,13 @@ SEAL_P28E = "docs/XBRL_P28E_SEAL_2026-11-03.md"    # 2026-11-03 追記: P28E(= P
 SEAL_N = "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md"    # 2026-11-04 追記: 数の読み取り N(万・億の数のコンマ。P29・P29E)を足す(下の遷移。extract.py 3cf55966f12919f0 → a61da3fc3c336e80・vocabulary.py 2dd3f03e777224b4 → ca0367520f04cf87・recipes.py 89eee7eca15480c6 → f1f344a9e2bb364a。挿入だけ。直前の値は測った時点の値として上の SEAL の行に残す)
 SEAL_RB = "docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md"    # 2026-11-04 追記: 丸め方の根拠が混ざる桁は両方の帯で照らす RB(P30E)を足す(下の遷移。vocabulary.py ca0367520f04cf87 → 5b9fe3711a00fce3・recipes.py f1f344a9e2bb364a → 86fd620840807ed7・comparators.py d8706338325e725b → 9d65945efab20089。挿入だけ。直前の値は測った時点の値として上の SEAL の行に残す)
 SEAL_PB = "docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md"    # 2026-11-06 追記: 前期の手がかりがある数を当期の fact に落とさない PB(P32E)を足す(下の遷移。vocabulary.py 5b9fe3711a00fce3 → e35b7fea2463818f・recipes.py 86fd620840807ed7 → 0add35e7aa77d86b。挿入だけ。comparators.py は触らない。直前の値は測った時点の値として上の SEAL の行に残す)
+SEAL_T = "docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md"    # 2026-11-09 追記: 表の見出しの「前期」の列の数を前期の手がかりがある数として扱う T(P33E)を足す(下の遷移。vocabulary.py e35b7fea2463818f → 369891933a5876c4・recipes.py 0add35e7aa77d86b → 346adb0d586e3af2。挿入だけ。comparators.py は触らない。直前の値は測った時点の値として上の SEAL_PB の行に残す)
 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に旗 vocab_2026_10_21・frame_rebind の塊(+224 行・既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
 # d5308700eae78c10(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 3461c3f8b7af6675。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)、vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)を足した(DEFAULT_PROFILE は P22 のまま)。
 # recipes.py の 3461c3f8b7af6675・vocabulary.py の 83498c04a7b70396(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/recipes.py": ("0add35e7aa77d86b", SEAL_PB),
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("346adb0d586e3af2", SEAL_T),
                 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 2 つ・資金の句の表・P24・PROFILES の登録を足した(DEFAULT_PROFILE は P22 のまま)。
                 # f7b8d925eb6787ec(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 83498c04a7b70396。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 5 つ・P26・PROFILES の登録(+17 行・-0 行) を足した。
@@ -103,7 +104,7 @@ ENGINE_LATER = {"adapters/xbrl/recipes.py": ("0add35e7aa77d86b", SEAL_PB),
                 # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
                 # 85896a67913ce1e7(P27 の段 2) は残す(測った時点の値。vocabulary.py の sha16)、既定を P26 -> P27 に切り替える 段 2(封 docs/XBRL_DEFAULT_P27_SEAL_2026-10-28.md)で 514ebb8104451c07。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
                 # 2026-10-30(候補の欄を足す): 封 docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md §2-3 が宣言した遷移(人間の承認 2026-10-30)。vocabulary.py に旗 1 つ・P27C・PROFILES の登録、verify_document.py に Claim の欄 candidate(CLAIM_FIELDS の末尾)、report_customer.py に candidate_ja(案 A)を足した。直前の値(vocabulary.py 514ebb8104451c07・verify_document.py c3791080ab5aef2f・report_customer.py 6679138d350ec382・束ねた指紋 92326a0f4dcefd21・frozen_bundle 030455282c89661b)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が候補の欄の後の値のときだけ。
-                "adapters/xbrl/vocabulary.py": ("e35b7fea2463818f", SEAL_PB)}
+                "adapters/xbrl/vocabulary.py": ("369891933a5876c4", SEAL_T)}
 FACT = {
     "e1": (485, 1, 482, 2),                    # 注入・P22 で通した・止めた・その他
     "e1_p21": (459, 458),                      # P21(対照)で通した・うち前期へ移った(穴 B の記録と同じ 459・458)
@@ -797,7 +798,8 @@ def check_frozen_generation(generations, current):
     # 2026-11-04 追記(pin の遷移): 数の読み取り N(docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md。extract.py・vocabulary.py・recipes.py に挿入だけを足し 37 本のまま世代をもう 1 つ足した)の後も、段 2 の宣言まで後の封の宣言を 1 つずつ飛ばして読む。
     # 2026-11-04 追記(pin の遷移): 丸め方の根拠が混ざる桁は両方の帯で照らす RB(docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md。recipes.py・vocabulary.py・comparators.py に挿入だけを足し 37 本のまま世代をもう 1 つ足した)の後も、段 2 の宣言まで後の封の宣言を 1 つずつ飛ばす。
     # 2026-11-06 追記(pin の遷移): 前期の手がかりがある数を当期の fact に落とさない PB(docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md。recipes.py・vocabulary.py に挿入だけを足し 37 本のまま世代をもう 1 つ足した)の後も、段 2 の宣言の世代の説明は残る(世代の説明は消さない)。
-    for later in (u"XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06", u"XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04", u"XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04", u"XBRL_P28E_SEAL_2026-11-03", u"XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02", u"XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29", u"XBRL_DEFAULT_P27_SEAL_2026-10-28", u"XBRL_P27_SEAL_2026-10-27", u"XBRL_DEFAULT_P26_SEAL_2026-10-23", u"XBRL_P26_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_SEAL_2026-10-21", u"XBRL_LASTBRANCH_SEAL_2026-10-21", u"XBRL_VOCAB_SEAL_2026-10-21", u"XBRL_ROUNDING_SEAL_2026-10-21"):
+    # 2026-11-09 追記(pin の遷移): 表の見出しの「前期」の列の数を前期の手がかりがある数として扱う T(docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md。recipes.py・vocabulary.py に挿入だけを足し 37 本のまま世代をもう 1 つ足した)の後も、段 2 の宣言の世代の説明は残る(世代の説明は消さない)。
+    for later in (u"XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09", u"XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06", u"XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04", u"XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04", u"XBRL_P28E_SEAL_2026-11-03", u"XBRL_OTHER_SUBJECT_ENGINE_SEAL_2026-11-02", u"XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29", u"XBRL_DEFAULT_P27_SEAL_2026-10-28", u"XBRL_P27_SEAL_2026-10-27", u"XBRL_DEFAULT_P26_SEAL_2026-10-23", u"XBRL_P26_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_SEAL_2026-10-21", u"XBRL_LASTBRANCH_SEAL_2026-10-21", u"XBRL_VOCAB_SEAL_2026-10-21", u"XBRL_ROUNDING_SEAL_2026-10-21"):
         if later in generations[i][1]:
             i -= 1
             assert i >= 0, u"後の封の宣言の前に段 2 の世代が無い"
@@ -1036,7 +1038,8 @@ HEAVY_RERUN_LATER = {
         # 2026-11-04(数の読み取り N): 950ab354…(P28E の後の値。残す)から、封 SEAL_N §2-3 が宣言した遷移の値(extract.py・vocabulary.py・recipes.py に挿入だけを足した後。ritual の engine_bundle_sha256)。
         # 2026-11-04(RB): 29b388ed…(N の後の値。残す)から、封 SEAL_RB §2-3 が宣言した遷移の値(recipes.py・vocabulary.py・comparators.py に挿入だけを足した後。ritual の engine_bundle_sha256。37 file)。
         # 2026-11-06(PB): eed2d5d0…(RB の後の値。残す)から、封 SEAL_PB §2-3 が宣言した遷移の値(recipes.py・vocabulary.py に挿入だけを足した後。ritual の engine_bundle_sha256。37 file)。
-        ("9355dc5e8ab7fdb8aacf85698c19094a6c9610ec95da89747a8bfe0e05ef4efb", SEAL_PB, None),
+        # 2026-11-09(T): 9355dc5e…(PB の後の値。残す)から、封 SEAL_T §2-3 が宣言した遷移の値(recipes.py・vocabulary.py に挿入だけを足した後。ritual の engine_bundle_sha256。37 file)。
+        ("4b7000c9a8f3542fdc93b0af327456a7eaaf162fe2d1bbae49c91b45b44e0631", SEAL_T, None),
 }
 
 

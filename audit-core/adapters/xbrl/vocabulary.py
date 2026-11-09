@@ -447,6 +447,8 @@ class Profile:
     rounding_mixed_2026_11_04: bool = False
     # PB(封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §1): 前期の手がかり(数の直前 12 字の窓)がある数を当期の fact に結ばない(最初の枝は当期の hit を外し、最後の枝は前期の fact を名指して VALUE_MISMATCH)。偽(既定)なら 1 行も変わらない。
     prior_cue_bind_2026_11_06: bool = False
+    # T(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §1): 表の見出し(行頭が | の文の連なりの最初の文)の「前期」の列の数を、前期の手がかりがある数(_prior_cue・PB の窓の関数が真を返す数)と同じに扱う。偽(既定)なら 1 行も変わらない。
+    table_period_2026_11_09: bool = False
     # P27(封 docs/XBRL_P27_SEAL_2026-10-27.md §1-5): 外部の数の文のための直しの旗 5 つ。どれも偽(既定)なら P1〜P26 の振る舞いは 1 行も変わらない。
     # A 書かれた精度で照合する(extract.iter_numbers_2026_10_27 と recipes._direct_value_claim の scale)。
     written_precision_2026_10_27: bool = False
@@ -841,3 +843,6 @@ PROFILES["P30E"] = P30E
 # P32E = P30E + PB(封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §0-2 の 1)。外部の文の E 系だけ(P31 は規則 T の下書きに取り置く。P32 は作らない)。既定にしない(DEFAULT_PROFILE は P27 のまま)。
 P32E = dataclasses.replace(P30E, name="P32E", prior_cue_bind_2026_11_06=True)
 PROFILES["P32E"] = P32E
+# P33E = P32E + T(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §0-2 の 1)。外部の文の E 系だけ(P31・P31E・P33 は作らない)。既定にしない(DEFAULT_PROFILE は P27 のまま)。
+P33E = dataclasses.replace(P32E, name="P33E", table_period_2026_11_09=True)
+PROFILES["P33E"] = P33E

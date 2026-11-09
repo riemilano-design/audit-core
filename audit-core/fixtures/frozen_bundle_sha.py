@@ -178,6 +178,12 @@ FROZEN_BUNDLE_GENERATIONS = (
      "comparators.py・verify_document.py・extract.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
      "人間の言葉「それで任せる進めて」(2026-11-06)= 司令塔の意見 1〜7 の順で進める委任(旗 1 つ・profile 1 つ・挿入だけ。既定にしない)、封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md(commit b7824e6)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("8584938954aa5b4e9a5f9d3f0a8707ce012266318cc57972293285916a385f1a",
+     "2026-11-09 feature/audit-core-final-eval-8(表の見出しの「前期」の列の数を前期の手がかりがある数として扱う T): recipes.py に語の組・集合・関数 _table_head_kind_2026_11_09・_table_prior_keys_2026_11_09 と _prior_cue・_prior_cue_window_2026_11_06 の先頭の 2 行ずつと _build_raw_num_claims の入口の 3 行(+57 行・-0 行)、"
+     "vocabulary.py に旗 table_period_2026_11_09・P33E・PROFILES の登録(+5 行・-0 行。DEFAULT_PROFILE は P27 のまま)を足した。"
+     "comparators.py・verify_document.py・extract.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
+     "人間の言葉「君に任せる進めて」(2026-11-09)= 規則 T を engine に入れる方向で封から進める委任(旗 1 つ・profile 1 つ・挿入だけ。既定にしない)、封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md(commit eb281f1)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

@@ -208,6 +208,8 @@ def frozen_since_engine_problems(rels=READ_ONLY_RELS, root=REPO, base=ROOT, seal
             if blob.stdout != fh.read():
                 if SGR.t5y_declared_file_change(root, e, rel, base):      # 2026-11-06(T5Y): 仕掛けの 2 file と、T5Y の便の commit だけが触った前の便の門は宣言された遷移
                     continue
+                if SGR.t_declared_file_change(root, e, rel, base):      # 2026-11-09(T): T の engine の commit が触った(T5Y の便の commit も触ってよい)前の便の門は宣言された遷移
+                    continue
                 out.append(u"engine の commit の blob と byte が違う: %s" % rel)
     return out
 
@@ -221,7 +223,8 @@ def untouched_since_engine_problems(rels=NOT_TOUCHED_RELS, root=REPO, seal_rel=S
     if code != 0:
         return [u"git diff が失敗"]
     # 2026-11-06(T5Y): 仕掛けの 2 file(measure/inject.py・measure/lib/sites.py)に挿入だけを足した宣言された遷移(行数・sha16・封が履歴に在る、の全部が宣言と同じ行)だけを許す
-    return [u"engine の commit から変わった: %s" % ln for ln in text.splitlines() if ln and not SGR.t5y_declared_numstat(ln, root=root)]
+    # 2026-11-09(T): 封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §2-3 が宣言した遷移(recipes.py +57・vocabulary.py +5。削除 0。行数・sha16・封が履歴に在る、の全部が宣言と同じ行)も許す(SGR.t_declared_numstat)
+    return [u"engine の commit から変わった: %s" % ln for ln in text.splitlines() if ln and not SGR.t5y_declared_numstat(ln, root=root) and not SGR.t_declared_numstat(ln, root=root)]
 
 
 reserved_problems = SGR.reserved_problems

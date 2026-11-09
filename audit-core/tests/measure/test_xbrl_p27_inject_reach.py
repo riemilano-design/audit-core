@@ -81,9 +81,9 @@ ENGINE_AT_MEASURE = {
 # 2026-11-03(P28E): 封 docs/XBRL_P28E_SEAL_2026-11-03.md §2-3 が宣言した遷移(人間の承認 2026-11-03)。vocabulary.py に profile 1 つ P28E と注記(+5 行・-0 行。180125cd94053a94 → 2dd3f03e777224b4)。recipes.py ほかは不変。直前の値は測った時点の値として上に残す
 # 2026-11-04(数の読み取り N): 封 docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md §2-3 が宣言した遷移(人間の GO 2026-11-04)。extract.py に数の読み取りの新しい関数 1 つ(3cf55966f12919f0 → a61da3fc3c336e80)、vocabulary.py に旗 1 つ・P29・P29E(2dd3f03e777224b4 → ca0367520f04cf87)、recipes.py に旗の 2 行(89eee7eca15480c6 → f1f344a9e2bb364a)を足した。挿入だけ。直前の値は測った時点の値として上に残す
 ENGINE_DECLARED = {"adapters/xbrl/extract.py": ("a61da3fc3c336e80", "docs/XBRL_NUMBER_READER_ENGINE_SEAL_2026-11-04.md"),
-                   "adapters/xbrl/vocabulary.py": ("e35b7fea2463818f", "docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md"),
+                   "adapters/xbrl/vocabulary.py": ("369891933a5876c4", "docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md"),
                    "adapters/xbrl/verify_document.py": ("6c76c8ade6c7b1c8", "docs/XBRL_UNNAMED_CANDIDATE_SEAL_2026-10-29.md"),
-                   "adapters/xbrl/recipes.py": ("0add35e7aa77d86b", "docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md"),
+                   "adapters/xbrl/recipes.py": ("346adb0d586e3af2", "docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md"),
                    "adapters/xbrl/comparators.py": ("9d65945efab20089", "docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md")}
 
 #: 記録から求めた当否のうち外れ・判定しないの名前(測った事実。外れは外れのまま残す。封も予測も直さない)。記録から求めた当否と食い違えば d_5 が赤。

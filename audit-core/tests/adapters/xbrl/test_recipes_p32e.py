@@ -68,7 +68,8 @@ class ProfileTest(unittest.TestCase):
 
     def test_the_flag_is_true_only_in_p32e(self):
         self.assertTrue(getattr(V.P32E, FLAG))
-        self.assertEqual(["P32E"], sorted(n for n, p in V.PROFILES.items() if getattr(p, FLAG)))
+        # 2026-11-09: P33E(= P32E + T。封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md)も PB の旗を引き継ぐ
+        self.assertEqual(["P32E", "P33E"], sorted(n for n, p in V.PROFILES.items() if getattr(p, FLAG)))
         for n in ("P30E", "P29E", "P29", "P28E", "P28", "P27E", "P27C", "P27", "P26", "P24", "P22", "P1"):
             self.assertFalse(getattr(V.PROFILES[n], FLAG), n)
 

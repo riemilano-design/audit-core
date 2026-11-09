@@ -49,7 +49,7 @@ class ProfileShapeTest(unittest.TestCase):
 
     def test_only_p28_has_the_flag(self):
         # 2026-11-03: 旗が真の profile は P28 と P28E(= P27E + O。封 docs/XBRL_P28E_SEAL_2026-11-03.md §1)の 2 つ。ほかは偽。
-        self.assertEqual(["P28", "P28E", "P29", "P29E", "P30E", "P32E"], sorted(n for n, p in V.PROFILES.items() if p.other_subject_2026_11_02))
+        self.assertEqual(["P28", "P28E", "P29", "P29E", "P30E", "P32E", "P33E"], sorted(n for n, p in V.PROFILES.items() if p.other_subject_2026_11_02))
         self.assertFalse(V.P27.other_subject_2026_11_02)
         self.assertFalse(V.P27E.other_subject_2026_11_02)
         self.assertFalse(V.P27C.other_subject_2026_11_02)

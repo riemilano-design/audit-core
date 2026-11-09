@@ -126,6 +126,9 @@ def profile_problems(V=None, fields=None, numbers_of=None):
     # 2026-11-06: PB(封 docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md §1)が旗 prior_cue_bind_2026_11_06 を RB の旗の直後に足した: この旗 → RB の旗 → PB の旗 → written_precision_2026_10_27(PB の旗が在るときだけ)
     if after == "prior_cue_bind_2026_11_06":
         after = names[i + 3]
+        # 2026-11-09: T(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §1)が旗 table_period_2026_11_09 を PB の旗の直後に足した: この旗 → RB の旗 → PB の旗 → T の旗 → written_precision_2026_10_27(T の旗が在るときだけ)
+        if after == "table_period_2026_11_09":
+            after = names[i + 4]
     if names[i - 1] != "numbers_2026_10_21" or after != "written_precision_2026_10_27":
         out.append(u"旗の位置が numbers_2026_10_21 の直後・written_precision_2026_10_27 の前でない")
     if dataclasses.fields(V.Profile)[names.index(FLAG)].default is not False:
@@ -144,7 +147,8 @@ def profile_problems(V=None, fields=None, numbers_of=None):
     on = sorted(k for k, p in V.PROFILES.items() if getattr(p, FLAG, False))
     # 2026-11-04: RB の旗が Profile に在るときは P30E(= P29E + RB)も N の旗を引き継いで真
     # 2026-11-06: PB の旗が Profile に在るときは P32E(= P30E + PB)も N の旗を引き継いで真
-    if on != ["P29", "P29E"] + (["P30E"] if "rounding_mixed_2026_11_04" in names else []) + (["P32E"] if "prior_cue_bind_2026_11_06" in names else []):
+    # 2026-11-09: T の旗が Profile に在るときは P33E(= P32E + T)も N の旗を引き継いで真
+    if on != ["P29", "P29E"] + (["P30E"] if "rounding_mixed_2026_11_04" in names else []) + (["P32E"] if "prior_cue_bind_2026_11_06" in names else []) + (["P33E"] if "table_period_2026_11_09" in names else []):
         out.append(u"旗が真の profile が P29・P29E だけでない: %s" % on)
     s = u"売上高は1,234万円でした。"
     got_off = [(a, b) for (a, b, _v, _u, _p) in numbers_of(V.PROFILES["P28"], s)]
