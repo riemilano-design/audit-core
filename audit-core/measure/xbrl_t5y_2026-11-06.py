@@ -685,7 +685,7 @@ def run_inject(root=ROOT, procs=1, only=None, out=None, key_value=None, say=prin
         ("相手の fact の期", "coincident_ref_key の context の先頭: CurrentYear / Prior1Year / 他"),
         ("相手と同じ要素か", "相手の key と本当の参照の key の要素名(@ の前)が同じか。要素名は持たず真偽だけ"),
         ("pointer の期", "基準の claim と id で引いた claim(P30E)の pointers の先頭の context の先頭: CurrentYear / Prior1Year / 他 / なし。要素名は持たない"),
-        ("注入後の pointer が相手の fact と同じか", "id で引いた claim(P30E)の pointers の先頭(xbrl: と名前空間の接頭辞を除いた <要素>@<context>)が相手の key か(真偽だけ)"),
+        ("注入後の pointer が相手の fact と同じか", "id で引いた claim(P30E)の pointers の先頭(名前空間の接頭辞を除いた <要素>@<context>)が相手の key か(真偽だけ)"),
         ("集計の2本", "集計 = 全部の site での P29E・P30E の率。" + COMPARE_KEY + " = そのうち P29E の claim にも対応が付く site だけでの P29E と P30E の率"),
         ("inject の docID の引数", "本の名前(<docID>_<形>_<model>)")])
     rec["本ごとの数え"] = per
