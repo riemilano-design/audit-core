@@ -207,8 +207,14 @@ class KeysTest(unittest.TestCase):
         self.assertEqual({(s, a_of(s, "100億円"))}, keys_of("P33E", t2))
 
     def test_the_head_row_itself_is_not_used(self):
-        t = "| 項目 | 当期(2026年) | 前期(2025年) |\n| 売上高 | 120億円 | 100億円 |"
-        for s, a in keys_of("P33E", t):
+        # 見出しの「前期」のセルに数(100億円)を持たせる。見出しも走査する変異(最初の文の後の continue を外す)では、この数が集合に入って赤になる
+        # (測定の便 2026-11-09 の監査の指摘 2: 以前の入力は見出しの数が年(2025年)で、見出しを走査しても数が読まれず変異が黙った)。
+        t = "| 項目 | 当期 | 前期(100億円) |\n| 売上高 | 120億円 | 100億円 |"
+        head, row = E.split_sentences(t, True)
+        self.assertGreaterEqual(len(R._numbers_of(V.P33E, head)), 1)                      # 前提: 見出しの数が読まれる(走査すれば拾える入力)
+        got = keys_of("P33E", t)
+        self.assertEqual({(row, a_of(row, "100億円"))}, got)
+        for s, a in got:
             self.assertNotIn("項目", s)
 
     def test_only_the_prior_column_not_the_current_or_the_diff(self):
@@ -220,6 +226,33 @@ class KeysTest(unittest.TestCase):
         t = HEAD + "\n" + ROW + "\n本文です。\n| 項目 | 前期 | 当期 |\n| 利益 | 10億円 | 12億円 |"
         got = keys_of("P33E", t)
         self.assertEqual(2, len(got))
+
+    def test_a_leading_double_bar_and_a_trailing_empty_cell_shift_the_column_by_one(self):
+        """**いまの振る舞いを字で留める(直さない)。** engine のセルの割り方は ``strip().strip("|").split("|")``(``s.strip("|")`` は連なった ``|`` を全部除く)で、
+        封 §1 の 1 の字「``strip()`` の両端の ``|`` を除いて ``|`` で割った字」(両端の ``|`` を 1 つずつ除く読み)より広い。先頭が ``||``(先頭の空セル)で、末尾にも空セルがある行
+        (例 ``|| 売上高 | 120億円 | 120億円 | |``)は、先頭の ``||`` が丸ごと除かれて末尾の空セルが残り、セルの数は見出しと同じ 4 になるが、列の番号は 1 つずれる
+        (``s[:a].count("|") - 1`` は先頭の ``||`` を 2 つ数える)。このとき**当期の列(見出しから見て 2 番目のセル)の数が前期の列の番号に当たり、前期の fact に結ばれる**。
+        封の字どおり(両端の ``|`` を 1 つずつ除く読み)なら先頭の空セル・末尾の空セルを含めて 5 セルで見出しの 4 と合わず、行は使われない。
+        この読みの違いは測定の便の監査(2026-11-09)の指摘 1。200 本の AI の文に ``||`` は 0 件・97 書類に表は 0 なので記録の数には届かない。**次の改訂で直す候補**
+        (直すときはこの試験を新しい振る舞いに書き替える)。"""
+        row = "|| 売上高 | 120億円 | 120億円 | |"
+        t = HEAD + "\n" + row
+        sents = E.split_sentences(t, True)
+        self.assertEqual(row, sents[1])
+        pos = sorted(a for (a, _b, *_rest) in R._numbers_of(V.P33E, row))
+        self.assertEqual(2, len(pos))
+        self.assertEqual(4, len(row.strip("|").split("|")))                                  # セルの数は見出し(4)と同じ
+        # いまの振る舞い: 1 つ目の数(真の当期の列)だけが前期の列として集合に入る。2 つ目(真の前期の列)は入らない。
+        self.assertEqual({(row, pos[0])}, keys_of("P33E", t))
+        # 効き方: 1 つ目の数は、P32E は当期の fact に GROUNDED、P33E は前期の fact を名指して VALUE_MISMATCH。2 つ目は両方とも当期の fact に GROUNDED で同じ。
+        got32 = sorted((c for c in claims("P32E", t) if c["sentence"] == 1 and c["value"] == 120e8), key=lambda c: c["pos"])
+        got33 = sorted((c for c in claims("P33E", t) if c["sentence"] == 1 and c["value"] == 120e8), key=lambda c: c["pos"])
+        self.assertEqual(2, len(got32))
+        self.assertEqual(2, len(got33))
+        self.assertEqual(("GROUNDED", ptr(CUR)), (got32[0]["result"], got32[0]["pointer"]))
+        self.assertEqual(("VALUE_MISMATCH", ptr(PRI)), (got33[0]["result"], got33[0]["pointer"]))
+        self.assertEqual(view(got32[1]), view(got33[1]))
+        self.assertEqual(("GROUNDED", ptr(CUR)), (got33[1]["result"], got33[1]["pointer"]))
 
 
 class BehaviorTest(unittest.TestCase):

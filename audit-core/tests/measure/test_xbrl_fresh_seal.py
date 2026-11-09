@@ -203,6 +203,9 @@ LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixt
                       # 2026-11-09: TS(封 docs/XBRL_TANSHIN_HUMAN_TEXT_SEAL_2026-11-09.md)。人が書いた有報の外の文(決算短信の概況 17 社)で engine を測る便の材料の取得の記録(fetched)は
                       # 17 社の有報の docID を持つ(証券コードと docID の対応)。states・inject の記録は証券コードで本を引き docID を持たない。script 2 本・門 2 本・結果の文書は docID を持たない。
                       "fixtures/xbrl/tanshin/fetched_2026-11-09.json",
+                      # 2026-11-10: 規則 T の測定(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md eb281f1)。記録 3 つ(moves_200・regress97・inject)は選んだ 20 社の docID と 97 書類の docID を持つ。
+                      # script 1 本・門 2 本・結果の文書は docID を持たない。(上の T5Y と同じ理由で tuple の末尾でなくここに置く)
+                      "fixtures/xbrl/tperiod/moves_200_2026-11-09.json", "fixtures/xbrl/tperiod/regress97_2026-11-09.json", "fixtures/xbrl/tperiod/inject_2026-11-09.json",
                       # 2026-11-03: AI の形 4 × model 2(封 docs/XBRL_AI_FORMS_SEAL_2026-11-03.md)。手元の 97 のうち選んだ 20 社の docID を材料の名として持つ記録 5 つ(gen・claims・labels・inject・tally)。
                       # script 4 本・門・結果の文書は docID を持たない
                       "fixtures/xbrl/aiforms/gen_2026-11-03.json", "fixtures/xbrl/aiforms/claims_2026-11-03.json", "fixtures/xbrl/aiforms/labels_2026-11-03.json",

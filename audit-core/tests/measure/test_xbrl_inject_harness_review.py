@@ -964,6 +964,8 @@ LATER_HARNESS_FILES = (
     # 2026-11-09: TS の注入(封 docs/XBRL_TANSHIN_HUMAN_TEXT_SEAL_2026-11-09.md §0-2 の 4・§5)。人が書いた有報の外の文(決算短信の概況 17 社)に T1・T5・T8・T9 を 1 件ずつ注入する。T5Y の便の script を importlib で読み込み、
     # site・並べ替え・cap・差し替えは仕掛けの関数(IJ.select・S.t5_sites・RUN.t8_candidates4・PS.t9_all_sites)のまま、profile を P30E・P32E にし、注入後の claim は基準の claim の id で引く(T9 の第 2 便と同じ 3 条件)。
     ("measure/xbrl_tanshin_2026-11-09.py", u"仕掛け持ち + 使う側", u"有", "build_row", u"res, conds[p], miss[p], found[p] = PI.id_map(claims, bc[\"ids\"][p], target, inj[\"replacement\"])", "2026-11-09"),
+    # 2026-11-10: 規則 T の注入(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §5)。(a) は PB の script の inject_job_pb を P30E・P33E に差し替えて呼ぶ(使う側)。(b) は表の期の入れ替え TP・TC を測定 script が自分で作り(仕掛けの経路は使わない)、注入後の claim は (文の番号, 替えたセルの数の位置) で引く(文の列が同じ長さで、同じ番号の文が替えた文と同じ字のときだけ対応)
+    ("measure/xbrl_tperiod_2026-11-09.py", u"仕掛け持ち + 使う側", u"有", "table_book", u"mapped = len(sents2) == len(sents) and i < len(sents2) and sents2[i] == ns", "2026-11-10"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
