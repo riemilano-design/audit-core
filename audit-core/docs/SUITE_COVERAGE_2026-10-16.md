@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **289 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **291 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 216 |
+| `tests/measure` | 218 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -289,6 +289,9 @@ T9 の第 2 便(注入後の claim を基準の claim の id で引く対応付�
 
 **2026-11-10 に +1**(`tests/measure/test_xbrl_aiforms_fx_result.py`。
 FX(AI の文の形を増やす。F6 社長メッセージ・F7 ニュース記事・F8 百万円単位・F9 前期を主語にした対比。20 社 × 形 4 × model 2 = 160 本。封 `docs/XBRL_AI_FORMS_FX_SEAL_2026-11-09.md`)の駆動 script `measure/xbrl_aiforms_fx_2026-11-09.py` と測定の門。結果は `docs/XBRL_AI_FORMS_FX_RESULT_2026-11-09.md`)。288 → 289(`tests/measure` 215 → 216)。
+
+**2026-11-10 に +2**(`tests/measure/test_xbrl_tanshin_seal.py`・`tests/measure/test_xbrl_tanshin_result.py`。
+人が書いた有報の外の文(決算短信の概況 17 社)で engine を測る TS(封 `docs/XBRL_TANSHIN_HUMAN_TEXT_SEAL_2026-11-09.md`)の測定 script 2 本の封の門と結果の門。結果は `docs/XBRL_TANSHIN_HUMAN_TEXT_RESULT_2026-11-09.md`)。289 → 291(`tests/measure` 216 → 218)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
