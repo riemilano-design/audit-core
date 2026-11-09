@@ -959,6 +959,8 @@ LATER_HARNESS_FILES = (
     ("measure/xbrl_t5y_2026-11-06.py", u"仕掛け持ち + 使う側", u"有", "inject_text_ty", u"res, conds[p], miss[p], found[p] = PI.id_map(claims, bc[\"ids\"][p], target, inj[\"replacement\"])", "2026-11-06"),
     # 2026-11-06: T5Y の仕掛け(封 docs/XBRL_T5_YEN_SEAL_2026-11-06.md §2-1)。measure/inject.py に切り替え t5_yen_2026_11_06 が真のときだけ通る build_t5 の枝 _build_t5_yen(相手の値を倍率で割って token の形で描き、描いた字を読み直した値を new_value にする。挿入 +30 行・削除 0)。claim への対応付けは持たない共通部品のまま(役は表の 4 行目と同じ)。
     ("measure/inject.py", u"共通部品", u"不要", "_build_t5_yen", u"rendered, back = S.t5_readback(t, other[\"value\"])", "2026-11-06"),
+    # 2026-11-09: FX の注入(封 docs/XBRL_AI_FORMS_FX_SEAL_2026-11-09.md §0-2 の 6 (b)・9)。T5Y の script(T1・T8 の RB の関数と T5 の関数)と PB の script(T9 を P30E・P32E で)を importlib で読み込んで 1 本ずつ呼ぶ使う側。site・差し替え・id で引く対応付けは読み込んだ関数のまま。判定の入口は verify_document( を P32E の軸で呼ぶ。
+    ("measure/xbrl_aiforms_fx_2026-11-09.py", u"使う側", u"有", "inject_job_fx", u"rows, counts = fn(zb, text, refs, seed, name)", "2026-11-09"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
