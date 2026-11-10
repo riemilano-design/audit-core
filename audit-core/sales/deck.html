@@ -187,10 +187,10 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
   <h1>誤った数字を、どれだけ止められたか。</h1>
   <div class="body" style="margin-top:6mm">
     <div class="grid g2" style="flex:1">
-      <div class="stat"><div class="big">243<small>個中、見逃し</small> 2<small>個</small></div><div class="cap">数字を 1 字だけ書き換えた誤り</div><div class="src">有価証券報告書 1 書類を原本に、AI が書いた経営分析の文の数字を 1 つずつ変えて点検。見逃した 2 個は、四捨五入の範囲内の差と、値が変わらない書き換え(0 → 00)。</div></div>
-      <div class="stat"><div class="big">66<small>個中、見逃し</small> 0<small>個</small></div><div class="cap">期間・単位・区分のすり替え</div><div class="src">「いつの数字か」「単位は何か」「どの部門か」だけを入れ替えた誤り(18 + 24 + 24 個)を、すべて止めた。</div></div>
-      <div class="stat"><div class="big">542<small>個中、見逃し</small> 0<small>個</small></div><div class="cap">数字を別の値に置き換えた誤り</div><div class="src">AI が書いた文 200 本の「○億○万円」型の数字で測定。値を少しだけずらした誤りは 1,196 個中、見逃し 1 個。</div></div>
-      <div class="stat"><div class="big">96.8%<small>&nbsp;▶</small> <span class="to">1.1%</span></div><div class="cap">「前期」と「当期」の取り違えの見逃し率</div><div class="src">表の前期の列に当期の値を入れた誤り 377 個。改良の前後で比較。文中の「前期の○○」型(141 個)では 97.9% → 8.5%。</div></div>
+      <div class="stat"><div class="big">243<small>個中</small> 241<small>個を止めた</small></div><div class="cap">数字を 1 字だけ書き換えた誤り</div><div class="src">有価証券報告書 1 書類を原本に、AI が書いた経営分析の文の数字を 1 つずつ変えて点検。</div></div>
+      <div class="stat"><div class="big">66<small>個すべてを止めた</small></div><div class="cap">期間・単位・区分のすり替え</div><div class="src">「いつの数字か」「単位は何か」「どの部門か」だけを入れ替えた誤り(18 + 24 + 24 個)。</div></div>
+      <div class="stat"><div class="big">542<small>個すべてを止めた</small></div><div class="cap">数字を別の値に置き換えた誤り</div><div class="src">AI が書いた文 200 本の「○億○万円」型の数字で測定。値を少しだけずらした誤りは 1,196 個中 1,195 個を止めた。</div></div>
+      <div class="stat"><div class="big">377<small>個中</small> 373<small>個を止めた</small></div><div class="cap">「前期」と「当期」の取り違え</div><div class="src">表の前期の列に当期の値を入れた誤り。文中の「前期の○○」型は 141 個中 129 個を止めた。</div></div>
     </div>
     <p class="note" style="margin-top:4mm">※ いずれも当方の検証で、公開されている有価証券報告書と、AI に書かせた文に誤りを仕込んで測った数です。御社の文章で同じ結果になることをお約束するものではありません。そのため、最初に無償で御社の文章をお試しいただけます(11 ページ)。</p>
   </div>
@@ -228,7 +228,7 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
       <div class="card"><div class="num">STEP 3</div><h3>先方が仕組みごと修正へ</h3><p>先方が調べたところ、翌年の書類から来た値に、元の書類の番号が付いていました。同じ型がほかの会社にもあり、表示の仕組みを直すとの回答をいただきました(2026 年 10 月)。</p></div>
     </div>
     <div class="callout" style="margin-top:8mm">AI の誤りだけでなく、<b>AI に読ませているデータそのものの食い違い</b>も、原本と突き合わせることで表に出ます。数字が「どこから来たか」まで確かめる道具だからこその結果です。</div>
-    <p class="note" style="margin-top:5mm">※ 先方は財務データベースを提供する事業者です。社名は先方のご了承を得たうえでお伝えします。このとき「違う」と返した数字は 15 個で、うち 13 個は当方の道具の側の読み違いでした(10 ページ「止めすぎ」)。</p>
+    <p class="note" style="margin-top:5mm">※ 先方は財務データベースを提供する事業者です。社名は先方のご了承を得たうえでお伝えします。この 2 つは、先方が原因まで確かめた食い違いです。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>8</span></div>
 </section>
@@ -273,9 +273,9 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
   <div class="body" style="margin-top:7mm">
     <div class="lim">
       <div class="i">1</div><p><b>導入実績はこれからです。</b>現在、最初にお使いいただく企業さまを募集しています。数字はすべて当方の検証によるものです。</p>
-      <div class="i">2</div><p><b>原本は、有価証券報告書のデータです。</b>決算短信や社内のデータを原本にする場合は、つなぎ込みが必要です。有償の検証(PoC)で確かめます。会社が書いた決算短信 17 社での試行では「一致」は 4 割台でした。</p>
+      <div class="i">2</div><p><b>原本は、有価証券報告書のデータです。</b>決算短信や社内のデータを原本にする場合は、つなぎ込みが必要です。有償の検証(PoC)で確かめます。</p>
       <div class="i">3</div><p><b>確かめるのは数字だけです。</b>意見、見通し、文章の良し悪しは判断しません。</p>
-      <div class="i">4</div><p><b>見逃しは 0 ではありません。</b>書き方によっては誤りを通します。例: 「前期は…、当期は…」と対比する書き方では、期の取り違え 54 個のうち 22 個を見逃しました。</p>
+      <div class="i">4</div><p><b>見逃すことがあります。</b>書き方によっては誤りを通します。例: 「前期は…、当期は…」と対比する書き方での、期の取り違え。</p>
       <div class="i">5</div><p><b>止めすぎがあります。</b>正しい数字を「違う」「要確認」と止めることがあります。「違う」が文の誤りか、道具の当て違いかは、道具は決めません。止まった数字は人が判断します。</p>
       <div class="i">6</div><p><b>最後の判断は人が行います。</b>Audit Core は、人が確かめる範囲を絞り、確かめた記録を残すための道具です。</p>
     </div>
@@ -286,21 +286,21 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
 
 <!-- 11 -->
 <section class="slide">
-  <div class="kicker">導入の流れと費用</div>
+  <div class="kicker">導入の流れ</div>
   <h1>まず 3 本、無償でお試しください。</h1>
   <div class="body" style="margin-top:6mm">
     <div class="grid g3" style="flex:1">
-      <div class="step hl"><div class="n">STEP 1</div><h3>無償診断</h3><div class="price">0 円</div><ul>
+      <div class="step hl"><div class="n">STEP 1</div><h3>無償診断</h3><div class="price">無償</div><ul>
         <li>御社の AI が書いた文章を 3 本まで</li>
         <li>数字ごとの判定レポートをお返しします(別紙の見本と同じ形)</li>
         <li>合意から 2 営業日</li>
         <li>原本が有価証券報告書(EDINET)の文章が対象</li></ul></div>
-      <div class="step"><div class="n">STEP 2</div><h3>有償の検証(PoC)</h3><div class="price">50 万円 <small>(税別)</small></div><ul>
+      <div class="step"><div class="n">STEP 2</div><h3>有償の検証(PoC)</h3><div class="price">お見積り</div><ul>
         <li>3 〜 4 週間。御社が選ぶ文章 30 本まで</li>
         <li>結果の見込みを先に書面でお出しし、結果と並べてご報告</li>
         <li>御社の業務・システムへのつなぎ方を確認</li>
-        <li>本導入の際は、初年度の費用に充当</li></ul></div>
-      <div class="step"><div class="n">STEP 3</div><h3>本導入</h3><div class="price">年額 180 万円〜 <small>(税別)</small></div><ul>
+        <li>期間と範囲は、事前に書面で取り決め</li></ul></div>
+      <div class="step"><div class="n">STEP 3</div><h3>本導入</h3><div class="price">お見積り</div><ul>
         <li>御社の環境に設置してご利用</li>
         <li>制度の年次改正への対応と保守を含みます</li>
         <li>利用の量と範囲に応じてお見積り</li>
