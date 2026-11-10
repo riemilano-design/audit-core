@@ -192,7 +192,7 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
       <div class="stat"><div class="big">542<small>個すべてを止めた</small></div><div class="cap">数字を別の値に置き換えた誤り</div><div class="src">AI が書いた文 200 本の「○億○万円」型の数字で測定。値を少しだけずらした誤りは 1,196 個中 1,195 個を止めた。</div></div>
       <div class="stat"><div class="big">377<small>個中</small> 373<small>個を止めた</small></div><div class="cap">「前期」と「当期」の取り違え</div><div class="src">表の前期の列に当期の値を入れた誤り。文中の「前期の○○」型は 141 個中 129 個を止めた。</div></div>
     </div>
-    <p class="note" style="margin-top:4mm">※ いずれも当方の検証で、公開されている有価証券報告書と、AI に書かせた文に誤りを仕込んで測った数です。御社の文章で同じ結果になることをお約束するものではありません。そのため、最初に無償で御社の文章をお試しいただけます(11 ページ)。</p>
+    <p class="note" style="margin-top:4mm">※ いずれも当方の検証で、公開されている有価証券報告書と、AI に書かせた文に誤りを仕込んで測った数です。御社の文章で同じ結果になることをお約束するものではありません。そのため、最初に無償で御社の文章をお試しいただけます(12 ページ)。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>6</span></div>
 </section>
@@ -286,6 +286,33 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
 
 <!-- 11 -->
 <section class="slide">
+  <div class="kicker">導入の形</div>
+  <h1>使い方は 3 通り。設置なしで始められます。</h1>
+  <div class="body" style="margin-top:6mm">
+    <div class="grid g3" style="flex:1">
+      <div class="step hl"><div class="n">A ― 設置なし</div><h3>文章を送る</h3><ul style="margin-top:2mm">
+        <li>御社は、AI が書いた文章(テキスト)と、対象の会社名・年度を送るだけ</li>
+        <li>当方が原本(EDINET の有価証券報告書)を用意し、点検して、数字ごとの判定レポートをお返しします</li>
+        <li>御社のシステムの変更は要りません</li>
+        <li>無償診断は、この形で行います</li></ul></div>
+      <div class="step"><div class="n">B ― 社内に置く</div><h3>御社の機械で動かす</h3><ul style="margin-top:2mm">
+        <li>Python が動く機械 1 台で動きます。追加のソフトや専用の機器は要りません</li>
+        <li>文章を社外に出さずに点検できます。点検に外部の AI・外部のサービスを使いません</li>
+        <li>点検 1 回は 1 秒前後(当方の 1 台で測った中央値 0.7 秒・最大 1.6 秒)</li>
+        <li>原本は、公開されている EDINET の書類を使います</li></ul></div>
+      <div class="step"><div class="n">C ― 組み込む</div><h3>御社のシステムにつなぐ</h3><ul style="margin-top:2mm">
+        <li>AI が文章を作った直後に自動で点検し、止まった数字だけを担当者に回す形</li>
+        <li>結果はレポートのほか、データ(JSON)でも受け取れます</li>
+        <li>つなぎ込みは御社の仕組みに合わせた個別の作業です。有償の検証(PoC)で範囲を確かめます</li></ul></div>
+    </div>
+    <div class="callout" style="margin-top:6mm">どの形でも、御社にご用意いただくのは <b>① AI が書いた文章</b> と <b>② どの会社の・どの年度の話か</b> の 2 つです。A で結果を見てから、B・C に進むかをお決めいただけます。</div>
+    <p class="note" style="margin-top:3mm">※ 時間は当方の機械 1 台(AI が書いた文 200 本)での実測で、御社の文章・機械での値をお約束するものではありません。同時に何本を処理できるかは測っていません。動作は macOS・Python 3.9 で確かめています。</p>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>11</span></div>
+</section>
+
+<!-- 12 -->
+<section class="slide">
   <div class="kicker">導入の流れ</div>
   <h1>まず 3 本、無償でお試しください。</h1>
   <div class="body" style="margin-top:6mm">
@@ -301,7 +328,7 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
         <li>御社の業務・システムへのつなぎ方を確認</li>
         <li>期間と範囲は、事前に書面で取り決め</li></ul></div>
       <div class="step"><div class="n">STEP 3</div><h3>本導入</h3><div class="price">お見積り</div><ul>
-        <li>御社の環境に設置してご利用</li>
+        <li>文章を送る形・社内に置く形・組み込む形から選べます(11 ページ)</li>
         <li>制度の年次改正への対応と保守を含みます</li>
         <li>利用の量と範囲に応じてお見積り</li>
         <li>技術一式の譲渡のご相談も承ります</li></ul></div>
@@ -312,7 +339,7 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
     </div>
     <p class="note" style="margin-top:3mm">※ 無償診断でお預かりした文章は診断のみに使用し、保管期間を事前に取り決めます。無償診断に、システムへの接続開発と追加の分析は含みません。</p>
   </div>
-  <div class="foot"><span>Audit Core ご紹介資料</span><span>11</span></div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>12</span></div>
 </section>
 
 <script>
