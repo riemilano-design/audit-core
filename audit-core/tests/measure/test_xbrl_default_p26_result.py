@@ -93,6 +93,8 @@ FACTS_ROWS_2026_11_06C = (u"L-64", u"D-41")
 FACTS_ROWS_2026_11_09 = (u"L-65", u"D-42")
 # 2026-11-10: 人が書いた決算短信の概況で engine を測る TS の便の行。P22・P26 の字は持たない(L-66・D-43・P-51 とも)が、前例と同じ形で遷移の検査に並べる
 FACTS_ROWS_2026_11_10 = (u"L-66", u"D-43")
+# 2026-11-10(2): AI の文の形を増やす FX の便の行。P22・P26 の字は持たない(L-67・D-44・P-52 とも)が、前例と同じ形で遷移の検査に並べる(便ごとに別の組 = TS の組と独立に、全部在るか全部無いか)
+FACTS_ROWS_2026_11_10B = (u"L-67", u"D-44")
 STEP_NAMES = (u"S-1", u"S-2", u"S-3", u"S-4", u"S-5", u"S-6", u"S-7", u"S-8", u"S-9", u"S-10", u"S-11", u"S-12")
 
 #: **字で留める**(測った事実。定数から作らない)。変えたら記録も文書も作り直す。
@@ -818,7 +820,9 @@ class RecordTest(unittest.TestCase):
             self.assertIn(len(present_1109), (0, len(FACTS_ROWS_2026_11_09)), u"2026-11-09 の便(注入の仕掛けの T5 を円族の数に作る T5Y)の行が一部だけ在る(中途の遷移)")
             present_1110 = [i for i in FACTS_ROWS_2026_11_10 if any(l.startswith(u"| %s |" % i) for l in lines)]
             self.assertIn(len(present_1110), (0, len(FACTS_ROWS_2026_11_10)), u"2026-11-10 の便(人が書いた決算短信の概況で engine を測る TS)の行が一部だけ在る(中途の遷移)")
-            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b) + tuple(present_1101) + tuple(present_1103) + tuple(present_1103b) + tuple(present_1104) + tuple(present_1104b) + tuple(present_1105) + tuple(present_1105b) + tuple(present_1106) + tuple(present_1106b) + tuple(present_1106c) + tuple(present_1109) + tuple(present_1110))
+            present_1110b = [i for i in FACTS_ROWS_2026_11_10B if any(l.startswith(u"| %s |" % i) for l in lines)]
+            self.assertIn(len(present_1110b), (0, len(FACTS_ROWS_2026_11_10B)), u"2026-11-10 の便(2。AI の文の形を増やす FX)の行が一部だけ在る(中途の遷移)")
+            row_heads = tuple(u"| %s |" % i for i in FACTS_ROWS_2026_10_28 + tuple(present_29) + tuple(present_29b) + tuple(present_1101) + tuple(present_1103) + tuple(present_1103b) + tuple(present_1104) + tuple(present_1104b) + tuple(present_1105) + tuple(present_1105b) + tuple(present_1106) + tuple(present_1106b) + tuple(present_1106c) + tuple(present_1109) + tuple(present_1110) + tuple(present_1110b))
             stray = [l[:60] for l in lines if (u"P22" in l or u"P26" in l) and not l.startswith(row_heads) and u"2026-10-28" not in l]
             self.assertEqual(stray, [], u"遷移の外の行に P22・P26 の字がある")
         n = 0
