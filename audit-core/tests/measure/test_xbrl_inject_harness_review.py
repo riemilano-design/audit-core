@@ -968,6 +968,8 @@ LATER_HARNESS_FILES = (
     ("measure/xbrl_tperiod_2026-11-09.py", u"仕掛け持ち + 使う側", u"有", "table_book", u"mapped = len(sents2) == len(sents) and i < len(sents2) and sents2[i] == ns", "2026-11-10"),
     # 2026-11-10: NF(非機能の実測。封 docs/XBRL_NONFUNCTIONAL_SEAL_2026-11-10.md §4)。注入はしない。verify_document 1 回の時間とメモリを子 process で測る script で、検査の呼び出し verify_document( が副産物の検査の規準に当たるだけ(前例 xbrl_delta_naming と同じ「対象外・不要」)。
     ("measure/xbrl_nonfunc_2026-11-10.py", u"対象外", u"不要", "measure_call", u"out = VD.verify_document(zb, prof, text)", "2026-11-10"),
+    # 2026-11-10: LB(札のある行だけの率。封 docs/XBRL_LABEL_ONLY_RATES_SEAL_2026-11-10.md §4)。注入はしない。200 本 × 5 profile の state と既存の札を数える script で、検査の呼び出し verify_document( が副産物の検査の規準に当たるだけ(前例 NF と同じ「対象外・不要」)。
+    ("measure/xbrl_labelonly_2026-11-10.py", u"対象外", u"不要", "num_view", u"out = VD.verify_document(zb, pname, text)", "2026-11-10"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
