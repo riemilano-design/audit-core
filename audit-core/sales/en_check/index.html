@@ -74,10 +74,11 @@ const FACT_SRC = "<ix:nonFraction([^>]*)>([^<]*)</ix:nonFraction>";
 
 // PDF の 1 ページの字を、行と欄で区切った文字列にする(離れた欄は別の行として扱う)
 function pageText(items) {
-  let out = "", prev = null;
+  // 空白だけの item は字として数えない(pdf.js は欄の間の空きを幅のある空白 1 個で返す。数えると離れた欄の「-」が次の数に付く)
+  let out = "", prev = null, sp = false;
   for (const it of items) {
     if (typeof it.str !== "string") continue;
-    if (it.str === "") { if (it.hasEOL) { out += "\n"; prev = null; } continue; }
+    if (it.str.trim() === "") { if (it.hasEOL) { out += "\n"; prev = null; sp = false; } else if (it.str !== "") sp = true; continue; }
     if (prev) {
       let sep = "";
       if (prev.hasEOL) sep = "\n";
@@ -86,11 +87,11 @@ function pageText(items) {
         const dy = Math.abs(it.transform[5] - prev.transform[5]);
         const gap = it.transform[4] - (prev.transform[4] + prev.width);
         if (dy > h * 0.5 || gap > h * 1.0 || gap < -h * 0.5) sep = "\n";
-        else if (gap > h * 0.15) sep = " ";
+        else if (sp || gap > h * 0.15) sep = " ";
       }
       out += sep;
     }
-    out += it.str; prev = it;
+    out += it.str; prev = it; sp = false;
   }
   return out;
 }
