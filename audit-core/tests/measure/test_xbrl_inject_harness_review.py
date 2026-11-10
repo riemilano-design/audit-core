@@ -966,6 +966,8 @@ LATER_HARNESS_FILES = (
     ("measure/xbrl_tanshin_2026-11-09.py", u"仕掛け持ち + 使う側", u"有", "build_row", u"res, conds[p], miss[p], found[p] = PI.id_map(claims, bc[\"ids\"][p], target, inj[\"replacement\"])", "2026-11-09"),
     # 2026-11-10: 規則 T の注入(封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §5)。(a) は PB の script の inject_job_pb を P30E・P33E に差し替えて呼ぶ(使う側)。(b) は表の期の入れ替え TP・TC を測定 script が自分で作り(仕掛けの経路は使わない)、注入後の claim は (文の番号, 替えたセルの数の位置) で引く(文の列が同じ長さで、同じ番号の文が替えた文と同じ字のときだけ対応)
     ("measure/xbrl_tperiod_2026-11-09.py", u"仕掛け持ち + 使う側", u"有", "table_book", u"mapped = len(sents2) == len(sents) and i < len(sents2) and sents2[i] == ns", "2026-11-10"),
+    # 2026-11-10: NF(非機能の実測。封 docs/XBRL_NONFUNCTIONAL_SEAL_2026-11-10.md §4)。注入はしない。verify_document 1 回の時間とメモリを子 process で測る script で、検査の呼び出し verify_document( が副産物の検査の規準に当たるだけ(前例 xbrl_delta_naming と同じ「対象外・不要」)。
+    ("measure/xbrl_nonfunc_2026-11-10.py", u"対象外", u"不要", "measure_call", u"out = VD.verify_document(zb, prof, text)", "2026-11-10"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 

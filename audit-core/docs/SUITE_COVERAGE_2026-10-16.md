@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **293 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **295 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 220 |
+| `tests/measure` | 222 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -295,6 +295,9 @@ FX(AI の文の形を増やす。F6 社長メッセージ・F7 ニュース記�
 
 **2026-11-10 に +2**(`tests/measure/test_xbrl_tperiod_seal.py`・`tests/measure/test_xbrl_tperiod_result.py`。
 表の見出しの「前期」の列の数を前期の手がかりがある数として扱う T の測定 script `measure/xbrl_tperiod_2026-11-09.py` の封の門と結果の門)。291 → 293(`tests/measure` 218 → 220)。
+
+**2026-11-10 に +2**(`tests/measure/test_xbrl_nonfunc_seal.py`・`tests/measure/test_xbrl_nonfunc_result.py`。
+engine の非機能の実測 NF(verify_document 1 回の時間とメモリ。封 `docs/XBRL_NONFUNCTIONAL_SEAL_2026-11-10.md`)の測定 script `measure/xbrl_nonfunc_2026-11-10.py` の封の門と結果の門)。293 → 295(`tests/measure` 220 → 222)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
