@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Audit Core ご紹介資料</title>
+<style>
+@page { size: 297mm 210mm; margin: 0; }
+:root{
+  --ink:#16233b; --sub:#51607a; --line:#d9dee8; --bg:#ffffff; --soft:#f3f5f9;
+  --navy:#16233b; --accent:#0e7c66; --accent-soft:#e3f3ee; --warn:#c2412d; --warn-soft:#fbe9e5;
+  --amber:#b7791f; --amber-soft:#fbf1dc; --gray-soft:#eceff4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff;color:var(--ink);font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.slide{width:297mm;height:210mm;position:relative;overflow:hidden;page-break-after:always;break-after:page;padding:15mm 20mm 18mm 20mm;display:flex;flex-direction:column}
+.slide:last-child{page-break-after:auto;break-after:auto}
+.kicker{font-size:10.5pt;letter-spacing:.14em;color:var(--accent);font-weight:700;margin-bottom:3mm}
+h1{font-size:25pt;line-height:1.35;font-weight:700;letter-spacing:.01em;text-wrap:balance}
+.lead{font-size:13pt;line-height:1.75;color:var(--sub);margin-top:4mm;max-width:235mm}
+.body{flex:1;min-height:0;margin-top:8mm;display:flex;flex-direction:column}
+.foot{position:absolute;left:20mm;right:20mm;bottom:7mm;display:flex;justify-content:space-between;font-size:8.5pt;color:#8a94a6;border-top:.3mm solid var(--line);padding-top:2mm}
+.note{font-size:9.5pt;line-height:1.6;color:var(--sub)}
+b,strong{font-weight:700}
+.grid{display:grid;gap:6mm}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--soft);border-radius:3mm;padding:6mm 6.5mm}
+.card h3{font-size:14.5pt;line-height:1.45;margin-bottom:2.5mm}
+.card p{font-size:11.5pt;line-height:1.7;color:#33415a}
+.num{font-size:10pt;font-weight:700;color:var(--accent);letter-spacing:.1em;margin-bottom:2mm}
+/* cover */
+.cover{background:var(--navy);color:#fff;padding:24mm 26mm}
+.cover .kicker{color:#7fd6c2}
+.cover h1{font-size:36pt;line-height:1.4;margin-top:16mm}
+.cover .lead{color:#c9d2e3;font-size:15pt;margin-top:9mm;max-width:215mm}
+.cover .brand{position:absolute;left:26mm;bottom:22mm;font-size:12pt;color:#c9d2e3;line-height:1.8}
+.cover .brand b{font-size:20pt;color:#fff;letter-spacing:.04em}
+.cover .bar{position:absolute;right:0;top:0;bottom:0;width:9mm;background:var(--accent)}
+/* flow */
+.flow{display:grid;grid-template-columns:62mm 12mm 50mm 12mm 1fr;align-items:center;gap:0}
+.box{border:.4mm solid var(--line);border-radius:3mm;padding:5mm;font-size:11.5pt;line-height:1.6;background:#fff}
+.box b{display:block;font-size:12.5pt;margin-bottom:1mm}
+.stack{display:flex;flex-direction:column;gap:4mm}
+.arrow{text-align:center;font-size:18pt;color:#9aa5b8}
+.engine{background:var(--navy);color:#fff;border-radius:3mm;padding:8mm 4mm;text-align:center;font-size:11pt;line-height:1.6}
+.engine b{display:block;font-size:17pt;letter-spacing:.03em;margin-bottom:1.5mm}
+.ans{display:grid;grid-template-columns:24mm 1fr;align-items:center;border-radius:2.5mm;padding:3.2mm 4mm;font-size:11pt;line-height:1.5}
+.ans b{font-size:12pt}
+.ok{background:var(--accent-soft)} .ok b{color:var(--accent)}
+.ng{background:var(--warn-soft)} .ng b{color:var(--warn)}
+.nf{background:var(--amber-soft)} .nf b{color:var(--amber)}
+.uv{background:var(--gray-soft)} .uv b{color:#4a566b}
+/* table */
+table{border-collapse:collapse;width:100%;font-size:11pt;line-height:1.55}
+th{font-size:9.5pt;text-align:left;color:var(--sub);font-weight:700;border-bottom:.4mm solid var(--ink);padding:2mm 3mm}
+td{border-bottom:.3mm solid var(--line);padding:2.6mm 3mm;vertical-align:middle}
+.tag{display:inline-block;border-radius:1.5mm;padding:.8mm 2.6mm;font-size:10pt;font-weight:700;white-space:nowrap}
+.tag.ok{color:var(--accent)} .tag.ng{color:var(--warn)} .tag.nf{color:var(--amber)} .tag.uv{color:#4a566b}
+mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
+/* stats */
+.stat{background:var(--soft);border-radius:3mm;padding:6mm 6.5mm;display:flex;flex-direction:column}
+.stat .big{font-size:30pt;font-weight:700;line-height:1.15;color:var(--navy);letter-spacing:-.01em}
+.stat .big small{font-size:13pt;font-weight:700;margin-left:1mm}
+.stat .big .to{color:var(--accent)}
+.stat .cap{font-size:11.5pt;line-height:1.6;margin-top:2.5mm;font-weight:700}
+.stat .src{font-size:9.5pt;line-height:1.55;color:var(--sub);margin-top:1.5mm}
+.callout{border-left:1.2mm solid var(--accent);background:var(--accent-soft);padding:4mm 6mm;font-size:11.5pt;line-height:1.7;border-radius:0 2.5mm 2.5mm 0}
+.callout.warn{border-color:var(--amber);background:var(--amber-soft)}
+/* steps */
+.step{border:.4mm solid var(--line);border-radius:3mm;padding:6mm;display:flex;flex-direction:column;background:#fff}
+.step.hl{border-color:var(--accent);border-width:.7mm}
+.step .n{font-size:10pt;font-weight:700;letter-spacing:.12em;color:var(--accent)}
+.step h3{font-size:16pt;margin:1.5mm 0 1mm}
+.step .price{font-size:19pt;font-weight:700;color:var(--navy);margin:1mm 0 3mm}
+.step .price small{font-size:10pt;font-weight:400;color:var(--sub)}
+.step ul{list-style:none;font-size:10.8pt;line-height:1.65;color:#33415a}
+.step li{padding-left:4.2mm;position:relative;margin-bottom:1mm}
+.step li:before{content:"";position:absolute;left:0;top:2.6mm;width:1.8mm;height:1.8mm;border-radius:50%;background:var(--accent)}
+.ba{display:grid;grid-template-columns:1fr 10mm 1fr;align-items:stretch}
+.ba .col{border-radius:3mm;padding:6mm 7mm}
+.ba .before{background:var(--gray-soft)} .ba .after{background:var(--accent-soft)}
+.ba h3{font-size:12pt;letter-spacing:.1em;margin-bottom:3mm;color:var(--sub)} .ba .after h3{color:var(--accent)}
+.ba ul{list-style:none;font-size:12.5pt;line-height:1.7}
+.ba li{margin-bottom:2.2mm;padding-left:5mm;position:relative}
+.ba li:before{content:"";position:absolute;left:0;top:3.2mm;width:2.2mm;height:2.2mm;border-radius:50%;background:#9aa5b8}
+.ba .after li:before{background:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:3mm}
+.chip{border:.35mm solid var(--line);border-radius:10mm;padding:1.6mm 4.5mm;font-size:10.8pt;background:#fff}
+.lim{display:grid;grid-template-columns:9mm 1fr;gap:1mm 3mm;font-size:11.8pt;line-height:1.65}
+.lim .i{font-weight:700;color:var(--amber);font-size:13pt}
+.lim p{margin-bottom:3.4mm}
+.contact{background:var(--navy);color:#fff;border-radius:3mm;padding:5mm 7mm;display:flex;justify-content:space-between;align-items:center;font-size:11.5pt;line-height:1.7}
+.contact b{font-size:14pt}
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="slide cover">
+  <div class="bar"></div>
+  <div class="kicker">生成 AI で決算・財務の文章を作る企業さまへ</div>
+  <h1>AI が書いた決算の文章。<br>その数字、原本と合っていますか。</h1>
+  <p class="lead">Audit Core は、文章の中の数字を 1 つずつ、金融庁に提出された原本のデータと突き合わせる検証エンジンです。合っていれば「一致」、違っていれば原本の値を添えてお返しします。</p>
+  <div class="brand"><b>Audit Core</b><br>ご紹介資料 ／ 2026 年 11 月</div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <div class="kicker">課題</div>
+  <h1>AI は速い。けれど、数字を間違えます。</h1>
+  <p class="lead">生成 AI は決算の要約やレポートを数秒で書きます。ただし、文章として自然なまま、数字だけが違っていることがあります。読んだだけでは気づけません。</p>
+  <div class="body">
+    <div class="grid g3">
+      <div class="card"><div class="num">よくある誤り 1</div><h3>期の取り違え</h3><p>前の年の売上高を、今年の数字として書いてしまう。桁も単位も正しいので、いちばん見つけにくい誤りです。</p></div>
+      <div class="card"><div class="num">よくある誤り 2</div><h3>単位・桁の取り違え</h3><p>「百万円」と「億円」、「%」と「ポイント」。単位がずれると、数字の意味がまるごと変わります。</p></div>
+      <div class="card"><div class="num">よくある誤り 3</div><h3>別の項目の数字・原本に無い数字</h3><p>営業利益の話に別の利益の数字を引く。もっともらしいが、原本のどこにも無い数字を書く。</p></div>
+    </div>
+    <div class="callout warn" style="margin-top:8mm">人がすべての数字を見直せば、AI で浮いた時間は消えます。見直さなければ、誤った数字が社外に出ます。<b>「どの数字を、何と照らして確かめたか」を仕組みで残す</b>ことが必要です。</div>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>2</span></div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <div class="kicker">Audit Core がすること</div>
+  <h1>数字を 1 つずつ、原本のどの値かまで突き止めます。</h1>
+  <p class="lead">AI が書いた文章と、原本のデータ(有価証券報告書)を入れると、文章の中の数字ごとに 4 つの答えのどれかを返します。</p>
+  <div class="body">
+    <div class="flow">
+      <div class="stack">
+        <div class="box"><b>AI が書いた文章</b>決算の要約、分析レポート、IR 資料の下書き など</div>
+        <div class="box"><b>原本のデータ</b>金融庁の開示システム(EDINET)に提出された有価証券報告書</div>
+      </div>
+      <div class="arrow">▶</div>
+      <div class="engine"><b>Audit Core</b>数字を取り出し、<br>原本の値と照合</div>
+      <div class="arrow">▶</div>
+      <div class="stack" style="gap:3mm">
+        <div class="ans ok"><b>一致</b><span>原本の値と合っています(どの値かを示します)</span></div>
+        <div class="ans ng"><b>違う</b><span>原本に当たる値があり、文の値と違います(原本の値を添えます)</span></div>
+        <div class="ans nf"><b>要確認</b><span>原本の 1 つの値に結べませんでした(理由を添えます)</span></div>
+        <div class="ans uv"><b>判断しない</b><span>見通し・目標など。無理に答えず、人の確認に回します</span></div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:9mm"><b>わからないものを「合っている」と言わない。</b>これが設計の中心です。確かめられた数字と、人が見るべき数字を分けてお渡しします。</div>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>3</span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <div class="kicker">結果の見え方</div>
+  <h1>どの数字が、なぜ止まったのかが一目でわかります。</h1>
+  <div class="body" style="margin-top:6mm">
+    <table>
+      <tr><th style="width:42%">AI が書いた文(数字ごとに点検)</th><th style="width:15%">判定</th><th>Audit Core の答え</th></tr>
+      <tr><td>当期の売上高は <mark>43,210 百万円</mark>となり、</td><td><span class="tag ok">一致</span></td><td>原本の「売上高(当期)」と合っています</td></tr>
+      <tr><td>前期に比べ <mark>2,671 百万円</mark>の増収となった。</td><td><span class="tag ok">一致</span></td><td>原本の売上高の「当期 − 前期」を計算した値と合っています</td></tr>
+      <tr><td>営業利益は <mark>3,150 百万円</mark>であった。</td><td><span class="tag ng">違う</span></td><td>原本の「営業利益(当期)」は <b>3,510 百万円</b>です</td></tr>
+      <tr><td>前期の売上高は <mark>43,210 百万円</mark>であり、</td><td><span class="tag ng">違う</span></td><td>原本の「売上高(前期)」は <b>40,539 百万円</b>です(43,210 は当期の値)</td></tr>
+      <tr><td>顧客満足度は <mark>90%</mark> に達した。</td><td><span class="tag nf">要確認</span></td><td>文の項目に当たる数が、原本のデータに見つかりませんでした</td></tr>
+      <tr><td>来期は <mark>2 割</mark>の増益を見込む。</td><td><span class="tag uv">判断しない</span></td><td>目標や計画の数字のため、判断しません。人がご確認ください</td></tr>
+    </table>
+    <p class="note" style="margin-top:5mm">※ 上の表は説明のための表示例で、会社・数字は架空のものです。実際の出力は、別紙「見本の診断レポート」をご覧ください。</p>
+    <div class="callout" style="margin-top:6mm">担当者が見るのは、色の付いた「止まった数字」だけ。原本の値と理由が添えられているので、確かめるのも直すのもその場で済みます。</div>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>4</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <div class="kicker">特長</div>
+  <h1>経営の目線で大切な、4 つのこと。</h1>
+  <div class="body">
+    <div class="grid g2" style="flex:1">
+      <div class="card"><div class="num">01</div><h3>同じ文章には、いつも同じ答え</h3><p>点検に生成 AI を使いません。決まった手順で原本と照合するので、結果がぶれず、あとから「なぜそう判定したか」を説明できます。AI の点検を、別の AI に任せない仕組みです。</p></div>
+      <div class="card"><div class="num">02</div><h3>データを社外に出さない</h3><p>御社の PC やサーバー 1 台の中で動きます。点検のたびに外部へ通信することも、使った分だけ課金されることもありません。発表前の資料にもお使いいただけます。</p></div>
+      <div class="card"><div class="num">03</div><h3>待たせない速さ</h3><p>1 つの文書の点検は 1 秒前後です(ノート PC 1 台での実測。AI が書いた文 200 本で中央値 0.7 秒・最大 1.6 秒)。AI が書くそばから点検できます。</p></div>
+      <div class="card"><div class="num">04</div><h3>確かめた記録が残る</h3><p>どの数字を、原本のどの値と照らしたかを 1 件ずつ記録します。社内のレビューや、取引先・監査への説明にそのまま使えます。</p></div>
+    </div>
+    <p class="note" style="margin-top:4mm">※ 速さは 1 台(Apple M2)での 1 回の測定です。複数の文書を同時に処理したときの速さは測っていません。初回の準備(制度の項目名データの取得)にのみ通信が必要です。</p>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>5</span></div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="kicker">実績 1 ― わざと誤りを仕込んで測りました</div>
+  <h1>誤った数字を、どれだけ止められたか。</h1>
+  <div class="body" style="margin-top:6mm">
+    <div class="grid g2" style="flex:1">
+      <div class="stat"><div class="big">243<small>個中、見逃し</small> 2<small>個</small></div><div class="cap">数字を 1 字だけ書き換えた誤り</div><div class="src">有価証券報告書 1 書類を原本に、AI が書いた経営分析の文の数字を 1 つずつ変えて点検。見逃した 2 個は、四捨五入の範囲内の差と、値が変わらない書き換え(0 → 00)。</div></div>
+      <div class="stat"><div class="big">66<small>個中、見逃し</small> 0<small>個</small></div><div class="cap">期間・単位・区分のすり替え</div><div class="src">「いつの数字か」「単位は何か」「どの部門か」だけを入れ替えた誤り(18 + 24 + 24 個)を、すべて止めた。</div></div>
+      <div class="stat"><div class="big">542<small>個中、見逃し</small> 0<small>個</small></div><div class="cap">数字を別の値に置き換えた誤り</div><div class="src">AI が書いた文 200 本の「○億○万円」型の数字で測定。値を少しだけずらした誤りは 1,196 個中、見逃し 1 個。</div></div>
+      <div class="stat"><div class="big">96.8%<small>&nbsp;▶</small> <span class="to">1.1%</span></div><div class="cap">「前期」と「当期」の取り違えの見逃し率</div><div class="src">表の前期の列に当期の値を入れた誤り 377 個。改良の前後で比較。文中の「前期の○○」型(141 個)では 97.9% → 8.5%。</div></div>
+    </div>
+    <p class="note" style="margin-top:4mm">※ いずれも当方の検証で、公開されている有価証券報告書と、AI に書かせた文に誤りを仕込んで測った数です。御社の文章で同じ結果になることをお約束するものではありません。そのため、最初に無償で御社の文章をお試しいただけます(11 ページ)。</p>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>6</span></div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <div class="kicker">実績 2 ― 検証の厚み</div>
+  <h1>測った数だけを、お伝えします。</h1>
+  <div class="body" style="margin-top:6mm">
+    <div class="grid g4">
+      <div class="stat"><div class="big">97<small>書類</small></div><div class="cap">有価証券報告書</div><div class="src">実際に提出された原文で動作を確認</div></div>
+      <div class="stat"><div class="big">360<small>本</small></div><div class="cap">AI が書いた文</div><div class="src">要約・社長メッセージ・記事・表など 9 つの書き方。数字は 29,287 個</div></div>
+      <div class="stat"><div class="big">70.1<small>%</small></div><div class="cap">自動で「一致」を確認</div><div class="src">AI の文 200 本の数字 16,588 個のうち 11,625 個。残りが人の確認に回る数字</div></div>
+      <div class="stat"><div class="big">7,601<small>本</small></div><div class="cap">自動テスト</div><div class="src">エンジンの動きを自動で確かめる試験。変更が既存の動きを壊すと止まります</div></div>
+    </div>
+    <div class="grid g2" style="margin-top:7mm">
+      <div class="card"><h3>予測を先に書き、外れも残す</h3><p>改良のたびに「どうなるはずか」を先に書面で固定し、そのあとで測ります。予測が外れた結果も消さずに残しています(事前の計画書 117 本・結果報告 144 本)。</p></div>
+      <div class="card"><h3>作った本人以外が点検する</h3><p>動きを変える変更は、実装とは別に立てた独立の点検役(AI)が、わざと壊してテストが止まるかまで確かめたものだけを採用しています。資料の数字が記録とずれると、自動テストが止めます。</p></div>
+    </div>
+    <p class="note" style="margin-top:4mm">※ 「一致」は原本の値と結び付いた数字の割合で、文章の正しさの割合ではありません。資料の数字は 2026 年 11 月 10 日時点の記録によります。</p>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>7</span></div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <div class="kicker">実績 3 ― 社外での出来事</div>
+  <h1>止まった 2 つの数字が、<br>データベース側の不備を見つけました。</h1>
+  <div class="body">
+    <div class="grid g3">
+      <div class="card"><div class="num">STEP 1</div><h3>AI のレポート 3 本を点検</h3><p>外部の財務データベースの数字をもとに AI が書いた、大手企業 3 社のレポート(数字 163 個)を、原本と照合しました。</p></div>
+      <div class="card"><div class="num">STEP 2</div><h3>2 つの数字で、原本との差</h3><p>営業利益と減価償却費の 2 つが原本と合いませんでした。営業利益の差は約 1,305 億円。AI の書き間違いではなく、もとのデータベースが返した値でした。</p></div>
+      <div class="card"><div class="num">STEP 3</div><h3>先方が仕組みごと修正へ</h3><p>先方が調べたところ、翌年の書類から来た値に、元の書類の番号が付いていました。同じ型がほかの会社にもあり、表示の仕組みを直すとの回答をいただきました(2026 年 10 月)。</p></div>
+    </div>
+    <div class="callout" style="margin-top:8mm">AI の誤りだけでなく、<b>AI に読ませているデータそのものの食い違い</b>も、原本と突き合わせることで表に出ます。数字が「どこから来たか」まで確かめる道具だからこその結果です。</div>
+    <p class="note" style="margin-top:5mm">※ 先方は財務データベースを提供する事業者です。社名は先方のご了承を得たうえでお伝えします。このとき「違う」と返した数字は 15 個で、うち 13 個は当方の道具の側の読み違いでした(10 ページ「止めすぎ」)。</p>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>8</span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <div class="kicker">導入すると</div>
+  <h1>人が見るのは「止まった数字」だけになります。</h1>
+  <div class="body">
+    <div class="ba">
+      <div class="col before"><h3>いま</h3><ul>
+        <li>AI の文章の数字を、人がすべて原本と見比べる</li>
+        <li>誰がどこまで確かめたかが残らない</li>
+        <li>誤りが外に出たとき、原因をたどれない</li>
+        <li>不安なので、AI の利用範囲を広げられない</li></ul></div>
+      <div class="arrow" style="align-self:center">▶</div>
+      <div class="col after"><h3>導入後</h3><ul>
+        <li>「一致」の数字は記録つきで確認済み。人は止まった数字に集中</li>
+        <li>すべての数字に「原本のどの値と照らしたか」が残る</li>
+        <li>食い違いは、原本の値つきで戻ってくる</li>
+        <li>確かめる仕組みがあるので、AI の利用を広げられる</li></ul></div>
+    </div>
+    <div style="margin-top:8mm">
+      <div class="num" style="margin-bottom:3mm">このような企業さまに</div>
+      <div class="chips">
+        <span class="chip">決算・有価証券報告書の AI 要約を提供している</span>
+        <span class="chip">IR・開示の資料を AI で下書きしている</span>
+        <span class="chip">財務データを AI に読ませる製品を開発している</span>
+        <span class="chip">企業分析・与信のレポートを AI で作っている</span>
+        <span class="chip">監査・レビューで数字の整合を確かめている</span>
+      </div>
+    </div>
+    <p class="note" style="margin-top:6mm">※ 御社の文章で「一致」が何割になるか、確認の手間がどれだけ減るかは、無償診断で実際の数字をお出しします。</p>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>9</span></div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <div class="kicker">先にお伝えします</div>
+  <h1>できないこと、まだ足りないこと。</h1>
+  <div class="body" style="margin-top:7mm">
+    <div class="lim">
+      <div class="i">1</div><p><b>導入実績はこれからです。</b>現在、最初にお使いいただく企業さまを募集しています。数字はすべて当方の検証によるものです。</p>
+      <div class="i">2</div><p><b>原本は、有価証券報告書のデータです。</b>決算短信や社内のデータを原本にする場合は、つなぎ込みが必要です。有償の検証(PoC)で確かめます。会社が書いた決算短信 17 社での試行では「一致」は 4 割台でした。</p>
+      <div class="i">3</div><p><b>確かめるのは数字だけです。</b>意見、見通し、文章の良し悪しは判断しません。</p>
+      <div class="i">4</div><p><b>見逃しは 0 ではありません。</b>書き方によっては誤りを通します。例: 「前期は…、当期は…」と対比する書き方では、期の取り違え 54 個のうち 22 個を見逃しました。</p>
+      <div class="i">5</div><p><b>止めすぎがあります。</b>正しい数字を「違う」「要確認」と止めることがあります。「違う」が文の誤りか、道具の当て違いかは、道具は決めません。止まった数字は人が判断します。</p>
+      <div class="i">6</div><p><b>最後の判断は人が行います。</b>Audit Core は、人が確かめる範囲を絞り、確かめた記録を残すための道具です。</p>
+    </div>
+    <div class="callout" style="margin-top:3mm">だからこそ、ご契約の前に<b>御社の文章で無償診断</b>を行い、実際の数字を見てからご判断いただけます。</div>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>10</span></div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <div class="kicker">導入の流れと費用</div>
+  <h1>まず 3 本、無償でお試しください。</h1>
+  <div class="body" style="margin-top:6mm">
+    <div class="grid g3" style="flex:1">
+      <div class="step hl"><div class="n">STEP 1</div><h3>無償診断</h3><div class="price">0 円</div><ul>
+        <li>御社の AI が書いた文章を 3 本まで</li>
+        <li>数字ごとの判定レポートをお返しします(別紙の見本と同じ形)</li>
+        <li>合意から 2 営業日</li>
+        <li>原本が有価証券報告書(EDINET)の文章が対象</li></ul></div>
+      <div class="step"><div class="n">STEP 2</div><h3>有償の検証(PoC)</h3><div class="price">50 万円 <small>(税別)</small></div><ul>
+        <li>3 〜 4 週間。御社が選ぶ文章 30 本まで</li>
+        <li>結果の見込みを先に書面でお出しし、結果と並べてご報告</li>
+        <li>御社の業務・システムへのつなぎ方を確認</li>
+        <li>本導入の際は、初年度の費用に充当</li></ul></div>
+      <div class="step"><div class="n">STEP 3</div><h3>本導入</h3><div class="price">年額 180 万円〜 <small>(税別)</small></div><ul>
+        <li>御社の環境に設置してご利用</li>
+        <li>制度の年次改正への対応と保守を含みます</li>
+        <li>利用の量と範囲に応じてお見積り</li>
+        <li>技術一式の譲渡のご相談も承ります</li></ul></div>
+    </div>
+    <div class="contact" style="margin-top:6mm">
+      <div><b>お問い合わせ</b><br>無償診断のお申し込み・ご質問は、下記までご連絡ください。</div>
+      <div style="text-align:right"><b>山中 雄史</b>(Audit Core 開発者)<br>riemilano@gmail.com ／ 080-6413-9526</div>
+    </div>
+    <p class="note" style="margin-top:3mm">※ 無償診断でお預かりした文章は診断のみに使用し、保管期間を事前に取り決めます。無償診断に、システムへの接続開発と追加の分析は含みません。</p>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>11</span></div>
+</section>
+
+<script>
+(function(){var bad=[];document.querySelectorAll('.slide').forEach(function(s,i){
+  var f=s.querySelector('.foot');var limit=f?f.getBoundingClientRect().top:s.getBoundingClientRect().bottom;
+  var maxb=0;s.querySelectorAll('.body *, h1, .lead').forEach(function(e){var r=e.getBoundingClientRect();if(r.bottom>maxb)maxb=r.bottom;if(r.right>s.getBoundingClientRect().right-1)bad.push('R'+(i+1));});
+  if(maxb>limit-4)bad.push('B'+(i+1)+':'+Math.round(maxb-limit));
+  if(s.scrollHeight>s.clientHeight+1)bad.push('S'+(i+1));});
+document.documentElement.setAttribute('data-overflow',bad.length?bad.join(','):'none');})();
+</script>
+</body>
+</html>
