@@ -65,6 +65,12 @@ RECORD_REL = "fixtures/xbrl/labelonly/rates_2026-11-10.json"
 #: 封の commit から 0 行でなければならない path(engine・measure 全部・既存の記録)と、そこに新しく足してよい file(この便の script と記録)
 NOT_TOUCHED_RELS = ("adapters", "core", "measure", "fixtures/xbrl")
 ALLOWED_NEW = (SCRIPT_RELS[0], RECORD_REL)
+#: 封の後の便が、日付と理由を書いて届けた新しい file(字で留める。NF の門の ``later_declared_problems`` をこの便の封で使う。届けていない新しい file・在る file の変更は今も赤)
+DECLARED_NEW_AFTER_SEAL = (
+    # 2026-11-12: 止まった数字の「見る順」の診断(docs/XBRL_STOP_TRIAGE_DIAG_2026-11-12.md。封なし)。既に在る記録を数え直すだけで engine を呼ばない script 1 本と記録 1 つ。
+    # この便の script はどちらも読まない(この便が読む file は READ_ONLY_RELS の byte の一致で別に守る)
+    "measure/xbrl_stop_triage_2026-11-12.py", "fixtures/xbrl/aiforms/stop_triage_2026-11-12.json",
+)
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
     "measure/xbrl_pbind_2026-11-06.py", "measure/xbrl_rmix_2026-11-04.py", "measure/xbrl_rmix_regress97_2026-11-04.py", "measure/xbrl_pswap_idmap_2026-11-06.py", "measure/xbrl_pswap_2026-11-06.py",
@@ -188,6 +194,10 @@ def script_problems(seal, sc=None):
 # ---------------------------------------------------------------- 3. 触らない file
 def untouched_problems(rels=NOT_TOUCHED_RELS, root=REPO, seal_rel=SEAL_REL, allowed_new=ALLOWED_NEW):
     return NSG.untouched_problems(rels=rels, root=root, seal_rel=seal_rel, allowed_new=allowed_new)
+
+
+def later_declared_problems(declared=DECLARED_NEW_AFTER_SEAL, allowed_new=ALLOWED_NEW, rels=NOT_TOUCHED_RELS, root=REPO, seal_rel=SEAL_REL):
+    return NSG.later_declared_problems(declared=declared, allowed_new=allowed_new, rels=rels, root=root, seal_rel=seal_rel)
 
 
 def frozen_problems(rels=READ_ONLY_RELS, root=REPO, base=ROOT, seal_rel=SEAL_REL):
@@ -345,7 +355,29 @@ class ScriptMatchesSealTest(unittest.TestCase):
 
 class NotTouchedAndFrozenTest(unittest.TestCase):
     def test_c_1_engine_measure_and_the_records_are_untouched_since_the_seal_commit(self):
-        self.assertEqual([], untouched_problems())
+        self.assertEqual([], untouched_problems(allowed_new=ALLOWED_NEW + DECLARED_NEW_AFTER_SEAL))
+        self.assertEqual([], later_declared_problems())
+
+    def test_c_1a_a_later_declared_file_with_this_seal_must_be_new_outside_the_engine_and_exactly_what_was_added(self):
+        def repo():
+            r = self._repo()
+            r.put("measure/later.py")
+            r.commit("measure/later.py")                                             # 後の便が足した script(commit 済み)
+            return r
+        good = ("measure/later.py",)
+        kw = dict(allowed_new=("measure/new.py",), rels=self.RELS)
+        self.assertEqual([], later_declared_problems(declared=good, root=repo().d, **kw))
+        self.assertNotEqual([], later_declared_problems(declared=(), root=repo().d, **kw))                          # 届けずに足した file
+        self.assertNotEqual([], later_declared_problems(declared=good + ("measure/ghost.py",), root=repo().d, **kw))  # 届けたのに木に無い
+        r2 = repo()
+        r2.put("measure/prev.py")                                                    # 封の木に在る file の変更は届けても赤
+        self.assertNotEqual([], later_declared_problems(declared=good + ("measure/prev.py",), root=r2.d, **kw))
+        r3 = repo()
+        r3.put("adapters/xbrl/later.py")                                             # engine の置き場の新しい file は届けても赤
+        self.assertNotEqual([], later_declared_problems(declared=good + ("adapters/xbrl/later.py",), root=r3.d, **kw))
+        r4 = repo()
+        r4.put("measure/undeclared.py")                                              # 届けの外の新しい file は、届けを足した検査でも赤
+        self.assertNotEqual([], untouched_problems(rels=self.RELS, root=r4.d, allowed_new=("measure/new.py",) + good))
 
     def test_c_1b_the_seal_commit_is_found_from_history(self):
         s = seal_commit_of()
