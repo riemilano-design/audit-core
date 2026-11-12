@@ -132,6 +132,16 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
 .q4 li:before{content:"";position:absolute;left:0;top:2.4mm;width:1.8mm;height:1.8mm;border-radius:50%;background:var(--accent)}
 .q4 li b{color:var(--ink)}
 .q4 .mini{margin-top:auto;padding-top:2.2mm}
+.q4 .ck5{display:grid;grid-template-columns:1fr 1fr;gap:.9mm 4mm;margin-top:1.2mm}
+.q4 .ck5 div{font-size:10.3pt;line-height:1.5;color:var(--ink);display:flex;align-items:center;gap:1.8mm}
+.q4 .ck5 i{font-style:normal;flex:none;width:4.4mm;height:4.4mm;border-radius:50%;background:var(--accent);color:#fff;font-size:8.4pt;font-weight:700;display:flex;align-items:center;justify-content:center}
+.q4 .ck5 .to{color:var(--accent);font-weight:700}
+.take{display:grid;grid-template-columns:1fr 1fr;gap:4.5mm;margin-top:4mm}
+.take>div{border-radius:3mm;padding:4mm 6mm;font-size:11.3pt;line-height:1.7;color:#33415a}
+.take>div b{color:var(--ink)}
+.take .lb{font-size:9.6pt;font-weight:700;letter-spacing:.08em;margin-bottom:1.4mm}
+.take .a{background:var(--soft)} .take .a .lb{color:#6b778c}
+.take .b{background:var(--accent-soft);border-left:1.2mm solid var(--accent);border-radius:0 3mm 3mm 0} .take .b .lb{color:var(--accent)}
 .bar{display:flex;height:17mm;border-radius:3mm;overflow:hidden;font-size:12pt;font-weight:700;line-height:1.3}
 .bar div{display:flex;align-items:center;padding:0 5mm}
 .bar .a{background:var(--accent);color:#fff}
@@ -642,16 +652,16 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
 <!-- 17 -->
 <section class="slide">
   <div class="kicker">実績 3 ― 社外での出来事</div>
-  <h1>止まった 2 つの数字が、<br>データベース側の不備を見つけました。</h1>
+  <h1>止まった 2 つの数字が、<br>データベースの仕組みの修正につながりました。</h1>
   <div class="body">
     <div class="grid g3 flow3">
       <div class="card"><div class="num">STEP 1</div><div class="hd"><span class="icb s"><svg class="ic"><use href="#i-search"/></svg></span><h3>AI のレポート 3 本を点検</h3></div><p>外部の財務データベースの数字をもとに AI が書いた、大手企業 3 社のレポート(数字 163 個)を、原本と照合しました。</p></div>
       <div class="card"><div class="num">STEP 2</div><div class="hd"><span class="icb s w"><svg class="ic"><use href="#i-alert"/></svg></span><h3>2 つの数字で、原本との差</h3></div><p>営業利益と減価償却費の 2 つが原本と合いませんでした。営業利益の差は約 1,305 億円。AI の書き間違いではなく、もとのデータベースが返した値でした。</p></div>
       <div class="card"><div class="num">STEP 3</div><div class="hd"><span class="icb s"><svg class="ic"><use href="#i-gear"/></svg></span><h3>先方が仕組みごと修正へ</h3></div><p>先方が調べたところ、翌年の書類から来た値に、元の書類の番号が付いていました。同じ型がほかの会社にもあり、表示の仕組みを直すとの回答をいただきました(2026 年 10 月)。</p></div>
     </div>
-    <div class="mini" style="margin-top:5mm;justify-content:center"><span><b>データベース</b>の値</span><em>▶</em><span>AI がレポートを書く</span><em>▶</em><span class="e">Audit Core が原本と照合</span><em>▶</em><span class="w">2 つで「違う」</span><em>▶</em><span class="k">データベース側を修正へ</span></div>
-    <div class="callout" style="margin-top:5mm">AI の誤りだけでなく、<b>AI に読ませているデータそのものの食い違い</b>も、原本と突き合わせることで表に出ます。数字が「どこから来たか」まで確かめる道具だからこその結果です。</div>
-    <p class="note" style="margin-top:5mm">※ 先方は財務データベースを提供する事業者です。社名は先方のご了承を得たうえでお伝えします。この 2 つは、先方が原因まで確かめた食い違いです。</p>
+    <div class="mini" style="margin-top:4mm;justify-content:center"><span><b>データベース</b>の値</span><em>▶</em><span>AI がレポートを書く</span><em>▶</em><span class="e">Audit Core が原本と照合</span><em>▶</em><span class="w">2 つで「違う」</span><em>▶</em><span class="k">データベース側を修正へ</span></div>
+    <div class="take"><div class="a"><div class="lb">何が起きたか</div>文章の誤記を 1 つ直した話ではありません。見つかったのは、<b>AI に読ませているデータの「出所の付け方」の不備</b>で、同じ型がほかの会社の値にもありました。</div><div class="b"><div class="lb">この事例が示すこと(場面 3・11 ページ)</div>AI の文の点検に加えて、<b>データを提供する会社が、配信する値を原本と照らす品質管理</b>にも使える可能性があります。</div></div>
+    <p class="note" style="margin-top:3mm">※ 先方は財務データベースを提供する事業者です。社名は先方のご了承を得たうえでお伝えします。この 2 つは、先方が原因まで確かめた食い違いです。1 社での 1 回の出来事で、データ提供会社の品質管理として継続して使った実績は、まだありません。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>17</span></div>
 </section>
@@ -706,9 +716,10 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
         <p>文章の意味や表現は、AI の点検が得意です。数字の誤りを見つける力で AI より上だ、とは申しません。違いは、同じ文にはいつも同じ結果が出ること、照らした原本の値が 1 件ずつ記録に残ること、点検に外部の AI を使わないことです(10 ページ)。</p>
         <div class="mini"><span>AI の点検: 意味・表現</span><em>▶</em><span class="e">Audit Core: 数字の裏づけと記録</span></div></div>
       <div class="q4"><div class="hd"><span class="icb s n qn">3</span><h3>自社で開発すれば、済むのではないか。</h3></div>
-        <div class="q4a">作れます。手間がかかるのは、作ったあとの「確かめ」です。</div>
-        <p>原本のデータも、照らす考え方も公開されています。手間がかかるのは、日本語の数字の書き方、前期と当期の取り違え、項目名のゆれを 1 つずつ見つけて直し、測り直す部分と、制度の年次改正への対応です。その確かめが済んだものを、お使いいただけます(16 ページ)。</p>
-        <div class="mini"><span>有価証券報告書 97 書類</span><span>AI の文 360 本</span><span class="k">自動テスト 7,601 本</span></div></div>
+        <div class="q4a">作れます。ただ、作ったあとの「確かめ」が、ずっと続きます。</div>
+        <p>原本のデータも考え方も公開されています。自社で持つ場合は、次の 5 つを続ける体制が要ります。</p>
+        <div class="ck5"><div><i>1</i>正解のデータを用意する</div><div><i>2</i>誤りをわざと仕込んで測る</div><div><i>3</i>見逃しと止めすぎを測る</div><div><i>4</i>制度改正の影響を確かめる</div><div><i>5</i>変更で前の動きを崩さない</div><div class="to">▼ Audit Core での実施</div></div>
+        <div class="mini"><span class="k">1 〜 3: 誤りを仕込んで測定(15 ページ)</span><span class="k">5: 自動テスト 7,601 本</span><span>4: 保守に含む(22 ページ)</span></div></div>
       <div class="q4"><div class="hd"><span class="icb s n qn">4</span><h3>Audit Core を導入する合理性は、何か。</h3></div>
         <div class="q4a">人が見る数字を絞り、確かめた記録を残せることです。</div>
         <ul>
