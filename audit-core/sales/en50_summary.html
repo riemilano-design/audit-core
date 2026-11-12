@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>英文の決算短信 50 本の結果の要約</title>
+<style>
+@page{size:A4;margin:0}
+:root{--ink:#16233b;--sub:#51607a;--line:#d9dee8;--soft:#f3f5f9;--accent:#0e7c66;--accent-soft:#e3f3ee;--warn:#c2412d;--warn-soft:#fbe9e5;--amber:#b7791f;--amber-soft:#fbf1dc}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff;color:var(--ink);font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;position:relative;overflow:hidden;padding:13mm 17mm 16mm;display:flex;flex-direction:column;page-break-after:always;break-after:page}
+.page:last-child{page-break-after:auto;break-after:auto}
+.kicker{font-size:9.5pt;letter-spacing:.14em;color:var(--accent);font-weight:700}
+h1{font-size:19pt;line-height:1.4;font-weight:700;margin-top:2mm}
+.meta{font-size:9.5pt;color:var(--sub);margin-top:1.5mm}
+h2{font-size:12.5pt;font-weight:700;margin:5mm 0 2.2mm;padding-bottom:1.2mm;border-bottom:.45mm solid var(--ink)}
+p,li,td,th{font-size:10pt;line-height:1.62}
+.hero{margin-top:4mm;background:var(--soft);border-left:1.6mm solid var(--warn);padding:4.5mm 6mm;display:flex;gap:7mm;align-items:center}
+.hero .big{font-size:27pt;font-weight:700;line-height:1.15;white-space:nowrap}
+.hero .big small{font-size:11pt;font-weight:700;display:block;color:var(--sub);margin-bottom:1mm}
+.hero p{font-size:10.5pt;line-height:1.7}
+.dots{display:grid;grid-template-columns:repeat(25,3.1mm);gap:1.25mm;margin-top:2.5mm}
+.dots i{width:3.1mm;height:3.1mm;border-radius:50%;background:#c9d0dc;display:block}
+.dots i.x{background:var(--warn)}
+.legend{font-size:9pt;color:var(--sub);margin-top:1.5mm}
+.legend b{color:var(--warn)}
+table{border-collapse:collapse;width:100%}
+th,td{border:.25mm solid var(--line);padding:1.5mm 2.6mm;vertical-align:top;text-align:left}
+th{background:var(--soft);font-weight:700;white-space:nowrap;width:26mm}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:3.5mm}
+.card{border:.3mm solid var(--line);border-top:1.2mm solid var(--warn);padding:3.2mm 3.6mm 3.6mm}
+.card .n{font-size:9pt;color:var(--sub);font-weight:700}
+.card .t{font-size:12pt;font-weight:700;margin:.8mm 0 1.4mm}
+.card p{font-size:9.5pt;line-height:1.65}
+ul{margin-left:5mm}
+li{margin-bottom:.9mm}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.stat{background:var(--accent-soft);padding:3.5mm 4.5mm}
+.stat .v{font-size:17pt;font-weight:700;line-height:1.2}
+.stat .v small{font-size:10pt;font-weight:700}
+.stat p{font-size:9.5pt;line-height:1.6;margin-top:1mm}
+.note{font-size:9pt;line-height:1.65;color:var(--sub);margin-top:2.5mm}
+.offer{background:var(--amber-soft);border-left:1.6mm solid var(--amber);padding:4mm 5.5mm}
+.offer li{margin-bottom:1.4mm}
+.contact{margin-top:4mm;font-size:10pt;line-height:1.7}
+.foot{position:absolute;left:17mm;right:17mm;bottom:8mm;display:flex;justify-content:space-between;font-size:8.5pt;color:var(--sub);border-top:.25mm solid var(--line);padding-top:1.6mm}
+</style>
+</head>
+<body>
+
+<section class="page">
+  <div class="kicker">調べの結果(要約)</div>
+  <h1>英文の決算短信 50 本を、<br>日本語の原本データと照らしました</h1>
+  <div class="meta">2026 年 11 月 ／ 山中 雄史(Audit Core 開発・個人)</div>
+
+  <div class="hero">
+    <div>
+      <div class="big"><small>50 本のうち</small>3 本・19 欄</div>
+      <div class="dots">
+        <i class="x"></i><i class="x"></i><i class="x"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="legend"><b>●</b> 食い違い 3 本　● そのほか 47 本</div>
+    </div>
+    <p>英文に印字された数字が、同じ会社の日本語の決算短信の原本データと違っていました。19 欄はどれも、サマリー(業績予想)と主な財務諸表 ― 投資家が最初に見る場所でした。</p>
+  </div>
+
+  <h2>1　何を照らしたか</h2>
+  <table>
+    <tr><th>対象</th><td>東証プライム市場の会社が 2026 年 4 月 1 日〜11 月 10 日に出した通期の決算短信のうち、英文が「全文の英訳・日本語と同時に開示」とされている会社のもの 50 本(1 社 1 本)。日本取引所グループが公表している英文開示の一覧(2026 年 9 月 30 日時点)から、先に決めた乱数の順で選びました(その前に試しに見た 17 社は除いています)。大半は 2026 年 3 月期の通期の短信です。</td></tr>
+    <tr><th>比べたもの</th><td>日本語の決算短信の原本データ(XBRL)に入っている数字と、英文の決算短信(PDF)に印字された数字。</td></tr>
+    <tr><th>手順</th><td>① 道具が、両方の数字を出てくる順に並べて突き合わせ、食い違いの候補を出します(生成 AI は使いません)。<br>② 食い違いと数えた 19 欄は、どれも英文の紙面と表の足し算に照らして確かめました。確かめたのは開発に使っている AI で、人による再確認はしていません。</td></tr>
+  </table>
+
+  <h2>2　見つかった食い違い(3 本・19 欄)</h2>
+  <div class="cards">
+    <div class="card"><div class="n">型 1 ― 1 本・1 欄</div><div class="t">桁の違い</div><p>来期の業績予想の経常利益が、日本語の原本の 10 倍の数字で載っていました。同じ英文の別のページには、正しい数字が載っていました。</p></div>
+    <div class="card"><div class="n">型 2 ― 1 本・3 欄</div><div class="t">打ち間違い</div><p>純資産の変動の表とキャッシュ・フロー計算書で、原本と違う値が載っていました。表の足し算に合うのは、日本語の原本の値のほうでした。</p></div>
+    <div class="card"><div class="n">型 3 ― 1 本・少なくとも 15 欄</div><div class="t">表が別の数字で組まれていた</div><p>英文の財務諸表の当期の列が、日本語の原本と別の数字でした。英文のサマリーの数字とも合っていません(原因は確かめていません)。</p></div>
+  </div>
+  <p class="note">※ 照合に使ったのは Audit Core のエンジンではなく、同じ考え方(原本のデータと照らす)で作った別の小さな道具です。会社名は公表しません。どなたが、どの道具で英訳された短信かは、当方には分かりません。</p>
+
+  <div class="foot"><span>英文の決算短信 50 本の結果の要約</span><span>1 / 2</span></div>
+</section>
+
+<section class="page">
+  <h2 style="margin-top:0">3　点検ページ(HTML 1 枚)を、同じ 50 本に当てた結果</h2>
+  <p>上の照合を、ブラウザだけで動く 1 枚のページにしました。日本語の決算短信の XBRL の ZIP と、英文の決算短信の PDF を画面で選ぶと、数字が食い違う欄の候補を表で出します。2 つのファイルはブラウザの中で読むだけで、外へは送りません(部品 2 つを公開の配信元から読み込む以外は、どこにも接続できない設定にしてあります)。生成 AI は使いません。</p>
+  <div class="two" style="margin-top:3mm">
+    <div class="stat"><div class="v">19 欄 <small>のうち</small> 19 欄</div><p>上の食い違い 19 欄を、ページは全部、候補に出しました。</p></div>
+    <div class="stat"><div class="v">47 本 <small>のうち</small> 33 本</div><p>食い違いの無かった 47 本のうち 33 本では、候補を 1 件も出しませんでした。</p></div>
+  </div>
+  <ul style="margin-top:3mm">
+    <li>残りの 14 本では、食い違いでない候補も出ました(道具の当て違いか、紙面で確かめていないものです)。候補は、紙面で確かめるまで「誤り」とは言えません。</li>
+    <li>この数は、ページの不具合を 1 か所直した後の、2 回目のものです。直しはこの 50 本の結果を見て選んだので、新しい書類でも同じになるとは言えません。</li>
+    <li>照合にかかった時間は、1 本あたり 1 秒未満でした(当方の機械での 1 回の実測)。</li>
+  </ul>
+
+  <h2>4　見ていないもの・言えないこと</h2>
+  <ul>
+    <li>見るのは<b>表の数字だけ</b>です。文章の中の数、表の見出し・単位・期の表記、科目名の訳、英文に載せていない部分は見ません。</li>
+    <li>1 回の調べです。50 本での結果で、英文の決算短信の全体の割合を示すものではありません。</li>
+    <li>候補の全部を紙面で確かめたわけではありません。確かめていない候補の中に、食い違いが残っている可能性があります。</li>
+    <li>道具が候補に出さなかった食い違いが在っても、この数には入っていません。</li>
+    <li>ページを動かしたのは Chromium 系のブラウザ 1 つだけです。Safari・Firefox・Edge、スマートフォン、部品の配信元(cdnjs)が止められている社内の網、100 ページを超える PDF、日本基準・IFRS 以外の様式は試していません。</li>
+  </ul>
+
+  <h2>5　無償でできること</h2>
+  <div class="offer">
+    <ul>
+      <li><b>公開済みの英文の決算短信を 3 本、照らしてお返しします。</b>会社名と決算期をご指定ください。日本語の原本データと英文の PDF は、当方が公開の場所から取得します。候補の一覧と、紙面に照らして確かめた結果をお返しします(確かめるのは開発に使っている AI です)。</li>
+      <li><b>点検ページ(HTML 1 枚)をお送りします。</b>御社の手元で、開示前のファイルにもお試しいただけます(ページはファイルを外へ送りません)。使える・使えないのご意見をいただければ幸いです。</li>
+    </ul>
+  </div>
+  <p class="note">同じ考え方で、日本語の文章の中の数字を有価証券報告書の原本データと照らす道具(Audit Core)も開発しています。ご紹介資料(PDF・22 ページ)を別にお送りできます。</p>
+  <div class="contact"><b>山中 雄史</b>(Audit Core 開発・個人)　riemilano@gmail.com ／ 080-6413-9526</div>
+
+  <div class="foot"><span>英文の決算短信 50 本の結果の要約</span><span>2 / 2</span></div>
+</section>
+
+<script>
+(function(){var bad=[];document.querySelectorAll('.page').forEach(function(s,i){
+  var f=s.querySelector('.foot');var limit=f.getBoundingClientRect().top;var sr=s.getBoundingClientRect();
+  var maxb=0;s.querySelectorAll('*').forEach(function(e){if(e===f||f.contains(e))return;var r=e.getBoundingClientRect();if(r.bottom>maxb)maxb=r.bottom;if(r.right>sr.right-1)bad.push('R'+(i+1));});
+  if(maxb>limit-4)bad.push('B'+(i+1)+':'+Math.round(maxb-limit));
+  if(s.scrollHeight>s.clientHeight+1)bad.push('S'+(i+1));
+  s.setAttribute('data-room',Math.round(limit-maxb));});
+document.documentElement.setAttribute('data-overflow',bad.length?bad.join(','):'none');})();
+</script>
+</body>
+</html>
