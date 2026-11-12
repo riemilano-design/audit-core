@@ -34,7 +34,7 @@ b,strong{font-weight:700}
 .cover .lead{color:#c9d2e3;font-size:15pt;margin-top:9mm;max-width:215mm}
 .cover .brand{position:absolute;left:26mm;bottom:22mm;font-size:12pt;color:#c9d2e3;line-height:1.8}
 .cover .brand b{font-size:20pt;color:#fff;letter-spacing:.04em}
-.cover .bar{position:absolute;right:0;top:0;bottom:0;width:9mm;background:var(--accent)}
+.cover .bar{position:absolute;right:0;top:0;bottom:0;width:9mm;height:auto;border-radius:0;background:var(--accent)}
 /* flow */
 .flow{display:grid;grid-template-columns:62mm 12mm 50mm 12mm 1fr;align-items:center;gap:0}
 .box{border:.4mm solid var(--line);border-radius:3mm;padding:5mm;font-size:11.5pt;line-height:1.6;background:#fff}
@@ -93,7 +93,7 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
 
 /* 2026-11-12 に足した部品 */
 .src2{font-size:8.8pt;line-height:1.5;color:var(--sub);margin-top:1.5mm}
-.scene{background:var(--soft);border-radius:3mm;padding:5mm 6mm;display:flex;flex-direction:column}
+.scene{background:var(--soft);border-radius:3mm;padding:3.8mm 6mm;display:flex;flex-direction:column}
 .scene h3{font-size:13.5pt;line-height:1.4;margin-bottom:2mm}
 .scene dl{display:grid;grid-template-columns:19mm 1fr;gap:1.2mm 3mm;font-size:10.6pt;line-height:1.6;color:#33415a}
 .scene dt{font-weight:700;color:var(--sub);font-size:9.6pt;padding-top:.4mm}
@@ -112,9 +112,105 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
 .map{display:grid;grid-template-columns:repeat(5,1fr);gap:3mm}
 .map div{border:.35mm solid var(--line);border-radius:2.5mm;padding:3mm 4mm;font-size:10.6pt;line-height:1.5;background:#fff}
 .map b{display:block;color:var(--accent);font-size:9.6pt;letter-spacing:.06em;margin-bottom:.6mm}
+
+/* 2026-11-12 第 2 便: 図の部品 */
+.ic{width:6.5mm;height:6.5mm;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.icb{width:11mm;height:11mm;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex:none}
+.icb.w{background:var(--warn-soft);color:var(--warn)} .icb.am{background:var(--amber-soft);color:var(--amber)} .icb.g{background:var(--gray-soft);color:#4a566b} .icb.n{background:var(--navy);color:#fff}
+.icb.s{width:8.5mm;height:8.5mm} .icb.s .ic{width:5mm;height:5mm}
+.hd{display:flex;align-items:center;gap:3mm;margin-bottom:2.5mm}
+.hd h3{margin-bottom:0}
+.lane{flex:none;display:grid;grid-template-columns:37mm repeat(5,1fr);border:.4mm solid var(--line);border-radius:3mm;overflow:hidden;background:#fff}
+.lane>div{padding:1.8mm 2mm;border-top:.3mm solid var(--line);display:flex;align-items:center}
+.lane .lh{border-top:0;background:var(--navy);color:#fff;font-size:10pt;font-weight:700;justify-content:center;padding:2mm;letter-spacing:.04em}
+.lane .ll{background:var(--soft);gap:2.5mm;font-size:10.6pt;font-weight:700;line-height:1.35}
+.lane .ll small{display:block;font-weight:400;font-size:8.8pt;color:var(--sub)}
+.lane .ac{background:#eef7f4}
+.sb{position:relative;width:100%;border:.4mm solid var(--line);border-radius:2.5mm;padding:2mm 2.2mm 2mm 7.6mm;font-size:9.8pt;line-height:1.42;background:#fff}
+.sb i{position:absolute;left:1.6mm;top:1.9mm;width:4.8mm;height:4.8mm;border-radius:50%;background:var(--navy);color:#fff;font-style:normal;font-weight:700;font-size:8.8pt;display:flex;align-items:center;justify-content:center}
+.sb.e{background:var(--navy);color:#fff;border-color:var(--navy)} .sb.e i{background:#fff;color:var(--navy)}
+.sb.k{background:var(--accent-soft);border-color:var(--accent)} .sb.k i{background:var(--accent)}
+.chg{display:grid;grid-template-columns:52mm 1fr 9mm 1fr;gap:3mm 0;align-items:stretch}
+.chg .r{display:flex;align-items:center;gap:3mm;font-size:11.5pt;font-weight:700;line-height:1.35}
+.chg .r small{display:block;font-weight:400;font-size:9pt;color:var(--sub)}
+.chg .b4,.chg .af{border-radius:2.5mm;padding:3mm 5mm;font-size:11pt;line-height:1.55;display:flex;align-items:center}
+.chg .b4{background:var(--gray-soft);color:#33415a} .chg .af{background:var(--accent-soft)}
+.chg .ar{display:flex;align-items:center;justify-content:center;color:#9aa5b8;font-size:13pt}
+.chg .th{font-size:9.6pt;font-weight:700;letter-spacing:.1em;color:var(--sub);padding:0 4.5mm}
+.chg .th.t2{color:var(--accent)}
+.dots{display:flex;flex-wrap:wrap;gap:.85mm;margin-top:2mm}
+.dots span{width:3mm;height:3mm;border-radius:50%;background:var(--amber)}
+.dots span.o{background:var(--accent)} .dots span.x{background:var(--warn)} .dots span.z{background:#c5ccd8}
+.dp{border:.4mm solid var(--line);border-radius:3mm;padding:3.2mm 5mm;background:#fff;font-size:10pt;line-height:1.55}
+.dp b{font-size:11pt} .dp small{font-size:9.4pt;color:var(--sub)}
+.meter{height:2.4mm;border-radius:2mm;background:#dfe4ec;margin-top:2.5mm;overflow:hidden;position:relative}
+.meter span{display:block;height:100%;background:var(--accent);border-radius:2mm}
+.meter.w span{background:var(--warn)} .meter.am span{background:var(--amber)}
+.meter .p{position:absolute;left:0;top:0;background:#9aa5b8;opacity:.9}
+.mini{display:flex;align-items:center;gap:1.5mm;flex-wrap:wrap;font-size:9.6pt;line-height:1.4}
+.mini span{border:.35mm solid var(--line);border-radius:1.8mm;padding:1mm 2.2mm;background:#fff;white-space:nowrap}
+.mini span.e{background:var(--navy);color:#fff;border-color:var(--navy)} .mini span.k{background:var(--accent-soft);border-color:var(--accent)} .mini span.w{background:var(--warn-soft);border-color:var(--warn);color:var(--warn);font-weight:700}
+.mini em{font-style:normal;color:#9aa5b8}
+.ex{background:#fff;border-radius:2.2mm;padding:2.6mm 2.4mm;margin-bottom:3mm;font-size:9pt;line-height:1.6;white-space:nowrap}
+.ex u{text-decoration:none;display:inline-block;min-width:11.6mm;font-size:8pt;font-weight:700;color:var(--sub)}
+.ex s{text-decoration:none;color:var(--warn);font-weight:700;background:var(--warn-soft);padding:0 1mm;border-radius:.8mm}
+.ex q{quotes:none;color:var(--accent);font-weight:700}
+.cv{position:absolute;right:26mm;bottom:22mm;width:142mm;display:flex;flex-direction:column;gap:2.5mm}
+.cv .row{white-space:nowrap;display:grid;grid-template-columns:1.2fr 6mm 1fr 17mm;align-items:center;gap:2mm;background:rgba(255,255,255,.09);border-radius:2.5mm;padding:3mm 4mm;font-size:10pt;line-height:1.5;color:#e6ebf5}
+.cv small{font-size:8pt;color:#9fb0cc;display:block;letter-spacing:.06em}
+.cv mark{color:var(--navy);font-weight:700}
+.cv .ar{color:#7f8fae;text-align:center}
+.cv .t{font-weight:700;border-radius:1.5mm;padding:.9mm 0;text-align:center;font-size:10pt}
+.cv .t.ok{background:#7fd6c2;color:#0b3d33} .cv .t.ng{background:#f3a79b;color:#5a1409}
+.cv .cap{font-size:8pt;color:#9fb0cc;text-align:right}
+.bigrow{display:flex;align-items:center;gap:4mm}
+.bigrow .meter{flex:1;margin-top:0;height:3mm}
+.bigrow .icb{margin-left:auto}
+.gly{display:inline-flex;align-items:center;justify-content:center;flex:none;min-width:13mm;height:10mm;padding:0 2.5mm;border-radius:2.2mm;background:var(--warn-soft);color:var(--warn);font-weight:700;font-size:13pt}
+.grid>*{min-width:0}
+.tb{display:flex;align-items:center;gap:2.5mm;font-size:9.6pt;line-height:1.4;margin-top:1.6mm}
+.tb u{text-decoration:none;min-width:12mm;color:var(--sub);font-weight:700} .tb .meter{flex:1;margin-top:0;height:2.6mm} .tb b{min-width:13mm;text-align:right}
+.flow3>*{position:relative} .flow3 .card h3{font-size:13pt}
+.flow3>*+*:before{content:"▶";position:absolute;left:-4.9mm;top:50%;transform:translateY(-50%);color:#9aa5b8;font-size:11pt}
+.stat .meter{height:3mm;margin-top:3.5mm}
+.lc{display:flex;gap:3.5mm;align-items:flex-start;background:var(--soft);border-radius:3mm;padding:4mm 5mm;font-size:10.8pt;line-height:1.6;color:#33415a}
+.lc b{display:block;font-size:12pt;color:var(--ink);margin-bottom:.6mm}
+.nrow{display:flex;justify-content:space-between;align-items:center}
+.dgm{margin-top:auto;padding-top:2mm;flex-wrap:nowrap;font-size:8.2pt;gap:1.1mm}
+.dgm span{padding:.8mm 1.6mm}
+.zn{border:.35mm dashed #9aa5b8;border-radius:2mm;padding:4.6mm 1.6mm 1.5mm;position:relative;display:inline-flex;gap:1.1mm;align-items:center}
+.zn>u{position:absolute;top:.5mm;left:1.6mm;font-size:7.4pt;color:var(--sub);text-decoration:none;font-weight:700;white-space:nowrap}
+.zn.in{border-color:var(--accent);background:#f4faf8} .zn.in>u{color:var(--accent)}
+.tm{margin-top:auto;padding-top:3mm;display:flex;align-items:center;gap:2.5mm;font-size:9.6pt;line-height:1.4;color:var(--sub)}
+.tm b{font-size:12.5pt;color:var(--ink)}
+.box.wi{display:flex;gap:3.5mm;align-items:center}
+.engine .icb{margin:0 auto 2.5mm;background:rgba(255,255,255,.14);color:#fff}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z M14 3v4h4 M9 12h6 M9 16h6"/></symbol>
+<symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6 M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12 M8 12h12 M8 18h12 M4 6h.01 M4 12h.01 M4 18h.01"/></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11a8 8 0 0 1 14-4l2 2 M20 4v5h-5 M20 13a8 8 0 0 1-14 4l-2-2 M4 20v-5h5"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16 M8 3v4 M16 3v4"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18 M12 3c3 3.5 3 14.5 0 18 M12 3c-3 3.5-3 14.5 0 18"/></symbol>
+<symbol id="i-bldg" viewBox="0 0 24 24"><path d="M5 21V5l8-2v18 M13 9h6v12 M3 21h18 M8 8h2 M8 12h2 M8 16h2"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4 M4 20h16 M8 16v-5 M12 16V8 M16 16v-9"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z M12 10v5 M12 18h.01"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4 M5 4h13l-3 4 3 4H5"/></symbol>
+<symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l1-4L16 5l3 3L8 19z M14 7l3 3"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-7z"/></symbol>
+<symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3v5 M15 3v5 M6 8h12v3a6 6 0 0 1-12 0z M12 17v4"/></symbol>
+<symbol id="i-ruler" viewBox="0 0 24 24"><path d="M3 8h18v8H3z M7 8v3 M11 8v4 M15 8v3"/></symbol>
+<symbol id="i-q" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1 1-1.1 1.8 M12 17h.01"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3 M12 18v3 M3 12h3 M18 12h3 M5.6 5.6l2.1 2.1 M16.3 16.3l2.1 2.1 M5.6 18.4l2.1-2.1 M16.3 7.7l2.1-2.1"/></symbol>
+</defs></svg>
 
 <!-- 1 -->
 <section class="slide cover">
@@ -122,6 +218,11 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
   <div class="kicker">生成 AI で決算・財務の文章を作る企業さまへ</div>
   <h1>AI が書いた決算の文章。<br>その数字、原本と合っていますか。</h1>
   <p class="lead">Audit Core は、文章の中の数字を 1 つずつ、金融庁に提出された原本のデータと突き合わせる検証エンジンです。合っていれば「一致」、違っていれば原本の値を添えてお返しします。</p>
+  <div class="cv">
+    <div class="row"><div><small>AI が書いた文</small>当期の売上高は <mark>43,210</mark> 百万円</div><div class="ar">▶</div><div><small>原本のデータ</small>売上高・当期　43,210</div><div class="t ok">一致</div></div>
+    <div class="row"><div><small>AI が書いた文</small>営業利益は <mark>3,150</mark> 百万円</div><div class="ar">▶</div><div><small>原本のデータ</small>営業利益・当期　3,510</div><div class="t ng">違う</div></div>
+    <div class="cap">※ 説明のための架空の例です</div>
+  </div>
   <div class="brand"><b>Audit Core</b><br>ご紹介資料 ／ 2026 年 11 月</div>
 </section>
 
@@ -132,17 +233,17 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
   <p class="lead">担当者が原本を横に置いて、赤ペンで 1 つずつ見比べている作業。それを機械が 1 秒前後で行い、「何と照らしたか」の記録を残します。</p>
   <div class="body" style="margin-top:6mm">
     <div class="grid g3">
-      <div class="card"><div class="num">何をする道具か</div><h3>数字を原本と照らす</h3><p>文章の中の数字を 1 つずつ、公式に提出された原本のデータと照らし、「一致」「違う」「要確認」「判断しない」のどれかを返します。</p></div>
-      <div class="card"><div class="num">どなたの役に立つか</div><h3>数字を社外に出す方</h3><p>決算・財務の数字が入った文章を、AI や人の手で作って社外に出す企業さま。AI 要約の事業者、IR・開示のご担当、財務データの事業者など。</p></div>
-      <div class="card"><div class="num">まず何をするか</div><h3>3 本を無償で診断</h3><p>御社の文章を 3 本お預かりし、数字ごとの判定レポートを 2 営業日でお返しします。設置も、システムの変更も要りません。</p></div>
+      <div class="card"><div class="num">何をする道具か</div><div class="hd"><span class="icb "><svg class="ic"><use href="#i-search"/></svg></span><h3>数字を原本と照らす</h3></div><p>文章の中の数字を 1 つずつ、公式に提出された原本のデータと照らし、「一致」「違う」「要確認」「判断しない」のどれかを返します。</p></div>
+      <div class="card"><div class="num">どなたの役に立つか</div><div class="hd"><span class="icb "><svg class="ic"><use href="#i-bldg"/></svg></span><h3>数字を社外に出す方</h3></div><p>決算・財務の数字が入った文章を、AI や人の手で作って社外に出す企業さま。AI 要約の事業者、IR・開示のご担当、財務データの事業者など。</p></div>
+      <div class="card"><div class="num">まず何をするか</div><div class="hd"><span class="icb "><svg class="ic"><use href="#i-doc"/></svg></span><h3>3 本を無償で診断</h3></div><p>御社の文章を 3 本お預かりし、数字ごとの判定レポートを 2 営業日でお返しします。設置も、システムの変更も要りません。</p></div>
     </div>
     <div class="num" style="margin:7mm 0 2.5mm">この資料の読み方</div>
     <div class="map">
       <div><b>3 〜 5 ページ</b>課題と、いま必要な理由</div>
       <div><b>6 〜 9 ページ</b>しくみと特長</div>
-      <div><b>10 〜 12 ページ</b>使う場面と効果</div>
-      <div><b>13 〜 15 ページ</b>実績(測った数)</div>
-      <div><b>16 〜 19 ページ</b>ご質問・限界・導入</div>
+      <div><b>10 〜 13 ページ</b>使う場面・効果・導入後の姿</div>
+      <div><b>14 〜 16 ページ</b>実績(測った数)</div>
+      <div><b>17 〜 20 ページ</b>ご質問・限界・導入</div>
     </div>
     <div class="callout" style="margin-top:6mm">確かめるのは<b>「数字が原本と合っているか」だけ</b>です。文章の良し悪しや、経営判断の当否は扱いません。その代わり、数字については 1 つずつ根拠を示します。</div>
   </div>
@@ -156,11 +257,12 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
   <p class="lead">生成 AI は決算の要約やレポートを数秒で書きます。ただし、文章として自然なまま、数字だけが違っていることがあります。読んだだけでは気づけません。</p>
   <div class="body">
     <div class="grid g3">
-      <div class="card"><div class="num">よくある誤り 1</div><h3>期の取り違え</h3><p>前の年の売上高を、今年の数字として書いてしまう。桁も単位も正しいので、いちばん見つけにくい誤りです。</p></div>
-      <div class="card"><div class="num">よくある誤り 2</div><h3>単位・桁の取り違え</h3><p>「百万円」と「億円」、「%」と「ポイント」。単位がずれると、数字の意味がまるごと変わります。</p></div>
-      <div class="card"><div class="num">よくある誤り 3</div><h3>別の項目の数字・原本に無い数字</h3><p>営業利益の話に別の利益の数字を引く。もっともらしいが、原本のどこにも無い数字を書く。</p></div>
+      <div class="card"><div class="num">よくある誤り 1</div><div class="hd"><span class="icb w"><svg class="ic"><use href="#i-cal"/></svg></span><h3>期の取り違え</h3></div><div class="ex"><u>AI の文</u>当期の売上高は <s>40,539</s><br><u>原本</u>当期 <q>43,210</q> ・前期 40,539</div><p>前の年の売上高を、今年の数字として書いてしまう。桁も単位も正しいので、いちばん見つけにくい誤りです。</p></div>
+      <div class="card"><div class="num">よくある誤り 2</div><div class="hd"><span class="icb w"><svg class="ic"><use href="#i-ruler"/></svg></span><h3>単位・桁の取り違え</h3></div><div class="ex"><u>AI の文</u>売上高は <s>43,210 億円</s><br><u>原本</u>売上高 <q>43,210 百万円</q></div><p>「百万円」と「億円」、「%」と「ポイント」。単位がずれると、数字の意味がまるごと変わります。</p></div>
+      <div class="card"><div class="num">よくある誤り 3</div><div class="hd"><span class="icb w"><svg class="ic"><use href="#i-q"/></svg></span><h3>別の項目・無い数字</h3></div><div class="ex"><u>AI の文</u>営業利益は <s>3,890</s><br><u>原本</u>営業利益 <q>3,510</q> ・経常利益 3,890</div><p>営業利益の話に別の利益の数字を引く。もっともらしいが、原本のどこにも無い数字を書く。</p></div>
     </div>
     <div class="callout warn" style="margin-top:8mm">人がすべての数字を見直せば、AI で浮いた時間は消えます。見直さなければ、誤った数字が社外に出ます。<b>「どの数字を、何と照らして確かめたか」を仕組みで残す</b>ことが必要です。</div>
+    <p class="note" style="margin-top:3mm">※ 図の数字は、説明のための架空の例です。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>3</span></div>
 </section>
@@ -171,14 +273,14 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
   <h1>AI の利用は広がり、数字の誤りは社外で起きています。</h1>
   <div class="body" style="margin-top:5mm">
     <div class="grid g3" style="gap:4.5mm">
-      <div class="stat" style="padding:4.5mm 5.5mm"><div class="big">47<small>%</small></div><div class="cap">経理財務の業務に AI を利用(日本)</div><div class="src2">KPMG「AI を用いたこれからの財務報告(拡大版)」。23 か国・2,900 社の調査。財務報告に AI を利用する日本企業は、前回の 31% から 39% に。</div></div>
-      <div class="stat" style="padding:4.5mm 5.5mm"><div class="big">63.7<small>%</small></div><div class="cap">英文開示資料の作成に生成 AI を使用(試行を含む)</div><div class="src2">日本 IR 協議会 第 33 回「IR 活動の実態調査」(2026 年 5 月公表)。2 年前の調査では 16.0% でした。全上場 4,088 社に調査し、948 社が回答。</div></div>
-      <div class="stat" style="padding:4.5mm 5.5mm"><div class="big">77.2<small>%</small></div><div class="cap">生成 AI を IR 業務に入れる課題に「情報の正確性」</div><div class="src2">同じ調査の回答。次に多かったのは「情報漏洩などセキュリティ面での懸念」の 60.1% でした。</div></div>
-      <div class="stat" style="padding:4.5mm 5.5mm"><div class="big">2025<small>年 4 月</small></div><div class="cap">プライム市場で英文開示が義務に</div><div class="src2">東京証券取引所の制度。決算情報と適時開示情報が対象。日本語と英語で同じ数字を出す作業が、毎回発生します。</div></div>
-      <div class="stat" style="padding:4.5mm 5.5mm"><div class="big">81<small>%</small></div><div class="cap">金融の文書への質問に、AI が誤答または回答できず</div><div class="src2">米 Patronus AI「FinanceBench」(2023 年 11 月発表)。当時の AI(GPT-4-Turbo)に検索の仕組みを付けた構成で、150 問の標本。</div></div>
-      <div class="stat" style="padding:4.5mm 5.5mm"><div class="big">36<small>本以上</small></div><div class="cap">大手通信社が訂正した、AI による記事の要約</div><div class="src2">ブルームバーグが 2025 年に入って訂正した本数(米ニューヨーク・タイムズの報道、2025 年 3 月)。</div></div>
+      <div class="stat" style="padding:4.5mm 5.5mm"><div class="bigrow"><div class="big">47<small>%</small></div><div class="meter"><span style="width:47%"></span></div></div><div class="cap">経理財務の業務に AI を利用(日本)</div><div class="src2">KPMG「AI を用いたこれからの財務報告(拡大版)」。23 か国・2,900 社の調査。財務報告に AI を利用する日本企業は、前回の 31% から 39% に。</div></div>
+      <div class="stat" style="padding:4.5mm 5.5mm"><div class="bigrow"><div class="big">63.7<small>%</small></div><div class="meter"><span style="width:63.7%"></span><span class="p" style="width:16%"></span></div></div><div class="cap">英文開示資料の作成に生成 AI を使用(試行を含む)</div><div class="src2">日本 IR 協議会 第 33 回「IR 活動の実態調査」(2026 年 5 月公表)。2 年前の調査では 16.0% でした(棒の灰色の部分)。全上場 4,088 社に調査し、948 社が回答。</div></div>
+      <div class="stat" style="padding:4.5mm 5.5mm"><div class="bigrow"><div class="big">77.2<small>%</small></div><div class="meter am"><span style="width:77.2%"></span></div></div><div class="cap">生成 AI を IR 業務に入れる課題に「情報の正確性」</div><div class="src2">同じ調査の回答。次に多かったのは「情報漏洩などセキュリティ面での懸念」の 60.1% でした。</div></div>
+      <div class="stat" style="padding:4.5mm 5.5mm"><div class="bigrow"><div class="big">2025<small>年 4 月</small></div><span class="icb s"><svg class="ic"><use href="#i-globe"/></svg></span></div><div class="cap">プライム市場で英文開示が義務に</div><div class="src2">東京証券取引所の制度。決算情報と適時開示情報が対象。日本語と英語で同じ数字を出す作業が、毎回発生します。</div></div>
+      <div class="stat" style="padding:4.5mm 5.5mm"><div class="bigrow"><div class="big">81<small>%</small></div><div class="meter w"><span style="width:81%"></span></div></div><div class="cap">金融の文書への質問に、AI が誤答または回答できず</div><div class="src2">米 Patronus AI「FinanceBench」(2023 年 11 月発表)。当時の AI(GPT-4-Turbo)に検索の仕組みを付けた構成で、150 問の標本。</div></div>
+      <div class="stat" style="padding:4.5mm 5.5mm"><div class="bigrow"><div class="big">36<small>本以上</small></div><span class="icb s w"><svg class="ic"><use href="#i-alert"/></svg></span></div><div class="cap">大手通信社が訂正した、AI による記事の要約</div><div class="src2">ブルームバーグが 2025 年に入って訂正した本数(米ニューヨーク・タイムズの報道、2025 年 3 月)。</div></div>
     </div>
-    <div class="callout" style="margin-top:5mm">使う企業は増え、課題に挙がるのは「情報の正確性」です。必要なのは AI を止めることではなく、<b>社外に出す前に数字を確かめる工程</b>です。</div>
+    <div class="callout" style="margin-top:5mm">課題の 1 位は「情報の正確性」。必要なのは AI を止めることではなく、<b>社外に出す前に数字を確かめる工程</b>です。</div>
     <p class="note" style="margin-top:3mm;font-size:8.8pt">※ いずれも公開されている調査・報道の数字で、当方が測ったものではありません。2026 年 11 月に各ページを読んで確認しました。日本 IR 協議会の数字は、協議会が公表した結果概要で確認しました(IR 活動を実施している企業への設問です)。東証の制度は週刊「経営財務」の記事、ブルームバーグの件は報道を紹介した記事(Talking Biz News)で確認したものです。FinanceBench は 2023 年時点の AI での結果です。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>4</span></div>
@@ -189,14 +291,15 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
   <div class="kicker">需要の具体例 ― 当方が実際に数えました</div>
   <h1>英文の決算短信 50 本のうち 3 本で、<br>数字が日本語の原本と違っていました。</h1>
   <p class="lead">プライム市場の会社が公開した英文の決算短信 50 本を、同じ会社の日本語の短信の原本データと照らしました。食い違いは 3 本・19 欄。どれも、サマリーと主な財務諸表 ― 投資家が最初に見る場所でした。</p>
-  <div class="body" style="margin-top:6mm">
+  <div class="body" style="margin-top:5mm">
+    <div style="display:flex;align-items:center;gap:5mm;margin-bottom:4mm"><div class="dots" style="margin:0;flex:none;flex-wrap:nowrap"><span class="x"></span><span class="x"></span><span class="x"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span><span class="z"></span></div><span class="note" style="white-space:nowrap"><b style="color:var(--warn)">●</b> 食い違い 3 本　<b style="color:#aab3c2">●</b> そのほか 47 本</span></div>
     <div class="grid g3">
-      <div class="card"><div class="num">型 1 ― 1 本・1 欄</div><h3>桁の違い</h3><p>来期の業績予想の経常利益が、日本語の原本の 10 倍の数字で載っていました。同じ英文の別のページには、正しい数字が載っていました。</p></div>
-      <div class="card"><div class="num">型 2 ― 1 本・3 欄</div><h3>打ち間違い</h3><p>純資産の変動の表とキャッシュ・フロー計算書で、数字の並びの入れ違いなど、原本と違う値が載っていました。表の足し算に合うのは、日本語の原本の値のほうでした。</p></div>
-      <div class="card"><div class="num">型 3 ― 1 本・少なくとも 15 欄</div><h3>表が別の数字で組まれていた</h3><p>英文の財務諸表の当期の列が、日本語の原本と別の数字でした。英文のサマリーの数字とも合っていません(原因は確かめていません)。</p></div>
+      <div class="card"><div class="num">型 1 ― 1 本・1 欄</div><div class="hd"><span class="gly">×10</span><h3>桁の違い</h3></div><p>来期の業績予想の経常利益が、日本語の原本の 10 倍の数字で載っていました。同じ英文の別のページには、正しい数字が載っていました。</p></div>
+      <div class="card"><div class="num">型 2 ― 1 本・3 欄</div><div class="hd"><span class="gly">12⇄21</span><h3>打ち間違い</h3></div><p>純資産の変動の表とキャッシュ・フロー計算書で、数字の並びの入れ違いなど、原本と違う値が載っていました。表の足し算に合うのは、日本語の原本の値のほうでした。</p></div>
+      <div class="card"><div class="num">型 3 ― 1 本・少なくとも 15 欄</div><div class="hd"><span class="gly">≠</span><h3>表が別の数字で組まれていた</h3></div><p>英文の財務諸表の当期の列が、日本語の原本と別の数字でした。英文のサマリーの数字とも合っていません(原因は確かめていません)。</p></div>
     </div>
-    <div class="callout" style="margin-top:6mm">AI が書いた文章に限らず、<b>人の手や翻訳の工程を通った数字も食い違います。</b>原本がデータで在れば、出す前に機械で照らせます。照合そのものは数秒でした。</div>
-    <p class="note" style="margin-top:4mm">※ 2026 年 11 月に 1 回行った調べです。50 本の大半は 2026 年 3 月期の通期の決算短信です。照合に使ったのは Audit Core のエンジンではなく、同じ考え方(原本のデータと照らす)で作った別の小さな道具です。食い違いは、英文の紙面と表の足し算に照らして確かめました(確かめたのは開発に使っている AI で、人による再確認はしていません)。会社名は公表しません。50 本での結果で、全体の割合を示すものではありません。</p>
+    <div class="callout" style="margin-top:4.5mm">AI が書いた文章に限らず、<b>人の手や翻訳の工程を通った数字も食い違います。</b>原本がデータで在れば、出す前に機械で照らせます。照合そのものは数秒でした。</div>
+    <p class="note" style="margin-top:2.5mm">※ 2026 年 11 月に 1 回行った調べです。50 本の大半は 2026 年 3 月期の通期の決算短信です。照合に使ったのは Audit Core のエンジンではなく、同じ考え方(原本のデータと照らす)で作った別の小さな道具です。食い違いは、英文の紙面と表の足し算に照らして確かめました(確かめたのは開発に使っている AI で、人による再確認はしていません)。会社名は公表しません。50 本での結果で、全体の割合を示すものではありません。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>5</span></div>
 </section>
@@ -209,11 +312,11 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
   <div class="body">
     <div class="flow">
       <div class="stack">
-        <div class="box"><b>AI が書いた文章</b>決算の要約、分析レポート、IR 資料の下書き など</div>
-        <div class="box"><b>原本のデータ</b>金融庁の開示システム(EDINET)に提出された有価証券報告書</div>
+        <div class="box wi"><span class="icb "><svg class="ic"><use href="#i-doc"/></svg></span><div><b>AI が書いた文章</b>決算の要約、分析レポート、IR 資料の下書き など</div></div>
+        <div class="box wi"><span class="icb "><svg class="ic"><use href="#i-db"/></svg></span><div><b>原本のデータ</b>金融庁の開示システム(EDINET)に提出された有価証券報告書</div></div>
       </div>
       <div class="arrow">▶</div>
-      <div class="engine"><b>Audit Core</b>数字を取り出し、<br>原本の値と照合</div>
+      <div class="engine"><span class="icb "><svg class="ic"><use href="#i-gear"/></svg></span><b>Audit Core</b>数字を取り出し、<br>原本の値と照合</div>
       <div class="arrow">▶</div>
       <div class="stack" style="gap:3mm">
         <div class="ans ok"><b>一致</b><span>原本の値と合っています(どの値かを示します)</span></div>
@@ -263,7 +366,8 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
           <tr><td>営業利益</td><td>当期</td><td>百万円</td><td style="text-align:right">3,510</td></tr>
         </table>
         <p class="note" style="margin-top:3mm">※ 説明のための架空の数字です(7 ページの表示例と同じ会社)。</p>
-        <div class="callout" style="margin-top:5mm">文章に「前期の売上高は 43,210 百万円」とあれば、名札「売上高・前期」の値 40,539 と照らします。桁も単位も正しい<b>「期の取り違え」まで止められる</b>のは、このためです。</div>
+        <div class="mini" style="margin-top:4mm;flex-wrap:nowrap;font-size:9pt;gap:1.2mm"><span>文:「前期の売上高は 43,210」</span><em>▶</em><span class="k">名札: 売上高・前期 = 40,539</span><em>▶</em><span class="w">違う</span></div>
+        <div class="callout" style="margin-top:3mm">文章に「前期の売上高は 43,210 百万円」とあれば、名札「売上高・前期」の値 40,539 と照らします。桁も単位も正しい<b>「期の取り違え」まで止められる</b>のは、このためです。</div>
       </div>
       <div class="stack" style="gap:3.5mm">
         <div class="num" style="margin-bottom:-1mm">出てくる言葉</div>
@@ -283,12 +387,12 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
   <h1>経営の目線で大切な、4 つのこと。</h1>
   <div class="body">
     <div class="grid g2" style="flex:1">
-      <div class="card"><div class="num">01</div><h3>同じ文章には、いつも同じ答え</h3><p>点検に生成 AI を使いません。決まった手順で原本と照合するので、結果がぶれず、あとから「なぜそう判定したか」を説明できます。AI の点検を、別の AI に任せない仕組みです。</p></div>
-      <div class="card"><div class="num">02</div><h3>データを社外に出さない</h3><p>御社の PC やサーバー 1 台の中で動きます。点検のたびに外部へ通信することも、使った分だけ課金されることもありません。発表前の資料にもお使いいただけます。</p></div>
-      <div class="card"><div class="num">03</div><h3>待たせない速さ</h3><p>1 つの文書の点検は 1 秒前後です(ノート PC 1 台での実測。AI が書いた文 200 本で中央値 0.7 秒・最大 1.6 秒)。AI が書くそばから点検できます。</p></div>
-      <div class="card"><div class="num">04</div><h3>確かめた記録が残る</h3><p>どの数字を、原本のどの値と照らしたかを 1 件ずつ記録します。社内のレビューや、取引先・監査への説明にそのまま使えます。</p></div>
+      <div class="card"><div class="hd"><span class="icb "><svg class="ic"><use href="#i-repeat"/></svg></span><div><div class="num" style="margin-bottom:.4mm">01</div><h3>同じ文章には、いつも同じ答え</h3></div></div><p>点検に生成 AI を使いません。決まった手順で原本と照合するので、結果がぶれず、あとから「なぜそう判定したか」を説明できます。AI の点検を、別の AI に任せない仕組みです。</p><div class="mini" style="margin-top:3.5mm"><span>同じ文章</span><em>▶</em><span class="e">Audit Core</span><em>▶</em><span class="k">1 回目の結果</span><em>=</em><span class="k">2 回目の結果</span></div></div>
+      <div class="card"><div class="hd"><span class="icb "><svg class="ic"><use href="#i-lock"/></svg></span><div><div class="num" style="margin-bottom:.4mm">02</div><h3>データを社外に出さない</h3></div></div><p>御社の PC やサーバー 1 台の中で動きます。点検のたびに外部へ通信することも、使った分だけ課金されることもありません。発表前の資料にもお使いいただけます。</p><div class="mini" style="margin-top:3.5mm"><span>文章</span><em>▶</em><span class="e">Audit Core</span><em>▶</em><span>結果</span><em>｜</em><span class="k">外部への通信 なし</span></div></div>
+      <div class="card"><div class="hd"><span class="icb "><svg class="ic"><use href="#i-clock"/></svg></span><div><div class="num" style="margin-bottom:.4mm">03</div><h3>待たせない速さ</h3></div></div><p>1 つの文書の点検は 1 秒前後です(ノート PC 1 台での実測。AI が書いた文 200 本で中央値 0.7 秒・最大 1.6 秒)。AI が書くそばから点検できます。</p><div style="margin-top:3.5mm"><div class="tb"><u>中央値</u><div class="meter"><span style="width:35%"></span></div><b>0.7 秒</b></div><div class="tb"><u>最大</u><div class="meter am"><span style="width:80%"></span></div><b>1.6 秒</b></div><div class="tb" style="color:var(--sub);font-size:8.6pt"><u></u><span>棒の右端が 2 秒です</span></div></div></div>
+      <div class="card"><div class="hd"><span class="icb "><svg class="ic"><use href="#i-list"/></svg></span><div><div class="num" style="margin-bottom:.4mm">04</div><h3>確かめた記録が残る</h3></div></div><p>どの数字を、原本のどの値と照らしたかを 1 件ずつ記録します。社内のレビューや、取引先・監査への説明にそのまま使えます。</p><div class="mini" style="margin-top:3.5mm"><span>文の数字 43,210</span><em>▶</em><span class="k">原本: 売上高・当期 43,210</span><em>▶</em><span class="k">一致</span></div></div>
     </div>
-    <p class="note" style="margin-top:4mm">※ 速さは 1 台(Apple M2)での 1 回の測定です。複数の文書を同時に処理したときの速さは測っていません。初回の準備(制度の項目名データの取得)にのみ通信が必要です。</p>
+    <p class="note" style="margin-top:4mm">※ 速さは 1 台(Apple M2)での 1 回の測定です。複数の文書を同時に処理したときの速さは測っていません。初回の準備(制度の項目名データの取得)にのみ通信が必要です。04 の図の数字は架空の例です。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>9</span></div>
 </section>
@@ -299,24 +403,24 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
   <h1>数字を社外に出す前の、最後の確認に。</h1>
   <div class="body" style="margin-top:5mm">
     <div class="grid g2" style="flex:1;gap:4.5mm">
-      <div class="scene"><div class="num">場面 1</div><h3>AI の決算要約・分析を提供している</h3><dl>
+      <div class="scene"><div class="num">場面 1</div><div class="hd" style="margin-bottom:2mm"><span class="icb s"><svg class="ic"><use href="#i-chart"/></svg></span><h3>AI の決算要約・分析を提供している</h3></div><dl>
         <dt>困りごと</dt><dd>毎日たくさん出る要約の数字を、人がすべては見られない。利用者には「重要な内容は原文で確認を」と案内するしかない。</dd>
         <dt class="a">入れると</dt><dd>公開の前に、すべての数字を自動で原本と照合。人は止まった数字だけを見ます。数字ごとに「原本のどの値か」を示せます。</dd></dl>
         <div class="st">当方の検証の中心です(AI が書いた文 360 本で測定)</div></div>
-      <div class="scene"><div class="num">場面 2</div><h3>IR・経理・経営企画で、数字入りの文書を作る</h3><dl>
+      <div class="scene"><div class="num">場面 2</div><div class="hd" style="margin-bottom:2mm"><span class="icb s"><svg class="ic"><use href="#i-pen"/></svg></span><h3>IR・経理・経営企画で、数字入りの文書を作る</h3></div><dl>
         <dt>困りごと</dt><dd>統合報告書、株主通信、社長メッセージ、説明会の原稿。何人もの手と AI が入り、直前の修正で古い数字が残る。</dd>
         <dt class="a">入れると</dt><dd>提出済みの有価証券報告書と照らし、食い違う数字を原本の値つきで一覧に。校了前の読み合わせを、止まった数字に絞れます。</dd></dl>
         <div class="st">社長メッセージ・記事など 9 つの書き方の AI の文で測定</div></div>
-      <div class="scene"><div class="num">場面 3</div><h3>財務データを集めて配信している</h3><dl>
+      <div class="scene"><div class="num">場面 3</div><div class="hd" style="margin-bottom:2mm"><span class="icb s"><svg class="ic"><use href="#i-db"/></svg></span><h3>財務データを集めて配信している</h3></div><dl>
         <dt>困りごと</dt><dd>配信する値が「どの書類のどの値から来たか」を取り違える。AI がその値を読めば、誤りはそのまま文章に入る。</dd>
         <dt class="a">入れると</dt><dd>原本と突き合わせ、出所の合わない値を洗い出します。AI に読ませるデータの品質の点検に使えます。</dd></dl>
-        <div class="st">実際に起きた例があります(15 ページ)</div></div>
-      <div class="scene"><div class="num">場面 4</div><h3>決算短信などを英文でも開示している</h3><dl>
+        <div class="st">実際に起きた例があります(16 ページ)</div></div>
+      <div class="scene"><div class="num">場面 4</div><div class="hd" style="margin-bottom:2mm"><span class="icb s"><svg class="ic"><use href="#i-globe"/></svg></span><h3>決算短信などを英文でも開示している</h3></div><dl>
         <dt>困りごと</dt><dd>日本語と英語で同じ数字を出す作業が、決算のたびに発生。打ち間違いや、古い版の数字が英文に残る。</dd>
         <dt class="a">入れると</dt><dd>日本語の原本データと英文の表を照らし、食い違う欄の候補を挙げます。開示の前に、人が見る欄を絞れます。</dd></dl>
         <div class="st">別の小さな道具で試作の段階です(5 ページ)</div></div>
     </div>
-    <p class="note" style="margin-top:3mm">※ 場面 1 〜 3 は、有価証券報告書を原本にする場合です。決算短信や社内のデータを原本にする場合は、つなぎ込みが必要です(17 ページ)。困りごとは、公開されている情報から当方が想定したもので、お客さまから伺った声ではありません。</p>
+    <p class="note" style="margin-top:3mm">※ 場面 1 〜 3 は、有価証券報告書を原本にする場合です。決算短信や社内のデータを原本にする場合は、つなぎ込みが必要です(18 ページ)。困りごとは、公開されている情報から当方が想定したもので、お客さまから伺った声ではありません。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>10</span></div>
 </section>
@@ -342,172 +446,203 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
 
 <!-- 12 -->
 <section class="slide">
-  <div class="kicker">導入すると</div>
-  <h1>人が見るのは「止まった数字」だけになります。</h1>
-  <div class="body">
-    <div class="ba">
-      <div class="col before"><h3>いま</h3><ul>
-        <li>AI の文章の数字を、人がすべて原本と見比べる</li>
-        <li>誰がどこまで確かめたかが残らない</li>
-        <li>誤りが外に出たとき、原因をたどれない</li>
-        <li>不安なので、AI の利用範囲を広げられない</li></ul></div>
-      <div class="arrow" style="align-self:center">▶</div>
-      <div class="col after"><h3>導入後</h3><ul>
-        <li>「一致」の数字は記録つきで確認済み。人は止まった数字に集中</li>
-        <li>すべての数字に「原本のどの値と照らしたか」が残る</li>
-        <li>食い違いは、原本の値つきで戻ってくる</li>
-        <li>確かめる仕組みがあるので、AI の利用を広げられる</li></ul></div>
+  <div class="kicker">導入後のイメージ ①(想定)― 誰が、何をするか</div>
+  <h1>増える作業は「点検にかける」だけです。</h1>
+  <div class="body" style="margin-top:5mm">
+    <div class="lane">
+      <div class="lh">担当</div><div class="lh">書く</div><div class="lh">点検にかける</div><div class="lh">照らす</div><div class="lh">確かめて直す</div><div class="lh">承認して出す</div>
+      <div class="ll"><span class="icb s"><svg class="ic"><use href="#i-pen"/></svg></span><span>作成担当<small>IR・経理・編集 など</small></span></div>
+      <div><div class="sb"><i>1</i>AI で下書き(これまでどおり)</div></div>
+      <div><div class="sb k"><i>2</i>文章と会社名・年度を指定して、点検にかける</div></div>
+      <div></div>
+      <div><div class="sb"><i>4</i>「違う」の数字を、原本の値を見て直す</div></div>
+      <div></div>
+      <div class="ll ac"><span class="icb s n"><svg class="ic"><use href="#i-gear"/></svg></span><span>Audit Core<small>機械が自動で</small></span></div>
+      <div class="ac"></div><div class="ac"></div>
+      <div class="ac"><div class="sb e"><i>3</i>数字を 1 つずつ原本と照合(1 本 1 秒前後)</div></div>
+      <div class="ac"></div>
+      <div class="ac"><div class="sb e"><i>6</i>「何と照らしたか」の記録が残る</div></div>
+      <div class="ll"><span class="icb s"><svg class="ic"><use href="#i-search"/></svg></span><span>確認担当<small>上長・校閲 など</small></span></div>
+      <div></div><div></div><div></div>
+      <div><div class="sb"><i>5</i>「要確認」「判断しない」の数字を目で確かめる</div></div>
+      <div></div>
+      <div class="ll"><span class="icb s"><svg class="ic"><use href="#i-flag"/></svg></span><span>責任者<small>部門長・開示の責任者</small></span></div>
+      <div></div><div></div><div></div><div></div>
+      <div><div class="sb"><i>7</i>止まった数字が片づいたかを見て、承認・公開</div></div>
     </div>
-    <div style="margin-top:8mm">
-      <div class="num" style="margin-bottom:3mm">このような企業さまに</div>
-      <div class="chips">
-        <span class="chip">決算・有価証券報告書の AI 要約を提供している</span>
-        <span class="chip">IR・開示の資料を AI で下書きしている</span>
-        <span class="chip">財務データを AI に読ませる製品を開発している</span>
-        <span class="chip">企業分析・与信のレポートを AI で作っている</span>
-        <span class="chip">監査・レビューで数字の整合を確かめている</span>
-      </div>
+    <div class="grid g3" style="margin-top:5mm;gap:4.5mm">
+      <div class="dp"><b>ご用意いただくもの</b><br><small>① AI が書いた文章　② どの会社の・どの年度の話か。原本(有価証券報告書のデータ)は、公開されているものを使います。</small></div>
+      <div class="dp"><b>変わらないもの</b><br><small>文章を書く道具と手順。最後の判断は、これまでどおり人が行います。</small></div>
+      <div class="dp"><b>文章を送る形(設置なし)では</b><br><small>② で当方に文章を送り、③ を当方が行ってレポートをお返しします(無償診断は 2 営業日)。</small></div>
     </div>
-    <p class="note" style="margin-top:6mm">※ 御社の文章で「一致」が何割になるか、確認の手間がどれだけ減るかは、無償診断で実際の数字をお出しします。</p>
+    <p class="note" style="margin-top:3mm;font-size:9pt">※ 導入後の姿を当方が想定して描いたもので、導入実績はこれからです(18 ページ)。担当の名前は例で、御社の体制に合わせます。上の図は「社内に置く」「組み込む」形の場合です(19 ページ)。速さは当方の 1 台での実測(中央値 0.7 秒・最大 1.6 秒)です。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>12</span></div>
 </section>
 
 <!-- 13 -->
 <section class="slide">
-  <div class="kicker">実績 1 ― わざと誤りを仕込んで測りました</div>
-  <h1>誤った数字を、どれだけ止められたか。</h1>
+  <div class="kicker">導入後のイメージ ②(想定)― 何が変わるか</div>
+  <h1>「全部を見直す」から、「止まった数字を見る」へ。</h1>
   <div class="body" style="margin-top:6mm">
-    <div class="grid g2" style="flex:1">
-      <div class="stat"><div class="big">243<small>個中</small> 241<small>個を止めた</small></div><div class="cap">数字を 1 字だけ書き換えた誤り</div><div class="src">有価証券報告書 1 書類を原本に、AI が書いた経営分析の文の数字を 1 つずつ変えて点検。</div></div>
-      <div class="stat"><div class="big">66<small>個すべてを止めた</small></div><div class="cap">期間・単位・区分のすり替え</div><div class="src">「いつの数字か」「単位は何か」「どの部門か」だけを入れ替えた誤り(18 + 24 + 24 個)。</div></div>
-      <div class="stat"><div class="big">542<small>個すべてを止めた</small></div><div class="cap">数字を別の値に置き換えた誤り</div><div class="src">AI が書いた文 200 本の「○億○万円」型の数字で測定。値を少しだけずらした誤りは 1,196 個中 1,195 個を止めた。</div></div>
-      <div class="stat"><div class="big">377<small>個中</small> 373<small>個を止めた</small></div><div class="cap">「前期」と「当期」の取り違え</div><div class="src">表の前期の列に当期の値を入れた誤り。文中の「前期の○○」型は 141 個中 129 個を止めた。</div></div>
+    <div class="chg">
+      <div></div><div class="th">いま</div><div></div><div class="th t2">導入後</div>
+      <div class="r"><span class="icb "><svg class="ic"><use href="#i-pen"/></svg></span><span>作成担当<small>IR・経理・編集 など</small></span></div>
+      <div class="b4">AI の下書きの数字を、原本を開いて 1 つずつ見比べる。直前の修正で、古い数字が残る。</div><div class="ar">▶</div>
+      <div class="af">下書きを点検にかけ、「違う」と出た数字から直す。原本の値が添えられているので、原本を探す手間が減る。</div>
+      <div class="r"><span class="icb "><svg class="ic"><use href="#i-search"/></svg></span><span>確認担当<small>上長・校閲 など</small></span></div>
+      <div class="b4">誰がどの数字を確かめたか分からないので、もう一度すべての数字を見る。</div><div class="ar">▶</div>
+      <div class="af">「一致」の数字は、照らした原本の値の記録つき。止まった数字に時間を使える。</div>
+      <div class="r"><span class="icb "><svg class="ic"><use href="#i-flag"/></svg></span><span>責任者・経営<small>部門長・開示の責任者</small></span></div>
+      <div class="b4">誤りが外に出たとき、どこまで確かめたかを説明できない。不安で、AI の利用範囲を広げにくい。</div><div class="ar">▶</div>
+      <div class="af">すべての数字に「原本のどの値と照らしたか」が残る。確かめる工程があるので、AI を使う範囲を決めやすい。</div>
     </div>
-    <p class="note" style="margin-top:4mm">※ いずれも当方の検証で、公開されている有価証券報告書と、AI に書かせた文に誤りを仕込んで測った数です。御社の文章で同じ結果になることをお約束するものではありません。そのため、最初に無償で御社の文章をお試しいただけます(19 ページ)。</p>
+    <div class="grid g2" style="margin-top:6mm;gap:6mm">
+      <div class="dp"><b>いま ― 人が見る数字</b>　<small>1 本あたり 83 個すべて</small><div class="dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+      <div class="dp" style="border-color:var(--accent)"><b>導入後 ― 人が見る数字</b>　<small><span style="color:var(--accent);font-weight:700">● 自動で「一致」58 個</span>　<span style="color:var(--amber);font-weight:700">● 人が確認 25 個</span></small><div class="dots"><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span class="o"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+    </div>
+    <div class="callout" style="margin-top:5mm">人の確認をなくす道具ではなく、<b>確かめる範囲を絞り、記録を残す</b>道具です。最後の判断は、導入後も人が行います。</div>
+    <p class="note" style="margin-top:4mm">※ 「導入後」は当方が想定した姿で、導入実績はこれからです。83 個・58 個・25 個は、AI が書いた文 200 本を点検した当方の実測の平均です(11 ページ)。御社の文章で何個になるかは、無償診断で実際の数字をお出しします。「一致」と出た数字にも見逃しがありえます(18 ページ)。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>13</span></div>
 </section>
 
 <!-- 14 -->
 <section class="slide">
-  <div class="kicker">実績 2 ― 検証の厚み</div>
-  <h1>測った数だけを、お伝えします。</h1>
+  <div class="kicker">実績 1 ― わざと誤りを仕込んで測りました</div>
+  <h1>誤った数字を、どれだけ止められたか。</h1>
   <div class="body" style="margin-top:6mm">
-    <div class="grid g4">
-      <div class="stat"><div class="big">97<small>書類</small></div><div class="cap">有価証券報告書</div><div class="src">実際に提出された原文で動作を確認</div></div>
-      <div class="stat"><div class="big">360<small>本</small></div><div class="cap">AI が書いた文</div><div class="src">要約・社長メッセージ・記事・表など 9 つの書き方。数字は 29,287 個</div></div>
-      <div class="stat"><div class="big">70.1<small>%</small></div><div class="cap">自動で「一致」を確認</div><div class="src">AI の文 200 本の数字 16,588 個のうち 11,625 個。残りが人の確認に回る数字</div></div>
-      <div class="stat"><div class="big">7,601<small>本</small></div><div class="cap">自動テスト</div><div class="src">エンジンの動きを自動で確かめる試験。変更が既存の動きを壊すと止まります</div></div>
+    <div class="grid g2" style="flex:1">
+      <div class="stat"><div class="big">243<small>個中</small> 241<small>個を止めた</small></div><div class="meter" style="background:var(--warn)"><span style="width:99.2%;border-radius:2mm 0 0 2mm"></span></div><div class="cap">数字を 1 字だけ書き換えた誤り</div><div class="src">有価証券報告書 1 書類を原本に、AI が書いた経営分析の文の数字を 1 つずつ変えて点検。</div></div>
+      <div class="stat"><div class="big">66<small>個すべてを止めた</small></div><div class="meter"><span style="width:100%"></span></div><div class="cap">期間・単位・区分のすり替え</div><div class="src">「いつの数字か」「単位は何か」「どの部門か」だけを入れ替えた誤り(18 + 24 + 24 個)。</div></div>
+      <div class="stat"><div class="big">542<small>個すべてを止めた</small></div><div class="meter"><span style="width:100%"></span></div><div class="cap">数字を別の値に置き換えた誤り</div><div class="src">AI が書いた文 200 本の「○億○万円」型の数字で測定。値を少しだけずらした誤りは 1,196 個中 1,195 個を止めた。</div></div>
+      <div class="stat"><div class="big">377<small>個中</small> 373<small>個を止めた</small></div><div class="meter" style="background:var(--warn)"><span style="width:98.9%;border-radius:2mm 0 0 2mm"></span></div><div class="cap">「前期」と「当期」の取り違え</div><div class="src">表の前期の列に当期の値を入れた誤り。文中の「前期の○○」型は 141 個中 129 個を止めた。</div></div>
     </div>
-    <div class="grid g2" style="margin-top:7mm">
-      <div class="card"><h3>予測を先に書き、外れも残す</h3><p>改良のたびに「どうなるはずか」を先に書面で固定し、そのあとで測ります。予測が外れた結果も消さずに残しています(事前の計画書 117 本・結果報告 144 本)。</p></div>
-      <div class="card"><h3>作った本人以外が点検する</h3><p>動きを変える変更は、実装とは別に立てた独立の点検役(AI)が、わざと壊してテストが止まるかまで確かめたものだけを採用しています。資料の数字が記録とずれると、自動テストが止めます。</p></div>
-    </div>
-    <p class="note" style="margin-top:4mm">※ 「一致」は原本の値と結び付いた数字の割合で、文章の正しさの割合ではありません。資料の数字は 2026 年 11 月 10 日時点の記録によります。</p>
+    <p class="note" style="margin-top:4mm">※ 棒は、緑が止めた数・赤が止められなかった数です。いずれも当方の検証で、公開されている有価証券報告書と、AI に書かせた文に誤りを仕込んで測った数です。御社の文章で同じ結果になることをお約束するものではありません。そのため、最初に無償で御社の文章をお試しいただけます(20 ページ)。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>14</span></div>
 </section>
 
 <!-- 15 -->
 <section class="slide">
-  <div class="kicker">実績 3 ― 社外での出来事</div>
-  <h1>止まった 2 つの数字が、<br>データベース側の不備を見つけました。</h1>
-  <div class="body">
-    <div class="grid g3">
-      <div class="card"><div class="num">STEP 1</div><h3>AI のレポート 3 本を点検</h3><p>外部の財務データベースの数字をもとに AI が書いた、大手企業 3 社のレポート(数字 163 個)を、原本と照合しました。</p></div>
-      <div class="card"><div class="num">STEP 2</div><h3>2 つの数字で、原本との差</h3><p>営業利益と減価償却費の 2 つが原本と合いませんでした。営業利益の差は約 1,305 億円。AI の書き間違いではなく、もとのデータベースが返した値でした。</p></div>
-      <div class="card"><div class="num">STEP 3</div><h3>先方が仕組みごと修正へ</h3><p>先方が調べたところ、翌年の書類から来た値に、元の書類の番号が付いていました。同じ型がほかの会社にもあり、表示の仕組みを直すとの回答をいただきました(2026 年 10 月)。</p></div>
+  <div class="kicker">実績 2 ― 検証の厚み</div>
+  <h1>測った数だけを、お伝えします。</h1>
+  <div class="body" style="margin-top:6mm">
+    <div class="grid g4">
+      <div class="stat"><span class="icb s" style="margin-bottom:2.5mm"><svg class="ic"><use href="#i-doc"/></svg></span><div class="big">97<small>書類</small></div><div class="cap">有価証券報告書</div><div class="src">実際に提出された原文で動作を確認</div></div>
+      <div class="stat"><span class="icb s" style="margin-bottom:2.5mm"><svg class="ic"><use href="#i-pen"/></svg></span><div class="big">360<small>本</small></div><div class="cap">AI が書いた文</div><div class="src">要約・社長メッセージ・記事・表など 9 つの書き方。数字は 29,287 個</div></div>
+      <div class="stat"><span class="icb s" style="margin-bottom:2.5mm"><svg class="ic"><use href="#i-chart"/></svg></span><div class="big">70.1<small>%</small></div><div class="meter" style="margin-top:1.5mm;height:2.4mm"><span style="width:70.1%"></span></div><div class="cap">自動で「一致」を確認</div><div class="src">AI の文 200 本の数字 16,588 個のうち 11,625 個。残りが人の確認に回る数字</div></div>
+      <div class="stat"><span class="icb s" style="margin-bottom:2.5mm"><svg class="ic"><use href="#i-check"/></svg></span><div class="big">7,601<small>本</small></div><div class="cap">自動テスト</div><div class="src">エンジンの動きを自動で確かめる試験。変更が既存の動きを壊すと止まります</div></div>
     </div>
-    <div class="callout" style="margin-top:8mm">AI の誤りだけでなく、<b>AI に読ませているデータそのものの食い違い</b>も、原本と突き合わせることで表に出ます。数字が「どこから来たか」まで確かめる道具だからこその結果です。</div>
-    <p class="note" style="margin-top:5mm">※ 先方は財務データベースを提供する事業者です。社名は先方のご了承を得たうえでお伝えします。この 2 つは、先方が原因まで確かめた食い違いです。</p>
+    <div class="grid g2" style="margin-top:7mm">
+      <div class="card"><div class="hd"><span class="icb s"><svg class="ic"><use href="#i-flag"/></svg></span><h3>予測を先に書き、外れも残す</h3></div><div class="mini" style="margin-bottom:2.5mm"><span>予測を書いて固定</span><em>▶</em><span>測る</span><em>▶</em><span class="k">当たりも外れも残す</span></div><p>改良のたびに「どうなるはずか」を先に書面で固定し、そのあとで測ります。予測が外れた結果も消さずに残しています(事前の計画書 117 本・結果報告 144 本)。</p></div>
+      <div class="card"><div class="hd"><span class="icb s"><svg class="ic"><use href="#i-search"/></svg></span><h3>作った本人以外が点検する</h3></div><div class="mini" style="margin-bottom:2.5mm"><span>実装</span><em>▶</em><span>点検役(AI)がわざと壊す</span><em>▶</em><span class="k">テストが止まれば採用</span></div><p>動きを変える変更は、実装とは別に立てた独立の点検役(AI)が、わざと壊してテストが止まるかまで確かめたものだけを採用しています。資料の数字が記録とずれると、自動テストが止めます。</p></div>
+    </div>
+    <p class="note" style="margin-top:4mm">※ 「一致」は原本の値と結び付いた数字の割合で、文章の正しさの割合ではありません。資料の数字は 2026 年 11 月 10 日時点の記録によります。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>15</span></div>
 </section>
 
 <!-- 16 -->
 <section class="slide">
-  <div class="kicker">ご質問と答え</div>
-  <h1>気になりそうな点に、先にお答えします。</h1>
-  <div class="body" style="margin-top:6mm">
-    <div class="grid g2" style="gap:4.5mm">
-      <div class="qa"><h3>AI の文章を、別の AI に見直させれば足りませんか。</h3><p>AI の見直しは、聞くたびに答えが変わることがあり、何と照らしたかが残りません。Audit Core は決まった手順で原本のデータと照らすので、同じ文章にはいつも同じ答えが出て、記録が残ります。AI の見直しとの併用もできます。</p></div>
-      <div class="qa"><h3>誤りをすべて見つけられますか。</h3><p>いいえ。書き方によっては見逃すことがあり、正しい数字を止めることもあります(17 ページ)。人の確認をなくす道具ではなく、人が確かめる範囲を絞り、確かめた記録を残す道具です。</p></div>
-      <div class="qa"><h3>決算短信や、上場していない会社の決算書にも使えますか。</h3><p>いまの原本は有価証券報告書のデータです。原本がデータとして在れば同じ考え方で照らせますが、つなぎ込みの開発が必要です。上場していない会社の決算書では、まだ試していません。個別にご相談ください。</p></div>
-      <div class="qa"><h3>発表前の文章が、外に漏れませんか。</h3><p>点検に外部の AI や外部のサービスを使いません。「社内に置く」形なら、文章は御社の外に出ません。「文章を送る」形では、お預かりした文章を診断だけに使い、保管期間を事前に取り決めます。</p></div>
-      <div class="qa"><h3>導入に何が要りますか。費用は。</h3><p>無償診断は、文章(テキスト)と、会社名・年度だけです。社内に置く場合も、Python が動く機械 1 台で動きます。費用は、無償診断の結果をご覧いただいたうえで、範囲と期間に合わせてお見積りします。</p></div>
-      <div class="qa"><h3>英語の文章も点検できますか。</h3><p>エンジンが読むのは日本語の文章です。英文の決算短信については、表の数字を日本語の原本データと照らす別の道具を試作しています(5 ページ)。</p></div>
+  <div class="kicker">実績 3 ― 社外での出来事</div>
+  <h1>止まった 2 つの数字が、<br>データベース側の不備を見つけました。</h1>
+  <div class="body">
+    <div class="grid g3 flow3">
+      <div class="card"><div class="num">STEP 1</div><div class="hd"><span class="icb s"><svg class="ic"><use href="#i-search"/></svg></span><h3>AI のレポート 3 本を点検</h3></div><p>外部の財務データベースの数字をもとに AI が書いた、大手企業 3 社のレポート(数字 163 個)を、原本と照合しました。</p></div>
+      <div class="card"><div class="num">STEP 2</div><div class="hd"><span class="icb s w"><svg class="ic"><use href="#i-alert"/></svg></span><h3>2 つの数字で、原本との差</h3></div><p>営業利益と減価償却費の 2 つが原本と合いませんでした。営業利益の差は約 1,305 億円。AI の書き間違いではなく、もとのデータベースが返した値でした。</p></div>
+      <div class="card"><div class="num">STEP 3</div><div class="hd"><span class="icb s"><svg class="ic"><use href="#i-gear"/></svg></span><h3>先方が仕組みごと修正へ</h3></div><p>先方が調べたところ、翌年の書類から来た値に、元の書類の番号が付いていました。同じ型がほかの会社にもあり、表示の仕組みを直すとの回答をいただきました(2026 年 10 月)。</p></div>
     </div>
+    <div class="mini" style="margin-top:5mm;justify-content:center"><span><b>データベース</b>の値</span><em>▶</em><span>AI がレポートを書く</span><em>▶</em><span class="e">Audit Core が原本と照合</span><em>▶</em><span class="w">2 つで「違う」</span><em>▶</em><span class="k">データベース側を修正へ</span></div>
+    <div class="callout" style="margin-top:5mm">AI の誤りだけでなく、<b>AI に読ませているデータそのものの食い違い</b>も、原本と突き合わせることで表に出ます。数字が「どこから来たか」まで確かめる道具だからこその結果です。</div>
+    <p class="note" style="margin-top:5mm">※ 先方は財務データベースを提供する事業者です。社名は先方のご了承を得たうえでお伝えします。この 2 つは、先方が原因まで確かめた食い違いです。</p>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>16</span></div>
 </section>
 
 <!-- 17 -->
 <section class="slide">
-  <div class="kicker">先にお伝えします</div>
-  <h1>できないこと、まだ足りないこと。</h1>
-  <div class="body" style="margin-top:7mm">
-    <div class="lim">
-      <div class="i">1</div><p><b>導入実績はこれからです。</b>現在、最初にお使いいただく企業さまを募集しています。数字はすべて当方の検証によるものです。</p>
-      <div class="i">2</div><p><b>原本は、有価証券報告書のデータです。</b>決算短信や社内のデータを原本にする場合は、つなぎ込みが必要です。有償の検証(PoC)で確かめます。</p>
-      <div class="i">3</div><p><b>確かめるのは数字だけです。</b>意見、見通し、文章の良し悪しは判断しません。</p>
-      <div class="i">4</div><p><b>見逃すことがあります。</b>書き方によっては誤りを通します。例: 「前期は…、当期は…」と対比する書き方での、期の取り違え。</p>
-      <div class="i">5</div><p><b>止めすぎがあります。</b>正しい数字を「違う」「要確認」と止めることがあります。「違う」が文の誤りか、道具の当て違いかは、道具は決めません。止まった数字は人が判断します。</p>
-      <div class="i">6</div><p><b>最後の判断は人が行います。</b>Audit Core は、人が確かめる範囲を絞り、確かめた記録を残すための道具です。</p>
+  <div class="kicker">ご質問と答え</div>
+  <h1>気になりそうな点に、先にお答えします。</h1>
+  <div class="body" style="margin-top:6mm">
+    <div class="grid g2" style="gap:4.5mm">
+      <div class="qa"><h3>AI の文章を、別の AI に見直させれば足りませんか。</h3><p>AI の見直しは、聞くたびに答えが変わることがあり、何と照らしたかが残りません。Audit Core は決まった手順で原本のデータと照らすので、同じ文章にはいつも同じ答えが出て、記録が残ります。AI の見直しとの併用もできます。</p></div>
+      <div class="qa"><h3>誤りをすべて見つけられますか。</h3><p>いいえ。書き方によっては見逃すことがあり、正しい数字を止めることもあります(18 ページ)。人の確認をなくす道具ではなく、人が確かめる範囲を絞り、確かめた記録を残す道具です。</p></div>
+      <div class="qa"><h3>決算短信や、上場していない会社の決算書にも使えますか。</h3><p>いまの原本は有価証券報告書のデータです。原本がデータとして在れば同じ考え方で照らせますが、つなぎ込みの開発が必要です。上場していない会社の決算書では、まだ試していません。個別にご相談ください。</p></div>
+      <div class="qa"><h3>発表前の文章が、外に漏れませんか。</h3><p>点検に外部の AI や外部のサービスを使いません。「社内に置く」形なら、文章は御社の外に出ません。「文章を送る」形では、お預かりした文章を診断だけに使い、保管期間を事前に取り決めます。</p></div>
+      <div class="qa"><h3>導入に何が要りますか。費用は。</h3><p>無償診断は、文章(テキスト)と、会社名・年度だけです。社内に置く場合も、Python が動く機械 1 台で動きます。費用は、無償診断の結果をご覧いただいたうえで、範囲と期間に合わせてお見積りします。</p></div>
+      <div class="qa"><h3>英語の文章も点検できますか。</h3><p>エンジンが読むのは日本語の文章です。英文の決算短信については、表の数字を日本語の原本データと照らす別の道具を試作しています(5 ページ)。</p></div>
     </div>
-    <div class="callout" style="margin-top:3mm">だからこそ、ご契約の前に<b>御社の文章で無償診断</b>を行い、実際の数字を見てからご判断いただけます。</div>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>17</span></div>
 </section>
 
 <!-- 18 -->
 <section class="slide">
-  <div class="kicker">導入の形</div>
-  <h1>使い方は 3 通り。設置なしで始められます。</h1>
-  <div class="body" style="margin-top:6mm">
-    <div class="grid g3" style="flex:1">
-      <div class="step hl"><div class="n">A ― 設置なし</div><h3>文章を送る</h3><ul style="margin-top:2mm">
-        <li>御社は、AI が書いた文章(テキスト)と、対象の会社名・年度を送るだけ</li>
-        <li>当方が原本(EDINET の有価証券報告書)を用意し、点検して、数字ごとの判定レポートをお返しします</li>
-        <li>御社のシステムの変更は要りません</li>
-        <li>無償診断は、この形で行います</li></ul></div>
-      <div class="step"><div class="n">B ― 社内に置く</div><h3>御社の機械で動かす</h3><ul style="margin-top:2mm">
-        <li>Python が動く機械 1 台で動きます。追加のソフトや専用の機器は要りません</li>
-        <li>文章を社外に出さずに点検できます。点検に外部の AI・外部のサービスを使いません</li>
-        <li>点検 1 回は 1 秒前後(当方の 1 台で測った中央値 0.7 秒・最大 1.6 秒)</li>
-        <li>原本は、公開されている EDINET の書類を使います</li></ul></div>
-      <div class="step"><div class="n">C ― 組み込む</div><h3>御社のシステムにつなぐ</h3><ul style="margin-top:2mm">
-        <li>AI が文章を作った直後に自動で点検し、止まった数字だけを担当者に回す形</li>
-        <li>結果はレポートのほか、データ(JSON)でも受け取れます</li>
-        <li>つなぎ込みは御社の仕組みに合わせた個別の作業です。有償の検証(PoC)で範囲を確かめます</li></ul></div>
+  <div class="kicker">先にお伝えします</div>
+  <h1>できないこと、まだ足りないこと。</h1>
+  <div class="body" style="margin-top:7mm">
+    <div class="grid g2" style="gap:4mm">
+      <div class="lc"><span class="icb am"><svg class="ic"><use href="#i-bldg"/></svg></span><div><b>1　導入実績はこれからです。</b>現在、最初にお使いいただく企業さまを募集しています。数字はすべて当方の検証によるものです。</div></div>
+      <div class="lc"><span class="icb am"><svg class="ic"><use href="#i-db"/></svg></span><div><b>2　原本は、有価証券報告書のデータです。</b>決算短信や社内のデータを原本にする場合は、つなぎ込みが必要です。有償の検証(PoC)で確かめます。</div></div>
+      <div class="lc"><span class="icb am"><svg class="ic"><use href="#i-search"/></svg></span><div><b>3　確かめるのは数字だけです。</b>意見、見通し、文章の良し悪しは判断しません。</div></div>
+      <div class="lc"><span class="icb am"><svg class="ic"><use href="#i-alert"/></svg></span><div><b>4　見逃すことがあります。</b>書き方によっては誤りを通します。例: 「前期は…、当期は…」と対比する書き方での、期の取り違え。</div></div>
+      <div class="lc"><span class="icb am"><svg class="ic"><use href="#i-flag"/></svg></span><div><b>5　止めすぎがあります。</b>正しい数字を「違う」「要確認」と止めることがあります。「違う」が文の誤りか、道具の当て違いかは、道具は決めません。止まった数字は人が判断します。</div></div>
+      <div class="lc"><span class="icb am"><svg class="ic"><use href="#i-user"/></svg></span><div><b>6　最後の判断は人が行います。</b>Audit Core は、人が確かめる範囲を絞り、確かめた記録を残すための道具です。</div></div>
     </div>
-    <div class="callout" style="margin-top:6mm">どの形でも、御社にご用意いただくのは <b>① AI が書いた文章</b> と <b>② どの会社の・どの年度の話か</b> の 2 つです。A で結果を見てから、B・C に進むかをお決めいただけます。</div>
-    <p class="note" style="margin-top:3mm">※ 時間は当方の機械 1 台(AI が書いた文 200 本)での実測で、御社の文章・機械での値をお約束するものではありません。同時に何本を処理できるかは測っていません。動作は macOS・Python 3.9 で確かめています。</p>
+    <div class="callout" style="margin-top:5mm">だからこそ、ご契約の前に<b>御社の文章で無償診断</b>を行い、実際の数字を見てからご判断いただけます。</div>
   </div>
   <div class="foot"><span>Audit Core ご紹介資料</span><span>18</span></div>
 </section>
 
 <!-- 19 -->
 <section class="slide">
+  <div class="kicker">導入の形</div>
+  <h1>使い方は 3 通り。設置なしで始められます。</h1>
+  <div class="body" style="margin-top:4.5mm">
+    <div class="grid g3" style="flex:1">
+      <div class="step hl"><div class="n nrow">A ― 設置なし<span class="icb s"><svg class="ic"><use href="#i-send"/></svg></span></div><h3>文章を送る</h3><ul style="margin-top:2mm">
+        <li>御社は、AI が書いた文章(テキスト)と、対象の会社名・年度を送るだけ</li>
+        <li>当方が原本(EDINET の有価証券報告書)を用意し、点検して、数字ごとの判定レポートをお返しします</li>
+        <li>御社のシステムの変更は要りません</li>
+        <li>無償診断は、この形で行います</li></ul><div class="mini dgm"><div class="zn in"><u>御社</u><span>文章</span></div><em>▶</em><div class="zn"><u>当方</u><span class="e">Audit Core</span></div><em>▶</em><div class="zn in"><u>御社</u><span>レポート</span></div></div></div>
+      <div class="step"><div class="n nrow">B ― 社内に置く<span class="icb s"><svg class="ic"><use href="#i-lock"/></svg></span></div><h3>御社の機械で動かす</h3><ul style="margin-top:2mm">
+        <li>Python が動く機械 1 台で動きます。追加のソフトや専用の機器は要りません</li>
+        <li>文章を社外に出さずに点検できます。点検に外部の AI・外部のサービスを使いません</li>
+        <li>点検 1 回は 1 秒前後(当方の 1 台で測った中央値 0.7 秒・最大 1.6 秒)</li>
+        <li>原本は、公開されている EDINET の書類を使います</li></ul><div class="mini dgm"><div class="zn in"><u>御社の機械の中(文章は社外に出ません)</u><span>文章</span><em>▶</em><span class="e">Audit Core</span><em>▶</em><span>レポート</span></div></div></div>
+      <div class="step"><div class="n nrow">C ― 組み込む<span class="icb s"><svg class="ic"><use href="#i-plug"/></svg></span></div><h3>御社のシステムにつなぐ</h3><ul style="margin-top:2mm">
+        <li>AI が文章を作った直後に自動で点検し、止まった数字だけを担当者に回す形</li>
+        <li>結果はレポートのほか、データ(JSON)でも受け取れます</li>
+        <li>つなぎ込みは御社の仕組みに合わせた個別の作業です。有償の検証(PoC)で範囲を確かめます</li></ul><div class="mini dgm"><div class="zn in" style="min-width:57mm"><u>御社のシステムの中(止まった数字だけ人へ)</u><span>AI</span><em>▶</em><span class="e">Audit Core</span><em>▶</em><span>担当者</span></div></div></div>
+    </div>
+    <div class="callout" style="margin-top:3.5mm">どの形でも、御社にご用意いただくのは <b>① AI が書いた文章</b> と <b>② どの会社の・どの年度の話か</b> の 2 つです。A で結果を見てから、B・C に進むかをお決めいただけます。</div>
+    <p class="note" style="margin-top:2mm">※ 時間は当方の機械 1 台(AI が書いた文 200 本)での実測で、御社の文章・機械での値をお約束するものではありません。同時に何本を処理できるかは測っていません。動作は macOS・Python 3.9 で確かめています。</p>
+  </div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>19</span></div>
+</section>
+
+<!-- 20 -->
+<section class="slide">
   <div class="kicker">導入の流れ</div>
   <h1>まず 3 本、無償でお試しください。</h1>
   <div class="body" style="margin-top:6mm">
-    <div class="grid g3" style="flex:1">
+    <div class="grid g3 flow3" style="flex:1">
       <div class="step hl"><div class="n">STEP 1</div><h3>無償診断</h3><div class="price">無償</div><ul>
         <li>御社の AI が書いた文章を 3 本まで</li>
         <li>数字ごとの判定レポートをお返しします(別紙の見本と同じ形)</li>
         <li>合意から 2 営業日</li>
-        <li>原本が有価証券報告書(EDINET)の文章が対象</li></ul></div>
+        <li>原本が有価証券報告書(EDINET)の文章が対象</li></ul><div class="tm"><span class="icb s"><svg class="ic"><use href="#i-clock"/></svg></span><b>2 営業日</b><span>合意からレポートまで</span></div></div>
       <div class="step"><div class="n">STEP 2</div><h3>有償の検証(PoC)</h3><div class="price">お見積り</div><ul>
         <li>3 〜 4 週間。御社が選ぶ文章 30 本まで</li>
         <li>結果の見込みを先に書面でお出しし、結果と並べてご報告</li>
         <li>御社の業務・システムへのつなぎ方を確認</li>
-        <li>期間と範囲は、事前に書面で取り決め</li></ul></div>
+        <li>期間と範囲は、事前に書面で取り決め</li></ul><div class="tm"><span class="icb s"><svg class="ic"><use href="#i-clock"/></svg></span><b>3 〜 4 週間</b><span>文章 30 本まで</span></div></div>
       <div class="step"><div class="n">STEP 3</div><h3>本導入</h3><div class="price">お見積り</div><ul>
-        <li>文章を送る形・社内に置く形・組み込む形から選べます(18 ページ)</li>
+        <li>文章を送る形・社内に置く形・組み込む形から選べます(19 ページ)</li>
         <li>制度の年次改正への対応と保守を含みます</li>
         <li>利用の量と範囲に応じてお見積り</li>
-        <li>技術一式の譲渡のご相談も承ります</li></ul></div>
+        <li>技術一式の譲渡のご相談も承ります</li></ul><div class="tm"><span class="icb s"><svg class="ic"><use href="#i-repeat"/></svg></span><b>継続</b><span>年次改正への対応・保守</span></div></div>
     </div>
     <div class="contact" style="margin-top:6mm">
       <div><b>お問い合わせ</b><br>無償診断のお申し込み・ご質問は、下記までご連絡ください。</div>
@@ -515,7 +650,7 @@ mark{background:#fff3b8;padding:0 .6mm;border-radius:.6mm;color:inherit}
     </div>
     <p class="note" style="margin-top:3mm">※ 無償診断でお預かりした文章は診断のみに使用し、保管期間を事前に取り決めます。無償診断に、システムへの接続開発と追加の分析は含みません。</p>
   </div>
-  <div class="foot"><span>Audit Core ご紹介資料</span><span>19</span></div>
+  <div class="foot"><span>Audit Core ご紹介資料</span><span>20</span></div>
 </section>
 
 <script>
