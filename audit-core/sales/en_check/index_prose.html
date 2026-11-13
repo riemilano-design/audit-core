@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 通信を止める設定: このページは部品 2 つ(cdnjs)を読み込む以外、どこにも接続できない(connect-src 'none')。 -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>英文決算短信の数字の点検(試作: 文章の中の数つき)</title>
+<style>
+:root { --bg:#f7f6f2; --panel:#ffffff; --fg:#1d2327; --sub:#5b646b; --line:#d9d6cc; --accent:#0b5c6b; --warn:#9a3412; --warnbg:#fdf0e6; --okbg:#e9f3ee; --ok:#1f6b45; --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#15191b; --panel:#1e2427; --fg:#e7eaec; --sub:#9aa5ac; --line:#343c41; --accent:#6cc3d2; --warn:#f0a36b; --warnbg:#3a2a1e; --okbg:#1d3027; --ok:#7fcfa4; color-scheme: dark } }
+:root[data-theme="dark"] { --bg:#15191b; --panel:#1e2427; --fg:#e7eaec; --sub:#9aa5ac; --line:#343c41; --accent:#6cc3d2; --warn:#f0a36b; --warnbg:#3a2a1e; --okbg:#1d3027; --ok:#7fcfa4; color-scheme: dark }
+* { box-sizing: border-box }
+body { margin:0; background:var(--bg); color:var(--fg); font: 15px/1.7 -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", Meiryo, sans-serif }
+main { max-width: 980px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display:flex; flex-direction:column; gap:20px }
+h1 { font-size: 24px; line-height:1.35; margin:0; text-wrap: balance }
+h2 { font-size: 17px; margin:0 0 8px }
+p { margin:0 } .sub { color:var(--sub); font-size:13.5px }
+.panel { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px }
+.pick { display:grid; grid-template-columns: 1fr 1fr; gap:14px } @media (max-width: 640px) { .pick { grid-template-columns: 1fr } }
+.drop { border:1.5px dashed var(--line); border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:6px; min-width:0 }
+.drop.over { border-color: var(--accent) } .drop b { font-size:14.5px } .drop input { max-width:100%; font-size:13px }
+.fname { font-family:var(--mono); font-size:12.5px; color:var(--sub); overflow-wrap:anywhere }
+button { font: inherit; font-weight:600; padding:10px 22px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:var(--panel); cursor:pointer } button:disabled { opacity:.45; cursor:default }
+.row { display:flex; gap:14px; align-items:center; flex-wrap:wrap }
+.tiles { display:grid; grid-template-columns: repeat(4, 1fr); gap:10px } @media (max-width: 640px) { .tiles { grid-template-columns: 1fr 1fr } }
+.tile { border:1px solid var(--line); border-radius:8px; padding:10px 12px } .tile .n { font-size:24px; font-weight:700; font-variant-numeric: tabular-nums; line-height:1.2 } .tile .l { font-size:12.5px; color:var(--sub) }
+.tile.hot { background:var(--warnbg); border-color:var(--warn) } .tile.hot .n { color:var(--warn) } .tile.calm { background:var(--okbg) } .tile.calm .n { color:var(--ok) }
+.scroll { overflow-x:auto } table { border-collapse:collapse; width:100%; font-size:13.5px } th, td { text-align:left; padding:7px 9px; border-bottom:1px solid var(--line); vertical-align:top }
+th { font-size:12px; color:var(--sub); font-weight:600; white-space:nowrap } td.num { font-family:var(--mono); font-variant-numeric: tabular-nums; white-space:nowrap; text-align:right } th.num { text-align:right }
+td.ctx { font-family:var(--mono); font-size:12px; color:var(--sub); min-width:220px; overflow-wrap:anywhere } .diff { color:var(--warn); font-weight:700 }
+.note { border-left:3px solid var(--line); padding:2px 0 2px 12px; color:var(--sub); font-size:13.5px } .err { color:var(--warn); font-weight:600 }
+ul { margin:0; padding-left:1.2em } li { margin:2px 0 } details summary { cursor:pointer; font-weight:600 }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>英文決算短信の数字の点検 <span class="sub" style="font-weight:400">試作: 文章の中の数つき</span></h1>
+    <p class="sub">日本語の決算短信の原本データ(XBRL)と、英文の決算短信の PDF を照らし、数字が食い違う欄の候補を出します。この試作は、英文の「概況」の文章に出てくる金額・率・ポイントも、日本語の「概況」の文章の数と照らします。file はこのブラウザの中で読むだけで、どこにも送りません。</p>
+  </header>
+
+  <section class="panel">
+    <div class="pick">
+      <label class="drop" id="dz"><b>1. 日本語の決算短信の XBRL(ZIP)</b><span class="sub">TDnet に出す ZIP をそのまま</span><input type="file" id="fz" accept=".zip"><span class="fname" id="nz"></span></label>
+      <label class="drop" id="dp"><b>2. 英文の決算短信(PDF)</b><span class="sub">公表する前の版でも、公表した版でも</span><input type="file" id="fp" accept=".pdf"><span class="fname" id="np"></span></label>
+    </div>
+    <div class="row" style="margin-top:14px"><button id="go" disabled>照らす</button><span class="sub" id="st"></span></div>
+  </section>
+
+  <section id="res" hidden></section>
+
+  <section class="panel">
+    <h2>この道具が見るもの・見ないもの</h2>
+    <ul class="sub">
+      <li>見るもの: 日本語の原本データに入っている数(サマリーと財務諸表の表の数)が、英文 PDF の同じ並びの所に同じ値・同じ符号で在るか。</li>
+      <li>見るもの(試作): 英文の「概況」の文章に出てくる金額・率・ポイントと同じ数が、日本語の「概況」の文章に在るか。数が在るかだけを見ます。何の数か(どの項目・どの期の数か)は見ません。</li>
+      <li>見ないもの: 「概況」のほかの文章(注記など)の数、円のほかの通貨の金額、人数・数量など金額と率のほかの数、表の見出し・単位・期の字、英文に載せていない部分。</li>
+      <li>候補には道具の当て違いが混ざります。「違う」と出た欄は、紙面で確かめてください。候補が 0 件でも、誤りが無いことの保証ではありません。</li>
+      <li>生成 AI は使っていません。同じ file を入れれば同じ結果が出ます。</li>
+    </ul>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<script>
+"use strict";
+// ---- 当て方(sales/EN_TANSHIN_50_SEAL_2026-11-10.md と同じ。Python の script を写した)----
+const MONTHS = "(?:January|February|March|April|May|June|July|August|September|October|November|December)";
+const DATE_RE = new RegExp(MONTHS + "\\s+\\d{1,2},\\s?\\d{4}", "g");
+const NUM_SRC = "(?<neg>[△▲−–][ \\t]?|-[ \\t]?¥?(?=\\d)|\\([ \\t]?)?(?<n>\\d{1,3}(?:,\\d{3})+(?:\\.\\d+)?|\\d+(?:\\.\\d+)?)(?<close>[ \\t]?%?\\))?";
+const FACT_SRC = "<ix:nonFraction([^>]*)>([^<]*)</ix:nonFraction>";
+
+// PDF の 1 ページの字を、行と欄で区切った文字列にする(離れた欄は別の行として扱う)
+function pageText(items) {
+  // 空白だけの item は字として数えない(pdf.js は欄の間の空きを幅のある空白 1 個で返す。数えると離れた欄の「-」が次の数に付く)
+  let out = "", prev = null, sp = false;
+  for (const it of items) {
+    if (typeof it.str !== "string") continue;
+    if (it.str.trim() === "") { if (it.hasEOL) { out += "\n"; prev = null; sp = false; } else if (it.str !== "") sp = true; continue; }
+    if (prev) {
+      let sep = "";
+      if (prev.hasEOL) sep = "\n";
+      else {
+        const h = Math.max(prev.height || 0, it.height || 0, 1);
+        const dy = Math.abs(it.transform[5] - prev.transform[5]);
+        const gap = it.transform[4] - (prev.transform[4] + prev.width);
+        if (dy > h * 0.5 || gap > h * 1.0 || gap < -h * 0.5) sep = "\n";
+        else if (sp || gap > h * 0.15) sep = " ";
+      }
+      out += sep;
+    }
+    out += it.str; prev = it; sp = false;
+  }
+  return out;
+}
+function tokens(text, page) {
+  const out = [], re = new RegExp(NUM_SRC, "g");
+  text = text.normalize("NFKC").replace(DATE_RE, " <DATE> ");
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    if (m[0] === "") { re.lastIndex++; continue; }
+    let neg = (m.groups.neg || "").trim();
+    if (neg.startsWith("(") && !m.groups.close) neg = "";
+    out.push({ v: m.groups.n, s: neg ? "-" : "", page, ctx: text.slice(Math.max(0, m.index - 110), m.index + m[0].length + 30).replace(/\n/g, " ⏎ ") });
+  }
+  return out;
+}
+async function enTokens(pdfBuf) {
+  const doc = await pdfjsLib.getDocument({ data: new Uint8Array(pdfBuf), isEvalSupported: false, useWorkerFetch: false, disableFontFace: true }).promise;
+  const out = [], lines = [];
+  for (let i = 1; i <= doc.numPages; i++) {
+    const tc = await (await doc.getPage(i)).getTextContent(), txt = pageText(tc.items);
+    for (const t of tokens(txt, i)) out.push(t);
+    for (const l of txt.split("\n")) lines.push([i, l.normalize("NFKC")]);   // 文章の点検に使う行([頁, 字])
+  }
+  return { toks: out, pages: doc.numPages, lines };
+}
+const ta = document.createElement("textarea");
+function plain(s) { ta.innerHTML = s.replace(/<[^>]+>/g, ""); return ta.value.replace(/\s+/g, " ").trim(); }
+function rowLabel(t, idx) {
+  const tr = t.lastIndexOf("<tr", idx); if (tr < 0 || idx - tr > 6000) return "";
+  const m = /<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/.exec(t.slice(tr, idx)); if (!m) return "";
+  const s = plain(m[1]); return /^[\d,.\s△▲\-−–()%]*$/.test(s) ? "" : s.slice(0, 40);
+}
+async function jpFacts(zipBuf) {
+  const zf = await JSZip.loadAsync(zipBuf), out = { summary: [], fs: [] };
+  const names = Object.keys(zf.files).filter(n => n.endsWith("ixbrl.htm")).sort();
+  for (const n of names) {
+    const part = n.includes("/Summary/") ? "summary" : "fs", t = await zf.files[n].async("string"), re = new RegExp(FACT_SRC, "g");
+    let m;
+    while ((m = re.exec(t)) !== null) {
+      const a = m[1], v = m[2].trim();
+      if (!/^[\d,]+(\.\d+)?$/.test(v)) continue;
+      const nm = /name="([^"]+)"/.exec(a), cx = /contextRef="([^"]+)"/.exec(a);
+      out[part].push({ v, s: a.includes('sign="-"') ? "-" : "", name: nm ? nm[1].split(":").pop() : "", c: cx ? cx[1] : "", f: n.split("/").pop(), label: rowLabel(t, m.index) });
+    }
+  }
+  return { facts: out, files: names.length };
+}
+// difflib.SequenceMatcher(autojunk=False) の get_opcodes を写したもの
+function opcodes(a, b) {
+  const b2j = new Map();
+  b.forEach((x, j) => { const l = b2j.get(x); if (l) l.push(j); else b2j.set(x, [j]); });
+  function longest(alo, ahi, blo, bhi) {
+    let bi = alo, bj = blo, bs = 0, j2len = new Map();
+    for (let i = alo; i < ahi; i++) {
+      const nj = new Map(), js = b2j.get(a[i]);
+      if (js) for (const j of js) {
+        if (j < blo) continue; if (j >= bhi) break;
+        const k = (j2len.get(j - 1) || 0) + 1; nj.set(j, k);
+        if (k > bs) { bi = i - k + 1; bj = j - k + 1; bs = k; }
+      }
+      j2len = nj;
+    }
+    return [bi, bj, bs];
+  }
+  const queue = [[0, a.length, 0, b.length]], blocks = [];
+  while (queue.length) {
+    const [alo, ahi, blo, bhi] = queue.pop(), [i, j, k] = longest(alo, ahi, blo, bhi);
+    if (k) { blocks.push([i, j, k]); if (alo < i && blo < j) queue.push([alo, i, blo, j]); if (i + k < ahi && j + k < bhi) queue.push([i + k, ahi, j + k, bhi]); }
+  }
+  blocks.sort((x, y) => x[0] - y[0] || x[1] - y[1] || x[2] - y[2]);
+  let i1 = 0, j1 = 0, k1 = 0; const merged = [];
+  for (const [i2, j2, k2] of blocks) { if (i1 + k1 === i2 && j1 + k1 === j2) k1 += k2; else { if (k1) merged.push([i1, j1, k1]); i1 = i2; j1 = j2; k1 = k2; } }
+  if (k1) merged.push([i1, j1, k1]);
+  merged.push([a.length, b.length, 0]);
+  const ops = []; let i = 0, j = 0;
+  for (const [ai, bj, size] of merged) {
+    let tag = ""; if (i < ai && j < bj) tag = "replace"; else if (i < ai) tag = "delete"; else if (j < bj) tag = "insert";
+    if (tag) ops.push([tag, i, ai, j, bj]);
+    i = ai + size; j = bj + size;
+    if (size) ops.push(["equal", ai, i, bj, j]);
+  }
+  return ops;
+}
+// ---- 文章の中の数(試作)。sales/EN_TANSHIN_PROSE_SEAL_2026-11-14.md の script の規則を写した。規則は足していない・引いていない ----
+const P_W = "[\\p{L}\\p{N}_]", P_WB = "(?:(?<=" + P_W + ")(?!" + P_W + ")|(?<!" + P_W + ")(?=" + P_W + "))";  // 語の切れ目(字は Unicode で数える)
+const P_EN_HEAD = /^\s*1\s*[\.\)]\s*(Overview of (the )?(Consolidated )?(Operating|Business|Financial) (Results|Performance)|Overview of Results of Operations|Overview of Consolidated Financial Results|Qualitative Information|Summary of (Business|Operating) Results|Analysis of (Operating Results|Results of Operations)|Results of Operations|Operating Results)/i;
+const P_EN_END = /^\s*[2-4]\s*[\.\)]\s*[A-Za-z].*(Accounting Standard|Accounting Princip|Accounting Polic|Corporate Group|Group Companies|Management Polic|Financial Statements)/i;
+const P_JA_START = /^1\s*\.\s*(経営成績等の概況|当中間決算に関する定性的情報|当四半期決算に関する定性的情報)/;
+const P_JA_END = /^[2-4]\s*\.\s*[^\d\s].*(会計基準|企業集団|経営方針|財務諸表|サマリー情報)/;
+const P_Q = "XBRLData/Attachment/qualitative.htm";
+const P_PAGE_LINE = /^\s*[-–—−]?\s*\d{1,3}\s*[-–—−]?\s*$/;
+const P_UNIT_LABEL = /(less than|nearest|units? of|unit:|\()\s*$/i;
+const P_TABLE_LINE = /^[\s△▲\-–—−+()%\d,\.¥$*※]+$/;
+const P_NUM = "\\d[\\d,]*(?:\\.\\d+)?", P_JA_UNIT = "兆|億|千万|百万|十万|万|千|百", P_EN_U = "(trillion|billion|bn|million|mn|thousand)";
+const pIsTableLine = l => P_TABLE_LINE.test(l) && /\d/.test(l);
+
+// 数は 10^12 倍の整数(BigInt)で持つ(小数の誤差を出さない)
+const P_SC = 10n ** 12n;
+function pDec(s) { s = s.replace(/,/g, ""); const k = s.indexOf("."), ip = k < 0 ? s : s.slice(0, k), fp = k < 0 ? "" : s.slice(k + 1); return BigInt(ip || "0") * P_SC + BigInt((fp + "000000000000").slice(0, 12)); }
+const pNdec = s => s.includes(".") ? s.split(".")[1].length : 0;
+const pP10neg = d => 10n ** BigInt(Math.max(0, 12 - d));   // 10^-d
+const pAbs = x => x < 0n ? -x : x;
+const P_SMALL = { "千": 1000n, "百": 100n, "十": 10n }, P_BIG = { "兆": 10n ** 12n, "億": 10n ** 8n, "万": 10n ** 4n };
+const P_EN_MULT = { trillion: 10n ** 12n, billion: 10n ** 9n, bn: 10n ** 9n, million: 10n ** 6n, mn: 10n ** 6n, thousand: 1000n };
+
+function pJaLines(h) {
+  h = h.replace(/<(script|style)[\s\S]*?<\/\1>/gi, "").replace(/<\/(p|div|tr|h\d|li)>|<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "");
+  const t = document.createElement("textarea"); t.innerHTML = h;
+  return t.value.split("\n").map(x => x.normalize("NFKC").trim()).filter(l => l);
+}
+async function pJaCut(zipBuf) {
+  const zf = await JSZip.loadAsync(zipBuf);
+  if (!zf.files[P_Q]) return null;
+  return pJaCutLines(pJaLines(await zf.files[P_Q].async("string")));
+}
+function pJaCutLines(L) {
+  let st = -1;
+  L.forEach((l, i) => { if (P_JA_START.test(l) && !l.includes("...") && !l.includes("・・")) st = i; });
+  if (st < 0) return null;
+  for (let j = st + 1; j < L.length; j++) if (P_JA_END.test(L[j]) && L[j].length <= 40 && !L[j].includes("。")) return L.slice(st, j);
+  return null;
+}
+function pEnCut(lines) {   // lines は [頁, 行の字]
+  let st = -1;
+  lines.forEach(([p, l], i) => { if (P_EN_HEAD.test(l) && !l.includes("...") && !l.includes("…")) st = i; });
+  if (st < 0) return null;
+  for (let j = st + 1; j < lines.length; j++) {
+    const e = lines[j][1].trim();
+    if (P_EN_END.test(e) && e.length <= 90 && !/[.,;]$/.test(e)) return lines.slice(st, j);
+  }
+  return null;
+}
+function pJaYenValue(chain, sen) {
+  let value = 0n, group = 0n, prec = P_SC;
+  for (const m of chain.matchAll(new RegExp("(" + P_NUM + ")(" + P_JA_UNIT + ")?", "g"))) {
+    let small = 1n, big = null;
+    for (const ch of (m[2] || "")) { if (P_SMALL[ch]) small = P_SMALL[ch]; else if (P_BIG[ch]) big = P_BIG[ch]; }
+    group += pDec(m[1]) * small;
+    prec = small * (big || 1n) * pP10neg(pNdec(m[1]));
+    if (big !== null) { value += group * big; group = 0n; }
+  }
+  value += group;
+  if (sen) { value += BigInt(sen) * P_SC / 100n; prec = P_SC / 100n; }
+  return [value, prec];
+}
+function pJaPools(L) {
+  const text = L.join("\n"), pct = [], pt = [], yen = [], tab = new Set();
+  for (const m of text.matchAll(new RegExp("(" + P_NUM + ")\\s*%", "g"))) pct.push([pDec(m[1]), pNdec(m[1])]);
+  for (const m of text.matchAll(new RegExp("(" + P_NUM + ")\\s*割", "g"))) pct.push([pDec(m[1]) * 10n, 0]);
+  for (const m of text.matchAll(new RegExp("(" + P_NUM + ")\\s*(?:%\\s*)?(?:ポイント|pt|pp)", "g"))) pt.push([pDec(m[1]), pNdec(m[1])]);
+  for (const m of text.matchAll(new RegExp("((?:" + P_NUM + "(?:" + P_JA_UNIT + ")?)+)円(?:(\\d+)銭)?", "g"))) yen.push(pJaYenValue(m[1], m[2]));
+  for (const l of L) if (pIsTableLine(l)) for (const m of l.matchAll(new RegExp(P_NUM, "g"))) tab.add(pDec(m[0]).toString());
+  return { pct, pt, yen, tab };
+}
+function pEnTokens(lines) {
+  // 行をつないだ文の上で数を拾う。数の字が「表の行」に在る物は外に数える
+  let text = ""; const owner = [];
+  lines.forEach(([p, l], idx) => { if (P_PAGE_LINE.test(l)) return; const seg = l + " "; text += seg; for (let i = 0; i < seg.length; i++) owner.push(idx); });
+  const tabline = lines.map(([p, l]) => pIsTableLine(l)), used = new Uint8Array(text.length), out = [];
+  const add = (kind, m, span, numstr, unit) => {
+    for (let i = span[0]; i < span[1]; i++) if (used[i]) return;
+    const a = m.index, b = m.index + m[0].length;
+    for (let i = a; i < b; i++) used[i] = 1;
+    const li = owner[span[0]];
+    const label = kind === "yen" && (numstr === "1" || numstr === "100" || numstr === "1,000") && P_UNIT_LABEL.test(text.slice(Math.max(0, a - 12), a));
+    out.push({ kind, num: numstr, unit, page: lines[li][0], table: tabline[li], label, ctx: text.slice(Math.max(0, a - 110), b + 40) });
+  };
+  for (const m of text.matchAll(new RegExp("(" + P_NUM + ")\\s*percentage\\s+points?", "giud"))) add("pt", m, m.indices[1], m[1], null);
+  for (const m of text.matchAll(new RegExp("(?:¥|JPY\\s?)(" + P_NUM + ")\\s*" + P_EN_U + "?" + P_WB + "|(" + P_NUM + ")\\s*" + P_EN_U + "?\\s*(?:yen|JPY)" + P_WB, "giud"))) {
+    const g = m[1] ? 1 : 3, u = m[g + 1];
+    add("yen", m, m.indices[g], m[g], u ? u.toLowerCase() : null);
+  }
+  for (const m of text.matchAll(new RegExp("(" + P_NUM + ")\\s*(?:%|percent" + P_WB + ")", "giud"))) add("pct", m, m.indices[1], m[1], null);
+  return out;
+}
+function pNear(v, d1, pool) {
+  // 小数の桁が同じなら同じ値、違えば粗い側の 1 単位より小さい差
+  for (const [jv, d2] of pool) { if (d1 === d2) { if (v === jv) return true; } else if (pAbs(v - jv) < pP10neg(Math.min(d1, d2))) return true; }
+  return false;
+}
+function pJudge(t, J) {
+  const n = pDec(t.num), d1 = pNdec(t.num), has = x => J.tab.has(x.toString()), C = 100n * P_SC;
+  if (t.kind === "yen") {
+    const mult = t.unit ? P_EN_MULT[t.unit] : 1n, v = n * mult, ep = mult * pP10neg(d1);
+    for (const [jv, jp] of J.yen) { if (ep === jp) { if (v === jv) return "same"; } else if (pAbs(v - jv) < (ep > jp ? ep : jp)) return "same"; }
+    return has(n) ? "table" : "none";
+  }
+  if (t.kind === "pt") { if (pNear(n, d1, J.pt) || pNear(n, d1, J.pct)) return "same"; return has(n) ? "table" : "none"; }
+  if (pNear(n, d1, J.pct)) return "same";
+  if (pNear(C + n, d1, J.pct) || pNear(C - n, d1, J.pct)) return "same_ratio";
+  if (has(n) || has(C + n) || has(C - n)) return "table";
+  return "none";
+}
+async function proseCheck(zipBuf, enLines) {
+  let el = null; try { el = pEnCut(enLines); } catch (e) { el = null; }
+  return proseJudge(el, await pJaCut(zipBuf));
+}
+function proseJudge(el, jl) {
+  if (el === null || jl === null) return { ok: false, en: el !== null, ja: jl !== null };
+  const J = pJaPools(jl), rows = pEnTokens(el).map(t => Object.assign(t, { state: t.table ? "out_table" : t.label ? "out_label" : pJudge(t, J) }));
+  const checked = rows.filter(r => !r.state.startsWith("out_"));
+  return { ok: true, en: true, ja: true, rows, checked: checked.length, same: checked.filter(r => r.state !== "none").length, none: rows.filter(r => r.state === "none"), en_lines: el.length, ja_lines: jl.length };
+}
+async function analyze(zipBuf, pdfBuf) {
+  const jp = await jpFacts(zipBuf), en = await enTokens(pdfBuf), ev = en.toks.map(t => t.v);
+  const res = { en_n: en.toks.length, pages: en.pages, files: jp.files, parts: {}, cands: [], groups: [], byFile: [] };
+  const stat = new Map();  // file → {facts, eq}
+  const elem = new Map();  // part|file|要素 → {eq, flip, sample}
+  for (const part of ["summary", "fs"]) {
+    const a = jp.facts[part], ops = opcodes(a.map(t => t.v), ev), c1 = [], c2 = []; let eq = 0;
+    for (const t of a) { const s = stat.get(t.f) || { f: t.f, part, facts: 0, eq: 0 }; s.facts++; stat.set(t.f, s); }
+    ops.forEach(([tag, i1, i2, j1, j2], k) => {
+      if (tag === "equal") {
+        eq += i2 - i1;
+        for (let q = 0; q < i2 - i1; q++) {
+          const x = a[i1 + q], y = en.toks[j1 + q], key = part + "|" + x.f + "|" + x.name;
+          stat.get(x.f).eq++;
+          const e = elem.get(key) || { eq: 0, flip: 0, sample: null }; e.eq++;
+          if (x.s !== y.s) { c1.push({ jp: x, en: y, key }); if (x.s === "") { e.flip++; e.sample = e.sample || { jp: x, en: y }; } }
+          elem.set(key, e);
+        }
+      } else if (tag === "replace" && i2 - i1 === 1 && j2 - j1 === 1 && k > 0 && k < ops.length - 1) {
+        const pv = ops[k - 1], nx = ops[k + 1];
+        if (pv[0] === "equal" && nx[0] === "equal" && pv[2] - pv[1] >= 3 && nx[2] - nx[1] >= 3) c2.push({ jp: a[i1], en: en.toks[j1] });
+      }
+    });
+    res.parts[part] = { facts: a.length, eq, c1: c1.length, c2: c2.length };
+    for (const c of c2) res.cands.push({ kind: "value", part, jp: c.jp, en: c.en });
+    for (const c of c1) {
+      if (c.jp.s === "-") res.cands.push({ kind: "sign_lost", part, jp: c.jp, en: c.en });            // 日本語が負・英文が正
+      else { const e = elem.get(c.key); if (e.flip !== e.eq) res.cands.push({ kind: "sign_some", part, jp: c.jp, en: c.en }); }  // 一部の欄だけ英文が負
+    }
+  }
+  for (const [key, e] of elem) if (e.flip && e.flip === e.eq) res.groups.push({ key, n: e.eq, jp: e.sample.jp, en: e.sample.en });
+  res.byFile = [...stat.values()];
+  const fs = res.parts.fs; res.full = fs.facts > 0 && fs.eq / fs.facts >= 0.9;
+  try { res.prose = await proseCheck(zipBuf, en.lines); } catch (e) { res.prose = { ok: false, err: String(e && e.message || e) }; }
+  return res;
+}
+window.enCheck = { analyze, opcodes, tokens, pageText, proseCheck };
+
+// ---- 画面 ----
+const $ = id => document.getElementById(id), esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const STMT = { bs: "貸借対照表", pl: "損益計算書", ci: "包括利益計算書", pc: "損益及び包括利益計算書", ss: "株主資本等変動計算書", cf: "キャッシュ・フロー計算書", sg: "セグメント情報", fp: "財政状態計算書", ce: "持分変動計算書" };
+function stmt(f, part) { if (part === "summary") return "サマリー"; const m = /-a(c|n)([a-z]{2})\d\d-/.exec(f); return m ? (m[1] === "c" ? "連結 " : "個別 ") + (STMT[m[2]] || m[2]) : f.slice(0, 24); }
+function period(c) { let p = /^NextYear|^NextAccumulated/.test(c) ? "翌期" : /^Prior/.test(c) ? "前期" : /^Current/.test(c) ? "当期" : ""; if (/Forecast/.test(c)) p += "(予想)"; return p; }
+const sv = t => (t.s ? "△" : "") + t.v;
+function row(c) {
+  return `<tr><td>${esc(stmt(c.jp.f, c.part))}</td><td>${esc(c.jp.label || c.jp.name)}<div class="sub">${esc(period(c.jp.c))}</div></td><td class="num">${esc(sv(c.jp))}</td><td class="num diff">${esc(sv(c.en))}</td><td class="num">${c.en.page}</td><td class="ctx">${esc(c.en.ctx.slice(-150))}</td></tr>`;
+}
+const HEAD = `<thead><tr><th>表</th><th>行(日本語の原本)</th><th class="num">日本語</th><th class="num">英文</th><th class="num">英文の頁</th><th>英文の前後の字</th></tr></thead>`;
+function table(list) { return `<div class="scroll"><table>${HEAD}<tbody>${list.map(row).join("")}</tbody></table></div>`; }
+const P_KIND = { yen: "金額", pct: "率", pt: "ポイント" };
+function proseNum(x) { return x.kind === "yen" ? x.num + (x.unit ? " " + x.unit : "") + " yen" : x.kind === "pct" ? x.num + "%" : x.num + " percentage points"; }
+function renderProse(p) {
+  let h = `<div class="panel"><h2>文章の中の数(試作)</h2>`;
+  if (!p || !p.ok) {
+    const why = !p || p.err ? "読んでいる途中で止まりました" : !p.en && !p.ja ? "英文と日本語の両方で「概況」の章を見つけられませんでした" : !p.en ? "英文の PDF で「概況」の章の始まりか終わりを見つけられませんでした" : "日本語の ZIP の中で「概況」の文章を見つけられませんでした";
+    return h + `<p class="err">この短信の文章は点検できませんでした。</p><p class="sub" style="margin-top:6px">${esc(why)}。表の点検の結果は、上のとおりです。</p></div>`;
+  }
+  const n = p.none.length;
+  h += `<div class="tiles"><div class="tile ${n ? "hot" : "calm"}"><div class="n">${n}</div><div class="l">日本語の文に同じ数が見つからなかった数</div></div>
+    <div class="tile"><div class="n">${p.same} / ${p.checked}</div><div class="l">日本語の文に同じ数が見つかった数</div></div></div>
+    <p class="sub" style="margin-top:10px">英文の「概況」の文章に出てくる金額・率・ポイントを、日本語の「概況」の文章の数と照らしました(文章の間にはさまれた表の数と、単位の断り書きは数えていません)。</p>`;
+  if (n) h += `<div class="scroll" style="margin-top:10px"><table><thead><tr><th>種類</th><th class="num">英文の数</th><th class="num">英文の頁</th><th>英文の前後の字</th></tr></thead><tbody>${p.none.map(x => `<tr><td style="white-space:nowrap">${P_KIND[x.kind]}</td><td class="num diff">${esc(proseNum(x))}</td><td class="num">${x.page}</td><td class="ctx">${esc(x.ctx)}</td></tr>`).join("")}</tbody></table></div>
+    <p class="note" style="margin-top:10px">ここに出るのは「日本語の文に同じ数が見つからなかった」までです。数の誤りとは限りません(英文だけに書いた数、丸め方や書き方の違い、道具の読み違いが混ざります)。日本語の紙面と見比べてください。</p>`;
+  else h += `<p style="margin-top:10px">日本語の文に同じ数が見つからなかった数は、出ませんでした。誤りが無いことの保証ではありません。</p>`;
+  return h + `</div>`;
+}
+function render(r) {
+  const val = r.cands.filter(c => c.kind === "value"), lost = r.cands.filter(c => c.kind === "sign_lost"), some = r.cands.filter(c => c.kind === "sign_some");
+  const facts = r.parts.summary.facts + r.parts.fs.facts, eq = r.parts.summary.eq + r.parts.fs.eq, low = r.byFile.filter(s => s.facts >= 10 && s.eq / s.facts < 0.9);
+  const n = r.cands.length;
+  let h = `<div class="panel"><h2>結果</h2><div class="tiles">
+    <div class="tile ${n ? "hot" : "calm"}"><div class="n">${n}</div><div class="l">1 件ずつ見てほしい候補</div></div>
+    <div class="tile"><div class="n">${eq} / ${facts}</div><div class="l">英文に同じ並びで見つかった数</div></div>
+    <div class="tile ${low.length ? "hot" : ""}"><div class="n">${low.length}</div><div class="l">並びで当てられなかった表</div></div>
+    <div class="tile"><div class="n">${r.pages}</div><div class="l">英文 PDF の頁数(数 ${r.en_n} 個)</div></div></div>`;
+  if (facts === 0) h += `<p class="err" style="margin-top:12px">ZIP の中に数の入った原本データ(ixbrl.htm)が見つかりませんでした。</p>`;
+  else if (r.en_n < 30) h += `<p class="err" style="margin-top:12px">英文 PDF から数をほとんど読めませんでした(画像の PDF か、字が読めない作りの PDF です)。この結果は使えません。</p>`;
+  else if (!r.full) h += `<p class="note" style="margin-top:12px">財務諸表の数のうち英文に同じ並びで見つかったのは 9 割未満です。英文が抄訳(サマリーだけ等)か、表の数がまとまって違っています。下の「並びで当てられなかった表」を見てください。</p>`;
+  h += `</div>`;
+  if (val.length) h += `<div class="panel"><h2>値が違う候補(${val.length} 件)</h2><p class="sub" style="margin-bottom:8px">前後の数は一致していて、この 1 つだけ値が違う欄です。</p>${table(val)}</div>`;
+  if (lost.length) h += `<div class="panel"><h2>符号が違う候補: 日本語は負・英文は正(${lost.length} 件)</h2><p class="sub" style="margin-bottom:8px">損失や減少の印(括弧・△)が英文で落ちていないかを見てください。</p>${table(lost)}</div>`;
+  if (some.length) h += `<div class="panel"><h2>符号が違う候補: 一部の欄だけ英文が負(${some.length} 件)</h2>${table(some)}</div>`;
+  if (low.length) h += `<div class="panel"><h2>並びで当てられなかった表(${low.length})</h2><div class="scroll"><table><thead><tr><th>表</th><th class="num">原本の数</th><th class="num">英文に見つかった数</th></tr></thead><tbody>${low.map(s => `<tr><td>${esc(stmt(s.f, s.part))}</td><td class="num">${s.facts}</td><td class="num diff">${s.eq}</td></tr>`).join("")}</tbody></table></div><p class="sub" style="margin-top:8px">英文に載せていない表なら問題ありません。載せている表なら、数がまとまって違っている疑いがあります(古い版の数で組んだ表など)。</p></div>`;
+  if (r.groups.length) h += `<div class="panel"><details><summary>表し方の違いとしてまとめたもの(${r.groups.length} 行・${r.groups.reduce((s, g) => s + g.n, 0)} 欄)</summary><p class="sub" style="margin:8px 0">日本語では正の数、英文では括弧つきで、その行の当たった欄が全部そうなっている物です(費用を括弧で書く、増減率を括弧で囲む、など)。英文の読み手に負の数と読まれてよい行かどうかだけ見てください。</p><div class="scroll"><table><thead><tr><th>表</th><th>行(日本語の原本)</th><th class="num">欄の数</th><th class="num">例: 日本語</th><th class="num">例: 英文</th><th class="num">英文の頁</th></tr></thead><tbody>${r.groups.map(g => `<tr><td>${esc(stmt(g.jp.f, g.key.split("|")[0]))}</td><td>${esc(g.jp.label || g.jp.name)}</td><td class="num">${g.n}</td><td class="num">${esc(sv(g.jp))}</td><td class="num">${esc(sv(g.en))}</td><td class="num">${g.en.page}</td></tr>`).join("")}</tbody></table></div></details></div>`;
+  if (!n && !low.length && facts && r.en_n >= 30) h += `<div class="panel"><p>1 件ずつ見てほしい候補は出ませんでした。見ていない所(見出し・単位など)は下の説明のとおりです。</p></div>`;
+  h += renderProse(r.prose);
+  $("res").innerHTML = h; $("res").hidden = false;
+}
+let fz = null, fp = null;
+function setFile(kind, f) { if (!f) return; if (kind === "z") { fz = f; $("nz").textContent = f.name; } else { fp = f; $("np").textContent = f.name; } $("go").disabled = !(fz && fp); }
+$("fz").addEventListener("change", e => setFile("z", e.target.files[0])); $("fp").addEventListener("change", e => setFile("p", e.target.files[0]));
+for (const [id, kind] of [["dz", "z"], ["dp", "p"]]) {
+  const el = $(id);
+  el.addEventListener("dragover", e => { e.preventDefault(); el.classList.add("over"); });
+  el.addEventListener("dragleave", () => el.classList.remove("over"));
+  el.addEventListener("drop", e => { e.preventDefault(); el.classList.remove("over"); setFile(kind, e.dataTransfer.files[0]); });
+}
+$("go").addEventListener("click", async () => {
+  $("go").disabled = true; $("st").textContent = "照らしています…"; $("res").hidden = true;
+  try { const t0 = performance.now(); render(await analyze(await fz.arrayBuffer(), await fp.arrayBuffer())); $("st").textContent = `終わりました(${((performance.now() - t0) / 1000).toFixed(1)} 秒)`; }
+  catch (e) { $("st").innerHTML = `<span class="err">読めませんでした: ${esc(e && e.message || e)}</span>`; }
+  $("go").disabled = false;
+});
+</script>
+</body>
+</html>
