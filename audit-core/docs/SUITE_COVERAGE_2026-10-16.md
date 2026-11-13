@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **298 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **299 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 225 |
+| `tests/measure` | 226 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -304,6 +304,9 @@ engine の非機能の実測 NF(verify_document 1 回の時間とメモリ。封
 
 **2026-11-12 に +1**(`tests/measure/test_xbrl_stop_triage_diag.py`。
 止まった数字の「見る順」の診断(封なしのあと知恵。既に在る AI の文の記録を数え直すだけで engine は呼ばない。文書 `docs/XBRL_STOP_TRIAGE_DIAG_2026-11-12.md`)の script `measure/xbrl_stop_triage_2026-11-12.py` の門)。297 → 298(`tests/measure` 224 → 225)。
+
+**2026-11-14 に +1**(`tests/measure/test_xbrl_tanshin_self_seal.py`。
+決算短信の概況の文を同じ短信の添付の財務諸表で確かめる TSS(封 `docs/XBRL_TANSHIN_SELF_SEAL_2026-11-14.md`)の置く script `measure/xbrl_tanshin_self_stage_2026-11-14.py` と測る script `measure/xbrl_tanshin_self_2026-11-14.py` の封の門。結果の門は次の段)。298 → 299(`tests/measure` 225 → 226)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

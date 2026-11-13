@@ -74,6 +74,9 @@ DECLARED_NEW_AFTER_SEAL = (
     "measure/xbrl_labelonly_2026-11-10.py",
     # 2026-11-12: 止まった数字の「見る順」の診断(docs/XBRL_STOP_TRIAGE_DIAG_2026-11-12.md。封なし)。既に在る記録を数え直すだけで engine を呼ばない script 1 本と記録 1 つ
     "measure/xbrl_stop_triage_2026-11-12.py", "fixtures/xbrl/aiforms/stop_triage_2026-11-12.json",
+    # 2026-11-14: TSS(決算短信の概況の文を同じ短信の添付の財務諸表で確かめる。封 docs/XBRL_TANSHIN_SELF_SEAL_2026-11-14.md e56d6782)の script 2 本。
+    # 材料を新しい置き場へ写す script と、切り出し・包み直し・P33E で測る script。engine(core/・adapters/)は 0 行。前の便の script は読み込むだけ
+    "measure/xbrl_tanshin_self_stage_2026-11-14.py", "measure/xbrl_tanshin_self_2026-11-14.py",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")

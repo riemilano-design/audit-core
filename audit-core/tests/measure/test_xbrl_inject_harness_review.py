@@ -970,6 +970,9 @@ LATER_HARNESS_FILES = (
     ("measure/xbrl_nonfunc_2026-11-10.py", u"対象外", u"不要", "measure_call", u"out = VD.verify_document(zb, prof, text)", "2026-11-10"),
     # 2026-11-10: LB(札のある行だけの率。封 docs/XBRL_LABEL_ONLY_RATES_SEAL_2026-11-10.md §4)。注入はしない。200 本 × 5 profile の state と既存の札を数える script で、検査の呼び出し verify_document( が副産物の検査の規準に当たるだけ(前例 NF と同じ「対象外・不要」)。
     ("measure/xbrl_labelonly_2026-11-10.py", u"対象外", u"不要", "num_view", u"out = VD.verify_document(zb, pname, text)", "2026-11-10"),
+    # 2026-11-14: TSS(決算短信の概況の文を同じ短信の添付の財務諸表で確かめる。封 docs/XBRL_TANSHIN_SELF_SEAL_2026-11-14.md §0-2・§5)。注入はしない(注入は次の便 1b)。400 本を P33E で判定する script で、標本の読むための紙を作る run_sample の
+    # 検査の呼び出し verify_document( が副産物の検査の規準に当たるだけ(前例 NF・LB と同じ「対象外・不要」。包んだ ZIP に text は渡さない = 本文の差し替えはしない)。置く script(xbrl_tanshin_self_stage_2026-11-14.py)は規準に当たらない
+    ("measure/xbrl_tanshin_self_2026-11-14.py", u"対象外", u"不要", "run_sample", u"cl = VD.verify_document(wrapped, PROFILE)[\"claims\"]", "2026-11-14"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
