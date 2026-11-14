@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-このリポジトリには資産が 2 つある。**いまの作業は `audit-core/`(Audit Core: XBRL 等の監査エンジン。売却を目指す技術資産)** で、直近 200 コミットはすべてそこだけを触っている(2026-10-19 時点)。将棋アプリ(`apps/`・`data/`・`scripts/`)の憲法は [docs/SHOGI_CONSTITUTION.md](docs/SHOGI_CONSTITUTION.md) に原文のまま移した ― **将棋側を触るときだけ読む。**
+このリポジトリには資産が 2 つある。**いまの作業は `audit-core/`(Audit Core: XBRL 等の監査エンジン。売却を目指す技術資産)** で、直近 200 コミットはすべてそこだけを触っている(2026-10-19 時点)。2026-11-14 からセッションは 2 本: engine・測定・台帳の側(入口 [audit-core/docs/HANDOFF_AUDIT_CORE_SESSION_2026-11-14.md](audit-core/docs/HANDOFF_AUDIT_CORE_SESSION_2026-11-14.md))と、英文の決算短信の点検を売る側(`audit-core/sales/` だけを触る。入口 [audit-core/sales/HANDOFF_2026-11-14.md](audit-core/sales/HANDOFF_2026-11-14.md))。将棋アプリ(`apps/`・`data/`・`scripts/`)の憲法は [docs/SHOGI_CONSTITUTION.md](docs/SHOGI_CONSTITUTION.md) に原文のまま移した ― **将棋側を触るときだけ読む。**
 
 ## Audit Core の作法(毎セッション効く 6 つ)
 
@@ -13,8 +13,8 @@
 
 ## コマンド(`cd audit-core` で)
 
-- `python3 -m pytest -q tests/measure` ― 門だけ(約 90 秒)
-- `sh run_tests.sh` ― 全部(約 40 分。覆いの検査 → pytest → unittest)
+- `python3 -m pytest -q tests/measure` ― 門だけ(約 31 分。2026-11-14 実測)
+- `sh run_tests.sh` ― 全部(約 1 時間 47 分。2026-11-14 実測。覆いの検査 → pytest → unittest)
 - 試験 file を足したら `python3 measure/suite_coverage_2026-10-16.py --write` を走らせ、`docs/SUITE_COVERAGE_2026-10-16.md` §2-1 の数も直す(忘れると門が赤くなる ― それが狙い)
 
 ## git
