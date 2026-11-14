@@ -80,6 +80,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-14: TSS の第 2 便(中間の短信の期の名前を measure/ の側で写して読む・「値が違う」のうち表の値に近い行を拾って読む。封 docs/XBRL_TANSHIN_SELF2_SEAL_2026-11-14.md a1fd09bf)の script 1 本。
     # 第 1 便の script の関数を呼ぶ(書き写さない)。engine(core/・adapters/)は 0 行。この便の記録(fixtures/xbrl/tanshin_self/ の 3 つ)は本番の後に届ける
     "measure/xbrl_tanshin_self2_2026-11-14.py",
+    # 2026-11-14: TSS の便 1b の注入(短信の概況の文に誤りを 1 件ずつ入れ、同じ短信の財務諸表に当てる。封 docs/XBRL_TANSHIN_SELF_INJECT_SEAL_2026-11-14.md bcc244ae)の script 1 本。
+    # TSS・第 2 便・2026-11-09 の便の関数を呼ぶ(書き写さない)。engine(core/・adapters/)は 0 行。この便の記録(fixtures/xbrl/tanshin_self/ の 2 つ)は本番の後に届ける
+    "measure/xbrl_tanshin_self_inject_2026-11-14.py",
     # 2026-11-14: TSS の第 2 便の記録 3 つ(中間 150 本を期の名前を写して判定した行・「値が違う」のうち近い行・読んだ 200 行の型。fixtures/xbrl/tanshin_self/)。script が書いた数と、司令塔(AI の席)が付けた型。
     # 会社名・証券コード・文・値を持たない。結果の門 tests/measure/test_xbrl_tanshin_self2_result.py が縛る。engine(core/・adapters/)は 0 行
     "fixtures/xbrl/tanshin_self/states_interim_2026-11-14.json", "fixtures/xbrl/tanshin_self/near_2026-11-14.json", "fixtures/xbrl/tanshin_self/near_types_2026-11-14.json",
