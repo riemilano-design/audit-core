@@ -73,6 +73,10 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-14: TSS(決算短信の概況の文を同じ短信の添付の財務諸表で確かめる。封 docs/XBRL_TANSHIN_SELF_SEAL_2026-11-14.md e56d6782)の script 2 本。
     # 材料を新しい置き場へ写す script と、切り出し・包み直し・P33E で測る script。engine(core/・adapters/)は 0 行。前の便の script は読み込むだけ
     "measure/xbrl_tanshin_self_stage_2026-11-14.py", "measure/xbrl_tanshin_self_2026-11-14.py",
+    # 2026-11-14: TSS の記録 4 つ(置いた 400 本の表・400 本の判定・標本 120 行の型・型の細目。fixtures/xbrl/tanshin_self/)。script 2 本が書いた数と、司令塔(AI の席)が付けた型。
+    # 会社名・証券コード・文・値を持たない。結果の門 tests/measure/test_xbrl_tanshin_self_result.py が縛る。engine(core/・adapters/)は 0 行
+    "fixtures/xbrl/tanshin_self/population_2026-11-14.json", "fixtures/xbrl/tanshin_self/states_2026-11-14.json",
+    "fixtures/xbrl/tanshin_self/vm_types_2026-11-14.json", "fixtures/xbrl/tanshin_self/vm_types_subreading_2026-11-14.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
