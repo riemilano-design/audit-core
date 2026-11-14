@@ -81,6 +81,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 会社名・証券コード・文・値を持たない。結果の門 tests/measure/test_xbrl_tanshin_self_result.py が縛る。engine(core/・adapters/)は 0 行
     "fixtures/xbrl/tanshin_self/population_2026-11-14.json", "fixtures/xbrl/tanshin_self/states_2026-11-14.json",
     "fixtures/xbrl/tanshin_self/vm_types_2026-11-14.json", "fixtures/xbrl/tanshin_self/vm_types_subreading_2026-11-14.json",
+    # 2026-11-14: TSS の第 2 便(中間の短信の期の名前を measure/ の側で写して読む・「値が違う」のうち表の値に近い行を拾って読む。封 docs/XBRL_TANSHIN_SELF2_SEAL_2026-11-14.md a1fd09bf)の script 1 本。
+    # 第 1 便の script の関数を呼ぶ(書き写さない)。engine(core/・adapters/)は 0 行。この便の記録(fixtures/xbrl/tanshin_self/ の 3 つ)は本番の後に届ける
+    "measure/xbrl_tanshin_self2_2026-11-14.py",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")

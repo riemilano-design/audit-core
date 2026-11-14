@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **300 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **301 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 227 |
+| `tests/measure` | 228 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -310,6 +310,9 @@ engine の非機能の実測 NF(verify_document 1 回の時間とメモリ。封
 
 **2026-11-14 に +1**(`tests/measure/test_xbrl_tanshin_self_result.py`。
 TSS の結果の門(記録 4 つ `fixtures/xbrl/tanshin_self/`・結果の文書 `docs/XBRL_TANSHIN_SELF_RESULT_2026-11-14.md` を縛る。封の門 `test_xbrl_tanshin_self_seal.py` の次の段)。299 → 300(`tests/measure` 226 → 227)。
+
+**2026-11-14 に +1**(`tests/measure/test_xbrl_tanshin_self2_seal.py`。
+TSS の第 2 便(中間の短信の期の名前を measure/ の側で写して読む・「値が違う」のうち表の値に近い行を拾って読む。封 `docs/XBRL_TANSHIN_SELF2_SEAL_2026-11-14.md`)の script `measure/xbrl_tanshin_self2_2026-11-14.py` の封の門。結果の門は次の段)。300 → 301(`tests/measure` 227 → 228)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
