@@ -13,7 +13,7 @@
 
 ## コマンド(`cd audit-core` で)
 
-- `python3 -m pytest -q tests/measure` ― 門だけ(約 31 分。2026-11-14 実測)
+- `python3 -m pytest -q tests/measure` ― 門だけ(約 1 時間 12 分。2026-11-15 実測)
 - `sh run_tests.sh` ― 全部(約 1 時間 47 分。2026-11-14 実測。覆いの検査 → pytest → unittest)
 - 試験 file を足したら `python3 measure/suite_coverage_2026-10-16.py --write` を走らせ、`docs/SUITE_COVERAGE_2026-10-16.md` §2-1 の数も直す(忘れると門が赤くなる ― それが狙い)
 
