@@ -1,0 +1,6030 @@
+{
+ "seal": "docs/XBRL_KAM_SEAL_2026-11-15.md",
+ "封の commit": "497a4661",
+ "step": "KAM(監査報告書の KAM の文を同じ有報の fact で確かめる)― 201 本の切り出し・判定(0 USD・通信なし)",
+ "HEAD の commit": "e6f01e24c154416c19b972798969353d940280e8",
+ "この script の sha256": "cc2aab3029ef76d91e73aceae562370d3e74a58f51d90cecfb6153e28259aa4a",
+ "2026-11-09 の便の script の sha256": "b7ea491bf5cd34c4976bde86c4329583e0d9af09ec8895ea0caf48491492b5bd",
+ "TSS の script の sha256": "fa603d1c2dbfdee7c3ad4197ab9c4a9f1428419ada57293f346418bc0997aeb6",
+ "封の表の sha256": "330cbeba21abaac55dad2180fb738dc39334f3e7a738f1805053fc93eb6f671c",
+ "母集団の表(# TAB 群 TAB sha256 の行)の sha256": "026da4e6c41b6b72213d881d5cf84f43e31a3c1fd80e2cb67dd9dd023cb316c3",
+ "engine の指紋": {
+  "adapter_xbrl_py_sha256": "5221d3c9a7bdb5c9833dee52490b0064255bdb54fb3210f1b19c1d19f28f9116",
+  "adapter_xbrl_py_files": 16,
+  "core_py_sha256": "34e836bb39762d5af831a9aa11d4ea095e73221beb5bd4510d3b234363a2a6e8",
+  "core_py_files": 4,
+  "git_commit": "e6f01e24c154416c19b972798969353d940280e8"
+ },
+ "profile": "P33E",
+ "材料": {
+  "置き場": "~/.cache/audit-core の 3 つの folder(甲・乙・丙。名前は書かない)",
+  "表と一致した ZIP": 201,
+  "3 つの folder の一覧の前後(件数・名前の sha256)": {
+   "前": [
+    [
+     281,
+     "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+    ],
+    [
+     40,
+     "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+    ],
+    [
+     94,
+     "de611b3805b5d8087eea119c0d341e126f9f0ed152edba940cefbed743ecc110"
+    ]
+   ],
+   "後": [
+    [
+     281,
+     "01119150612c7a440b45f7159f23ad3ba22567888168a64983f4b0aad8f0b61f"
+    ],
+    [
+     40,
+     "b74a18188c0df9d81f3140baef8eae5b60cc3fb21bec94adfabab6dbc84287b2"
+    ],
+    [
+     94,
+     "de611b3805b5d8087eea119c0d341e126f9f0ed152edba940cefbed743ecc110"
+    ]
+   ],
+   "変化なし": true
+  }
+ },
+ "切り出し": {
+  "member": "名前に /AuditDoc/ を含み .htm で終わるもの(名前の順に utf-8 strict で全部読む)",
+  "札の名前": "連結と単体で別(要素名は script の SIDES。長い英字なので記録には書かない)",
+  "始まりの規則": "<ix:nonNumeric\\b[^>]*\\bname=\"%s\"[^>]*>",
+  "深さの規則": "<ix:nonNumeric\\b[^>]*?(/?)>|</ix:nonNumeric>",
+  "続きありの印": "continuedAt",
+  "NFKC": true,
+  "行にする関数": "2026-11-09 の便の html_to_lines(呼ぶ)",
+  "切れない理由": [
+   "decode",
+   "札なし",
+   "札が複数",
+   "続きあり",
+   "閉じない",
+   "空"
+  ]
+ },
+ "判定": {
+  "呼び方": "verify_document(元の ZIP, P33E, text=文)。連結の文と単体の文は別々に 1 回ずつ。数は連結と単体を足さない",
+  "10 欄目": "pointer の字のどれかに NonConsolidatedMember を含む(真偽)"
+ },
+ "本の数": 201,
+ "集計": {
+  "連結": {
+   "甲": {
+    "本": 67,
+    "切れた": 51,
+    "切れない": 16,
+    "切れない理由": {
+     "decode": 0,
+     "札なし": 16,
+     "札が複数": 0,
+     "続きあり": 0,
+     "閉じない": 0,
+     "空": 0
+    },
+    "字数の合計": 80154,
+    "claim": 161,
+    "4 state": {
+     "GROUNDED": 48,
+     "VALUE_MISMATCH": 9,
+     "UNVERIFIABLE": 23,
+     "POINTER_NOT_FOUND": 81
+    },
+    "reason": {
+     "GROUNDED": {
+      "なし": 48
+     },
+     "VALUE_MISMATCH": {
+      "なし": 9
+     },
+     "UNVERIFIABLE": {
+      "ambiguous(elements)": 1,
+      "ambiguous(member)": 6,
+      "no_subject": 5,
+      "other_frame": 7,
+      "per_unit_counter": 4
+     },
+     "POINTER_NOT_FOUND": {
+      "no_element": 12,
+      "no_element(ratio without fact)": 30,
+      "no_element(unit not in XBRL)": 2,
+      "no_same_value": 36,
+      "other_concept": 1
+     }
+    },
+    "VALUE_MISMATCH の内訳": {
+     "行": 9,
+     "導出(formula)": 0,
+     "直接": 9,
+     "% の数": 0,
+     "円族の数": 9,
+     "両期の fact を引く a−b(円)": 0,
+     "単位の族が %": 0,
+     "単位の族が円族": 9,
+     "単位の族が他": 0,
+     "pointer の期": {
+      "CurrentYear": 8,
+      "Prior1Year": 1,
+      "Prior2Year": 0,
+      "他": 0,
+      "なし": 0
+     }
+    },
+    "10 欄目(pointer の字のどれかに NonConsolidatedMember を含む)の数": {
+     "GROUNDED": {
+      "真": 0,
+      "偽": 48
+     },
+     "VALUE_MISMATCH": {
+      "真": 0,
+      "偽": 9
+     },
+     "UNVERIFIABLE": {
+      "真": 0,
+      "偽": 23
+     },
+     "POINTER_NOT_FOUND": {
+      "真": 0,
+      "偽": 81
+     }
+    },
+    "切れた本のうち claim が 0 の本": 4,
+    "切れた本のうち GROUNDED が 0 の本": 21,
+    "VALUE_MISMATCH が 1 以上の本": 8,
+    "claim と raw の並びが対応しなかった本": 0
+   },
+   "乙": {
+    "本": 40,
+    "切れた": 29,
+    "切れない": 11,
+    "切れない理由": {
+     "decode": 0,
+     "札なし": 11,
+     "札が複数": 0,
+     "続きあり": 0,
+     "閉じない": 0,
+     "空": 0
+    },
+    "字数の合計": 43483,
+    "claim": 83,
+    "4 state": {
+     "GROUNDED": 24,
+     "VALUE_MISMATCH": 6,
+     "UNVERIFIABLE": 12,
+     "POINTER_NOT_FOUND": 41
+    },
+    "reason": {
+     "GROUNDED": {
+      "なし": 24
+     },
+     "VALUE_MISMATCH": {
+      "なし": 6
+     },
+     "UNVERIFIABLE": {
+      "ambiguous(elements)": 2,
+      "ambiguous(member)": 2,
+      "no_subject": 1,
+      "other_frame": 2,
+      "per_unit_counter": 5
+     },
+     "POINTER_NOT_FOUND": {
+      "no_element": 10,
+      "no_element(ratio without fact)": 15,
+      "no_element(unit not in XBRL)": 2,
+      "no_same_value": 14
+     }
+    },
+    "VALUE_MISMATCH の内訳": {
+     "行": 6,
+     "導出(formula)": 0,
+     "直接": 6,
+     "% の数": 0,
+     "円族の数": 6,
+     "両期の fact を引く a−b(円)": 0,
+     "単位の族が %": 0,
+     "単位の族が円族": 6,
+     "単位の族が他": 0,
+     "pointer の期": {
+      "CurrentYear": 5,
+      "Prior1Year": 1,
+      "Prior2Year": 0,
+      "他": 0,
+      "なし": 0
+     }
+    },
+    "10 欄目(pointer の字のどれかに NonConsolidatedMember を含む)の数": {
+     "GROUNDED": {
+      "真": 0,
+      "偽": 24
+     },
+     "VALUE_MISMATCH": {
+      "真": 0,
+      "偽": 6
+     },
+     "UNVERIFIABLE": {
+      "真": 0,
+      "偽": 12
+     },
+     "POINTER_NOT_FOUND": {
+      "真": 0,
+      "偽": 41
+     }
+    },
+    "切れた本のうち claim が 0 の本": 1,
+    "切れた本のうち GROUNDED が 0 の本": 10,
+    "VALUE_MISMATCH が 1 以上の本": 5,
+    "claim と raw の並びが対応しなかった本": 0
+   },
+   "丙": {
+    "本": 94,
+    "切れた": 71,
+    "切れない": 23,
+    "切れない理由": {
+     "decode": 0,
+     "札なし": 23,
+     "札が複数": 0,
+     "続きあり": 0,
+     "閉じない": 0,
+     "空": 0
+    },
+    "字数の合計": 120522,
+    "claim": 236,
+    "4 state": {
+     "GROUNDED": 64,
+     "VALUE_MISMATCH": 14,
+     "UNVERIFIABLE": 37,
+     "POINTER_NOT_FOUND": 121
+    },
+    "reason": {
+     "GROUNDED": {
+      "なし": 64
+     },
+     "VALUE_MISMATCH": {
+      "なし": 14
+     },
+     "UNVERIFIABLE": {
+      "ambiguous(elements)": 2,
+      "ambiguous(member)": 6,
+      "no_subject": 8,
+      "other_frame": 12,
+      "per_unit_counter": 8,
+      "target_or_plan": 1
+     },
+     "POINTER_NOT_FOUND": {
+      "no_element": 30,
+      "no_element(ratio without fact)": 44,
+      "no_element(unit not in XBRL)": 3,
+      "no_same_value": 43,
+      "other_concept": 1
+     }
+    },
+    "VALUE_MISMATCH の内訳": {
+     "行": 14,
+     "導出(formula)": 0,
+     "直接": 14,
+     "% の数": 2,
+     "円族の数": 12,
+     "両期の fact を引く a−b(円)": 0,
+     "単位の族が %": 0,
+     "単位の族が円族": 14,
+     "単位の族が他": 0,
+     "pointer の期": {
+      "CurrentYear": 13,
+      "Prior1Year": 1,
+      "Prior2Year": 0,
+      "他": 0,
+      "なし": 0
+     }
+    },
+    "10 欄目(pointer の字のどれかに NonConsolidatedMember を含む)の数": {
+     "GROUNDED": {
+      "真": 0,
+      "偽": 64
+     },
+     "VALUE_MISMATCH": {
+      "真": 0,
+      "偽": 14
+     },
+     "UNVERIFIABLE": {
+      "真": 0,
+      "偽": 37
+     },
+     "POINTER_NOT_FOUND": {
+      "真": 0,
+      "偽": 121
+     }
+    },
+    "切れた本のうち claim が 0 の本": 5,
+    "切れた本のうち GROUNDED が 0 の本": 30,
+    "VALUE_MISMATCH が 1 以上の本": 13,
+    "claim と raw の並びが対応しなかった本": 0
+   },
+   "計": {
+    "本": 201,
+    "切れた": 151,
+    "切れない": 50,
+    "切れない理由": {
+     "decode": 0,
+     "札なし": 50,
+     "札が複数": 0,
+     "続きあり": 0,
+     "閉じない": 0,
+     "空": 0
+    },
+    "字数の合計": 244159,
+    "claim": 480,
+    "4 state": {
+     "GROUNDED": 136,
+     "VALUE_MISMATCH": 29,
+     "UNVERIFIABLE": 72,
+     "POINTER_NOT_FOUND": 243
+    },
+    "reason": {
+     "GROUNDED": {
+      "なし": 136
+     },
+     "VALUE_MISMATCH": {
+      "なし": 29
+     },
+     "UNVERIFIABLE": {
+      "ambiguous(elements)": 5,
+      "ambiguous(member)": 14,
+      "no_subject": 14,
+      "other_frame": 21,
+      "per_unit_counter": 17,
+      "target_or_plan": 1
+     },
+     "POINTER_NOT_FOUND": {
+      "no_element": 52,
+      "no_element(ratio without fact)": 89,
+      "no_element(unit not in XBRL)": 7,
+      "no_same_value": 93,
+      "other_concept": 2
+     }
+    },
+    "VALUE_MISMATCH の内訳": {
+     "行": 29,
+     "導出(formula)": 0,
+     "直接": 29,
+     "% の数": 2,
+     "円族の数": 27,
+     "両期の fact を引く a−b(円)": 0,
+     "単位の族が %": 0,
+     "単位の族が円族": 29,
+     "単位の族が他": 0,
+     "pointer の期": {
+      "CurrentYear": 26,
+      "Prior1Year": 3,
+      "Prior2Year": 0,
+      "他": 0,
+      "なし": 0
+     }
+    },
+    "10 欄目(pointer の字のどれかに NonConsolidatedMember を含む)の数": {
+     "GROUNDED": {
+      "真": 0,
+      "偽": 136
+     },
+     "VALUE_MISMATCH": {
+      "真": 0,
+      "偽": 29
+     },
+     "UNVERIFIABLE": {
+      "真": 0,
+      "偽": 72
+     },
+     "POINTER_NOT_FOUND": {
+      "真": 0,
+      "偽": 243
+     }
+    },
+    "切れた本のうち claim が 0 の本": 10,
+    "切れた本のうち GROUNDED が 0 の本": 61,
+    "VALUE_MISMATCH が 1 以上の本": 26,
+    "claim と raw の並びが対応しなかった本": 0
+   }
+  },
+  "単体": {
+   "甲": {
+    "本": 67,
+    "切れた": 64,
+    "切れない": 3,
+    "切れない理由": {
+     "decode": 0,
+     "札なし": 3,
+     "札が複数": 0,
+     "続きあり": 0,
+     "閉じない": 0,
+     "空": 0
+    },
+    "字数の合計": 48852,
+    "claim": 96,
+    "4 state": {
+     "GROUNDED": 15,
+     "VALUE_MISMATCH": 2,
+     "UNVERIFIABLE": 17,
+     "POINTER_NOT_FOUND": 62
+    },
+    "reason": {
+     "GROUNDED": {
+      "なし": 15
+     },
+     "VALUE_MISMATCH": {
+      "なし": 2
+     },
+     "UNVERIFIABLE": {
+      "ambiguous(elements)": 2,
+      "no_subject": 1,
+      "other_frame": 9,
+      "per_unit_counter": 4,
+      "target_or_plan": 1
+     },
+     "POINTER_NOT_FOUND": {
+      "no_element": 35,
+      "no_element(ratio without fact)": 19,
+      "no_element(unit not in XBRL)": 1,
+      "no_same_value": 7
+     }
+    },
+    "VALUE_MISMATCH の内訳": {
+     "行": 2,
+     "導出(formula)": 0,
+     "直接": 2,
+     "% の数": 0,
+     "円族の数": 2,
+     "両期の fact を引く a−b(円)": 0,
+     "単位の族が %": 0,
+     "単位の族が円族": 2,
+     "単位の族が他": 0,
+     "pointer の期": {
+      "CurrentYear": 2,
+      "Prior1Year": 0,
+      "Prior2Year": 0,
+      "他": 0,
+      "なし": 0
+     }
+    },
+    "10 欄目(pointer の字のどれかに NonConsolidatedMember を含む)の数": {
+     "GROUNDED": {
+      "真": 14,
+      "偽": 1
+     },
+     "VALUE_MISMATCH": {
+      "真": 1,
+      "偽": 1
+     },
+     "UNVERIFIABLE": {
+      "真": 0,
+      "偽": 17
+     },
+     "POINTER_NOT_FOUND": {
+      "真": 0,
+      "偽": 62
+     }
+    },
+    "切れた本のうち claim が 0 の本": 30,
+    "切れた本のうち GROUNDED が 0 の本": 53,
+    "VALUE_MISMATCH が 1 以上の本": 2,
+    "claim と raw の並びが対応しなかった本": 0
+   },
+   "乙": {
+    "本": 40,
+    "切れた": 38,
+    "切れない": 2,
+    "切れない理由": {
+     "decode": 0,
+     "札なし": 2,
+     "札が複数": 0,
+     "続きあり": 0,
+     "閉じない": 0,
+     "空": 0
+    },
+    "字数の合計": 31323,
+    "claim": 63,
+    "4 state": {
+     "GROUNDED": 8,
+     "VALUE_MISMATCH": 3,
+     "UNVERIFIABLE": 9,
+     "POINTER_NOT_FOUND": 43
+    },
+    "reason": {
+     "GROUNDED": {
+      "なし": 8
+     },
+     "VALUE_MISMATCH": {
+      "なし": 3
+     },
+     "UNVERIFIABLE": {
+      "ambiguous(member)": 1,
+      "no_subject": 1,
+      "other_frame": 5,
+      "per_unit_counter": 2
+     },
+     "POINTER_NOT_FOUND": {
+      "no_element": 18,
+      "no_element(ratio without fact)": 12,
+      "no_same_value": 13
+     }
+    },
+    "VALUE_MISMATCH の内訳": {
+     "行": 3,
+     "導出(formula)": 0,
+     "直接": 3,
+     "% の数": 0,
+     "円族の数": 3,
+     "両期の fact を引く a−b(円)": 0,
+     "単位の族が %": 0,
+     "単位の族が円族": 3,
+     "単位の族が他": 0,
+     "pointer の期": {
+      "CurrentYear": 2,
+      "Prior1Year": 1,
+      "Prior2Year": 0,
+      "他": 0,
+      "なし": 0
+     }
+    },
+    "10 欄目(pointer の字のどれかに NonConsolidatedMember を含む)の数": {
+     "GROUNDED": {
+      "真": 5,
+      "偽": 3
+     },
+     "VALUE_MISMATCH": {
+      "真": 2,
+      "偽": 1
+     },
+     "UNVERIFIABLE": {
+      "真": 0,
+      "偽": 9
+     },
+     "POINTER_NOT_FOUND": {
+      "真": 0,
+      "偽": 43
+     }
+    },
+    "切れた本のうち claim が 0 の本": 15,
+    "切れた本のうち GROUNDED が 0 の本": 32,
+    "VALUE_MISMATCH が 1 以上の本": 3,
+    "claim と raw の並びが対応しなかった本": 0
+   },
+   "丙": {
+    "本": 94,
+    "切れた": 90,
+    "切れない": 4,
+    "切れない理由": {
+     "decode": 0,
+     "札なし": 4,
+     "札が複数": 0,
+     "続きあり": 0,
+     "閉じない": 0,
+     "空": 0
+    },
+    "字数の合計": 67759,
+    "claim": 149,
+    "4 state": {
+     "GROUNDED": 13,
+     "VALUE_MISMATCH": 3,
+     "UNVERIFIABLE": 24,
+     "POINTER_NOT_FOUND": 109
+    },
+    "reason": {
+     "GROUNDED": {
+      "なし": 13
+     },
+     "VALUE_MISMATCH": {
+      "なし": 3
+     },
+     "UNVERIFIABLE": {
+      "ambiguous(elements)": 2,
+      "ambiguous(member)": 1,
+      "no_subject": 3,
+      "other_frame": 13,
+      "per_unit_counter": 4,
+      "target_or_plan": 1
+     },
+     "POINTER_NOT_FOUND": {
+      "no_element": 53,
+      "no_element(ratio without fact)": 32,
+      "no_element(unit not in XBRL)": 5,
+      "no_same_value": 18,
+      "other_concept": 1
+     }
+    },
+    "VALUE_MISMATCH の内訳": {
+     "行": 3,
+     "導出(formula)": 0,
+     "直接": 3,
+     "% の数": 0,
+     "円族の数": 3,
+     "両期の fact を引く a−b(円)": 0,
+     "単位の族が %": 0,
+     "単位の族が円族": 3,
+     "単位の族が他": 0,
+     "pointer の期": {
+      "CurrentYear": 2,
+      "Prior1Year": 1,
+      "Prior2Year": 0,
+      "他": 0,
+      "なし": 0
+     }
+    },
+    "10 欄目(pointer の字のどれかに NonConsolidatedMember を含む)の数": {
+     "GROUNDED": {
+      "真": 11,
+      "偽": 2
+     },
+     "VALUE_MISMATCH": {
+      "真": 2,
+      "偽": 1
+     },
+     "UNVERIFIABLE": {
+      "真": 0,
+      "偽": 24
+     },
+     "POINTER_NOT_FOUND": {
+      "真": 0,
+      "偽": 109
+     }
+    },
+    "切れた本のうち claim が 0 の本": 38,
+    "切れた本のうち GROUNDED が 0 の本": 79,
+    "VALUE_MISMATCH が 1 以上の本": 3,
+    "claim と raw の並びが対応しなかった本": 0
+   },
+   "計": {
+    "本": 201,
+    "切れた": 192,
+    "切れない": 9,
+    "切れない理由": {
+     "decode": 0,
+     "札なし": 9,
+     "札が複数": 0,
+     "続きあり": 0,
+     "閉じない": 0,
+     "空": 0
+    },
+    "字数の合計": 147934,
+    "claim": 308,
+    "4 state": {
+     "GROUNDED": 36,
+     "VALUE_MISMATCH": 8,
+     "UNVERIFIABLE": 50,
+     "POINTER_NOT_FOUND": 214
+    },
+    "reason": {
+     "GROUNDED": {
+      "なし": 36
+     },
+     "VALUE_MISMATCH": {
+      "なし": 8
+     },
+     "UNVERIFIABLE": {
+      "ambiguous(elements)": 4,
+      "ambiguous(member)": 2,
+      "no_subject": 5,
+      "other_frame": 27,
+      "per_unit_counter": 10,
+      "target_or_plan": 2
+     },
+     "POINTER_NOT_FOUND": {
+      "no_element": 106,
+      "no_element(ratio without fact)": 63,
+      "no_element(unit not in XBRL)": 6,
+      "no_same_value": 38,
+      "other_concept": 1
+     }
+    },
+    "VALUE_MISMATCH の内訳": {
+     "行": 8,
+     "導出(formula)": 0,
+     "直接": 8,
+     "% の数": 0,
+     "円族の数": 8,
+     "両期の fact を引く a−b(円)": 0,
+     "単位の族が %": 0,
+     "単位の族が円族": 8,
+     "単位の族が他": 0,
+     "pointer の期": {
+      "CurrentYear": 6,
+      "Prior1Year": 2,
+      "Prior2Year": 0,
+      "他": 0,
+      "なし": 0
+     }
+    },
+    "10 欄目(pointer の字のどれかに NonConsolidatedMember を含む)の数": {
+     "GROUNDED": {
+      "真": 30,
+      "偽": 6
+     },
+     "VALUE_MISMATCH": {
+      "真": 5,
+      "偽": 3
+     },
+     "UNVERIFIABLE": {
+      "真": 0,
+      "偽": 50
+     },
+     "POINTER_NOT_FOUND": {
+      "真": 0,
+      "偽": 214
+     }
+    },
+    "切れた本のうち claim が 0 の本": 83,
+    "切れた本のうち GROUNDED が 0 の本": 164,
+    "VALUE_MISMATCH が 1 以上の本": 8,
+    "claim と raw の並びが対応しなかった本": 0
+   }
+  }
+ },
+ "限界": [
+  "材料は過去の便で取った有報 201 本(提出者 108。同じ会社の 2 つの年度が入る)で、上場会社全体の標本ではない。本と本は独立でない(封 §6)",
+  "切れない本は測れていない。「札なし」が「KAM が無い」「連結財務諸表が無い」「札の付け方が違う」のどれかは分けない",
+  "engine は渡された文を経営者による分析の塊として読む。監査報告書の文であること・単体の文であることを知らない。単体の数は限界の記録で、成績ではない",
+  "文と fact が同じ誤りを共有していれば、この照合では見えない(同じ有報の中の照合)",
+  "KAM の数の多くは見積りの前提・一部分の残高で、fact の表に相手が無い。「見つからない」「止まった」が多いのはその形のため",
+  "NFKC を掛けた文を測っている(原文の全角・半角の違いは見ていない)",
+  "注入はしていないので、誤りを通す率は言えない",
+  "行は [文の番号, 位置, state, reason, pointer の期, formula の有無, 単位の族, 両期の fact を引く a−b, span に % を含む, pointer の字のどれかに NonConsolidatedMember を含む] だけで、文・span・値・要素名は持たない"
+ ],
+ "行の欄": [
+  "文の番号",
+  "位置",
+  "state",
+  "reason",
+  "pointer の期",
+  "formula の有無",
+  "単位の族",
+  "両期の fact を引く a−b",
+  "span に % を含む",
+  "pointer の字のどれかに NonConsolidatedMember を含む"
+ ],
+ "時間(秒)": 74.5,
+ "key_leaks": [],
+ "本": [
+  {
+   "#": 1,
+   "群": "甲",
+   "ZIP の sha256": "02358db58564bca3b19b58bb60b0cca0c01f2b8c305366a7ea1083ed1edd9d70",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1411,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 95, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "円族", false, false, false],
+   [7, 123, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 940,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 40, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [7, 67, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 2,
+   "群": "甲",
+   "ZIP の sha256": "02fcaa9a52e52943108f905abc115daea2243eba97bfdc5f56f51f783fe792de",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1453,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 66, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1241,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 73, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [19, 18, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 3,
+   "群": "甲",
+   "ZIP の sha256": "0731a291f10af5dd207e05d54df8e2b5dc34e79a84de94af1c1a5d4e207228f6",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1606,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 129, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 973,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 29, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 4,
+   "群": "甲",
+   "ZIP の sha256": "11a87aa7ddda60db6d51910decfbf8a643621e520f582ba920ecece743604cec",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1538,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 39, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 27, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 51, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 69, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 939,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 61, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, true, false],
+   [6, 74, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 5,
+   "群": "甲",
+   "ZIP の sha256": "13cf3587a467a0af3869d0ecaa8d8a921e4d9fcb881b6bf369a5734a4060714d",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 244,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 238,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 6,
+   "群": "甲",
+   "ZIP の sha256": "1ca23bba5f21e83d0d8784dbb0f7ece069e59c43d9f81c192918223a90cf6f70",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1597,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 41, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [25, 36, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true]
+   ]
+   }
+  },
+  {
+   "#": 7,
+   "群": "甲",
+   "ZIP の sha256": "1d67d1910fa96fa0465206480400e99f7c9fb3c66c577171a833699ec3682278",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1492,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 38, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [9, 61, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 373,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [4, 47, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [5, 22, "GROUNDED", null, "CurrentYear", true, "円族", true, false, false]
+   ]
+   }
+  },
+  {
+   "#": 8,
+   "群": "甲",
+   "ZIP の sha256": "20d381114819b7608f4113d37fcd8920357a5da05f37f4542aaf6b5b3e92198d",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1298,
+    "claim": 6,
+    "対応": true,
+    "行": [
+   [7, 29, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 50, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [8, 93, "VALUE_MISMATCH", null, "Prior1Year", false, "円族", false, false, false],
+   [8, 109, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [9, 41, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [9, 51, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 328,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 9,
+   "群": "甲",
+   "ZIP の sha256": "29b7eb0b24e579a5b2ae9ce664d58af2d1d3cd0ffe4aec23fd7a45bd7fc36cbf",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   }
+  },
+  {
+   "#": 10,
+   "群": "甲",
+   "ZIP の sha256": "2b988d6b20de5de7b7eae20d28f5085117c553331ac1b979576de60fa4208114",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1240,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 31, "GROUNDED", null, "CurrentYear", false, "円族", false, true, true],
+   [6, 45, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 11,
+   "群": "甲",
+   "ZIP の sha256": "2de15610c9b207fdb286035fb76b30c1ac88d6ad16e8356a3517bb99ae453214",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1075,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 12,
+   "群": "甲",
+   "ZIP の sha256": "2fea27f5328ec8fb528a08b681a747d6c4d43c8edb843507815db774179a9b1c",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1122,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 34, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 13,
+   "群": "甲",
+   "ZIP の sha256": "35654a6bfa47e203c92c5bc33391bc48c68e792a29129996676ecfbf83da63b9",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 946,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 28, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 86, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 242,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 14,
+   "群": "甲",
+   "ZIP の sha256": "3aad9a94337487665f23b2066612ca3cf7ece7b596b47a6885e5975d4a00c9b2",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 3708,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 71, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [37, 117, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1119,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 27, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 50, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [9, 120, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 15,
+   "群": "甲",
+   "ZIP の sha256": "430ae0aec4807aa73b35b8409a8075b37b9487357d129b10bc1194905f87c753",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1343,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 30, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 32, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 234,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 16,
+   "群": "甲",
+   "ZIP の sha256": "45a71507465dbf9c1cbf82f23d378aca7a0330f78809c403ac23c82f9c7d8d06",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1628,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 36, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 398,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [4, 61, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 17,
+   "群": "甲",
+   "ZIP の sha256": "4876a2b52b30706b7c38ee925108dbb1eb8e5f3b8fd0dc33031aeb54349ef051",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1135,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 57, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true]
+   ]
+   }
+  },
+  {
+   "#": 18,
+   "群": "甲",
+   "ZIP の sha256": "4a5982e7447d6e0614c6ad12e7c091d462ca61a0128c2ce2af957a8bdfe1d52c",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1033,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 20, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 43, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 61, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 779,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 21, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 42, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [7, 60, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 19,
+   "群": "甲",
+   "ZIP の sha256": "4cfd8ff692f81692cf79f9acfc71af0265e161dd4852755e01d84ebdd934c322",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1571,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 75, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [7, 91, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true]
+   ]
+   }
+  },
+  {
+   "#": 20,
+   "群": "甲",
+   "ZIP の sha256": "511f1811cebc9bd7d72d069652effe99ebdb271ae99823c0115f89d697ae2726",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   }
+  },
+  {
+   "#": 21,
+   "群": "甲",
+   "ZIP の sha256": "512b316c0739e2cb83c465ec7ffae4474efebf4ffbc234a70270346cf1e1caad",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1691,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 198, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 160,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 22,
+   "群": "甲",
+   "ZIP の sha256": "52ece970160e6d7e45d9d0d4aebbbe50094f726ab55db4a3ea1a409de3a5c1e9",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1609,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 113, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1482,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 126, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 149, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 36, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 23,
+   "群": "甲",
+   "ZIP の sha256": "53991c2cc3021f050fac8ff1f1c16a3b7f3c2c8cd1a923706977f0d1f4a403ed",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1428,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [9, 59, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [10, 12, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, true, false],
+   [10, 22, "UNVERIFIABLE", "no_subject", "なし", false, "%", false, true, false],
+   [10, 30, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [10, 41, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1055,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [7, 96, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 12, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [8, 23, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 31, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [8, 42, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 24,
+   "群": "甲",
+   "ZIP の sha256": "55ab0bb442c1106cd119ecfc3c6ed1af5597d2e21b344bad938addfc034e2152",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1683,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [7, 3, "UNVERIFIABLE", "ambiguous(elements)", "なし", false, "円族", false, false, false],
+   [10, 0, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [10, 22, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [13, 6, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [14, 0, "UNVERIFIABLE", "no_subject", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 298,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 25,
+   "群": "甲",
+   "ZIP の sha256": "566f171ee5e55dc2b12b7f84dd1c6c481642683b5feba49baa290fe830645c3e",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1598,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [7, 55, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false],
+   [8, 18, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [8, 41, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [9, 19, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 26,
+   "群": "甲",
+   "ZIP の sha256": "57a1433e56905297735294f5e48795e48eba1ccbe29e5ea54000d58bf3c80b7c",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1311,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 60, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [8, 103, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1382,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [6, 25, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 45, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 70, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 18, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false],
+   [8, 56, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 27,
+   "群": "甲",
+   "ZIP の sha256": "5851a52ff80044bbb31f622f847461b1fccb5fc802a555dba868fd983372efbf",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1205,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 41, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 104, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [6, 116, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 28,
+   "群": "甲",
+   "ZIP の sha256": "5f154b2a5ba081abe7495fabc2cf6aae795cf92b1ad02808954d2befe424aa43",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2143,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [7, 74, "GROUNDED", null, "CurrentYear", false, "円族", false, true, false],
+   [7, 89, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 99, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, true, false],
+   [7, 169, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 241,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 29,
+   "群": "甲",
+   "ZIP の sha256": "646d95e04a253fc996dd17a231905ecb662686bd5c77f1c7730f51161c59e75a",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2593,
+    "claim": 6,
+    "対応": true,
+    "行": [
+   [7, 83, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 106, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 20, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [26, 109, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [26, 133, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [27, 46, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 268,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 30,
+   "群": "甲",
+   "ZIP の sha256": "7365ffce12ee1cb1514b83e52a30aa4c004bbd94077d42146a376d6f096ba06d",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1039,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 23, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, false, false],
+   [6, 43, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 322,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [5, 19, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [5, 39, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 31,
+   "群": "甲",
+   "ZIP の sha256": "74c51c983fe55d0bfbaf14e6c3a298a4aeb6ce0940c9acb9ab60f2ee37ade432",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1512,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [6, 45, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 66, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 12, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 90, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 110, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 314,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 32,
+   "群": "甲",
+   "ZIP の sha256": "761f019f4c1533ba195b6622f34b42004f9536c078580135d4fec20dd5aa8ec5",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1368,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 73, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 272,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 33,
+   "群": "甲",
+   "ZIP の sha256": "778a6a113f4ee1e2fc40b64375e55273cd38a15906271e08bd95415cf49d4a9e",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1056,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [7, 24, "UNVERIFIABLE", "ambiguous(elements)", "なし", false, "円族", false, false, false],
+   [8, 102, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 167, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 179, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 34,
+   "群": "甲",
+   "ZIP の sha256": "7993b5ff710ccd33dde89aa363438ef1c7b52f4e47d8af28ce841ee2bcac3bbd",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1120,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [7, 33, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 12, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 22, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 39, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 84, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 229,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 35,
+   "群": "甲",
+   "ZIP の sha256": "79ae06b59b670e21bcd00883d58dc37399d06a5d27490e04d7bf75f6dd55cbf6",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1365,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 36,
+   "群": "甲",
+   "ZIP の sha256": "7e033584d1c9975a93a07a4c337b403119581b96dd59c4bdfa056a17a03cba7f",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1088,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 71, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true]
+   ]
+   }
+  },
+  {
+   "#": 37,
+   "群": "甲",
+   "ZIP の sha256": "818194e233e7ceea8f3070289776425a8f314ed647310d917a180a5bf3d5d30e",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   }
+  },
+  {
+   "#": 38,
+   "群": "甲",
+   "ZIP の sha256": "81de2055f7dc51ded49fad1d19291bbc84c59c9a26a23e1b634b2f9b01ce24ac",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1460,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 61, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 76, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 99, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 89, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1296,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [6, 57, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 78, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 98, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 59, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 82, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 39,
+   "群": "甲",
+   "ZIP の sha256": "861de89d99d2463f9c2230fdbf596c1e75eba5a59096efe969d72cdb3f272828",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1452,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 5, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 33, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 314,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 40,
+   "群": "甲",
+   "ZIP の sha256": "8ecaed66f2f15d9251f3daf14ff53dd6e2c2d248db8fc691bf5bc63cfd73f12d",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1217,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 47, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [8, 53, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 264,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 41,
+   "群": "甲",
+   "ZIP の sha256": "906951be808f0ebbe406c2689b577b6f198d68d0677d84ff2a9d59e226793d20",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1092,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 22, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true]
+   ]
+   }
+  },
+  {
+   "#": 42,
+   "群": "甲",
+   "ZIP の sha256": "944ed61c7b78dc48722f34796f520d6dbc86bbeaaf82a151913f0840133ffcd4",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 3123,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [8, 66, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [31, 79, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [31, 97, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1296,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [9, 53, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [12, 62, "UNVERIFIABLE", "no_subject", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 43,
+   "群": "甲",
+   "ZIP の sha256": "946b4a8fa94cffe2120dff46be0df296adb2f7a60b42e769398bb7fbefcebd3b",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1058,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 29, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "円族", false, false, false],
+   [7, 52, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 71, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 265,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 44,
+   "群": "甲",
+   "ZIP の sha256": "9b695ec4541d08acbe57eb9b52e7378b61ab9d67f0d140e08bdaa62a0d0a1717",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1186,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 78, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 101, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 90, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 19, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1423,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [6, 31, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 51, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 23, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 73, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [10, 74, "UNVERIFIABLE", "target_or_plan", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 45,
+   "群": "甲",
+   "ZIP の sha256": "a0313840d8ecc13e8470e34f54451a0207c5510ffd0a9c3860e50c9640a9cdf0",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1487,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 77, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 287,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 46,
+   "群": "甲",
+   "ZIP の sha256": "a3170c66ce46185f02e8f5274c9d4f646ef97b089d13e6f7f4e65539e8d69719",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1456,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 18, "UNVERIFIABLE", "ambiguous(elements)", "なし", false, "円族", false, false, false],
+   [8, 4, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [8, 21, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 47,
+   "群": "甲",
+   "ZIP の sha256": "ab1cb84c0f983f8527accda1e6b7a2219f2950082090c4f1bcb2326ca42bb873",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1259,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 48,
+   "群": "甲",
+   "ZIP の sha256": "ac0a65a02d908b0dbfd4a56cc46cf0eb5384ef5d7db7926b244ca7443b30c9f4",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2759,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [8, 71, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [24, 64, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [25, 39, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [25, 60, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 875,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [10, 25, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [10, 47, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [11, 17, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [11, 33, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 49,
+   "群": "甲",
+   "ZIP の sha256": "b31651903185ef1afe2c8141b96646a947721b2333311a183d2f49348af7659e",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2076,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [6, 48, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 68, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 82, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 41, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 93, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 50,
+   "群": "甲",
+   "ZIP の sha256": "b3d46992ceb5eb86b9bd230a1ab34d06bbf031fc9182d29cb211830afcd39b6d",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1490,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 114, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 130, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 157, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1357,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 104, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 134, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 51,
+   "群": "甲",
+   "ZIP の sha256": "b4f42344bb48be29c047e7f9fd825b0b3f2e2ef8d62f84d29c534cd08ae2c52a",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1152,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 33, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 716,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 26, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 53, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 106, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 52,
+   "群": "甲",
+   "ZIP の sha256": "b8bb37a7c8984f5bf7d7ac5761df502feea2fe35b00b3b3f25d4bd194e69b862",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 903,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 30, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 43, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 392,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [4, 28, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [5, 43, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 53,
+   "群": "甲",
+   "ZIP の sha256": "bd2fe7969c31528f9c1609c85cb2dd8bb26aad2469ee060e3227b7f9367353f3",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1997,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 73, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true]
+   ]
+   }
+  },
+  {
+   "#": 54,
+   "群": "甲",
+   "ZIP の sha256": "c37346d3285f33377d82e103a5192d496c85da7dada60754b1a7a0ee1968bf42",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1137,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 79, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [6, 104, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, true],
+   [6, 120, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 55,
+   "群": "甲",
+   "ZIP の sha256": "c9337c162e23e2808f73cb0318cfd96e36c25915cc6aaaa8a9eccc974557bbbc",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1570,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 28, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "円族", false, false, false],
+   [6, 42, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 78, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1122,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 19, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [6, 33, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 56,
+   "群": "甲",
+   "ZIP の sha256": "cd212b810b33d07bd9723ed9518c299dcfaf88fc434f7026211206a9d5f6d450",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2225,
+    "claim": 12,
+    "対応": true,
+    "行": [
+   [6, 110, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 131, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, true, false],
+   [6, 141, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 41, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [22, 50, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [22, 118, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [22, 134, "GROUNDED", null, "CurrentYear", false, "円族", false, true, false],
+   [22, 144, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [24, 8, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false],
+   [24, 54, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false],
+   [31, 39, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false],
+   [31, 53, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 160,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 57,
+   "群": "甲",
+   "ZIP の sha256": "d029feb21328c92305dc4222722ea1ffd294b649e86a944b89ccfcb989f963b0",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 3637,
+    "claim": 12,
+    "対応": true,
+    "行": [
+   [6, 78, "POINTER_NOT_FOUND", "other_concept", "なし", false, "円族", false, false, false],
+   [6, 118, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 16, "GROUNDED", null, "CurrentYear", false, "円族", false, true, false],
+   [7, 29, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [33, 27, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, false, false],
+   [33, 42, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [33, 57, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [33, 85, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [34, 10, "GROUNDED", null, "CurrentYear", false, "円族", false, true, false],
+   [34, 23, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [35, 111, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [36, 20, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 346,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 58,
+   "群": "甲",
+   "ZIP の sha256": "d3183747336ee1ab3fd80b2114046f3cf15e5130c2cddd7110132b644075e0bb",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1059,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 240,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 59,
+   "群": "甲",
+   "ZIP の sha256": "d617b6e1807c8aa6d2b1269f6b25ff57a6a71dbf683020f1859d2d4a04c02d26",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 738,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 60,
+   "群": "甲",
+   "ZIP の sha256": "d94d447b6f8182d770179d58e60c03962ccb1f9a6251dff793239e8e4663ac85",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1619,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 77, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 97, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1186,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 75, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 93, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 61,
+   "群": "甲",
+   "ZIP の sha256": "e1fdf292e146deb540a634b7c0bab060b19d29f08552f1276617a9e8309702fe",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1319,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [7, 24, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 110, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 129, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [9, 18, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [9, 44, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 299,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 62,
+   "群": "甲",
+   "ZIP の sha256": "e4d7621bd1f65b451037db3bde4c5cb23297e59a7f9ba830b3bfcf5b62f8b3c7",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1584,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [8, 41, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "円族", false, false, false],
+   [8, 72, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 89, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 271,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 63,
+   "群": "甲",
+   "ZIP の sha256": "e8c2c6cfc2079b24938e78c702559d5ac9b339d06d775cfd542ecb0143ce93d0",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1137,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 47, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 58, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 64,
+   "群": "甲",
+   "ZIP の sha256": "eab8422ec94cf9ed7f5ccc9d8eb43fa548ad5abe4d9899223f060f4a4de84396",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2804,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [7, 73, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [8, 65, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [32, 123, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [33, 17, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 65,
+   "群": "甲",
+   "ZIP の sha256": "edb9a67e11131f7bc189fb071128a65eef328e515528056b0550a27e006db61f",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2660,
+    "claim": 11,
+    "対応": true,
+    "行": [
+   [8, 19, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 30, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 52, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [8, 75, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [26, 25, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [26, 39, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [27, 11, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [27, 24, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [27, 66, "GROUNDED", null, "CurrentYear", false, "円族", false, true, false],
+   [27, 75, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [28, 151, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1735,
+    "claim": 11,
+    "対応": true,
+    "行": [
+   [8, 24, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [8, 37, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [8, 53, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, true, false],
+   [8, 62, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [9, 135, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [15, 25, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [15, 48, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [15, 64, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, true, false],
+   [15, 73, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [17, 154, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [17, 173, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 66,
+   "群": "甲",
+   "ZIP の sha256": "f646974b4447f633f41d844333681f2bf71ae77558693786d3edd8dd76b3987f",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1360,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 75, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 98, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 67,
+   "群": "甲",
+   "ZIP の sha256": "fa1db1d43ef6eac7f682b728128b6f13e32c130086e49f93aad60e4bfb4a2e37",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1396,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 65, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 86, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 116, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "%", false, true, false],
+   [13, 35, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1042,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 51, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 54, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false],
+   [8, 69, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 68,
+   "群": "乙",
+   "ZIP の sha256": "19cf7892d6d076c4680a64b4d96a3e66f6d05ec0f612ce9dc8c56ab4956cd2fb",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1677,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 104, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false],
+   [8, 69, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [10, 138, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 661,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 42, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 59, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 69,
+   "群": "乙",
+   "ZIP の sha256": "22b46ebe8c80f1737e29c7af34cb64de9e9cc632f9d9e4bcc7997b667d55b5d4",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1662,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 50, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 24, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 49, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 408,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [4, 48, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [5, 23, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [5, 48, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 70,
+   "群": "乙",
+   "ZIP の sha256": "2b1f871f706e28eb46da00b36558d137472c0502ef117827ea323ae03b98dd8b",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1242,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 35, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 87, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 115, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 342,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 71,
+   "群": "乙",
+   "ZIP の sha256": "2badc60ad94066994be333aec1c7ffa7d421834d0d351d8bce960d7e9f50445d",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1938,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [8, 53, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 66, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [22, 31, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [22, 48, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [22, 71, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 242,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 72,
+   "群": "乙",
+   "ZIP の sha256": "2c9a642213a6ec03529c479f860bd2ae32c887061a512ceb6def15701927de9f",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1620,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 75, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 96, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 23, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1021,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [7, 84, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 100, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 19, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [10, 25, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 73,
+   "群": "乙",
+   "ZIP の sha256": "39bc6a5ea3e1fac1391e3911c465bdda0717f6df961310f3dd41ae0dbb72df40",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   }
+  },
+  {
+   "#": 74,
+   "群": "乙",
+   "ZIP の sha256": "528e757682c7aad4876d92c444fa49323bab28c86077bdfa1eb061eccd3f1d77",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1030,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 75,
+   "群": "乙",
+   "ZIP の sha256": "54a5acf1823560cd8199d0387274e413ac6b756aafba4838abd52fc29f5be681",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1045,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 24, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 26, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [7, 49, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 373,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [4, 20, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [5, 12, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [5, 33, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 76,
+   "群": "乙",
+   "ZIP の sha256": "5746323a56b68618499ed4539fe79826c0b1f17fc9b7c98579c529e2bb90ee8b",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1568,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 43, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 77, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 328,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [5, 25, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [5, 57, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 77,
+   "群": "乙",
+   "ZIP の sha256": "5a02794170d40c48f7636796cd7be350d79c5a7c07b5ce6aedb384024d4d7903",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1277,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 41, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [8, 60, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 254,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 78,
+   "群": "乙",
+   "ZIP の sha256": "5f899f5f272d76de1425d1d4d2e625d23ee2ed19ba4eb9305e72082d26546e93",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2764,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [7, 89, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 123, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [26, 90, "UNVERIFIABLE", "no_subject", "なし", false, "%", false, true, false],
+   [26, 96, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [27, 31, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1254,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [9, 65, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 144, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 79,
+   "群": "乙",
+   "ZIP の sha256": "627f7c4b9d137a4dd7beb676e3383b90d5d37a8b2f3ed82e3f90df5a21977baf",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   }
+  },
+  {
+   "#": 80,
+   "群": "乙",
+   "ZIP の sha256": "69ab15ff52d16d2d28521b1e7d7cd185bbd36726cce5f46156cadc7880e091ff",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1378,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 45, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, true],
+   [6, 68, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [9, 55, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 81,
+   "群": "乙",
+   "ZIP の sha256": "6a7dbefaf93fc6c799d8eaad874d7a36c96e14813583daf522708d78e6782894",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1291,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [9, 57, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 282,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 82,
+   "群": "乙",
+   "ZIP の sha256": "707252c0c80574c3309f9d2ed3145719b64f0e81f7c0a6210400e70019d4ac37",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1520,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 71, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [10, 77, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false],
+   [12, 56, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 266,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 83,
+   "群": "乙",
+   "ZIP の sha256": "707f9623f7a3e424504f623f020036cf9b75ac55b460e9db48eabea5ef58fcb6",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1720,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [9, 24, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 42, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [9, 73, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [9, 92, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1306,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 22, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [7, 38, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 88, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 84,
+   "群": "乙",
+   "ZIP の sha256": "73b4aa4f001455b07337ada7deb2ddfe0389969207760996985f44d22776c7a9",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1437,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 78, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 90, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 189, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1521,
+    "claim": 7,
+    "対応": true,
+    "行": [
+   [7, 74, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 86, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 154, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [9, 82, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 98, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 132, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 150, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 85,
+   "群": "乙",
+   "ZIP の sha256": "7753678234297a2b3a30b6214f65276f4a5e5b57fa34cc101a164a5a6b48cb9d",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1180,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 73, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 93, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1141,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 22, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 66, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [8, 83, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 86,
+   "群": "乙",
+   "ZIP の sha256": "82cd0262be19fbe6e5207e7ba859befc17f113398f7ab200c16750ee82363ffb",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 890,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [9, 36, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 87,
+   "群": "乙",
+   "ZIP の sha256": "902b57b898dcd4e0af68b5aa5524bae606c9d1af79607da0ae803b87c532dba9",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1025,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [9, 36, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [9, 52, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [9, 66, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [9, 82, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1114,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 115, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 135, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 88,
+   "群": "乙",
+   "ZIP の sha256": "9053500dbc647070018e5b6f523b8b715246afe19b2eb77784bb900e7c176935",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1420,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 70, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [12, 52, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 259,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 89,
+   "群": "乙",
+   "ZIP の sha256": "954acdde95c0aaea7e42d9728db36df432ecb06195ebd2bd602cbbc879b45c64",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1304,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 39, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 254,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 90,
+   "群": "乙",
+   "ZIP の sha256": "a2226149e6296710299338387f348c5c2a03011b42d683e6042f68d939765849",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1706,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [7, 37, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [7, 59, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 110, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [10, 59, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 91,
+   "群": "乙",
+   "ZIP の sha256": "a3d572439d5287f88c13d5c4f1551e747723bb6198e6822c13ecb4768c0ca608",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2659,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 64, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 51, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [7, 64, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [31, 74, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1264,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [8, 53, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 92,
+   "群": "乙",
+   "ZIP の sha256": "ab8fe631dbbff13db037b8c68c71b511d5c68f9d88b06d069e444e34a73ef1bc",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 999,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 28, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 53, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 73, "VALUE_MISMATCH", null, "Prior1Year", false, "円族", false, false, false],
+   [7, 113, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1135,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 38, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 60, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 80, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 103, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 93,
+   "群": "乙",
+   "ZIP の sha256": "b5979477967f73f82c9339e12ab34d2d3c2f99bc04af35d945dc27773f01b967",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2041,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 55, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false],
+   [7, 59, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 85, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 107, "UNVERIFIABLE", "ambiguous(elements)", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 236,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 94,
+   "群": "乙",
+   "ZIP の sha256": "b5c78d6f471ad3307377556db9eb000cc415c77f0c2cb2a869bf36b4120b133e",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 969,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 45, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true]
+   ]
+   }
+  },
+  {
+   "#": 95,
+   "群": "乙",
+   "ZIP の sha256": "c568596bb8402601e36071e78e0548175bde593cb8b238d473fa5aeb8cf67492",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1726,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 73, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 356,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [4, 69, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 96,
+   "群": "乙",
+   "ZIP の sha256": "c6239bdb06b0e1396144369bfdf49b43a84d1fe997dcbc6f7930d85733eee97c",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1400,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 79, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 199, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [19, 26, "UNVERIFIABLE", "ambiguous(elements)", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 339,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 97,
+   "群": "乙",
+   "ZIP の sha256": "ca9266a79dea367ddc10c38d00667b8c38d418ea400c681fece862d4bdeae762",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 166,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 304,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 98,
+   "群": "乙",
+   "ZIP の sha256": "cd8940d3d48997819dabfff2bca306d55b6323c928a3cfca247c8a8902bd9aae",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2511,
+    "claim": 7,
+    "対応": true,
+    "行": [
+   [6, 51, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [6, 70, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [6, 88, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [22, 22, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [23, 59, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [23, 92, "VALUE_MISMATCH", null, "Prior1Year", false, "円族", false, false, true],
+   [23, 118, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 99,
+   "群": "乙",
+   "ZIP の sha256": "cff888cee95d824881bfe6fdeb06ed8f4f8f53a9da104dd997190736bff1d15e",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1839,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 36, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 56, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 69, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 101, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 100,
+   "群": "乙",
+   "ZIP の sha256": "d594dfb4ab9d2fdab1a497b9b42c6968a49cc5aa201f626346165ef675f79520",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 988,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 24, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 72, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [10, 15, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 271,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 101,
+   "群": "乙",
+   "ZIP の sha256": "dc7ed274a5470e9db6d0971ea53cd675443d5cfcb2e32f55880c021fd3a7ae0d",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1431,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 38, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 73, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [8, 71, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [12, 47, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 293,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 102,
+   "群": "乙",
+   "ZIP の sha256": "e08e430656361c7a6285ede8ec93f8e89bf9c9f8b39da69902fee9f4566a421c",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2073,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 103,
+   "群": "乙",
+   "ZIP の sha256": "e38aeca329654e04525ea3fd2d4e65e7e6284926198a0ef661efbfd7731738c2",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1143,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 29, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 987,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 59, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 85, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 104,
+   "群": "乙",
+   "ZIP の sha256": "ee96a4855753903df29c15328524e800f8c4fce55a0831c7ac963e354cd74e42",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1324,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 86, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 105,
+   "群": "乙",
+   "ZIP の sha256": "eff54e2257ada64e2a6137583fcff2dc06ca3e2e3837f2c7799d28b83500d495",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1384,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 39, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 69, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 106,
+   "群": "乙",
+   "ZIP の sha256": "f8b798f5e2b0d97bc1ab3af67d8ba672e081e2540c45c82c3313e4d0d70b127f",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1346,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 16, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 52, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 810,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 14, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [8, 50, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 107,
+   "群": "乙",
+   "ZIP の sha256": "fde0c1366cdec471fae83af9adc2108b352e2743aa1e32d81c67f980f976ddff",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2055,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 69, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 86, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [22, 17, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [22, 34, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 833,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 71, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 118, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 134, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 108,
+   "群": "丙",
+   "ZIP の sha256": "00284e90fd8d86cd20bbf14615b78e62f8a0ef498c0b81c8aeee16d7203a4722",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1865,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 211, "UNVERIFIABLE", "target_or_plan", "なし", false, "円族", false, false, false],
+   [8, 21, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 21, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, false, false],
+   [10, 26, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 419,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 109,
+   "群": "丙",
+   "ZIP の sha256": "0159649cb50037ada64cc9b37ebff181ec005da1b885bbb614e0f4ea614fd9f0",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 738,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 110,
+   "群": "丙",
+   "ZIP の sha256": "05a84f2f11ecc84c9a86b3f72caa3694c0ef65565ab32e66f642c333515b8a82",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1405,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 75, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 98, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 111,
+   "群": "丙",
+   "ZIP の sha256": "0728c808c60469360da747d671be344d286301ed9eb014731ec033473bbe860d",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1128,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 58, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [6, 77, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 111, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 112,
+   "群": "丙",
+   "ZIP の sha256": "09a9ab8b347548690a9c402691d894be9dee4af72d4cca3e7c5c278a98d29d39",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1520,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 71, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [10, 77, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false],
+   [12, 56, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 266,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 113,
+   "群": "丙",
+   "ZIP の sha256": "110914c3b969b84e731c2df7f5f3e16208a58febca063f5fc007ef600ff311bb",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1168,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 27, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 51, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 36, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, false, false],
+   [7, 101, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1064,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 38, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 60, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 80, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 103, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 114,
+   "群": "丙",
+   "ZIP の sha256": "116907ef5699248072a65d34cfc3dd8cff9ddf4360531ba07d7caaadbb6e85e6",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2055,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 33, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 56, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 72, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1076,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [6, 40, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false],
+   [6, 47, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false],
+   [7, 32, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 43, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 73, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 115,
+   "群": "丙",
+   "ZIP の sha256": "11e93b1051fe6592c11d59c5bf387102793162ce408e652d7c3cb6ced1730f78",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1661,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 50, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 24, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 48, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 406,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [4, 48, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [5, 23, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [5, 47, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 116,
+   "群": "丙",
+   "ZIP の sha256": "13266aac128fbbe61b82ea19ced0cffb34da7349539f0dcb09b0d7353f9579b6",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2323,
+    "claim": 12,
+    "対応": true,
+    "行": [
+   [6, 110, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 131, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, true, false],
+   [6, 141, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 41, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [24, 50, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [24, 118, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [24, 134, "GROUNDED", null, "CurrentYear", false, "円族", false, true, false],
+   [24, 144, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [26, 8, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false],
+   [26, 54, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false],
+   [33, 39, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false],
+   [33, 53, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 160,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 117,
+   "群": "丙",
+   "ZIP の sha256": "148007a2100c420ab96bbbff7a76343dd0259ff8ee52ec136b327379e94c62d6",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2254,
+    "claim": 6,
+    "対応": true,
+    "行": [
+   [7, 47, "UNVERIFIABLE", "no_subject", "なし", false, "%", false, true, false],
+   [7, 52, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [21, 55, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false],
+   [22, 18, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [22, 39, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [23, 19, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 682,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 19, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 58, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 118,
+   "群": "丙",
+   "ZIP の sha256": "16a41baf8f2a95cb277e5c3ea8b2502ca4798f90187da3776233f0e2bfea2a0d",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1887,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 100, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 353,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 119,
+   "群": "丙",
+   "ZIP の sha256": "1d7965ed78da5402f6786f498fa897bcf251ee06ffeb099d3f3a7858508646fd",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1328,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 77, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 260,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 120,
+   "群": "丙",
+   "ZIP の sha256": "255e7876edc5c77648d0de999fe146598f1a749f65b14e9468602aee7e0f0a5f",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1313,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [11, 39, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [11, 84, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1046,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 23, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false],
+   [8, 44, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 93, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 103, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 121,
+   "群": "丙",
+   "ZIP の sha256": "2641c05244e8860f32da5dcda453b53a75b43137454810db22878e6956422d04",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1562,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 43, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 78, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 329,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [5, 25, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [5, 58, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 122,
+   "群": "丙",
+   "ZIP の sha256": "26c9e5bf853ead1841f6acdd5f88b75445f4467215aff7ca90a7dc25dd41b8c7",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1605,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 128, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1013,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 29, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 123,
+   "群": "丙",
+   "ZIP の sha256": "2b6ccf47d6fb35dbf387153e6b787505ab5715cb837de0e81a0ec71946ec7b2c",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1572,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [8, 41, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "円族", false, false, false],
+   [8, 72, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 89, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 272,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 124,
+   "群": "丙",
+   "ZIP の sha256": "2b70e1b28591ad9c8ec77fdec06a868b8ea0a1891c8684aafa128f913c7710e4",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 3074,
+    "claim": 12,
+    "対応": true,
+    "行": [
+   [6, 78, "POINTER_NOT_FOUND", "other_concept", "なし", false, "円族", false, false, false],
+   [6, 119, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 16, "GROUNDED", null, "CurrentYear", false, "円族", false, true, false],
+   [7, 29, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [30, 28, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [30, 43, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [30, 58, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [30, 84, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [31, 10, "GROUNDED", null, "CurrentYear", false, "円族", false, true, false],
+   [31, 23, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [32, 111, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [33, 20, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 346,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 125,
+   "群": "丙",
+   "ZIP の sha256": "2cf0dcf36ed1c1ceb932a8984db7195075d40ef7c7eafb843543187f505caf3b",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2176,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 113, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [22, 31, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [22, 48, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [22, 71, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1028,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 88, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 107, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 126,
+   "群": "丙",
+   "ZIP の sha256": "2daf9b5d1de0cf94ab855531aeab24ae5cd40679f88cbcdc70833621bd23ea6b",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1030,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 127,
+   "群": "丙",
+   "ZIP の sha256": "2db3e88144c2977b3fb67332018df016990c55d9308bc8ff8c8628bbe0f59c95",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1453,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 5, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 33, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 314,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 128,
+   "群": "丙",
+   "ZIP の sha256": "2e76af52ccabf08d298fc7ae0f994dbaf992d8902c10d3ca99da4d8cf6e58a96",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1696,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [7, 37, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [7, 59, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 108, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [10, 59, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 129,
+   "群": "丙",
+   "ZIP の sha256": "2e9e6a76211eb404a771f724f6603f9650370c74428049143d01e3e8fa4a8424",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   }
+  },
+  {
+   "#": 130,
+   "群": "丙",
+   "ZIP の sha256": "2f591b7a2eb8ae78e560557af51cce7892245bf7e93a150a2aa068e21ce1d08e",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1175,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 78, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 99, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 90, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 16, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1412,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [6, 31, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 51, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 23, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 73, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [10, 74, "UNVERIFIABLE", "target_or_plan", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 131,
+   "群": "丙",
+   "ZIP の sha256": "3ab39b3a846620bc8cc0ecb67be0b028cf667fd950ec97670b4178316330409b",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1304,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [8, 67, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 132,
+   "群": "丙",
+   "ZIP の sha256": "3d72274127e53922001d54a89c99ebf3cc20d03af7d50efff2af4d60c4170ea5",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1152,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 41, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 73, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [6, 85, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 133,
+   "群": "丙",
+   "ZIP の sha256": "3dcb6f1408b5645efd8ab5a4b02efc5f99cb59dc542572a1faea18286c2e49c5",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1916,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 55, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false],
+   [7, 60, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 86, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 236,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 134,
+   "群": "丙",
+   "ZIP の sha256": "42346db509f180b8731852fce08f95008fe20d670f75883f8db02a4acb617ac2",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 903,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 30, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 43, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 392,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [4, 28, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [5, 43, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 135,
+   "群": "丙",
+   "ZIP の sha256": "43637d0bccddfdfe34df68b7285a4868f2b007020a625ee42a4b4c865709df1b",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 877,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 136,
+   "群": "丙",
+   "ZIP の sha256": "4473d5fc6d3d94c0f864ba1546b16a6f6a0518182651c1596926a8913487a27b",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   }
+  },
+  {
+   "#": 137,
+   "群": "丙",
+   "ZIP の sha256": "48a791f8a4aae222e7a866cc13ef9c903922dcd170cb84e8ce2f09e3700deacd",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 988,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 24, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 72, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [10, 15, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 271,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 138,
+   "群": "丙",
+   "ZIP の sha256": "48abeb7194bfcfa6b62ace7a80e0439da8bcac7160d9fc73697d315e73a1d116",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1628,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 36, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 398,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [4, 61, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 139,
+   "群": "丙",
+   "ZIP の sha256": "4b27eba403154c62c9aa3c0be569c1091afc1d723b39a672100190ca62586465",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2795,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [6, 84, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 24, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [22, 63, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [23, 39, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [23, 57, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 662,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [7, 32, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 49, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 62, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 77, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 140,
+   "群": "丙",
+   "ZIP の sha256": "5074edd3f45c17ab13e7476f4f1bee16a8814a0e14b81be077f9645767363132",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2829,
+    "claim": 6,
+    "対応": true,
+    "行": [
+   [7, 26, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 96, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [11, 19, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [18, 0, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false],
+   [38, 28, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [38, 86, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 326,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 141,
+   "群": "丙",
+   "ZIP の sha256": "54e22aaef13b3208cf0bc413b04077ede5aea55c724348478bf565ee3a1298d2",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   }
+  },
+  {
+   "#": 142,
+   "群": "丙",
+   "ZIP の sha256": "550391a0e0a54e8145bf9b10319a9f9c0096553fc15ba9edd5eaee0d2c630489",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 3880,
+    "claim": 6,
+    "対応": true,
+    "行": [
+   [6, 48, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 68, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 82, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 41, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 93, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [23, 34, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 143,
+   "群": "丙",
+   "ZIP の sha256": "55d67d87d382f52870f76b14ccc443bdc21539825c22973a2426a2917c9eb04e",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1366,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 30, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 32, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 234,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 144,
+   "群": "丙",
+   "ZIP の sha256": "5a0f4b9a932271a5f9fd012277e21253b4f9bd6056f6906ffb2d7ec22290acbc",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1178,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 23, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, false, false],
+   [6, 43, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 322,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [5, 19, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [5, 39, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 145,
+   "群": "丙",
+   "ZIP の sha256": "5cc355cede4de926065d6daae55d8dd2fd547aae40c74eba5e3dd66517435f94",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1871,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 70, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [27, 25, "UNVERIFIABLE", "ambiguous(elements)", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 259,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 146,
+   "群": "丙",
+   "ZIP の sha256": "6e1eab96d2ee369cd57a453928479bd3921795113bac7a63007aae2e84e60c7b",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 3038,
+    "claim": 15,
+    "対応": true,
+    "行": [
+   [9, 54, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 90, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 117, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [10, 12, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, true, false],
+   [10, 22, "UNVERIFIABLE", "no_subject", "なし", false, "%", false, true, false],
+   [10, 30, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [10, 41, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [31, 8, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [31, 44, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, false, false],
+   [31, 59, "UNVERIFIABLE", "ambiguous(elements)", "なし", false, "円族", false, false, false],
+   [31, 72, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [31, 107, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, true, false],
+   [31, 121, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [31, 130, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [31, 141, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1993,
+    "claim": 10,
+    "対応": true,
+    "行": [
+   [7, 68, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 138, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 11, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 30, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [8, 41, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 49, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [8, 60, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [23, 22, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [23, 36, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [23, 47, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 147,
+   "群": "丙",
+   "ZIP の sha256": "6fdf144e58cd70cc1d16e1207ce31996e1acbf99bc3f4c9d76cc5ebb767a78ae",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1265,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 39, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 254,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 148,
+   "群": "丙",
+   "ZIP の sha256": "70e311cb5ef095eadcaeede3ea7ab92042b45ef22841ac9c8e78545906bef376",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2342,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [8, 31, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 44, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [24, 84, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [24, 100, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [24, 127, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 160,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 149,
+   "群": "丙",
+   "ZIP の sha256": "71966d29610b893a70504271b5d2ee36b5f1ac5310193ec2398acf4032892ad8",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1422,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [7, 29, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 53, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [8, 87, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [9, 38, "VALUE_MISMATCH", null, "Prior1Year", false, "円族", false, false, false],
+   [9, 54, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 328,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 150,
+   "群": "丙",
+   "ZIP の sha256": "75b7bbac0643e0f54d820ad42b8d382f51926d36ce4870e030e3cbe944439e36",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1044,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [7, 24, "UNVERIFIABLE", "ambiguous(elements)", "なし", false, "円族", false, false, false],
+   [8, 87, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 148, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, false, false],
+   [8, 160, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 151,
+   "群": "丙",
+   "ZIP の sha256": "77cb418f3d6cdc8f9772ae9e4a4f9abef780e40993dd04f152c10e450677b557",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2884,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [7, 82, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 112, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [8, 73, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [31, 129, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [32, 19, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 352,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 152,
+   "群": "丙",
+   "ZIP の sha256": "7bb38c6d08113d45ff75732ce627a2bbeafb9c912ae39737ac60aa65b05afba4",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1853,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 148, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 170, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 196, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1446,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 111, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 135, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 153,
+   "群": "丙",
+   "ZIP の sha256": "7d64956daa6b9fa382c26c58bf0c424da048babf32a413d380b1051baa2c4ae4",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1279,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 16, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 52, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 810,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 14, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [8, 50, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 154,
+   "群": "丙",
+   "ZIP の sha256": "7e8585d44b3efffc6b4f3e8f22b652e0fb3a04f7b56964a6a1b57a5c9aa13d97",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   }
+  },
+  {
+   "#": 155,
+   "群": "丙",
+   "ZIP の sha256": "7f0fef301f6334f4954239ec81029bfb96817f8d1a27ae1ae1044eae6ef746c2",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1222,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 26, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 83, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 35, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 807,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 22, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [7, 77, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 156,
+   "群": "丙",
+   "ZIP の sha256": "82bb307314563f84561608f89394f20999d258434fc6ad6c8daec8ce386b8f63",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1381,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 93, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 157,
+   "群": "丙",
+   "ZIP の sha256": "8306fbc7b1b1126f98e1c96eea7e710c3875c2f63c08d8a541e197775de760f7",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1456,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 18, "UNVERIFIABLE", "ambiguous(elements)", "なし", false, "円族", false, false, false],
+   [8, 4, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [8, 21, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 158,
+   "群": "丙",
+   "ZIP の sha256": "83b32b95e20d7249f3ae6e9f360b5459e776c3a3275e5bd9a253bb0b12d91342",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1152,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 33, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 716,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 26, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 53, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 106, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 159,
+   "群": "丙",
+   "ZIP の sha256": "86b4eb672f173cfa28973171c3331a818ed3827354eeef04ce033bc30716dff5",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1195,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [9, 24, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 160,
+   "群": "丙",
+   "ZIP の sha256": "88134a8eada2cb13831be1ca08c04aa73465a38b1194558d2273b717e187ba47",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1465,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 29, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 57, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, true, false],
+   [6, 67, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1037,
+    "claim": 6,
+    "対応": true,
+    "行": [
+   [7, 11, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 0, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 18, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 4, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [10, 0, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, true, false],
+   [10, 13, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 161,
+   "群": "丙",
+   "ZIP の sha256": "8865bff068ae20cf02138fdec060f52efaeb329dc9647de20db372318de7cca4",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2936,
+    "claim": 11,
+    "対応": true,
+    "行": [
+   [7, 111, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 128, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 153, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 159, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 46, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [28, 28, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [28, 52, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [28, 68, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [28, 96, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [28, 112, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [28, 136, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 302,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 162,
+   "群": "丙",
+   "ZIP の sha256": "895ab3267823f0fe043d667bfc70763715e45b52736df14bcd4a1cf8703c8c1c",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1231,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 25, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [8, 47, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 163,
+   "群": "丙",
+   "ZIP の sha256": "89ccf83ceaaec0b8391d3014ed9c1d7309c611a8c60ba47b995de428b225041a",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 244,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 238,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 164,
+   "群": "丙",
+   "ZIP の sha256": "8b08d7503b14b44cad2b00ee22e9464a68c9aa5bbe89d7d15395023564905ecc",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 3591,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [8, 74, "GROUNDED", null, "CurrentYear", false, "円族", false, true, false],
+   [8, 89, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 99, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, true, false],
+   [8, 169, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 314,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 165,
+   "群": "丙",
+   "ZIP の sha256": "8e194a0de9e1e71edd61d27dc7a477c15b25944f07efe6aa8eaa7f39d7bcbddf",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1488,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 84, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 166,
+   "群": "丙",
+   "ZIP の sha256": "a2510399c0aecd117b6651d1d7c0a0b877393dd61bd8d63f7b055136b7c03e5e",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1025,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 33, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 53, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 229,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 167,
+   "群": "丙",
+   "ZIP の sha256": "a2f01d09477199dc1cfbbd0974f9c3b21cda2c387657a1a49e22ffcd37684bbb",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1160,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 35, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [7, 52, "VALUE_MISMATCH", null, "Prior1Year", false, "円族", false, false, true],
+   [7, 68, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 168,
+   "群": "丙",
+   "ZIP の sha256": "a31df1f67d06c513af0eb222161741d5d4a9117d76f767347f565cac9f66db9f",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1880,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 58, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 16, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 86, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1046,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 23, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false],
+   [8, 44, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 93, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 103, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 169,
+   "群": "丙",
+   "ZIP の sha256": "a481eaa4f8fec378b9d80b525e8b2cbb9ff413029276fa4c5720e0d5850d821f",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1148,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 47, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [8, 53, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 260,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 170,
+   "群": "丙",
+   "ZIP の sha256": "aae4c46c25cec795661a4d384a5912a38fe0b6acc8e75e85ce912f0a33c3c63f",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1302,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 171,
+   "群": "丙",
+   "ZIP の sha256": "ae20877cea76f3555dfa83f74218e7e5064f71770dbd67f142086e0c742898b5",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1621,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 95, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "円族", false, false, false],
+   [7, 123, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 927,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 40, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 67, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 172,
+   "群": "丙",
+   "ZIP の sha256": "b277613fe787f886c4e80ee8c0fb3e623d9e268542a90927006bf490cbdab3af",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1319,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [7, 24, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 110, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 129, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [9, 18, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [9, 44, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 299,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 173,
+   "群": "丙",
+   "ZIP の sha256": "b30454c00b019c3da7c10f00acf398faed0eea20e39df4f85f77b60ea3d62cf8",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1651,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 78, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 90, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1146,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [7, 71, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 83, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 75, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [10, 46, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 174,
+   "群": "丙",
+   "ZIP の sha256": "b62899b134f4e8a03d57ea3e49e8de1ce8d8039b97cf96301a2c848a782c7b4b",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1845,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 75, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [7, 91, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [9, 38, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 175,
+   "群": "丙",
+   "ZIP の sha256": "b89d03a53b13933aa308b31a25b1e835ffa333d24a8243dedebf42beec88e011",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 966,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 20, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 43, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 61, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 724,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 21, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 42, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [7, 60, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 176,
+   "群": "丙",
+   "ZIP の sha256": "c56c2972d956cc24cf417a6c28712c259ad05fbafce00c6b24378b77e8627d64",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 2443,
+    "claim": 11,
+    "対応": true,
+    "行": [
+   [8, 19, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 30, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [8, 52, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [8, 75, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [24, 25, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [24, 39, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [25, 11, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [25, 24, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [25, 65, "GROUNDED", null, "CurrentYear", false, "円族", false, true, false],
+   [25, 74, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [26, 130, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1698,
+    "claim": 10,
+    "対応": true,
+    "行": [
+   [8, 24, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [8, 37, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [8, 52, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, true, false],
+   [8, 61, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [9, 135, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [15, 25, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [15, 40, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [15, 56, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, true, false],
+   [15, 65, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [17, 157, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 177,
+   "群": "丙",
+   "ZIP の sha256": "c62ce3e75ef73e327e793f24b4ffa5d080d6ee07177e706810306fc3b96f7e7f",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 3214,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 145, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [28, 138, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 893,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 27, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 50, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 178,
+   "群": "丙",
+   "ZIP の sha256": "c7ce3f8432d0ab9ba8bff78bc57144047f6ff258bb10f52e2dec903f4a0d9f35",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 960,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 240,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 179,
+   "群": "丙",
+   "ZIP の sha256": "c8610f13c447a6484b794844d96ef66ea2668fccdcfb8ab1013db6baee971255",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1444,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 109, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 125, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 152, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1323,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 102, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 132, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 180,
+   "群": "丙",
+   "ZIP の sha256": "ce1ae81593b2fee5e57063f4016b1dc670591f9428c0c5575bbb1e5f1519991a",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 4012,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [7, 66, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [29, 81, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [32, 22, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [32, 40, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [33, 21, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1421,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [8, 53, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 67, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [11, 62, "UNVERIFIABLE", "no_subject", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 181,
+   "群": "丙",
+   "ZIP の sha256": "d0096a0e13438134c6911dab943e20af808f6a1c700cc0491ce7ee327fcaf0aa",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1584,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 41, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true]
+   ]
+   }
+  },
+  {
+   "#": 182,
+   "群": "丙",
+   "ZIP の sha256": "d359d7cfe353a58f8b9a1b2be48447a1fb9fe86224c986758b0d411151d50175",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1401,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 45, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, true],
+   [6, 68, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [9, 55, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 183,
+   "群": "丙",
+   "ZIP の sha256": "d62c46f67ddcb738a57922861226141333d1bae94e23b24d516e1a509445f6ad",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1380,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 66, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1211,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 73, "POINTER_NOT_FOUND", "other_concept", "なし", false, "円族", false, false, false],
+   [19, 18, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 184,
+   "群": "丙",
+   "ZIP の sha256": "d6f164bcfc2e8134ff836d684fc803fa383faadfae1f0d37659bbb5d6c6dbf52",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1089,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 29, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "円族", false, false, false],
+   [7, 52, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 71, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 265,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 185,
+   "群": "丙",
+   "ZIP の sha256": "d786f9d27492200f2b4d1876f2825c339812275fdf03462db4a8cb58246e8117",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1045,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 24, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 26, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [7, 49, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 373,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [4, 20, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [5, 12, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [5, 33, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 186,
+   "群": "丙",
+   "ZIP の sha256": "d9a9d293f02454c1bb09340acb6ffd76fd595a23025c68ef11df3e4aecec38b9",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1524,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [6, 45, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 66, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [6, 117, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 187, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [6, 206, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 314,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 187,
+   "群": "丙",
+   "ZIP の sha256": "dbe90825d93f1503aa5033832256bd14abe0b97663c640318bb71927e77ac6bf",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1190,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 31, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [7, 54, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 60, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 188,
+   "群": "丙",
+   "ZIP の sha256": "de0a7650870f3342b4f14a5e400b1152242a0b1e1809582b2611ba906fa106fc",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1075,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 36, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 189,
+   "群": "丙",
+   "ZIP の sha256": "e18744e3a14f43c9ada9892841f211f61407974e475297b82987b8982dac81d7",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1653,
+    "claim": 5,
+    "対応": true,
+    "行": [
+   [6, 27, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 31, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false],
+   [7, 53, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 29, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [8, 54, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 298,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 190,
+   "群": "丙",
+   "ZIP の sha256": "e1a7f67915471f9a8bd1e5533519ad3db9e386297774e607a9af341cf77c42ac",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1181,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 58, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 74, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1057,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [6, 57, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [7, 59, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [9, 50, "UNVERIFIABLE", "per_unit_counter", "なし", false, "他", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 191,
+   "群": "丙",
+   "ZIP の sha256": "e1aea1e77adcdd4e1f94e3ab2712d752b2a991b7736f4dd57a71ac0fe5982859",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1511,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 53, "UNVERIFIABLE", "no_subject", "なし", false, "円族", false, false, false],
+   [6, 66, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1326,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 25, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 45, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false],
+   [6, 70, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [7, 18, "POINTER_NOT_FOUND", "no_element(unit not in XBRL)", "なし", false, "他", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 192,
+   "群": "丙",
+   "ZIP の sha256": "e292010a46d66dd8ac5095635d9bf4ca4083f878c93884ba2b48d6b274985313",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1719,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 73, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 356,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [4, 69, "UNVERIFIABLE", "ambiguous(member)", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 193,
+   "群": "丙",
+   "ZIP の sha256": "e941adb479099303daff2780631e4115335ca440bf40495cf4ba0c5903d9c544",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1559,
+    "claim": 4,
+    "対応": true,
+    "行": [
+   [6, 39, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 27, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 51, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false],
+   [8, 83, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 946,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [6, 57, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, true, false],
+   [6, 70, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 194,
+   "群": "丙",
+   "ZIP の sha256": "eac9bef984c7ab31034744ad33190ef78aff569c3ea5d881eae356a5b19e5534",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1545,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 89, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 126, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 250,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 195,
+   "群": "丙",
+   "ZIP の sha256": "f059357047c07383d051eae78095ddde148649584d35db7bdd8757bb15628d86",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1365,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 204,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 196,
+   "群": "丙",
+   "ZIP の sha256": "f0f0b6e8236c1c46f40a81f9c1be1745a43cae4f643a310a1521505fab000e14",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1619,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 77, "VALUE_MISMATCH", null, "CurrentYear", false, "円族", false, false, false],
+   [7, 97, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1186,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [7, 75, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [7, 93, "POINTER_NOT_FOUND", "no_element(ratio without fact)", "なし", false, "%", false, true, false]
+   ]
+   }
+  },
+  {
+   "#": 197,
+   "群": "丙",
+   "ZIP の sha256": "f2a836cde000d5b395e2a330534c107816d76086384c6d6566becd5a1ccd1adb",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1502,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [7, 76, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 376,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [4, 74, "POINTER_NOT_FOUND", "no_element", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 198,
+   "群": "丙",
+   "ZIP の sha256": "f585e6ec7781261fd3ba93162ef9660f926cc04f9bf26d91be7a0ab2bee7c234",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 244,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 238,
+    "claim": 0,
+    "対応": true,
+    "行": []
+   }
+  },
+  {
+   "#": 199,
+   "群": "丙",
+   "ZIP の sha256": "fd13995f8530e23bf9fb315f754febdb63385c0c47ba69a11132dc3306025601",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1997,
+    "claim": 1,
+    "対応": true,
+    "行": [
+   [6, 73, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true]
+   ]
+   }
+  },
+  {
+   "#": 200,
+   "群": "丙",
+   "ZIP の sha256": "ff907b3894a6cd4108ed505030a3d1278fd7a814ca3d3cd975992cee091e2e2d",
+   "連結": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1495,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [8, 38, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [9, 61, "GROUNDED", null, "CurrentYear", false, "円族", false, false, false]
+   ]
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 373,
+    "claim": 2,
+    "対応": true,
+    "行": [
+   [4, 47, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [5, 22, "UNVERIFIABLE", "other_frame", "なし", false, "円族", false, false, false]
+   ]
+   }
+  },
+  {
+   "#": 201,
+   "群": "丙",
+   "ZIP の sha256": "ffcdd98d2deba8ba3931282af58c0baf395526f095e104f48ba4c1c2a5c936f3",
+   "連結": {
+    "切り出し": "切れない",
+    "理由": "札なし",
+    "字数": null,
+    "claim": 0,
+    "対応": null,
+    "行": []
+   },
+   "単体": {
+    "切り出し": "切れた",
+    "理由": null,
+    "字数": 1148,
+    "claim": 3,
+    "対応": true,
+    "行": [
+   [7, 34, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true],
+   [7, 62, "POINTER_NOT_FOUND", "no_same_value", "なし", false, "円族", false, false, false],
+   [8, 26, "GROUNDED", null, "CurrentYear", false, "円族", false, false, true]
+   ]
+   }
+  }
+ ]
+}

@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **305 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **306 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 232 |
+| `tests/measure` | 233 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -325,6 +325,9 @@ TSS の便 1b の注入の結果の門(記録 2 つ `fixtures/xbrl/tanshin_self/
 
 **2026-11-15 に +1**(`tests/measure/test_xbrl_kam_seal.py`。
 KAM(有価証券報告書の監査報告書の「監査上の主要な検討事項」の文を、同じ有報の fact で確かめる。封 `docs/XBRL_KAM_SEAL_2026-11-15.md`)の script `measure/xbrl_kam_2026-11-15.py` の封の門。結果の門は次の段)。304 → 305(`tests/measure` 231 → 232)。
+
+**2026-11-15 に +1**(`tests/measure/test_xbrl_kam_result.py`。
+KAM の結果の門(記録 3 つ `fixtures/xbrl/kam/`・結果の文書 `docs/XBRL_KAM_RESULT_2026-11-15.md` を縛る。封の門 `test_xbrl_kam_seal.py` の次の段)。305 → 306(`tests/measure` 232 → 233)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

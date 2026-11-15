@@ -96,6 +96,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-14: TSS の便 1b の記録 2 つ(注入の 3,726 行と本ごとの数え・配線・集計・覆い / 通した行を読んだ札。fixtures/xbrl/tanshin_self/)。script が書いた数と、司令塔(AI の席)が付けた札。
     # 会社名・証券コード・文・値を持たない。結果の門 tests/measure/test_xbrl_tanshin_self_inject_result.py が縛る。engine(core/・adapters/)は 0 行
     "fixtures/xbrl/tanshin_self/inject_2026-11-14.json", "fixtures/xbrl/tanshin_self/inject_passed_types_2026-11-14.json",
+    # 2026-11-15: KAM の記録 3 つ(母集団 201 本の表 / 201 本の切り出しと判定の行 / 読んだ 133 行の型。fixtures/xbrl/kam/)。script が書いた数と、司令塔(AI の席)が付けた型。
+    # 会社名・証券コード・文・値を持たない。結果の門 tests/measure/test_xbrl_kam_result.py が縛る。engine(core/・adapters/)は 0 行
+    "fixtures/xbrl/kam/population_2026-11-15.json", "fixtures/xbrl/kam/states_2026-11-15.json", "fixtures/xbrl/kam/read_types_2026-11-15.json",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")
