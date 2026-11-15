@@ -979,6 +979,9 @@ LATER_HARNESS_FILES = (
     # 2026-11-14: TSS の便 1b の注入(封 docs/XBRL_TANSHIN_SELF_INJECT_SEAL_2026-11-14.md §0-2 の 4・6・§5)。短信の概況の文(切れた 372 本)に T1・T5・T8・T9 を 1 件ずつ注入し、同じ短信の添付の財務諸表(包み直した ZIP)に当てる使う側。2026-11-09 の便の inject_text_ts を呼び、
     # profile の対 (P33E, P33E) は with の中だけ(出たら戻す)。site・並べ替え・cap・差し替え・id で引く対応付け・行の欄は呼んだ関数のまま。検証は注入後の文で包み直した ZIP に verify_document(P33E)(verify 引数)。
     ("measure/xbrl_tanshin_self_inject_2026-11-14.py", u"使う側", u"有", "inject_book", u"rows, counts = TS.inject_text_ts(wrapped, text, refs, SEED, book_name(n), cap=CAP, verify=verify)", "2026-11-14"),
+    # 2026-11-15: KAM(有価証券報告書の監査報告書の「監査上の主要な検討事項」の文を、同じ有報の fact で確かめる。封 docs/XBRL_KAM_SEAL_2026-11-15.md §0-2・§5)。注入はしない。201 本の KAM の文を P33E で判定する script で、
+    # 読むための紙を作る run_sheet の検査の呼び出し verify_document( が副産物の検査の規準に当たるだけ(前例 TSS・NF・LB と同じ「対象外・不要」。差し替えは engine の入口が memory の中でする = 本文の差し替えで注入はしない)
+    ("measure/xbrl_kam_2026-11-15.py", u"対象外", u"不要", "run_sheet", u"cl = VD.verify_document(zb, PROFILE, text)[\"claims\"]", "2026-11-15"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 

@@ -607,7 +607,7 @@ def near_problems():
         eqp(out, u"近い行の数・読む行の数", (rec[u"近い行の数(A と B)"], rec[u"読む行の規則"][u"読む行の数"], rec[u"読む行の規則"][u"種"], rec[u"読む行の規則"][u"標本の数"]), (6, 6, 20261115, 200))
         eqp(out, u"時間は 1 つの欄", (rec[u"時間(秒)"], len(re.findall(u"時間", text))), (2.5, 1))
         eqp(out, u"行の長さ", set(len(r) for r in rec[u"行"]), set([5]))
-        bare = re.sub(u"[0-9a-f]{64}", u"", text)                                       # sha256 の hex は実行ごとに変わり、4 桁の値の字が偶然入りうる。字の検査は hex を除いた字で見る(2026-11-15)
+        bare = re.sub(u"\\b(?:[0-9a-f]{64}|[0-9a-f]{40})\\b", u"", text)                  # sha256(64 字)と git の HEAD(40 字)の hex は実行ごとに変わり、4 桁の値の字が偶然入りうる。字の検査は hex を除いた字で見る(2026-11-15)
         eqp(out, u"記録に文・span・値・要素名の字が無い", [x in bare for x in (u"売上高", u"となりました", u'"span"', u'"value"', u'"recomputed"', u"jpcrp_cor", u"1,250", u"1250", u"1324")], [False] * 9)
         eqp(out, u"interim の記録の sha256 を持つ", rec[u"interim の記録の sha256"], ST.sha256_file(ip))
         n2 = os.path.join(d, "o", "n2.json")

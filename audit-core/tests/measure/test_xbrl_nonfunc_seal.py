@@ -87,6 +87,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-14: TSS の便 1b の注入(短信の概況の文に誤りを 1 件ずつ入れ、同じ短信の財務諸表に当てる。封 docs/XBRL_TANSHIN_SELF_INJECT_SEAL_2026-11-14.md bcc244ae)の script 1 本。
     # TSS・第 2 便・2026-11-09 の便の関数を呼ぶ(書き写さない)。engine(core/・adapters/)は 0 行。この便の記録(fixtures/xbrl/tanshin_self/ の 2 つ)は本番の後に届ける
     "measure/xbrl_tanshin_self_inject_2026-11-14.py",
+    # 2026-11-15: KAM(有価証券報告書の監査報告書の「監査上の主要な検討事項」の文を、同じ有報の fact で確かめる。封 docs/XBRL_KAM_SEAL_2026-11-15.md 497a4661)の script 1 本。
+    # TSS・2026-11-09 の便の関数を呼ぶ(書き写さない)。engine(core/・adapters/)は 0 行。この便の記録(fixtures/xbrl/kam/ の 3 つ)は本番の後に届ける
+    "measure/xbrl_kam_2026-11-15.py",
     # 2026-11-14: TSS の第 2 便の記録 3 つ(中間 150 本を期の名前を写して判定した行・「値が違う」のうち近い行・読んだ 200 行の型。fixtures/xbrl/tanshin_self/)。script が書いた数と、司令塔(AI の席)が付けた型。
     # 会社名・証券コード・文・値を持たない。結果の門 tests/measure/test_xbrl_tanshin_self2_result.py が縛る。engine(core/・adapters/)は 0 行
     "fixtures/xbrl/tanshin_self/states_interim_2026-11-14.json", "fixtures/xbrl/tanshin_self/near_2026-11-14.json", "fixtures/xbrl/tanshin_self/near_types_2026-11-14.json",
