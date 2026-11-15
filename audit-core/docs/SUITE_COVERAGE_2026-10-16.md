@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **303 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **304 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 230 |
+| `tests/measure` | 231 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -319,6 +319,9 @@ TSS の第 2 便の結果の門(記録 3 つ `fixtures/xbrl/tanshin_self/`・結
 
 **2026-11-14 に +1**(`tests/measure/test_xbrl_tanshin_self_inject_seal.py`。
 TSS の便 1b の注入(短信の概況の文に誤りを 1 件ずつ入れ、同じ短信の財務諸表に当てる。封 `docs/XBRL_TANSHIN_SELF_INJECT_SEAL_2026-11-14.md`)の script `measure/xbrl_tanshin_self_inject_2026-11-14.py` の封の門。結果の門は次の段)。302 → 303(`tests/measure` 229 → 230)。
+
+**2026-11-14 に +1**(`tests/measure/test_xbrl_tanshin_self_inject_result.py`。
+TSS の便 1b の注入の結果の門(記録 2 つ `fixtures/xbrl/tanshin_self/`・結果の文書 `docs/XBRL_TANSHIN_SELF_INJECT_RESULT_2026-11-14.md` を縛る。封の門 `test_xbrl_tanshin_self_inject_seal.py` の次の段)。303 → 304(`tests/measure` 230 → 231)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
