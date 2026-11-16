@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **309 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **310 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 236 |
+| `tests/measure` | 237 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -337,6 +337,9 @@ YS の結果の門(記録 3 つ `fixtures/xbrl/yuho_sections/`・結果の文書
 
 **2026-11-17 に +1**(`tests/measure/test_xbrl_attr_tally_seal.py`。
 AT(便をまたいだ集計。「値が違う」と「結べたが別のもの」の行のうち、数の身元の 5 つの属性の取り違えに写る行の割合を、既に在る型の読みの記録だけで数える。封 `docs/XBRL_ATTR_TALLY_SEAL_2026-11-17.md`)の script `measure/xbrl_attr_tally_2026-11-17.py` と記録 `fixtures/xbrl/attr_tally/tally_2026-11-17.json` の封の門)。308 → 309(`tests/measure` 235 → 236)。
+
+**2026-11-17 に +1**(`tests/measure/test_xbrl_attr_tally_result.py`。
+AT の結果の門(記録 `fixtures/xbrl/attr_tally/`・結果の文書 `docs/XBRL_ATTR_TALLY_RESULT_2026-11-17.md` を縛る。封の門 `test_xbrl_attr_tally_seal.py` の次の段)。309 → 310(`tests/measure` 236 → 237)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
