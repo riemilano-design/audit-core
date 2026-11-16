@@ -105,6 +105,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-16: YS の記録 3 つ(母集団 201 本の表 / 201 本 × 3 つの節の切り出しと判定の行 / 読んだ 169 行の型。fixtures/xbrl/yuho_sections/)。script が書いた数と、司令塔(AI の席)が付けた型。
     # 会社名・証券コード・文・値を持たない。結果の門 tests/measure/test_xbrl_yuho_sections_result.py が縛る。engine(core/・adapters/)は 0 行
     "fixtures/xbrl/yuho_sections/population_2026-11-16.json", "fixtures/xbrl/yuho_sections/states_2026-11-16.json", "fixtures/xbrl/yuho_sections/read_types_2026-11-16.json",
+    # 2026-11-17: AT(便をまたいだ集計。封 docs/XBRL_ATTR_TALLY_SEAL_2026-11-17.md 52f3a228)の script 1 本と記録 1 つ(fixtures/xbrl/attr_tally/)。
+    # 既に在る型の読みの記録 5 つを sha256 で確かめて数え直すだけの標準ライブラリだけの script で、engine(core/・adapters/)・材料の本・前の便の script を読まない。記録は数だけで、行・文・値・本の番号を持たない
+    "measure/xbrl_attr_tally_2026-11-17.py", "fixtures/xbrl/attr_tally/tally_2026-11-17.json",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")
