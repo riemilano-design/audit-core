@@ -104,6 +104,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-17: AT(便をまたいだ集計。封 docs/XBRL_ATTR_TALLY_SEAL_2026-11-17.md 52f3a228)の script 1 本と記録 1 つ(fixtures/xbrl/attr_tally/)。
     # 既に在る型の読みの記録 5 つを sha256 で確かめて数え直すだけの標準ライブラリだけの script で、engine(core/・adapters/)・材料の本・前の便の script を読まない。記録は数だけで、行・文・値・本の番号を持たない
     "measure/xbrl_attr_tally_2026-11-17.py", "fixtures/xbrl/attr_tally/tally_2026-11-17.json",
+    # 2026-11-17: PS(止めた行にサマリーの予想の fact という当てる先が在るか。封 docs/XBRL_PLAN_SOURCE_SEAL_2026-11-17.md a080ce5f・追記 §7 5b38862e)の script 1 本と記録(fixtures/xbrl/plan_source/)。
+    # 材料は TSS の置き場の ZIP 400 本(新しく取らない)・engine(core/・adapters/)は 0 行。記録は数と、P・W の行の [本の #, 文の番号, 位置, 組, 札] だけで、文・span・値・要素名・context の字・会社名・証券コード・docID を持たない
+    "measure/xbrl_plan_source_2026-11-17.py", "fixtures/xbrl/plan_source/states_2026-11-17.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
