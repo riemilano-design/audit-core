@@ -98,6 +98,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-15: KAM の記録 3 つ(母集団 201 本の表 / 201 本の切り出しと判定の行 / 読んだ 133 行の型。fixtures/xbrl/kam/)。script が書いた数と、司令塔(AI の席)が付けた型。
     # 会社名・証券コード・文・値を持たない。結果の門 tests/measure/test_xbrl_kam_result.py が縛る。engine(core/・adapters/)は 0 行
     "fixtures/xbrl/kam/population_2026-11-15.json", "fixtures/xbrl/kam/states_2026-11-15.json", "fixtures/xbrl/kam/read_types_2026-11-15.json",
+    # 2026-11-16: YS の記録 3 つ(母集団 201 本の表 / 201 本 × 3 つの節の切り出しと判定の行 / 読んだ 169 行の型。fixtures/xbrl/yuho_sections/)。script が書いた数と、司令塔(AI の席)が付けた型。
+    # 会社名・証券コード・文・値を持たない。結果の門 tests/measure/test_xbrl_yuho_sections_result.py が縛る。engine(core/・adapters/)は 0 行
+    "fixtures/xbrl/yuho_sections/population_2026-11-16.json", "fixtures/xbrl/yuho_sections/states_2026-11-16.json", "fixtures/xbrl/yuho_sections/read_types_2026-11-16.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
