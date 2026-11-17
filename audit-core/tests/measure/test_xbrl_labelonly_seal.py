@@ -110,6 +110,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-17(2): PS の読みの軸の記録 1 つ(fixtures/xbrl/plan_source/read_types_2026-11-17.json。読みの軸の封 docs/XBRL_PLAN_SOURCE_READ_AXES_SEAL_2026-11-17.md 06d7b8a7 §6)。
     # 標本の行 [標本の番号, 本の #, 文の番号, 位置, 組, 値の軸, 身元の 5 字, 字] と数だけで、文・span・値・要素名・context の字・会社名・証券コード・docID を持たない。新しい取得 0・engine は 0 行
     "fixtures/xbrl/plan_source/read_types_2026-11-17.json",
+    # 2026-11-17(3): NR(engine の inline XBRL の読み取りが自己閉じの空の欄を次の fact まで読む欠陥は過去の便の数にどれだけ効いたか。封 docs/XBRL_NIL_READ_SEAL_2026-11-17.md 720a473d)の script 1 本と記録(fixtures/xbrl/nil_read/)。
+    # 材料は TSS の置き場の ZIP 400 本(新しく取らない)と ~/.cache/audit-core/ の ZIP の棚卸し・engine(core/・adapters/)は 0 行。記録は数と、行 [本の #, 文の番号, 位置, そのままの state, 直した入力の state, reason が同じか]・本ごとの数だけで、文・span・値・要素名・context の字・会社名・証券コード・docID を持たない
+    "measure/xbrl_nil_read_2026-11-17.py", "fixtures/xbrl/nil_read/states_2026-11-17.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
