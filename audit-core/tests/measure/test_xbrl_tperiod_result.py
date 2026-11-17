@@ -266,6 +266,8 @@ def header_problems(k, rec, full):
     fp = rec.get(u"engine の指紋") or {}
     want = engine_fingerprint_at_commit()
     for name in want:
+        if name == "adapter_xbrl_py_sha256" and SGR.nre_declared_fingerprint(fp.get(name)):      # 2026-11-17(NRE): 封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 が宣言した遷移の指紋も(実書類を通す試験が今の engine で作る記録。封が履歴に在るときだけ。SGR.nre_declared_fingerprint)
+            continue
         if fp.get(name) != want[name]:
             out.append(u"%s: engine の指紋 %s が engine の commit の木から作り直した値と違う" % (k, name))
     if not re.fullmatch(r"[0-9a-f]{40}", str(rec.get(u"HEAD の commit") or u"")):

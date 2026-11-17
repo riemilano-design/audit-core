@@ -6,8 +6,10 @@
 1. 封の字: 封の commit(720a473d)・path・要点の字・入れ物の棚卸しの数(7 folder)が script の定数と同じ。封の file は commit した blob と 1 字も変わっていない。
 2. 入力 6 つの sha256 が script の表と実物で同じ。
 3. 直した入力(封 §2-2): 取り除く関数を当たる例・当たらない例で直接呼ぶ。ZIP を作り直す関数は ``XBRL/PublicDoc/`` の ``.htm`` だけを変え、ほかの member・member の順・ほかの bytes を変えない。
-4. 独立の読み(封 §2-1)と fact の差(封 §2-3)を、封 §0 の作り物の例(小さい ZIP を memory で作る)で直接呼ぶ。**engine の ``load_instance`` が実際に「作られた fact 1・消えた fact 1」を出し、直した入力では出ない**ことを確かめる。
-   **engine の欠陥が直ったら(engine の読み取りが自己閉じを始まりの tag と読まなくなったら)この門は赤くなる**(それが狙い。そのとき数の元の仮定が変わるので、この便の結果の読み方を人間と見直す)。
+4. 独立の読み(封 §2-1)と fact の差(封 §2-3)を、封 §0 の作り物の例(小さい ZIP を memory で作る)で直接呼ぶ。
+   **2026-11-17(NRE)で engine の読み取りが自己閉じを始まりの tag と読まなくなったので、この項は「直った後の形」に書き直した**(封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 の型 6。同じ作り物で、
+   いまの engine が「作られた fact 0・消えた fact 0」を出し、独立の読みと同じ列になる)。**直す前の欠陥の形(作られた fact 1・消えた fact 1)は、直す前の式の写しを使う参照の engine
+   (``SGR.nre_old_formula_instance``。engine の字の中の式を封 §1 の「前」の字に戻した memory の module)で残す**(参照の engine で同じ作り物を読むと欠陥の形が出る)。
 5. 判定の差(封 §2-4): 移り変わりの表・state が変わった行・reason だけ変わった行・そのままでだけ合う行と直した入力でだけ合う行(向き)を、作り物の行で直接呼ぶ。止まり方(「そのまま」が TSS の記録と違う・独立の読みが engine と違う・行の集合が違う・集計の鍵の集合が違う・棚卸しが封の数と違う)。
 6. 棚卸し(封 §1 の 1)と 2026-11-09 の便の ZIP の経路(封 §1 の 3): 経路の判定を 3 つの形の ZIP で、棚卸しを使い捨ての folder で。NR-6 の数を作り物の経路で。
 7. 記録 ``fixtures/xbrl/nil_read/states_2026-11-17.json``: 封の字・script の sha256・入力・engine の指紋・行の形(6 欄。文や値や要素名を持たない)・集計が行からの独立の数え直しと一致・「そのまま」の集計の葉が TSS の記録の集計の葉と同じ・
@@ -59,6 +61,7 @@ def load_module(rel, name):
 
 
 PR = load_module("tests/measure/test_xbrl_p28_result.py", "p28_result_helpers_for_nr_seal")       # 順序の部品。門としては走らせない
+SGR = load_module("tests/measure/test_xbrl_rmix_seal.py", "rmix_seal_gate_for_nr_seal")      # 宣言された遷移の部品・直す前の式の参照の engine(2026-11-17 NRE)。門としては走らせない
 MS = load_module("measure/xbrl_nil_read_2026-11-17.py", "nil_read_script_for_seal_gate")
 
 SEAL_REL = "docs/XBRL_NIL_READ_SEAL_2026-11-17.md"
@@ -226,27 +229,39 @@ def read_problems(ms=None):
     out = []
     html = NIL_TAG + b"\n" + REAL_TAG                      # 封 §0 の「…」は空白(読み取りの中身が数だけになる形)
     zb = example_zip(html)
-    # engine(いま在るもの)が封 §0 のとおりに読む: Prior の ex:A が 120 百万を持つ fact 1 つ(作られた)・Current の ex:A は読まない(消えた)
+    # 2026-11-17(NRE): 直った後の形。engine(いま在るもの。封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §1 の式)は自己閉じの空の欄を始まりの tag と読まず、
+    # 「Current の ex:A が 120 百万」の fact 1 つだけを作る(そのまま = 自己閉じを消した入力。作られた fact 0・消えた fact 0)
+    want_cur = {(u"ex:A", u"Current", u"JPY", None, 120000000.0): 1}
     asis = ms.engine_counter(zb)
-    want_made = {(u"ex:A", u"Prior", u"JPY", None, 120000000.0): 1}
-    if dict(asis) != want_made:
-        out.append(u"engine がいまの読み取りで「Prior の ex:A が 120 百万」の fact 1 つにならない(engine の欠陥が直った可能性。数の仮定を人間と見直す): %s" % dict(asis))
+    if dict(asis) != want_cur:
+        out.append(u"engine がいまの読み取りで「Current の ex:A が 120 百万」の fact 1 つにならない(式が自己閉じを始まりの tag と読む疑い): %s" % dict(asis))
     fixed_zb, n = ms.fix_zip(zb)
     fixed = ms.engine_counter(fixed_zb)
-    if n != 1 or dict(fixed) != {(u"ex:A", u"Current", u"JPY", None, 120000000.0): 1}:
+    if n != 1 or dict(fixed) != want_cur:
         out.append(u"直した入力を engine に渡しても「Current の ex:A が 120 百万」の fact 1 つにならない: %s" % dict(fixed))
+    if asis != fixed or ms.fact_diff(asis, fixed) != (0, 0, 0):
+        out.append(u"直した engine で「そのまま」と「自己閉じを消した入力」の fact の列が同じでない(作られた fact 0・消えた fact 0 にならない): %s" % (ms.fact_diff(asis, fixed),))
+    # 直す前の欠陥の形は、直す前の式の写しを使う参照の engine で残す: Prior の ex:A が 120 百万を持つ fact 1 つ(作られた)・Current の ex:A は読まない(消えた)
+    want_made = {(u"ex:A", u"Prior", u"JPY", None, 120000000.0): 1}
+    with patched(ms, I=SGR.nre_old_formula_instance()):
+        old_asis = ms.engine_counter(zb)
+        old_fixed = ms.engine_counter(fixed_zb)
+    if dict(old_asis) != want_made:
+        out.append(u"直す前の式の参照の engine が「Prior の ex:A が 120 百万」の fact 1 つにならない(参照が欠陥の形を出さない): %s" % dict(old_asis))
+    if dict(old_fixed) != want_cur or ms.fact_diff(old_asis, old_fixed) != (1, 1, 1) or ms.fact_diff(old_asis, fixed) != (1, 1, 1):
+        out.append(u"直した入力が、直す前の式の参照の engine でも「Current の ex:A が 120 百万」の fact 1 つにならない(自己閉じを消す直しが効いていない): %s" % dict(old_fixed))
     # 独立の読み(engine を呼ばない)が直した入力の engine と同じ・そのままの入力でも空の欄を fact にしない
-    if ms.independent_counter(zb) != fixed or ms.independent_counter(fixed_zb) != fixed:
-        out.append(u"独立の読みが直した入力の engine の fact と違う")
+    if ms.independent_counter(zb) != fixed or ms.independent_counter(fixed_zb) != fixed or ms.independent_counter(zb) != asis:
+        out.append(u"独立の読みが直した入力の engine の fact と違う(直した engine の「そのまま」とも同じ列になる)")
     if dict(ms.independent_counter(example_zip(NIL_TAG + NIL_TAG))) != {}:
         out.append(u"空の欄だけの入力から fact を作った")
     if ms.independent_reads(u"<ix:nonFraction name=\"a\" scale=\"3\" sign=\"-\">1,5</ix:nonFraction>") != [(u"a", None, None, None, -15000.0)]:
         out.append(u"独立の読みの値の式(, を消す・scale・sign)が engine と同じでない")
     if ms.independent_reads(u"<ix:nonFraction name=\"a\">x</ix:nonFraction>") != []:
         out.append(u"数の形でない中身を fact にした")
-    # fact の差(向き): 作られた = そのままに在って直した入力に無い・消えた = 逆
-    if ms.fact_diff(asis, fixed) != (1, 1, 1):
-        out.append(u"fact の差が (作られた 1・消えた 1・期の取り違えの形 1) にならない: %s" % (ms.fact_diff(asis, fixed),))
+    # fact の差(向き): 作られた = そのままに在って直した入力に無い・消えた = 逆(欠陥の形は参照の engine の「そのまま」で)
+    if ms.fact_diff(old_asis, fixed) != (1, 1, 1):
+        out.append(u"fact の差が (作られた 1・消えた 1・期の取り違えの形 1) にならない: %s" % (ms.fact_diff(old_asis, fixed),))
     a = collections.Counter({(u"n", u"c1", u"JPY", None, 1.0): 2, (u"m", u"c1", u"JPY", None, 5.0): 1})
     b = collections.Counter({(u"n", u"c2", u"JPY", None, 3.0): 1, (u"m", u"c1", u"JPY", None, 5.0): 1})
     if ms.fact_diff(a, b) != (2, 1, 2):
@@ -544,7 +559,11 @@ def record_problems(ms=None, text=None, with_script_tally=True):
         out.append(u"記録の入力が表・実物と違う")
     tss = tss_record()
     fp = ms.VD.engine_fingerprint()
-    if rec.get(u"engine の指紋") != collections.OrderedDict((k, fp[k]) for k in ms.FP_KEYS) or any(rec[u"engine の指紋"][k] != tss[u"engine の指紋"][k] for k in ms.FP_KEYS):
+    # 2026-11-17(NRE): 記録の指紋 = TSS の記録のもの(T の後・NRE の前の engine)で、今の engine はそこから NRE の宣言された遷移だけ離れている(SGR.nre_record_fingerprint_ok)。記録は作り直さない
+    now_fp = collections.OrderedDict((k, fp[k]) for k in ms.FP_KEYS)
+    rec_fp = rec.get(u"engine の指紋") or {}
+    fp_ok = all(rec_fp.get(k) == now_fp[k] for k in ms.FP_KEYS if k != "adapter_xbrl_py_sha256") and SGR.nre_record_fingerprint_ok(rec_fp.get("adapter_xbrl_py_sha256"), now_fp["adapter_xbrl_py_sha256"])
+    if not fp_ok or any(rec[u"engine の指紋"][k] != tss[u"engine の指紋"][k] for k in ms.FP_KEYS):
         out.append(u"記録の engine の指紋が今の engine か TSS の記録のものと違う")
     if rec.get(u"profile") != u"P33E" or rec.get(u"key_leaks") != []:
         out.append(u"profile か key_leaks が違う")
@@ -686,7 +705,8 @@ def engine_since_seal_problems(root=REPO):
     rc, log = PR.git_in(root, "log", "--format=%H", "%s..HEAD" % c[0], "--", *[PREFIX + r for r in NOT_TOUCHED_RELS])
     if rc != 0:
         return [u"git log が失敗した"]
-    return [u"封の後に engine・lib・入力を触った commit %s" % x[:7] for x in log.split() if x]
+    # 2026-11-17(NRE): 封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 が宣言した遷移(instance.py の式 1 行の置き換え 1・1)だけを許す。NRE の engine の commit ただ 1 つで、その commit の NOT_TOUCHED_RELS への変更が宣言の行だけのときに限り一覧から外す(SGR.nre_explained_commit。他の commit・他の行は問題のまま)
+    return [u"封の後に engine・lib・入力を触った commit %s" % x[:7] for x in log.split() if x and not SGR.nre_explained_commit(root, x, [PREFIX + r for r in NOT_TOUCHED_RELS])]
 
 
 def engine_worktree_problems(root=REPO):
@@ -782,8 +802,18 @@ def spy_counter(spy, key, fn, extra=False):
     return f
 
 
-def run_job(ms, html, cut=True, bad_rec=False, engine_extra=False, rows_key=(1, 1)):
-    u"""``ms.states_job`` を作り物の 1 本で走らせる。(spy, 結果, 例外, ファイルの bytes)。"""
+def old_engine_counter(ms):
+    u"""直す前の式の参照の engine(``SGR.nre_old_formula_instance``)で fact の多重集合を作る関数。配線の試験が「作られた fact と消えた fact の数が違う非対称な例」を保つために使う
+    (2026-11-17 NRE で engine が直ったので、いまの engine では差が 0 になる。配線の試験の数は参照の engine で作る)。"""
+    mod = SGR.nre_old_formula_instance()
+
+    def engine_counter(zb):
+        return collections.Counter((f["name"], f["context"], f["unit"], f["decimals"], f["value"]) for f in mod.load_instance(zb)["facts"])
+    return engine_counter
+
+
+def run_job(ms, html, cut=True, bad_rec=False, engine_extra=False, rows_key=(1, 1), old=True):
+    u"""``ms.states_job`` を作り物の 1 本で走らせる。(spy, 結果, 例外, ファイルの bytes)。``old`` が真なら fact の多重集合を直す前の式の参照の engine で作り、偽ならいまの engine で作る。"""
     spy = {}
     content = (b"cut-" if cut else b"nocut-") + b"material"
     sha = hashlib.sha256(content).hexdigest()
@@ -798,7 +828,7 @@ def run_job(ms, html, cut=True, bad_rec=False, engine_extra=False, rows_key=(1, 
         if bad_rec:
             rec_book[u"対応"] = False
         over = dict(TSS=tss, TS=ts, independent_counter=spy_counter(spy, "independent", ms.independent_counter),
-                    engine_counter=spy_counter(spy, "engine", ms.engine_counter, engine_extra))
+                    engine_counter=spy_counter(spy, "engine", old_engine_counter(ms) if old else ms.engine_counter, engine_extra))
         with patched(ms, **over):
             try:
                 return spy, ms.states_job((1, u"甲", u"k", sha, path, rec_book)), None, content, wrapped
@@ -840,6 +870,17 @@ def job_wire_problems(ms=None):
             out.append(u"%s: 行(そのまま・直した入力)が判定の側に結ばれていない" % label)
         if res.get(u"切れた") is not True:
             out.append(u"%s: 切れた本を切れたとしない" % label)
+    # 2026-11-17(NRE): いまの engine(直った後)では、同じ作り物で作られた fact 0・消えた fact 0(そのまま = 自己閉じを消した入力)。判定は直した ZIP・独立の読みは包んだままの側のまま
+    for label, (html, want_nil, want_reads, _want_diff, want_facts) in sorted(SCEN_FACTS.items()):
+        spy, res, exc, content, wrapped = run_job(ms, html, old=False)
+        if exc is not None or res is None:
+            out.append(u"%s(いまの engine): states_job が落ちた %s" % (label, type(exc).__name__))
+            continue
+        if res.get(u"fact の差") != (0, 0, 0) or res[u"fixed"].get(u"fact の数") != want_facts or res.get(u"nil") != want_nil:
+            out.append(u"%s(いまの engine): fact の差が(0, 0, 0)・自己閉じの数・fixed の fact の数にならない: %s" % (label, res.get(u"fact の差")))
+        eng = spy.get("engine", [])
+        if len(eng) != 2 or zb_members(eng[0]) != zb_members(wrapped):
+            out.append(u"%s(いまの engine): engine の fact の多重集合が(包んだまま, 直した入力)の順で作られていない" % label)
     # 切れない本: 直した入力を作らず、そのまま = 直した入力
     spy, res, exc, content, wrapped = run_job(ms, SCEN_A, cut=False)
     if exc is not None or res is None or res[u"切れた"] or res[u"fixed"] is not res[u"asis"] or u"nil" in res or spy.get("profile_rows") or spy.get("wrap"):
@@ -880,7 +921,7 @@ def record_wire_problems(ms=None):
         inv = collections.OrderedDict([(u"f", collections.OrderedDict([(r, 0) for r in ROUTES] + [(u"ZIP として読める file", 0), (u"ZIP でない file", 0)]))])
         st = ns(ms.ST, validate_population=lambda p, a, b: p, read_population=lambda root: pop, names_snapshot=lambda d: 0, display_path=lambda p: u"x")
         ts = ns(ts, NF=types.SimpleNamespace(map_pool=lambda f, jobs, procs: [f(j) for j in jobs]))
-        over = dict(TSS=tss, TS=ts, ST=st, independent_counter=ms.independent_counter, material_dir=lambda m, o, r: (tmp, True), check_inputs=lambda root: [],
+        over = dict(TSS=tss, TS=ts, ST=st, independent_counter=ms.independent_counter, engine_counter=old_engine_counter(ms), material_dir=lambda m, o, r: (tmp, True), check_inputs=lambda root: [],
                     inventory=lambda base: inv, check_inventory=lambda i: [], check_population=lambda r, p: None, load_json=lambda p: states_in,
                     engine_fp=lambda s: collections.OrderedDict(), cache_base_dir=lambda: tmp)
         with patched(ms, **over):
@@ -1078,7 +1119,7 @@ class ReadTest(unittest.TestCase):
         self.assertEqual([], strip_problems())
 
     def test_c_2_the_independent_read_and_the_fact_diff_on_the_sealed_made_up_example(self):
-        u"""封 §0 の作り物の例を ``load_instance`` で読むと、作られた fact 1・消えた fact 1。engine の欠陥が直ったらここが赤くなる(狙い)。"""
+        u"""封 §0 の作り物の例を ``load_instance`` で読むと、直した engine では作られた fact 0・消えた fact 0(2026-11-17 NRE で直った後の形に書き直した)。直す前の式の参照の engine では作られた fact 1・消えた fact 1。"""
         self.assertEqual([], read_problems())
 
     def test_c_3_the_judge_counts_and_directions(self):

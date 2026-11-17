@@ -377,6 +377,8 @@ SEAL_T = "docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md"    # 2026-11-09 追�
 # recipes.py の 3461c3f8b7af6675・vocabulary.py の 83498c04a7b70396・registry_setup.py の 9a0b08954cf22639(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
 # 2026-10-27(P27 の段 2): 封 docs/XBRL_P27_SEAL_2026-10-27.md §2-3 が宣言した遷移。engine の 5 file(vocabulary・recipes・extract・registry_setup・report_customer)に挿入だけを足した(既存の行の書き換え 0)。直前の値は残す(測った時点の値)、P27 の段 2 で下の値。受け入れるのは、その封が履歴に在り、値が P27 の段 2 の後の値のときだけ。
 ENGINE_LATER = {"adapters/xbrl/recipes.py": ("346adb0d586e3af2", SEAL_T),
+                # 2026-11-17(NRE): 封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 が宣言した遷移(司令塔の決定 2026-11-17)。instance.py の .htm の経路の式 1 行の置き換え(+1 行・-1 行。旗なし)。この file はこの門が測った時点では動いていない。受け入れるのは、NRE の封が履歴に在り、sha16 が下の値のときだけ。
+                "adapters/xbrl/instance.py": ("1b8c00f86eafe765", "docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md"),
                 "adapters/xbrl/comparators.py": ("9d65945efab20089", SEAL_RB),
                 # 2026-10-20 追記(段 2): vocabulary.py の sha は 段 1 3320c8c で 1fdb48e7e3ba58ce(残す。測った時点の値)、段 2(DEFAULT_PROFILE を
                 # P21 -> P22 にし、決定の注記を足した。vocabulary.py だけ・recipes.py は 0 行。同じ封 SEAL_PERIOD_BIND の段 2)で 25a3c0992e10daaa。

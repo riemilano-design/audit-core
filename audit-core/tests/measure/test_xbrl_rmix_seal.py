@@ -413,6 +413,94 @@ def t_declared_file_change(root, seal_commit, rel, base=ROOT):
         return head.stdout == fh.read()
 
 
+#: 2026-11-17(NRE): 封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 が宣言した遷移(司令塔の決定 2026-11-17)。NRE の engine の commit が instance.py の .htm の経路の式 1 行を置き換え(+1 行・-1 行。旗なし)、
+#: 束ねた指紋が NRE_FP になる。PB・T の宣言(上の PB_*・T_*)と同じ形で、engine を「封の commit から変えない」と留めた後の便の門(この file の frozen_problems・untouched の numstat・記録の頭の engine の指紋を使う便)は、
+#: この遷移だけを許す。許すのは、NRE の封が履歴に 1 つ在り、numstat・sha16・指紋が下の宣言と同じときだけ。numstat は NRE だけの行数(1・1)で、PB・T の封から数えた門でも instance.py の行は 1・1 のまま。
+#: 他の file・他の行数・他の値は今までどおり赤。
+NRE_SEAL_REL = "docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md"
+NRE_ENGINE_FILES = ("adapters/xbrl/instance.py",)
+NRE_NUMSTAT = {"adapters/xbrl/instance.py": ("1", "1")}
+NRE_SHA16 = {"adapters/xbrl/instance.py": "1b8c00f86eafe765"}
+NRE_FP = "38951626929e7d04b32b1a89586294198087f6fabded4162cd6ef2f14c9c91c0"
+
+
+def nre_seal_in_history(root=REPO):
+    return len(PR.added_commits(root, PREFIX + NRE_SEAL_REL)) == 1
+
+
+def nre_declared_numstat(line, root=REPO, base=ROOT):
+    u"""``git diff --numstat`` の 1 行が NRE の宣言した遷移の行か(NRE の封が履歴に在り、行数 1・1 と作業木の sha16 が宣言と同じ)。"""
+    parts = line.split("\t")
+    if len(parts) != 3 or not parts[2].startswith(PREFIX):
+        return False
+    rel = parts[2][len(PREFIX):]
+    return (rel in NRE_NUMSTAT and (parts[0], parts[1]) == NRE_NUMSTAT[rel] and pb_sha16(rel, base) == NRE_SHA16[rel] and nre_seal_in_history(root))
+
+
+def nre_declared_fingerprint(value, root=REPO):
+    u"""記録の頭の ``adapter_xbrl_py_sha256`` の値が NRE の宣言した遷移の値か(NRE の封が履歴に在るときだけ)。"""
+    return value == NRE_FP and nre_seal_in_history(root)
+
+
+#: 封 §1 の式の前・後の字(engine の字の中の 1 行の式。literal)。直す前の欠陥の形を試験の中に残すための参照の engine(``nre_old_formula_instance``)が使う
+NRE_FORMULA_BEFORE = r"r'<ix:nonFraction([^>]*)>(.*?)</ix:nonFraction>'"
+NRE_FORMULA_AFTER = r"r'<ix:nonFraction([^>]*)(?<!/)>(.*?)</ix:nonFraction>'"
+
+
+def nre_old_formula_instance(src=None, base=ROOT):
+    u"""engine の ``instance.py`` の字の中の式を封 §1 の「前」の字に戻した module(memory の中だけ。``sys.modules`` に登録せず・file は書かない)。直す前の欠陥
+    (自己閉じの空の欄が次の fact まで読まれる)の形を試験の中に残す参照。「後」の字が 1 回だけ在らなければ AssertionError(式を戻す前提が崩れた)。"""
+    if src is None:
+        with open(os.path.join(base, NRE_ENGINE_FILES[0]), encoding="utf-8") as fh:
+            src = fh.read()
+    assert src.count(NRE_FORMULA_AFTER) == 1, u"engine の字に封 §1 の「後」の式が 1 回だけ在らない"
+    mod = types.ModuleType("instance_with_the_old_formula_for_nre")
+    mod.__file__ = os.path.join(base, NRE_ENGINE_FILES[0])
+    exec(compile(src.replace(NRE_FORMULA_AFTER, NRE_FORMULA_BEFORE), mod.__file__, "exec"), mod.__dict__)
+    return mod
+
+
+def nre_record_fingerprint_ok(rec_value, now_value, root=REPO):
+    u"""記録の頭の ``adapter_xbrl_py_sha256``(記録を作った時の engine の値)と今の engine の値の関係。同じか、記録が NRE の前の値(T の宣言の値 ``T_FP``。T の後 NRE の前の engine)で、今の値が
+    NRE の宣言した遷移の値(封が履歴に在るとき)のどちらか。記録は作り直さない(測った時の値のまま)。他の値の組は今までどおり赤。"""
+    return rec_value == now_value or (rec_value == T_FP and nre_declared_fingerprint(now_value, root))
+
+
+def nre_engine_commits(root=REPO):
+    u"""NRE の engine の commit(NRE の封の後に instance.py を最初に触った commit。履歴から探す)を 1 つだけ入れた集合。封か engine の commit が無ければ空。"""
+    s, e = engine_commit(root, PREFIX, NRE_SEAL_REL, NRE_ENGINE_FILES)
+    return set([e]) if (s is not None and e is not None) else set()
+
+
+def nre_explained_commit(root, commit, paths, base=ROOT):
+    u"""``commit`` が NRE の engine の commit(``nre_engine_commits``)で、``paths``(repo の根からの path の列)への変更が NRE の宣言した遷移の行だけか(``git diff --numstat commit^ commit``)。
+    「封の後に engine を触った commit の一覧」を見る門が、その一覧から NRE の engine の commit を外してよいかを決める。他の commit・他の行は外さない。"""
+    if commit not in nre_engine_commits(root):
+        return False
+    rc, txt = PR.git_in(root, "diff", "--numstat", commit + "^", commit, "--", *paths)
+    lines = [x for x in txt.splitlines() if x]
+    return rc == 0 and bool(lines) and all(nre_declared_numstat(x, root, base) for x in lines)
+
+
+def nre_declared_file_change(root, seal_commit, rel, base=ROOT):
+    u"""封の commit から ``rel`` が変わったのが、NRE の engine の commit を含み、ほかは PB・T5Y・T の commit だけか(前の便の門に NRE の便が宣言の字を足したので、その commit が触ってよい)。
+    作業木が HEAD の blob と同じ(commit 済み)ことも見る。"""
+    nre = nre_engine_commits(root)
+    if not nre:
+        return False
+    log = [c for c in PR.git_in(root, "log", "--format=%H", seal_commit + "..HEAD", "--", PREFIX + rel)[1].split() if c]
+    _pbs, pb_e = engine_commit(root, PREFIX, PB_SEAL_REL, PB_ENGINE_FILES)
+    _t5s, t5_e = engine_commit(root, PREFIX, T5Y_SEAL_REL, T5Y_FILES)
+    _ts, t_e = engine_commit(root, PREFIX, T_SEAL_REL, T_ENGINE_FILES)
+    if not nre <= set(log) or not set(log) <= set(c for c in (pb_e, t5_e, t_e) if c) | nre:
+        return False
+    head = subprocess.run(["git", "show", "HEAD:%s%s" % (PREFIX, rel)], cwd=root, capture_output=True)
+    if head.returncode != 0:
+        return False
+    with open(os.path.join(base, rel), "rb") as fh:
+        return head.stdout == fh.read()
+
+
 def frozen_problems(rels=READ_ONLY_RELS, root=REPO, base=ROOT, seal_rel=SEAL_REL):
     u"""root = git の木、base = 作業木の audit-core の folder。封の commit の blob と作業木の byte を比べる。"""
     seal = PR.added_commits(root, PREFIX + seal_rel)
@@ -431,6 +519,8 @@ def frozen_problems(rels=READ_ONLY_RELS, root=REPO, base=ROOT, seal_rel=SEAL_REL
                 if t5y_declared_file_change(root, seal[0], rel, base):      # 2026-11-06(T5Y): 仕掛けの 2 file と、T5Y の便の commit だけが触った前の便の門は宣言された遷移
                     continue
                 if t_declared_file_change(root, seal[0], rel, base):      # 2026-11-09(T): T の engine の commit が触った(PB・T5Y の commit も触ってよい)前の便の門は宣言された遷移
+                    continue
+                if nre_declared_file_change(root, seal[0], rel, base):      # 2026-11-17(NRE): NRE の engine の commit が触った(PB・T5Y・T の commit も触ってよい)前の便の門は宣言された遷移
                     continue
                 out.append(u"封の commit の blob と byte が違う: %s" % rel)
     return out
@@ -1064,6 +1154,240 @@ class TTransitionTest(unittest.TestCase):
         self.assertFalse(t5y_declared_numstat("57\t0\t" + self.REC))
         self.assertFalse(t_declared_numstat("30\t0\t%smeasure/inject.py" % PREFIX))
         self.assertFalse(t_declared_numstat("81\t0\t%smeasure/lib/sites.py" % PREFIX))
+
+
+class NreTransitionTest(unittest.TestCase):
+    u"""2026-11-17(NRE): 後の便の門が使う「NRE の宣言された遷移」の部品(``nre_declared_numstat``・``nre_declared_fingerprint``・``nre_declared_file_change``)。許すのは宣言の字だけで、他は赤。"""
+
+    INST = "%sadapters/xbrl/instance.py" % PREFIX
+    REC = "%sadapters/xbrl/recipes.py" % PREFIX
+
+    def test_n_1_the_declared_numstat_line_is_accepted_in_this_repo(self):
+        self.assertTrue(nre_seal_in_history())
+        self.assertTrue(nre_declared_numstat("1\t1\t" + self.INST))
+        for rel in NRE_ENGINE_FILES:
+            self.assertEqual(NRE_SHA16[rel], pb_sha16(rel))
+
+    def test_n_2_any_other_numstat_line_is_not_accepted(self):
+        for bad in ("2\t1\t" + self.INST, "1\t2\t" + self.INST, "1\t0\t" + self.INST, "0\t1\t" + self.INST, "0\t0\t" + self.INST, "1\t1\t" + self.REC, "1\t1\t%sadapters/xbrl/extract.py" % PREFIX,
+                    "1\t1\t%sadapters/xbrl/vocabulary.py" % PREFIX, "1\t1\t%score/py/audit_core/verify.py" % PREFIX, "1\t1\t%smeasure/inject.py" % PREFIX, "1\t1\tadapters/xbrl/instance.py", "1\t1", ""):
+            self.assertFalse(nre_declared_numstat(bad), bad)
+
+    def test_n_3_a_file_that_is_not_the_declared_sha16_is_not_accepted(self):
+        with tempfile.TemporaryDirectory(dir=os.environ.get("TMPDIR")) as d:
+            os.makedirs(os.path.join(d, "adapters", "xbrl"))
+            with open(os.path.join(d, NRE_ENGINE_FILES[0]), "w", encoding="utf-8") as fh:
+                fh.write("x = 1\n")
+            self.assertFalse(nre_declared_numstat("1\t1\t" + self.INST, base=d))
+
+    def test_n_4_without_the_nre_seal_in_history_nothing_is_accepted(self):
+        r = PR.Repo()
+        r.put("measure/prev.py")
+        r.commit("measure/prev.py")
+        self.assertFalse(nre_seal_in_history(r.d))
+        self.assertFalse(nre_declared_numstat("1\t1\t" + self.INST, root=r.d))
+        self.assertFalse(nre_declared_fingerprint(NRE_FP, root=r.d))
+        self.assertEqual(set(), nre_engine_commits(r.d))
+
+    def test_n_5_only_the_declared_fingerprint_is_accepted(self):
+        self.assertTrue(nre_declared_fingerprint(NRE_FP))
+        self.assertFalse(nre_declared_fingerprint(NRE_FP[:-1] + "1"))
+        self.assertFalse(nre_declared_fingerprint(T_FP))
+        self.assertFalse(nre_declared_fingerprint(PB_FP))
+        self.assertFalse(nre_declared_fingerprint(None))
+
+    def _repo(self, extra_commit=False, dirty=False, engine=True, other_between=False, with_t=False):
+        u"""封 →(T の封 → T の engine の commit)→ NRE の封 → (NRE の engine の commit = instance.py と前の便の file を触る)→ ..."""
+        r = PR.Repo()
+        r.put("measure/gate.py")
+        r.put(SEAL_REL)
+        seal = r.commit("measure/gate.py", SEAL_REL)
+        if with_t:
+            r.put(T_SEAL_REL)
+            r.commit(T_SEAL_REL)
+            for rel in T_ENGINE_FILES:
+                r.put(rel)
+            r.put("measure/gate.py")
+            r.commit(*(list(T_ENGINE_FILES) + ["measure/gate.py"]))
+        if other_between:
+            r.put("measure/gate.py")
+            r.commit("measure/gate.py")
+        r.put(NRE_SEAL_REL)
+        r.commit(NRE_SEAL_REL)
+        for rel in NRE_ENGINE_FILES:
+            r.put(rel)
+        r.put("measure/gate.py")
+        files = ["measure/gate.py"] + (list(NRE_ENGINE_FILES) if engine else [])
+        e = r.commit(*files)
+        if extra_commit:
+            r.put("measure/gate.py")
+            r.commit("measure/gate.py")
+        if dirty:
+            r.put("measure/gate.py")
+        return r, seal, e
+
+    def _base(self, r):
+        return os.path.join(r.d, "audit-core")
+
+    def test_n_6_a_file_changed_only_by_the_nre_engine_commit_is_accepted(self):
+        r, seal, e = self._repo()
+        self.assertEqual(set([e]), nre_engine_commits(r.d))
+        self.assertTrue(nre_declared_file_change(r.d, seal, "measure/gate.py", base=self._base(r)))
+        self.assertEqual([], frozen_problems(rels=("measure/gate.py",), root=r.d, base=self._base(r)))
+
+    def test_n_7_a_file_changed_again_after_the_nre_engine_commit_is_not_accepted(self):
+        r, seal, e = self._repo(extra_commit=True)
+        self.assertFalse(nre_declared_file_change(r.d, seal, "measure/gate.py", base=self._base(r)))
+        self.assertEqual([u"封の commit の blob と byte が違う: measure/gate.py"], frozen_problems(rels=("measure/gate.py",), root=r.d, base=self._base(r)))
+
+    def test_n_8_an_uncommitted_change_is_not_accepted(self):
+        r, seal, e = self._repo(dirty=True)
+        self.assertFalse(nre_declared_file_change(r.d, seal, "measure/gate.py", base=self._base(r)))
+
+    def test_n_9_a_change_by_a_commit_that_does_not_touch_the_engine_is_not_accepted(self):
+        r, seal, e = self._repo(engine=False)
+        self.assertFalse(nre_declared_file_change(r.d, seal, "measure/gate.py", base=self._base(r)))
+        self.assertNotEqual([], frozen_problems(rels=("measure/gate.py",), root=r.d, base=self._base(r)))
+
+    def test_n_10_a_file_changed_by_another_commit_between_is_not_accepted(self):
+        r, seal, e = self._repo(other_between=True)
+        self.assertFalse(nre_declared_file_change(r.d, seal, "measure/gate.py", base=self._base(r)))
+        self.assertNotEqual([], frozen_problems(rels=("measure/gate.py",), root=r.d, base=self._base(r)))
+
+    def test_n_11_a_gate_changed_by_the_t_commit_and_then_the_nre_commit_is_accepted(self):
+        r, seal, e = self._repo(with_t=True)
+        self.assertTrue(nre_declared_file_change(r.d, seal, "measure/gate.py", base=self._base(r)))
+        self.assertEqual([], frozen_problems(rels=("measure/gate.py",), root=r.d, base=self._base(r)))
+
+    def test_n_12_a_gate_changed_only_by_the_t_commit_is_not_an_nre_transition(self):
+        r = PR.Repo()
+        r.put("measure/gate.py")
+        r.put(SEAL_REL)
+        seal = r.commit("measure/gate.py", SEAL_REL)
+        r.put(T_SEAL_REL)
+        r.commit(T_SEAL_REL)
+        for rel in T_ENGINE_FILES:
+            r.put(rel)
+        r.put("measure/gate.py")
+        r.commit(*(list(T_ENGINE_FILES) + ["measure/gate.py"]))
+        r.put(NRE_SEAL_REL)
+        r.commit(NRE_SEAL_REL)
+        for rel in NRE_ENGINE_FILES:
+            r.put(rel)
+        r.commit(*NRE_ENGINE_FILES)
+        base = self._base(r)
+        self.assertTrue(t_declared_file_change(r.d, seal, "measure/gate.py", base=base))                 # T の遷移としては許す
+        self.assertFalse(nre_declared_file_change(r.d, seal, "measure/gate.py", base=base))              # NRE の遷移とは言わない
+
+    def test_n_13_a_file_changed_before_the_nre_seal_is_not_accepted(self):
+        r = PR.Repo()
+        r.put("measure/gate.py")
+        r.put(SEAL_REL)
+        seal = r.commit("measure/gate.py", SEAL_REL)
+        r.put("measure/gate.py")
+        r.commit("measure/gate.py")
+        r.put(NRE_SEAL_REL)
+        r.commit(NRE_SEAL_REL)
+        for rel in NRE_ENGINE_FILES:
+            r.put(rel)
+        r.commit(*NRE_ENGINE_FILES)
+        self.assertFalse(nre_declared_file_change(r.d, seal, "measure/gate.py", base=self._base(r)))
+
+    def _explained_repo(self, extra_engine_file=False, extra_commit_after=False):
+        u"""封 → NRE の封(instance.py は 1 行)→ NRE の engine の commit(instance.py の 1 行を替える。numstat 1・1)。sha16 を見る作業木の側は実物の instance.py の写しを置いた使い捨ての folder。"""
+        r = PR.Repo()
+        r.put("measure/gate.py")
+        r.put(SEAL_REL)
+        r.put(NRE_ENGINE_FILES[0], text=u"")
+        seal = r.commit("measure/gate.py", SEAL_REL, NRE_ENGINE_FILES[0])
+        r.put(NRE_SEAL_REL)
+        r.commit(NRE_SEAL_REL)
+        r.put(NRE_ENGINE_FILES[0], text=u"")
+        files = [NRE_ENGINE_FILES[0]]
+        if extra_engine_file:
+            r.put("adapters/xbrl/recipes.py")
+            files.append("adapters/xbrl/recipes.py")
+        e = r.commit(*files)
+        if extra_commit_after:
+            r.put("measure/gate.py")
+            r.commit("measure/gate.py")
+        return r, seal, e
+
+    def test_n_15_an_explained_commit_is_the_nre_engine_commit_whose_change_to_the_paths_is_the_declared_line_only(self):
+        with tempfile.TemporaryDirectory(dir=os.environ.get("TMPDIR")) as d:
+            os.makedirs(os.path.join(d, "adapters", "xbrl"))
+            with open(os.path.join(ROOT, NRE_ENGINE_FILES[0]), "rb") as src, open(os.path.join(d, NRE_ENGINE_FILES[0]), "wb") as dst:
+                dst.write(src.read())                                                                       # sha16 が宣言の値の instance.py の写し
+            r, seal, e = self._explained_repo()
+            paths = [PREFIX + "adapters", PREFIX + "core"]
+            self.assertEqual(set([e]), nre_engine_commits(r.d))
+            self.assertTrue(nre_explained_commit(r.d, e, paths, base=d))                                    # 宣言の行だけ(1・1。sha16・封が履歴に在る)
+            self.assertFalse(nre_explained_commit(r.d, seal, paths, base=d))                                # engine の commit でない
+            with tempfile.TemporaryDirectory(dir=os.environ.get("TMPDIR")) as d2:
+                os.makedirs(os.path.join(d2, "adapters", "xbrl"))
+                with open(os.path.join(d2, NRE_ENGINE_FILES[0]), "w", encoding="utf-8") as fh:
+                    fh.write("x = 1\n")
+                self.assertFalse(nre_explained_commit(r.d, e, paths, base=d2))                              # sha16 が宣言の値でない
+            r2, seal2, e2 = self._explained_repo(extra_engine_file=True)
+            self.assertFalse(nre_explained_commit(r2.d, e2, paths, base=d))                                 # recipes.py も触った(宣言の行だけでない)
+            self.assertFalse(nre_explained_commit(r.d, "0" * 40, paths, base=d))                            # 履歴に無い commit
+            r3, seal3, e3 = self._explained_repo(extra_commit_after=True)
+            self.assertTrue(nre_explained_commit(r3.d, e3, paths, base=d))                                  # 後の commit が在っても、engine の commit 自身は外れる
+            r4 = PR.Repo()
+            r4.put(NRE_ENGINE_FILES[0], text=u"")
+            r4.commit(NRE_ENGINE_FILES[0])
+            r4.put(NRE_ENGINE_FILES[0], text=u"")
+            c4 = r4.commit(NRE_ENGINE_FILES[0])
+            self.assertFalse(nre_explained_commit(r4.d, c4, paths, base=d))                                 # NRE の封が履歴に無い
+
+    def test_n_16_an_explained_commit_in_this_repo_needs_the_commit_to_exist(self):
+        # いまの木では instance.py は宣言の値。NRE の engine の commit が履歴に在れば、その commit だけが外れる(未 commit のうちは engine の commit が無いので何も外れない)
+        e = nre_engine_commits()
+        for c in e:
+            self.assertTrue(nre_explained_commit(REPO, c, [PREFIX + "adapters", PREFIX + "core"]))
+            self.assertFalse(nre_explained_commit(REPO, c, [PREFIX + "tests"]))                                 # 試験の file も触っているので、その path まで含めれば外さない
+        self.assertFalse(nre_explained_commit(REPO, "0" * 40, [PREFIX + "adapters"]))
+
+    def test_n_17_the_old_formula_reference_reads_the_defect_and_the_engine_does_not(self):
+        import io
+        import zipfile
+        nil = b'<ix:nonFraction name="ex:A" contextRef="Prior" unitRef="JPY" scale="6" xsi:nil="true"/>'
+        real = b'<ix:nonFraction name="ex:A" contextRef="Current" unitRef="JPY" scale="6">120</ix:nonFraction>'
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as z:
+            z.writestr("XBRL/PublicDoc/x_ixbrl.htm", nil + b"\n" + real)
+        zb = buf.getvalue()
+        old = nre_old_formula_instance()
+        self.assertNotIn("instance_with_the_old_formula_for_nre", sys.modules)
+        self.assertEqual([("ex:A", "Prior", 120000000.0)], [(f["name"], f["context"], f["value"]) for f in old.load_instance(zb)["facts"]])
+        from adapters.xbrl import instance as I
+        self.assertEqual([("ex:A", "Current", 120000000.0)], [(f["name"], f["context"], f["value"]) for f in I.load_instance(zb)["facts"]])
+        with open(os.path.join(ROOT, NRE_ENGINE_FILES[0]), encoding="utf-8") as fh:
+            src = fh.read()
+        with self.assertRaises(AssertionError):
+            nre_old_formula_instance(src=src.replace(NRE_FORMULA_AFTER, NRE_FORMULA_BEFORE))        # 前の字のままの engine には戻す式が無い
+        with self.assertRaises(AssertionError):
+            nre_old_formula_instance(src=src + "\n" + NRE_FORMULA_AFTER + "\n")                  # 「後」の字が 2 回
+
+    def test_n_18_a_record_fingerprint_is_ok_only_for_the_same_value_or_the_declared_pre_nre_value(self):
+        self.assertTrue(nre_record_fingerprint_ok(NRE_FP, NRE_FP))
+        self.assertTrue(nre_record_fingerprint_ok(T_FP, NRE_FP))                       # 記録は NRE の前の engine(T の後)で、今の engine は NRE の宣言された遷移の値
+        self.assertTrue(nre_record_fingerprint_ok(T_FP, T_FP))
+        self.assertFalse(nre_record_fingerprint_ok(PB_FP, NRE_FP))                    # 記録が NRE の前の値でない
+        self.assertFalse(nre_record_fingerprint_ok(T_FP, NRE_FP[:-1] + "1"))          # 今の値が宣言の値でない
+        self.assertFalse(nre_record_fingerprint_ok(NRE_FP, T_FP))                     # 向きが逆
+        self.assertFalse(nre_record_fingerprint_ok(None, NRE_FP))
+        r = PR.Repo()
+        r.put("measure/prev.py")
+        r.commit("measure/prev.py")
+        self.assertFalse(nre_record_fingerprint_ok(T_FP, NRE_FP, root=r.d))           # NRE の封が履歴に無い
+
+    def test_n_14_the_other_transitions_do_not_accept_the_nre_line_and_the_nre_does_not_accept_theirs(self):
+        self.assertFalse(pb_declared_numstat("1\t1\t" + self.INST))
+        self.assertFalse(t5y_declared_numstat("1\t1\t" + self.INST))
+        self.assertFalse(t_declared_numstat("1\t1\t" + self.INST))
+        self.assertFalse(nre_declared_numstat("57\t0\t" + self.REC))
+        self.assertFalse(nre_declared_numstat("30\t0\t%smeasure/inject.py" % PREFIX))
 
 
 class OrderTest(unittest.TestCase):

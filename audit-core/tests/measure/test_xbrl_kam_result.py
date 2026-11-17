@@ -310,7 +310,8 @@ def provenance_problems(c, root=REPO):
     if S.get(u"2026-11-09 の便の script の sha256") != cur["ts"] or S.get(u"TSS の script の sha256") != cur["tss"]:
         out.append(u"来歴[states]: 前の便の script の sha256 が今の file と違う")
     fp = S.get(u"engine の指紋") or {}
-    if fp.get(u"adapter_xbrl_py_sha256") != cur["fp"]["adapter_xbrl_py_sha256"] or fp.get(u"core_py_sha256") != cur["fp"]["core_py_sha256"] \
+    # 2026-11-17(NRE): 記録の指紋 = 記録を作った時の engine(T の後・NRE の前)で、今の engine はそこから NRE の宣言された遷移だけ離れている(封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3。SGR.nre_record_fingerprint_ok)。記録は作り直さない。他の値の組は今までどおり赤
+    if not SG.SGR.nre_record_fingerprint_ok(fp.get(u"adapter_xbrl_py_sha256"), cur["fp"]["adapter_xbrl_py_sha256"]) or fp.get(u"core_py_sha256") != cur["fp"]["core_py_sha256"] \
             or fp.get(u"adapter_xbrl_py_files") != cur["fp"]["adapter_xbrl_py_files"] or fp.get(u"core_py_files") != cur["fp"]["core_py_files"] or not head_ok(root, fp.get(u"git_commit")):
         out.append(u"来歴[states]: engine の指紋が今の engine と違う")
     if S.get(u"profile") != u"P33E":

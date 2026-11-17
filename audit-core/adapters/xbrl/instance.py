@@ -115,7 +115,7 @@ def load_instance(zbytes):
         src = ",".join(htm[:3])
         for n in htm:
             raw = z.read(n).decode("utf-8", "ignore")
-            for m in re.finditer(r'<ix:nonFraction([^>]*)>(.*?)</ix:nonFraction>', raw, re.S):
+            for m in re.finditer(r'<ix:nonFraction([^>]*)(?<!/)>(.*?)</ix:nonFraction>', raw, re.S):
                 a = dict(re.findall(r'(\w+)="([^"]*)"', m.group(1)))
                 v = re.sub(r"<[^>]+>", "", m.group(2)).replace(",", "").strip()
                 if not re.fullmatch(r"-?\d+(\.\d+)?", v or ""):

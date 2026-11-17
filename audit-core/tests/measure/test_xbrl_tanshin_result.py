@@ -220,7 +220,8 @@ def common_header_problems(rec, full, fetch_rec_exists):
     if rec.get(u"前の便の script の sha256") != dict((rel, sha256_rel(rel)) for rel in TS.PREV_SCRIPT_RELS):
         out.append(u"前の便の script の sha256 が現物と違う")
     fp, now = rec.get(u"engine の指紋") or {}, VD.engine_fingerprint()
-    if fp.get(u"adapter_xbrl_py_sha256") != now["adapter_xbrl_py_sha256"] or fp.get(u"core_py_sha256") != now["core_py_sha256"]:
+    # 2026-11-17(NRE): 記録の指紋 = 記録を作った時の engine(T の後・NRE の前)で、今の engine はそこから NRE の宣言された遷移だけ離れている(封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3。SGR.nre_record_fingerprint_ok)。記録は作り直さない。他の値の組は今までどおり赤
+    if not SG.SGR.nre_record_fingerprint_ok(fp.get(u"adapter_xbrl_py_sha256"), now["adapter_xbrl_py_sha256"]) or fp.get(u"core_py_sha256") != now["core_py_sha256"]:
         out.append(u"engine の指紋が今の engine と違う(記録を作ったあとに engine が変わった)")
     if rec.get(u"lib の指紋") != dict((rel, sha256_rel(rel)) for rel in TS.LIB_RELS) or rec.get(u"仕掛けの 2 file の sha256") != dict((rel, sha256_rel(rel)) for rel in TS.DEVICE_RELS):
         out.append(u"lib・仕掛けの sha256 が現物と違う")

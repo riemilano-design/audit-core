@@ -464,7 +464,11 @@ def engine_problems(root=REPO):
     if rc != 0:
         out.append(u"engine: git diff が失敗した")
     elif txt:
-        out.append(u"engine: script・記録・封の門が %s から変わっている" % IMPL_COMMIT)
+        # 2026-11-17(NRE): 封の門だけは、NRE の engine の commit が宣言された遷移の字(``SGR.nre_explained_commit`` の宣言)を足した変更なら許す(SGR.nre_declared_file_change。
+        # 封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 型 4。script と記録は 0 行のまま)。他の変更・他の file は今までどおり赤
+        changed = [ln.split("\t")[2] for ln in txt.splitlines() if ln.count("\t") >= 2]
+        if len(changed) != len([x for x in txt.splitlines() if x]) or any(c != PREFIX + SEAL_GATE_REL for c in changed) or not SG.SGR.nre_declared_file_change(root, IMPL_COMMIT, SEAL_GATE_REL, ROOT):
+            out.append(u"engine: script・記録・封の門が %s から変わっている" % IMPL_COMMIT)
     return out
 
 

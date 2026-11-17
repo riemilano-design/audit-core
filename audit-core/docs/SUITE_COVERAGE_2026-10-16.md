@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **314 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **315 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 241 |
+| `tests/measure` | 242 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -352,6 +352,9 @@ NR(engine の inline XBRL の読み取りが自己閉じの空の欄を次の fa
 
 **2026-11-17 に +1**(`tests/measure/test_xbrl_nil_read_result.py`。
 NR の結果の門(記録 `fixtures/xbrl/nil_read/states_2026-11-17.json`・結果の文書 `docs/XBRL_NIL_READ_RESULT_2026-11-17.md` を縛る。封の門 `test_xbrl_nil_read_seal.py` の次の段)。313 → 314(`tests/measure` 240 → 241)。
+
+**2026-11-17 に +1**(`tests/measure/test_xbrl_nil_read_engine_seal.py`。
+NRE(engine の inline XBRL の読み取りが自己閉じの空の欄を始まりの tag と読まないようにする直し。封 `docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md`)の engine の式 1 行・script `measure/xbrl_nil_read_engine_2026-11-17.py`・記録 `fixtures/xbrl/nil_read_engine/states_2026-11-17.json` の封の門)。314 → 315(`tests/measure` 241 → 242)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

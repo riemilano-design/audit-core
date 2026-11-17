@@ -295,7 +295,8 @@ def header_problems(rec, ex, seal):
     fp = rec.get(u"engine の指紋") or {}
     want = engine_fingerprint_at_seal()
     for name in want:
-        if fp.get(name) != want[name]:
+        # 2026-11-17(NRE): 記録の指紋 = 記録を作った時の engine(T の後・NRE の前)で、今の engine はそこから NRE の宣言された遷移だけ離れている(封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3。SGR.nre_record_fingerprint_ok)。記録は作り直さない。他の値の組は今までどおり赤
+        if fp.get(name) != want[name] and not (name == "adapter_xbrl_py_sha256" and SG.SGR.nre_record_fingerprint_ok(want[name], fp.get(name))):
             out.append(u"engine の指紋 %s が封の commit の木から作り直した値と違う(この便は engine を変えない)" % name)
     if not re.fullmatch(r"[0-9a-f]{40}", str(rec.get(u"HEAD の commit") or u"")):
         out.append(u"HEAD の commit が 40 字の 16 進でない")
@@ -586,6 +587,9 @@ class SealPinTest(unittest.TestCase):
         fp = SC.VD.engine_fingerprint()
         want = engine_fingerprint_at_seal()
         for name in want:
+            if name == "adapter_xbrl_py_sha256" and SG.SGR.nre_record_fingerprint_ok(want[name], fp[name]):      # 2026-11-17(NRE): 封の commit の木の指紋は T の後の値で、今の engine は NRE の宣言された遷移だけ離れている(SGR.nre_record_fingerprint_ok)
+                self.assertRegex(want[name], r"^[0-9a-f]{64}$")
+                continue
             self.assertEqual(want[name], fp[name], name)
             self.assertRegex(want[name], r"^[0-9a-f]{64}$")
 

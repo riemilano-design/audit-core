@@ -75,6 +75,11 @@ PB_SEAL_REL = "docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md"
 #: 2026-11-09(T): 封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §2-3 が宣言した遷移(司令塔の決定 2026-11-09)。vocabulary.py に旗 1 つ・P33E・PROFILES の登録(e35b7fea2463818f → 369891933a5876c4。+5)、recipes.py に語の組と集合・関数 2 つ・先頭の 2 行ずつ・入口の 3 行(0add35e7aa77d86b → 346adb0d586e3af2。+57)を挿入だけで足した(comparators.py は触らない)。直前の値は測った時点の値としてここに残す。
 #: 受け入れるのは、T の封も履歴に在るときだけ(下の p28_declared)。
 T_SEAL_REL = "docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md"
+#: 2026-11-17(NRE): 封 NRE_SEAL_REL §1・§2-3 が instance.py の式 1 行の置き換え(挿入 1・削除 1)を宣言した。後の sha16 は封の字の値(instance.py は P27 の封の対象 5 file の外)。
+#: 受け入れるのは、NRE の封も履歴に在るときだけ(下の nre_declared)。
+NRE_SEAL_REL = "docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md"
+NRE_INSTANCE_REL = "adapters/xbrl/instance.py"
+NRE_INSTANCE_AFTER16 = "1b8c00f86eafe765"
 P28_AFTER16 = {"vocabulary.py": "369891933a5876c4", "recipes.py": "346adb0d586e3af2", "extract.py": "a61da3fc3c336e80", "comparators.py": "9d65945efab20089"}
 #: 既存の門が行頭の名前を数える変数名(封 §2-3 の言い分け)。新しい門はこれらを行頭に置かない。
 RESERVED_PREFIXES = ("ENGINE_LATER", "UNTOUCHED", "PIN_DEF", "LATER_ENGINE_COMMITS", "FROZEN_LATER", "ENGINE_TRANSITIONS", "LATER_FINGERPRINT",
@@ -120,6 +125,13 @@ def p28_declared():
     if dict((n, sha16_of("adapters/xbrl/" + n)) for n in P28_AFTER16) != P28_AFTER16:
         return False
     return all(sha16_of("adapters/xbrl/" + n) == CAND_AFTER16[n] for n in ("verify_document.py", "report_customer.py"))
+
+
+def nre_declared():
+    u"""NRE の遷移(封 NRE_SEAL_REL §2-3)が宣言されているか。封が履歴に在り、作業木の instance.py の sha16 が宣言の後の値のときだけ True。"""
+    if not git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + NRE_SEAL_REL).stdout.split():
+        return False
+    return sha16_of(NRE_INSTANCE_REL) == NRE_INSTANCE_AFTER16
 
 
 def cand_declared():
@@ -275,13 +287,15 @@ def check_insertion_only(numstat_text, allowed_deletions=None):
     allowed = allowed_deletions or {}
     for p, (a, d) in sorted(rows.items()):
         rel = p.replace("audit-core/", "", 1)
-        assert d <= allowed.get(rel, 0), u"**既存の行が書き換えられている(削除の行が 0 でない): %s**" % p
+        # 2026-11-17(NRE): 封 NRE_SEAL_REL §2-3 が instance.py の式 1 行の置き換え(挿入 1・削除 1)を宣言した。封が履歴に在り作業木が宣言の値のとき(nre_declared)だけ、挿入・削除とも 1 以下で許す
+        nre_ok = rel == NRE_INSTANCE_REL and nre_declared() and a <= 1 and d <= 1
+        assert nre_ok or d <= allowed.get(rel, 0), u"**既存の行が書き換えられている(削除の行が 0 でない): %s**" % p
         if rel.startswith("core/") or rel.startswith("adapters/xbrl/"):
             if rel.startswith("adapters/xbrl/"):
                 name = os.path.basename(rel)
                 # 2026-11-04(RB): 封 RB_SEAL_REL §2-3 が comparators.py に梯子の mode "both" の 2 行(+2 行・削除 0)を宣言した。封が履歴に在り作業木が宣言の値のとき(p28_declared)だけ、挿入 2 行以内で許す
                 rb_ok = name == "comparators.py" and p28_declared() and a <= 2
-                assert name in ENGINE5 or rel in allowed or rb_ok, u"**封の範囲の外の engine の file が動いている: %s**" % p
+                assert name in ENGINE5 or rel in allowed or rb_ok or nre_ok, u"**封の範囲の外の engine の file が動いている: %s**" % p
             else:
                 raise AssertionError(u"**core/ が動いている: %s**" % p)
         elif rel.startswith("adapters/"):
@@ -367,7 +381,8 @@ class EngineDiffTest(unittest.TestCase):
         extra = (13 if cand else 8) if declared else 0
         p28 = p28_declared()
         extra_vocab, extra_recipes, extra_extract = (35, 166, 35) if p28 else (0, 0, 0)       # 2026-11-09: T(封 T_SEAL_REL §2-3)で vocabulary.py +5(30 → 35)・recipes.py +57(109 → 166)。2026-11-06: PB(封 PB_SEAL_REL §2-3)で vocabulary.py +5(25 → 30)・recipes.py +24(85 → 109)。2026-11-04: RB(封 RB_SEAL_REL §2-3)で vocabulary.py +7(18 → 25)・recipes.py +18(67 → 85)・comparators.py +2(下の test_8)。同日の数の読み取り N(封 N_SEAL_REL §2-3)で vocabulary.py +7(11 → 18)・recipes.py +2(65 → 67)・extract.py +35(削除は 0)。2026-11-02: 「その他」の主語の結び直し(封 P28_SEAL_REL §2-3)。vocabulary.py +6・recipes.py +65(削除は 0)。2026-11-03: P28E(封 P28E_SEAL_REL §2-3)で vocabulary.py +5 を足して +11
-        self.assertEqual(sum(CAND_DELETIONS.values()) if cand else (sum(DEFAULT_P27_DELETIONS.values()) if declared else 0), sum(d for _a, d in rows.values()))
+        # 2026-11-17(NRE): 封 NRE_SEAL_REL §2-3 が宣言した instance.py の式 1 行の置き換えの分(削除 +1)。nre_declared のときだけ
+        self.assertEqual((sum(CAND_DELETIONS.values()) if cand else (sum(DEFAULT_P27_DELETIONS.values()) if declared else 0)) + (1 if nre_declared() else 0), sum(d for _a, d in rows.values()))
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 10)
         self.assertLessEqual(rows["audit-core/adapters/xbrl/vocabulary.py"][0], 20 + extra + extra_vocab)
         self.assertGreaterEqual(rows["audit-core/adapters/xbrl/extract.py"][0], 10)
@@ -488,6 +503,17 @@ class GateMutationTest(unittest.TestCase):
         self._red(check_insertion_only, out + "3\t0\taudit-core/adapters/xbrl/comparators.py\n", allowed)
         self._red(check_insertion_only, out + "3\t0\taudit-core/core/py/audit_core/x.py\n", allowed)
         self._red(check_insertion_only, out + "3\t0\taudit-core/adapters/shogi/x.py\n", allowed)
+        # 2026-11-17(NRE): instance.py の宣言された置き換え(1・1)以外の行数は赤。宣言が無い形でも赤
+        ins = "audit-core/adapters/xbrl/instance.py\n"
+        self._red(check_insertion_only, out + "2\t1\t" + ins, allowed)
+        self._red(check_insertion_only, out + "1\t2\t" + ins, allowed)
+        real = globals()["nre_declared"]
+        globals()["nre_declared"] = lambda: False
+        try:
+            self._red(check_insertion_only, out + "1\t1\t" + ins, allowed)
+        finally:
+            globals()["nre_declared"] = real
+        check_insertion_only(out + "1\t1\t" + ins, allowed) if real() else None
 
 
 if __name__ == "__main__":

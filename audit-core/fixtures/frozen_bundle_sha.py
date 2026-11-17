@@ -184,6 +184,11 @@ FROZEN_BUNDLE_GENERATIONS = (
      "comparators.py・verify_document.py・extract.py・resolve.py・registry_setup.py・report_customer.py・instance.py・core/py は 0 行。"
      "人間の言葉「君に任せる進めて」(2026-11-09)= 規則 T を engine に入れる方向で封から進める委任(旗 1 つ・profile 1 つ・挿入だけ。既定にしない)、封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md(commit eb281f1)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("72303a25c51923fba2fb08c75ec1a9dd684945ecb66e273eeb28267031c6ac2c",
+     "2026-11-17 feature/audit-core-final-eval-8(inline XBRL の読み取りが自己閉じの空の欄を始まりの tag と読まないようにする NRE): instance.py の .htm の経路の式 1 行の置き換え(+1 行・-1 行。既存の行を書き換える。旗なし・既定 P27 は不変)。"
+     "comparators.py・verify_document.py・extract.py・resolve.py・registry_setup.py・report_customer.py・recipes.py・vocabulary.py・core/py は 0 行。"
+     "人間の言葉「任せる進めて」(2026-11-17)= 便 NR の報告の決めていただくこと (1) を受けた委任(司令塔が封 §0-2 で引き受けた。engine の変更を含む)、封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md(commit 36ca78f1)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

@@ -58,6 +58,7 @@ def load_module(rel, name):
 
 
 PR = load_module("tests/measure/test_xbrl_p28_result.py", "p28_result_helpers_for_ps_seal")       # 順序の部品。門としては走らせない
+SGR = load_module("tests/measure/test_xbrl_rmix_seal.py", "rmix_seal_gate_for_plan_source_seal")      # 宣言された遷移の部品(2026-11-17 NRE: nre_explained_commit)。門としては走らせない
 MS = load_module("measure/xbrl_plan_source_2026-11-17.py", "plan_source_script_for_seal_gate")
 
 SEAL_REL = "docs/XBRL_PLAN_SOURCE_SEAL_2026-11-17.md"
@@ -485,12 +486,27 @@ def strip_problems(ms=None):
     zb = tiny_summary_zip(b"<html>" + CTX + NIL_TAG + REAL_TAG + b"</html>")
     if ms.summary_member_bytes(zb) != b"<html>" + CTX + NIL_TAG + REAL_TAG + b"</html>":
         out.append(u"サマリーの member の bytes が読めない")
+    # 2026-11-17(NRE): 直った後の形。engine(封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §1 の式)は空の欄を始まりの tag と読まないので、そのままの読みも「本物の fact 1 つ(倍率つき)」で、
+    # 空の欄を除く読みと同じ列になる。直す前の欠陥の形(偽の fact 1 つ)は、直す前の式の写しを使う参照の engine(SGR.nre_old_formula_instance)で残す
     raw_f, raw_r = ms.summary_facts(zb)
-    if [(f[u"name"], f[u"value"]) for f in raw_f + raw_r] != [(u"x:Empty", 1234.0)]:
-        out.append(u"そのままの読みが「偽の fact 1 つ(名前は空の欄・値は次の fact の字・倍率なし)」にならない: %s" % [(f[u"name"], f[u"value"]) for f in raw_f + raw_r])
+    if [(f[u"name"], f[u"value"], f[u"unit"]) for f in raw_f + raw_r] != [(u"x:Real", 1234000000.0, u"JPY")]:
+        out.append(u"そのままの読みが「本物の fact 1 つ(倍率つき)」にならない(式が空の欄を始まりの tag と読む疑い): %s" % [(f[u"name"], f[u"value"]) for f in raw_f + raw_r])
     nn_f, nn_r = ms.summary_facts(zb, True)
     if [(f[u"name"], f[u"value"], f[u"unit"]) for f in nn_f + nn_r] != [(u"x:Real", 1234000000.0, u"JPY")]:
         out.append(u"空の欄を除く読みが「本物の fact 1 つ(倍率つき)」にならない: %s" % [(f[u"name"], f[u"value"]) for f in nn_f + nn_r])
+    if (raw_f, raw_r) != (nn_f, nn_r):
+        out.append(u"直した engine でそのままの読みと空の欄を除く読みが同じ列でない")
+    saved_i = ms.I
+    ms.I = SGR.nre_old_formula_instance()
+    try:
+        old_f, old_r = ms.summary_facts(zb)
+        old_nn_f, old_nn_r = ms.summary_facts(zb, True)
+    finally:
+        ms.I = saved_i
+    if [(f[u"name"], f[u"value"]) for f in old_f + old_r] != [(u"x:Empty", 1234.0)]:
+        out.append(u"直す前の式の参照の engine のそのままの読みが「偽の fact 1 つ(名前は空の欄・値は次の fact の字・倍率なし)」にならない: %s" % [(f[u"name"], f[u"value"]) for f in old_f + old_r])
+    if [(f[u"name"], f[u"value"], f[u"unit"]) for f in old_nn_f + old_nn_r] != [(u"x:Real", 1234000000.0, u"JPY")]:
+        out.append(u"空の欄を除く読みが直す前の式の参照の engine でも「本物の fact 1 つ(倍率つき)」にならない")
     if [f[u"name"] for f in nn_f] != [u"x:Real"]:
         out.append(u"予想の context の fact が F に入らない")
     # サマリーの member が 0 個・2 個は止まる
@@ -1034,7 +1050,7 @@ def engine_since_seal_problems(root=REPO):
     rc, log = PR.git_in(root, "log", "--format=%H", "%s..HEAD" % c[0], "--", *[PREFIX + r for r in NOT_TOUCHED_RELS])
     if rc != 0:
         return [u"git log が失敗した"]
-    return [u"封の後に engine・lib・入力を触った commit %s" % x[:7] for x in log.split() if x]
+    return [u"封の後に engine・lib・入力を触った commit %s" % x[:7] for x in log.split() if x and not SGR.nre_explained_commit(root, x, [PREFIX + r for r in NOT_TOUCHED_RELS])]      # 2026-11-17(NRE): 封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 が宣言した遷移(instance.py の式 1 行の置き換え 1・1)だけを許す。NRE の engine の commit ただ 1 つで、その commit の rels への変更が宣言の行だけのときに限り一覧から外す(SGR.nre_explained_commit。他の commit・他の行は問題のまま)
 
 
 def engine_worktree_problems(root=REPO):

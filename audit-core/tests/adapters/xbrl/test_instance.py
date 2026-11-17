@@ -488,3 +488,57 @@ class TaxonomyLabelsTest(unittest.TestCase):
         self.assertEqual(got.get("流動資産"), ["CurrentAssets"])
         self.assertEqual(got.get("固定資産"), ["NoncurrentAssets"])
         self.assertEqual(got.get("長期借入金の返済による支出"), ["RepaymentOfLongTermLoansPayableFinCF"])
+
+
+class InlineSelfClosedFactTest(unittest.TestCase):
+    """封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §1(2026-11-17。engine の ``.htm`` の経路の式 1 行)。
+
+    ``<ix:nonFraction .../>``(属性の並びの直後の ``>`` の 1 字前が ``/``)は空の欄で、始まりの tag と読まない。
+    直す前の式は、空の欄を始まりの tag と読んで、次の ``</ix:nonFraction>`` までを中身にし、
+    空の欄の context に次の fact の値を入れた fact を作り、次の fact 自身は読まなかった。
+    作り物の小さい ZIP(memory)で、封の 3 つの例(自己閉じの後ろに fact が続く・自己閉じが無い・属性の値の中の ``/``)を走らせる。
+    """
+
+    NIL = '<ix:nonFraction name="ex:A" contextRef="Prior" unitRef="JPY" scale="6" xsi:nil="true"/>'
+    REAL = '<ix:nonFraction name="ex:A" contextRef="Current" unitRef="JPY" scale="6">120</ix:nonFraction>'
+    NIL_B = '<ix:nonFraction name="ex:B" contextRef="Prior" unitRef="JPY" decimals="-6" scale="6" xsi:nil="true"/>'
+    REAL_B = '<ix:nonFraction name="ex:B" contextRef="Current" unitRef="JPY" decimals="-6" scale="6">3,401</ix:nonFraction>'
+    SLASH = ('<ix:nonFraction name="ex:D" contextRef="Current" unitRef="JPY" scale="3" format="ixt:numdotdecimal" '
+             'href="http://example.invalid/a/b/" title="x/">58</ix:nonFraction>')
+
+    @staticmethod
+    def _facts(html):
+        import io
+        import zipfile
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as z:
+            z.writestr("XBRL/PublicDoc/x_ixbrl.htm", html)
+        return [(f["name"], f["context"], f["unit"], f["value"]) for f in I.load_instance(buf.getvalue())["facts"]]
+
+    def test_a_fact_after_a_self_closed_empty_cell_is_read_as_its_own_fact(self):
+        got = self._facts(self.NIL + "\n" + self.REAL)
+        self.assertEqual(got, [("ex:A", "Current", "JPY", 120000000.0)])
+        self.assertNotIn("Prior", [g[1] for g in got])
+
+    def test_without_a_self_closed_cell_the_facts_are_the_same_as_before(self):
+        self.assertEqual(self._facts(self.REAL), [("ex:A", "Current", "JPY", 120000000.0)])
+        self.assertEqual(self._facts(self.REAL + self.REAL_B), [("ex:A", "Current", "JPY", 120000000.0), ("ex:B", "Current", "JPY", 3401000000.0)])
+        self.assertEqual(self._facts(self.NIL + "\n" + self.REAL), self._facts(self.REAL))
+
+    def test_a_slash_inside_an_attribute_value_is_not_a_self_closed_tag(self):
+        self.assertEqual(self._facts(self.SLASH), [("ex:D", "Current", "JPY", 58000.0)])
+        self.assertEqual(self._facts(self.NIL + self.SLASH), [("ex:D", "Current", "JPY", 58000.0)])
+
+    def test_a_self_closed_cell_alone_or_with_a_space_before_the_slash_makes_no_fact(self):
+        self.assertEqual(self._facts(self.NIL), [])
+        self.assertEqual(self._facts(self.NIL.replace("/>", " />")), [])
+        self.assertEqual(self._facts(self.NIL + self.NIL_B), [])
+        self.assertEqual(self._facts(self.NIL.replace("/>", " />") + "\n" + self.REAL), [("ex:A", "Current", "JPY", 120000000.0)])
+
+    def test_every_real_fact_among_many_self_closed_cells_is_read_and_no_prior_fact_appears(self):
+        html = self.NIL + self.NIL_B + self.REAL + "\n" + self.NIL_B + self.NIL + self.REAL_B + self.NIL + self.SLASH
+        self.assertEqual(self._facts(html), [("ex:A", "Current", "JPY", 120000000.0), ("ex:B", "Current", "JPY", 3401000000.0), ("ex:D", "Current", "JPY", 58000.0)])
+
+    def test_a_non_number_body_is_still_skipped_and_the_next_fact_is_still_read(self):
+        html = ('<ix:nonFraction name="ex:C" contextRef="Current" unitRef="JPY">-</ix:nonFraction>' + self.NIL + self.REAL)
+        self.assertEqual(self._facts(html), [("ex:A", "Current", "JPY", 120000000.0)])

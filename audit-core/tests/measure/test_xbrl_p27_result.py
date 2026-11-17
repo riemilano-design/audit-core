@@ -63,6 +63,9 @@ PB_FP_TO = "dc13edfee7a9ac6b900ae610d056424b622b8447491113b78c4debf902bcfee8"
 # 2026-11-09(T): 封 docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md §2-3 が宣言した遷移の後の値(recipes.py・vocabulary.py への挿入だけ。comparators.py は触らない)。上の PB_FP_TO は測った時点の値として残す。
 T_SEAL_REL = "docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md"
 T_FP_TO = "5221d3c9a7bdb5c9833dee52490b0064255bdb54fb3210f1b19c1d19f28f9116"
+# 2026-11-17(NRE): 封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 が宣言した遷移の後の値(instance.py の .htm の経路の式 1 行の置き換え。旗なし)。上の T_FP_TO は測った時点の値として残す。
+NRE_SEAL_REL = "docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md"
+NRE_FP_TO = "38951626929e7d04b32b1a89586294198087f6fabded4162cd6ef2f14c9c91c0"
 DOC_REL = "docs/XBRL_P27_RESULT_2026-10-27.md"
 EVAL_REC_REL = collections.OrderedDict([
     ("eval", "fixtures/xbrl/p27/eval_2026-10-27.json"),
@@ -1603,25 +1606,29 @@ class TestPins(Base):
         moved = [l.decode("utf-8") for l in git("diff", "--name-only", e, "--", *ENGINE_TREES).stdout.split() if l]
         if now["adapter_xbrl_py_sha256"] != fp_e["adapter_xbrl_py_sha256"]:
             self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + DEFAULT_P27_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
-            if now["adapter_xbrl_py_sha256"] in (P28_FP_TO, P28E_FP_TO, N_FP_TO, RB_FP_TO, PB_FP_TO, T_FP_TO):      # 2026-11-03: P28E の遷移の後も(動いた file は同じ 4 file)。2026-11-04: N の遷移の後は extract.py を足した 5 file
-                if now["adapter_xbrl_py_sha256"] == T_FP_TO:
+            if now["adapter_xbrl_py_sha256"] in (P28_FP_TO, P28E_FP_TO, N_FP_TO, RB_FP_TO, PB_FP_TO, T_FP_TO, NRE_FP_TO):      # 2026-11-03: P28E の遷移の後も(動いた file は同じ 4 file)。2026-11-04: N の遷移の後は extract.py を足した 5 file
+                if now["adapter_xbrl_py_sha256"] == NRE_FP_TO:
+                    self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + NRE_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
+                if now["adapter_xbrl_py_sha256"] in (T_FP_TO, NRE_FP_TO):
                     self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + T_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
-                if now["adapter_xbrl_py_sha256"] in (PB_FP_TO, T_FP_TO):
+                if now["adapter_xbrl_py_sha256"] in (PB_FP_TO, T_FP_TO, NRE_FP_TO):
                     self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + PB_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
-                if now["adapter_xbrl_py_sha256"] in (RB_FP_TO, PB_FP_TO, T_FP_TO):
+                if now["adapter_xbrl_py_sha256"] in (RB_FP_TO, PB_FP_TO, T_FP_TO, NRE_FP_TO):
                     self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + RB_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
-                if now["adapter_xbrl_py_sha256"] in (N_FP_TO, RB_FP_TO, PB_FP_TO, T_FP_TO):
+                if now["adapter_xbrl_py_sha256"] in (N_FP_TO, RB_FP_TO, PB_FP_TO, T_FP_TO, NRE_FP_TO):
                     self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + N_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
-                if now["adapter_xbrl_py_sha256"] in (P28E_FP_TO, N_FP_TO, RB_FP_TO, PB_FP_TO, T_FP_TO):
+                if now["adapter_xbrl_py_sha256"] in (P28E_FP_TO, N_FP_TO, RB_FP_TO, PB_FP_TO, T_FP_TO, NRE_FP_TO):
                     self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + P28E_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
                 self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + P28_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
                 self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + CAND_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
                 want_moved = ["audit-core/adapters/xbrl/recipes.py", "audit-core/adapters/xbrl/report_customer.py", "audit-core/adapters/xbrl/verify_document.py", "audit-core/adapters/xbrl/vocabulary.py"]
-                if now["adapter_xbrl_py_sha256"] in (N_FP_TO, RB_FP_TO, PB_FP_TO, T_FP_TO):
+                if now["adapter_xbrl_py_sha256"] in (N_FP_TO, RB_FP_TO, PB_FP_TO, T_FP_TO, NRE_FP_TO):
                     want_moved = ["audit-core/adapters/xbrl/extract.py"] + want_moved
-                if now["adapter_xbrl_py_sha256"] in (RB_FP_TO, PB_FP_TO, T_FP_TO):
+                if now["adapter_xbrl_py_sha256"] in (RB_FP_TO, PB_FP_TO, T_FP_TO, NRE_FP_TO):
                     want_moved = ["audit-core/adapters/xbrl/comparators.py"] + want_moved
-                self.assertEqual(sorted(moved), want_moved)
+                if now["adapter_xbrl_py_sha256"] == NRE_FP_TO:      # 2026-11-17(NRE): instance.py の式 1 行の置き換えも動いた file(挿入だけの 4〜6 file に足して)
+                    want_moved = want_moved + ["audit-core/adapters/xbrl/instance.py"]
+                self.assertEqual(sorted(moved), sorted(want_moved))
             elif now["adapter_xbrl_py_sha256"] == CAND_FP_TO:
                 self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", "audit-core/" + CAND_SEAL_REL).stdout.split(), u"engine が動いているのに、遷移を宣言した封が履歴に無い")
                 self.assertEqual(sorted(moved), ["audit-core/adapters/xbrl/report_customer.py", "audit-core/adapters/xbrl/verify_document.py", "audit-core/adapters/xbrl/vocabulary.py"])

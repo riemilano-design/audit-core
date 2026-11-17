@@ -55,6 +55,7 @@ def load_module(rel, name):
 
 
 PR = load_module("tests/measure/test_xbrl_p28_result.py", "p28_result_helpers_for_at_seal")       # 順序の部品(order_problems・Repo・git_in・added_commits)。門としては走らせない
+SGR = load_module("tests/measure/test_xbrl_rmix_seal.py", "rmix_seal_gate_for_attr_tally_seal")      # 宣言された遷移の部品(2026-11-17 NRE: nre_explained_commit)。門としては走らせない
 MS = load_module("measure/xbrl_attr_tally_2026-11-17.py", "attr_tally_script_for_seal_gate")
 
 SEAL_REL = "docs/XBRL_ATTR_TALLY_SEAL_2026-11-17.md"
@@ -455,7 +456,7 @@ def engine_since_seal_problems(root=REPO):
     rc, log = PR.git_in(root, "log", "--format=%H", "%s..HEAD" % c[0], "--", *[PREFIX + r for r in NOT_TOUCHED_RELS])
     if rc != 0:
         return [u"git log が失敗した"]
-    return [u"封の後に engine・lib・入力を触った commit %s" % x[:7] for x in log.split() if x]
+    return [u"封の後に engine・lib・入力を触った commit %s" % x[:7] for x in log.split() if x and not SGR.nre_explained_commit(root, x, [PREFIX + r for r in NOT_TOUCHED_RELS])]      # 2026-11-17(NRE): 封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 が宣言した遷移(instance.py の式 1 行の置き換え 1・1)だけを許す。NRE の engine の commit ただ 1 つで、その commit の rels への変更が宣言の行だけのときに限り一覧から外す(SGR.nre_explained_commit。他の commit・他の行は問題のまま)
 
 
 def engine_worktree_problems(root=REPO):

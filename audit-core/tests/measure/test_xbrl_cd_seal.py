@@ -62,7 +62,9 @@ FROZEN = {
 # 上の値は 10-17 の便でのものとして正しい。いまの値はこの表で、**その封が履歴に在るときだけ**受け入れる
 # (`fixtures/frozen_bundle_sha.py` の世代と同じ型: 「ずれ」と「宣言された遷移」を言い分ける)。
 FROZEN_LATER = {
-    "adapters/xbrl/instance.py": ("f2d9e040f19adebf", "docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md"),
+    # 2026-11-17(NRE): 封 `docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md` が宣言した遷移(司令塔の決定 2026-11-17)。instance.py の .htm の経路の式 1 行の置き換え(+1 行・-1 行。旗なし)。
+    # 直前の値 f2d9e040f19adebf(封 `docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md` の後の値。測った時点の値)は残す。受け入れるのは、NRE の封が履歴に在り、値が NRE の後の値のときだけ。
+    "adapters/xbrl/instance.py": ("1b8c00f86eafe765", "docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md"),
     # 2026-10-20: 封 `docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md`(名指しの直し P21)で vocabulary.py に旗 last_branch_cues と P21 が足された。
     # 2026-10-20(段 2): 既定を P20 -> P21 にした(vocabulary.py の DEFAULT_PROFILE と決定の注記。同じ封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md の段 2)。
     # vocabulary.py の sha は 段 1 5eb80a2 のとき 6c6db4c75e571a6c(残す。段 1 の結果の記録が測った時点の値)、段 2 で 1205b30b496090ef。

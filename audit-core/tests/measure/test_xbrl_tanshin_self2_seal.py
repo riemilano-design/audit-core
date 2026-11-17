@@ -62,6 +62,7 @@ def load_module(rel, name):
 G1 = load_module("tests/measure/test_xbrl_tanshin_self_seal.py", "tanshin_self_seal_gate_helpers_for_self2_seal")        # 第 1 便の門の道具(fixture・変異の差し込み・順序の部品)。門としては走らせない
 MS = load_module("measure/xbrl_tanshin_self2_2026-11-14.py", "tanshin_self2_script_for_seal_gate")
 PR = G1.PR
+SGR = G1.SGR      # 宣言された遷移の部品(2026-11-17 NRE: nre_explained_commit)。第 1 便の門が読み込んだもの。門としては走らせない
 TSS, ST, TS = MS.TSS, MS.ST, MS.TS
 patched, mutated, guard, tmpdir, eqp, expect_stop, make_zip, strip_time = G1.patched, G1.mutated, G1.guard, G1.tmpdir, G1.eqp, G1.expect_stop, G1.make_zip, G1.strip_time
 
@@ -219,7 +220,7 @@ def untouched_problems(root=REPO, base=None, rels=NOT_TOUCHED_RELS, prefix=PREFI
     rc, log = PR.git_in(root, "log", "--format=%H", "%s..HEAD" % base, "--", *[prefix + r for r in rels])
     if rc != 0:
         return [u"git log が失敗した"]
-    out = [u"基準の後に engine・lib・仕掛け・前の便を触った commit %s" % c[:7] for c in log.split() if c]
+    out = [u"基準の後に engine・lib・仕掛け・前の便を触った commit %s" % c[:7] for c in log.split() if c and not SGR.nre_explained_commit(root, c, [prefix + r for r in rels])]      # 2026-11-17(NRE): 封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 が宣言した遷移(instance.py の式 1 行の置き換え 1・1)だけを許す。NRE の engine の commit ただ 1 つで、その commit の rels への変更が宣言の行だけのときに限り一覧から外す(SGR.nre_explained_commit。他の commit・他の行は問題のまま)
     rc, st = PR.git_in(root, "status", "--porcelain", "--", *[prefix + r for r in rels])
     if rc != 0:
         return out + [u"git status が失敗した"]

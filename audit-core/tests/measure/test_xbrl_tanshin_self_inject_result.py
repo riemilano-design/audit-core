@@ -314,7 +314,8 @@ def provenance_problems(c, root=REPO):
         out.append(u"来歴[inject]: lib の指紋が今の file と違う")
     fp = R.get(u"engine の指紋") or {}
     for k in (u"adapter_xbrl_py_sha256", u"core_py_sha256", u"adapter_xbrl_py_files", u"core_py_files"):
-        if fp.get(k) != cur["fp"][k]:
+        # 2026-11-17(NRE): 記録の指紋 = 記録を作った時の engine(T の後・NRE の前)で、今の engine はそこから NRE の宣言された遷移だけ離れている(封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3。SGR.nre_record_fingerprint_ok)。記録は作り直さない。他の値の組は今までどおり赤
+        if fp.get(k) != cur["fp"][k] and not (k == u"adapter_xbrl_py_sha256" and SG.SGR.nre_record_fingerprint_ok(fp.get(k), cur["fp"][k])):
             out.append(u"来歴[inject]: engine の指紋 %s が今の engine と違う" % k)
     if fp.get(u"git_commit") != R.get(u"HEAD の commit"):
         out.append(u"来歴[inject]: engine の指紋の git_commit が HEAD の commit と違う")

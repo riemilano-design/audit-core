@@ -57,6 +57,7 @@ G2 = load_module("tests/measure/test_xbrl_tanshin_self2_seal.py", "tanshin_self2
 G1 = G2.G1
 MS = load_module("measure/xbrl_tanshin_self_inject_2026-11-14.py", "tanshin_self_inject_script_for_seal_gate")
 PR = G1.PR
+SGR = G1.SGR      # 宣言された遷移の部品(2026-11-17 NRE: nre_record_fingerprint_ok)。第 2 便の門が読み込んだもの。門としては走らせない
 S2, TSS, ST, TS = MS.S2, MS.TSS, MS.ST, MS.TS
 patched, guard, tmpdir, eqp, expect_stop, strip_time = G1.patched, G1.guard, G1.tmpdir, G1.eqp, G1.expect_stop, G1.strip_time
 

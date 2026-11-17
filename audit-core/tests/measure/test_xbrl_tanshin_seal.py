@@ -59,6 +59,7 @@ def load_module(rel, name):
 
 
 PR = load_module("tests/measure/test_xbrl_p28_result.py", "p28_result_helpers_for_tanshin_seal")       # 順序の部品(order_problems・Repo・git_in・added_commits)。門としては走らせない
+SGR = load_module("tests/measure/test_xbrl_rmix_seal.py", "rmix_seal_gate_for_tanshin_seal")      # 宣言された遷移の部品(2026-11-17 NRE: nre_explained_commit)。門としては走らせない
 TS = load_module("measure/xbrl_tanshin_2026-11-09.py", "tanshin_script_for_seal_gate")
 FE = TS.FE
 
@@ -197,6 +198,8 @@ def engine_since_seal_problems(root=REPO, seal_rel=SEAL_REL, prefix=PREFIX, rels
         msg = PR.git_in(root, "show", "-s", "--format=%B", c)[1]
         files = [x for x in PR.git_in(root, "diff-tree", "--no-commit-id", "--name-only", "-r", c, "--", *[prefix + r for r in rels])[1].split() if x]
         declared = any(m in msg for m in markers) and all(f in [prefix + a for a in allowed] for f in files)
+        if not declared and SGR.nre_explained_commit(root, c, [prefix + r for r in rels]):      # 2026-11-17(NRE): 封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 が宣言した遷移(instance.py の式 1 行の置き換え 1・1)。NRE の engine の commit ただ 1 つで、その commit の rels への変更が宣言の行だけのときに限り宣言された遷移とする(他の commit・他の行は問題のまま)
+            declared = True
         if not declared:
             out.append(u"封の後に engine・lib・仕掛けを触った commit %s(宣言された遷移でない)" % c[:7])
     return out

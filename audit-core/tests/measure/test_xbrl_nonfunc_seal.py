@@ -117,6 +117,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-17(3): NR(engine の inline XBRL の読み取りが自己閉じの空の欄を次の fact まで読む欠陥は過去の便の数にどれだけ効いたか。封 docs/XBRL_NIL_READ_SEAL_2026-11-17.md 720a473d)の script 1 本と記録(fixtures/xbrl/nil_read/)。
     # 材料は TSS の置き場の ZIP 400 本(新しく取らない)と ~/.cache/audit-core/ の ZIP の棚卸し・engine(core/・adapters/)は 0 行。記録は数と、行 [本の #, 文の番号, 位置, そのままの state, 直した入力の state, reason が同じか]・本ごとの数だけで、文・span・値・要素名・context の字・会社名・証券コード・docID を持たない
     "measure/xbrl_nil_read_2026-11-17.py", "fixtures/xbrl/nil_read/states_2026-11-17.json",
+    # 2026-11-17(4): NRE(engine の inline XBRL の読み取りが自己閉じの空の欄を始まりの tag と読まないようにする直し。封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md 36ca78f1)の script 1 本と記録(fixtures/xbrl/nil_read_engine/)。
+    # 材料は NR と同じ(TSS の置き場の ZIP 400 本・~/.cache/audit-core/ の ZIP。新しく取らない)。engine の変更は instance.py の式 1 行(挿入 1・削除 1)だけで、届けではなく封が宣言した遷移。記録は数と行 [本の #, 文の番号, 位置, state, 同じか, state]・本ごとの数だけで、文・span・値・要素名・context の字・会社名・証券コード・docID を持たない
+    "measure/xbrl_nil_read_engine_2026-11-17.py", "fixtures/xbrl/nil_read_engine/states_2026-11-17.json",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")
@@ -258,6 +261,8 @@ def untouched_problems(rels=NOT_TOUCHED_RELS, root=REPO, seal_rel=SEAL_REL, allo
         return [u"git diff が失敗した"]
     for line in [x for x in txt.splitlines() if x]:
         rel = line.split("\t")[2][len(PREFIX):]
+        if SGR.nre_declared_numstat(line, root):      # 2026-11-17(NRE): 封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md §2-3 が宣言した遷移(instance.py の式 1 行の置き換え 1・1。行数・sha16・封が履歴に在る、の全部が宣言と同じ行)だけは触らない path から外す(SGR.nre_declared_numstat)。他の行・他の値は赤のまま
+            continue
         if rel not in allowed_new:
             out.append(u"封の commit の後に変わった: %s" % rel)
     rc2, txt2 = PR.git_in(root, "ls-files", "--others", "--exclude-standard", "--", *paths)

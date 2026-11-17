@@ -457,7 +457,9 @@ class NotTouchedAndFrozenTest(unittest.TestCase):
             blob = subprocess.run(["git", "show", "%s:%s%s" % (e, PREFIX, rel)], cwd=REPO, capture_output=True)
             self.assertEqual(0, blob.returncode, rel)
             with open(os.path.join(ROOT, rel), "rb") as fh:
-                self.assertEqual(blob.stdout, fh.read(), rel)
+                if blob.stdout != fh.read():
+                    # 2026-11-17(NRE): NRE の engine の commit が宣言された遷移の字を足した PB の門は、その commit の blob から変わってよい(型 3。SGR.nre_declared_file_change。他の変更は赤)
+                    self.assertTrue(SGR.nre_declared_file_change(REPO, e, rel, ROOT), rel)
 
     def test_e_1_gate_files_do_not_use_the_reserved_names(self):
         self.assertEqual([], reserved_problems(rels=tuple(r for r in GATE_RELS if os.path.exists(os.path.join(ROOT, r))), base=ROOT))
