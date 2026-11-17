@@ -985,6 +985,9 @@ LATER_HARNESS_FILES = (
     # 2026-11-16: YS(有価証券報告書の「経営者による分析」以外の 3 つの節の文を、同じ有報の fact で確かめる。封 docs/XBRL_YUHO_SECTIONS_SEAL_2026-11-16.md §0-2・§5)。注入はしない。201 本の 3 つの節の文を P33E で判定する script で、
     # 読むための紙を作る run_sheet の検査の呼び出し verify_document( が副産物の検査の規準に当たるだけ(前例 KAM・TSS・NF・LB と同じ「対象外・不要」。差し替えは engine の入口が memory の中でする = 本文の差し替えで注入はしない)
     ("measure/xbrl_yuho_sections_2026-11-16.py", u"対象外", u"不要", "run_sheet", u"cl = VD.verify_document(zb, PROFILE, text)[\"claims\"]", "2026-11-16"),
+    # 2026-11-17: PS(TSS の便が計画・予想として止めた行に、同じ短信のサマリーの予想の fact という当てる先が在るかを数える。封 docs/XBRL_PLAN_SOURCE_SEAL_2026-11-17.md §2-1)。注入はしない。400 本を TSS の便と同じ入力で作り直して
+    # 記録の行と同じことを確かめる claims_of の検査の呼び出し verify_document( が副産物の検査の規準に当たるだけ(前例 YS・KAM・TSS・NF・LB と同じ「対象外・不要」。包んだ ZIP に text は渡さない = 本文の差し替えはしない)
+    ("measure/xbrl_plan_source_2026-11-17.py", u"対象外", u"不要", "claims_of", u"out = VD.verify_document(wrapped, PROFILE)", "2026-11-17"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
