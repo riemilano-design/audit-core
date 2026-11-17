@@ -4,7 +4,7 @@
  "封の追記(§7)の commit": "5b38862e",
  "封の追記(§8)の commit": "3e8a722d",
  "step": "PS(止めた行にサマリーの予想の fact という当てる先が在るか)― 400 本の作り直し・P・W・N の照合(0 USD・通信なし・engine は 0 行)",
- "この script の sha256": "f5c0213c242e2faa47a9f19daa70071a98d1031e4163229acbd6b4b8252cc680",
+ "この script の sha256": "0617d75a98e9aca390426b2751bed5ae40a8aa8759b3e80bffab163e1abeb8ea",
  "入力": [
   {
    "#": 1,
@@ -3058,7 +3058,7 @@
   "空の欄を除く・円の族: 実",
   "空の欄を除く・円の族: 他"
  ],
- "時間(秒)": 57.5,
+ "時間(秒)": 57.9,
  "key_leaks": [],
  "行": [
   [3, 112, 58, "P", "円", false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],

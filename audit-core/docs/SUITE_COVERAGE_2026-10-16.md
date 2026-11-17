@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **311 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **312 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 238 |
+| `tests/measure` | 239 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -343,6 +343,9 @@ AT の結果の門(記録 `fixtures/xbrl/attr_tally/`・結果の文書 `docs/XB
 
 **2026-11-17 に +1**(`tests/measure/test_xbrl_plan_source_seal.py`。
 PS(engine が計画・予想の数として止めた行に、同じ短信のサマリーの予想の fact という当てる先が在るかを数える。封 `docs/XBRL_PLAN_SOURCE_SEAL_2026-11-17.md`・追記 §7・§8)の script `measure/xbrl_plan_source_2026-11-17.py` と記録 `fixtures/xbrl/plan_source/states_2026-11-17.json` の封の門)。310 → 311(`tests/measure` 237 → 238)。
+
+**2026-11-17 に +1**(`tests/measure/test_xbrl_plan_source_result.py`。
+PS の結果の門(記録 `fixtures/xbrl/plan_source/`・結果の文書 `docs/XBRL_PLAN_SOURCE_RESULT_2026-11-17.md` を縛る。封の門 `test_xbrl_plan_source_seal.py` の次の段。読みの軸の封 `docs/XBRL_PLAN_SOURCE_READ_AXES_SEAL_2026-11-17.md` の記録 `read_types_2026-11-17.json` も縛る)。311 → 312(`tests/measure` 238 → 239)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

@@ -5,7 +5,7 @@ u"""封 docs/XBRL_PLAN_SOURCE_SEAL_2026-11-17.md(PS ― engine が「計画・�
     python3 measure/xbrl_plan_source_2026-11-17.py states --out PATH [--material DIR] [--procs N]      # 400 本を作り直して TSS の記録と照らし、P・W・N を数える → fixtures/xbrl/plan_source/states_2026-11-17.json
     python3 measure/xbrl_plan_source_2026-11-17.py states --check [--material DIR] [--procs N]         # 書かずに作り直し、在る記録と比べる(時間の欄は除く)
     python3 measure/xbrl_plan_source_2026-11-17.py sheet --states PATH --material DIR --sheet PATH     # 封 §2-7 の標本を引き、読むための紙を repo の外に書く(標準出力は件数だけ)
-    python3 measure/xbrl_plan_source_2026-11-17.py types --states PATH --typed PATH --out PATH         # 付けた字の file を確かめて read_types_2026-11-17.json を書く
+    python3 measure/xbrl_plan_source_2026-11-17.py types --states PATH --typed PATH --out PATH         # 付けた 7 列の file(値の軸・身元の 5 字・元の封の字。読みの軸の封 §6)を確かめて read_types_2026-11-17.json を書く
 
 実装の注(封が 1 通りに決めていない細部の決め。実装より先に決め、結果を見て変えない。報告にも書く):
 - 前の便の部品は TSS の script(``load_module`` の形で読む)の ``cut``・``wrap``・``ST.default_cache_dir``・``ST.read_population``・``ST.validate_population`` を **呼ぶ**(写さない)。
@@ -34,6 +34,9 @@ u"""封 docs/XBRL_PLAN_SOURCE_SEAL_2026-11-17.md(PS ― engine が「計画・�
   標本(封 §8 の 5)は「空の欄を除く読み」の札から引く(甲組 = 単位が字のとおりで自が真の P から 60・乙組 = 円の族でだけ自が真の P から 30・W組 = 円の族で自が真の W の全部)。紙の fact も空の欄を除く読みの F。
   自己閉じの tag から始まる読み取りの数と本の数を、サマリー(400 本の全部)と短信の本体(``XBRLData/Attachment/`` の ``.htm``)の両方で数える(engine と同じ正規表現 ``<ix:nonFraction([^>]*)>(.*?)</ix:nonFraction>``(re.S)の一致のうち属性の列が ``/`` で終わるもの。数えるだけ・engine は直さない)。
 - ``--check`` は「作り直した記録が在る記録と同じか」を見るだけで、fact の読みが正しいかは見えない(封 §8 の欠陥は ``--check`` が緑のまま在った)。fact の読みの正しさは、読み取りを元の字と突き合わせる試験(門)で縛る。
+- 読みの軸の封(``docs/XBRL_PLAN_SOURCE_READ_AXES_SEAL_2026-11-17.md``・commit 06d7b8a7)§6: ``types`` の入口は 1 行 7 列(標本の番号・本の #・文の番号・位置・値の軸(1〜4)・身元の 5 字(合・違・不だけ。順は 項目・期・範囲・予想の種類・1 株あたり)・元の封の字(あ・い・う))。
+  標本の行と 1 対 1・順も同じ。**元の封の字は §2-3 から script が決め**(あ = 5 字に 違 が無く項目と期が 合・い = 5 字のどれかが 違・う = それ以外)、付けた字と食い違えば止まる。
+  states の入口・sheet の入口・states の記録は変えない(記録は script の sha256 と時間の欄のほかは byte で同じ)。
 - 時間(秒)以外は 2 回走らせて byte で同じ(本・辞書の順を固定)。
 """
 from __future__ import print_function
@@ -148,7 +151,18 @@ READ_LETTERS = collections.OrderedDict([
     (u"あ", u"合った fact のどれかが、文の言う項目・期の予想そのもの"),
     (u"い", u"値は合うが別の項目か別の期(偶然か取り違え)"),
     (u"う", u"分けられない")])
-TYPED_BY = u"司令塔(AI の席)。人は読んでいない"
+TYPED_BY = u"司令塔(AI の席 1 席)。人は読んでいない"
+AXES_SEAL_REL = "docs/XBRL_PLAN_SOURCE_READ_AXES_SEAL_2026-11-17.md"
+AXES_SEAL_COMMIT = "06d7b8a7"
+#: 読みの軸の封 §2-1 の値の軸(1 字の数)と §2-2 の身元の 5 属性(順は固定)・身元の字
+VALUE_AXES = collections.OrderedDict([
+    (1, u"文のその位置に書いてある数と単位そのもので、合った fact を文の桁に丸めると文の字になる"),
+    (2, u"文の数と単位そのものだが、選んだ fact を文の桁に丸めても文の字にならない(照合の帯の中で当たっただけ)"),
+    (3, u"engine が読んだ数か単位が、文に書いてある数と違う(読み取り・倍率・単位の取り違え)"),
+    (4, u"分けられない")])
+IDENT_ATTRS = (u"項目", u"期", u"範囲", u"予想の種類", u"1 株あたり")
+IDENT_LETTERS = collections.OrderedDict([(u"合", u"同じ"), (u"違", u"違う"), (u"不", u"文からその属性が読めない")])
+GRP_ALL = (GRP_KOU, GRP_OTSU, GRP_W)
 STATES_LIMITS = (
     u"値が合うことは同定ではない。予想の fact は 1 本に 10〜20 個ほどで、桁の少ない数(% の 1 桁など)は偶然に合う。対照(別の本の予想の fact)と読み(AI の席 1 席・盲検でない・人は読んでいない)はそのために置く",
     u"engine は動かしていない。サマリーを engine に渡したとき、予想の context を期として扱えるか・正しく結べるか・実績の行の結びを壊さないかは測っていない。「合う fact が在る」は「engine が確かめられる」ではない",
@@ -689,7 +703,7 @@ def record_text(rec, key_value=None):
 
 
 def check_text(rec, text, key_value=None):
-    scan = text.replace(SEAL_REL, u"")
+    scan = text.replace(SEAL_REL, u"").replace(AXES_SEAL_REL, u"")
     for _no, rel, _sha in INPUTS:
         scan = scan.replace(rel, u"")                    # 封の path と入力の path は 32 字以上の _ - 英数字の連なり(TSS と同じく除いて検査する)
     TSS.check_clean(rec, scan, key_value)
@@ -809,37 +823,63 @@ def run_sheet(states_path, material, sheet, root=ROOT, say=print, repo=None, pop
 
 # ======================================================================================================
 # types
+def letter_of(ident):
+    u"""読みの軸の封 §2-3: 身元の 5 字から元の封の字を決める。あ = 違 が無く、項目と期が 合。い = どれかが 違。う = それ以外(項目か期が 不)。"""
+    if u"違" in ident:
+        return u"い"
+    return u"あ" if ident[0] == u"合" and ident[1] == u"合" else u"う"
+
+
 def read_typed(path, items):
-    u"""TSV(標本の番号 TAB 本の # TAB 文の番号 TAB 位置 TAB 字)。標本の行と 1 対 1・字は あ/い/う だけ。{標本の番号: 字}。"""
+    u"""TSV(標本の番号 TAB 本の # TAB 文の番号 TAB 位置 TAB 値の軸(1〜4)TAB 身元の 5 字 TAB 元の封の字)。標本の行と 1 対 1・順も標本と同じ。
+    値の軸は 1〜4・身元は 合・違・不 の 5 字・元の封の字は あ/い/う で、身元から §2-3 で決めた字と食い違えば止める。{標本の番号: (値の軸, 身元の 5 字, 字)}。"""
     want = dict((it[0], it[1:4]) for it in items)
-    out = {}
+    out = collections.OrderedDict()
     with io.open(path, encoding="utf-8") as fh:
         for ln in fh.read().split(u"\n"):
             if not ln.strip():
                 continue
             parts = ln.rstrip(u"\r").split(u"\t")
-            if len(parts) != 5 or not all(re.fullmatch(r"[0-9]+", p) for p in parts[:4]) or parts[4] not in READ_LETTERS:
-                raise Stop(u"**字の file の行が「標本の番号 TAB 本の # TAB 文の番号 TAB 位置 TAB 字(あ・い・う)」でない。止める**")
+            if (len(parts) != 7 or not all(re.fullmatch(r"[0-9]+", p) for p in parts[:5]) or int(parts[4]) not in VALUE_AXES
+                    or len(parts[5]) != len(IDENT_ATTRS) or any(ch not in IDENT_LETTERS for ch in parts[5]) or parts[6] not in READ_LETTERS):
+                raise Stop(u"**字の file の行が「標本の番号 TAB 本の # TAB 文の番号 TAB 位置 TAB 値の軸(1〜4)TAB 身元の 5 字(合・違・不)TAB 元の封の字(あ・い・う)」でない。止める**")
             k = int(parts[0])
             if k in out:
                 raise Stop(u"**字の file に同じ標本の番号が 2 行ある。止める**")
             if k not in want or tuple(int(p) for p in parts[1:4]) != tuple(want[k]):
                 raise Stop(u"**字の file の行が標本の行(本の #・文の番号・位置)と合わない。止める**")
-            out[k] = parts[4]
+            if letter_of(parts[5]) != parts[6]:
+                raise Stop(u"**元の封の字が身元の 5 字から封 §2-3 で決めた字と食い違う(標本 %d)。止める**" % k)
+            out[k] = (int(parts[4]), parts[5], parts[6])
     if sorted(out) != sorted(want):
         raise Stop(u"**字の file の標本の番号が標本の行(%d 行)とそろわない。止める**" % len(want))
+    if list(out) != [it[0] for it in items]:
+        raise Stop(u"**字の file の行の順が標本の順と違う。止める**")
     return out
 
 
 def read_counts(items, typed):
+    u"""組ごとの集計(読みの軸の封 §3)。分母は読んだ行の全部。"""
     def part(sel):
-        c = collections.Counter(typed[it[0]] for it in items if sel(it))
-        n = sum(c.values())
-        return collections.OrderedDict([(u"読んだ行", n)] + [(t, c.get(t, 0)) for t in READ_LETTERS] + [(u"あの率", rate(c.get(u"あ", 0), n))])
-    out = collections.OrderedDict([(u"全部", part(lambda it: True))])
-    for g in (GRP_KOU, GRP_OTSU, GRP_W):
-        out[g] = part(lambda it, g=g: it[4] == g)
-    return out
+        its = [it for it in items if sel(it)]
+        n = len(its)
+        t = [typed[it[0]] for it in its]
+        ax = collections.OrderedDict((str(a), rate(sum(1 for x in t if x[0] == a), n)) for a in VALUE_AXES)
+        attrs = collections.OrderedDict()
+        for i, nm in enumerate(IDENT_ATTRS):
+            attrs[nm] = collections.OrderedDict((ch, rate(sum(1 for x in t if x[1][i] == ch), n)) for ch in IDENT_LETTERS)
+        letters = collections.OrderedDict((ch, rate(sum(1 for x in t if x[2] == ch), n)) for ch in READ_LETTERS)
+        cross = collections.OrderedDict((str(a), collections.OrderedDict((ch, sum(1 for x in t if x[0] == a and x[2] == ch)) for ch in READ_LETTERS)) for a in VALUE_AXES)
+        diff = [x for x in t if u"違" in x[1]]
+        diff12 = [x for x in diff if x[0] in (1, 2)]
+        def by_attr(rows):
+            return collections.OrderedDict((nm, sum(1 for x in rows if x[1][i] == u"違")) for i, nm in enumerate(IDENT_ATTRS))
+        return collections.OrderedDict([
+            (u"読んだ行", n), (u"値の軸ごとの行の数", ax), (u"身元の属性ごとの 合・違・不 の行の数", attrs), (u"あ・い・う の行の数", letters),
+            (u"値の軸 × あ・い・う の行の数", cross),
+            (u"身元に 違 が在る行", collections.OrderedDict([(u"行の数", rate(len(diff), n)), (u"違 の属性ごとの行の数(1 行に複数の 違 が在れば重ねて数える)", by_attr(diff))])),
+            (u"値の軸が 1 か 2 で身元に 違 が在る行", collections.OrderedDict([(u"行の数", rate(len(diff12), n)), (u"違 の属性ごとの行の数(1 行に複数の 違 が在れば重ねて数える)", by_attr(diff12))]))])
+    return collections.OrderedDict((g, part(lambda it, g=g: it[4] == g)) for g in GRP_ALL)
 
 
 def run_types(states_path, typed_path, out, root=ROOT, say=print, key_value=None):
@@ -854,13 +894,15 @@ def run_types(states_path, typed_path, out, root=ROOT, say=print, key_value=None
     rec[u"封の commit"] = SEAL_COMMIT
     rec[u"封の追記(§7)の commit"] = ADDENDUM_COMMIT
     rec[u"封の追記(§8)の commit"] = ADDENDUM8_COMMIT
-    rec[u"step"] = u"PS ― 「自」が真の P の標本(甲組・乙組)と W の行(W組)の読み(0 USD)"
+    rec[u"読みの軸の封"] = AXES_SEAL_REL
+    rec[u"読みの軸の封の commit"] = AXES_SEAL_COMMIT
+    rec[u"step"] = u"PS ― 「自」が真の P の標本(甲組・乙組)と W の行(W組)の読みを、値の軸と身元の 5 字の 2 つの軸で付けた記録(0 USD)"
     rec[u"この script の sha256"] = ST.sha256_file(os.path.abspath(__file__))
     rec[u"states の記録の sha256"] = ST.sha256_file(os.path.abspath(states_path))
     rec[u"型を付けた席"] = TYPED_BY
-    rec[u"盲検"] = u"盲検ではない(封の予測と §0 の形を知ったうえで付けた)"
+    rec[u"盲検"] = u"盲検ではない(封の予測と §0 の形・読みの軸の封の予測を知ったうえで付けた)"
     rec[u"標本の規則"] = collections.OrderedDict([
-        (u"読みの札", u"全部「空の欄を除く読み」の札から引く。" + NONNIL_NOTE + u"。封 §8 の 5(PS-6 は封のとおりには測らない・当たりに数えない)"),
+        (u"読みの札", u"全部「空の欄を除く読み」の札から引く。" + NONNIL_NOTE + u"。標本は主の数の標本ではない。封 §8 の 5(PS-6 は封のとおりには測らない・当たりに数えない)"),
         (u"甲組", u"空の欄を除く読みで、単位が字のとおりで「自」が真の P の行を (# の順・文の番号の順・位置の順)に並べ、random.Random(種).sample(range(行の数), 60) を番号の順に(60 に満たなければ全部)"),
         (u"乙組", u"空の欄を除く読みで、円の族の読みでだけ「自」が真になる P の行を同じ順に並べ、同じ種で 30 行(満たなければ全部)。" + FAMILY_NOTE),
         (u"W組", u"空の欄を除く読みで、円の族の読みで「自」が真の W の行を全部。" + FAMILY_NOTE),
@@ -871,9 +913,13 @@ def run_types(states_path, typed_path, out, root=ROOT, say=print, key_value=None
         (u"甲組の標本の数", n_in(items, GRP_KOU)), (u"乙組の標本の数", n_in(items, GRP_OTSU)), (u"W組の標本の数", n_in(items, GRP_W)),
         (u"番号の割り当て", u"1 から 甲組・続けて 乙組・続けて W組")])
     rec[u"字の説明"] = collections.OrderedDict(READ_LETTERS)
+    rec[u"値の軸の説明"] = collections.OrderedDict((str(a), t) for a, t in VALUE_AXES.items())
+    rec[u"身元の属性の順"] = list(IDENT_ATTRS)
+    rec[u"身元の字の説明"] = collections.OrderedDict(IDENT_LETTERS)
+    rec[u"元の封の字の決め方"] = u"読みの軸の封 §2-3。あ = 身元の 5 字に 違 が無く、項目と期が 合。い = 5 字のどれかが 違。う = それ以外(項目か期が 不)。script が身元から決め、付けた字と食い違えば止まる。値の軸は あ・い・う に入れない"
     rec[u"集計"] = read_counts(items, typed)
-    rec[u"行の欄"] = [u"標本の番号", u"本の #", u"文の番号", u"位置", u"字"]
-    rec[u"行"] = [[it[0], it[1], it[2], it[3], typed[it[0]]] for it in items]
+    rec[u"行の欄"] = [u"標本の番号", u"本の #", u"文の番号", u"位置", u"組", u"値の軸", u"身元の 5 字", u"元の封の字"]
+    rec[u"行"] = [[it[0], it[1], it[2], it[3], it[4], typed[it[0]][0], typed[it[0]][1], typed[it[0]][2]] for it in items]
     rec[u"key_leaks"] = []
     text = ST.dumps_record(rec)
     check_text(rec, text, key_value)

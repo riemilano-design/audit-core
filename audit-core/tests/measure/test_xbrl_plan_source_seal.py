@@ -10,7 +10,8 @@
    **空の欄を除く関数(封 §8 の 4)を、当たる例・当たらない例で直接呼ぶ。** 小さい作り物のサマリー(空の欄の直後に本物の fact が在る形)で、そのままの読みでは本物の fact が落ちて偽の fact が出ること・空の欄を除く読みでは本物の fact が倍率つきで出ることを ``load_instance`` で確かめる。自己閉じの読み取りの数え方(engine と同じ正規表現・属性の列が ``/`` で終わる)も直接呼ぶ。
 5. 記録 ``fixtures/xbrl/plan_source/states_2026-11-17.json``: 封の字・script の sha256・入力・P の行 794(群別 129・632・33)・W の行 20・行の形(22 欄・文や値や要素名を持たない)・
    主の数の固定(P の自 193・実 71・他 8・当てない 355・W 5・3・0・7)・読み 4 通りの集計が記録の行からの独立の数え直しと一致・自己閉じの数・script の集計関数が記録の行から同じ数を作る・行の不変(自 ≤ 当てた行・F が空の本の行は自が偽・字のとおりの自は円の族の自に含まれる・scale が無い行は両方で当てない)・率の字。
-6. types の記録(司令塔が読んだ後に作る): 無い間は「無い」ことを見て通る(足されたら形を縛る)。入口は作り物の字の file で直接走らせる(標本の行と 1 対 1・字は あ/い/う だけ・文や値を持たない)。
+6. types の記録(読みの軸の封 06d7b8a7 §6 の形。1 行 7 列の入口): 記録が在ることと形・行が標本の行と 1 対 1・集計が行からの数え直しと一致・元の封の字が身元の 5 字から §2-3 で決めた字と一致・states の sha256 が実物と同じ。
+   入口は作り物の字の file で直接走らせる(標本の行と 1 対 1・順も同じ・値の軸は 1〜4・身元は 合・違・不 の 5 字・字は あ/い/う で身元から決めた字と食い違えば止まる・文や値を持たない)。
 7. sheet は repo の中への書き出しを止める。
 8. engine 0 行: 封の commit から HEAD まで ``core/``・``adapters/``・``measure/lib``・``measure/inject.py`` と入力 5 つを触っていない。作業木に未 commit の変更も無い。``tests/adapters/xbrl/test_boundary.py`` の import 一覧は広げない。
 9. 順序: **最初の封 a080ce5f と追記 5b38862e・3e8a722d の全部**が script・この門・記録より前(commit の順。未 commit は赤)。
@@ -63,6 +64,8 @@ SEAL_REL = "docs/XBRL_PLAN_SOURCE_SEAL_2026-11-17.md"
 SEAL_COMMIT_SHORT = "a080ce5f"                 # 最初の封の commit(literal に留める。script の定数と違えば赤)
 ADDENDUM_COMMIT_SHORT = "5b38862e"             # 追記 §7 の commit
 ADDENDUM8_COMMIT_SHORT = "3e8a722d"            # 追記 §8 の commit
+AXES_SEAL_REL = "docs/XBRL_PLAN_SOURCE_READ_AXES_SEAL_2026-11-17.md"      # 読みの軸の封(§6 が types の入口を決める)
+AXES_SEAL_COMMIT_SHORT = "06d7b8a7"
 SCRIPT_REL = "measure/xbrl_plan_source_2026-11-17.py"
 GATE_REL = "tests/measure/test_xbrl_plan_source_seal.py"
 RECORD_REL = "fixtures/xbrl/plan_source/states_2026-11-17.json"
@@ -782,8 +785,62 @@ def sample_items_real():
     return MS.sample_items(MS.load_json(os.path.join(ROOT, RECORD_REL)))
 
 
+def gate_letter(ident):
+    u"""読みの軸の封 §2-3 を門の側で独立に書いた決め方(script の関数を使わない)。"""
+    if any(ch == u"違" for ch in ident):
+        return u"い"
+    if ident[0] == u"合" and ident[1] == u"合":
+        return u"あ"
+    return u"う"
+
+
+IDENT_PATTERNS = (u"合合合合合", u"合不合合合", u"不合合合合", u"合違合合合", u"違合不合合", u"合合不合合", u"合合合違違", u"不不不不不", u"合合合合不")
+AXES = (1, 2, 3, 4)
+ATTR_NAMES = (u"項目", u"期", u"範囲", u"予想の種類", u"1 株あたり")
+
+
+def fake_typed(items):
+    u"""作り物の 7 列の字(標本の行に 1 対 1)。値の軸と身元の型を回して全部の字・全部の値の軸が出る。[(標本の番号, 本の #, 文の番号, 位置, 値の軸, 身元, 字)]。"""
+    out = []
+    for it in items:
+        ident = IDENT_PATTERNS[it[0] % len(IDENT_PATTERNS)]
+        out.append((it[0], it[1], it[2], it[3], AXES[(it[0] // 3) % 4], ident, gate_letter(ident)))
+    return out
+
+
+def tsv_lines(rows):
+    return [u"\t".join([str(x) for x in r[:5]] + [r[5], r[6]]) for r in rows]
+
+
+def recount_types(items, typed):
+    u"""集計の数を作り物の字から独立に数え直す。{組: (読んだ行, 値の軸ごと, 属性 × 合違不, あいう, 値の軸 × あいう, 違の属性ごと, 値 1・2 の違の属性ごと)}。"""
+    res = {}
+    for g in (u"甲組", u"乙組", u"W組"):
+        rows = [t for it, t in zip(items, typed) if it[4] == g]
+        ax = [sum(1 for t in rows if t[4] == a) for a in AXES]
+        at = [[sum(1 for t in rows if t[5][i] == ch) for ch in u"合違不"] for i in range(5)]
+        lt = [sum(1 for t in rows if t[6] == ch) for ch in u"あいう"]
+        cross = [[sum(1 for t in rows if t[4] == a and t[6] == ch) for ch in u"あいう"] for a in AXES]
+        d = [t for t in rows if u"違" in t[5]]
+        d12 = [t for t in d if t[4] in (1, 2)]
+        res[g] = (len(rows), ax, at, lt, cross, [sum(1 for t in d if t[5][i] == u"違") for i in range(5)], [sum(1 for t in d12 if t[5][i] == u"違") for i in range(5)], len(d), len(d12))
+    return res
+
+
+def counts_of_record(sec):
+    ax = [sec[u"値の軸ごとの行の数"][str(a)][u"分子"] for a in AXES]
+    at = [[sec[u"身元の属性ごとの 合・違・不 の行の数"][nm][ch][u"分子"] for ch in u"合違不"] for nm in ATTR_NAMES]
+    lt = [sec[u"あ・い・う の行の数"][ch][u"分子"] for ch in u"あいう"]
+    cross = [[sec[u"値の軸 × あ・い・う の行の数"][str(a)][ch] for ch in u"あいう"] for a in AXES]
+    dk = [k for k in sec[u"身元に 違 が在る行"] if k.startswith(u"違 の属性")][0]
+    dk12 = [k for k in sec[u"値の軸が 1 か 2 で身元に 違 が在る行"] if k.startswith(u"違 の属性")][0]
+    d = [sec[u"身元に 違 が在る行"][dk][nm] for nm in ATTR_NAMES]
+    d12 = [sec[u"値の軸が 1 か 2 で身元に 違 が在る行"][dk12][nm] for nm in ATTR_NAMES]
+    return (sec[u"読んだ行"], ax, at, lt, cross, d, d12, sec[u"身元に 違 が在る行"][u"行の数"][u"分子"], sec[u"値の軸が 1 か 2 で身元に 違 が在る行"][u"行の数"][u"分子"])
+
+
 def types_entry_problems(ms=None):
-    u"""作り物の字の file で ``types`` を走らせる(複製の先)。標本の行と 1 対 1・あ/い/う だけ・文や値を持たない・組別の集計。"""
+    u"""作り物の字の file で ``types`` を走らせる(複製の先)。7 列・標本の行と 1 対 1(順も)・値の軸は 1〜4・身元は 合・違・不・字は身元から決めた字・文や値を持たない・組別の集計が独立の数え直しと同じ。"""
     ms = ms or MS
     out = []
     items = ms.sample_items(ms.load_json(os.path.join(ROOT, RECORD_REL)))
@@ -794,27 +851,51 @@ def types_entry_problems(ms=None):
             with open(p, "w", encoding="utf-8", newline="") as fh:
                 fh.write(u"\n".join(lines) + u"\n")
             return p
-        good = [u"%d\t%d\t%d\t%d\t%s" % (it[0], it[1], it[2], it[3], (u"あ", u"い", u"う")[it[0] % 3]) for it in items]
-        typed = write("typed.tsv", good)
+        typed = fake_typed(items)
+        good = tsv_lines(typed)
+        path = write("typed.tsv", good)
         o = os.path.join(tmp, "out.json")
-        rec = ms.run_types(os.path.join(ROOT, RECORD_REL), typed, o, say=lambda *a: None)
+        rec = ms.run_types(os.path.join(ROOT, RECORD_REL), path, o, say=lambda *a: None)
         text = open(o, encoding="utf-8").read()
-        if rec[u"集計"][u"全部"][u"読んだ行"] != len(items) or sum(rec[u"集計"][u"全部"][t] for t in (u"あ", u"い", u"う")) != len(items):
-            out.append(u"types の集計が標本の数と合わない")
+        want = recount_types(items, typed)
         for g in (u"甲組", u"乙組", u"W組"):
-            if rec[u"集計"][g][u"読んだ行"] != sum(1 for it in items if it[4] == g):
-                out.append(u"types の組別の数が標本と合わない: %s" % g)
-        if [r[0] for r in rec[u"行"]] != [it[0] for it in items] or leak_problems_types(text):
+            if g not in rec[u"集計"] or counts_of_record(rec[u"集計"][g]) != want[g]:
+                out.append(u"types の組別の集計が独立の数え直しと違う: %s" % g)
+        if [r[:5] for r in rec[u"行"]] != [list(it[:5]) for it in items] or [r[5:] for r in rec[u"行"]] != [[t[4], t[5], t[6]] for t in typed] or leak_problems_types(text):
             out.append(u"types の行が標本とそろわない・文や値が在る")
-        for label, lines in ((u"字が あ/い/う の外", good[:-1] + [good[-1][:-1] + u"え"]), (u"行が 1 つ足りない", good[:-1]), (u"同じ番号が 2 行", good + [good[0]]),
-                             (u"本の # が標本と違う", [good[0].replace(u"\t", u"\t9", 1)] + good[1:]), (u"列が足りない", [u"1\t1"] + good[1:])):
+        if rec.get(u"読みの軸の封の commit") != AXES_SEAL_COMMIT_SHORT or rec.get(u"読みの軸の封") != AXES_SEAL_REL:
+            out.append(u"types の記録の読みの軸の封の path・commit が違う")
+        L = good[0].split(u"\t")
+
+        def line(k, **ch):
+            c = list(good[k].split(u"\t"))
+            for i, v in ch.items():
+                c[int(i[1:])] = v
+            return u"\t".join(c)
+        bad_cases = (
+            (u"字が あ/い/う の外", good[:-1] + [line(len(good) - 1, c6=u"え")]),
+            (u"字が身元から決めた字と食い違う(あ → い)", [line(0, c5=u"合合合合合", c6=u"い")] + good[1:]),
+            (u"字が身元から決めた字と食い違う(違が在るのに あ)", good[:3] + [line(3, c5=u"合違合合合", c6=u"あ")] + good[4:]),
+            (u"字が身元から決めた字と食い違う(項目が 不 なのに あ)", good[:1] + [line(1, c5=u"不合合合合", c6=u"あ")] + good[2:]),
+            (u"値の軸が 5", [line(0, c4=u"5")] + good[1:]),
+            (u"値の軸が 0", [line(0, c4=u"0")] + good[1:]),
+            (u"身元が 4 字", [line(0, c5=u"合合合合", c6=u"あ")] + good[1:]),
+            (u"身元が 6 字", [line(0, c5=u"合合合合合合", c6=u"あ")] + good[1:]),
+            (u"身元に 合・違・不 の外の字", [line(0, c5=u"合合合合×", c6=u"あ")] + good[1:]),
+            (u"行が 1 つ足りない", good[:-1]),
+            (u"同じ番号が 2 行", good + [good[0]]),
+            (u"順が標本と違う", [good[1], good[0]] + good[2:]),
+            (u"本の # が標本と違う", [line(0, c1=u"9" + L[1])] + good[1:]),
+            (u"列が足りない(5 列の古い形)", [u"\t".join(L[:4] + [u"あ"])] + good[1:]),
+            (u"列が多い", [good[0] + u"\tx"] + good[1:]))
+        for label, lines in bad_cases:
             try:
                 ms.run_types(os.path.join(ROOT, RECORD_REL), write("bad.tsv", lines), os.path.join(tmp, "o_%d.json" % abs(hash(label))), say=lambda *a: None)
                 out.append(u"types が止まらない: %s" % label)
             except ms.Stop:
                 pass
         try:
-            ms.run_types(os.path.join(ROOT, RECORD_REL), typed, o, say=lambda *a: None)
+            ms.run_types(os.path.join(ROOT, RECORD_REL), path, o, say=lambda *a: None)
             out.append(u"在る出力に types が止まらない")
         except ms.Stop:
             pass
@@ -825,38 +906,67 @@ def types_entry_problems(ms=None):
 
 def leak_problems_types(text):
     rec = json.loads(text)
-    bad = [p[-1] for p, _v in walk(rec) if p and isinstance(p[-1], str) and p[-1] in (u"文", u"span", u"sentence", u"値", u"要素名", u"context", u"name", u"value")]
-    cells = all(len(r) == 5 and all(isinstance(x, int) for x in r[:4]) and r[4] in (u"あ", u"い", u"う") for r in rec[u"行"])
+    bad = [p[-1] for p, _v in walk(rec) if p and isinstance(p[-1], str) and p[-1] in (u"文", u"span", u"sentence", u"値", u"要素名", u"context", u"name", u"value", u"会社名", u"証券コード", u"docID")]
+    cells = all(len(r) == 8 and all(isinstance(x, int) for x in r[:4]) and r[4] in (u"甲組", u"乙組", u"W組") and r[5] in (1, 2, 3, 4)
+                and len(r[6]) == 5 and all(ch in u"合違不" for ch in r[6]) and r[7] in (u"あ", u"い", u"う") for r in rec[u"行"])
     return bad or not cells or DOCID_RE.search(text)
 
 
-def types_record_problems():
-    u"""types の記録が在れば形を縛る。無い間(司令塔が読む前)は「無い」ことを見て通る。"""
-    p = os.path.join(ROOT, TYPES_REL)
-    if not os.path.isfile(p):
-        return []
-    text = read(TYPES_REL)
-    rec = json.loads(text)
+def types_rec_problems(rec, text, states_sha, items, ms=None):
+    u"""read_types の記録の形と不変(行が標本の行と 1 対 1・集計が行からの数え直しと一致・字が §2-3 の決め方と一致・states の sha256・key_leaks・席・盲検)。"""
+    ms = ms or MS
     out = []
     if leak_problems_types(text):
         out.append(u"types の記録に文や値が在る・行が形に合わない")
-    items = sample_items_real()
-    if [r[:4] for r in rec[u"行"]] != [list(it[:4]) for it in items]:
+        return out
+    if [r[:5] for r in rec[u"行"]] != [list(it[:5]) for it in items]:
         out.append(u"types の記録の行が標本の行と違う")
-    if rec.get(u"states の記録の sha256") != sha_of(RECORD_REL):
+    if len(rec[u"行"]) != 109 or [sum(1 for r in rec[u"行"] if r[4] == g) for g in (u"甲組", u"乙組", u"W組")] != [60, 30, 19]:
+        out.append(u"types の記録が 109 行・組 60・30・19 でない")
+    if rec.get(u"states の記録の sha256") != states_sha:
         out.append(u"types の記録の states の sha256 が実物と違う")
     if u"人は読んでいない" not in rec.get(u"型を付けた席", u"") or u"盲検ではない" not in rec.get(u"盲検", u""):
         out.append(u"types の記録の席・盲検の字が無い")
+    if rec.get(u"key_leaks") != []:
+        out.append(u"types の記録の key_leaks が空でない")
+    if rec.get(u"読みの軸の封") != AXES_SEAL_REL or rec.get(u"読みの軸の封の commit") != AXES_SEAL_COMMIT_SHORT:
+        out.append(u"types の記録の読みの軸の封の path・commit が違う")
+    if (rec.get(u"seal"), rec.get(u"封の commit"), rec.get(u"封の追記(§7)の commit"), rec.get(u"封の追記(§8)の commit")) != (SEAL_REL, SEAL_COMMIT_SHORT, ADDENDUM_COMMIT_SHORT, ADDENDUM8_COMMIT_SHORT):
+        out.append(u"types の記録の封の path・commit が違う")
+    if rec.get(u"この script の sha256") != sha_of(SCRIPT_REL):
+        out.append(u"types の記録の script の sha256 が実物と違う")
+    for r in rec[u"行"]:
+        if gate_letter(r[6]) != r[7]:
+            out.append(u"types の記録の字が身元の 5 字から §2-3 で決めた字と違う: 標本 %d" % r[0])
+            break
+    typed = [(r[0], r[1], r[2], r[3], r[5], r[6], r[7]) for r in rec[u"行"]]
+    want = recount_types(items, typed)
+    for g in (u"甲組", u"乙組", u"W組"):
+        if g not in rec.get(u"集計", {}) or counts_of_record(rec[u"集計"][g]) != want[g]:
+            out.append(u"types の記録の集計が行の数え直しと違う: %s" % g)
     out.extend(rate_problems_loose(rec))
     return out
 
 
+def types_record_problems():
+    u"""types の記録が在り、形と不変が合う(記録が無ければ赤)。"""
+    p = os.path.join(ROOT, TYPES_REL)
+    if not os.path.isfile(p):
+        return [u"types の記録が無い"]
+    text = read(TYPES_REL)
+    return types_rec_problems(json.loads(text, object_pairs_hook=collections.OrderedDict), text, sha_of(RECORD_REL), sample_items_real())
+
+
 def rate_problems_loose(rec):
     out = []
+    n_seen = 0
     for p, v in rates(rec):
+        n_seen += 1
         want = u"分母 0" if v[u"分母"] == 0 else u"%d.%d%%" % divmod(int(Fraction(v[u"分子"], v[u"分母"]) * 1000 + Fraction(1, 2)), 10)
         if v[u"率"] != want:
             out.append(u"types の率の字が違う")
+    if n_seen < 72:
+        out.append(u"types の率の欄が少なすぎる(%d)" % n_seen)
     return out
 
 
@@ -1001,7 +1111,19 @@ MUTANTS = (
     (u"M27 通信の module を import する(行を足す)", u"import argparse\n", u"import argparse\nimport urllib.request\n", ("import",)),
     (u"M28 許す一覧の外の engine の module を import する(行を足す)", u"import argparse\n", u"import argparse\nfrom adapters.xbrl import prose\n", ("import",)),
     (u"M29 types が標本の行との合致を見ない", u"if k not in want or tuple(int(p) for p in parts[1:4]) != tuple(want[k]):", u"if False:", ("types",)),
-    (u"M30 types が あ/い/う の外の字を通す", u"or parts[4] not in READ_LETTERS:", u"or False:", ("types",)),
+    (u"M30 types が あ/い/う の外の字を通す(字の形の検査と身元との食い違いの検査の両方を外す。1 つだけ外しても、もう 1 つが止める)",
+     ((u"or parts[6] not in READ_LETTERS):", u"or False):"), (u"if letter_of(parts[5]) != parts[6]:", u"if False:")), None, ("types",)),
+    (u"M43 types が元の封の字と身元の食い違いを見ない", u"if letter_of(parts[5]) != parts[6]:", u"if False:", ("types",)),
+    (u"M44 元の封の字の決め方で 違 が在っても い にしない", u'if u"違" in ident:\n        return u"い"', u'if False:\n        return u"い"', ("types",)),
+    (u"M45 元の封の字の決め方で あ に期を要らなくする", u'ident[0] == u"合" and ident[1] == u"合"', u'ident[0] == u"合"', ("types",)),
+    (u"M46 値の軸の範囲を 1〜5 に広げる", u"int(parts[4]) not in VALUE_AXES", u"int(parts[4]) not in (1, 2, 3, 4, 5)", ("types",)),
+    (u"M47 身元の字の外の字を通す", u"any(ch not in IDENT_LETTERS for ch in parts[5])", u"False", ("types",)),
+    (u"M48 身元の字数を見ない", u"len(parts[5]) != len(IDENT_ATTRS) or ", u"", ("types",)),
+    (u"M49 行の順を見ない", u"if list(out) != [it[0] for it in items]:", u"if False:", ("types",)),
+    (u"M50 集計の 違 の属性の数え方で属性の添字をずらす", u'(nm, sum(1 for x in rows if x[1][i] == u"違")) for i, nm in enumerate(IDENT_ATTRS))', u'(nm, sum(1 for x in rows if x[1][(i + 1) % 5] == u"違")) for i, nm in enumerate(IDENT_ATTRS))', ("types",)),
+    (u"M51 集計の「値が 1 か 2」を 1 だけにする", u"diff12 = [x for x in diff if x[0] in (1, 2)]", u"diff12 = [x for x in diff if x[0] in (1,)]", ("types",)),
+    (u"M52 集計の 値の軸 × あ・い・う の行と列を取り違える", u"sum(1 for x in t if x[0] == a and x[2] == ch)", u"sum(1 for x in t if x[0] == a and x[2] == u\"あ\")", ("types",)),
+    (u"M53 読みの軸の封の commit の字を替える", u'AXES_SEAL_COMMIT = "06d7b8a7"', u'AXES_SEAL_COMMIT = "06d7b8a8"', ("types",)),
 )
 
 
@@ -1048,8 +1170,14 @@ def run_mutants():
     base = read(SCRIPT_REL)
     out = []
     for name, old, new, checks in MUTANTS:
-        assert base.count(old) == 1, (name, base.count(old))
-        src = base.replace(old, new)
+        if new is None:                              # 複数の字を同時に替える変異(old は (old, new) の並び)
+            src = base
+            for o, n in old:
+                assert src.count(o) == 1, (name, o, src.count(o))
+                src = src.replace(o, n)
+        else:
+            assert base.count(old) == 1, (name, base.count(old))
+            src = base.replace(old, new)
         try:
             mod = load_source(src)
         except BaseException as exc:                # noqa: BLE001
