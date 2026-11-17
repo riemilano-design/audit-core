@@ -105,6 +105,7 @@ LATER_ENGINE_COMMITS = {
     "d81d35f": "docs/XBRL_ROUNDING_MIXED_ENGINE_SEAL_2026-11-04.md",  # 丸め方の根拠が混ざる桁は両方の帯 RB ― engine(recipes.py +18/−0: build_raw_claims の 3 周目 "both"、vocabulary.py +7/−0: 旗・match_value の "both" = None・P30E、comparators.py +2/−0: _match_value の同じ 2 行。既定は P27 のまま。宣言 2026-11-04)
     "c2eb773": "docs/XBRL_PRIOR_CUE_BIND_ENGINE_SEAL_2026-11-06.md",  # 前期の手がかりを縛る PB ― engine(旗 prior_cue_bind_2026_11_06 と P32E、既定は P27 のまま。宣言 2026-11-06)
     "2770ab2": "docs/XBRL_TABLE_PERIOD_ENGINE_SEAL_2026-11-09.md",  # 表の見出しの前期の列の数を前期の手がかりとして扱う規則 T ― engine(旗 table_period_2026_11_09 と P33E、既定は P27 のまま。宣言 2026-11-10)
+    "d86c550": "docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md",  # inline XBRL の読み取りが自己閉じの空の欄を始まりの tag と読まない直し NRE ― engine(instance.py +1/−1。旗なし。既定は P27 のまま。封 36ca78f1。宣言 2026-11-17)
 }
 
 
