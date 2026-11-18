@@ -988,6 +988,10 @@ LATER_HARNESS_FILES = (
     # 2026-11-17: PS(TSS の便が計画・予想として止めた行に、同じ短信のサマリーの予想の fact という当てる先が在るかを数える。封 docs/XBRL_PLAN_SOURCE_SEAL_2026-11-17.md §2-1)。注入はしない。400 本を TSS の便と同じ入力で作り直して
     # 記録の行と同じことを確かめる claims_of の検査の呼び出し verify_document( が副産物の検査の規準に当たるだけ(前例 YS・KAM・TSS・NF・LB と同じ「対象外・不要」。包んだ ZIP に text は渡さない = 本文の差し替えはしない)
     ("measure/xbrl_plan_source_2026-11-17.py", u"対象外", u"不要", "claims_of", u"out = VD.verify_document(wrapped, PROFILE)", "2026-11-17"),
+    # 2026-11-18: RT(TSS の系列 = 第 1 便・第 2 便・便 1b・便 PS を、直した engine で取り直して前の記録と並べる。封 docs/XBRL_TSS_RETAKE_SEAL_2026-11-18.md §2)。注入の仕掛けは持たない。
+    # 規準の字 inject( が run_inject( の部分一致で当たるだけの使う側: 便 1b の script の run_inject を、前の段(段 1・2)の取り直した本を bases に渡して 1 回呼ぶ。profile の対 (P33E, P33E)・切り替え 2 つ・
+    # 届き方の確かめ(reach_problems)・土台の確かめ(無改変の文の判定が bases の行と同じでなければ止まる)は呼ぶ側の便 1b の script の device()・inject_book の中にあり、この script は書き写さない
+    ("measure/xbrl_tss_retake_2026-11-18.py", u"使う側", u"有", "orchestrate", u"rec4 = INJ.run_inject(root=root, procs=procs, out=p_inject, material=material, say=say, population=pop, bases=bases)", "2026-11-18"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 

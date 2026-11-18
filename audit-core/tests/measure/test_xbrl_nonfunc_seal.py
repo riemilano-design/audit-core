@@ -120,6 +120,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-17(4): NRE(engine の inline XBRL の読み取りが自己閉じの空の欄を始まりの tag と読まないようにする直し。封 docs/XBRL_NIL_READ_ENGINE_SEAL_2026-11-17.md 36ca78f1)の script 1 本と記録(fixtures/xbrl/nil_read_engine/)。
     # 材料は NR と同じ(TSS の置き場の ZIP 400 本・~/.cache/audit-core/ の ZIP。新しく取らない)。engine の変更は instance.py の式 1 行(挿入 1・削除 1)だけで、届けではなく封が宣言した遷移。記録は数と行 [本の #, 文の番号, 位置, state, 同じか, state]・本ごとの数だけで、文・span・値・要素名・context の字・会社名・証券コード・docID を持たない
     "measure/xbrl_nil_read_engine_2026-11-17.py", "fixtures/xbrl/nil_read_engine/states_2026-11-17.json",
+    # 2026-11-18(5): RT(TSS の系列 = 第 1 便・第 2 便・便 1b・便 PS を、直した engine で取り直して前の記録と並べる。封 docs/XBRL_TSS_RETAKE_SEAL_2026-11-18.md b4c08fc6)の script 1 本と記録(fixtures/xbrl/tss_retake/)。
+    # 材料は TSS の置き場の ZIP 400 本(新しく取らない)・engine(core/・adapters/)は 0 行・前の 4 便の script と記録は 1 byte も変えない(sha256 を門が縛る)。記録は数と、変わった行の [本の #, 文の番号, 位置, state] 等の記号だけで、文・span・値・要素名・context の字・会社名・証券コード・docID・金額を持たない
+    "measure/xbrl_tss_retake_2026-11-18.py", "fixtures/xbrl/tss_retake/retake_2026-11-18.json",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")
