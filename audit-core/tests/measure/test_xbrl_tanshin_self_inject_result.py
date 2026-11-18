@@ -213,7 +213,7 @@ class Ctx(object):
         self.seal = cached_text(SEAL_REL)
         self.doc = cached_text(DOC_REL) if os.path.exists(os.path.join(ROOT, DOC_REL)) else u""
         self.texts = collections.OrderedDict((rel, read_bytes(rel)) for rel in SHA_PIN)
-        self.cur = dict(current())
+        self.cur = copy.deepcopy(current())             # 中の engine の指紋の dict まで写す(浅い写しだと指紋を変える変異が共有の側に残り、変異の class が先に走る順で実物の検査が赤になる。2026-11-18)
 
 
 # ======================================================================================================
