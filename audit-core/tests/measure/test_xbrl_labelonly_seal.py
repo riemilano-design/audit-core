@@ -122,6 +122,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-18(6): SE(サマリーを engine に渡したときに動く行と、engine の語彙が予想の枠の fact に届くか。封 docs/XBRL_SUMMARY_ENGINE_SEAL_2026-11-18.md fabd87ba)の script 1 本と記録(fixtures/xbrl/summary_engine/)。
     # 材料は TSS の置き場の ZIP 400 本(新しく取らない)・engine(core/・adapters/)は 0 行・前の便の script と記録は 1 byte も変えない(sha256 を門が縛る)。記録は数と、鍵 [本の #, 文の番号, 位置] と札だけで、文・値・要素名・主語の語・枠の id・会社名・証券コード・docID・金額を持たない
     "measure/xbrl_summary_engine_2026-11-18.py", "fixtures/xbrl/summary_engine/states_2026-11-18.json",
+    # 2026-11-19(1): SC(文は一部分を言うのに全体の fact に結んだ行を文の字で止める後付けの規則が、取り違えをどれだけ止め、正しい結びをどれだけ減らすか。封 docs/XBRL_SCOPE_COND_SEAL_2026-11-19.md 5b77133b)の script 1 本と記録(fixtures/xbrl/scope_cond/)。
+    # 材料は TSS の置き場の ZIP 400 本と KAM・YS の 3 つの folder の ZIP 201 本(新しく取らない)・engine(core/・adapters/)は 0 行・前の便の script と記録は 1 byte も変えない(sha256 を門が縛る)。記録は数と、鍵 [便, 本の #, 文の種類か節, 文の番号, 位置] と state・member が空か・段ごとの当たりの類だけで、文・値・要素名・枠の id・pointer の字・主語の語・会社名・証券コード・docID・金額を持たない
+    "measure/xbrl_scope_cond_2026-11-19.py", "fixtures/xbrl/scope_cond/stops_2026-11-19.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (

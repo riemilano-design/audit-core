@@ -992,6 +992,9 @@ LATER_HARNESS_FILES = (
     # 規準の字 inject( が run_inject( の部分一致で当たるだけの使う側: 便 1b の script の run_inject を、前の段(段 1・2)の取り直した本を bases に渡して 1 回呼ぶ。profile の対 (P33E, P33E)・切り替え 2 つ・
     # 届き方の確かめ(reach_problems)・土台の確かめ(無改変の文の判定が bases の行と同じでなければ止まる)は呼ぶ側の便 1b の script の device()・inject_book の中にあり、この script は書き写さない
     ("measure/xbrl_tss_retake_2026-11-18.py", u"使う側", u"有", "orchestrate", u"rec4 = INJ.run_inject(root=root, procs=procs, out=p_inject, material=material, say=say, population=pop, bases=bases)", "2026-11-18"),
+    # 2026-11-19: SC(文は一部分を言うのに全体の fact に結んだ行を文の字で止める後付けの規則。封 docs/XBRL_SCOPE_COND_SEAL_2026-11-19.md §2-1)。注入はしない。TSS の 400 本・KAM と YS の 201 本を前の便の script の関数で引き直し、
+    # 結んだ行の文・前の字・見出しを engine の外で数える script で、KAM・YS の文の差し替えを engine の入口 build_modified_zip(memory の中だけ)に渡す kam_units の呼び出しが副産物の検査の規準に当たるだけ(前例 KAM・YS・TSS・NF・LB と同じ「対象外・不要」。差し替えた文は元の切り出した文で、値を変えた注入ではない)
+    ("measure/xbrl_scope_cond_2026-11-19.py", u"対象外", u"不要", "kam_units", u"zm = KAM.PR.build_modified_zip(zb, text)[0]", "2026-11-19"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
