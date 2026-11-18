@@ -119,6 +119,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-18(5): RT(TSS の系列 = 第 1 便・第 2 便・便 1b・便 PS を、直した engine で取り直して前の記録と並べる。封 docs/XBRL_TSS_RETAKE_SEAL_2026-11-18.md b4c08fc6)の script 1 本と記録(fixtures/xbrl/tss_retake/)。
     # 材料は TSS の置き場の ZIP 400 本(新しく取らない)・engine(core/・adapters/)は 0 行・前の 4 便の script と記録は 1 byte も変えない(sha256 を門が縛る)。記録は数と、変わった行の [本の #, 文の番号, 位置, state] 等の記号だけで、文・span・値・要素名・context の字・会社名・証券コード・docID・金額を持たない
     "measure/xbrl_tss_retake_2026-11-18.py", "fixtures/xbrl/tss_retake/retake_2026-11-18.json",
+    # 2026-11-18(6): SE(サマリーを engine に渡したときに動く行と、engine の語彙が予想の枠の fact に届くか。封 docs/XBRL_SUMMARY_ENGINE_SEAL_2026-11-18.md fabd87ba)の script 1 本と記録(fixtures/xbrl/summary_engine/)。
+    # 材料は TSS の置き場の ZIP 400 本(新しく取らない)・engine(core/・adapters/)は 0 行・前の便の script と記録は 1 byte も変えない(sha256 を門が縛る)。記録は数と、鍵 [本の #, 文の番号, 位置] と札だけで、文・値・要素名・主語の語・枠の id・会社名・証券コード・docID・金額を持たない
+    "measure/xbrl_summary_engine_2026-11-18.py", "fixtures/xbrl/summary_engine/states_2026-11-18.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (

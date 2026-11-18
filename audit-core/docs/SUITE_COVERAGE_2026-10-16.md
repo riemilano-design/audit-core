@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **318 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **319 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 245 |
+| `tests/measure` | 246 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -364,6 +364,9 @@ RT(TSS の系列 = 第 1 便・第 2 便・便 1b・便 PS を、直した engin
 
 **2026-11-18 に +1**(`tests/measure/test_xbrl_tss_retake_result.py`。
 RT の結果の門(記録 `fixtures/xbrl/tss_retake/retake_2026-11-18.json`・結果の文書 `docs/XBRL_TSS_RETAKE_RESULT_2026-11-18.md` を縛る。封の門 `test_xbrl_tss_retake_seal.py` の次の段)。317 → 318(`tests/measure` 244 → 245)。
+
+**2026-11-18 に +1**(`tests/measure/test_xbrl_summary_engine_seal.py`。
+SE(サマリーを engine に渡したときに動く行と、engine の語彙が予想の枠の fact に届くか。封 `docs/XBRL_SUMMARY_ENGINE_SEAL_2026-11-18.md`)の script `measure/xbrl_summary_engine_2026-11-18.py` と記録 `fixtures/xbrl/summary_engine/states_2026-11-18.json` の封の門)。318 → 319(`tests/measure` 245 → 246)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
