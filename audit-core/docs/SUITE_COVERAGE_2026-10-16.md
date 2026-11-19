@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **323 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **324 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 250 |
+| `tests/measure` | 251 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -379,6 +379,9 @@ SC の結果の門(記録 `fixtures/xbrl/scope_cond/stops_2026-11-19.json`・結
 
 **2026-11-19 に +1(3)**(`tests/measure/test_xbrl_plan_attr_seal.py`。
 PA(実績の数でない見積り・計画の数なのに実績の fact に結んだ行を文の字で止める後付けの規則が、取り違えをどれだけ止め、正しい結びをどれだけ減らすか。封 `docs/XBRL_PLAN_ATTR_SEAL_2026-11-19.md`)の script `measure/xbrl_plan_attr_2026-11-19.py` と記録 `fixtures/xbrl/plan_attr/stops_2026-11-19.json` の封の門)。322 → 323(`tests/measure` 249 → 250)。
+
+**2026-11-19 に +1(4)**(`tests/measure/test_xbrl_plan_attr_result.py`。
+PA の結果の門(記録 `fixtures/xbrl/plan_attr/stops_2026-11-19.json`・結果の文書 `docs/XBRL_PLAN_ATTR_RESULT_2026-11-19.md` を縛る。封の門 `test_xbrl_plan_attr_seal.py` の次の段)。323 → 324(`tests/measure` 250 → 251)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
