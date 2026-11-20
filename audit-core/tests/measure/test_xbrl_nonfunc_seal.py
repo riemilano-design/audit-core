@@ -132,9 +132,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-19(2): PA(実績の数でないのに実績の fact に結んだ行を文の字で止める後付けの規則が、取り違えをどれだけ止め、正しい結びをどれだけ減らすか。封 docs/XBRL_PLAN_ATTR_SEAL_2026-11-19.md e69b733c)の script 1 本と記録(fixtures/xbrl/plan_attr/)。
     # 材料は TSS の置き場の ZIP 400 本と KAM・YS の 3 つの folder の ZIP 201 本(新しく取らない)・engine(core/・adapters/)は 0 行・前の便の script(便 SC のものを含む)と記録は 1 byte も変えない(sha256 を門が縛る)。記録は数と、鍵 [便, 本の #, 文の種類か節, 文の番号, 位置] と state・段ごとの当たりの類だけで、文・値・要素名・枠の id・pointer の字・主語の語・会社名・証券コード・docID・金額を持たない
     "measure/xbrl_plan_attr_2026-11-19.py", "fixtures/xbrl/plan_attr/stops_2026-11-19.json",
-    # 2026-11-19(3): LX(文の字だけを読んだ LLM の席の答え(範囲・性質)で結んだ行を止める後付けの規則が、語の表の規則と比べて、取り違えをどれだけ止め、正しい結びをどれだけ減らすか。封 docs/XBRL_LLM_EXTRACT_SEAL_2026-11-19.md 198961e6)の script 1 本(記録 fixtures/xbrl/llm_extract/answers_2026-11-19.json は本番が全部済んだときにだけ書かれるので、記録を足す commit でここへ足す)。
-    # 材料は TSS の置き場の ZIP 400 本と KAM・YS の 3 つの folder の ZIP 201 本(新しく取らない)・engine(core/・adapters/)は 0 行・前の便の script(便 SC・便 PA を含む)と記録は 1 byte も変えない(sha256 を門が縛る)。有料の script(--dry-run・--check は鍵も通信も無い。鍵は環境変数だけから読み記録に出さない)。記録(後で足す)は数と、鍵 [便, 本の #, 文の種類か節, 文の番号, 位置] と state・member が空か・席ごとの答えの語・指示文の sha256・呼び出しの数だけで、文・見出し・値・要素名・枠の id・pointer の字・主語の語・会社名・証券コード・docID・金額・席の返した text を持たない
-    "measure/xbrl_llm_extract_2026-11-19.py",
+    # 2026-11-19(3): LX(文の字だけを読んだ LLM の席の答え(範囲・性質)で結んだ行を止める後付けの規則が、語の表の規則と比べて、取り違えをどれだけ止め、正しい結びをどれだけ減らすか。封 docs/XBRL_LLM_EXTRACT_SEAL_2026-11-19.md 198961e6)の script 1 本と記録(fixtures/xbrl/llm_extract/。記録は本番が全部済んだ 2026-11-20 に書かれた)。
+    # 材料は TSS の置き場の ZIP 400 本と KAM・YS の 3 つの folder の ZIP 201 本(新しく取らない)・engine(core/・adapters/)は 0 行・前の便の script(便 SC・便 PA を含む)と記録は 1 byte も変えない(sha256 を門が縛る)。有料の script(--dry-run・--check は鍵も通信も無い。鍵は環境変数だけから読み記録に出さない)。記録は数と、鍵 [便, 本の #, 文の種類か節, 文の番号, 位置] と state・member が空か・席ごとの答えの語・指示文の sha256・呼び出しの数だけで、文・見出し・値・要素名・枠の id・pointer の字・主語の語・会社名・証券コード・docID・金額・席の返した text を持たない
+    "measure/xbrl_llm_extract_2026-11-19.py", "fixtures/xbrl/llm_extract/answers_2026-11-19.json",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")
