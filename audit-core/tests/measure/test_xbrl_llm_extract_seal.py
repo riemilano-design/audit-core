@@ -64,6 +64,7 @@ MS = load_module("measure/xbrl_llm_extract_2026-11-19.py", "llm_extract_script_f
 SEAL_REL = "docs/XBRL_LLM_EXTRACT_SEAL_2026-11-19.md"
 SEAL_COMMIT_SHORT = "198961e6"                # 封の commit(literal に留める。script の定数と違えば赤)
 SEAL_ADDENDUM_SHORT = "a2ed6d0b"              # 封の §8 追記の commit(literal)
+SEAL_ADDENDUM2_SHORT = "07719813"             # 封の §9 追記の commit(literal)
 SCRIPT_REL = "measure/xbrl_llm_extract_2026-11-19.py"
 GATE_REL = "tests/measure/test_xbrl_llm_extract_seal.py"
 RECORD_REL = "fixtures/xbrl/llm_extract/answers_2026-11-19.json"
@@ -139,6 +140,9 @@ def seal_values(seal):
     out["seats"] = (m.group(1), m.group(2)) if m else None
     m = re.search(r"`max_tokens` (\d+)・`temperature` (\d+)・思考の指定は model ごとに字で留める\(主の席 `(\{[^`]*\})`・副の席 `(\{[^`]*\})`", seal)
     out["shape"] = (int(m.group(1)), int(m.group(2)), json.loads(m.group(3)), json.loads(m.group(4))) if m else None
+    m9 = re.search(r"\*\*§3 の呼び出しの形のうち `temperature` (\d+) を外す", seal)
+    out["temp9_removed"] = m9 is not None                                          # §9 の置き換えの行が在れば temperature は送らない(§9 が勝つ)
+    out["shape_eff"] = (out["shape"][0], None if out["temp9_removed"] else out["shape"][1], out["shape"][2], out["shape"][3]) if m else None
     m = re.search(r"\*\*上限\*\*: (\d+) USD", seal)
     out["cap3"] = int(m.group(1)) if m else None
     m8 = re.search(r"\*\*上限の替え[^*]*\*\*: (\d+) USD", seal)
@@ -165,6 +169,8 @@ def seal_problems(ms=None, seal=None):
     ms = ms or MS
     seal = seal if seal is not None else seal_text()
     out = []
+    if ms.SEAL_ADDENDUM2_COMMIT != SEAL_ADDENDUM2_SHORT:
+        out.append(u"script の封の追記 2 の commit が門と違う")
     if ms.SEAL_ADDENDUM_COMMIT != SEAL_ADDENDUM_SHORT:
         out.append(u"script の封の追記の commit が門と違う")
     if ms.SEAL_COMMIT != SEAL_COMMIT_SHORT or ms.SEAL_REL != SEAL_REL or ms.SCRIPT_REL != SCRIPT_REL or ms.RECORD_REL != RECORD_REL:
@@ -177,7 +183,7 @@ def seal_problems(ms=None, seal=None):
     v = seal_values(seal)
     if v["seats"] != tuple(ms.SEATS) or tuple(ms.SEAT_TAG.items()) != (("claude-sonnet-5-5", u"主"), ("claude-haiku-5-5", u"副")) or v["seats"] != ("claude-sonnet-5-5", "claude-haiku-5-5"):
         out.append(u"席の名(主・副)が封と違う")
-    if v["shape"] is None or (ms.MAX_TOKENS, ms.TEMPERATURE, ms.THINKING.get(ms.SEATS[0]), ms.THINKING.get(ms.SEATS[1])) != v["shape"]:
+    if v["shape"] is None or (ms.MAX_TOKENS, ms.TEMPERATURE, ms.THINKING.get(ms.SEATS[0]), ms.THINKING.get(ms.SEATS[1])) != v["shape_eff"]:
         out.append(u"max_tokens・temperature・思考の指定が封と違う")
     if v["cap"] is None or ms.COST_CAP_USD != float(v["cap"]):
         out.append(u"上限が封と違う")
@@ -202,7 +208,7 @@ def seal_problems(ms=None, seal=None):
     if (ms.K_WIRE, ms.K_TALLY, ms.K_CALLS, ms.K_PRED) != (K_WIRE, K_TALLY, K_CALLS, K_PRED):
         out.append(u"記録の欄の名が門と違う")
     for phrase in (u"LX-1", u"LX-11", u"両方の席に答えが在る行の 85%", u"答えを司令塔が手で直さない", u"返らなかった呼び出しは見積りの額で", u"試しの 10 回の答えは、形が良ければそのまま本番の答えに使う",
-                   u"`--dry-run` は鍵を読まず通信せず", u"L-S(範囲)", u"member の欄が空", u"上限の替え", u"この 2 つの束を除いた数は参考に並べる", u"便は TSS・KAM・YS の順"):
+                   u"`--dry-run` は鍵を読まず通信せず", u"L-S(範囲)", u"member の欄が空", u"上限の替え", u"`temperature` の欄を送らない", u"この 2 つの束を除いた数は参考に並べる", u"便は TSS・KAM・YS の順"):
         if phrase not in seal:
             out.append(u"封に要点の字が無い: %s" % phrase[:20])
     return out
@@ -224,21 +230,22 @@ def seal_table_problems(ms=None, seal=None):
 
 
 def seal_history_problems(root=REPO):
-    u"""封の file の履歴は 2 commit(198961e6 が封・a2ed6d0b が §8 の追記)。封の commit の blob は今の file の頭と 1 字も変わらない(追記は §8 を足すだけ)。今の file は追記の commit の blob と同じ。"""
+    u"""封の file の履歴は 3 commit(198961e6 が封・a2ed6d0b が §8 の追記・07719813 が §9 の追記)。前の commit の blob は次の blob の頭と 1 字も変わらない(追記は足すだけ)。今の file は最後の追記の commit の blob と同じ。"""
     c = PR.added_commits(root, PREFIX + SEAL_REL)
     if len(c) != 1 or not c[0].startswith(SEAL_COMMIT_SHORT):
         return [u"封の commit が履歴に 1 つで %s に決まらない" % SEAL_COMMIT_SHORT]
     rc, log = PR.git_in(root, "log", "--format=%H", "--reverse", "--", PREFIX + SEAL_REL)
     hs = [x for x in log.split() if x]
-    if len(hs) != 2 or not hs[0].startswith(SEAL_COMMIT_SHORT) or not hs[1].startswith(SEAL_ADDENDUM_SHORT):
-        return [u"封の file の履歴が(封・§8 の追記)の 2 commit でない"]
-    rc, sealed = PR.git_in(root, "show", "%s:%s" % (hs[0], PREFIX + SEAL_REL))
-    rc, added = PR.git_in(root, "show", "%s:%s" % (hs[1], PREFIX + SEAL_REL))
+    if len(hs) != 3 or not hs[0].startswith(SEAL_COMMIT_SHORT) or not hs[1].startswith(SEAL_ADDENDUM_SHORT) or not hs[2].startswith(SEAL_ADDENDUM2_SHORT):
+        return [u"封の file の履歴が(封・§8 の追記・§9 の追記)の 3 commit でない"]
+    blobs = [PR.git_in(root, "show", "%s:%s" % (h, PREFIX + SEAL_REL))[1].rstrip(u"\n") for h in hs]
     now = seal_text().rstrip(u"\n")
-    if now != added.rstrip(u"\n"):
-        return [u"今の封が追記の commit の blob と違う"]
-    if not now.startswith(sealed.rstrip(u"\n")) or u"## §8 追記" not in now[len(sealed.rstrip(u"\n")):]:
-        return [u"封の commit の字が今の封の頭と違う(追記の外が書き換えられた)"]
+    if now != blobs[2]:
+        return [u"今の封が最後の追記の commit の blob と違う"]
+    if not blobs[1].startswith(blobs[0]) or u"## §8 追記" not in blobs[1][len(blobs[0]):]:
+        return [u"封の commit の字が §8 の追記の commit の頭と違う(追記の外が書き換えられた)"]
+    if not blobs[2].startswith(blobs[1]) or u"## §9 追記" not in blobs[2][len(blobs[1]):]:
+        return [u"§8 の追記の commit の字が今の封の頭と違う(追記の外が書き換えられた)"]
     return []
 
 
@@ -618,8 +625,10 @@ def answers_problems(ms=None):
             out.append(u"答えのやり直し(読めない答えは 1 回だけ)の呼び出しの数が違う")
         if len(tr.n) != 14:
             out.append(u"transport を呼んだ回数が 14 でない(12 + 読めない 2 回のやり直し): %d" % len(tr.n))
-        if rec.get(u"封の commit") != SEAL_COMMIT_SHORT or rec.get(u"封の追記の commit") != SEAL_ADDENDUM_SHORT:
+        if rec.get(u"封の commit") != SEAL_COMMIT_SHORT or rec.get(u"封の追記の commit") != SEAL_ADDENDUM_SHORT or rec.get(u"封の追記 2 の commit") != SEAL_ADDENDUM2_SHORT:
             out.append(u"記録の封の commit・封の追記の commit が違う")
+        if rec[u"呼び出しの形"].get(u"temperature") != u"送らない(封 §9)" or rec[u"呼び出しの形"].get(u"max_tokens") != 200:
+            out.append(u"記録の呼び出しの形が封 §9(temperature は送らない)と違う")
         if [(r[14], r[15]) for r in rec[u"行"]] != [(False, False)] * 3 + [(True, False), (False, False), (False, True)]:
             out.append(u"記録の行の「元から 【 か 】 が在る」の欄が手計算と違う")
         T = rec[K_TALLY]
@@ -887,6 +896,69 @@ def resume_problems(ms=None):
     return out
 
 
+def c400_problems(ms=None):
+    u"""HTTP 400(断りの文)の扱い: 本文の error.message を(鍵を含まないと確かめて)進捗に残し印字する・記録には書かない・全体を止める。
+    前の走りの 400 は答えの回に数えず額を引き継ぎ、試しをもう 1 度走らせると頭の行を呼び直す(答えが 1 つも無い置き場でだけ)。"""
+    ms = ms or MS
+    out = []
+    w = World(ms)
+    msg = u"`temperature` is deprecated for this model."
+    tmp = Temp()
+    try:
+        lines = []
+        calls400 = []
+
+        def t400(n, model, prompt):
+            calls400.append(model)
+            return 400, json.dumps({"type": "error", "error": {"type": "invalid_request_error", "message": msg}}).encode()
+        tr1 = w.transport(seq=t400)
+        if stops(ms, run_world, ms, w, tmp, 6, tr1, True, False, quiet, lines.append) is not True or len(tr1.n) != 1:
+            out.append(u"試しの 1 回目が 400 で全体を止めない")
+        st = ms.load_state(tmp.p(u"w", u"work"))
+        c0 = st[u"calls"][0]
+        if c0.get(u"error_message") != msg or not any(msg in l for l in lines) or not st[u"stopped"]:
+            out.append(u"400 の断りの文を進捗と印字に残さない")
+        cost1 = ms.state_cost(st)
+        est = ms.estimate_usd(len(collect(ms, w)[0][0][u"prompt"]))
+        if abs(cost1 - est) > 1e-6:
+            out.append(u"400 の呼び出しを見積りの額で数えない")
+        # 本文に鍵らしい字・鍵そのものが在れば残さない・本文の形が違えば None
+        for bad in (u"x sk-abcdefghijklmnop1234 y", u"bad %s bad" % FAKE_KEY):
+            r = ms.error_message_of(json.dumps({"error": {"message": bad}}).encode(), FAKE_KEY)
+            if r is None or bad in r or FAKE_KEY in r or u"sk-abc" in r:
+                out.append(u"400 の本文に鍵らしい字が在るのに残す")
+        if ms.error_message_of(b"not json", FAKE_KEY) is not None or ms.error_message_of(json.dumps({"error": 1}).encode(), FAKE_KEY) is not None:
+            out.append(u"形が違う本文を None にしない")
+        if len(ms.error_message_of(json.dumps({"error": {"message": u"あ" * 1000}}).encode(), FAKE_KEY)) != 300:
+            out.append(u"400 の本文を 300 字に切らない")
+        # 試しをもう 1 度: 額を引き継ぎ、頭の行を呼び直す
+        before = open(tmp.p(u"w", u"work", u"progress.json"), encoding="utf-8").read()
+        tr2 = w.transport()
+        st2 = run_world(ms, w, tmp, transport=tr2, trial=True)
+        if len(tr2.n) != 10 or len(st2[u"calls"]) != 11:
+            out.append(u"直した後の試しが頭 5 行 × 2 席の 10 回を呼び直さない(呼び出し %d)" % len(tr2.n))
+        retired = [c for c in st2[u"calls"] if c[u"aborted"]]
+        if len(retired) != 1 or retired[0][u"config_error"] != 400 or abs(retired[0][u"cost_usd"] - est) > 1e-6 or retired[0][u"attempt"] is not None:
+            out.append(u"前の走りの 400 を答えの回から外して額を残さない")
+        if abs(ms.state_cost(st2) - (est + 0.001 * 5 + 0.00075 * 5)) > 1e-6:
+            out.append(u"試しの額が前の 400 の額を引き継いでいない")
+        if ms.seat_answer(st2, 0, ms.SEATS[0]) is None or len(ms.seat_attempts(st2, 0, ms.SEATS[0])) != 1:
+            out.append(u"頭の行の主の席が呼び直されていない")
+        # 答えが在る置き場では試しをやり直せない
+        if stops(ms, run_world, ms, w, tmp, 6, w.transport(), True) is not True:
+            out.append(u"答えが返った置き場で試しをもう 1 度走らせられる")
+        rec = run_world(ms, w, tmp, transport=w.transport(), resume=True)
+        if [r[:11] for r in rec[u"行"]] != w.expected_rows() or abs(rec[u"費用"][u"使った額 USD"] - (USD_ALL + est)) > 1e-6:
+            out.append(u"400 の後の試し → 続きの記録・額が手計算と違う")
+        if msg in ms.dumps(rec) or FAKE_KEY in ms.dumps(rec):
+            out.append(u"記録に 400 の断りの文か鍵が在る")
+        if before == u"":
+            out.append(u"進捗が空")
+    finally:
+        tmp.close()
+    return out
+
+
 def leak_problems(ms=None):
     u"""鍵の字が置き場の全部の file・記録・例外・途中の答えに出ない。記録は書く前と書いた後に検査される。"""
     ms = ms or MS
@@ -982,10 +1054,12 @@ def call_problems(ms=None):
             st, bd = ms.call_api(u"指示文 A", model, FAKE_KEY)
             req, timeout = sent[-1]
             b = json.loads(req.data.decode("utf-8"))
-            want = {"model": model, "max_tokens": 200, "temperature": 0, "thinking": {"type": "between_tools"} if model == "claude-sonnet-5-5" else {"type": "disabled"},
+            want = {"model": model, "max_tokens": 200, "thinking": {"type": "between_tools"} if model == "claude-sonnet-5-5" else {"type": "disabled"},
                     "messages": [{"role": "user", "content": u"指示文 A"}]}
+            if "temperature" in b:
+                out.append(u"body に temperature の欄が在る(封 §9: 欄そのものを送らない): %s" % model)
             if st != 200 or b != want:
-                out.append(u"送る body の形が封(max_tokens 200・temperature 0・思考の指定・system なし・user の 1 message)と違う: %s" % model)
+                out.append(u"送る body の形が封(max_tokens 200・temperature の欄なし・思考の指定・system なし・user の 1 message)と違う: %s" % model)
         if req.full_url != "https://api.anthropic.com/v1/messages" or req.get_method() != "POST" or req.get_header("Anthropic-version") != "2023-06-01":
             out.append(u"送り先・method・API の版が違う")
         if req.get_header("X-api-key") != FAKE_KEY or FAKE_KEY in req.data.decode("utf-8") or FAKE_KEY in req.full_url:
@@ -1214,7 +1288,15 @@ MUTANTS = (
     (u"M15 席の名(副)を替える", u'SEATS = ("claude-sonnet-5-5", "claude-haiku-5-5")', u'SEATS = ("claude-sonnet-5-5", "claude-haiku-5-4")', ("seal", "answers")),
     (u"M16 席の名(主)を替える", u'SEAT_TAG = collections.OrderedDict([("claude-sonnet-5-5", u"主"), ("claude-haiku-5-5", u"副")])', u'SEAT_TAG = collections.OrderedDict([("claude-sonnet-5-5", u"副"), ("claude-haiku-5-5", u"主")])', ("seal", "answers")),
     (u"M17 max_tokens を替える", u"MAX_TOKENS = 200\n", u"MAX_TOKENS = 400\n", ("seal", "call")),
-    (u"M18 temperature を替える", u"TEMPERATURE = 0\n", u"TEMPERATURE = 1\n", ("seal", "call")),
+    (u"M18 temperature の定数を替える", u"TEMPERATURE = None ", u"TEMPERATURE = 0 ", ("seal",)),
+    (u"M70 記録の呼び出しの形に temperature を書く", u'(u"temperature", u"送らない(封 §9)")', u'(u"temperature", 0)', ("answers",)),
+    (u"M63 body に temperature を戻す", u'"max_tokens": MAX_TOKENS, "thinking": THINKING[model],', u'"max_tokens": MAX_TOKENS, "temperature": 0, "thinking": THINKING[model],', ("call",)),
+    (u"M64 封の追記 2 の commit の定数を替える", u'SEAL_ADDENDUM2_COMMIT = "07719813"', u'SEAL_ADDENDUM2_COMMIT = "07719814"', ("seal",)),
+    (u"M65 記録に封の追記 2 の commit を書かない", u"    rec[u\"封の追記 2 の commit\"] = SEAL_ADDENDUM2_COMMIT\n", u"", ("answers",)),
+    (u"M66 前の走りの 400 を答えの回に数えたまま", u"    if resolve_in_flight(state) | bool(retire_config_failures(state)):", u"    if resolve_in_flight(state):", ("c400",)),
+    (u"M67 400 の本文の鍵の検査を外す", u"    if GEN.key_leaks(m, key, False):", u"    if False:", ("c400",)),
+    (u"M68 答えが在る置き場でも試しをやり直せる", u'        if any(c[u"answer"] is not None or c[u"http_status"] == 200 for c in prev[u"calls"]):', u"        if False:", ("c400", "resume")),
+    (u"M69 400 の本文を残さない", u'        item[u"error_message"] = error_message_of(body, key)', u'        item[u"error_message"] = None', ("c400",)),
     (u"M19 思考の指定(主)を替える", u'THINKING = {"claude-sonnet-5-5": {"type": "between_tools"}', u'THINKING = {"claude-sonnet-5-5": {"type": "disabled"}', ("seal", "call")),
     (u"M20 上限を替える", u"COST_CAP_USD = 15.0 ", u"COST_CAP_USD = 20.0 ", ("seal",)),
     (u"M21 出力の単価を替える", u"PRICE_OUT = 25.0", u"PRICE_OUT = 15.0", ("seal", "stops")),
@@ -1264,7 +1346,7 @@ MUTANTS = (
 def check_by_name(name, mod, src):
     table = {u"seal": seal_problems, u"seal_table": seal_table_problems, u"input_sha": input_sha_problems, u"wire_inputs": input_wire_problems, u"mark": mark_problems, u"prompt": prompt_problems,
              u"read": read_problems, u"stops": stops_problems, u"unit": unit_problems, u"items": items_problems, u"answers": answers_problems, u"retry": retry_problems,
-             u"cap": cap_problems, u"resume": resume_problems, u"leak": leak_problems, u"call": call_problems, u"dry": dry_problems, u"check": check_cmd_problems}
+             u"cap": cap_problems, u"c400": c400_problems, u"resume": resume_problems, u"leak": leak_problems, u"call": call_problems, u"dry": dry_problems, u"check": check_cmd_problems}
     if name in table:
         return table[name](mod)
     if name == u"import":
@@ -1318,6 +1400,17 @@ class SealTextTest(unittest.TestCase):
         no8 = seal.split(u"## §8 追記")[0]
         self.assertEqual(10, seal_values(no8)["cap"])
         self.assertNotEqual([], seal_problems(seal=no8))                                                          # §8 が無ければ §3 の 10 と script の 15 が違う
+
+    def test_a_6_the_section_9_removal_of_temperature_wins_over_section_3(self):
+        u"""§3 の「temperature 0」が残っていても、§9 の置き換えの行が在れば temperature は送らない(§8 の上限と同じ作り)。"""
+        seal = seal_text()
+        v = seal_values(seal)
+        self.assertTrue(v["temp9_removed"])
+        self.assertEqual((200, None, {"type": "between_tools"}, {"type": "disabled"}), v["shape_eff"])
+        self.assertEqual(0, v["shape"][1])
+        self.assertEqual([], seal_problems(seal=seal.replace(u"`temperature` 0・思考の指定", u"`temperature` 1・思考の指定")))     # §3 の字は §9 が勝つので門は動かない(script は欄を送らない)
+        self.assertNotEqual([], seal_problems(seal=seal.replace(u"`temperature` 0 を外す", u"`temperature` 0 を残す")))       # §9 の字を替えると script(送らない)と食い違う
+        self.assertNotEqual([], seal_problems(seal=seal.split(u"## §9 追記")[0]))                                              # §9 が無ければ §3 の 0 と script の None が違う
 
     def test_a_4_the_seal_has_one_prompt_block_and_the_values_are_read_from_it(self):
         seal = seal_text()
@@ -1459,6 +1552,9 @@ class PipelineTest(unittest.TestCase):
     def test_f_9_check_rebuilds_the_numbers_and_the_prompt_hashes(self):
         self.assertEqual([], check_cmd_problems())
 
+    def test_f_11_http_400_message_is_kept_outside_the_record_and_the_trial_can_be_rerun(self):
+        self.assertEqual([], c400_problems())
+
     def test_f_10_the_script_has_no_real_call_path_in_the_zero_cost_functions(self):
         saved = os.environ.pop(MS.KEY_ENV, None)
         try:
@@ -1538,7 +1634,7 @@ class MutantTest(unittest.TestCase):
     def test_j_2_the_unmutated_script_is_green_on_every_check(self):
         base = read(SCRIPT_REL)
         mod = load_source(base)
-        for name in (u"seal", u"seal_table", u"input_sha", u"mark", u"prompt", u"read", u"stops", u"unit", u"items", u"answers", u"retry", u"cap", u"resume", u"leak", u"call", u"dry", u"check", u"import"):
+        for name in (u"seal", u"seal_table", u"input_sha", u"mark", u"prompt", u"read", u"stops", u"unit", u"items", u"answers", u"retry", u"cap", u"c400", u"resume", u"leak", u"call", u"dry", u"check", u"import"):
             self.assertEqual([], check_by_name(name, mod, base), name)
 
 

@@ -22,6 +22,7 @@ u"""封 docs/XBRL_LLM_EXTRACT_SEAL_2026-11-19.md(LX ― 文の字だけを読ん
 - HTTP 400・401・403 は設定の誤りなので全体を止める(封は 401・403 を明示していない。400 は思考の指定・temperature の断りを試しで見るため)。
 - 上限の比較は 1 回の transport の呼び出しごと(HTTP の再試行を含む)。返らなかった呼び出し(通信の失敗・429・5xx・usage の無い返事)は 1 回ごとに見積りの額を数える。
 - 封 §8(追記 a2ed6d0b): 上限は 15 USD。元から 【 か 】 が在る行(文 / 見出し)は別の束に数え、予測の判定に要る数は全部の行のまま、その 2 つの束を除いた数を「参考」に並べる。行の順は上の読みのまま(§8 と同じ)。
+- 封 §9(追記 07719813): temperature の欄は送らない(この model が断る)。400 の本文の error.message は鍵を含まないと確かめてから進捗の file と印字に残す(記録には書かない)。前の走りが 400・401・403 で止めた呼び出しは答えの回に数えず、額を残して中断した呼び出しに移し、試しをもう 1 度走らせられる(答えが 1 つも無い置き場でだけ)。
 - 呼んでいる間に中断した呼び出し(次の ``--resume`` で見つかる)は見積りの額で数える。
 """
 from __future__ import print_function
@@ -79,6 +80,7 @@ Stop = PA.Stop
 
 SEAL_REL = "docs/XBRL_LLM_EXTRACT_SEAL_2026-11-19.md"
 SEAL_COMMIT = "198961e6"
+SEAL_ADDENDUM2_COMMIT = "07719813"                         # 封の §9 追記の commit(temperature を送らない)
 SEAL_ADDENDUM_COMMIT = "a2ed6d0b"                          # 封の §8 追記の commit(上限の替え・元から 【 】 が在る行・行の順の読み)
 SCRIPT_REL = "measure/xbrl_llm_extract_2026-11-19.py"
 REC_DIR_REL = "fixtures/xbrl/llm_extract"
@@ -132,7 +134,7 @@ SEATS = ("claude-sonnet-5-5", "claude-haiku-5-5")           # 主の席・副の
 SEAT_TAG = collections.OrderedDict([("claude-sonnet-5-5", u"主"), ("claude-haiku-5-5", u"副")])
 SEAT_FILE = {"claude-sonnet-5-5": "main", "claude-haiku-5-5": "sub"}
 MAX_TOKENS = 200
-TEMPERATURE = 0
+TEMPERATURE = None                                          # 封 §9: temperature の欄を送らない(§3 の 0 を外す)
 THINKING = {"claude-sonnet-5-5": {"type": "between_tools"}, "claude-haiku-5-5": {"type": "disabled"}}
 COST_CAP_USD = 15.0                                         # 封 §8 の「上限の替え」(§3 の 10 USD を置き換える)
 PRICE_IN = 5.0                                              # USD / M tokens(両席に当てる保守的な字)
@@ -501,7 +503,7 @@ def collect_items(root=ROOT, procs=1, material=None, cache_base=None, say=print,
 # API(通信する唯一の所)
 def call_api(prompt, model, key):
     u"""(status, body)。HTTP の 4xx・5xx は例外にせず status で返す。例外の文には鍵を通さない(型だけ)。"""
-    body = json.dumps({"model": model, "max_tokens": MAX_TOKENS, "temperature": TEMPERATURE, "thinking": THINKING[model],
+    body = json.dumps({"model": model, "max_tokens": MAX_TOKENS, "thinking": THINKING[model],
                        "messages": [{"role": "user", "content": prompt}]}).encode("utf-8")
     req = urllib.request.Request(GEN.API_URL, data=body, method="POST",
                                  headers={"content-type": "application/json", "x-api-key": key, "anthropic-version": GEN.API_VERSION})
@@ -545,6 +547,20 @@ def usage_returned(status, body):
     return p is not None and isinstance(p[u"tin"], int) and isinstance(p[u"tout"], int)
 
 
+def error_message_of(body, key=None, limit=300):
+    u"""HTTP 4xx・5xx の本文の error.message(短く)。鍵らしい字が在れば残さない(型だけ)。読めなければ None。本文のほかの欄は残さない。"""
+    try:
+        m = json.loads(body.decode("utf-8"))["error"]["message"]
+    except Exception:                                    # noqa: BLE001
+        return None
+    if not isinstance(m, str):
+        return None
+    m = m[:limit]
+    if GEN.key_leaks(m, key, False):
+        return u"(鍵らしい字が在るので残さない)"
+    return m
+
+
 def do_call(prompt, seat, key, transport, sleep, cum, cap, row, attempt, script_sha):
     u"""1 行 1 席 1 回の呼び出し(HTTP の再試行を含む)。(呼び出しの記録(OrderedDict), 返った text か None)。
     上限は transport を呼ぶ前に毎回見る(累計 + この呼び出しで見積りの額を数えた分 + 次の見積り > 上限 なら止める)。返らなかった呼び出しは 1 回ごとに見積りの額を数える。"""
@@ -579,6 +595,8 @@ def do_call(prompt, seat, key, transport, sleep, cum, cap, row, attempt, script_
         item[u"answer"] = read_answer(text, p[u"stop_reason"])
         if item[u"answer"] is not None:
             item[u"answer"] = list(item[u"answer"])
+    if status is not None and status >= 400:
+        item[u"error_message"] = error_message_of(body, key)
     item[u"usage_usd"] = round(usage_cost, 6)
     item[u"est_counted_usd"] = round(meter["extra"], 6)
     item[u"cost_usd"] = round(usage_cost + meter["extra"], 6)
@@ -627,6 +645,18 @@ def seat_done(state, row, seat, max_attempts=MAX_ANSWER_ATTEMPTS):
 
 def state_cost(state):
     return round(sum(c[u"cost_usd"] for c in state[u"calls"]), 6)
+
+
+def retire_config_failures(state):
+    u"""前の走りが HTTP 400・401・403(設定の誤り)で止めた呼び出しは答えの回に数えない(答えは 1 つも返っていない)。額は残したまま中断した呼び出しの側へ移す(上限をすり抜けさせない)。"""
+    n = 0
+    for c in state[u"calls"]:
+        if not c[u"aborted"] and c[u"http_status"] in STOP_HTTP:
+            c[u"aborted"] = True
+            c[u"attempt"] = None
+            c[u"config_error"] = c[u"http_status"]
+            n += 1
+    return n
 
 
 def resolve_in_flight(state):
@@ -709,7 +739,7 @@ def run_calls(items, state, work, key, transport=call_api, sleep=None, say=print
     sleep = sleep if sleep is not None else time.sleep
     this_sha = ST.sha256_file(os.path.abspath(__file__))
     check_state(items, state, work)
-    if resolve_in_flight(state):
+    if resolve_in_flight(state) | bool(retire_config_failures(state)):
         save_state(work, state)
     problem = plan_problem(items, state, rows_limit, one_attempt, cap, say)
     if problem:
@@ -744,6 +774,7 @@ def run_calls(items, state, work, key, transport=call_api, sleep=None, say=print
                     i, SEAT_TAG[seat], attempt, item[u"http_status"], item[u"stop_reason"], u",".join(x or u"?" for x in (item[u"blocks"] or [])), item[u"chars"],
                     u"読めた" if item[u"answer"] is not None else u"読めない", state_cost(state)))
                 if item[u"http_status"] in STOP_HTTP:
+                    say(u"  HTTP %s の断りの文: %s" % (item[u"http_status"], item.get(u"error_message")))
                     state[u"stopped"] = u"HTTP %s(設定の誤りか鍵の問題)" % item[u"http_status"]
                     save_state(work, state)
                     raise Stop(u"**HTTP %s。全体を止める**" % item[u"http_status"])
@@ -1005,6 +1036,7 @@ def build_record(items, state, labels, recs, inputs, fp, wire, material_cell):
     rec[u"seal"] = SEAL_REL
     rec[u"封の commit"] = SEAL_COMMIT
     rec[u"封の追記の commit"] = SEAL_ADDENDUM_COMMIT
+    rec[u"封の追記 2 の commit"] = SEAL_ADDENDUM2_COMMIT
     rec[u"step"] = u"LX(文の字だけを読んだ LLM の席の答え(範囲・性質)で結んだ行を止める後付けの規則 ― L-S・L-P・L-U。語の表(便 SC・便 PA の段 2)と並べる)(有料・engine は 0 行)"
     rec[u"この script の sha256"] = ST.sha256_file(os.path.abspath(__file__))
     rec[u"入力"] = inputs
@@ -1012,7 +1044,7 @@ def build_record(items, state, labels, recs, inputs, fp, wire, material_cell):
     rec[u"profile"] = PROFILE
     rec[u"材料"] = material_cell
     rec[u"席"] = od([(u"主の席", od([(u"model", SEATS[0]), (u"thinking", THINKING[SEATS[0]])])), (u"副の席", od([(u"model", SEATS[1]), (u"thinking", THINKING[SEATS[1]])]))])
-    rec[u"呼び出しの形"] = od([(u"max_tokens", MAX_TOKENS), (u"temperature", TEMPERATURE), (u"API の版", GEN.API_VERSION), (u"送り先", GEN.API_URL),
+    rec[u"呼び出しの形"] = od([(u"max_tokens", MAX_TOKENS), (u"temperature", u"送らない(封 §9)"), (u"API の版", GEN.API_VERSION), (u"送り先", GEN.API_URL),
                           (u"HTTP の再試行", u"429 / 5xx のときだけ最大 %d 回(待ち %s 秒)" % (len(GEN.RETRY_WAITS), list(GEN.RETRY_WAITS))),
                           (u"答えのやり直し", u"読めない答えは同じ指示文でもう 1 回だけ(封 §2-3)"), (u"system", u"無し(user の 1 message)")])
     rec[u"指示文の型(封 §2-2)"] = od([(u"字", PROMPT_TEMPLATE), (u"sha256", sha256_text(PROMPT_TEMPLATE)), (u"置き換える所", list(PLACEHOLDERS))])
@@ -1071,7 +1103,9 @@ def run(root=ROOT, procs=1, material=None, cache_base=None, say=print, trial=Fal
         raise Stop(u"**記録が既に在る: %s。止める**" % os.path.basename(out))
     exists = os.path.exists(state_path(work))
     if trial and exists:
-        raise Stop(u"**途中の答えが既に在る(試しは新しい置き場でだけ)。止める**")
+        prev = load_state(work)
+        if any(c[u"answer"] is not None or c[u"http_status"] == 200 for c in prev[u"calls"]):
+            raise Stop(u"**途中の答えが既に在る(試しは答えが 1 つも返っていない置き場でだけ)。止める**")
     if not trial and exists and not resume:
         raise Stop(u"**途中の答えが既に在る。続きは --resume を付ける(有料の呼び出しを二度しない)。止める**")
     if TSS.inside_repo(work):
