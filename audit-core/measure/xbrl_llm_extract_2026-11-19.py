@@ -933,6 +933,11 @@ def tally(views):
     return out
 
 
+def pairs_of(values):
+    u"""API の返事の字(block の type・stop_reason・HTTP の状態)の種類 → [[字, 回数], ...](字の順)。字を dict の key にしない(``text`` などの禁止欄に当たるため)。"""
+    return [[k, v] for k, v in sorted(collections.Counter(values).items())]
+
+
 def call_tally(call_rows, n_rows):
     u"""呼び出しの欄 → 席ごとの数(封 §2-5 の 6)。回数・答えのやり直し・答えなし・token・USD・block の type の並びの種類・stop_reason の種類・HTTP の状態。"""
     out = od()
@@ -949,9 +954,9 @@ def call_tally(call_rows, n_rows):
                        (u"中断した(次の走りで見つけた・上限で止めた)呼び出し", sum(1 for c in cs if c[K_ABORT])),
                        (u"答えなしの行", none_rows), (u"入力 token の合計", sum(c[K_TIN] or 0 for c in cs)), (u"出力 token の合計", sum(c[K_TOUT] or 0 for c in cs)),
                        (u"USD(返った usage で。§3 の単価)", usd_u), (u"USD(返らなかった呼び出しの見積りで数えた分)", usd_e), (u"USD 合計", round(usd_u + usd_e, 6)),
-                       (u"返った block の type の並びの種類", od(sorted(collections.Counter(c[K_BLOCKS] for c in real if c[K_BLOCKS] is not None).items()))),
-                       (u"stop_reason の種類", od(sorted(collections.Counter(str(c[K_STOP]) for c in real).items()))),
-                       (u"HTTP の状態の種類", od(sorted(collections.Counter(str(c[K_HTTP]) for c in real).items())))])
+                       (u"返った block の type の並びの種類", pairs_of(c[K_BLOCKS] for c in real if c[K_BLOCKS] is not None)),
+                       (u"stop_reason の種類", pairs_of(str(c[K_STOP]) for c in real)),
+                       (u"HTTP の状態の種類", pairs_of(str(c[K_HTTP]) for c in real))])
     out[u"USD の全部"] = round(total_usd, 6)
     return out
 

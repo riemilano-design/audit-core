@@ -695,7 +695,7 @@ def answers_problems(ms=None):
         if (c[u"主"][u"呼び出しの数(HTTP の再試行を除く。中断した呼び出しを除く)"], c[u"主"][u"答えのやり直し(封 §2-3)"], c[u"主"][u"答えなしの行"]) != (7, 1, 1) or \
                 (c[u"副"][u"呼び出しの数(HTTP の再試行を除く。中断した呼び出しを除く)"], c[u"副"][u"答えのやり直し(封 §2-3)"], c[u"副"][u"答えなしの行"]) != (7, 1, 1):
             out.append(u"呼び出しの記録の数が手計算と違う")
-        if c[u"主"][u"返った block の type の並びの種類"] != od([(u"thinking,text", 7)]) or c[u"主"][u"stop_reason の種類"] != od([(u"end_turn", 7)]) or c[u"主"][u"入力 token の合計"] != 700 or c[u"副"][u"入力 token の合計"] != 350 or abs(c[u"USD の全部"] - USD_ALL) > 1e-9 \
+        if c[u"主"][u"返った block の type の並びの種類"] != [[u"thinking,text", 7]] or c[u"主"][u"stop_reason の種類"] != [[u"end_turn", 7]] or c[u"主"][u"入力 token の合計"] != 700 or c[u"副"][u"入力 token の合計"] != 350 or abs(c[u"USD の全部"] - USD_ALL) > 1e-9 \
                 or abs(c[u"主"][u"USD 合計"] - 0.007) > 1e-9 or abs(c[u"副"][u"USD 合計"] - 0.00525) > 1e-9:
             out.append(u"呼び出しの記録の token・USD・block・stop_reason が手計算と違う(主の席 7 回 × 0.001・副の席 7 回 × 0.00075)")
         if abs(rec[u"費用"][u"使った額 USD"] - USD_ALL) > 1e-9:
@@ -959,6 +959,69 @@ def c400_problems(ms=None):
     return out
 
 
+def dict_keys(o):
+    u"""記録の中の dict の key(入れ子の全部)。"""
+    if isinstance(o, dict):
+        for k, v in o.items():
+            yield k
+            for x in dict_keys(v):
+                yield x
+    elif isinstance(o, list):
+        for v in o:
+            for x in dict_keys(v):
+                yield x
+
+
+def realshape_problems(ms=None):
+    u"""実物と同じ形の返事(block は text だけ・stop_reason は end_turn)で、``build_record`` → ``record_text``(``check_clean`` を通る)まで本物の関数で通す。
+    API の返事の字(block の type・stop_reason・HTTP の状態)が記録の dict の key になると、禁止欄(text など)に当たって記録が書けない。
+    さらに、呼ぶ行が残っていなければ ``--resume`` は 1 回も呼ばずに記録を書く。"""
+    ms = ms or MS
+    out = []
+    w = World(ms)
+    tmp = Temp()
+    try:
+        def real_like(n, model, prompt):
+            row = int(re.search(u"\\(甲(\\d)\\)", prompt).group(1))
+            ans = w.answers[row][0 if model == "claude-sonnet-5-5" else 1] or (u"全体", u"実績")
+            return 200, body(json.dumps({u"範囲": ans[0], u"性質": ans[1]}, ensure_ascii=False), blocks=("text",))
+        tr = w.transport(seq=real_like)
+        try:
+            rec = run_world(ms, w, tmp, transport=tr)
+        except SystemExit as e:
+            return [u"実物と同じ形の返事で記録が書けない(止まった): %s" % str(e)[:60]]
+        text = ms.dumps(rec)
+        c = rec[K_CALLS][u"主"]
+        if c[u"返った block の type の並びの種類"] != [[u"text", 6]] or c[u"stop_reason の種類"] != [[u"end_turn", 6]] or c[u"HTTP の状態の種類"] != [[u"200", 6]]:
+            out.append(u"返事の字の種類が [字, 回数] の組の並びでない: %s" % (c[u"返った block の type の並びの種類"],))
+        for k in dict_keys(rec):
+            if k in (u"text", u"end_turn", u"200"):
+                out.append(u"API の返事の字が記録の欄の名になっている: %s" % k)
+        # 呼ぶ行が残っていなければ --resume は 1 回も呼ばずに記録を書く(記録の書き出しだけが失敗した後の続き)
+        tmp2 = Temp()
+        try:
+            tr1 = w.transport(seq=real_like)
+            with patched(ms, record_text=lambda r, kv=None: (_ for _ in ()).throw(ms.Stop(u"**作り物: 記録の書き出しで止まる**"))):
+                try:
+                    run_world(ms, w, tmp2, transport=tr1)
+                except SystemExit:
+                    pass
+            n1 = len(tr1.n)
+            if n1 != 12 or os.path.exists(tmp2.p(u"w", u"answers.json")):
+                out.append(u"記録の書き出しで止める作り物が効いていない")
+            tr2 = w.transport(seq=real_like)
+            rec2 = run_world(ms, w, tmp2, transport=tr2, resume=True)
+            if tr2.n or not os.path.exists(tmp2.p(u"w", u"answers.json")) or [r[:11] for r in rec2[u"行"]][0][0] != u"TSS":
+                out.append(u"呼ぶ行が残っていないのに --resume が呼ぶ(%d 回)・記録を書かない" % len(tr2.n))
+            if ms.dumps(rec2[K_TALLY]) != ms.dumps(rec[K_TALLY]) or rec2[u"費用"][u"使った額 USD"] != rec[u"費用"][u"使った額 USD"]:
+                out.append(u"呼ばずに書いた記録の数が通しの記録と違う")
+        finally:
+            tmp2.close()
+    finally:
+        tmp.close()
+    return out
+
+
 def leak_problems(ms=None):
     u"""鍵の字が置き場の全部の file・記録・例外・途中の答えに出ない。記録は書く前と書いた後に検査される。"""
     ms = ms or MS
@@ -982,7 +1045,7 @@ def leak_problems(ms=None):
         for tok in (u"甲1", u"経営成績", u"監査上の項目", u"売上高", u"読めません", u"答えです", FAKE_KEY):
             if tok in text:
                 out.append(u"記録に文・見出し・返った text・鍵の字が在る: %s" % tok[:2])
-        bad = [k for k in walk(rec) if k in (u"span", u"value", u"recomputed", u"文", u"sentence", u"text", u"数", u"元の字", u"後の字", u"新しい値", u"docID", u"name")]
+        bad = [k for k in dict_keys(rec) if k in (u"span", u"value", u"recomputed", u"文", u"sentence", u"text", u"数", u"元の字", u"後の字", u"新しい値", u"docID", u"name")]
         if bad:
             out.append(u"記録に置いてはいけない欄が在る: %s" % bad[:3])
         if DOCID_RE.search(text):
@@ -1290,6 +1353,9 @@ MUTANTS = (
     (u"M17 max_tokens を替える", u"MAX_TOKENS = 200\n", u"MAX_TOKENS = 400\n", ("seal", "call")),
     (u"M18 temperature の定数を替える", u"TEMPERATURE = None ", u"TEMPERATURE = 0 ", ("seal",)),
     (u"M70 記録の呼び出しの形に temperature を書く", u'(u"temperature", u"送らない(封 §9)")', u'(u"temperature", 0)', ("answers",)),
+    (u"M71 block の type の並びを dict の key に戻す", u"pairs_of(c[K_BLOCKS] for c in real if c[K_BLOCKS] is not None)", u"od(sorted(collections.Counter(c[K_BLOCKS] for c in real if c[K_BLOCKS] is not None).items()))", ("real", "answers")),
+    (u"M72 stop_reason の種類を dict の key に戻す", u"pairs_of(str(c[K_STOP]) for c in real)", u"od(sorted(collections.Counter(str(c[K_STOP]) for c in real).items()))", ("real", "answers")),
+    (u"M73 呼ぶ行が残っていなくても --resume が呼ぶ(上限の見積りの外へ)", u"                if seat_answer(state, i, seat) is not None or len(att) >= max_attempts:", u"                if len(att) >= max_attempts:", ("real",)),
     (u"M63 body に temperature を戻す", u'"max_tokens": MAX_TOKENS, "thinking": THINKING[model],', u'"max_tokens": MAX_TOKENS, "temperature": 0, "thinking": THINKING[model],', ("call",)),
     (u"M64 封の追記 2 の commit の定数を替える", u'SEAL_ADDENDUM2_COMMIT = "07719813"', u'SEAL_ADDENDUM2_COMMIT = "07719814"', ("seal",)),
     (u"M65 記録に封の追記 2 の commit を書かない", u"    rec[u\"封の追記 2 の commit\"] = SEAL_ADDENDUM2_COMMIT\n", u"", ("answers",)),
@@ -1346,7 +1412,7 @@ MUTANTS = (
 def check_by_name(name, mod, src):
     table = {u"seal": seal_problems, u"seal_table": seal_table_problems, u"input_sha": input_sha_problems, u"wire_inputs": input_wire_problems, u"mark": mark_problems, u"prompt": prompt_problems,
              u"read": read_problems, u"stops": stops_problems, u"unit": unit_problems, u"items": items_problems, u"answers": answers_problems, u"retry": retry_problems,
-             u"cap": cap_problems, u"c400": c400_problems, u"resume": resume_problems, u"leak": leak_problems, u"call": call_problems, u"dry": dry_problems, u"check": check_cmd_problems}
+             u"cap": cap_problems, u"c400": c400_problems, u"real": realshape_problems, u"resume": resume_problems, u"leak": leak_problems, u"call": call_problems, u"dry": dry_problems, u"check": check_cmd_problems}
     if name in table:
         return table[name](mod)
     if name == u"import":
@@ -1555,6 +1621,9 @@ class PipelineTest(unittest.TestCase):
     def test_f_11_http_400_message_is_kept_outside_the_record_and_the_trial_can_be_rerun(self):
         self.assertEqual([], c400_problems())
 
+    def test_f_12_a_real_shaped_reply_does_not_put_api_words_into_record_keys_and_resume_writes_without_calling(self):
+        self.assertEqual([], realshape_problems())
+
     def test_f_10_the_script_has_no_real_call_path_in_the_zero_cost_functions(self):
         saved = os.environ.pop(MS.KEY_ENV, None)
         try:
@@ -1634,7 +1703,7 @@ class MutantTest(unittest.TestCase):
     def test_j_2_the_unmutated_script_is_green_on_every_check(self):
         base = read(SCRIPT_REL)
         mod = load_source(base)
-        for name in (u"seal", u"seal_table", u"input_sha", u"mark", u"prompt", u"read", u"stops", u"unit", u"items", u"answers", u"retry", u"cap", u"c400", u"resume", u"leak", u"call", u"dry", u"check", u"import"):
+        for name in (u"seal", u"seal_table", u"input_sha", u"mark", u"prompt", u"read", u"stops", u"unit", u"items", u"answers", u"retry", u"cap", u"c400", u"real", u"resume", u"leak", u"call", u"dry", u"check", u"import"):
             self.assertEqual([], check_by_name(name, mod, base), name)
 
 
