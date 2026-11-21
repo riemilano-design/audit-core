@@ -1,0 +1,3822 @@
+{
+  "seal": "docs/XBRL_EDINET_VALIDATE_SEAL_2026-11-21.md",
+  "封の commit": "1bda1997",
+  "step": "XV0(公開の検査の道具 Arelle の EDINET の規則を、提出済みの有報 67 本に掛けると、どの規則がどれだけ鳴るか)(0 USD・engine は読まない)",
+  "この script の sha256": "b4b7cbc6c6c6f04b2fc09489a6428ed864bcfe346dc445becab91f2a87a61219",
+  "材料": {
+    "書類の本数": 67,
+    "書類の file 名の並びの sha256": "f240150645a9b05a8d9bf5a9fe0ab89633ae338e42b8cc4d891dc04ca401e3f5",
+    "道具の版": "2.47.5",
+    "道具 R の ModelValue.py の sha256": "3d108b7764e01306e032f78def4036813c74d32d0e27c3a684a9df4f8f376ff0",
+    "道具 P の ModelValue.py の sha256": "fd9b0d08bf283452fe4ebd6ec9de2f273010de0420b70e61c993a6c033814635",
+    "道具 R の package の一覧の sha256": "51e7d2857de748b879e21995908efe50a9350041596e1cd73bef7aac595004a1",
+    "道具 P の package の一覧の sha256": "51e7d2857de748b879e21995908efe50a9350041596e1cd73bef7aac595004a1",
+    "Python の版(道具 R)": "Python 3.11.17",
+    "Python の版(道具 P)": "Python 3.11.17",
+    "3 通り": [
+      "道具 R × EDINET-2026",
+      "道具 P × EDINET-2026",
+      "道具 P × EDINET-2025"
+    ],
+    "時間の上限(秒)": 600
+  },
+  "書類": [
+    {
+      "番号": 1,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 179,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 57,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 35,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 147,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 57,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 35,
+          "EDINET.EC8029W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 234,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 60,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 35,
+          "EDINET.EC8029W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 70,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 2,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 155,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 53,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 121,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 53,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 202,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 54,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 65,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 3,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 196,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 53,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 55,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 162,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 53,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 55,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 244,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 58,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 55,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 61,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 4,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 211,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC5611W": 59,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 65,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1,
+          "xbrl.3.5.3.7": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 178,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 59,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 65,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1,
+          "xbrl.3.5.3.7": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 252,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 60,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 65,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 58,
+          "EDINET.EC8075W": 1,
+          "xbrl.3.5.3.7": 1
+        }
+      }
+    },
+    {
+      "番号": 5,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 118,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 18,
+          "EDINET.EC0130E": 10,
+          "EDINET.EC5611W": 27,
+          "EDINET.EC8023W": 9,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8069W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 86,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 18,
+          "EDINET.EC0130E": 10,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 27,
+          "EDINET.EC8023W": 9,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8069W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 126,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 18,
+          "EDINET.EC0130E": 10,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC8023W": 9,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 60,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 6,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 116,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5611W": 32,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 84,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 32,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 128,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 61,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 7,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 170,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 35,
+          "EDINET.EC0130E": 12,
+          "EDINET.EC5611W": 70,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 136,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 35,
+          "EDINET.EC0130E": 12,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 70,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 219,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 35,
+          "EDINET.EC0130E": 12,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 74,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 63,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 8,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 176,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 34,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 77,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 143,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 34,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 77,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 233,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 34,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 77,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 75,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 9,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 113,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5611W": 25,
+          "EDINET.EC8023W": 12,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 80,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 25,
+          "EDINET.EC8023W": 12,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 137,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC8023W": 12,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 66,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 10,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 158,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 53,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 124,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 53,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 197,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 52,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 59,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 11,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 166,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 61,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 132,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 61,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 230,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 67,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 76,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 12,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 174,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 66,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 140,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 66,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 234,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 69,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 75,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 13,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 146,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 39,
+          "EDINET.EC5700W": 2,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 12,
+          "EDINET.EC8027W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 115,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 39,
+          "EDINET.EC5700W": 2,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 12,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8055W": 1,
+          "EDINET.EC8065W": 1,
+          "EDINET.EC8067W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 216,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 16,
+          "EDINET.EC5700W": 2,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 64,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 54,
+          "EDINET.EC8055W": 1,
+          "EDINET.EC8065W": 1,
+          "EDINET.EC8067W": 1,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 14,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 165,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 51,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 28,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 132,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 51,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 28,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 210,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 59,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 28,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 55,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 15,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 192,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 49,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 54,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 158,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 49,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 54,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 239,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 55,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 54,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 60,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 16,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 203,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 63,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 53,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 169,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 63,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 53,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 253,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 67,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 53,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 64,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 17,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 160,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 58,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 126,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 58,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 220,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 65,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 71,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 18,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 119,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC5611W": 21,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 14,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 112,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC2002W": 2,
+          "EDINET.EC5611W": 21,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8018W": 9,
+          "EDINET.EC8019W": 17,
+          "EDINET.EC8023W": 14,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 161,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 2,
+          "EDINET.EC5611W": 24,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8018W": 9,
+          "EDINET.EC8019W": 17,
+          "EDINET.EC8023W": 14,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 30,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 19,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 194,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 63,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 45,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 161,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 63,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 45,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 256,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 68,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 45,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 75,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 20,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 163,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 59,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 129,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 59,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 229,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 68,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 75,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 21,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 218,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 58,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 71,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 185,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 58,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 71,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 270,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 64,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 71,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 65,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 22,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 140,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 34,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 20,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 106,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 34,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 20,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 175,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 39,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 20,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 48,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 23,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 130,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5611W": 27,
+          "EDINET.EC8023W": 17,
+          "EDINET.EC8027W": 3,
+          "EDINET.EC8069W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 98,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 27,
+          "EDINET.EC8023W": 17,
+          "EDINET.EC8027W": 3,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8069W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 138,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC8023W": 17,
+          "EDINET.EC8027W": 3,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 60,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 24,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 188,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC5611W": 69,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 33,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 154,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 69,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 33,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 225,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 68,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 33,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 56,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 25,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 102,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5611W": 25,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 70,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 25,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 104,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 45,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 26,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 152,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 33,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 52,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 119,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 33,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 52,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 193,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 33,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 52,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 60,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 27,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 157,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 53,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 124,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 53,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 206,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 60,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 60,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 28,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 190,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 64,
+          "EDINET.EC5700W": 2,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 31,
+          "xbrl.3.5.3.7": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 159,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 64,
+          "EDINET.EC5700W": 2,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 31,
+          "EDINET.EC8055W": 1,
+          "EDINET.EC8065W": 1,
+          "EDINET.EC8067W": 1,
+          "xbrl.3.5.3.7": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 229,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 34,
+          "EDINET.EC5700W": 2,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 38,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 75,
+          "EDINET.EC8055W": 1,
+          "EDINET.EC8065W": 1,
+          "EDINET.EC8067W": 1,
+          "EDINET.EC8075W": 1,
+          "xbrl.3.5.3.7": 1
+        }
+      }
+    },
+    {
+      "番号": 29,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 207,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 73,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 48,
+          "EDINET.EC8027W": 2
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 173,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 73,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 48,
+          "EDINET.EC8027W": 2
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 255,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 75,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 48,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 62,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 30,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 158,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 56,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 124,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 56,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 216,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 62,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 70,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 31,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 169,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 38,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 66,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 135,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 38,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 66,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 222,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 38,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 66,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 71,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 32,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 234,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 66,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 80,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 200,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 66,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 80,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 291,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 71,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 80,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 71,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 33,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 161,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 46,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 10,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8069W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 127,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 46,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 10,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8069W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 205,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 52,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 10,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 58,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 34,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 207,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 68,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 52,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 173,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 68,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 52,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 256,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 73,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 52,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 63,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 35,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 166,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 62,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 133,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 62,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 211,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 65,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 60,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 36,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 170,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 57,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8024E": 2,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 135,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 57,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8024E": 2,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 215,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC5611W": 63,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8024E": 2,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 59,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 37,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 160,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 57,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 126,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 57,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 211,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 64,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 62,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 38,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 130,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 44,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 98,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 44,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 122,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 55,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 39,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 174,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 70,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 141,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 70,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 239,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 73,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 80,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 40,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 129,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC5611W": 43,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 95,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 43,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 163,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 45,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 50,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 41,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 185,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1016E": 1,
+          "EDINET.EC5611W": 82,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 152,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1016E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 82,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8055W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 237,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1016E": 1,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 78,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 73,
+          "EDINET.EC8055W": 1,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 42,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 115,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5611W": 31,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 83,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 31,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 127,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 60,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 43,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 200,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 63,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 49,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 167,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 63,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 49,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 245,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 62,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 49,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 65,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 44,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 205,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC5611W": 58,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 60,
+          "EDINET.EC8027W": 3,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 171,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 58,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 60,
+          "EDINET.EC8027W": 3,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 255,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 66,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 60,
+          "EDINET.EC8027W": 3,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 60,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 45,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 192,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 63,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 42,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 158,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 63,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 42,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 231,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 67,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 42,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 53,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 46,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 106,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 22,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 73,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 22,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 146,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 80,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 47,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 163,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 35,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC5611W": 63,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 129,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 35,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 63,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 201,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 35,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 64,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 55,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 48,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 135,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 32,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 101,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 32,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 157,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 33,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 39,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 49,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 114,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5611W": 20,
+          "EDINET.EC8023W": 17,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 81,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 20,
+          "EDINET.EC8023W": 17,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 159,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC8023W": 17,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 83,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 50,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 93,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5611W": 13,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 60,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 13,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 130,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 67,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 51,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 160,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 51,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 22,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 126,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 51,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 22,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 200,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 52,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 22,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 57,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 52,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 137,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 33,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 104,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 33,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 178,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 37,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 55,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 53,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 168,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 64,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 134,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 64,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 222,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 37,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 70,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 66,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 54,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 119,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5611W": 36,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 87,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 36,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 137,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 71,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 55,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 215,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 47,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 80,
+          "EDINET.EC8027W": 3,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 181,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5602R": 1,
+          "EDINET.EC5611W": 47,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 80,
+          "EDINET.EC8027W": 3,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 270,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 23,
+          "EDINET.EC0130E": 13,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 48,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 80,
+          "EDINET.EC8027W": 3,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 73,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 56,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 192,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 29,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 86,
+          "EDINET.EC5700W": 2,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 159,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 29,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 86,
+          "EDINET.EC5700W": 2,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8055W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 237,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 29,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 84,
+          "EDINET.EC5700W": 2,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 64,
+          "EDINET.EC8055W": 1,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 57,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 111,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5611W": 24,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 78,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 24,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 137,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 67,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 58,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 124,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5611W": 40,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 92,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 40,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 132,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 25,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5710W": 2,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 65,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 59,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 174,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 22,
+          "EDINET.EC0130E": 12,
+          "EDINET.EC5611W": 35,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 54,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 140,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 22,
+          "EDINET.EC0130E": 12,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 35,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 54,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 213,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 22,
+          "EDINET.EC0130E": 12,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 38,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 54,
+          "EDINET.EC8027W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 55,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 60,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 133,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 47,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 99,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 47,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 188,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 59,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 61,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 61,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 167,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 50,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 30,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 133,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 50,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 30,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 216,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 61,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 30,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 57,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 62,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 148,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 47,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 115,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 47,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 194,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 36,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 56,
+          "EDINET.EC5710W": 3,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 55,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 63,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 225,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 71,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 55,
+          "EDINET.EC8069W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 191,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 71,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 55,
+          "EDINET.EC8069W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 281,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 78,
+          "EDINET.EC5700W": 1,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 55,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 75,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 64,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 126,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 37,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 92,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 37,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 147,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 41,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 2,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 36,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 65,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 119,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 18,
+          "EDINET.EC0130E": 10,
+          "EDINET.EC5611W": 37,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8069W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 87,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 18,
+          "EDINET.EC0130E": 10,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 37,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8069W": 2,
+          "EDINET.EC8070W": 1,
+          "EDINET.EC8075W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 97,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 18,
+          "EDINET.EC0130E": 10,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC8027W": 1,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 40,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 66,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 116,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC5611W": 23,
+          "EDINET.EC8023W": 18,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 84,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 23,
+          "EDINET.EC8023W": 18,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8070W": 1
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 116,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 19,
+          "EDINET.EC0130E": 11,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC8023W": 18,
+          "EDINET.EC8043W": 1,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 40,
+          "EDINET.EC8075W": 1
+        }
+      }
+    },
+    {
+      "番号": 67,
+      "道具 R × EDINET-2026": {
+        "類": "止まった",
+        "時間の上限を超えた": false,
+        "出力の行の数": 194,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC5611W": 58,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 50,
+          "xbrl.3.5.3.7": 2
+        }
+      },
+      "道具 P × EDINET-2026": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 160,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 58,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 50,
+          "xbrl.3.5.3.7": 2
+        }
+      },
+      "道具 P × EDINET-2025": {
+        "類": "走った",
+        "時間の上限を超えた": false,
+        "出力の行の数": 265,
+        "符号ごとの行": {
+          "EDINET.EC0121E": 24,
+          "EDINET.EC0130E": 14,
+          "EDINET.EC1001E": 15,
+          "EDINET.EC1057E": 1,
+          "EDINET.EC2002W": 1,
+          "EDINET.EC5611W": 66,
+          "EDINET.EC8015W": 1,
+          "EDINET.EC8023W": 50,
+          "EDINET.EC8050W": 1,
+          "EDINET.EC8054W": 79,
+          "EDINET.EC8075W": 1,
+          "xbrl.3.5.3.7": 2
+        }
+      }
+    }
+  ],
+  "集計": {
+    "道具 R × EDINET-2026": {
+      "類別": {
+        "走った": 0,
+        "止まった": 67,
+        "走らなかった": 0
+      },
+      "時間の上限を超えた数": 0,
+      "符号ごと": {
+        "EDINET.EC0121E": {
+          "書類": 67,
+          "行": 1852
+        },
+        "EDINET.EC0130E": {
+          "書類": 67,
+          "行": 879
+        },
+        "EDINET.EC1016E": {
+          "書類": 1,
+          "行": 1
+        },
+        "EDINET.EC5602R": {
+          "書類": 6,
+          "行": 6
+        },
+        "EDINET.EC5611W": {
+          "書類": 67,
+          "行": 3359
+        },
+        "EDINET.EC5700W": {
+          "書類": 7,
+          "行": 10
+        },
+        "EDINET.EC5710W": {
+          "書類": 31,
+          "行": 86
+        },
+        "EDINET.EC8015W": {
+          "書類": 52,
+          "行": 52
+        },
+        "EDINET.EC8023W": {
+          "書類": 40,
+          "行": 1239
+        },
+        "EDINET.EC8024E": {
+          "書類": 1,
+          "行": 2
+        },
+        "EDINET.EC8027W": {
+          "書類": 41,
+          "行": 64
+        },
+        "EDINET.EC8069W": {
+          "書類": 5,
+          "行": 9
+        },
+        "EDINET.EC8070W": {
+          "書類": 63,
+          "行": 63
+        },
+        "EDINET.EC8075W": {
+          "書類": 17,
+          "行": 17
+        },
+        "xbrl.3.5.3.7": {
+          "書類": 3,
+          "行": 4
+        }
+      },
+      "包みの形のほかの E が 1 行以上在る書類": 2,
+      "E の符号が 1 行も無い書類": 0,
+      "指摘の行が 1 行も無い書類": 0,
+      "鳴った符号の種類": {
+        "EDINET. の符号": 14,
+        "ほかの符号": 1
+      },
+      "34 本以上で鳴った符号の種類": 7,
+      "EC0121E か EC0130E が鳴る書類": 67
+    },
+    "道具 P × EDINET-2026": {
+      "類別": {
+        "走った": 67,
+        "止まった": 0,
+        "走らなかった": 0
+      },
+      "時間の上限を超えた数": 0,
+      "符号ごと": {
+        "EDINET.EC0121E": {
+          "書類": 67,
+          "行": 1852
+        },
+        "EDINET.EC0130E": {
+          "書類": 67,
+          "行": 879
+        },
+        "EDINET.EC1016E": {
+          "書類": 1,
+          "行": 1
+        },
+        "EDINET.EC2002W": {
+          "書類": 66,
+          "行": 67
+        },
+        "EDINET.EC5602R": {
+          "書類": 6,
+          "行": 6
+        },
+        "EDINET.EC5611W": {
+          "書類": 67,
+          "行": 3359
+        },
+        "EDINET.EC5700W": {
+          "書類": 7,
+          "行": 10
+        },
+        "EDINET.EC5710W": {
+          "書類": 31,
+          "行": 86
+        },
+        "EDINET.EC8015W": {
+          "書類": 52,
+          "行": 52
+        },
+        "EDINET.EC8018W": {
+          "書類": 1,
+          "行": 9
+        },
+        "EDINET.EC8019W": {
+          "書類": 1,
+          "行": 17
+        },
+        "EDINET.EC8023W": {
+          "書類": 40,
+          "行": 1239
+        },
+        "EDINET.EC8024E": {
+          "書類": 1,
+          "行": 2
+        },
+        "EDINET.EC8027W": {
+          "書類": 41,
+          "行": 64
+        },
+        "EDINET.EC8029W": {
+          "書類": 1,
+          "行": 1
+        },
+        "EDINET.EC8043W": {
+          "書類": 15,
+          "行": 15
+        },
+        "EDINET.EC8050W": {
+          "書類": 23,
+          "行": 23
+        },
+        "EDINET.EC8055W": {
+          "書類": 4,
+          "行": 4
+        },
+        "EDINET.EC8065W": {
+          "書類": 2,
+          "行": 2
+        },
+        "EDINET.EC8067W": {
+          "書類": 2,
+          "行": 2
+        },
+        "EDINET.EC8069W": {
+          "書類": 5,
+          "行": 9
+        },
+        "EDINET.EC8070W": {
+          "書類": 63,
+          "行": 63
+        },
+        "EDINET.EC8075W": {
+          "書類": 17,
+          "行": 17
+        },
+        "xbrl.3.5.3.7": {
+          "書類": 3,
+          "行": 4
+        }
+      },
+      "包みの形のほかの E が 1 行以上在る書類": 2,
+      "E の符号が 1 行も無い書類": 0,
+      "指摘の行が 1 行も無い書類": 0,
+      "鳴った符号の種類": {
+        "EDINET. の符号": 23,
+        "ほかの符号": 1
+      },
+      "34 本以上で鳴った符号の種類": 8,
+      "EC0121E か EC0130E が鳴る書類": 67
+    },
+    "道具 P × EDINET-2025": {
+      "類別": {
+        "走った": 67,
+        "止まった": 0,
+        "走らなかった": 0
+      },
+      "時間の上限を超えた数": 0,
+      "符号ごと": {
+        "EDINET.EC0121E": {
+          "書類": 67,
+          "行": 1852
+        },
+        "EDINET.EC0130E": {
+          "書類": 67,
+          "行": 879
+        },
+        "EDINET.EC1001E": {
+          "書類": 67,
+          "行": 1005
+        },
+        "EDINET.EC1016E": {
+          "書類": 1,
+          "行": 1
+        },
+        "EDINET.EC1057E": {
+          "書類": 67,
+          "行": 67
+        },
+        "EDINET.EC2002W": {
+          "書類": 66,
+          "行": 67
+        },
+        "EDINET.EC5611W": {
+          "書類": 52,
+          "行": 3079
+        },
+        "EDINET.EC5700W": {
+          "書類": 7,
+          "行": 10
+        },
+        "EDINET.EC5710W": {
+          "書類": 31,
+          "行": 86
+        },
+        "EDINET.EC8015W": {
+          "書類": 52,
+          "行": 52
+        },
+        "EDINET.EC8018W": {
+          "書類": 1,
+          "行": 9
+        },
+        "EDINET.EC8019W": {
+          "書類": 1,
+          "行": 17
+        },
+        "EDINET.EC8023W": {
+          "書類": 40,
+          "行": 1298
+        },
+        "EDINET.EC8024E": {
+          "書類": 1,
+          "行": 2
+        },
+        "EDINET.EC8027W": {
+          "書類": 41,
+          "行": 64
+        },
+        "EDINET.EC8029W": {
+          "書類": 1,
+          "行": 1
+        },
+        "EDINET.EC8043W": {
+          "書類": 15,
+          "行": 15
+        },
+        "EDINET.EC8050W": {
+          "書類": 67,
+          "行": 67
+        },
+        "EDINET.EC8054W": {
+          "書類": 67,
+          "行": 4154
+        },
+        "EDINET.EC8055W": {
+          "書類": 4,
+          "行": 4
+        },
+        "EDINET.EC8065W": {
+          "書類": 2,
+          "行": 2
+        },
+        "EDINET.EC8067W": {
+          "書類": 2,
+          "行": 2
+        },
+        "EDINET.EC8075W": {
+          "書類": 67,
+          "行": 67
+        },
+        "xbrl.3.5.3.7": {
+          "書類": 3,
+          "行": 4
+        }
+      },
+      "包みの形のほかの E が 1 行以上在る書類": 67,
+      "E の符号が 1 行も無い書類": 0,
+      "指摘の行が 1 行も無い書類": 0,
+      "鳴った符号の種類": {
+        "EDINET. の符号": 23,
+        "ほかの符号": 1
+      },
+      "34 本以上で鳴った符号の種類": 12,
+      "EC0121E か EC0130E が鳴る書類": 67
+    }
+  },
+  "予測の判定に要る数(XV0-1〜XV0-7。当たり・外れは結果の文書で)": {
+    "XV0-1 道具 R・2026: 止まった書類": {
+      "書類": 67,
+      "分母": 67
+    },
+    "XV0-2 道具 P・2026: 止まった + 走らなかった書類": {
+      "書類": 0,
+      "分母": 67
+    },
+    "XV0-3 道具 P・2026: 包みの形のほかの E が 1 行以上在る書類": {
+      "書類": 2,
+      "分母": 67
+    },
+    "XV0-4 道具 P・2026: EC5611W が鳴る書類": {
+      "書類": 67,
+      "分母": 67
+    },
+    "XV0-5 道具 P・2026: 鳴った EDINET. の符号の種類": 23,
+    "XV0-6 道具 P: 包みの形のほかの E が在る書類(2025・2026・2025 から 2026 を引いた差)": {
+      "2025": 67,
+      "2026": 2,
+      "差": 65
+    },
+    "XV0-7 道具 P・2026: EC0121E か EC0130E が鳴る書類": {
+      "書類": 67,
+      "分母": 67
+    },
+    "補 道具 P・2026: 指摘の行が 1 行も無い書類(5 本以上なら先に自分の欠陥を疑う)": 0
+  },
+  "限界": [
+    "掛けたのは API から取った zip(拡張子 xbrl の file を除いた写し)で、提出の包みそのものではない。包みの形の符号はこの違いで鳴りうる。",
+    "規則の年は 2 つとも全部の書類に掛ける。書類ごとに正しい年は決めていない。",
+    "道具の EDINET の規則は版の字が 0.0.1 で、EDINET の本物の検査の全部を写したものとは言えない。本物の検査の結果とは照らしていない。",
+    "道具 P は 1 行を直したもので、本家の版ではない。直しがほかの規則の鳴り方を変えていないことは、見た 1 本で「止まるまでの符号の数が同じ」ことしか確かめていない。",
+    "67 本は無作為ではない。有報だけ。",
+    "鳴ったことは、規則の誤りとも書類の誤りとも読まない。鳴らなかった符号は、正しく黙ったのか効いていないのかを測っていない。",
+    "「EDINET の検査に通る」「XBRL を作れる」は、この便からは言えない。"
+  ]
+}
