@@ -166,6 +166,8 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-22: XP0(受理済みの有報の公開用の file を原稿の folder に落とし、folder だけを読む別の process の命令で htm・xsd・linkbase を組み直す。封 docs/XBRL_PACK_BUILD_SEAL_2026-11-22.md c03a3348)の script 1 本。
     # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)と repo の外に置く道具の venv・engine(core/・adapters/)は 0 行・便 XG0・XV0・XB0・XT0 の script は importlib で読み関数を呼ぶ。記録は記録の commit で足す(script だけここで届ける)。
     "measure/xbrl_pack_build_2026-11-22.py",
+    # 2026-11-22: XP0 の記録 1 本(script 465d0bc7 を 1 回走らせて書いた。67 本の数だけ。docID・会社の名・EDINET コード・file の名・fact の値・要素の名・ラベルの字・role の URI・指摘の行の本文は持たない)。
+    "fixtures/xbrl/cd8/pack_build_2026-11-22.json",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")
