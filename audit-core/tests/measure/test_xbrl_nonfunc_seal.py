@@ -153,6 +153,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-21: XV0(公開の検査の道具 Arelle の EDINET の規則を、提出済みの有報 67 本に掛ける。封 docs/XBRL_EDINET_VALIDATE_SEAL_2026-11-21.md 1bda1997)の script 1 本。
     # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)と repo の外に置く道具の venv 2 つ・engine(core/・adapters/)は 0 行・便 XG0 の script は importlib で読み関数を呼ぶ。記録 fixtures/xbrl/cd8/edinet_validate_2026-11-21.json は記録の commit で足す(script だけここで届ける)。
     "measure/xbrl_edinet_validate_2026-11-21.py",
+    # 2026-11-21: XB0(受理済みの有報の inline XBRL を、タグを剥がした本文と fact の表から組み直す。封 docs/XBRL_INLINE_BUILD_SEAL_2026-11-21.md 9c528c49)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)と repo の外に置く道具の venv・engine(core/・adapters/)は 0 行・便 XG0・XV0 の script は importlib で読み関数を呼ぶ。記録は記録の commit で足す(script だけここで届ける)。
+    "measure/xbrl_inline_build_2026-11-21.py",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")
