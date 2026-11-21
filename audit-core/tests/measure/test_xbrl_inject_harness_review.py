@@ -995,6 +995,10 @@ LATER_HARNESS_FILES = (
     # 2026-11-19: SC(文は一部分を言うのに全体の fact に結んだ行を文の字で止める後付けの規則。封 docs/XBRL_SCOPE_COND_SEAL_2026-11-19.md §2-1)。注入はしない。TSS の 400 本・KAM と YS の 201 本を前の便の script の関数で引き直し、
     # 結んだ行の文・前の字・見出しを engine の外で数える script で、KAM・YS の文の差し替えを engine の入口 build_modified_zip(memory の中だけ)に渡す kam_units の呼び出しが副産物の検査の規準に当たるだけ(前例 KAM・YS・TSS・NF・LB と同じ「対象外・不要」。差し替えた文は元の切り出した文で、値を変えた注入ではない)
     ("measure/xbrl_scope_cond_2026-11-19.py", u"対象外", u"不要", "kam_units", u"zm = KAM.PR.build_modified_zip(zb, text)[0]", "2026-11-19"),
+    # 2026-11-21: XV0(公開の検査の道具の EDINET の規則を、受理済みの有報に掛けて鳴った符号を数える。封 docs/XBRL_EDINET_VALIDATE_SEAL_2026-11-21.md)。注入はしない。engine の検査(verify_document・verify_external)も呼ばない。
+    # 書類 1 本を 3 通りの道具に順に掛ける自前の関数の名 run_doc が、規準の字 run_doc( と同じ名で当たるだけ(注入の仕掛けの run_doc とは別物。文の差し替えも claim への対応付けも持たない。前例 NF・LB と同じ「対象外・不要」)。
+    # この宣言は script の commit(便 XV0)より後に足した: 全体の suite が赤で知らせた(その便では tests/measure の一部の門しか走らせていなかった)
+    ("measure/xbrl_edinet_validate_2026-11-21.py", u"対象外", u"不要", "build_record", u"res = run_doc(tool_dirs, p, runner, tmp_root, lines)", "2026-11-21"),
 )
 LATER_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
