@@ -164,6 +164,16 @@ DECLARED_NEW_AFTER_SEAL = (
     "measure/xbrl_pack_build_2026-11-22.py",
     # 2026-11-22: XP0 の記録 1 本(script 465d0bc7 を 1 回走らせて書いた。67 本の数だけ。docID・会社の名・EDINET コード・file の名・fact の値・要素の名・ラベルの字・role の URI・指摘の行の本文は持たない)。
     "fixtures/xbrl/cd8/pack_build_2026-11-22.json",
+    # 2026-11-22: XA0(受理済みの有報の数の fact の属性が、表の行ごと・列ごとの決めでどれだけ決まるかを数える。封 docs/XBRL_SHEET_WALL_SEAL_2026-11-22.md 3062223e)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)・engine(core/・adapters/)は 0 行・道具(Arelle)は呼ばない・便 XG0・XB0 の script は importlib で読み関数を呼ぶ。記録は記録の commit で足した。
+    "measure/xbrl_sheet_wall_2026-11-22.py",
+    # 2026-11-22: XA0 の記録 1 本(script f60f374b を 1 回走らせて書いた。67 本の数だけ。docID・会社の名・EDINET コード・file の名・fact の値・要素の名・文脈の名・表の字は持たない)。
+    "fixtures/xbrl/cd8/sheet_wall_2026-11-22.json",
+    # 2026-11-22: XA1(行・列の紙に収まらなかった fact の文脈を、終わりの日と member の組に分けて別々の線で決めると、どれだけ収まるか。封 docs/XBRL_SHEET_CONTEXT_SEAL_2026-11-22.md d46f92aa)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)・engine(core/・adapters/)は 0 行・道具(Arelle)は呼ばない・便 XA0 の script は importlib で読み関数を呼ぶ。記録は記録の commit で足した。
+    "measure/xbrl_sheet_context_2026-11-22.py",
+    # 2026-11-22: XA1 の記録 1 本(script 4f836c94 を 1 回走らせて書いた。67 本の数だけ。docID・会社の名・EDINET コード・file の名・要素の名・文脈の名・member の名・日付・表の字は持たない)。
+    "fixtures/xbrl/cd8/sheet_context_2026-11-22.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
