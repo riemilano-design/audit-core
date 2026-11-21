@@ -34,8 +34,8 @@ SUITE = os.path.join(ROOT, "fixtures", "suite_coverage_2026-10-16.json")
 REV = "c740e61"
 
 # 行の本数・印の本数。**黙って減らすと赤くなる**ように字で留める(増やすときは直す)
-EXPECT_ROWS = {"L": 85, "D": 62, "H": 11, "HD": 4, "P": 70, "Q": 7, "N": 13, "A": 11}
-EXPECT_CLAIMS = 3593   # 2026-11-21: L-85(10)・D-62(13)・P-70(8)で +31(XG0 = 有価証券報告書の計算書の行で、行の字と標準タクソノミのラベルの表だけで要素が 1 つに決まる行はどれだけか。予測 XG0-1〜XG0-6 の判定の根拠・来歴・材料の並びの sha256)。
+EXPECT_ROWS = {"L": 86, "D": 63, "H": 11, "HD": 4, "P": 71, "Q": 7, "N": 13, "A": 11}
+EXPECT_CLAIMS = 3628   # 2026-11-21(2): L-86(11)・D-63(16)・P-71(8)で +35(XG1 = 便 XG0 で候補が 2 つ以上だった行を、数を持てる要素・計算書の種類・業種の科目の一覧で絞ると、要素が 1 つに決まる行はどれだけ増えるか。予測 XG1-1〜XG1-7 の判定の根拠・来歴・材料の sha256)。2026-11-21: L-85(10)・D-62(13)・P-70(8)で +31(XG0 = 有価証券報告書の計算書の行で、行の字と標準タクソノミのラベルの表だけで要素が 1 つに決まる行はどれだけか。予測 XG0-1〜XG0-6 の判定の根拠・来歴・材料の並びの sha256)。
 
 FORBIDDEN = [u"精度", u"LLM より正確", u"世界で 1 社", u"金額", u"契約", u"税", u"USD"]
 ALLOWED_PATH_PREFIX = (u"fixtures/", u"tests/adapters/xbrl/mutations.json", u"core/py/audit_core/")
@@ -554,7 +554,9 @@ class NoApiNoNetworkTest(unittest.TestCase):
                                          # 2026-11-21: P-69(CT0 の便 = 治験の公開データで、いまの engine の数の読み取りが英語の論文の要旨の数をどれだけ拾うか。封の commit)
                                          u"9e41971",
                                          # 2026-11-21(2): P-70(XG0 の便 = 有価証券報告書の計算書の行で、行の字と標準のラベルの表だけで要素が 1 つに決まる行はどれだけか。封の commit)
-                                         u"3374e50"]))
+                                         u"3374e50",
+                                         # 2026-11-21(3): P-71(XG1 の便 = 便 XG0 で候補が 2 つ以上だった行を、数を持てる要素・計算書の種類・業種の科目の一覧で絞ると、要素が 1 つに決まる行はどれだけ増えるか。封の commit)
+                                         u"1bda199"]))
         r = subprocess.run(["git", "cat-file", "-e", REV + "^{commit}"], cwd=ROOT,
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if r.returncode != 0:
