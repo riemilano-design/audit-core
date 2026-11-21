@@ -158,6 +158,8 @@ DECLARED_NEW_AFTER_SEAL = (
     "measure/xbrl_inline_build_2026-11-21.py",
     # 2026-11-21: XB0 の記録 1 本(script 82b44aef を 1 回走らせて書いた。67 本の数だけ。docID・会社の名・EDINET コード・file の名・fact の値・要素の名・指摘の行の本文は持たない)。
     "fixtures/xbrl/cd8/inline_build_2026-11-21.json",
+    # 2026-11-22: XT0 の記録 1 本(script 9417a869 を 1 回走らせて書いた。67 本の数だけ。docID・会社の名・EDINET コード・file の名・fact の値・要素の名・ラベルの字・role の URI・指摘の行の本文は持たない)。
+    "fixtures/xbrl/cd8/taxonomy_build_2026-11-22.json",
     # 2026-11-22: XT0(受理済みの有報の提出者別タクソノミ(.xsd と linkbase 5 つ)を、中身を読んだ表から自前の部品で組み直す。封 docs/XBRL_TAXONOMY_BUILD_SEAL_2026-11-22.md dae701b0)の script 1 本。
     # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)と repo の外に置く道具の venv・engine(core/・adapters/)は 0 行・便 XG0・XV0・XB0 の script は importlib で読み関数を呼ぶ。記録は記録の commit で足す(script だけここで届ける)。
     "measure/xbrl_taxonomy_build_2026-11-22.py",
