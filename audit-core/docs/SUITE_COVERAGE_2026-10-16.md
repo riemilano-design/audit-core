@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **344 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **346 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 271 |
+| `tests/measure` | 273 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -442,6 +442,12 @@ XA0 の結果の門(記録 `fixtures/xbrl/cd8/sheet_wall_2026-11-22.json`・結�
 
 **2026-11-22 に +1(24)**(`tests/measure/test_xbrl_sheet_context_result.py`。
 XA1 の結果の門(記録 `fixtures/xbrl/cd8/sheet_context_2026-11-22.json`・結果の文書 `docs/XBRL_SHEET_CONTEXT_RESULT_2026-11-22.md` を縛る。封の門 `test_xbrl_sheet_context_seal.py` と便 XA0 の結果の門の部品を読み込む。置き場も道具も鍵も通信も使わない)。343 → 344(`tests/measure` 270 → 271)。
+
+**2026-11-22 に +1(25)**(`tests/measure/test_xbrl_sheet_build_seal.py`。
+XS0(行・列の紙から数の fact の属性を作り直し、便 XP0 の組む命令で包みを組むと、道具が読む fact は元と同じになるかを数える。封 `docs/XBRL_SHEET_BUILD_SEAL_2026-11-22.md`)の script `measure/xbrl_sheet_build_2026-11-22.py` の封の門。置き場も道具も鍵も使わない。作り物の書類にだけ本物の関数を掛ける)。344 → 345(`tests/measure` 271 → 272)。
+
+**2026-11-22 に +1(26)**(`tests/measure/test_xbrl_sheet_build_result.py`。
+XS0 の結果の門(記録 `fixtures/xbrl/cd8/sheet_build_2026-11-22.json`・結果の文書 `docs/XBRL_SHEET_BUILD_RESULT_2026-11-22.md` を縛る。封の門 `test_xbrl_sheet_build_seal.py` と便 XA0 の結果の門の部品を読み込む。便 XA1・便 XA0 の記録を読むだけ。置き場も道具も鍵も通信も使わない)。345 → 346(`tests/measure` 272 → 273)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

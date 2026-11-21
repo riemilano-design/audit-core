@@ -174,6 +174,11 @@ DECLARED_NEW_AFTER_SEAL = (
     "measure/xbrl_sheet_context_2026-11-22.py",
     # 2026-11-22: XA1 の記録 1 本(script 4f836c94 を 1 回走らせて書いた。67 本の数だけ。docID・会社の名・EDINET コード・file の名・要素の名・文脈の名・member の名・日付・表の字は持たない)。
     "fixtures/xbrl/cd8/sheet_context_2026-11-22.json",
+    # 2026-11-22: XS0(行・列の紙から数の fact の属性を作り直し、便 XP0 の組む命令で包みを組むと、道具が読む fact は元と同じになるか。封 docs/XBRL_SHEET_BUILD_SEAL_2026-11-22.md 483e3e93)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)・engine(core/・adapters/)は 0 行・道具(Arelle)は便 XP0 の組む命令を通して呼ぶ・前の便の script は importlib で読み関数を呼ぶ。記録は記録の commit で足した。
+    "measure/xbrl_sheet_build_2026-11-22.py",
+    # 2026-11-22: XS0 の記録 1 本(script 6d82a612 を 1 回走らせて書いた。67 本の数だけ。docID・会社の名・EDINET コード・file の名・fact の値・要素の名・文脈の名・member の名・日付・表の字・紙の中身・行の字は持たない)。
+    "fixtures/xbrl/cd8/sheet_build_2026-11-22.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
