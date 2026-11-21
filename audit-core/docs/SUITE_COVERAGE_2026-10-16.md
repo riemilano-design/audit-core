@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **329 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **330 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 256 |
+| `tests/measure` | 257 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -397,6 +397,9 @@ CT0 の結果の門(記録 `fixtures/ctgov/wall_2026-11-21.json`・結果の文�
 
 **2026-11-21 に +1(9)**(`tests/measure/test_xbrl_tag_wall_seal.py`。
 XG0(有価証券報告書の計算書の行で、行の字と標準タクソノミの表だけで要素が 1 つに決まる行はどれだけか。封 `docs/XBRL_TAG_WALL_SEAL_2026-11-21.md`)の script `measure/xbrl_tag_wall_2026-11-21.py` の封の門。置き場も鍵も通信も使わない)。328 → 329(`tests/measure` 255 → 256)。
+
+**2026-11-21 に +1(10)**(`tests/measure/test_xbrl_tag_wall_result.py`。
+XG0 の結果の門(記録 `fixtures/xbrl/cd8/tag_wall_2026-11-21.json`・結果の文書 `docs/XBRL_TAG_WALL_RESULT_2026-11-21.md` を縛る。封の門 `test_xbrl_tag_wall_seal.py` の次の段。置き場も鍵も通信も使わない)。329 → 330(`tests/measure` 256 → 257)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
