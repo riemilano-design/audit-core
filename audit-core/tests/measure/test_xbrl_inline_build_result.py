@@ -84,18 +84,30 @@ BOUND_SEAL_PHRASES = (u"56 本以上", u"4 本以下", u"50% 以上", u"10 本�
                       u"XB0-6 が外れたら、XB0-1・XB0-3 は当たり外れを書いたうえで「比べ方が効いていない」と結果の頭に書く",
                       u"XB0-1 と XB0-6 がどちらも当たりなら、次の便の候補を人間に示す")
 HEAD_PHRASES = (u"先に負けと限界を書く", u"当たり 4・外れ 3", u"外れは XB0-4・XB0-5・XB0-7", u"端の数(62/62)", u"「XBRL を作れる」を示していない",
-                u"タグを決める力は測っていない", u"元の file のまま", u"原稿(Word など)ではない", u"司令塔が 1 行を直したもので、本家の版ではない",
+                u"タグを決める力は測っていない", u"3 file に 2 file は元と bytes では違う", u"元の file のまま", u"原稿(Word など)ではない", u"司令塔が 1 行を直したもので、本家の版ではない",
                 u"EDINET の本物の検査とは照らしていない", u"engine では読み戻していない", u"無作為ではない。有報だけ", u"この便からは言えない",
                 u"LLM の席は呼んでいない", u"本番は 1 回だけ走らせた", u"元の書き方の跡が 1 つ残っている")
 SEAL7_PHRASES = (u"タグを決める力は測っていない", u"元のまま", u"原稿(Word など)ではない", u"1 行を直したもの", u"無作為ではない。有報だけ", u"「EDINET の検査に通る」")
 PHRASES = (u"測っていない", u"言えること", u"言えないこと", u"人間に示す次の便の候補", u"別の封が先", u"盲検ではない", u"記録に欄の無い読み", u"人間が決めること",
            u"62 本の全部を別の実装で掛け直してはいない", u"記録の 15 個の全部について書類ごとの符号の差を並べたものではない", u"比べる相手が同じ file になっていない",
-           u"頭の部を持つ file の 30 本で字が違う理由は、記録に無く、分けていない", u"「検査が鳴らない」は「fact が抜けていない」を言わない")
+           u"頭の部を持つ file の 30 本で字が違う理由は、記録に無く、分けていない", u"「検査が鳴らない」は「fact が抜けていない」を言わない",
+           u"残る壁は書き出す所ではなく、表を作る所(便 XG1 で要素は", u"と、提出者別タクソノミを作る所(未着手)")
 FORBIDDEN_WORDS = (u"精度", u"世界で 1 社", u"LLM より正確", u"保証", u"完璧")
 DOCID_FORM = re.compile(r"(?<![0-9A-Za-z])S[0-9A-Z]{7}(?![0-9A-Za-z])")
 ECODE_FORM = re.compile(r"(?<![0-9A-Za-z])E\d{5}(?![0-9A-Za-z])")
-# 記録に欄の無い読み(§3)が持つ数。記録から導けないので字で留める(これ以外の数が §3 に在れば赤)。
-SEC3_NUMBERS = (u"1", u"2", u"4", u"6", u"9", u"15", u"30", u"62", u"67")
+# 記録に欄の無い読み(§3)の、行ごとの数の並び。記録から導けない監査の席の読みなので、正本は文書の字そのもの = ここに字で留める(留め)。
+# 行の鍵になる句 → その行に在るべき数の並び(文書の左から右の順。docID・commit・符号の字・`` ` `` の中は数えない)。
+# §3 の行(箇条)がこの表と 1 対 1 でなければ赤。数の入れ替え・別の行への移し替えも赤。
+SEC3_LINES = (
+    (u"**端の数(62/62)の確かめ。**", (u"62", u"62", u"62", u"6", u"4", u"4", u"4", u"2", u"6", u"62")),
+    (u"**組む部品が元の字を読んでいないこと。**", (u"6",)),
+    (u"字が同じ file の数は、監査の席が", (u"67", u"1")),
+    (u"混ぜ物は、開発の 2 本について", (u"2", u"1", u"1", u"1", u"2", u"15")),
+    (u"監査の席が挙げた限界:", (u"9", u"30")),
+)
+TAG_NARROW_REL = "fixtures/xbrl/cd8/tag_narrow_2026-11-21.json"
+TN_KEY = u"予測の判定に要る数(XG1-1〜XG1-7。当たり・外れは結果の文書で)"
+TN_U3 = u"XG1-3 段 3 の類 U / 計算書の行"
 STRUCTURAL = set([u"0", u"1", u"2", u"3", u"4", u"5", u"6", u"7", u"8", u"9", u"10"])
 
 
@@ -125,6 +137,7 @@ class Ctx(object):
         self.doc = read(DOC_REL)
         self.seal = read(SEAL_REL)
         self.shas = collections.OrderedDict((rel, sha_file(rel)) for rel in SHA_PIN)
+        self.tn = json.loads(read(TAG_NARROW_REL), object_pairs_hook=collections.OrderedDict)
 
     def copy(self):
         c = Ctx.__new__(Ctx)
@@ -132,6 +145,7 @@ class Ctx(object):
         c.doc = self.doc
         c.seal = self.seal
         c.shas = collections.OrderedDict(self.shas)
+        c.tn = copy.deepcopy(self.tn)
         return c
 
 
@@ -418,6 +432,14 @@ def expected_lines(c):
     return out
 
 
+def tn_u3_percent(c):
+    u"""便 XG1 の記録の、段 3 の類 U の行 / 計算書の行(分母)の率。記録の「%」の欄が行と分母から数え直した値と同じことも見る(違えば例外 = 赤)。"""
+    node = c.tn[TN_KEY][TN_U3]
+    pc = 100.0 * node[u"行"] / node[u"分母"]
+    assert abs(pc - node[u"%"]) < 0.051, (pc, node[u"%"])
+    return pc
+
+
 def expected_fragments(c):
     rec = c.rec
     tot = totals(rec)
@@ -430,7 +452,13 @@ def expected_fragments(c):
     not_run = sum(1 for d in docs for k in (u"組み直しの 1 回",) if d[k][u"類"] != u"走った")
     over = sum(1 for d in docs for k in (u"元の 1 回", u"組み直しの 1 回") if d[k][u"時間の上限を超えた"])
     f = []
-    f.append(u"外れ 3" if False else u"当たり 4・外れ 3")
+    j = judge(tot)
+    hits = sum(1 for v in j.values() if v)
+    f.append(u"予測 %d 本のうち %d 本が外れ(当たり %d・外れ %d)" % (len(j), len(j) - hits, hits, len(j) - hits))
+    f.append(u"開発の %d 本で見た %d つを「知っている属性」" % (DEV_COUNT, len(MS.ATTR_ORDER[u"footnote"])))
+    wari = int(round(tn_u3_percent(c) / 10.0))                 # 便 XG1 の記録の段 3 の U の率(80.4)から「8 割」を導く
+    f.append(u"(それは便 XG0・XG1 で、%d 割)" % wari)
+    f.append(u"表を作る所(便 XG1 で要素は %d 割)と" % wari)
     f.append(u"頭の部を持たないfile" if False else u"頭の部を持たない file のうち字が同じものは %d/%d(%s)で、予測の下の境(50%%)に届かなかった" % (nh[u"字が同じ"], nh[u"数"], pct(nh[u"字が同じ"], nh[u"数"])))
     f.append(u"頭の部を持つ file のうち字が同じものは %d/%d で、予測の上の境(10 本)を超えた" % (wh[u"字が同じ"], wh[u"数"]))
     f.append(u"鳴り方が元と違ったのは %d 個で、予測の上の境(5 個)を超えた" % mx[u"鳴り方が同じでない数"])
@@ -551,13 +579,23 @@ def doc_number_problems(c):
 
 
 def sec3_problems(c):
-    u"""§3 は記録に欄の無い読みの節。数は字で留めた小さい集合の内。見出しと、記録から導けない旨の字が在る。"""
+    u"""§3 は記録に欄の無い読みの節。行(箇条)ごとの数の並びを SEC3_LINES(字で留めた)と照らす。見出しと、記録から導けない旨の字が在る。"""
     s = section(c.doc, u"## §3 ", u"## §4 ")
     out = []
-    for ln in s.splitlines():
-        for t in doc_number_tokens(ln):
-            if t not in SEC3_NUMBERS:
-                out.append(u"§3 に字で留めた集合の外の数 %s" % t)
+    bullets = [ln for ln in s.splitlines()[1:] if ln.strip()]
+    if len(bullets) != len(SEC3_LINES):
+        out.append(u"§3 の箇条の数 %d が留めた行の数 %d と違う" % (len(bullets), len(SEC3_LINES)))
+    for key, nums in SEC3_LINES:
+        hit = [ln for ln in bullets if key in ln]
+        if len(hit) != 1:
+            out.append(u"§3 に鍵の句の行が 1 つでない(%d 行): %s" % (len(hit), key))
+            continue
+        got = tuple(doc_number_tokens(hit[0]))
+        if got != tuple(nums):
+            out.append(u"§3 の行 %s の数の並び %s が留めた並び %s と違う" % (key, u",".join(got), u",".join(nums)))
+    for ln in bullets:
+        if not any(key in ln for key, _ in SEC3_LINES):
+            out.append(u"§3 に留めていない行: %s" % ln[:20])
     if u"記録に欄の無い読み" not in s.splitlines()[0]:
         out.append(u"§3 の見出しが「記録に欄の無い読み」でない")
     for p in (u"62 本の全部を別の実装で掛け直してはいない", u"確かめたのはこの 6 本"):
@@ -712,6 +750,22 @@ M40 文書に「保証」を足す                                              
 M41 文書に docID の形を足す                                                            -> forbidden
 M42 文書の commit の字 288d7b6d を 288d7b6e に                                         -> commits
 M43 文書の頭の「(62/62)」を「(61/62)」に                                                 -> frag・verdict(実測: verdict は頭の端の数の字を読まず黙った。frag だけに直した)
+M44 頭の「予測 7 本のうち 3 本が外れ」を 2 本に                                          -> frag
+M45 §4 の「開発の 5 本で見た 6 つ」を 7 つに                                            -> frag
+M46 頭の「3 file に 2 file は元と bytes では違う」を「3 file に 1 file」に               -> head
+M47 頭の「(それは便 XG0・XG1 で、8 割)」を 9 割に                                       -> frag
+M48 §5 の「表を作る所(便 XG1 で要素は 8 割)」を 9 割に                                  -> frag
+M49 便 XG1 の記録の写しの段 3 の U の行を 1 つ減らして率を 70 台に(分母は同じ)            -> frag(「8 割」が 7 割の期待とずれる・「%」の欄との不一致の例外も赤)
+M50 §3 の「62 本から 6 本を自分で選び」の 6 を 5 に                                      -> sec3
+M51 §3 の「そのうち 4 本は」を 3 本に                                                    -> sec3
+M52 §3 の「残りの 2 本」を 3 本に                                                        -> sec3
+M53 §3 の「67 本の全部」を 66 本に                                                       -> sec3
+M54 §3 の最初の行の数を入れ替える(「62 本から 6 本」と「そのうち 4 本」を字の上で互いに)  -> sec3(許可集合では黙る)
+M55 §3 の混ぜ物の行の「1 行増えた」の片方を「2 行増えた」に                               -> sec3
+M56 §3 の行を 1 つ丸ごと消す(「組む部品が元の字を読んでいないこと」)                      -> sec3
+M57 §5 の「残る壁は書き出す所ではなく…」を「壁はもう無い」に差し替える                    -> phrases
+M58 §5 の「提出者別タクソノミを作る所(未着手)」を「(済み)」に                            -> phrases
+M59 頭の「3 file に 2 file」を消す(c の文書の字)                                         -> head
 """
 
 
@@ -780,6 +834,19 @@ def m_28(c):
     rebuild(c.rec)
 
 
+def m_49(c):
+    node = c.tn[TN_KEY][TN_U3]
+    node[u"行"] = int(node[u"分母"] * 0.74)
+    node[u"%"] = round(100.0 * node[u"行"] / node[u"分母"], 1)
+
+
+def m_56(c):
+    lines = c.doc.splitlines()
+    i = [k for k, ln in enumerate(lines) if u"**組む部品が元の字を読んでいないこと。**" in ln][0]
+    del lines[i]
+    c.doc = u"\n".join(lines)
+
+
 def m_29(c):
     c.rec[u"書類"][19][u"組み直しの fact の行の数"] += 1
 
@@ -833,6 +900,22 @@ MUTATIONS = (
     (u"M41 文書に docID の形を足す", lambda c: add_doc(c, u"書類 S100ABCD。"), (u"forbidden",)),
     (u"M42 文書の commit の字 288d7b6d を 1 字替える", lambda c: rep(c, u"288d7b6d", u"288d7b6e", count=9), (u"commits",)),
     (u"M43 頭の「(62/62)」を「(61/62)」に", lambda c: rep(c, u"端の数(62/62)", u"端の数(61/62)"), (u"frag",)),
+    (u"M44 頭の「予測 7 本のうち 3 本が外れ」を 2 本に", lambda c: rep(c, u"予測 7 本のうち 3 本が外れ", u"予測 7 本のうち 2 本が外れ"), (u"frag",)),
+    (u"M45 「開発の 5 本で見た 6 つ」を 7 つに", lambda c: rep(c, u"開発の 5 本で見た 6 つ", u"開発の 5 本で見た 7 つ"), (u"frag",)),
+    (u"M46 頭の「3 file に 2 file」を「3 file に 1 file」に", lambda c: rep(c, u"3 file に 2 file は元と", u"3 file に 1 file は元と"), (u"head",)),
+    (u"M47 頭の「(それは便 XG0・XG1 で、8 割)」を 9 割に", lambda c: rep(c, u"(それは便 XG0・XG1 で、8 割)", u"(それは便 XG0・XG1 で、9 割)"), (u"frag",)),
+    (u"M48 §5 の「要素は 8 割)」を 9 割に", lambda c: rep(c, u"表を作る所(便 XG1 で要素は 8 割)", u"表を作る所(便 XG1 で要素は 9 割)"), (u"frag",)),
+    (u"M49 便 XG1 の記録の写しの段 3 の U の行を減らして率を 70 台に", m_49, (u"frag",)),
+    (u"M50 §3 の「62 本から 6 本」の 6 を 5 に", lambda c: rep(c, u"62 本から 6 本を自分で選び", u"62 本から 5 本を自分で選び"), (u"sec3",)),
+    (u"M51 §3 の「そのうち 4 本は」を 3 本に", lambda c: rep(c, u"そのうち 4 本は", u"そのうち 3 本は"), (u"sec3",)),
+    (u"M52 §3 の「残りの 2 本」を 3 本に", lambda c: rep(c, u"残りの 2 本は", u"残りの 3 本は"), (u"sec3",)),
+    (u"M53 §3 の「67 本の全部」を 66 本に", lambda c: rep(c, u"監査の席が 67 本の全部で", u"監査の席が 66 本の全部で"), (u"sec3",)),
+    (u"M54 §3 の数の入れ替え(6 本と 4 本)", lambda c: rep(c, u"62 本から 6 本を自分で選び、自分で包みを作って道具 P を直接呼んだ。そのうち 4 本は", u"62 本から 4 本を自分で選び、自分で包みを作って道具 P を直接呼んだ。そのうち 6 本は"), (u"sec3",)),
+    (u"M55 §3 の混ぜ物の行の「1 行増えた」の片方を 2 行に", lambda c: rep(c, u"EC8023W が 1 行増えた", u"EC8023W が 2 行増えた"), (u"sec3",)),
+    (u"M56 §3 の行を 1 つ丸ごと消す", m_56, (u"sec3",)),
+    (u"M57 §5 の「残る壁は…」を「壁はもう無い」に差し替える", lambda c: rep(c, u"**残る壁は書き出す所ではなく、表を作る所(便 XG1 で要素は 8 割)と、提出者別タクソノミを作る所(未着手)。**", u"**壁はもう無い。**"), (u"phrases",)),
+    (u"M58 §5 の「提出者別タクソノミを作る所(未着手)」を「(済み)」に", lambda c: rep(c, u"提出者別タクソノミを作る所(未着手)", u"提出者別タクソノミを作る所(済み)"), (u"phrases",)),
+    (u"M59 頭の「3 file に 2 file は元と bytes では違う」を消す", lambda c: rep(c, u"**組んだ字は、3 file に 2 file は元と bytes では違う。**", u""), (u"head",)),
 )
 
 
