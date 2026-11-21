@@ -448,7 +448,7 @@ def conditions_problems(ms=None):
         if log[u"seen"] != 9 or log[u"stop"] != u"候補が尽きた":
             out.append(u"見た試験・止めた理由が違う: %s %s" % (log[u"seen"], log[u"stop"]))
         sk = dict(log[u"skips"])
-        if sk != {u"条件(結果が在る・介入・Phase 3)に合わない": 3, u"RESULT の文献(PMID つき)が無い": 2, u"要旨に登録番号が無い": 1}:
+        if sk != {u"条件(結果が在る・介入・Phase 3)に合わない": 3, u"RESULT の文献(番号つき)が無い": 2, u"要旨に登録番号が無い": 1}:
             out.append(u"飛ばした理由の数が違う: %s" % sk)
         efetched = [urllib.parse.parse_qs(urllib.parse.urlsplit(u).query)["id"][0] for u, _t in tr.log if u.startswith(ms.EFETCH_URL)]
         if efetched != [u"9000005", u"9000006", u"9000007", u"9000008"]:
@@ -621,6 +621,90 @@ class NoNetwork(object):
         urllib.request.urlopen = self.old
 
 
+def nfkc_problems(ms=None):
+    u"""NFKC で変わる字(全角の数字と ％・NBSP)を作り物の要旨に入れて ``tally_text`` に直接渡す。NFKC を掛けないと類が変わる。"""
+    ms = ms or MS
+    out = []
+    per, outside = ms.tally_text(u"Rate \uff12\uff15\uff05; n\u00a0=\u00a030.")
+    if tally_cells(per) != od([("P", (1, 1)), ("C", (0, 0)), ("N", (1, 0)), ("R", (0, 0)), ("V", (0, 0)), ("Y", (0, 0)), ("O", (0, 0))]) or outside != 0:
+        out.append(u"NFKC で変わる字の類・拾った数が想定と違う: %s %s" % (dict(tally_cells(per)), outside))
+    return out
+
+
+def zero_rows_problems(ms=None):
+    u"""登録の側で値の読める行が 0 の対を 1 つ混ぜる。CT0-7 の 0 の対の数が 1・理由の欄の名が記録に出る。置き場の表が古い名(PMID の語を含む)の飛ばした理由を持っていても、記録を書ける。"""
+    ms = ms or MS
+    out = []
+    studies = [make_study(0), make_study(1), make_study(2), make_study(3, refs=((u"BACKGROUND", u"8000003"),))]
+    studies[1]["resultsSection"] = {"outcomeMeasuresModule": {"outcomeMeasures": [{"classes": [{"categories": [{"measurements": [{"value": "NA"}]}]}]}]}}
+    with Temp() as d:
+        cache, rec_path = os.path.join(d, "c"), os.path.join(d, "r.json")
+        run_fetch(ms, studies, good_abstracts(studies), cache)
+        pp = os.path.join(cache, "pairs.json")
+        with io.open(pp, encoding="utf-8") as fh:
+            raw = fh.read()
+        old_name = u"RESULT の文献(PMID つき)が無い"
+        if u"RESULT の文献(番号つき)が無い" not in raw:
+            out.append(u"取る関数の飛ばした理由の名が想定と違う")
+        with io.open(pp, "w", encoding="utf-8") as fh:                       # 古い置き場(PMID の語を含む名)の再現
+            fh.write(raw.replace(u"RESULT の文献(番号つき)が無い", old_name))
+        rec = guard(ms.run, root=d, cache=cache, out=rec_path, say=lambda *a: None)
+        if isinstance(rec, list):
+            return out + [u"古い名の置き場から記録を書けない: %s" % rec]
+        text = io.open(rec_path, encoding="utf-8").read()
+        if u"PMID" in text or u"RESULT の文献(番号つき)が無い" not in text:
+            out.append(u"記録の欄の名に PMID の語が残るか、替えた名が無い")
+        pred = rec[u"予測の判定に要る数(CT0-1〜CT0-7。当たり・外れは結果の文書で)"]
+        if pred[u"CT0-7 登録の側の値の読める行が 0 の対の数"] != 1:
+            out.append(u"CT0-7 の 0 の対の数が 1 でない: %s" % pred[u"CT0-7 登録の側の値の読める行が 0 の対の数"])
+        rows = rec[u"対"]
+        if [r[u"登録の側の値の読める行の数"] for r in rows] != [5, 0, 5]:
+            out.append(u"対ごとの行の数が想定と違う: %s" % [r[u"登録の側の値の読める行の数"] for r in rows])
+        if len(rows[1][u"登録の側が 0 行の理由(欄の名)"]) != 2 or u"outcomeMeasuresModule.outcomeMeasures" not in text:
+            out.append(u"0 行の対の理由の欄の名が記録に出ていない")
+    return out
+
+
+def keyname_problems(ms=None):
+    u"""欄の名に PMID の語を入れた作り物の記録を本番と同じ道(build_record → write_record)で通すと止まる(書かれない)。いまの build_record が作る記録の欄の名は検査を通る。"""
+    ms = ms or MS
+    out = []
+    studies = [make_study(i) for i in range(2)] + [make_study(2, refs=((u"BACKGROUND", u"8000003"),))]
+    ab = dict((u"90000%02d" % i, abstract_xml(u"90000%02d" % i, fake_text(u"NCT%08d" % (i + 1)) + u" Registered at ClinicalTrials.gov API v2 with apiVersion and dataTimestamp.")) for i in range(2))
+    with Temp() as d:
+        cache = os.path.join(d, "c")
+        run_fetch(ms, studies, ab, cache)                      # 要旨が出どころの名(ClinicalTrials.gov API v2・apiVersion)を持っていても、記録の欄の名が要旨の字に当たらない
+        log, mats = ms.load_cache(cache)
+        rec, secret = ms.build_record(log, mats)
+        keys = [str(k) for k in ms.walk_keys(rec)]
+        if any(re.search(r"PMID|NCT", k, re.I) for k in keys):
+            out.append(u"いまの build_record の欄の名に PMID・NCT の語が在る")
+        p = os.path.join(d, "ok.json")
+        if guard(ms.write_record, p, rec, secret) is not None or not os.path.exists(p):
+            out.append(u"いまの build_record の記録が write_record を通らない")
+        for bad_key in (u"RESULT の文献(PMID つき)が無い", u"pmid の数"):
+            bad, secret2 = ms.build_record(log, mats)
+            bad[u"取り方の数"][u"飛ばした試験の理由別"][bad_key] = 1
+            q = os.path.join(d, "bad.json")
+            if not stops(ms, ms.write_record, q, bad, secret2) or os.path.exists(q):
+                out.append(u"欄の名に %s を入れた記録が止まらないか書かれた" % bad_key[:8])
+    return out
+
+
+def leak_gram_problems(ms=None):
+    u"""要旨の字の検査の境目: 16 字ちょうどは止まり、15 字は止まらない。"""
+    ms = ms or MS
+    out = []
+    sec = lambda a: [(u"NCT00000001", u"4242", a)]
+    rec = od([(u"x", u"zz abcdefghijklmnop zz")])
+    if not stops(ms, ms.check_clean, rec, ms.dumps(rec), sec(u"abcdefghijklmnop")):
+        out.append(u"16 字ちょうどの要旨の字が止まらない")
+    rec2 = od([(u"x", u"zz abcdefghijklmno zz")])
+    if stops(ms, ms.check_clean, rec2, ms.dumps(rec2), sec(u"abcdefghijklmno")):
+        out.append(u"15 字の要旨の字で止まる(窓は 16 字)")
+    return out
+
+
 def e2e_problems(ms=None):
     ms = ms or MS
     out = []
@@ -782,6 +866,12 @@ MUTANTS = (
     (u"M29 E-utilities の 200 でない返事で止めない", u"                if status != 200:\n                    raise Stop(u\"**E-utilities", u"                if False:\n                    raise Stop(u\"**E-utilities", ("stop",)),
     (u"M30 置き場が空でなくても取る", u"    if os.path.exists(cache) and os.listdir(cache):", u"    if False:", ("stop",)),
     (u"M31 登録の側の値を評価項目の値だけ数える", u"    rows = n_om + n_ae", u"    rows = n_om", ("registry",)),
+    (u"M34 NFKC を掛けずに字を読む", u"    text = nfkc(raw)", u"    text = raw", ("nfkc",)),
+    (u"M35 読める行が 0 の対を数えない(reg == 0 → reg < 0)", u"zero_pairs += 1 if reg == 0 else 0", u"zero_pairs += 1 if reg < 0 else 0", ("zero",)),
+    (u"M36 要旨の字の窓を 20 字にする", u"LEAK_GRAM = 16", u"LEAK_GRAM = 20", ("leakgram",)),
+    (u"M37 記録に入れる飛ばした理由の名を替えない", u'k.replace(u"PMID つき", u"番号つき").replace(u"PMID", u"番号").replace(u"NCT", u"登録番号")', u"k", ("zero",)),
+    (u"M38 出どころの版の欄の名を公開の名に戻す", u'(u"登録側の API の版", log[u"api"].get(u"apiVersion")), (u"登録側のデータの時刻", log[u"api"].get(u"dataTimestamp"))',
+     u'(u"ClinicalTrials.gov API v2 の apiVersion", log[u"api"].get(u"apiVersion")), (u"ClinicalTrials.gov のデータの時刻", log[u"api"].get(u"dataTimestamp"))', ("keyname",)),
     (u"M33 類 R の窓を 12 字に戻す", u"R_WINDOW = 16 ", u"R_WINDOW = 12 ", ("tally", "cases", "seal")),
     (u"M32 題を要旨の本文に入れる", u'    for el in root.iter("AbstractText"):', u'    for el in root.iter():', ("conditions",)),
 )
@@ -795,7 +885,8 @@ SILENT_BY_DESIGN = (
 
 def check_by_name(name, mod, src):
     table = {u"seal": seal_problems, u"tally": tally_problems, u"cases": class_cases_problems, u"registry": registry_problems, u"conditions": conditions_problems,
-             u"ten": ten_problems, u"c400": c400_problems, u"gap": gap_problems, u"url": url_problems, u"stop": stop_problems, u"clean": clean_problems, u"e2e": e2e_problems}
+             u"ten": ten_problems, u"c400": c400_problems, u"gap": gap_problems, u"url": url_problems, u"stop": stop_problems, u"clean": clean_problems, u"e2e": e2e_problems,
+             u"nfkc": nfkc_problems, u"zero": zero_rows_problems, u"keyname": keyname_problems, u"leakgram": leak_gram_problems}
     if name in table:
         return table[name](mod)
     if name == u"import":
@@ -803,7 +894,7 @@ def check_by_name(name, mod, src):
     raise AssertionError(name)
 
 
-ALL_CHECKS = (u"seal", u"tally", u"cases", u"registry", u"conditions", u"ten", u"c400", u"gap", u"url", u"stop", u"clean", u"e2e", u"import")
+ALL_CHECKS = (u"seal", u"tally", u"cases", u"registry", u"conditions", u"ten", u"c400", u"gap", u"url", u"stop", u"clean", u"e2e", u"nfkc", u"zero", u"keyname", u"leakgram", u"import")
 
 
 def run_mutants(table=MUTANTS):
@@ -938,6 +1029,18 @@ class RecordTest(unittest.TestCase):
 
     def test_d_2_cache_to_record_to_check_without_network(self):
         self.assertEqual([], e2e_problems())
+
+    def test_d_4_nfkc_changed_characters_are_normalised_before_the_classes(self):
+        self.assertEqual([], nfkc_problems())
+
+    def test_d_5_a_pair_with_zero_readable_registry_rows_and_an_old_cache_key_name(self):
+        self.assertEqual([], zero_rows_problems())
+
+    def test_d_6_record_key_names_pass_and_planted_pmid_nct_key_names_stop(self):
+        self.assertEqual([], keyname_problems())
+
+    def test_d_7_the_leak_window_edge(self):
+        self.assertEqual([], leak_gram_problems())
 
     def test_d_3_the_real_record_when_present_is_clean_and_has_no_secret_form(self):
         p = os.path.join(ROOT, RECORD_REL)

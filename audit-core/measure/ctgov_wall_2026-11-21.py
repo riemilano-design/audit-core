@@ -398,7 +398,7 @@ def fetch(cache=None, transport=None, sleep=time.sleep, clock=time.monotonic, to
             else:
                 pmid = pick_reference(st)
                 if pmid is None:
-                    skips[u"RESULT の文献(PMID つき)が無い"] += 1
+                    skips[u"RESULT の文献(番号つき)が無い"] += 1
             if pmid is not None:
                 status, xml_body = th(efetch_url(pmid))
                 if status != 200:
@@ -460,6 +460,11 @@ def ratio(n, d):
     return None if not d else round(100.0 * n / d, 1)
 
 
+def record_skips(skips):
+    u"""置き場の表の「飛ばした理由」の名を、記録に入れる名にする。記録の検査は PMID・NCT の語を止めるので、古い置き場の名(PMID の語を含む)の語を替える(数は変えない)。"""
+    return od((k.replace(u"PMID つき", u"番号つき").replace(u"PMID", u"番号").replace(u"NCT", u"登録番号"), v) for k, v in skips.items())
+
+
 def build_record(log, mats):
     u"""置き場の表と材料 → (記録, 漏れの検査に使う材料の字)。書かない。"""
     if V.DEFAULT_PROFILE != PROFILE:
@@ -503,8 +508,8 @@ def build_record(log, mats):
     rec[u"engine の指紋"] = od((k, fp[k]) for k in ("adapter_xbrl_py_sha256", "adapter_xbrl_py_files", "core_py_sha256", "core_py_files"))
     rec[u"profile"] = PROFILE
     rec[u"取った日付"] = log[u"date"]
-    rec[u"出どころの版"] = od([(u"ClinicalTrials.gov API v2 の apiVersion", log[u"api"].get(u"apiVersion")), (u"ClinicalTrials.gov のデータの時刻", log[u"api"].get(u"dataTimestamp"))])
-    rec[u"取り方の数"] = od([(u"見た試験", log[u"seen"]), (u"対", len(log[u"pairs"])), (u"止めた理由", log[u"stop"]), (u"飛ばした試験の理由別", log[u"skips"]), (u"呼び出しの数", log[u"calls"])])
+    rec[u"出どころの版"] = od([(u"登録側の API の版", log[u"api"].get(u"apiVersion")), (u"登録側のデータの時刻", log[u"api"].get(u"dataTimestamp"))])
+    rec[u"取り方の数"] = od([(u"見た試験", log[u"seen"]), (u"対", len(log[u"pairs"])), (u"止めた理由", log[u"stop"]), (u"飛ばした試験の理由別", record_skips(log[u"skips"])), (u"呼び出しの数", log[u"calls"])])
     rec[u"対"] = rows
     rec[u"集計"] = od([
         (u"対の数", len(rows)), (u"数の字の数", den_all), (u"拾った数", pick_all), (u"分母の外で拾った数", out_all),
