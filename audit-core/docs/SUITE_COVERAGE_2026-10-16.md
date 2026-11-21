@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **327 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **328 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 254 |
+| `tests/measure` | 255 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -391,6 +391,9 @@ LX の結果の門(記録 `fixtures/xbrl/llm_extract/answers_2026-11-19.json`・
 
 **2026-11-21 に +1(7)**(`tests/measure/test_ctgov_wall_seal.py`。
 CT0(治験の公開データで、いまの engine の数の読み取りが英語の論文の要旨の数をどれだけ拾うか。封 `docs/CTGOV_WALL_SEAL_2026-11-21.md`)の script `measure/ctgov_wall_2026-11-21.py` の封の門。鍵も通信も使わない)。326 → 327(`tests/measure` 253 → 254)。
+
+**2026-11-21 に +1(8)**(`tests/measure/test_ctgov_wall_result.py`。
+CT0 の結果の門(記録 `fixtures/ctgov/wall_2026-11-21.json`・結果の文書 `docs/CTGOV_WALL_RESULT_2026-11-21.md` を縛る。封の門 `test_ctgov_wall_seal.py` の次の段。鍵も通信も使わない)。327 → 328(`tests/measure` 254 → 255)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
