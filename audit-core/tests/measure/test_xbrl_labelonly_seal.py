@@ -131,6 +131,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-19(3): LX(文の字だけを読んだ LLM の席の答え(範囲・性質)で結んだ行を止める後付けの規則が、語の表の規則と比べて、取り違えをどれだけ止め、正しい結びをどれだけ減らすか。封 docs/XBRL_LLM_EXTRACT_SEAL_2026-11-19.md 198961e6)の script 1 本と記録(fixtures/xbrl/llm_extract/。記録は本番が全部済んだ 2026-11-20 に書かれた)。
     # 材料は TSS の置き場の ZIP 400 本と KAM・YS の 3 つの folder の ZIP 201 本(新しく取らない)・engine(core/・adapters/)は 0 行・前の便の script(便 SC・便 PA を含む)と記録は 1 byte も変えない(sha256 を門が縛る)。有料の script(--dry-run・--check は鍵も通信も無い。鍵は環境変数だけから読み記録に出さない)。記録は数と、鍵 [便, 本の #, 文の種類か節, 文の番号, 位置] と state・member が空か・席ごとの答えの語・指示文の sha256・呼び出しの数だけで、文・見出し・値・要素名・枠の id・pointer の字・主語の語・会社名・証券コード・docID・金額・席の返した text を持たない
     "measure/xbrl_llm_extract_2026-11-19.py", "fixtures/xbrl/llm_extract/answers_2026-11-19.json",
+    # 2026-11-21: CT0(治験の公開データで、いまの engine の数の読み取りが英語の論文の要旨の数をどれだけ拾うか。封 docs/CTGOV_WALL_SEAL_2026-11-21.md 9e41971b)の script 1 本。
+    # 材料は新しく取る(ClinicalTrials.gov・NCBI。置き場は repo の外)・engine(core/・adapters/)は 0 行・前の便の script と記録は読まない。記録 fixtures/ctgov/wall_2026-11-21.json はこの門が見る path の外(fixtures/ctgov/)。
+    "measure/ctgov_wall_2026-11-21.py",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
