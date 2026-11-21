@@ -159,6 +159,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-22: XT0(受理済みの有報の提出者別タクソノミ(.xsd と linkbase 5 つ)を、中身を読んだ表から自前の部品で組み直す。封 docs/XBRL_TAXONOMY_BUILD_SEAL_2026-11-22.md dae701b0)の script 1 本。
     # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)と repo の外に置く道具の venv・engine(core/・adapters/)は 0 行・便 XG0・XV0・XB0 の script は importlib で読み関数を呼ぶ。記録は記録の commit で足す(script だけここで届ける)。
     "measure/xbrl_taxonomy_build_2026-11-22.py",
+    # 2026-11-22: XP0(受理済みの有報の公開用の file を原稿の folder に落とし、folder だけを読む別の process の命令で htm・xsd・linkbase を組み直す。封 docs/XBRL_PACK_BUILD_SEAL_2026-11-22.md c03a3348)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)と repo の外に置く道具の venv・engine(core/・adapters/)は 0 行・便 XG0・XV0・XB0・XT0 の script は importlib で読み関数を呼ぶ。記録は記録の commit で足す(script だけここで届ける)。
+    "measure/xbrl_pack_build_2026-11-22.py",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
