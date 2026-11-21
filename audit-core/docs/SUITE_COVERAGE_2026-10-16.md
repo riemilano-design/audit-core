@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **337 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **338 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 264 |
+| `tests/measure` | 265 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -421,6 +421,9 @@ XB0 の結果の門(記録 `fixtures/xbrl/cd8/inline_build_2026-11-21.json`・�
 
 **2026-11-22 に +1(17)**(`tests/measure/test_xbrl_taxonomy_build_seal.py`。
 XT0(受理済みの有報の提出者別タクソノミ(`.xsd` と linkbase 5 つ)を、中身を読んだ表から自前の部品で組み直し、公開の道具が読むタクソノミ・fact・検査の鳴り方が元と同じかを見る。封 `docs/XBRL_TAXONOMY_BUILD_SEAL_2026-11-22.md`)の script `measure/xbrl_taxonomy_build_2026-11-22.py` の封の門。置き場も道具も鍵も使わない)。336 → 337(`tests/measure` 263 → 264)。
+
+**2026-11-22 に +1(18)**(`tests/measure/test_xbrl_taxonomy_build_result.py`。
+XT0 の結果の門(記録 `fixtures/xbrl/cd8/taxonomy_build_2026-11-22.json`・結果の文書 `docs/XBRL_TAXONOMY_BUILD_RESULT_2026-11-22.md` を縛る。封の門 `test_xbrl_taxonomy_build_seal.py` の次の段。置き場も道具も鍵も通信も使わない)。337 → 338(`tests/measure` 264 → 265)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
