@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **330 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **332 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 257 |
+| `tests/measure` | 259 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -400,6 +400,12 @@ XG0(有価証券報告書の計算書の行で、行の字と標準タクソノ�
 
 **2026-11-21 に +1(10)**(`tests/measure/test_xbrl_tag_wall_result.py`。
 XG0 の結果の門(記録 `fixtures/xbrl/cd8/tag_wall_2026-11-21.json`・結果の文書 `docs/XBRL_TAG_WALL_RESULT_2026-11-21.md` を縛る。封の門 `test_xbrl_tag_wall_seal.py` の次の段。置き場も鍵も通信も使わない)。329 → 330(`tests/measure` 256 → 257)。
+
+**2026-11-21 に +1(11)**(`tests/measure/test_xbrl_tag_narrow_seal.py`。
+XG1(XG0 で候補が 2 つ以上だった行を、数を持てる要素・計算書の種類・業種の科目の一覧で絞る。封 `docs/XBRL_TAG_NARROW_SEAL_2026-11-21.md`)の script `measure/xbrl_tag_narrow_2026-11-21.py` の封の門。置き場も鍵も通信も使わない)。330 → 331(`tests/measure` 257 → 258)。
+
+**2026-11-21 に +1(12)**(`tests/measure/test_xbrl_edinet_validate_seal.py`。
+XV0(公開の検査の道具 Arelle の EDINET の規則を、提出済みの有報 67 本に掛けると、どの規則がどれだけ鳴るか。封 `docs/XBRL_EDINET_VALIDATE_SEAL_2026-11-21.md`)の script `measure/xbrl_edinet_validate_2026-11-21.py` の封の門。置き場も道具も鍵も使わない)。331 → 332(`tests/measure` 258 → 259)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

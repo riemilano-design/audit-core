@@ -143,6 +143,12 @@ DECLARED_NEW_AFTER_SEAL = (
     "measure/xbrl_tag_wall_2026-11-21.py",
     # 2026-11-21: XG0 の記録 1 本(script 5305f855 を 1 回走らせて書いた。67 本の数だけ。docID・会社の名・EDINET コード・行の字・要素の名は持たない)。
     "fixtures/xbrl/cd8/tag_wall_2026-11-21.json",
+    # 2026-11-21: XG1(XG0 で候補が 2 つ以上だった行を、数を持てる要素・計算書の種類・業種の科目の一覧で絞る。封 docs/XBRL_TAG_NARROW_SEAL_2026-11-21.md 1bda1997)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip 67 本・標準ラベルの file・標準タクソノミの zip 1 本(置き場は repo の外)・engine(core/・adapters/)は 0 行・便 XG0 の script は importlib で読み関数を呼ぶ。記録 fixtures/xbrl/cd8/tag_narrow_2026-11-21.json は記録の commit で足す(script だけここで届ける)。
+    "measure/xbrl_tag_narrow_2026-11-21.py",
+    # 2026-11-21: XV0(公開の検査の道具 Arelle の EDINET の規則を、提出済みの有報 67 本に掛ける。封 docs/XBRL_EDINET_VALIDATE_SEAL_2026-11-21.md 1bda1997)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)と repo の外に置く道具の venv 2 つ・engine(core/・adapters/)は 0 行・便 XG0 の script は importlib で読み関数を呼ぶ。記録 fixtures/xbrl/cd8/edinet_validate_2026-11-21.json は記録の commit で足す(script だけここで届ける)。
+    "measure/xbrl_edinet_validate_2026-11-21.py",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")
