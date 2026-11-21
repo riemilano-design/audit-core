@@ -137,6 +137,8 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-21: XG0(有価証券報告書の計算書の行で、行の字と標準タクソノミの表だけで要素が 1 つに決まる行はどれだけか。封 docs/XBRL_TAG_WALL_SEAL_2026-11-21.md 3374e504)の script 1 本。
     # 材料は置き場の有価証券報告書の zip 67 本と標準タクソノミのラベルの file(新しく取らない)・engine(core/・adapters/)は 0 行・前の便の script と記録は読まない。記録 fixtures/xbrl/cd8/tag_wall_2026-11-21.json は記録の commit で足す(script だけここで届ける)。
     "measure/xbrl_tag_wall_2026-11-21.py",
+    # 2026-11-21: XG0 の記録 1 本(script 5305f855 を 1 回走らせて書いた。67 本の数だけ。docID・会社の名・EDINET コード・行の字・要素の名は持たない)。
+    "fixtures/xbrl/cd8/tag_wall_2026-11-21.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
