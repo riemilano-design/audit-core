@@ -138,6 +138,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-21: CT0(治験の公開データで、いまの engine の数の読み取りが英語の論文の要旨の数をどれだけ拾うか。封 docs/CTGOV_WALL_SEAL_2026-11-21.md 9e41971b)の script 1 本。
     # 材料は新しく取る(ClinicalTrials.gov・NCBI。置き場は repo の外)・engine(core/・adapters/)は 0 行・前の便の script と記録は読まない。記録 fixtures/ctgov/wall_2026-11-21.json はこの門が見る path の外(fixtures/ctgov/)。
     "measure/ctgov_wall_2026-11-21.py",
+    # 2026-11-21: XG0(有価証券報告書の計算書の行で、行の字と標準タクソノミの表だけで要素が 1 つに決まる行はどれだけか。封 docs/XBRL_TAG_WALL_SEAL_2026-11-21.md 3374e504)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip 67 本と標準タクソノミのラベルの file(新しく取らない)・engine(core/・adapters/)は 0 行・前の便の script と記録は読まない。記録 fixtures/xbrl/cd8/tag_wall_2026-11-21.json は記録の commit で足す(script だけここで届ける)。
+    "measure/xbrl_tag_wall_2026-11-21.py",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")
