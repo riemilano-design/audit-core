@@ -193,6 +193,11 @@ DECLARED_NEW_AFTER_SEAL = (
     "measure/xbrl_ai_tag_pick_2026-11-22.py",
     # 2026-11-22: XD0 の記録 1 本(script f119b80c を本番 1 回走らせて書いた。394 行の席ごとの札・呼び出しの数と token と費用。docID・会社の名・EDINET コード・行の字・要素の名・席の返事の字・鍵は持たない)。
     "fixtures/xbrl/cd8/ai_tag_pick_2026-11-22.json",
+    # 2026-11-22: XY0(同じ会社の前の年の提出書類の「行の字 → 要素」を今年の行に当てる測定。0 USD。封 docs/XBRL_PRIOR_YEAR_DRAFT_SEAL_2026-11-22.md ce70f71f)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip(今年の側 67 本と前の年の側の組 63。置き場は変えない)・engine(core/・adapters/)は 0 行・便 XG0・XG1 の script は importlib で読み関数を呼ぶ。通信しない。記録は記録の commit で足した。
+    "measure/xbrl_prior_year_draft_2026-11-22.py",
+    # 2026-11-22: XY0 の記録 1 本(script 150c7fe6 を本番 1 回走らせて書いた。63 組の書類ごと・段ごとの類別の数と合計。docID・会社の名・EDINET コード・file の名・期末の日付・行の字・要素の名は持たない)。
+    "fixtures/xbrl/cd8/prior_year_draft_2026-11-22.json",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")

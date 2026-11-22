@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **350 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **352 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 277 |
+| `tests/measure` | 279 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -460,6 +460,12 @@ XD0(候補が残る行の要素を LLM の席に選ばせ、2 席が同じ要素
 
 **2026-11-22 に +1(30)**(`tests/measure/test_xbrl_ai_tag_pick_result.py`。
 XD0 の結果の門(記録 `fixtures/xbrl/cd8/ai_tag_pick_2026-11-22.json`・結果の文書 `docs/XBRL_AI_TAG_PICK_RESULT_2026-11-22.md` を縛る。封の門 `test_xbrl_ai_tag_pick_seal.py` と便 XA0 の結果の門の部品を読み込む。置き場も置き場の返事の字も鍵も通信も使わない・API は呼ばない)。349 → 350(`tests/measure` 276 → 277)。
+
+**2026-11-22 に +1(31)**(`tests/measure/test_xbrl_prior_year_draft_seal.py`。
+XY0(同じ会社の前の年の提出書類の「行の字 → 要素」を今年の行に当てると、今年の行の要素はどれだけ決まり、どれだけ黙って違うかを数える。0 費用。封 `docs/XBRL_PRIOR_YEAR_DRAFT_SEAL_2026-11-22.md`)の script `measure/xbrl_prior_year_draft_2026-11-22.py` の封の門。置き場も通信も使わない。作り物の書類の組にだけ本物の関数を掛ける)。350 → 351(`tests/measure` 277 → 278)。
+
+**2026-11-22 に +1(32)**(`tests/measure/test_xbrl_prior_year_draft_result.py`。
+XY0 の結果の門(記録 `fixtures/xbrl/cd8/prior_year_draft_2026-11-22.json`・結果の文書 `docs/XBRL_PRIOR_YEAR_DRAFT_RESULT_2026-11-22.md` を縛る。封の門 `test_xbrl_prior_year_draft_seal.py` と便 XA0 の結果の門の部品を読み込む。便 XG1 の記録を読むだけ。置き場も通信も鍵も使わない)。351 → 352(`tests/measure` 278 → 279)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
