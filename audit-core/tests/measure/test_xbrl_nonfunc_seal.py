@@ -211,6 +211,8 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-22: XM0(機械の側が決めた入力の型(第 0 版)と対応表だけから、fact の属性と文脈・単位の定義を作る測定。0 USD。封 docs/XBRL_INPUT_TYPE_SEAL_2026-11-22.md 34afe495)の script 1 本。
     # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)と repo の外に置く道具の venv・engine(core/・adapters/)は 0 行・便 XG0・XV0・XB0・XT0・XP0 の script は importlib で読み関数を呼ぶ。記録は記録の commit で足す(script だけここで届ける)。
     "measure/xbrl_input_type_2026-11-22.py",
+    # 2026-11-22: XM0 の記録 1 本(script 6f719410 で書いた。67 本の書類ごと・型に入った fact・型の外の fact の理由ごとの数・型の行・対応表の行・作った定義・比べ方 1 と 2・混ぜ物・表示の字の検査と、開発の 5 本・本番だけの 62 本・全部の合計。docID・会社の名・EDINET コード・file の名・値・要素の名・文脈の名・日付は持たない)。
+    "fixtures/xbrl/cd8/input_type_2026-11-22.json",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")
