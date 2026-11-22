@@ -217,6 +217,8 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-22: XE0(会社が Excel で出すとしたら、XBRL の言葉を書かない欄だけで今年の型はどれだけ決まり・黙って違い・止まるかを数える測定。0 USD。封 docs/XBRL_COMPANY_EXCEL_SEAL_2026-11-22.md aec0496d)の script 1 本。
     # 材料は置き場の有価証券報告書の zip(今年の側 67 本と前の年の側の組 63。置き場は変えない)・engine(core/・adapters/)は 0 行・便 XG1・XM0・XY0・XZ0・XZ1 の script は importlib で読み関数を呼ぶ。通信しない。xlsx は一時の folder にだけ書く。記録は記録の commit で足す(script だけここで届ける)。
     "measure/xbrl_company_excel_2026-11-22.py",
+    # 2026-11-23: XE0 の記録 1 本(script 7cc388be で書いた。63 組の組ごと・行の中の数の fact・書かなかった fact の理由ごとの数・決めて全部同じ・決めたが違う(欄ごと)・止めた(理由ごと)・守りごとの正しかった止め・場面ごとの数・無くなった行と、訓練の 3 組・判定の 60 組・全部の合計。docID・会社の名・EDINET コード・file の名・値・要素の名・文脈の名・行の字・日付は持たない)。
+    "fixtures/xbrl/cd8/company_excel_2026-11-22.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
