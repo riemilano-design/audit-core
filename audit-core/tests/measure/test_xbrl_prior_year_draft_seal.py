@@ -703,6 +703,14 @@ def write_wall(path, wall=None):
         fh.write(json.dumps(wall, ensure_ascii=False))
 
 
+def real_record_state():
+    p = os.path.join(ROOT, RECORD_REL)
+    if not os.path.exists(p):
+        return None
+    with io.open(p, "rb") as fh:
+        return hashlib.sha256(fh.read()).hexdigest()
+
+
 def e2e_problems(ms=None):
     ms = load_source(read(SCRIPT_REL)) if ms is None or ms is MS else ms
     out = []
@@ -716,9 +724,10 @@ def e2e_problems(ms=None):
             rec_path = os.path.join(d, "rec", "r.json")
             kw = run_kw(d, docs, prior)
             say = []
-            # 下見: 記録を書かず数を出さない
+            # 下見: 記録を書かず数を出さない(本物の記録は、在るか無いか・中身が下見の前後で同じことを見る)
+            real_before = real_record_state()
             ms.dry_run(wall_path=wp, say=say.append, **kw)
-            if say != [u"--dry-run: 4 組・止まらない(記録は書かない)"] or os.path.exists(os.path.join(d, "rec")) or os.path.exists(os.path.join(ROOT, RECORD_REL)):
+            if say != [u"--dry-run: 4 組・止まらない(記録は書かない)"] or os.path.exists(os.path.join(d, "rec")) or real_record_state() != real_before:
                 out.append(u"下見が記録を書いた・数を出した: %s" % say)
             bw = os.path.join(d, "wall_bad.json")
             write_wall(bw, dict(FAKE_WALL, **{u"書類": [FAKE_WALL[u"書類"][0], od([(u"番号", 2), (u"計算書の行の数", 21)])] + FAKE_WALL[u"書類"][2:]}))
