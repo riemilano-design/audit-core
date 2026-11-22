@@ -204,6 +204,9 @@ DECLARED_NEW_AFTER_SEAL = (
     "measure/xbrl_prior_year_fact_guard_2026-11-22.py",
     # 2026-11-22: XZ1 の記録 1 本(script d6a18d51 を本番 1 回走らせて書いた。63 組の書類ごと・段ごとの類別の数・段の間の移り・止めた fact の類別・番号の列を使った fact・違う属性の数・旗と、60 組・3 組・63 組の合計。docID・会社の名・EDINET コード・file の名・行の字・見出しの字・要素の名・文脈の名・形の字は持たない)。
     "fixtures/xbrl/cd8/prior_year_fact_guard_2026-11-22.json",
+    # 2026-11-22: XM0(機械の側が決めた入力の型(第 0 版)と対応表だけから、fact の属性と文脈・単位の定義を作る測定。0 USD。封 docs/XBRL_INPUT_TYPE_SEAL_2026-11-22.md 34afe495)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)と repo の外に置く道具の venv・engine(core/・adapters/)は 0 行・便 XG0・XV0・XB0・XT0・XP0 の script は importlib で読み関数を呼ぶ。記録は記録の commit で足す(script だけここで届ける)。
+    "measure/xbrl_input_type_2026-11-22.py",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
