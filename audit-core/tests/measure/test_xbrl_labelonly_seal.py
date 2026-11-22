@@ -199,6 +199,11 @@ DECLARED_NEW_AFTER_SEAL = (
     "measure/xbrl_prior_year_fact_draft_2026-11-22.py",
     # 2026-11-22: XZ0 の記録 1 本(script 77662224 を本番 1 回走らせて書いた。63 組の書類ごと・束と段ごとの類別の数と合計。docID・会社の名・EDINET コード・file の名・行の字・見出しの字・要素の名・文脈の名・単位の名は持たない)。
     "fixtures/xbrl/cd8/prior_year_fact_draft_2026-11-22.json",
+    # 2026-11-22: XZ1(前の年の下書きが黙って違う属性を付ける fact を、行の順で番号を振り直す規則と表の頭の字の守りで直す・止める測定。0 USD。封 docs/XBRL_PRIOR_YEAR_FACT_GUARD_SEAL_2026-11-22.md 2079af62)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip(今年の側 67 本と前の年の側の組 63。置き場は変えない)・engine(core/・adapters/)は 0 行・便 XG0・XG1・XY0・XZ0 の script は importlib で読み関数を呼ぶ。通信しない。記録は記録の commit で足した。
+    "measure/xbrl_prior_year_fact_guard_2026-11-22.py",
+    # 2026-11-22: XZ1 の記録 1 本(script d6a18d51 を本番 1 回走らせて書いた。63 組の書類ごと・段ごとの類別の数・段の間の移り・止めた fact の類別・番号の列を使った fact・違う属性の数・旗と、60 組・3 組・63 組の合計。docID・会社の名・EDINET コード・file の名・行の字・見出しの字・要素の名・文脈の名・形の字は持たない)。
+    "fixtures/xbrl/cd8/prior_year_fact_guard_2026-11-22.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (

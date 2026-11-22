@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **354 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **356 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 281 |
+| `tests/measure` | 283 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -472,6 +472,12 @@ XZ0(同じ会社の前の年の提出書類の「表の中の置き場 → 数�
 
 **2026-11-22 に +1(34)**(`tests/measure/test_xbrl_prior_year_fact_draft_result.py`。
 XZ0 の結果の門(記録 `fixtures/xbrl/cd8/prior_year_fact_draft_2026-11-22.json`・結果の文書 `docs/XBRL_PRIOR_YEAR_FACT_DRAFT_RESULT_2026-11-22.md` を縛る。封の門 `test_xbrl_prior_year_fact_draft_seal.py` と便 XA0 の結果の門の部品を読み込む。便 XY0 の記録を読むだけ。置き場も通信も鍵も使わない)。353 → 354(`tests/measure` 280 → 281)。
+
+**2026-11-22 に +1(35)**(`tests/measure/test_xbrl_prior_year_fact_guard_seal.py`。
+XZ1(前の年の下書きが黙って違う属性を付ける fact を、行の順で番号を振り直す規則と表の頭の字が前の年と違えば止める守りで、どれだけ直せ、どれだけ止められ、正しい fact をどれだけ巻き添えにするかを数える。0 費用。封 `docs/XBRL_PRIOR_YEAR_FACT_GUARD_SEAL_2026-11-22.md`)の script `measure/xbrl_prior_year_fact_guard_2026-11-22.py` の封の門。置き場も通信も使わない。作り物の書類の組にだけ本物の関数を掛ける)。354 → 355(`tests/measure` 281 → 282)。
+
+**2026-11-22 に +1(36)**(`tests/measure/test_xbrl_prior_year_fact_guard_result.py`。
+XZ1 の結果の門(記録 `fixtures/xbrl/cd8/prior_year_fact_guard_2026-11-22.json`・結果の文書 `docs/XBRL_PRIOR_YEAR_FACT_GUARD_RESULT_2026-11-22.md` を縛る。封の門 `test_xbrl_prior_year_fact_guard_seal.py` と便 XA0 の結果の門の部品を読み込む。便 XZ0 の記録を読むだけ。置き場も通信も鍵も使わない)。355 → 356(`tests/measure` 282 → 283)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
