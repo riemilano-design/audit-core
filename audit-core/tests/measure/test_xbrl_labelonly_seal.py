@@ -219,6 +219,9 @@ DECLARED_NEW_AFTER_SEAL = (
     "measure/xbrl_company_excel_2026-11-22.py",
     # 2026-11-23: XE0 の記録 1 本(script 7cc388be で書いた。63 組の組ごと・行の中の数の fact・書かなかった fact の理由ごとの数・決めて全部同じ・決めたが違う(欄ごと)・止めた(理由ごと)・守りごとの正しかった止め・場面ごとの数・無くなった行と、訓練の 3 組・判定の 60 組・全部の合計。docID・会社の名・EDINET コード・file の名・値・要素の名・文脈の名・行の字・日付は持たない)。
     "fixtures/xbrl/cd8/company_excel_2026-11-22.json",
+    # 2026-11-23: XJ0(入力の型の第 1 版を字で決め、会社の AI に渡す指示書と、型どおりでない file を理由つきで断る受け口の検査を作る測定。0 USD。封 docs/XBRL_INPUT_TYPE_V1_SEAL_2026-11-23.md 8f3ec76b)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)と repo の外に置く道具の venv・engine(core/・adapters/)は 0 行・便 XM0 の script は importlib で読み関数を呼ぶ(受け口の検査は別の process で型の file と辞書だけを読む)。記録は記録の commit で足す(script だけここで届ける)。
+    "measure/xbrl_input_type_v1_2026-11-23.py",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
