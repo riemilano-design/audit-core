@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **361 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **362 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 288 |
+| `tests/measure` | 289 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -493,6 +493,9 @@ XK0 の結果の門(記録 `fixtures/xbrl/cd8/type_carryover_2026-11-22.json`・
 
 **2026-11-22 に +1(41)**(`tests/measure/test_xbrl_company_excel_seal.py`。
 XE0(会社が Excel で出すとしたら、XBRL の言葉を書かない欄だけで今年の型はどれだけ決まり・黙って違い・止まるかを数える。0 費用。封 `docs/XBRL_COMPANY_EXCEL_SEAL_2026-11-22.md`)の script `measure/xbrl_company_excel_2026-11-22.py` の封の門。置き場も道具も通信も使わない。作り物の fact の並びと作り物の字に、本物の関数と本物の openpyxl を掛ける)。360 → 361(`tests/measure` 287 → 288)。
+
+**2026-11-23 に +1(42)**(`tests/measure/test_xbrl_company_excel_result.py`。
+XE0 の結果の門(記録 `fixtures/xbrl/cd8/company_excel_2026-11-22.json`・結果の文書 `docs/XBRL_COMPANY_EXCEL_RESULT_2026-11-22.md` を縛る。封の門 `test_xbrl_company_excel_seal.py` と便 XA0 の結果の門の部品を読み込む。置き場も道具も通信も鍵も使わない。xlsx は書かない)。361 → 362(`tests/measure` 288 → 289)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
