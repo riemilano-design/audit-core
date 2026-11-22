@@ -184,6 +184,11 @@ DECLARED_NEW_AFTER_SEAL = (
     "measure/xbrl_place_context_build_2026-11-22.py",
     # 2026-11-22: XH0 の記録 1 本(script 2761b2dd を 1 回走らせて書いた。67 本の書類ごとの数と合計。docID・会社の名・EDINET コード・file の名・要素の名は持たない)。
     "fixtures/xbrl/cd8/place_context_build_2026-11-22.json",
+    # 2026-11-22: XD0(候補が残る行の要素を LLM の席に選ばせ、2 席の一致で通す測定。有料。封 docs/XBRL_AI_TAG_PICK_SEAL_2026-11-22.md 7bb4fa24)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip 67 本(置き場は変えない)・engine(core/・adapters/)は 0 行・便 XG1 の script は importlib で読み関数を呼ぶ。有料の入口(--trial・--run)は司令塔だけが走らせた。記録は記録の commit で足した。
+    "measure/xbrl_ai_tag_pick_2026-11-22.py",
+    # 2026-11-22: XD0 の記録 1 本(script f119b80c を本番 1 回走らせて書いた。394 行の席ごとの札・呼び出しの数と token と費用。docID・会社の名・EDINET コード・行の字・要素の名・席の返事の字・鍵は持たない)。
+    "fixtures/xbrl/cd8/ai_tag_pick_2026-11-22.json",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (

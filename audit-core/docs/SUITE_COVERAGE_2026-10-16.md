@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **348 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **350 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 275 |
+| `tests/measure` | 277 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -454,6 +454,12 @@ XH0(数の置き場を表の cell の字から決め、文脈と単位の定義�
 
 **2026-11-22 に +1(28)**(`tests/measure/test_xbrl_place_context_build_result.py`。
 XH0 の結果の門(記録 `fixtures/xbrl/cd8/place_context_build_2026-11-22.json`・結果の文書 `docs/XBRL_PLACE_CONTEXT_BUILD_RESULT_2026-11-22.md` を縛る。封の門 `test_xbrl_place_context_build_seal.py` と便 XA0 の結果の門の部品を読み込む。便 XS0 の記録・封への追記を読むだけ。置き場も道具も鍵も通信も使わない)。347 → 348(`tests/measure` 274 → 275)。
+
+**2026-11-22 に +1(29)**(`tests/measure/test_xbrl_ai_tag_pick_seal.py`。
+XD0(候補が残る行の要素を LLM の席に選ばせ、2 席が同じ要素を選んだ行だけを通すと、誤った選びはどれだけ止まるかを数える。有料。封 `docs/XBRL_AI_TAG_PICK_SEAL_2026-11-22.md`)の script `measure/xbrl_ai_tag_pick_2026-11-22.py` の封の門。置き場も鍵も通信も使わない。作り物の書類と作り物の transport にだけ本物の関数を掛ける)。348 → 349(`tests/measure` 275 → 276)。
+
+**2026-11-22 に +1(30)**(`tests/measure/test_xbrl_ai_tag_pick_result.py`。
+XD0 の結果の門(記録 `fixtures/xbrl/cd8/ai_tag_pick_2026-11-22.json`・結果の文書 `docs/XBRL_AI_TAG_PICK_RESULT_2026-11-22.md` を縛る。封の門 `test_xbrl_ai_tag_pick_seal.py` と便 XA0 の結果の門の部品を読み込む。置き場も置き場の返事の字も鍵も通信も使わない・API は呼ばない)。349 → 350(`tests/measure` 276 → 277)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
