@@ -209,6 +209,9 @@ DECLARED_NEW_AFTER_SEAL = (
     "measure/xbrl_input_type_2026-11-22.py",
     # 2026-11-22: XM0 の記録 1 本(script 6f719410 で書いた。67 本の書類ごと・型に入った fact・型の外の fact の理由ごとの数・型の行・対応表の行・作った定義・比べ方 1 と 2・混ぜ物・表示の字の検査と、開発の 5 本・本番だけの 62 本・全部の合計。docID・会社の名・EDINET コード・file の名・値・要素の名・文脈の名・日付は持たない)。
     "fixtures/xbrl/cd8/input_type_2026-11-22.json",
+    # 2026-11-22: XK0(同じ会社の前の年の型と対応表が今年の型にどれだけ持ち越せるかを数える測定。0 USD。封 docs/XBRL_TYPE_CARRYOVER_SEAL_2026-11-22.md 1fc4c736)の script 1 本。
+    # 材料は置き場の有価証券報告書の zip(今年の側 67 本と前の年の側の組 63。置き場は変えない)・engine(core/・adapters/)は 0 行・便 XM0・XY0 の script は importlib で読み関数を呼ぶ。通信しない。記録は記録の commit で足す(script だけここで届ける)。
+    "measure/xbrl_type_carryover_2026-11-22.py",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
