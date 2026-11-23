@@ -228,6 +228,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-23: UM0(開示に限らない共通構造(材料の型 第 0 版)で、資料の指定から資料の生成までの 7 段を 1 本につなぐ測定。0 USD。封 docs/UNIVERSAL_MATERIAL_SEAL_2026-11-23.md 4ef1368c)の script 2 本(素材を作る側と確かめる側)。
     # XBRL・EDINET・開示の書類・置き場・道具の venv は 1 つも使わない。engine(core/・adapters/)は 0 行。素材は作り物で repo に置かない(scratchpad)。記録は記録の commit で足す(script だけここで届ける)。
     "measure/universal_source_gen_2026-11-23.py", "measure/universal_check_2026-11-23.py",
+    # 2026-11-23: UM2(別の席が形を決めた架空の会計ソフトの file 一式から、資料の指定から人が読む版の資料までの 7 段を 2 期ぶん通す測定。0 USD。封 docs/UNIVERSAL_THROUGH_SEAL_2026-11-23.md 9ff5af9e)の script 2 本(確かめる側と答えを知っている側)。
+    # XBRL・EDINET・開示の書類・置き場・道具の venv は 1 つも使わない。engine(core/・adapters/)は 0 行。素材・正解・材料の束・置き場・資料は repo に置かない(scratchpad)。記録は記録の commit で足す(script だけここで届ける)。
+    "measure/universal_through_check_2026-11-23.py", "measure/universal_through_tally_2026-11-23.py",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
