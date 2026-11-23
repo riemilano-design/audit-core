@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **366 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **367 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 293 |
+| `tests/measure` | 294 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -508,6 +508,9 @@ UM0(開示に限らない共通構造(材料の型 第 0 版)で、資料の指�
 
 **2026-11-23 に +1(46)**(`tests/measure/test_universal_material_result.py`。
 UM0 の結果の門(記録 `fixtures/universal/um0/record.json`・結果の文書 `docs/UNIVERSAL_MATERIAL_RESULT_2026-11-23.md` を縛る。封の門 `test_universal_material_seal.py` の部品を読み込む。置き場も席の出力も素材も通信も鍵も使わない。API は呼ばない)。365 → 366(`tests/measure` 292 → 293)。
+
+**2026-11-23 に +1(47)**(`tests/measure/test_universal_ledger_seal.py`。
+UM1(測る側が形も中身も決めていない会計の素材(第三者が公開した作り物の会社の帳簿)から、席が材料を作り、答えを読まない検査が確かめ、確かめた取り方を次の期へ持ち越す。0 費用・API は呼ばない。封 `docs/UNIVERSAL_MATERIAL_THIRD_PARTY_SOURCE_SEAL_2026-11-23.md`)の script 2 本 `measure/universal_ledger_ref_2026-11-23.py`・`measure/universal_ledger_check_2026-11-23.py` と定義表・読込みの定義・指示書の封の門。素材の全体は開かず、門の中で作る作り物の SQLite だけで縛る。置き場も道具も通信も鍵も使わない)。366 → 367(`tests/measure` 293 → 294)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

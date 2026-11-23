@@ -232,6 +232,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-23: UM0(開示に限らない共通構造(材料の型 第 0 版)で、資料の指定から資料の生成までの 7 段を 1 本につなぐ測定。0 USD。封 docs/UNIVERSAL_MATERIAL_SEAL_2026-11-23.md 4ef1368c)の script 2 本(素材を作る側と確かめる側)。
     # XBRL・EDINET・開示の書類・置き場・道具の venv は 1 つも使わない。engine(core/・adapters/)は 0 行。素材は作り物で repo に置かない(scratchpad)。記録は記録の commit で足す(script だけここで届ける)。
     "measure/universal_source_gen_2026-11-23.py", "measure/universal_check_2026-11-23.py",
+    # 2026-11-23: UM1(測る側が形も中身も決めていない会計の素材(第三者が公開した作り物の会社の帳簿)から、席が材料を作り、答えを読まない検査が確かめ、確かめた取り方を次の期へ持ち越す測定。0 USD。封 docs/UNIVERSAL_MATERIAL_THIRD_PARTY_SOURCE_SEAL_2026-11-23.md 0d2156e4)の script 2 本(答えを知っている側と確かめる側)。
+    # XBRL・EDINET・開示の書類・置き場・道具の venv は 1 つも使わない。engine(core/・adapters/)は 0 行。素材は repo に置かない(scratchpad)。記録は記録の commit で足す(script だけここで届ける)。
+    "measure/universal_ledger_ref_2026-11-23.py", "measure/universal_ledger_check_2026-11-23.py",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")
