@@ -2233,11 +2233,11 @@ class TallyTest(unittest.TestCase):
             self.assertEqual(1, c[u"段 3:人が読む版が組めた:" + tag], tag)
             self.assertEqual(1, c[u"段 3:人が読む版の検査を通した:" + tag], tag)
             self.assertEqual(0, c[u"段 3:結ばれていない数:" + tag])
-        self.assertEqual(31, c[u"段 3:数が出ている行:期1・A"])
+        self.assertEqual(31, c[u"段 3:数の札の出現の数:期1・A"])
         self.assertEqual(31, c[u"段 3:A の 2 期目の資料で数が出ている行"])
-        self.assertEqual(2, c[u"段 3:無いの行:期1・A"])
-        self.assertEqual(0, c[u"段 3:確認待ちの行:期1・A"])
-        self.assertEqual(20, c[u"段 3:数が出ている行:期2・B"])
+        self.assertEqual(2, c[u"段 3:無いの札の出現の数:期1・A"])
+        self.assertEqual(0, c[u"段 3:確認待ちの札の出現の数:期1・A"])
+        self.assertEqual(20, c[u"段 3:数の札の出現の数:期2・B"])
         self.assertEqual((1, 1, 1), (c[u"通し:期1"], c[u"通し:期2"], c[u"通し:期1・期2とも"]))
         self.assertEqual({u"101": {u"K11 で止めた行": 0, u"通し:期1": 1, u"通し:期2": 1}}, res[u"会社ごと"])
         # 変異
@@ -2263,7 +2263,8 @@ class TallyTest(unittest.TestCase):
         self.assertEqual(0, mut[u"V3"][u"通した:関係に入る"])                           # 関係が見えるので止まる
         for code, row in mut.items():
             if code in TAL.DOC_CODES:
-                self.assertEqual((0, 0), (row[u"断った"], row[u"止めた"]), code)                  # 資料の変異は通したかどうかだけ数える
+                self.assertNotIn(u"断った", row, code)                                          # 資料の変異に断る段は無い(数えていない 0 を出さない)
+                self.assertEqual(row[u"作れた"], row[u"止めた"] + row[u"通した"], code)
                 continue
             self.assertEqual(row[u"作れた"], row.get(u"断った", 0) + row.get(u"止めた", 0) + row.get(u"通した", 0), code)
         # 資料の変異

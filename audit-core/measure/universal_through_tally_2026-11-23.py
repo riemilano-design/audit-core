@@ -600,12 +600,29 @@ def run_company(chk, i, company_dir, seat_dir, c, mut, per_company):
         res = chk.check_document(defn, store, text)
         c[u"段 3:資料の検査を通した:" + tag] += 1 if res[u"通った"] else 0
         c[u"段 3:結ばれていない数:" + tag] += res[u"結ばれていない数"]
+        # 数える単位は 2 つ。札の出現の数(同じ id が資料に何度出ても数える)と、定義表の行(id)の数(重複を除く)。
+        # 封 UM2-D2 の「行」は定義表の行(id)。1 つの id が数と確認待ち・無いの両方に出る場合は、封の字
+        # 「確認待ち・無い でない行」に沿い、数の札が 1 つでも在れば「数が出ている」、無ければ確認待ちの札が在れば「確認待ち」、
+        # どちらも無ければ「無い」に 1 回だけ入れる(1 つの id は 3 つのうち 1 つにしか入らない)。
+        # 定義表に無い id の札は定義表の行に数えず、別の欄に数える。3 つの和が定義表の行の数になること(閉じること)は記録の欄で見る。
+        nums_m = list(_NUMTAG.finditer(text))
+        words_m = list(_WORDTAG.finditer(text))
+        def_ids = set(r[u"id"] for r in defn.rows)
+        s_num = set(m.group(u"id") for m in nums_m)
+        s_wait = set(m.group(u"id") for m in words_m if m.group(u"word") == u"確認待ち") - s_num
+        s_none = set(m.group(u"id") for m in words_m if m.group(u"word") == u"無い") - s_num - s_wait
+        c[u"段 3:数の札の出現の数:" + tag] += len(nums_m)
+        c[u"段 3:確認待ちの札の出現の数:" + tag] += sum(1 for w in words_m if w.group(u"word") == u"確認待ち")
+        c[u"段 3:無いの札の出現の数:" + tag] += sum(1 for w in words_m if w.group(u"word") == u"無い")
+        c[u"段 3:定義表の行:" + tag] += len(def_ids)
+        c[u"段 3:数が出ている定義表の行:" + tag] += len(s_num & def_ids)
+        c[u"段 3:確認待ちの定義表の行:" + tag] += len(s_wait & def_ids)
+        c[u"段 3:無いの定義表の行:" + tag] += len(s_none & def_ids)
+        c[u"段 3:定義表の行のうち数・確認待ち・無いのどれにも入らない行:" + tag] += len(def_ids - s_num - s_wait - s_none)
+        c[u"段 3:定義表に無い id の札の id の数:" + tag] += len((s_num | s_wait | s_none) - def_ids)
         if prod == u"A" and per == u"期2":
-            nums = len(_NUMTAG.findall(text))
-            c[u"段 3:A の 2 期目の資料で数が出ている行"] += nums
-        c[u"段 3:数が出ている行:" + tag] += len(_NUMTAG.findall(text))
-        c[u"段 3:確認待ちの行:" + tag] += sum(1 for w in _WORDTAG.finditer(text) if w.group(u"word") == u"確認待ち")
-        c[u"段 3:無いの行:" + tag] += sum(1 for w in _WORDTAG.finditer(text) if w.group(u"word") == u"無い")
+            c[u"段 3:A の 2 期目の資料で数が出ている行"] += len(s_num & def_ids)
+            c[u"段 3:A の 2 期目の資料で数の札の出現の数"] += len(nums_m)
         if not res[u"通った"]:
             continue
         page, _r = chk.make_human(defn, store, text)
@@ -624,6 +641,8 @@ def run_company(chk, i, company_dir, seat_dir, c, mut, per_company):
             mut[code][u"作れた"] += 1
             if chk.check_document(defn, store, new)[u"通った"]:
                 mut[code][u"通した"] += 1
+            else:
+                mut[code][u"止めた"] += 1
     ok1 = built[(u"期1", u"A")] and built[(u"期1", u"B")]
     ok2 = built[(u"期2", u"A")] and built[(u"期2", u"B")]
     c[u"通し:期1"] += 1 if ok1 else 0
@@ -642,9 +661,9 @@ FIXED_COUNTS = (
     u"段 1:4 つの枠:正解どおり×通した", u"段 1:4 つの枠:正解どおり×止めた", u"段 1:4 つの枠:正解と違う×通した", u"段 1:4 つの枠:正解と違う×止めた",
     u"段 2:確かめた取り方の行", u"段 2:束が K0 で断られた束", u"段 2:持ち越した行", u"段 2:無いを持ち越した行", u"段 2:持ち越せなかった行", u"段 2:持ち越して検査を通った行",
     u"段 2:持ち越して通して正解と数値が同じ", u"段 2:持ち越して通したが数値が違う", u"段 2:持ち越して通したが正解が null", u"段 2:持ち越して通したが正解が読めない", u"段 2:K11 で止めた行", u"段 2:K11 で止めた社",
-    u"段 3:A の 2 期目の資料で数が出ている行", u"通し:期1", u"通し:期2", u"通し:期1・期2とも",
+    u"段 3:A の 2 期目の資料で数が出ている行", u"段 3:A の 2 期目の資料で数の札の出現の数", u"通し:期1", u"通し:期2", u"通し:期1・期2とも",
 ) + tuple(u"%s:%s" % (a, p) for a in (u"段 3:資料の検査を通した", u"段 3:人が読む版が組めた", u"段 3:人が読む版の検査を通した") for p in (u"期1・A", u"期1・B", u"期2・A", u"期2・B")) + tuple(
-    u"段 3:%s:%s" % (a, p) for a in (u"結ばれていない数", u"数が出ている行", u"確認待ちの行", u"無いの行") for p in (u"期1・A", u"期1・B", u"期2・A", u"期2・B")) + tuple(
+    u"段 3:%s:%s" % (a, p) for a in (u"結ばれていない数", u"数の札の出現の数", u"確認待ちの札の出現の数", u"無いの札の出現の数", u"定義表の行", u"数が出ている定義表の行", u"確認待ちの定義表の行", u"無いの定義表の行", u"定義表の行のうち数・確認待ち・無いのどれにも入らない行", u"定義表に無い id の札の id の数") for p in (u"期1・A", u"期1・B", u"期2・A", u"期2・B")) + tuple(
     u"%s:%s" % (a, p) for a in (u"正解が null の行", u"正解が読めない項目", u"素材の file の数") for p in PERIODS)
 
 
@@ -659,7 +678,9 @@ def tally(companies, company_dir, seat_dir, chk=None):
     for key in FIXED_COUNTS:
         c.setdefault(key, 0)
     for code, row in mut.items():
-        for key in (u"作れた", u"作れなかった", u"断った", u"止めた", u"通した") + ((u"数値が同じ",) if code in MUT_ROWS else ()):
+        # 資料の変異(D1・D4)は作れた = 通した + 止めた を数える。断る段は無いので「断った」は出さない(数えていない 0 を記録に出さない)。
+        keys = (u"作れた", u"作れなかった", u"止めた", u"通した") if code in DOC_CODES else (u"作れた", u"作れなかった", u"断った", u"止めた", u"通した")
+        for key in keys + ((u"数値が同じ",) if code in MUT_ROWS else ()):
             row.setdefault(key, 0)
         if code in (u"V2", u"V3", u"V6"):
             for key in (u"作れた:関係に入る", u"作れた:関係に入らない", u"通した:関係に入る", u"通した:関係に入らない"):
