@@ -3615,7 +3615,7 @@ def hand_other_mutants():
     a(u"D9 無い の表示の位を書く", u'o[u"表示の位"] = None if r["value"] == VALUE_NONE else r["shift"]', u'o[u"表示の位"] = r["shift"]', (u"derive",))
     a(u"D10 無い の精度を書く", u'o[u"精度"] = None if r["value"] == VALUE_NONE else r["prec"]', u'o[u"精度"] = r["prec"]', (u"derive",))
     a(u"D11 独自の名に辞書の名も入れる", u'        if name_class(r["name"]) == u"提出者別":\n            custom.add((u"科目", r["name"]))', u'        if True:\n            custom.add((u"科目", r["name"]))', (u"derive",))
-    a(u"D12 独自の名を並べ替えない", u'for k, n in sorted(custom)]', u'for k, n in list(custom)]', (u"derive",))
+    a(u"D12 独自の名を降順に並べる", u'for k, n in sorted(custom)]', u'for k, n in sorted(custom, reverse=True)]', (u"derive",))  # 並べ替えを外すだけの変異は set の並び(起動ごとの hash の乱数)がたまたま昇順だと黙るので、乱数に依らない形にした
     a(u"D13 辞書の無い _cor を提出者別にする", u'    return u"辞書の無い _cor の接頭辞" if prefix.endswith("_cor") else u"提出者別"', u'    return u"提出者別"', (u"derive",))
     a(u"D14 他: の単位の分子を並べ替えない", u'        return UNIT_OTHER + u"*".join(sorted(ms)) if ok(ms) else None', u'        return UNIT_OTHER + u"*".join(ms) if ok(ms) else None', (u"derive", u"render"))
     a(u"D15 他: の単位の分母を並べ替えない", u'UNIT_PER + u"*".join(sorted(d["den"]))', u'UNIT_PER + u"*".join(d["den"])', (u"derive", u"render"))
@@ -3716,7 +3716,7 @@ CAUGHT_BY = {
     "D8 期の始まり = 終わりを書けないとする": ('units',),
     "D9 無い の表示の位を書く": ('units',),
     "D10 無い の精度を書く": ('units',),
-    "D12 独自の名を並べ替えない": ('units',),
+    "D12 独自の名を降順に並べる": ('units',),
     "D14 他: の単位の分子を並べ替えない": ('units',),
     "D15 他: の単位の分母を並べ替えない": ('units',),
     "R-3 作る側の単位 id を字の順でなく出た順に振る": ('units',),
