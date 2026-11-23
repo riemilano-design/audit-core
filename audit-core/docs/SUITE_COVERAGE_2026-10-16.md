@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **363 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **364 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 290 |
+| `tests/measure` | 291 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -499,6 +499,9 @@ XE0 の結果の門(記録 `fixtures/xbrl/cd8/company_excel_2026-11-22.json`・�
 
 **2026-11-23 に +1(43)**(`tests/measure/test_xbrl_input_type_v1_seal.py`。
 XJ0(入力の型の第 1 版を字で決め、会社の AI に渡す指示書と、型どおりでない file を理由つきで断る受け口の検査を作る。0 費用。封 `docs/XBRL_INPUT_TYPE_V1_SEAL_2026-11-23.md`)の script `measure/xbrl_input_type_v1_2026-11-23.py` と指示書 `docs/INPUT_TYPE_V1_INSTRUCTION_2026-11-23.md` の封の門。置き場も道具も通信も使わない。作り物の辞書と作り物の書類に、本物の関数を掛ける。受け口の検査は別の process で型の file と辞書だけを読む)。362 → 363(`tests/measure` 289 → 290)。
+
+**2026-11-23 に +1(44)**(`tests/measure/test_xbrl_input_type_v1_result.py`。
+XJ0 の結果の門(記録 `fixtures/xbrl/cd8/input_type_v1_2026-11-23.json`・結果の文書 `docs/XBRL_INPUT_TYPE_V1_RESULT_2026-11-23.md` を縛る。封の門 `test_xbrl_input_type_v1_seal.py` と便 XA0 の結果の門の部品を読み込む。置き場も道具も標準の辞書の file も通信も鍵も使わない)。363 → 364(`tests/measure` 290 → 291)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
