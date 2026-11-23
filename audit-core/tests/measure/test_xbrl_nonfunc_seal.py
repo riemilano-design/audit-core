@@ -229,6 +229,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-23: XJ0 の記録 1 本(script 48cf7135 で書いた。67 本の書類ごと・対象の fact・型に入った fact・型の外の fact(理由ごと)・型の行・名の数・受け口の断り(規則ごと)・比べ方 1・比べ方 2・壊し方 44 通りと変え方 6 通りの数と、開発の 5 本・残りの 62 本の集計。
     # docID・会社の名・EDINET コード・file の名・値・要素の名・文脈の名・行の字・日付は持たない)。
     "fixtures/xbrl/cd8/input_type_v1_2026-11-23.json",
+    # 2026-11-23: UM0(開示に限らない共通構造(材料の型 第 0 版)で、資料の指定から資料の生成までの 7 段を 1 本につなぐ測定。0 USD。封 docs/UNIVERSAL_MATERIAL_SEAL_2026-11-23.md 4ef1368c)の script 2 本(素材を作る側と確かめる側)。
+    # XBRL・EDINET・開示の書類・置き場・道具の venv は 1 つも使わない。engine(core/・adapters/)は 0 行。素材は作り物で repo に置かない(scratchpad)。記録は記録の commit で足す(script だけここで届ける)。
+    "measure/universal_source_gen_2026-11-23.py", "measure/universal_check_2026-11-23.py",
 )
 #: 届けてよい file の置き場(engine の ``core/``・``adapters/`` は届けられない)
 DECLARABLE_PREFIXES = ("measure/", "fixtures/xbrl/")

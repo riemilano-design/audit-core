@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **364 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **365 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 291 |
+| `tests/measure` | 292 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -502,6 +502,9 @@ XJ0(入力の型の第 1 版を字で決め、会社の AI に渡す指示書と
 
 **2026-11-23 に +1(44)**(`tests/measure/test_xbrl_input_type_v1_result.py`。
 XJ0 の結果の門(記録 `fixtures/xbrl/cd8/input_type_v1_2026-11-23.json`・結果の文書 `docs/XBRL_INPUT_TYPE_V1_RESULT_2026-11-23.md` を縛る。封の門 `test_xbrl_input_type_v1_seal.py` と便 XA0 の結果の門の部品を読み込む。置き場も道具も標準の辞書の file も通信も鍵も使わない)。363 → 364(`tests/measure` 290 → 291)。
+
+**2026-11-23 に +1(45)**(`tests/measure/test_universal_material_seal.py`。
+UM0(開示に限らない共通構造(材料の型 第 0 版)で、資料の指定から資料の生成までの 7 段を 1 本につなぐ。0 費用・席は呼ばない。封 `docs/UNIVERSAL_MATERIAL_SEAL_2026-11-23.md`)の script 2 本 `measure/universal_source_gen_2026-11-23.py`・`measure/universal_check_2026-11-23.py` と定義表・指示書の封の門。開発の 3 社の作り物の素材だけを作る(本番の 12 社は作らない)。置き場も道具も通信も鍵も使わない)。364 → 365(`tests/measure` 291 → 292)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
