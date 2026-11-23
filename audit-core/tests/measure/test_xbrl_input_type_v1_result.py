@@ -68,16 +68,19 @@ GATE_REL = "tests/measure/test_xbrl_input_type_v1_result.py"
 DOC_REL = "docs/XBRL_INPUT_TYPE_V1_RESULT_2026-11-23.md"
 SCRIPT_COMMIT_SHORT = "48cf7135"                  # script・封の門・指示書を足した commit
 RECORD_COMMIT_SHORT = "9a8b246d"                  # 記録を足した commit
+FIX_COMMIT_SHORT = "36a52eec"                     # 封の門の変異 D12 を 2 行直した commit(記録の後・封の門の 1 file だけ)
+SEAL_GATE_FIXED_SHA = "b579c678be3a6c8ae527aed19b99b1ccddbf69f59b82d07d762bc7bf552f02be"          # 36a52eec の封の門の中身
 BLOB_AT = collections.OrderedDict([
-    (SEAL_REL, SEAL_COMMIT_SHORT), (SCRIPT_REL, SCRIPT_COMMIT_SHORT), (SEAL_GATE_REL, SCRIPT_COMMIT_SHORT), (INSTR_REL, SCRIPT_COMMIT_SHORT), (RECORD_REL, RECORD_COMMIT_SHORT)])
+    (SEAL_REL, SEAL_COMMIT_SHORT), (SCRIPT_REL, SCRIPT_COMMIT_SHORT), (SEAL_GATE_REL, FIX_COMMIT_SHORT), (INSTR_REL, SCRIPT_COMMIT_SHORT), (RECORD_REL, RECORD_COMMIT_SHORT)])
 HISTORY = collections.OrderedDict([
-    (SEAL_REL, [SEAL_COMMIT_SHORT]), (SCRIPT_REL, [SCRIPT_COMMIT_SHORT]), (SEAL_GATE_REL, [SCRIPT_COMMIT_SHORT]), (INSTR_REL, [SCRIPT_COMMIT_SHORT]), (RECORD_REL, [RECORD_COMMIT_SHORT])])
+    (SEAL_REL, [SEAL_COMMIT_SHORT]), (SCRIPT_REL, [SCRIPT_COMMIT_SHORT]), (SEAL_GATE_REL, [SCRIPT_COMMIT_SHORT, FIX_COMMIT_SHORT]), (INSTR_REL, [SCRIPT_COMMIT_SHORT]), (RECORD_REL, [RECORD_COMMIT_SHORT])])
 DOC_COMMITS = (SEAL_COMMIT_SHORT, SCRIPT_COMMIT_SHORT, RECORD_COMMIT_SHORT)
+DOC_COMMITS_ALL = DOC_COMMITS + (FIX_COMMIT_SHORT,)          # 文書が書く commit の字は 4 つ(3 つ + 追記の 1 つ)
 
 SHA_PIN = collections.OrderedDict([
     (RECORD_REL, "8528d9eb9f5184fae4eca8e7a90029c732af2274fa6f1eb089beba92fb008a68"),
     (SCRIPT_REL, "420fd6862e3989ff936041c42cd0619ffad3af8783ac4e9a12f65651746f2909"),
-    (SEAL_GATE_REL, "0053878d7876665dd7158ef96f64724eaa6e8ce24d71bd8f13c9dba68d207b26"),
+    (SEAL_GATE_REL, SEAL_GATE_FIXED_SHA),
     (SEAL_REL, "51639be054a83744fe402922c35c97d1e40b7234a1ed7100fd46faa62db060ef"),
     (INSTR_REL, "2f45240f49640c663ed43d88fc01958cf4ee4ad8c04748a192ebbbfbd2f11c96")])
 MATERIAL_PIN = collections.OrderedDict([
@@ -901,6 +904,8 @@ def render_post(c):
     w(u"- 封の門: %d 本。記録が無い時(script の commit の後)と記録が在る時(記録の commit の前)の両方で緑。" % seal_tests())
     w(u"- 監査で見つかった穴: 1 回目は、受け口が孤立 surrogate の鍵で例外で落ちる(封の「例外で落ちない」に反する)ことと、変え方の守り 2 つに門が黙ること。"
       u"2 回目は、守りを半分だけ外す変異・走査の向きを逆にする変異に門が黙ることと、壊した file の書き込みに守りが無いこと。どちらも直して、3 回目で GO。")
+    w(u"- 追記(2026-11-23): 封の門の変異 D12 を、乱数に依らない形に 2 行直した(commit %s)。並びが起動ごとの hash の乱数でたまたま昇順だと変異が黙るため。"
+      u"上の封の門の commit %s は、この直しより前の版を指す。script・封・記録・数・当たり外れは変わらない。結果の門の留めを、この直しに合わせた。" % (FIX_COMMIT_SHORT, SCRIPT_COMMIT_SHORT))
     w(u"")
     w(u"## §5 次の便の候補(封 §6 に在るものだけ)")
     w(u"")
@@ -969,7 +974,7 @@ def derived_numbers(c):
     out |= set(str(v) for v in (seal_tests(), len(SG.SILENT_BY_DESIGN), len(q_silent()), len(q_silent()) - len(q_silent_h()), len(q_silent_h()), len(BREAKS), len(RULES), len(CHANGES), len(BREAKS) - len(break_groups(rec)[0])))
     out |= set(str(rec[u"材料"][u"書類の本数"]))
     out.add(str(rec[u"材料"][u"書類の本数"]))
-    out |= set(DOC_COMMITS)
+    out |= set(DOC_COMMITS_ALL)
     out |= set(STRUCTURAL) | RESIDUAL_OK
     return out
 
@@ -990,7 +995,7 @@ def residual_problems(c):
     want = set(render_doc(c))
     rest = [ln for ln in outside_sec3(c).splitlines() if ln not in want]
     out = []
-    allowed = RESIDUAL_OK | set(STRUCTURAL) | set(DOC_COMMITS)
+    allowed = RESIDUAL_OK | set(STRUCTURAL) | set(DOC_COMMITS_ALL)
     for ln in rest:
         for tok in doc_number_tokens(ln):
             if tok.replace(u",", u"") not in allowed:
@@ -1180,10 +1185,10 @@ def forbidden_problems(c):
 
 def doc_commit_problems(c):
     out = []
-    for w in DOC_COMMITS:
+    for w in DOC_COMMITS_ALL:
         if w not in c.doc:
             out.append(u"文書に commit の字が無い: %s" % w)
-    if not set(re.findall(r"(?<![0-9A-Za-z])[0-9a-f]{8}(?![0-9A-Za-z])", c.doc)) <= set(DOC_COMMITS):
+    if not set(re.findall(r"(?<![0-9A-Za-z])[0-9a-f]{8}(?![0-9A-Za-z])", c.doc)) <= set(DOC_COMMITS_ALL):
         out.append(u"文書が知らない commit の字を書いている")
     return out
 
@@ -1200,14 +1205,20 @@ def blob_problems(root, prefix, at):
     return WG.blob_problems(root, prefix, at)
 
 
-def commit_problems(root=REPO):
-    u"""文書が書く 3 つの commit が実の履歴と合う: 封は 8f3ec76b・script と封の門と指示書は 48cf7135・記録は 9a8b246d。commit の message が文書の言う「REVISE」「独立監査 GO」「差は 0」を書いている。"""
+def history_problems(root, history):
+    u"""file ごとの履歴が、書いた commit の並びとちょうど同じ(長さも順も)。"""
     out = []
-    for rel, want in HISTORY.items():
+    for rel, want in history.items():
         r = subprocess.run(["git", "-C", root, "log", "--format=%H", "--reverse", "--", PREFIX + rel], stdout=subprocess.PIPE, universal_newlines=True)
         got = [x for x in r.stdout.split() if x]
         if len(got) != len(want) or any(not g.startswith(w) for g, w in zip(got, want)):
             out.append(u"%s の履歴が文書の書く commit %s と違う" % (rel, u"・".join(want)))
+    return out
+
+
+def commit_problems(root=REPO):
+    u"""文書が書く 3 つの commit が実の履歴と合う: 封は 8f3ec76b・script と封の門と指示書は 48cf7135・記録は 9a8b246d。commit の message が文書の言う「REVISE」「独立監査 GO」「差は 0」を書いている。"""
+    out = history_problems(root, HISTORY)
     for short, words in ((SCRIPT_COMMIT_SHORT, (u"独立監査 REVISE(受け口が孤立 surrogate の鍵で落ちる・門の穴)→ 直し → REVISE(半分だけ外す型の門の穴・壊した file の書き込み)→ 直し → GO", u"封は直さず結果の文書に書く", u"限界")),
                          (RECORD_COMMIT_SHORT, (u"独立監査 GO", u"67 本を別の実装で数え直し差は 0"))):
         r = subprocess.run(["git", "-C", root, "log", "-1", "--format=%B", short], stdout=subprocess.PIPE, universal_newlines=True)
@@ -1217,13 +1228,30 @@ def commit_problems(root=REPO):
     return out
 
 
+def fix_commit_problems(root=REPO, commit=FIX_COMMIT_SHORT, rel=SEAL_GATE_REL):
+    u"""36a52eec は封の門の 1 file だけを触っている(ほかの file を触っていたら赤)。"""
+    r = subprocess.run(["git", "-C", root, "show", "--name-only", "--format=", commit], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    files = [x for x in r.stdout.splitlines() if x.strip()]
+    if r.returncode != 0 or files != [PREFIX + rel]:
+        return [u"commit %s が封の門の 1 file だけを触っていない: %s" % (commit, u"・".join(files) or u"(読めない)")]
+    return []
+
+
 def git_problems(root=REPO):
     out = []
     out.extend(SG.seal_history_problems(root))
     out.extend(SG.engine_zero_problems(root))
     out.extend(blob_problems(root, PREFIX, BLOB_AT))
     out.extend(commit_problems(root))
+    out.extend(fix_commit_problems(root))
     return out
+
+
+def last_commit_problems(root, rel, want_last):
+    rc, last = PR.git_in(root, "log", "-1", "--format=%H", "--", PREFIX + rel)
+    if not last.startswith(want_last):
+        return [u"%s の最後の commit が %s でない(記録を書いた後に変わった)" % (rel, want_last)]
+    return []
 
 
 def order_problems_real(root=REPO):
@@ -1233,9 +1261,8 @@ def order_problems_real(root=REPO):
         added = PR.added_commits(root, PREFIX + rel)
         if len(added) != 1 or not added[0].startswith(SCRIPT_COMMIT_SHORT):
             out.append(u"%s を足した commit が %s でない" % (rel, SCRIPT_COMMIT_SHORT))
-        rc, last = PR.git_in(root, "log", "-1", "--format=%H", "--", PREFIX + rel)
-        if not last.startswith(SCRIPT_COMMIT_SHORT):
-            out.append(u"%s の最後の commit が %s でない(記録を書いた後に変わった)" % (rel, SCRIPT_COMMIT_SHORT))
+        want_last = FIX_COMMIT_SHORT if rel == SEAL_GATE_REL else SCRIPT_COMMIT_SHORT          # 記録の後に変わってよいのは、封の門のこの 1 commit だけ
+        out.extend(last_commit_problems(root, rel, want_last))
     rec = PR.added_commits(root, PREFIX + RECORD_REL)
     if len(rec) != 1 or not rec[0].startswith(RECORD_COMMIT_SHORT):
         out.append(u"記録を足した commit が %s でない" % RECORD_COMMIT_SHORT)
@@ -1317,6 +1344,9 @@ D18 文書の commit の字 48cf7135 を 1 字替える・9a8b246d を 1 字替�
 D19 §3 の見出しの「記録に欄の無い読み」を消す・「測った数ではない」を消す                         -> sec3
 D20 §3 の外に「2 つの類だけだった」を足す                                                       -> sec3
 D21 §4 の「36 本」を「37 本」に                                                               -> sec4・lines
+D33 §4 の追記(36a52eec)の行を消す                                                        -> lines・commits
+D34 追記の commit の字 36a52eec を 1 字替える                                                -> commits・lines
+F11 封の門の sha256 の写しを違う値に                                                         -> sha
 D22 §2 の表のセル 1 つ(壊し方 R12a の断ったと別の規則で断ったの取り違え・作れたと通したの取り違え)を替える -> lines
 D23 「断った 1 本の fact は、記録の「62 本」の数に入っていない」を消す                           -> phrases・lines
 D24 引用の外に「XBRL を作れる」「AI に任せられる」「会社の AI がこの型で書ける」を足す             -> affirm
@@ -1541,6 +1571,7 @@ MUTATIONS = (
     (u"F5 記録の step の欄を 1 字替える", lambda c: c.rec.__setitem__(u"step", c.rec[u"step"].replace(u"XJ0", u"XJ1", 1)), (u"sha",)),
     (u"F6 封の写しの sha256 の写しを違う値に", lambda c: c.shas.__setitem__(SEAL_REL, u"0" * 64), (u"sha",)),
     (u"F7 指示書の sha256 の写しを違う値に", lambda c: c.shas.__setitem__(INSTR_REL, u"0" * 64), (u"sha",)),
+    (u"F11 封の門の sha256 の写しを違う値に(36a52eec の中身の字の留め)", lambda c: c.shas.__setitem__(SEAL_GATE_REL, u"0" * 64), (u"sha",)),
     (u"F8 記録の script の決めの字の壊し方を 1 つ消す", lambda c: c.rec[u"script の決めの字"][u"壊し方"].pop(), (u"sha",)),
     (u"F9 記録の材料の書類の本数を 66 に", lambda c: c.rec[u"材料"].__setitem__(u"書類の本数", 66), (u"recount",)),
     (u"F10 記録の材料の file 名の並びの sha256 を 1 字替える", lambda c: c.rec[u"材料"].__setitem__(u"書類の file 名の並びの sha256", u"0" + c.rec[u"材料"][u"書類の file 名の並びの sha256"][1:]), (u"recount",)),
@@ -1595,6 +1626,8 @@ MUTATIONS = (
     (u"D18a 文書の commit の字 48cf7135 を 1 字替える", lambda c: rep(c, u"48cf7135", u"48cf7136", count=100), (u"commits",)),
     (u"D18b 文書の commit の字 9a8b246d を 1 字替える", lambda c: rep(c, u"9a8b246d", u"9a8b246e", count=100), (u"commits",)),
     (u"D18c 文書に知らない commit の字を足す", lambda c: add_doc(c, u"commit 1a2b3c4d。"), (u"commits",)),
+    (u"D33 §4 の追記(36a52eec)の行を消す", lambda c: rep(c, [ln for ln in c.doc.splitlines() if ln.startswith(u"- 追記(2026-11-23)")][0] + u"\n", u""), (u"lines", u"commits")),
+    (u"D34 追記の commit の字 36a52eec を 1 字替える", lambda c: rep(c, u"36a52eec", u"36a52eed", count=100), (u"commits", u"lines")),
     (u"D19a §3 の見出しの「記録に欄の無い読み」を消す", lambda c: rep(c, u"## §3 記録に欄の無い読み(", u"## §3 X("), (u"sec3",)),
     (u"D19b §3 の見出しの「測った数ではない」を消す", lambda c: rep(c, u"測った数ではない。出どころは", u"X。出どころは"), (u"sec3",)),
     (u"D20 §3 の外に「2 つの類だけだった」を足す", lambda c: add_doc(c, u"型の外の fact は 2 つの類だけだった。"), (u"sec3",)),
@@ -2102,7 +2135,10 @@ class RealTest(unittest.TestCase):
 
     def test_f_3_the_blob_check_lists_the_five_frozen_files_at_their_commits(self):
         self.assertEqual([SEAL_REL, SCRIPT_REL, SEAL_GATE_REL, INSTR_REL, RECORD_REL], list(BLOB_AT))
-        self.assertEqual([SEAL_COMMIT_SHORT, SCRIPT_COMMIT_SHORT, SCRIPT_COMMIT_SHORT, SCRIPT_COMMIT_SHORT, RECORD_COMMIT_SHORT], list(BLOB_AT.values()))
+        self.assertEqual([SEAL_COMMIT_SHORT, SCRIPT_COMMIT_SHORT, FIX_COMMIT_SHORT, SCRIPT_COMMIT_SHORT, RECORD_COMMIT_SHORT], list(BLOB_AT.values()))
+        self.assertEqual([SEAL_COMMIT_SHORT], HISTORY[SEAL_REL])
+        self.assertEqual([SCRIPT_COMMIT_SHORT, FIX_COMMIT_SHORT], HISTORY[SEAL_GATE_REL])          # 履歴は 2 つちょうど
+        self.assertEqual(u"36a52eec", FIX_COMMIT_SHORT)
         self.assertEqual((SEAL_COMMIT_SHORT, SCRIPT_COMMIT_SHORT, RECORD_COMMIT_SHORT), DOC_COMMITS)
         self.assertEqual((u"8f3ec76b", u"48cf7135", u"9a8b246d"), DOC_COMMITS)
 
@@ -2118,6 +2154,33 @@ class RealTest(unittest.TestCase):
         with open(os.path.join(r.d, PREFIX, "measure/s.py"), "a", encoding="utf-8") as fh:
             fh.write(u"# 結果の便で足した 1 行\n")
         self.assertNotEqual([], blob_problems(r.d, PREFIX, at))
+        # 封の門の留め(36a52eec): 履歴は 2 つちょうど・最後の commit・1 file だけ・中身は blob と sha256 の字。"""
+        g = "tests/g.py"
+        r = PR.Repo()
+        r.put(g)
+        c1 = r.commit(g)
+        r.put(g)
+        c2 = r.commit(g)
+        want = collections.OrderedDict([(g, [c1[:8], c2[:8]])])
+        self.assertEqual([], history_problems(r.d, want))
+        self.assertEqual([], last_commit_problems(r.d, g, c2[:8]))
+        self.assertEqual([], fix_commit_problems(r.d, c2[:8], g))
+        at = {g: c2[:8]}
+        self.assertEqual([], blob_problems(r.d, PREFIX, at))
+        self.assertNotEqual([], blob_problems(r.d, PREFIX, {g: c1[:8]}))                       # 36a52eec より前の中身
+        self.assertNotEqual([], history_problems(r.d, collections.OrderedDict([(g, [c1[:8]])])))          # 履歴の長さが 1 つ足りない
+        self.assertNotEqual([], history_problems(r.d, collections.OrderedDict([(g, [c2[:8], c1[:8]])])))          # 順が逆
+        self.assertNotEqual([], last_commit_problems(r.d, g, c1[:8]))
+        r.put(g)
+        r.commit(g)                                                                             # もう 1 回変わる
+        self.assertNotEqual([], history_problems(r.d, want))
+        self.assertNotEqual([], last_commit_problems(r.d, g, c2[:8]))
+        r.put(g)
+        r.put("tests/other.py")
+        c4 = r.commit(g, "tests/other.py")                                                      # 2 file を触る commit
+        self.assertNotEqual([], fix_commit_problems(r.d, c4[:8], g))
+        self.assertEqual(u"b579c678be3a6c8ae527aed19b99b1ccddbf69f59b82d07d762bc7bf552f02be", SHA_PIN[SEAL_GATE_REL])
+        self.assertEqual(SEAL_GATE_FIXED_SHA, sha_file(SEAL_GATE_REL))
 
 
 class MutationTest(unittest.TestCase):
