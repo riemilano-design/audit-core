@@ -1,0 +1,35 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>監査の報告 ― 便 TR3(2026-11-25)</title><style>@page{size:A4;margin:14mm 13mm}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#16233b;font-size:9.5pt;line-height:1.6;max-width:190mm;margin:8mm auto;padding:0 4mm}
+h1{font-size:15pt;margin:0 0 3mm}h2{font-size:12pt;margin:6mm 0 2mm;border-bottom:.4mm solid #16233b;padding-bottom:1mm}
+p{margin:1.5mm 0}table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:9pt}
+th{background:#f3f5f9;text-align:left;font-weight:700}th,td{border:.25mm solid #d9dee8;padding:1.2mm 1.8mm;vertical-align:top}
+tr{break-inside:avoid}hr{border:0;border-top:.3mm solid #d9dee8;margin:5mm 0 2mm}small{color:#51607a;font-size:8.5pt}
+.notice{border-left:1.2mm solid #b7791f;background:#fbf1dc;padding:3mm 5mm;margin:0 0 5mm;line-height:1.65}</style></head><body><h1>監査の報告 ― 便 TR3(2026-11-25)</h1>
+<div class="notice">便 TR3 の結果の前の独立監査(1 回)と、直しの差分の確認。監査の席は凍結した file と資料・材料を読み直し、script を別の folder で走らせ直した。木は書いていない。</div>
+<div class="notice">数・script・封との一致に直しは要らなかった。RESULT の文面 3 か所と表の注 1 つを直して GO。</div>
+<h2>判定: GO(文面を直す条件つき → 直して、差分の確認で GO のまま)</h2>
+<h2>数の表</h2>
+<table><thead><tr><th>区分</th><th>件数</th><th>内容</th></tr></thead><tbody>
+<tr><td>指摘して直した</td><td>3</td><td>RESULT の文面(と、補足の分母の注)</td></tr>
+<tr><td>指摘したが直さない</td><td>0</td><td></td></tr>
+<tr><td>確かめられなかった</td><td>1</td><td>確認済み 172 の読みの正しさ(RESULT §4 が自分で認めている)</td></tr>
+<tr><td>合った</td><td>14</td><td>下に要点</td></tr>
+</tbody></table>
+<h2>指摘して直した</h2>
+<table><thead><tr><th>番号</th><th>どこ</th><th>何</th><th>重さ</th><th>直し</th></tr></thead><tbody>
+<tr><td>1</td><td>RESULT §3 点検していない 31 の分け</td><td>「増減率の言い方 18」は司令塔の目の分けで、script では再現できなかった。機械で分けると % の付いた率 21・表の増減の列 7・その他 3</td><td>小〜中</td><td>機械で分けた数(21・7・3)に直し、監査の席が script で数えたと書いた</td></tr>
+<tr><td>2</td><td>RESULT §2 TR3-1</td><td>判定欄の頭が「当たり」で、外れを当たりに寄せる読み方を許す。封 §0 の意味(正しい数を「合わない」と言う)では 27 で、封の外れ方もそのまま成り立った</td><td>小</td><td>「外れ(封 §0 の意味)」を先に書き、封 §3 の機械の判定だけなら 0、と併記した</td></tr>
+<tr><td>3</td><td>RESULT §2 TR3-4</td><td>「中身は当たり」は薄い。乙・丙は 11 枚中 7 枚(64%)で、1 枚あたりの読み違いは甲が最多(甲 3.25・乙 1.75・丙 2.33)</td><td>小</td><td>「字の上では当たり(14 / 27)、趣旨は支持されない」に直した</td></tr>
+<tr><td>補足</td><td>RESULT §1 比べの表</td><td>TR1 の資料の拾った数(270)は誤りの項目を除き、数えた字(341)は除いていない。分母が揃っていない</td><td>なし</td><td>表の注に書いた</td></tr>
+</tbody></table>
+<h2>合った(要点)</h2>
+<ul>
+<li>拾い方(<code>check_tr1.extract</code>)と照合(<code>check_tr1.verify</code>)は 1 字も変えていない。tr1・tr2・core・adapters に差分なし(engine 0 行)。</li>
+<li>check_tr3.py と tally_tr3.py を別の folder で走らせ直すと、record.json の sha256 が一致し、check と miss も同一だった。</li>
+<li>RESULT の数は記録と合う。</li>
+<li>「27 は全部が拾い方の読み違い・書く席の誤りは 0」と、形の内訳 18 / 6 / 2 / 1 を、資料の字で全件確かめて合った(増減の数を再計算し、借入金と従業員数は材料と合うことを見た)。</li>
+<li>拾わなかった字 11 は全部が丙(3 枚)の表の増減・増減率の列(5 + 3 + 3)。12.0%(31 / 259)・4.1%(11 / 270)・14 / 27 も合う。</li>
+<li>比べの数え方(誤りを入れた項目を参照する数を除く)は確認事項の意図に合う。</li>
+<li>repo に入る file に、実在の会社の名・値は無い。</li>
+</ul>
+<p><small>凍結の sha256: SEAL.md・BRIEF_WRITE_TR3.md・check_tr3.py・tally_tr3.py・record.json の 5 つは監査の前後で freeze_before.txt と一致。RESULT.md は監査の指摘の文面直しでだけ変わった。</small></p></body></html>
