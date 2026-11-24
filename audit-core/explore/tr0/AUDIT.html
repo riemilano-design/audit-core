@@ -1,0 +1,38 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>監査の報告 ― 便 TR0(2026-11-24)</title><style>@page{size:A4;margin:14mm 13mm}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#16233b;font-size:9.5pt;line-height:1.6;max-width:190mm;margin:8mm auto;padding:0 4mm}
+h1{font-size:15pt;margin:0 0 3mm}h2{font-size:12pt;margin:6mm 0 2mm;border-bottom:.4mm solid #16233b;padding-bottom:1mm}
+p{margin:1.5mm 0}table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:9pt}
+th{background:#f3f5f9;text-align:left;font-weight:700}th,td{border:.25mm solid #d9dee8;padding:1.2mm 1.8mm;vertical-align:top}
+tr{break-inside:avoid}hr{border:0;border-top:.3mm solid #d9dee8;margin:5mm 0 2mm}small{color:#51607a;font-size:8.5pt}
+.notice{border-left:1.2mm solid #b7791f;background:#fbf1dc;padding:3mm 5mm;margin:0 0 5mm;line-height:1.65}</style></head><body><h1>監査の報告 ― 便 TR0(2026-11-24)</h1>
+<div class="notice">この報告は、便 TR0 の数と手順を、作った席とは別の監査の席が、結果を commit する前に確かめたものです。商品の出力(資料の点検レポート)ではありません。監査の席は読むだけで、再現の出力は repo の外にだけ書いた。</div>
+<p><b>判定: GO</b>(数と予測の判定は動かない)</p>
+<table><thead><tr><th>区分</th><th>件数</th><th>意味</th></tr></thead><tbody>
+<tr><td>指摘して直した</td><td>4</td><td>結果の文書と script の説明の字を直した(動きは変えない)</td></tr>
+<tr><td>指摘したが直さない</td><td>1</td><td>予測 TR0-1 の表は字の上の判定のまま(封を書き換えない)</td></tr>
+<tr><td>確かめられなかった</td><td>4</td><td>読む席の読みの再評価・席の起動記録・桁の字の衝突・点検レポートの全枚</td></tr>
+<tr><td>合った</td><td>7</td><td>封の不変・engine 0 行・再現の完全一致・数の一致・予測の判定・§3 の読み・点検レポートの決まり</td></tr>
+</tbody></table>
+<h2>1. 指摘して直した ― 4 件</h2>
+<table><thead><tr><th>#</th><th>指摘</th><th>直し</th></tr></thead><tbody>
+<tr><td>1</td><td>材料を作る script の説明「正解は読まない」が事実と違う(期の日付だけ正解の folder から読む)</td><td>説明の字を直し、結果の文書 §4 に 1 行足した</td></tr>
+<tr><td>2</td><td>前期の見分け方と増減の字の列挙が、封 §3 の字と少し違う</td><td>結果の文書 §4 に書いた</td></tr>
+<tr><td>3</td><td>増減率の照合が一度も働いていないことが §4 に無い</td><td>結果の文書 §4 に書いた(照合 301 = 金額 292・増減額 9)</td></tr>
+<tr><td>4</td><td>「人の判断が必要」の説明の字が、未決の訳を問わず同じで言い過ぎになりうる</td><td>結果の文書 §4 に書いた</td></tr>
+</tbody></table>
+<h2>2. 指摘したが直さない ― 1 件</h2>
+<table><thead><tr><th>#</th><th>指摘</th><th>訳</th></tr></thead><tbody>
+<tr><td>1</td><td>TR0-1 を「中身は外れ」と読む字は §3 に置き、表の欄には入れないほうがよい</td><td>表は「字の上では当たり」のまま、読みは §3 にある。監査も許容とした</td></tr>
+</tbody></table>
+<h2>3. 合った ― 7 件</h2>
+<table><thead><tr><th>#</th><th>確かめた点</th><th>どう確かめたか</th></tr></thead><tbody>
+<tr><td>1</td><td>封の文書が封の commit から変わっていない</td><td>指紋と差分</td></tr>
+<tr><td>2</td><td>engine の変更 0 行。点検は verify_external を読むだけで呼ぶ</td><td>差分と script を読んだ</td></tr>
+<tr><td>3</td><td>材料・点検・誤りの入れ方・集計を走らせ直し、出力が完全一致</td><td>repo の外の新しい folder で再現</td></tr>
+<tr><td>4</td><td>結果の文書の数が記録と一致</td><td>内訳を照らした</td></tr>
+<tr><td>5</td><td>予測 TR0-2〜6 は字のとおり当たり、TR0-1 の扱いは妥当</td><td>要確認 23 の文脈を全件読んだ</td></tr>
+<tr><td>6</td><td>§3 の読み(8 席のうち 7 席が増減額に気づいた など)が裏付けられる</td><td>読む席の答えを読んだ</td></tr>
+<tr><td>7</td><td>点検レポートが照合の符号を出さず、確認済みの行ごとに確かめたことを書き、点検していない数を分ける</td><td>数枚を読み、字を探した</td></tr>
+</tbody></table>
+<hr>
+<p><small>凍結の指紋(監査の始めと終わりで 9 file とも一致)。直しの後: build_tr0.py 4f7f85a9…・RESULT.md 23a7564c…</small></p></body></html>
