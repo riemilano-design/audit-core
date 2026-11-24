@@ -231,6 +231,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-23: UM2(別の席が形を決めた架空の会計ソフトの file 一式から、資料の指定から人が読む版の資料までの 7 段を 2 期ぶん通す測定。0 USD。封 docs/UNIVERSAL_THROUGH_SEAL_2026-11-23.md 9ff5af9e)の script 2 本(確かめる側と答えを知っている側)。
     # XBRL・EDINET・開示の書類・置き場・道具の venv は 1 つも使わない。engine(core/・adapters/)は 0 行。素材・正解・材料の束・置き場・資料は repo に置かない(scratchpad)。記録は記録の commit で足す(script だけここで届ける)。
     "measure/universal_through_check_2026-11-23.py", "measure/universal_through_tally_2026-11-23.py",
+    # 2026-11-24: UM3(UM2 と同じ素材を型も検査も持たない AI の席に資料まで作らせ、作る過程を数える測定。0 USD。封 docs/UNIVERSAL_PROCESS_SEAL_2026-11-24.md 6c4457fe)の script 1 本(席の folder を作る・会話の記録を数える・行ごとに正解と照合する・抜き書きを書く)。
+    # XBRL・EDINET・開示の書類・置き場・道具の venv は 1 つも使わない。engine(core/・adapters/)は 0 行。素材・正解・席の folder・会話の記録・抜き書きは repo に置かない(scratchpad)。記録は記録の commit で足す(script だけここで届ける)。
+    "measure/universal_process_tally_2026-11-24.py",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (
