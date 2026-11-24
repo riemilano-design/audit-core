@@ -1,0 +1,35 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>監査の報告 ― 便 TR4(2026-11-25)</title><style>@page{size:A4;margin:14mm 13mm}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#16233b;font-size:9.5pt;line-height:1.6;max-width:190mm;margin:8mm auto;padding:0 4mm}
+h1{font-size:15pt;margin:0 0 3mm}h2{font-size:12pt;margin:6mm 0 2mm;border-bottom:.4mm solid #16233b;padding-bottom:1mm}
+p{margin:1.5mm 0}table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:9pt}
+th{background:#f3f5f9;text-align:left;font-weight:700}th,td{border:.25mm solid #d9dee8;padding:1.2mm 1.8mm;vertical-align:top}
+tr{break-inside:avoid}hr{border:0;border-top:.3mm solid #d9dee8;margin:5mm 0 2mm}small{color:#51607a;font-size:8.5pt}
+.notice{border-left:1.2mm solid #b7791f;background:#fbf1dc;padding:3mm 5mm;margin:0 0 5mm;line-height:1.65}</style></head><body><h1>監査の報告 ― 便 TR4(2026-11-25)</h1>
+<div class="notice">便 TR4 の結果の前の独立監査(1 回)と、直しの差分の確認。監査の席は資料と札を写した別の folder で script を走らせ直した。木は書いていない。</div>
+<div class="notice">封の file は 1 字も変わらず、単体試験 20 件が通り、変異は 11 / 11 で赤。記録は完全に再現した。RESULT の文面 2 か所を直して GO。</div>
+<h2>判定: GO(文面を直す条件つき → 直して、差分の確認で GO のまま)</h2>
+<h2>数の表</h2>
+<table><thead><tr><th>区分</th><th>件数</th><th>内容</th></tr></thead><tbody>
+<tr><td>指摘して直した</td><td>2</td><td>RESULT の文面(A1・A2)</td></tr>
+<tr><td>指摘したが直さない</td><td>0</td><td></td></tr>
+<tr><td>確かめられなかった</td><td>2</td><td>書く席が札を誤る形・席が自分から隠す形(どちらも RESULT §4 が測っていないと書いている)</td></tr>
+<tr><td>合った</td><td>14</td><td>下に要点</td></tr>
+</tbody></table>
+<h2>指摘して直した</h2>
+<table><thead><tr><th>番号</th><th>どこ</th><th>何</th><th>重さ</th><th>直し</th></tr></thead><tbody>
+<tr><td>A1</td><td>RESULT §3 軽量確認 35 の内訳</td><td>内訳(株主資本等変動計算書の列・単体の枠)は TR1 で数えたもので、TR4 の記録には無い</td><td>軽微</td><td>「TR4 では内訳を数えていない」と書いた</td></tr>
+<tr><td>A2</td><td>RESULT 冒頭の太字</td><td>「言い過ぎは TR3 の 27 から 0」は、資料も拾い方も判定も違うものの比べで強すぎる。要修正・精査が 0 なので言い過ぎ 0 は当然</td><td>軽微</td><td>「新しい資料では要修正・精査 0(したがって言い過ぎも 0)。TR3 の 27 は別の資料の数で、同じ資料での比べではない」に直した</td></tr>
+</tbody></table>
+<h2>合った(要点)</h2>
+<ul>
+<li>封の commit の file は凍結のまま(<code>git diff 547f9e18</code> が空)。test_tr4.py は 20 件 OK。mutate_tests_tr4.py は赤 11 / 11(読みと比べる判定 M3 も赤)。</li>
+<li>check_tr4.py・tally_tr4.py・extra_a2_tr4.py で record.json を完全に再現した。</li>
+<li>札は照合先を選ぶ索引としてだけ使われ、基準 A は読むだけ。確認済みは engine の一致を要る(補足 (a′) の 245 が全部 VALUE_MISMATCH で止まった)。</li>
+<li>要修正・精査 0・札の付かない数 0 は空振りでない。日付・見出しの番号・会社の番号を除く数字の残り 103 を全部見て、取りこぼしは無かった。拾った数 284 は札 284 と一致。</li>
+<li>TR4-1 の外れの読み(判定は単位をまだ読みから受け取る)は事実。第 39 社の表の従業員数 150 を、単位「人」なら正しい、「百万円」なら正しくないと判定する。</li>
+<li>予測の判定は記録と封の字に合う(TR4-1・TR4-7 外れ、ほか当たり)。</li>
+<li>誤り (a)〜(e) の入れ方は封の字のとおり。(b) の止まらなかった 7 は、数の前に当期の字が無い形。うち 3 は替えた数が直後の「前期の」の数と同額。(d) の 1 は「〜の増収となる X 百万円」の形。</li>
+<li>補足 (a′) は結果の後に足したと明記され、予測の判定に使われていない。</li>
+<li>engine(core/・adapters/)と tr1・tr2 は 0 行。repo に入る file に実在の会社の名・値は無い。</li>
+</ul>
+<p><small>凍結の sha256: 封の 5 file と mutate・check・tally・extra_a2・record.json は監査の前後で freeze_before.txt と一致。RESULT.md は監査の指摘の文面直しでだけ変わった。</small></p></body></html>
