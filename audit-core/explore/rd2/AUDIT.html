@@ -1,0 +1,35 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>監査の報告 ― 便 RD2(2026-11-24)</title><style>@page{size:A4;margin:14mm 13mm}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#16233b;font-size:9.5pt;line-height:1.6;max-width:190mm;margin:8mm auto;padding:0 4mm}
+h1{font-size:15pt;margin:0 0 3mm}h2{font-size:12pt;margin:6mm 0 2mm;border-bottom:.4mm solid #16233b;padding-bottom:1mm}
+p{margin:1.5mm 0}table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:9pt}
+th{background:#f3f5f9;text-align:left;font-weight:700}th,td{border:.25mm solid #d9dee8;padding:1.2mm 1.8mm;vertical-align:top}
+tr{break-inside:avoid}hr{border:0;border-top:.3mm solid #d9dee8;margin:5mm 0 2mm}small{color:#51607a;font-size:8.5pt}
+.notice{border-left:1.2mm solid #b7791f;background:#fbf1dc;padding:3mm 5mm;margin:0 0 5mm;line-height:1.65}</style></head><body><h1>監査の報告 ― 便 RD2(2026-11-24)</h1>
+<div class="notice">この報告は、便 RD2 の数と手順を、作った席とは別の監査の席が、結果を commit する前に確かめたものです。商品の出力(できた資料の点検)ではありません。監査の席は読むだけで、木を変えていません。</div>
+<p><b>判定: GO</b>(結果を commit してよい)</p>
+<table><thead><tr><th>区分</th><th>件数</th><th>意味</th></tr></thead><tbody>
+<tr><td>指摘して直した</td><td>3</td><td>監査の指摘を受けて、結果の文書を直した(文書だけ)</td></tr>
+<tr><td>指摘したが直さない</td><td>0</td><td></td></tr>
+<tr><td>確かめられなかった</td><td>1</td><td>監査の手元では再現できなかった。結果の文書は司令塔の読みと分かる書き方にしてある</td></tr>
+<tr><td>合った</td><td>5</td><td>確かめた点が、封・記録と合った</td></tr>
+</tbody></table>
+<h2>1. 指摘して直した ― 3 件</h2>
+<table><thead><tr><th>#</th><th>指摘</th><th>直し</th></tr></thead><tbody>
+<tr><td>1</td><td>第 31 社の席の値は、事業収益の要素のほか、別の 2 つの要素とも同じ値。「事業収益の要素と一致」は唯一の一致ではない</td><td>結果の文書 §3 に、同じ値が別の 2 つの要素にも在ることを書き足した</td></tr>
+<tr><td>2</td><td>第 34 社の止めすぎを素材の変換の欠陥とする読みは、監査の手元では再現できない</td><td>「司令塔が貯めた行の列の見出しを見た読み」「変換の直しはこの便ではしない」と書き足した</td></tr>
+<tr><td>3</td><td>結果の文書が参照する監査の報告の file が無い</td><td>この file を置いた</td></tr>
+</tbody></table>
+<h2>2. 確かめられなかった ― 1 件</h2>
+<table><thead><tr><th>#</th><th>点</th><th>訳</th></tr></thead><tbody>
+<tr><td>1</td><td>第 34 社と第 38 社で、表を CSV に直す変換の列の見出しがずれたこと</td><td>監査の script では変換の中を見ていない。止めすぎが出た事実までは確かめた</td></tr>
+</tbody></table>
+<h2>3. 合った ― 5 件</h2>
+<table><thead><tr><th>#</th><th>確かめた点</th><th>どう確かめたか</th></tr></thead><tbody>
+<tr><td>1</td><td>封と決めの紙が、封の commit から変わっていない</td><td>封の commit との差分が空</td></tr>
+<tr><td>2</td><td>素材と正解を作る script が封のとおり。engine の変更は 0 行</td><td>script を読んだ。engine の folder の状態を見た</td></tr>
+<tr><td>3</td><td>結果の文書の数が記録と一致し、予測 5 本の判定が封の字のとおり</td><td>監査の席が集計を走らせ直し、出力が記録と完全一致。前の便(RD1)の列も、その記録と一致</td></tr>
+<tr><td>4</td><td>記録と結果の文書に、会社の名・書類の番号・file の名・金額・日付が無い</td><td>字を探した(文書の日付だけ)</td></tr>
+<tr><td>5</td><td>止めた正しい行 13 の内訳と、社・項目の割り当てが結果の文書と合う</td><td>司令塔の確かめの script を走らせた</td></tr>
+</tbody></table>
+<hr>
+<p><small>凍結の指紋(監査の始めと終わりで 6 file とも一致): build_rd2.py f91ef952… ・tally_rd2.py 3067635c… ・record.json 7d5f7fdb… ・RESULT.md 17bebf6f…(直しの後 1c57839d…)・SEAL.md 11e3ae7f… ・BRIEF_DECIDE_RD2.md e878ebd3…</small></p></body></html>

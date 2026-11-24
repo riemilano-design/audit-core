@@ -1,0 +1,39 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>監査の報告 ― 便 AQ0(2026-11-24)</title><style>@page{size:A4;margin:14mm 13mm}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#16233b;font-size:9.5pt;line-height:1.6;max-width:190mm;margin:8mm auto;padding:0 4mm}
+h1{font-size:15pt;margin:0 0 3mm}h2{font-size:12pt;margin:6mm 0 2mm;border-bottom:.4mm solid #16233b;padding-bottom:1mm}
+p{margin:1.5mm 0}table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:9pt}
+th{background:#f3f5f9;text-align:left;font-weight:700}th,td{border:.25mm solid #d9dee8;padding:1.2mm 1.8mm;vertical-align:top}
+tr{break-inside:avoid}hr{border:0;border-top:.3mm solid #d9dee8;margin:5mm 0 2mm}small{color:#51607a;font-size:8.5pt}
+.notice{border-left:1.2mm solid #b7791f;background:#fbf1dc;padding:3mm 5mm;margin:0 0 5mm;line-height:1.65}</style></head><body><h1>監査の報告 ― 便 AQ0(2026-11-24)</h1>
+<div class="notice">この報告は、便 AQ0 の数と手順を、作った席とは別の監査の席が、結果を commit する前に確かめたものです。商品の出力(できた資料の点検)ではありません。監査の席は読むだけで、木を変えていません(再現の出力は repo の外にだけ書いた)。</div>
+<p><b>判定: GO</b>(結果を commit してよい。数と予測の判定は動かない)</p>
+<table><thead><tr><th>区分</th><th>件数</th><th>意味</th></tr></thead><tbody>
+<tr><td>指摘して直した</td><td>3</td><td>監査の指摘を受けて、結果の文書を直した(文書だけ)</td></tr>
+<tr><td>指摘したが直さない</td><td>0</td><td></td></tr>
+<tr><td>確かめられなかった</td><td>3</td><td>監査の手元では確かめられなかった。結果の文書の読みは、言える所までの書き方にしてある</td></tr>
+<tr><td>合った</td><td>7</td><td>確かめた点が、封・記録と合った</td></tr>
+</tbody></table>
+<h2>1. 指摘して直した ― 3 件</h2>
+<table><thead><tr><th>#</th><th>指摘</th><th>直し</th></tr></thead><tbody>
+<tr><td>1</td><td>結果の文書 §3 が、席の言葉をかぎ括弧で引いているが、返事の file の字と同じではない</td><td>引用をやめ、「言い換え」と分かる書き方にした</td></tr>
+<tr><td>2</td><td>第 38 社・第 39 社の席の言葉は返事の file に無く、席の終わりの報告から写したもの。出どころが分からない</td><td>「終わりの報告(返事の file の外)で」と出どころを書き足した。第 38 社の食い違いは監査の席が画面で確かめたことも書いた</td></tr>
+<tr><td>3</td><td>「版 O の席は正しく埋めた値を 1 つも悪い値に替えなかった」だけだと、全部の行が残ったように読める</td><td>版 O で正解に届かなかった 1 行が「わからない」にした従業員数であることを書き足した</td></tr>
+</tbody></table>
+<h2>2. 確かめられなかった ― 3 件</h2>
+<table><thead><tr><th>#</th><th>点</th><th>訳</th></tr></thead><tbody>
+<tr><td>1</td><td>第 40 社の A2 の「もう一方」の値が、別の表に在る非支配株主の分を含む連結の数ではないこと</td><td>画面の行は確かめたが、別の表の連結の数とは比べていない</td></tr>
+<tr><td>2</td><td>人の代わりの席が、画面だけを見たかどうか</td><td>返事の file からは見えない</td></tr>
+<tr><td>3</td><td>画面の見た目(ブラウザでの表示)</td><td>HTML の字は読んだが、描画は見ていない</td></tr>
+</tbody></table>
+<h2>3. 合った ― 7 件</h2>
+<table><thead><tr><th>#</th><th>確かめた点</th><th>どう確かめたか</th></tr></thead><tbody>
+<tr><td>1</td><td>封と頼みの紙が封の commit から変わっていない。engine の変更は 0 行</td><td>封の commit との差分が空。engine の folder の状態を見た</td></tr>
+<tr><td>2</td><td>画面を組む script が封のとおり(A1・A2 の出し方、B の行は RD2 の照合で選び正解を読まない、候補の探し方、版 F の入れ替え、照合の符号を見せない)</td><td>script を読み、走らせ直した。O 11 枚・F 8 枚の画面と対応の file が、元のものとバイト単位で一致</td></tr>
+<tr><td>3</td><td>集計の script が封のとおりに数える</td><td>走らせ直した出力が記録と完全一致。B の行 14 は RD2 の記録から出した 14 と一致</td></tr>
+<tr><td>4</td><td>結果の文書の数が記録と一致し、予測 6 本の判定が封の字のとおり</td><td>数を 1 つずつ照らした(席 19・問い 57・足りない 5 を含む)</td></tr>
+<tr><td>5</td><td>結果の文書 §3 の読み(崩れた 3 行は従業員数、項目の定めを求めた 2 行は正しく選んだ)</td><td>司令塔の確かめの script を走らせた。言い過ぎは見当たらない</td></tr>
+<tr><td>6</td><td>記録と結果の文書に、会社の名・書類の番号・file の名・金額が無い</td><td>字を探した(日付は文書の日付と封の commit への言及だけ)</td></tr>
+<tr><td>7</td><td>監査の報告を組む道具が、入力の字を足さずに組むだけ</td><td>script を読んだ。RD2 の監査の報告を組み直し、前に組んだものと一致</td></tr>
+</tbody></table>
+<hr>
+<p><small>凍結の指紋(監査の始めと終わりで 7 file とも一致): SEAL.md 53255a27… ・BRIEF_PERSON_AQ0.md 8f2b4c2b… ・build_aq0.py 299d93be… ・tally_aq0.py ebdbdc3a… ・record.json e787b079… ・RESULT.md ae5b1d5c…(直しの後 f394be4d…)・audit_html.py a759a183…</small></p></body></html>
