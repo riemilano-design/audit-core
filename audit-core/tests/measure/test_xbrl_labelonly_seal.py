@@ -234,6 +234,9 @@ DECLARED_NEW_AFTER_SEAL = (
     # 2026-11-24: UM3(UM2 と同じ素材を型も検査も持たない AI の席に資料まで作らせ、作る過程を数える測定。0 USD。封 docs/UNIVERSAL_PROCESS_SEAL_2026-11-24.md 6c4457fe)の script 1 本(席の folder を作る・会話の記録を数える・行ごとに正解と照合する・抜き書きを書く)。
     # XBRL・EDINET・開示の書類・置き場・道具の venv は 1 つも使わない。engine(core/・adapters/)は 0 行。素材・正解・席の folder・会話の記録・抜き書きは repo に置かない(scratchpad)。記録は記録の commit で足す(script だけここで届ける)。
     "measure/universal_process_tally_2026-11-24.py",
+    # 2026-11-24: UM4(先に普通の AI の席に全部の数を埋めさせ、後から別の席に根拠を調べさせる作り方を新しい素材で測る測定。0 USD。封 docs/UNIVERSAL_FILL_VERIFY_SEAL_2026-11-24.md ce005f98)の script 1 本(素材の形の検査・席の folder を作る・壊した表を作る・確かめの状態を付ける・型の席の束に便 UM2 の検査を当てる・会話の記録を数える・行ごとに正解と照合する・抜き書きを書く)。
+    # XBRL・EDINET・開示の書類・置き場・道具の venv は 1 つも使わない。engine(core/・adapters/)は 0 行。素材・正解・席の folder・会話の記録・抜き書き・状態つきの資料は repo に置かない(scratchpad)。記録は記録の commit で足す(script だけここで届ける)。
+    "measure/universal_fill_verify_2026-11-24.py",
 )
 #: この便が読み込む前の便の script・読むだけの記録(封の commit の blob と byte が同じでなければならない)
 READ_ONLY_RELS = (

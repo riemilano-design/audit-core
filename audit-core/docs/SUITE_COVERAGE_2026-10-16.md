@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **370 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **371 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 297 |
+| `tests/measure` | 298 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -520,6 +520,9 @@ UM3(UM2 と同じ素材を型も検査も持たない AI の席に資料まで�
 
 **2026-11-24 に +1(50)**(`tests/measure/test_universal_process_result.py`。
 UM3 の結果の門(記録 `fixtures/universal/um3/record.json`・結果の文書 `docs/UNIVERSAL_PROCESS_RESULT_2026-11-24.md` を縛る。集計の script と記録の `予測` の欄の当たり外れを封の字の境から決め直す。結果の文書の全部の行を記録から組み直して照らす。席の folder・会話の記録・素材・正解は読まない。通信も鍵も使わない。API は呼ばない)。369 → 370(`tests/measure` 296 → 297)。
+
+**2026-11-24 に +1(51)**(`tests/measure/test_universal_fill_verify_seal.py`。
+UM4(先に普通の AI の席に全部の数を埋めさせ、後から別の席に根拠を調べさせる作り方を、型の席 + 検査と並べて新しい素材で数える。0 費用・席は呼ばない。封 `docs/UNIVERSAL_FILL_VERIFY_SEAL_2026-11-24.md`)の script `measure/universal_fill_verify_2026-11-24.py` の封の門。架空の 1 社の file と会話の記録を tmp に組む(本番の 4 社・開発の素材は repo に写さない)。置き場も道具も通信も鍵も使わない)。370 → 371(`tests/measure` 297 → 298)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
