@@ -1,0 +1,35 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>監査の報告 ― 便 TR2(2026-11-25)</title><style>@page{size:A4;margin:14mm 13mm}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#16233b;font-size:9.5pt;line-height:1.6;max-width:190mm;margin:8mm auto;padding:0 4mm}
+h1{font-size:15pt;margin:0 0 3mm}h2{font-size:12pt;margin:6mm 0 2mm;border-bottom:.4mm solid #16233b;padding-bottom:1mm}
+p{margin:1.5mm 0}table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:9pt}
+th{background:#f3f5f9;text-align:left;font-weight:700}th,td{border:.25mm solid #d9dee8;padding:1.2mm 1.8mm;vertical-align:top}
+tr{break-inside:avoid}hr{border:0;border-top:.3mm solid #d9dee8;margin:5mm 0 2mm}small{color:#51607a;font-size:8.5pt}
+.notice{border-left:1.2mm solid #b7791f;background:#fbf1dc;padding:3mm 5mm;margin:0 0 5mm;line-height:1.65}</style></head><body><h1>監査の報告 ― 便 TR2(2026-11-25)</h1>
+<div class="notice">便 TR2 の結果の前の独立監査(1 回)と、直しの差分の確認。監査の席は木を書いていない。</div>
+<div class="notice">記録の再現・凍結の sha・engine 0 行・実在の名や値が repo に無いことを、監査の席が自分で確かめた。数と予測の判定は変わらない。</div>
+<h2>判定: GO(RESULT の文面 3 か所を直す条件つき → 直して、差分の確認で GO のまま)</h2>
+<h2>数の表</h2>
+<table><thead><tr><th>区分</th><th>件数</th><th>内容</th></tr></thead><tbody>
+<tr><td>指摘して直した</td><td>3</td><td>RESULT の文面だけ</td></tr>
+<tr><td>指摘したが直さない</td><td>0</td><td></td></tr>
+<tr><td>確かめられなかった</td><td>2</td><td>確定の席がなぜ誤りを直せたか(席の中身)・提案の席 3 席が作業用 script を folder の外に置いた件の、席が開いた file</td></tr>
+<tr><td>合った</td><td>多数</td><td>下に要点</td></tr>
+</tbody></table>
+<h2>指摘して直した</h2>
+<table><thead><tr><th>番号</th><th>どこ</th><th>何</th><th>重さ</th><th>直し</th></tr></thead><tbody>
+<tr><td>1</td><td>RESULT §3・TR2-7</td><td>科目の追加の「読めない」4 社は、1 項目だけ読めず、ほかの 4 項目は黙って違う値だった。「4 社では読めず」だけでは黙った誤りが小さく見える</td><td>低〜中</td><td>内訳を書いた。読めない 4 社を入れて数えれば 24 / 42 になるが、結果を見てからの数え方なので判定は外れのまま、と書いた</td></tr>
+<tr><td>2</td><td>RESULT §4</td><td>「この点検の限界」の注記は 3 つで、封 §6 の 2 つより 1 つ多いのに、封との違いとして書いていなかった</td><td>低</td><td>§4 に、3 つ目は注記の足しで測った数でない、と書いた</td></tr>
+<tr><td>3</td><td>RESULT §4</td><td>科目の追加の依頼には、ずれた行の見出しが全部並ぶ(6 社で 94 行)。「依頼に変わった所が出ている 42 / 42」は緩い数え方で、見せ方の質は測っていない</td><td>低</td><td>§4 にそのとおり書いた</td></tr>
+</tbody></table>
+<h2>合った(要点)</h2>
+<ul>
+<li>読む規則 S1〜S4 は封のとおり。変異ごとに働いた規則は種類ごとに別々だった(列の挿入は S2 の列・並べ替えは S2 の行・シート名は S1・見出しの微修正と科目の追加は S2 と S3・単位は S2 の頭の行)。何にでも当たって止める形ではない。</li>
+<li>期 2(同じ様式)は 6 社とも止まらなかった(止めすぎの空振りではない)。</li>
+<li>正解は比べる所と集計だけで読み、台帳と画面は AI の答えと期 1 の xlsx だけから作っている。</li>
+<li>run_tr2.py を複製に走らせ直すと out/ が完全に一致し、tally も record.json と一致した。</li>
+<li>engine は 0 行。report_tr1_v2.py は holds と verify_external を読むだけで使い、要修正・精査 66 と軽量確認 45 が記録と一致した(足すと TR1 の要確認 111)。</li>
+<li>誤りの入れ方は封 §3 のとおりで、6 社とも「成分を 1 つ落とした」形になった。</li>
+<li>予測 TR2-1〜6 は当たり、TR2-7 は外れ(20 / 42)。判定は記録と合う。</li>
+<li>repo に入る file に、実在の会社の名・docID は無い。素材は作り物の 6 社だけ。</li>
+</ul>
+<p><small>凍結の sha256: freeze_before.txt の 12 file を監査の前後で照らし、不一致 0。直しの後は RESULT.md だけが変わり、script・record.json・封の 4 file は凍結のまま。</small></p></body></html>
