@@ -32,14 +32,22 @@ folder の形:
 - 過程の数えは会話の記録(JSONL)の ``tool_use``・``tool_result`` から(``tool_use`` の id で重ねを除く)。入力は文字列の値を連ねた字(NFC)で見る。素材の file は folder の中身から取り、``素材/`` 無ければ ``期1/`` の中の file。
   file の名が入力に出た(2 期目で ``前の期の素材`` も出る呼び出しは ``素材/<名>`` の形だけ)呼び出しの数を数える。書き込みは Write・Edit・MultiEdit・NotebookEdit の path か、
   Bash などの入力に名と書き込みの形(``>``・``json.dump``・``write``・``open(..,'w')``・``tee``・``cp``・``mv``)が在るもの、または前に書いた .py に名と書き込みの形が在りそれを python で走らせたもの。粗い数。
-- 汚れは、入力の絶対の path(``/private``・``/Users``・``/tmp`` など。便 UM2 の dirty2 と同じ根)が席の folder の外、または ``../``・``~/``・``$HOME``。
+- 席の発言の回は、会話の記録の assistant の text のうち、``isApiErrorMessage`` が true または ``model`` が ``<synthetic>`` の行(上限切れの合成メッセージ)を数えない。
+- 汚れは、道具 ``SubagentHandback``(席が最後に返す報告)の入力を対象にしない(path への読み書きではない。道具の呼び出しの数・名ごとの数には 1 と数える)。汚れは、入力の絶対の path(``/private``・``/Users``・``/tmp`` など。便 UM2 の dirty2 と同じ根)が席の folder の外、または ``../``・``~/``・``$HOME``。
   根は path の先頭でだけ読む(直前が行頭・空白・引用符・``=``・``(``・``:``・``,``・``;``・``<``・``>``・``file://`` などの時)。``/usr/bin/``・``/usr/local/bin/`` の下は道具の置き場なので数えない。
 - 「前の期の成果の道具を走らせた」は粗い数で、走らせた席は下限(`ran_prev_tool`)。
 
-限界(結果の文書はここから写す。どれも「汚れ」「走らせた」を少なく数える側。測っていないことは書かない):
+限界(結果の文書はここから写す。取りこぼす形と数え過ぎる形の両方が在る。測っていないことは書かない):
 - 汚れ: 根は便 UM2 と同じ 11 個だけ。``/root``・``/bin``・``/dev``・``/System``・``/mnt`` などの根と、根の無い裸の ``/`` は数えない。
 - 汚れ: ``cd ..``・``ls ..``・``ls ~``・``${HOME}``・``$PWD/..`` は数えない(数えるのは ``../``・``~/``・``$HOME`` の字)。
 - 汚れ: ``//tmp``・``/./tmp``・大文字の根(``/TMP``)は数えない。変数に組み立てた path(``a=/t; b=$a/x`` など)は数えない。
+- 汚れ: ハーネスが folder の外に保存した道具の出力の file を席が読んだ呼び出しも汚れに数える(席が自分から外へ出たとは限らない。この形は数え過ぎ)。
+- 走らせた: ``前の期の成果/道具/`` の script を cp や sed で自分の ``道具/`` へ写してから走らせる形は数えない(数えるのはその path のまま走らせた時だけ)。
+- 計算: ``数値`` が JSON の数(小数)で書かれた行は「形が読めない」に数え、値が合うかは見ない。
+- 素材の file: path の字が呼び出しに出た時だけ数える。script の中で listdir・glob・字の足し合わせで開いた file は数えない(「触れた」は下限)。
+- 値の表を書いた回数: script を走らせ直して書いた回は数えない。
+- 資料: 数の字と月・日の字の間に空白が在る形は、月日として外さず数の字に数える(数え過ぎ)。
+- 正解に null が 1 つも無い時、「無いのに在る」「無いで同じ」は構造上 0。
 - 走らせた: ``python3 -c`` の中で runpy・exec・import で読む形、``-m pdb`` などの module 経由、``xargs``・``find -exec``・``time``・``nohup`` 越しは数えない(数えない側が下限)。
   python・sh が命令の位置に無い形(``echo python3 <道具>``・``grep sh <道具>``)は数えない。
 """
@@ -730,6 +738,14 @@ def writes_name(raw, name):
     return False
 
 
+def is_synthetic(o):
+    u"""会話の記録の 1 行が上限切れなどの合成メッセージか(席の発言に数えない)。"""
+    if not isinstance(o, dict):
+        return False
+    msg = o.get(u"message")
+    return o.get(u"isApiErrorMessage") is True or (isinstance(msg, dict) and msg.get(u"model") == u"<synthetic>")
+
+
 def count_seat(path, folder):
     u"""会話の記録 1 本 → 過程の数(封 §1-5)。tool_use が 1 つも無ければ None。"""
     variants = folder_variants(folder)
@@ -767,7 +783,7 @@ def count_seat(path, folder):
                     errors += 1
                 if calls:
                     last_ts = ts
-            elif t == u"text" and o.get(u"type") == u"assistant" and isinstance(b.get(u"text"), str) and b[u"text"].strip():
+            elif t == u"text" and o.get(u"type") == u"assistant" and not is_synthetic(o) and isinstance(b.get(u"text"), str) and b[u"text"].strip():
                 texts += 1
     if not calls:
         return None
@@ -840,7 +856,7 @@ def count_seat(path, folder):
             prev_tool_run = 1
         if u"前の期の素材" in raw:
             prev_mat_calls += 1
-        if is_dirty(raw, variants):
+        if nm != u"SubagentHandback" and is_dirty(raw, variants):
             dirty += 1
     n[u"最初に値の表を書くまでの呼び出し"] = first_table
     n[u"値の表を書いた回数"] = table_w
@@ -1142,13 +1158,20 @@ LIMITS = (
     u"汚れ: 先頭のスラッシュが 2 つの形・間にドットだけの組・大文字の根は数えない。変数に組み立てた path は数えない",
     u"走らせた: python の -c の中で runpy・exec・import で道具を読む形と、module 経由(-m pdb など)、xargs・find の実行・time・nohup 越しは数えない",
     u"走らせた: python・sh が命令の位置に無い形(echo や grep の引数に python・sh が在る形)は数えない",
-    u"向き: どれも汚れ・走らせた席を少なく数える側(実際の席の数は記録の数以上)",
+    u"走らせた: 前の期の成果の道具の script を cp や sed で自分の道具の folder へ写してから走らせる形は数えない(数えるのはその path のまま走らせた時だけ)",
+    u"計算: 数値が JSON の数(小数)で書かれた行は形が読めないに数え、値が合うかは見ない",
+    u"素材の file: path の字が呼び出しに出た時だけ数える。script の中で listdir・glob・字の足し合わせで開いた file は数えない(触れたは下限)",
+    u"値の表を書いた回数: script を走らせ直して書いた回は数えない",
+    u"資料: 数の字と月・日の字の間に空白が在る形は、月日として外さず数の字に数える",
+    u"正解に null が 1 つも無い時、無いのに在る・無いで同じは構造上 0",
+    u"汚れ: ハーネスが folder の外に保存した道具の出力の file を席が読んだ呼び出しも汚れに数える(席が自分から外へ出たとは限らない。この形は数え過ぎ)",
+    u"向き: 走らせた・汚れの取りこぼしの形は少なく数える側、ハーネスの出力 file を読んだ呼び出しは汚れを多く数える側(どちらにも振れるので、実際の席の数は記録の数以上とは言えない)",
 )
 FIELD_NOTES = (
     (u"過程:期1:前の期の成果の道具を走らせた席", u"走らせた席は下限(粗い数。限界の欄を見る)"),
     (u"過程:期2:前の期の成果の道具を走らせた席", u"走らせた席は下限(粗い数。限界の欄を見る)"),
-    (u"過程:汚れの席", u"汚れた席は下限(限界の欄を見る)"),
-    (u"過程:汚れた呼び出し", u"汚れた呼び出しは下限(限界の欄を見る)"),
+    (u"過程:汚れの席", u"汚れた席は取りこぼしと数え過ぎの両方が在る(限界の欄を見る)"),
+    (u"過程:汚れた呼び出し", u"汚れた呼び出しは取りこぼしと数え過ぎの両方が在る(限界の欄を見る)"),
 )
 
 

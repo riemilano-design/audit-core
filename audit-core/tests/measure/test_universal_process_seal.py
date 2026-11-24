@@ -909,6 +909,33 @@ class ProcessTest(World):
         got = self.count_of(none)
         self.assertEqual((0, 0), (got[u"汚れた呼び出し"], got[u"汚れの席"]))
 
+    # ---- 直し(記録の監査 REVISE): 席の発言の回の合成メッセージ・SubagentHandback の汚れ
+    def test_d_60_a_synthetic_limit_message_is_not_a_seat_utterance(self):
+        def build(t, f):
+            t.text(u"席の本当の発言")
+            t.call(u"Bash", {u"command": u'ls "%s"' % f})
+            t.add({u"type": u"assistant", u"isApiErrorMessage": True,
+                   u"message": {u"role": u"assistant", u"model": u"claude-x", u"content": [{u"type": u"text", u"text": u"You have hit your limit"}]}})
+            t.add({u"type": u"assistant", u"message": {u"role": u"assistant", u"model": u"<synthetic>", u"content": [{u"type": u"text", u"text": u"No response requested."}]}})
+            t.add({u"type": u"assistant", u"isApiErrorMessage": False,
+                   u"message": {u"role": u"assistant", u"model": u"claude-x", u"content": [{u"type": u"text", u"text": u"もう 1 つの本当の発言"}]}})
+        self.assertEqual(2, self.count_of(build)[u"席の発言の回"])
+
+    def test_d_61_the_final_report_tool_input_is_not_a_path_but_the_same_text_in_bash_is_dirty(self):
+        outside = (u"報告 ../前の期の成果/x と /Users/someone/memory.md と ~/x と $HOME", u"/tmp/other/x.csv を読んだ")
+        for text in outside:
+            def hand(t, f, text=text):
+                t.call(u"Bash", {u"command": u'ls "%s"' % f})
+                t.call(u"SubagentHandback", {u"message": text})
+            got = self.count_of(hand)
+            self.assertEqual((2, {u"Bash": 1, u"SubagentHandback": 1}, 0, 0), (got[u"道具の呼び出し"], got[u"道具の名ごと"], got[u"汚れた呼び出し"], got[u"汚れの席"]), text)
+
+            def bash(t, f, text=text):
+                t.call(u"Bash", {u"command": u'ls "%s"' % f})
+                t.call(u"Bash", {u"command": u"echo " + text})
+            got = self.count_of(bash)
+            self.assertEqual((1, 1), (got[u"汚れた呼び出し"], got[u"汚れの席"]), text)
+
     # ---- 直し 1(監査 REVISE): 汚れの根の読み方・走らせた形・黙った変異
     ROOT_NAMES = (u"private", u"Users", u"tmp", u"var", u"etc", u"home", u"opt", u"usr", u"Library", u"Applications", u"Volumes")
 
@@ -1043,6 +1070,13 @@ class ProcessTest(World):
         notes = dict(TAL.FIELD_NOTES)
         for p in (1, 2):
             self.assertIn(u"下限", notes[u"過程:期%d:前の期の成果の道具を走らせた席" % p])
+        joined = u"\n".join(TAL.LIMITS)
+        for w in (u"前の期の成果の道具の script を cp や sed", u"数値が JSON の数", u"listdir・glob", u"走らせ直して書いた回", u"月・日の字の間に空白",
+                  u"正解に null が 1 つも無い時", u"ハーネスが folder の外に保存した道具の出力の file", u"汚れを多く数える側"):
+            self.assertIn(w, joined)
+        self.assertNotIn(u"実際の席の数は記録の数以上)", joined.replace(u"記録の数以上とは言えない", u""))
+        for w in (u"cp や sed", u"JSON の数", u"listdir・glob", u"走らせ直して", u"空白が在る形", u"構造上 0", u"ハーネスが folder の外に保存した", u"isApiErrorMessage", u"SubagentHandback"):
+            self.assertIn(w, TAL.__doc__)
         doc = TAL.__doc__
         for w in (u"/root", u"/System", u"cd ..", u"${HOME}", u"$PWD/..", u"//tmp", u"/./tmp", u"runpy", u"-m pdb", u"走らせた席は下限"):
             self.assertIn(w, doc)
