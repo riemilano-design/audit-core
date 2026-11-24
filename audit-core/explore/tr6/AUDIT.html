@@ -1,0 +1,33 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>監査の報告 ― 便 TR6(2026-11-25)</title><style>@page{size:A4;margin:14mm 13mm}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#16233b;font-size:9.5pt;line-height:1.6;max-width:190mm;margin:8mm auto;padding:0 4mm}
+h1{font-size:15pt;margin:0 0 3mm}h2{font-size:12pt;margin:6mm 0 2mm;border-bottom:.4mm solid #16233b;padding-bottom:1mm}
+p{margin:1.5mm 0}table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:9pt}
+th{background:#f3f5f9;text-align:left;font-weight:700}th,td{border:.25mm solid #d9dee8;padding:1.2mm 1.8mm;vertical-align:top}
+tr{break-inside:avoid}hr{border:0;border-top:.3mm solid #d9dee8;margin:5mm 0 2mm}small{color:#51607a;font-size:8.5pt}
+.notice{border-left:1.2mm solid #b7791f;background:#fbf1dc;padding:3mm 5mm;margin:0 0 5mm;line-height:1.65}</style></head><body><h1>監査の報告 ― 便 TR6(2026-11-25)</h1>
+<div class="notice">便 TR6 の結果の前の独立監査(1 回)。監査の席は prep → seat → extra を走らせ直し、出力と記録を完全に再現した。木は書いていない。</div>
+<div class="notice">封の file は 1 字も変わらず、単体試験 10 件が通った。数と結論は変わらず、RESULT の文面に 3 点を足して GO。</div>
+<h2>判定: GO(文面の直しを添えて → 直して GO)</h2>
+<h2>数の表</h2>
+<table><thead><tr><th>区分</th><th>件数</th><th>内容</th></tr></thead><tbody>
+<tr><td>指摘して直した</td><td>3</td><td>素材の一致の比べ方の注記・席の気づきの書き漏れ 2・席の検証力の限界(言えないこと)</td></tr>
+<tr><td>指摘したが直さない</td><td>2</td><td>丸めの許容(成分数 × 500 円)は桁の取り違えを拾えない幅ではないという注意・席の後の補足に違いが出ないのは正しいという確認</td></tr>
+<tr><td>確かめられなかった</td><td>2</td><td>やり直し 0(席の記録が 1 席 1 回に見えることから間接に)・同じ字の行が 2 つ在る所への差分の強さ(封 §6 が試していないと書く)</td></tr>
+<tr><td>合った</td><td>6</td><td>下に要点</td></tr>
+</tbody></table>
+<h2>指摘して直した</h2>
+<table><thead><tr><th>番号</th><th>どこ</th><th>何</th><th>直し</th></tr></thead><tbody>
+<tr><td>A1</td><td>RESULT §1</td><td><code>same_book</code> は空の升を捨てて比べるので、空の升の位置のずれは通る。監査が位置込みで比べ、TR2 の変異 42 file と升まで一致</td><td>注記を 1 行足した</td></tr>
+<tr><td>A2</td><td>RESULT §3 席の気づき</td><td>意味の変わる改名で元の行が残っていないか分からない(3 席)・列の追加で前後の行が出ない(1 席)が漏れていた</td><td>足した</td></tr>
+<tr><td>A3</td><td>RESULT §4</td><td>第 54 社の改名は案でも正しいので、見抜いたかが値に出るのは 5 / 6。紙の説明が改名を疑う手がかりになりえた。単位の変更は画面をまたいだ桁の照合が効いた</td><td>言えないことに足した</td></tr>
+</tbody></table>
+<h2>合った(要点)</h2>
+<ul>
+<li>縮めた差分は 54 / 54 で 1 行。TR2 の形は 260 → 54、TR2 の 7 種は 154 → 42。</li>
+<li>席の後 51 / 54・期 3 も 51 / 54。案だけは 34 正しい・8 黙って違う・12 止める。予測の判定(当たり 6・外れ 2)は正しい。</li>
+<li>正解の作り方は材料の定義に合う。監査が別の経路で 8 種 × 6 社 × 期 2・期 3 = 96 file の現金及び預金と短期借入金を xlsx から数え、正解と 96 / 96 一致。</li>
+<li>単位の変更の 3 社は円の正解を読めないという診断は妥当。違い 24 / 24 が丸めの内、改名の案だけの違い 5 は 0 / 5。</li>
+<li>席の気づきの記述は reply の「気づき」欄と合う。</li>
+<li>席の 6 の記録に、SEAL.md・key・正解.json・素材を読んだ跡は無い。画面に種類や正解の語は無い。</li>
+</ul>
+<p><small>凍結の sha256: 10 file は監査の前後で一致。RESULT.md は監査の指摘の文面直しでだけ変わった。</small></p></body></html>
