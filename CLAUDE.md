@@ -1,8 +1,8 @@
 # CLAUDE.md
 
-このリポジトリには資産が 2 つある。**いまの作業は `audit-core/`(Audit Core: XBRL 等の監査エンジン。売却を目指す技術資産)** で、直近 200 コミットはすべてそこだけを触っている(2026-10-19 時点)。2026-11-14 からセッションは 2 本: engine・測定・台帳の側(入口 [audit-core/docs/HANDOFF_AUDIT_CORE_SESSION_2026-11-14.md](audit-core/docs/HANDOFF_AUDIT_CORE_SESSION_2026-11-14.md))と、英文の決算短信の点検を売る側(`audit-core/sales/` だけを触る。入口 [audit-core/sales/HANDOFF_2026-11-14.md](audit-core/sales/HANDOFF_2026-11-14.md))。将棋アプリ(`apps/`・`data/`・`scripts/`)の憲法は [docs/SHOGI_CONSTITUTION.md](docs/SHOGI_CONSTITUTION.md) に原文のまま移した ― **将棋側を触るときだけ読む。**
+このリポジトリには資産が 2 つある。**いまの作業は `audit-core/`(Audit Core: XBRL 等の監査エンジン。売却を目指す技術資産)** で、直近 200 コミットはすべてそこだけを触っている(2026-10-19 時点)。2026-11-14 からセッションは 2 本: engine・測定・台帳の側(入口 [audit-core/docs/HANDOFF_NOW.md](audit-core/docs/HANDOFF_NOW.md)。いまの状態だけを上書きで保つ短い紙)と、英文の決算短信の点検を売る側(`audit-core/sales/` だけを触る。入口 [audit-core/sales/HANDOFF_2026-11-14.md](audit-core/sales/HANDOFF_2026-11-14.md))。将棋アプリ(`apps/`・`data/`・`scripts/`)の憲法は [docs/SHOGI_CONSTITUTION.md](docs/SHOGI_CONSTITUTION.md) に原文のまま移した ― **将棋側を触るときだけ読む。**
 
-## Audit Core の作法(毎セッション効く 6 つ)
+## Audit Core の作法(毎セッション効く 7 つ)
 
 1. **封を先に commit する。** 実装・材料・測定・採点より前に、封(対象条件・除外・分母・事前予測)を commit する。予測は欄ごとに**外れうる形**で書き、外れ方も書く。**結果を見てから封も予測も書き換えない**(外れは外れとして残す。補足は日付つきの追記)。
 2. **engine(`audit-core/core/`・`adapters/`)は人間の承認なしに変えない。** 実験の入口は `measure/` に置く。`tests/adapters/xbrl/test_boundary.py` の import 一覧を自分の都合で広げない。
@@ -10,9 +10,16 @@
 4. **0 USD が既定。** LLM の席(API)を呼ぶ・外部へ出す・金が動く変更は人間が決める。
 5. **測っていないことは書かない。** 数の正本は `fixtures/**/*.json`。文書の数は `tests/measure` の門で記録に縛り、**門は変異で赤くなることを確かめてから門と呼ぶ。** 「0 件」は先に自分の欠陥を疑う(key の取り違え・母集団の回し漏れ)。
 6. **`main` へのマージ・スコープの拡大・この節の変更は人間が決める。** `feature/` 上のコミット承認は司令塔に委任(条件は [docs/AGENT_PROTOCOL.md](docs/AGENT_PROTOCOL.md) の「承認の委任」: 監査 GO なしに承認しない・根拠を書く・測っていないものを承認しない)。
+7. **探索の便は軽い型で(人間の決め 2026-11-24)。** 方式を試す・作り物の素材・外に出さない数の便は、次の形にする。
+   - commit は 2 回だけ: 封(予測を含む)と、結果(script・記録・結果の文書をまとめて)。
+   - 置き場は `audit-core/explore/<便>/`。`measure/`・`fixtures/`・`tests/` には置かず、台帳にも載せない。
+   - 独立監査は結果の前に 1 回だけ。直しは差分だけを見る。変異の掃き・試験の門は作らない。
+   - 外に出す数(台帳・売る資料・README)にする時だけ、作法 1〜6 の重い型(`measure/`・門・台帳)へ移す。
+   - 作法 1(封を先に・結果を見て書き換えない)と作法 2(engine は人間の承認)は軽い型でも守る。
 
 ## コマンド(`cd audit-core` で)
 
+- ふだんの確かめは自分が触った試験の file だけを走らせる。全部の門は枝を寄せる前・外に出す数を作る時だけ(遅い試験の内訳は `audit-core/docs/TEST_DURATIONS_2026-11-24.md`)
 - `python3 -m pytest -q tests/measure` ― 門だけ(約 1 時間 12 分。2026-11-15 実測)
 - `sh run_tests.sh` ― 全部(約 1 時間 47 分。2026-11-14 実測。覆いの検査 → pytest → unittest)
 - 試験 file を足したら `python3 measure/suite_coverage_2026-10-16.py --write` を走らせ、`docs/SUITE_COVERAGE_2026-10-16.md` §2-1 の数も直す(忘れると門が赤くなる ― それが狙い)
