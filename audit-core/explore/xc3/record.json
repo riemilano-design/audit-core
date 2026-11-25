@@ -1,0 +1,4806 @@
+{
+ "便": "XC3(今年の答えを見ずに組んだ包みを道具 P に読ませる)",
+ "集計 作りの 23 組": {
+  "置いた数の fact": 19566,
+  "道具が読んだ: 元の数の fact": 24935,
+  "道具が読んだ: 組んだ数の fact": 19587,
+  "数の fact: 元と同じ行": 18990,
+  "数の fact: 組んだ側だけの行": 597,
+  "数の fact: 元の側だけの行": 5945,
+  "道具が読んだ: 元の数でない fact": 6859,
+  "道具が読んだ: 組んだ数でない fact": 600,
+  "数でない fact: 元と同じ行": 130,
+  "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 592,
+  "組んだ側だけで鳴った E の符号の数": 87,
+  "道具の類(元・組んだ)": {
+   "走った / 止まった": 2,
+   "走った / 走った": 21
+  },
+  "組んだ側だけで鳴った符号(その符号の鳴った組の数)": {
+   "EDINET.EC1057E": 23,
+   "arelle:nonIxdsDocument": 23,
+   "EDINET.EC8029W": 22,
+   "EDINET.EC8076W": 22,
+   "EDINET.EC1001E": 21,
+   "EDINET.EC3005E": 21,
+   "xbrl.3.5.2.4.5:roleRefMismatch": 21,
+   "EDINET.EC3002E": 20,
+   "EDINET.EC5700W": 19,
+   "EDINET.EC8075W": 16,
+   "EDINET.EC8054W": 7,
+   "xbrldie:PrimaryItemDimensionallyInvalidError": 5,
+   "EDINET.EC8030W": 4,
+   "EDINET.EC8050W": 4,
+   "EDINET.EC8048W": 2,
+   "exception:AttributeError": 2,
+   "EDINET.EC3003E": 1,
+   "EDINET.EC5623W": 1,
+   "EDINET.EC8018W": 1,
+   "EDINET.EC8020W": 1,
+   "EDINET.EC8024E": 1,
+   "EDINET.EC8036W": 1,
+   "EDINET.EC8038W": 1,
+   "EDINET.EC8039W": 1,
+   "EDINET.EC8041W": 1,
+   "EDINET.EC8044W": 1,
+   "EDINET.EC8057W": 1,
+   "EDINET.EC8058W": 1,
+   "ix10.11.1.2:missingReferences": 1,
+   "xbrldie:ExplicitMemberUndefinedQNameError": 1
+  },
+  "組んだ側だけで E の符号が鳴った組": 23,
+  "組んだ包みを道具が最後まで読んだ組": 21
+ },
+ "集計 判定の 40 組": {
+  "置いた数の fact": 33535,
+  "道具が読んだ: 元の数の fact": 40741,
+  "道具が読んだ: 組んだ数の fact": 32645,
+  "数の fact: 元と同じ行": 32124,
+  "数の fact: 組んだ側だけの行": 521,
+  "数の fact: 元の側だけの行": 8617,
+  "道具が読んだ: 元の数でない fact": 11375,
+  "道具が読んだ: 組んだ数でない fact": 1048,
+  "数でない fact: 元と同じ行": 259,
+  "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 1035,
+  "組んだ側だけで鳴った E の符号の数": 152,
+  "道具の類(元・組んだ)": {
+   "走った / 止まった": 5,
+   "走った / 走った": 35
+  },
+  "組んだ側だけで鳴った符号(その符号の鳴った組の数)": {
+   "EDINET.EC1057E": 40,
+   "EDINET.EC8029W": 40,
+   "arelle:nonIxdsDocument": 40,
+   "EDINET.EC8076W": 38,
+   "EDINET.EC1001E": 36,
+   "xbrl.3.5.2.4.5:roleRefMismatch": 36,
+   "EDINET.EC3002E": 35,
+   "EDINET.EC3005E": 35,
+   "EDINET.EC5700W": 32,
+   "EDINET.EC8075W": 28,
+   "EDINET.EC8054W": 11,
+   "EDINET.EC8024E": 5,
+   "EDINET.EC8030W": 4,
+   "EDINET.EC8050W": 4,
+   "exception:AttributeError": 4,
+   "xbrldie:PrimaryItemDimensionallyInvalidError": 3,
+   "ix10.11.1.2:missingReferences": 2,
+   "xbrldie:ExplicitMemberUndefinedQNameError": 2,
+   "AttributeError": 1,
+   "EDINET.EC3003E": 1,
+   "EDINET.EC8015W": 1,
+   "EDINET.EC8039W": 1,
+   "EDINET.EC8041W": 1,
+   "EDINET.EC8043W": 1,
+   "EDINET.EC8044W": 1,
+   "EDINET.EC8048W": 1,
+   "EDINET.EC8049W": 1,
+   "ix10.9.1.2:contextReference": 1,
+   "xbrl.4.6.1:itemContextRef": 1
+  },
+  "組んだ側だけで E の符号が鳴った組": 40,
+  "組んだ包みを道具が最後まで読んだ組": 35
+ },
+ "予測の判定": {
+  "XC3-1": {
+   "予測": "道具が読んだ数の fact のうち元と同じ行は、元の数の fact の 72% 以上 82% 以下",
+   "出た": 78.85,
+   "判定": "当たり"
+  },
+  "XC3-2": {
+   "予測": "組んだ側だけの数の fact の行は、組んだ包みから読んだ数の fact の 5% 以下",
+   "出た": 1.6,
+   "判定": "当たり"
+  },
+  "XC3-3": {
+   "予測": "組んだ包みを道具が最後まで読んだ組は 40 のうち 34 以上",
+   "出た": 35,
+   "判定": "当たり"
+  },
+  "XC3-4": {
+   "予測": "組んだ包みの数でない fact(隠しの fact)は、提出日の期を除けば 95% 以上が元と同じ",
+   "出た": 98.76,
+   "判定": "当たり"
+  },
+  "XC3-5": {
+   "予測": "組んだ側だけで E の符号が鳴った組は 40 のうち 38 以上(まだ検査に通る包みではない)",
+   "出た": 40,
+   "判定": "当たり"
+  }
+ },
+ "組ごと(番号と数だけ)": {
+  "dev": [
+   {
+    "番号": 1,
+    "置いた数の fact": 952,
+    "道具が読んだ: 元の数の fact": 1078,
+    "道具が読んだ: 組んだ数の fact": 953,
+    "数の fact: 元と同じ行": 940,
+    "数の fact: 組んだ側だけの行": 13,
+    "数の fact: 元の側だけの行": 138,
+    "道具が読んだ: 元の数でない fact": 349,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 11,
+     "EDINET.EC3005E": 8,
+     "EDINET.EC5700W": 18,
+     "EDINET.EC8054W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 147,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 57,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 35,
+      "EDINET.EC8029W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 427,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC3002E": 11,
+      "EDINET.EC3005E": 8,
+      "EDINET.EC5611W": 59,
+      "EDINET.EC5700W": 18,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 29,
+      "EDINET.EC8029W": 219,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 2,
+    "置いた数の fact": 817,
+    "道具が読んだ: 元の数の fact": 1171,
+    "道具が読んだ: 組んだ数の fact": 818,
+    "数の fact: 元と同じ行": 815,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 356,
+    "道具が読んだ: 元の数でない fact": 286,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3003E": 1,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC5700W": 100,
+     "EDINET.EC8029W": 216,
+     "EDINET.EC8050W": 1,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 9,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC5602R": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 5,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 121,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5602R": 1,
+      "EDINET.EC5611W": 53,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 495,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3003E": 1,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 58,
+      "EDINET.EC5700W": 100,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8029W": 216,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 9,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 3,
+    "置いた数の fact": 1040,
+    "道具が読んだ: 元の数の fact": 1238,
+    "道具が読んだ: 組んだ数の fact": 1041,
+    "数の fact: 元と同じ行": 1036,
+    "数の fact: 組んだ側だけの行": 5,
+    "数の fact: 元の側だけの行": 202,
+    "道具が読んだ: 元の数でない fact": 329,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 24,
+     "EDINET.EC5700W": 23,
+     "EDINET.EC8029W": 239,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 4,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 162,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 53,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 55,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 472,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 24,
+      "EDINET.EC5611W": 51,
+      "EDINET.EC5700W": 23,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 53,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 239,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 4,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 4,
+    "置いた数の fact": 869,
+    "道具が読んだ: 元の数の fact": 1027,
+    "道具が読んだ: 組んだ数の fact": 870,
+    "数の fact: 元と同じ行": 865,
+    "数の fact: 組んだ側だけの行": 5,
+    "数の fact: 元の側だけの行": 162,
+    "道具が読んだ: 元の数でない fact": 330,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1057E": 1,
+     "EDINET.EC8029W": 200,
+     "EDINET.EC8054W": 6,
+     "arelle:nonIxdsDocument": 5,
+     "exception:AttributeError": 1,
+     "xbrldie:ExplicitMemberUndefinedQNameError": 3,
+     "xbrldie:PrimaryItemDimensionallyInvalidError": 3
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC5611W": 59,
+     "EDINET.EC8023W": 65,
+     "EDINET.EC8070W": 1,
+     "xbrl.3.5.3.7": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 1,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "止まった"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 178,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 23,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 59,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 65,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1,
+      "xbrl.3.5.3.7": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "止まった",
+     "時間の上限を超えた": false,
+     "出力の行の数": 285,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 23,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 200,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 6,
+      "arelle:nonIxdsDocument": 5,
+      "exception:AttributeError": 1,
+      "xbrldie:ExplicitMemberUndefinedQNameError": 3,
+      "xbrldie:PrimaryItemDimensionallyInvalidError": 3
+     }
+    }
+   },
+   {
+    "番号": 5,
+    "置いた数の fact": 454,
+    "道具が読んだ: 元の数の fact": 473,
+    "道具が読んだ: 組んだ数の fact": 455,
+    "数の fact: 元と同じ行": 454,
+    "数の fact: 組んだ側だけの行": 1,
+    "数の fact: 元の側だけの行": 19,
+    "道具が読んだ: 元の数でない fact": 163,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 16,
+     "EDINET.EC5700W": 2,
+     "EDINET.EC8029W": 114,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 4
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8069W": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 86,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 18,
+      "EDINET.EC0130E": 10,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 27,
+      "EDINET.EC8023W": 9,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8069W": 2,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 238,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 18,
+      "EDINET.EC0130E": 10,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 16,
+      "EDINET.EC5611W": 29,
+      "EDINET.EC5700W": 2,
+      "EDINET.EC8023W": 9,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 114,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 4
+     }
+    }
+   },
+   {
+    "番号": 6,
+    "置いた数の fact": 510,
+    "道具が読んだ: 元の数の fact": 556,
+    "道具が読んだ: 組んだ数の fact": 511,
+    "数の fact: 元と同じ行": 508,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 48,
+    "道具が読んだ: 元の数でない fact": 216,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 18,
+     "EDINET.EC5700W": 16,
+     "EDINET.EC8029W": 143,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 6,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 3
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 84,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 32,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 286,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 18,
+      "EDINET.EC5611W": 32,
+      "EDINET.EC5700W": 16,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 143,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 6,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 3
+     }
+    }
+   },
+   {
+    "番号": 7,
+    "置いた数の fact": 1204,
+    "道具が読んだ: 元の数の fact": 1373,
+    "道具が読んだ: 組んだ数の fact": 1203,
+    "数の fact: 元と同じ行": 885,
+    "数の fact: 組んだ側だけの行": 318,
+    "数の fact: 元の側だけの行": 488,
+    "道具が読んだ: 元の数でない fact": 267,
+    "道具が読んだ: 組んだ数でない fact": 28,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 23,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1057E": 1,
+     "EDINET.EC8018W": 21,
+     "EDINET.EC8020W": 27,
+     "EDINET.EC8029W": 228,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 10,
+     "exception:AttributeError": 1,
+     "ix10.11.1.2:missingReferences": 2,
+     "xbrldie:PrimaryItemDimensionallyInvalidError": 1
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC5611W": 70,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 1,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "止まった"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 136,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 35,
+      "EDINET.EC0130E": 12,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 70,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "止まった",
+     "時間の上限を超えた": false,
+     "出力の行の数": 396,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 35,
+      "EDINET.EC0130E": 12,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8018W": 21,
+      "EDINET.EC8020W": 27,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 228,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 10,
+      "exception:AttributeError": 1,
+      "ix10.11.1.2:missingReferences": 2,
+      "xbrldie:PrimaryItemDimensionallyInvalidError": 1
+     }
+    }
+   },
+   {
+    "番号": 8,
+    "置いた数の fact": 980,
+    "道具が読んだ: 元の数の fact": 1057,
+    "道具が読んだ: 組んだ数の fact": 981,
+    "数の fact: 元と同じ行": 978,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 79,
+    "道具が読んだ: 元の数でない fact": 295,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 17,
+     "EDINET.EC5700W": 19,
+     "EDINET.EC8029W": 189,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 7,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 6
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 143,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 34,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 77,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 398,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 34,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 17,
+      "EDINET.EC5611W": 77,
+      "EDINET.EC5700W": 19,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8029W": 189,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 7,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 6
+     }
+    }
+   },
+   {
+    "番号": 9,
+    "置いた数の fact": 483,
+    "道具が読んだ: 元の数の fact": 724,
+    "道具が読んだ: 組んだ数の fact": 484,
+    "数の fact: 元と同じ行": 479,
+    "数の fact: 組んだ側だけの行": 5,
+    "数の fact: 元の側だけの行": 245,
+    "道具が読んだ: 元の数でない fact": 259,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 16,
+     "EDINET.EC5700W": 19,
+     "EDINET.EC8029W": 205,
+     "EDINET.EC8050W": 1,
+     "EDINET.EC8054W": 5,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 5
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 80,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 19,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 25,
+      "EDINET.EC8023W": 12,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 347,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 19,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 16,
+      "EDINET.EC5611W": 25,
+      "EDINET.EC5700W": 19,
+      "EDINET.EC8023W": 6,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 205,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 5,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 5
+     }
+    }
+   },
+   {
+    "番号": 10,
+    "置いた数の fact": 1075,
+    "道具が読んだ: 元の数の fact": 1263,
+    "道具が読んだ: 組んだ数の fact": 1076,
+    "数の fact: 元と同じ行": 1053,
+    "数の fact: 組んだ側だけの行": 23,
+    "数の fact: 元の側だけの行": 210,
+    "道具が読んだ: 元の数でない fact": 330,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC5700W": 32,
+     "EDINET.EC8029W": 223,
+     "EDINET.EC8030W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 8,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8023W": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 124,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 53,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 2,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 435,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 60,
+      "EDINET.EC5700W": 32,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8029W": 223,
+      "EDINET.EC8030W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 8,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 11,
+    "置いた数の fact": 1346,
+    "道具が読んだ: 元の数の fact": 1621,
+    "道具が読んだ: 組んだ数の fact": 1347,
+    "数の fact: 元と同じ行": 1340,
+    "数の fact: 組んだ側だけの行": 7,
+    "数の fact: 元の側だけの行": 281,
+    "道具が読んだ: 元の数でない fact": 447,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC5700W": 40,
+     "EDINET.EC8029W": 248,
+     "EDINET.EC8030W": 1,
+     "EDINET.EC8054W": 1,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 8,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7,
+     "xbrldie:PrimaryItemDimensionallyInvalidError": 4
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8023W": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 132,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 61,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 2,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 484,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 70,
+      "EDINET.EC5700W": 40,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 248,
+      "EDINET.EC8030W": 1,
+      "EDINET.EC8054W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 8,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7,
+      "xbrldie:PrimaryItemDimensionallyInvalidError": 4
+     }
+    }
+   },
+   {
+    "番号": 12,
+    "置いた数の fact": 1326,
+    "道具が読んだ: 元の数の fact": 1542,
+    "道具が読んだ: 組んだ数の fact": 1327,
+    "数の fact: 元と同じ行": 1307,
+    "数の fact: 組んだ側だけの行": 20,
+    "数の fact: 元の側だけの行": 235,
+    "道具が読んだ: 元の数でない fact": 426,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 11,
+     "EDINET.EC3005E": 5,
+     "EDINET.EC8029W": 221,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 9,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 140,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 66,
+      "EDINET.EC5700W": 1,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 450,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC3002E": 11,
+      "EDINET.EC3005E": 5,
+      "EDINET.EC5611W": 68,
+      "EDINET.EC5700W": 40,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 221,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 9,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 13,
+    "置いた数の fact": 49,
+    "道具が読んだ: 元の数の fact": 1234,
+    "道具が読んだ: 組んだ数の fact": 50,
+    "数の fact: 元と同じ行": 47,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 1187,
+    "道具が読んだ: 元の数でない fact": 317,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 23,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3005E": 1,
+     "EDINET.EC5623W": 1,
+     "EDINET.EC8029W": 472,
+     "EDINET.EC8036W": 1,
+     "EDINET.EC8038W": 1,
+     "EDINET.EC8039W": 1,
+     "EDINET.EC8041W": 1,
+     "EDINET.EC8044W": 1,
+     "EDINET.EC8048W": 1,
+     "EDINET.EC8050W": 1,
+     "EDINET.EC8054W": 48,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 8,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC5611W": 39,
+     "EDINET.EC8015W": 1,
+     "EDINET.EC8023W": 12,
+     "EDINET.EC8055W": 1,
+     "EDINET.EC8065W": 1,
+     "EDINET.EC8067W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 3,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 115,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 39,
+      "EDINET.EC5700W": 2,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 12,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8055W": 1,
+      "EDINET.EC8065W": 1,
+      "EDINET.EC8067W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 767,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC3005E": 1,
+      "EDINET.EC5623W": 1,
+      "EDINET.EC5700W": 147,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 472,
+      "EDINET.EC8036W": 1,
+      "EDINET.EC8038W": 1,
+      "EDINET.EC8039W": 1,
+      "EDINET.EC8041W": 1,
+      "EDINET.EC8044W": 1,
+      "EDINET.EC8048W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 48,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 8,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 14,
+    "置いた数の fact": 780,
+    "道具が読んだ: 元の数の fact": 870,
+    "道具が読んだ: 組んだ数の fact": 781,
+    "数の fact: 元と同じ行": 770,
+    "数の fact: 組んだ側だけの行": 11,
+    "数の fact: 元の側だけの行": 100,
+    "道具が読んだ: 元の数でない fact": 291,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 19,
+     "EDINET.EC5700W": 14,
+     "EDINET.EC8029W": 183,
+     "EDINET.EC8030W": 1,
+     "EDINET.EC8054W": 1,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7,
+     "xbrldie:PrimaryItemDimensionallyInvalidError": 1
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 132,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 51,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 28,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 376,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 19,
+      "EDINET.EC5611W": 55,
+      "EDINET.EC5700W": 14,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 20,
+      "EDINET.EC8029W": 183,
+      "EDINET.EC8030W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7,
+      "xbrldie:PrimaryItemDimensionallyInvalidError": 1
+     }
+    }
+   },
+   {
+    "番号": 15,
+    "置いた数の fact": 904,
+    "道具が読んだ: 元の数の fact": 1072,
+    "道具が読んだ: 組んだ数の fact": 905,
+    "数の fact: 元と同じ行": 897,
+    "数の fact: 組んだ側だけの行": 8,
+    "数の fact: 元の側だけの行": 175,
+    "道具が読んだ: 元の数でない fact": 264,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 19,
+     "EDINET.EC5700W": 26,
+     "EDINET.EC8029W": 207,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 158,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 49,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 54,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 437,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 19,
+      "EDINET.EC5611W": 50,
+      "EDINET.EC5700W": 26,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 52,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 207,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 16,
+    "置いた数の fact": 999,
+    "道具が読んだ: 元の数の fact": 1172,
+    "道具が読んだ: 組んだ数の fact": 1000,
+    "数の fact: 元と同じ行": 991,
+    "数の fact: 組んだ側だけの行": 9,
+    "数の fact: 元の側だけの行": 181,
+    "道具が読んだ: 元の数でない fact": 277,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 24,
+     "EDINET.EC5700W": 32,
+     "EDINET.EC8029W": 189,
+     "EDINET.EC8030W": 1,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 4,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 169,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 63,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 53,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 439,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 24,
+      "EDINET.EC5611W": 70,
+      "EDINET.EC5700W": 32,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 42,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 189,
+      "EDINET.EC8030W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 4,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 17,
+    "置いた数の fact": 1076,
+    "道具が読んだ: 元の数の fact": 1174,
+    "道具が読んだ: 組んだ数の fact": 1077,
+    "数の fact: 元と同じ行": 1072,
+    "数の fact: 組んだ側だけの行": 5,
+    "数の fact: 元の側だけの行": 102,
+    "道具が読んだ: 元の数でない fact": 259,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 16,
+     "EDINET.EC5700W": 16,
+     "EDINET.EC8029W": 189,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 9,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 126,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 58,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 383,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 16,
+      "EDINET.EC5611W": 61,
+      "EDINET.EC5700W": 16,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 189,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 9,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 19,
+    "置いた数の fact": 598,
+    "道具が読んだ: 元の数の fact": 1042,
+    "道具が読んだ: 組んだ数の fact": 599,
+    "数の fact: 元と同じ行": 569,
+    "数の fact: 組んだ側だけの行": 30,
+    "数の fact: 元の側だけの行": 473,
+    "道具が読んだ: 元の数でない fact": 290,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 24,
+     "EDINET.EC5700W": 19,
+     "EDINET.EC8029W": 284,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 4,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 161,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 63,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 45,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 465,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 24,
+      "EDINET.EC5611W": 29,
+      "EDINET.EC5700W": 19,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 28,
+      "EDINET.EC8029W": 284,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 4,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 20,
+    "置いた数の fact": 1229,
+    "道具が読んだ: 元の数の fact": 1474,
+    "道具が読んだ: 組んだ数の fact": 1230,
+    "数の fact: 元と同じ行": 1221,
+    "数の fact: 組んだ側だけの行": 9,
+    "数の fact: 元の側だけの行": 253,
+    "道具が読んだ: 元の数でない fact": 433,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC5700W": 68,
+     "EDINET.EC8024E": 5,
+     "EDINET.EC8029W": 217,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 8,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7,
+     "xbrldie:PrimaryItemDimensionallyInvalidError": 2
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8023W": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 5,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 129,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 59,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 2,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 482,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 71,
+      "EDINET.EC5700W": 68,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8024E": 5,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 217,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 8,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7,
+      "xbrldie:PrimaryItemDimensionallyInvalidError": 2
+     }
+    }
+   },
+   {
+    "番号": 21,
+    "置いた数の fact": 903,
+    "道具が読んだ: 元の数の fact": 1054,
+    "道具が読んだ: 組んだ数の fact": 904,
+    "数の fact: 元と同じ行": 897,
+    "数の fact: 組んだ側だけの行": 7,
+    "数の fact: 元の側だけの行": 157,
+    "道具が読んだ: 元の数でない fact": 296,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 19,
+     "EDINET.EC5700W": 24,
+     "EDINET.EC8029W": 199,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 185,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 58,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 71,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 459,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 19,
+      "EDINET.EC5611W": 63,
+      "EDINET.EC5700W": 24,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 69,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 199,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 22,
+    "置いた数の fact": 353,
+    "道具が読んだ: 元の数の fact": 928,
+    "道具が読んだ: 組んだ数の fact": 354,
+    "数の fact: 元と同じ行": 246,
+    "数の fact: 組んだ側だけの行": 108,
+    "数の fact: 元の側だけの行": 682,
+    "道具が読んだ: 元の数でない fact": 231,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 24,
+     "EDINET.EC5700W": 45,
+     "EDINET.EC8029W": 260,
+     "EDINET.EC8048W": 1,
+     "EDINET.EC8050W": 1,
+     "EDINET.EC8054W": 10,
+     "EDINET.EC8057W": 1,
+     "EDINET.EC8058W": 2,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 4,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 6
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 106,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 34,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 20,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 442,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 24,
+      "EDINET.EC5611W": 15,
+      "EDINET.EC5700W": 45,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 5,
+      "EDINET.EC8029W": 260,
+      "EDINET.EC8048W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 10,
+      "EDINET.EC8057W": 1,
+      "EDINET.EC8058W": 2,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 4,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 6
+     }
+    }
+   },
+   {
+    "番号": 23,
+    "置いた数の fact": 519,
+    "道具が読んだ: 元の数の fact": 562,
+    "道具が読んだ: 組んだ数の fact": 520,
+    "数の fact: 元と同じ行": 519,
+    "数の fact: 組んだ側だけの行": 1,
+    "数の fact: 元の側だけの行": 43,
+    "道具が読んだ: 元の数でない fact": 221,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 21,
+     "EDINET.EC5700W": 2,
+     "EDINET.EC8029W": 117,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 4,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 5
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8069W": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 98,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 19,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 27,
+      "EDINET.EC8023W": 17,
+      "EDINET.EC8027W": 3,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8069W": 2,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 256,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 19,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 21,
+      "EDINET.EC5611W": 28,
+      "EDINET.EC5700W": 2,
+      "EDINET.EC8023W": 17,
+      "EDINET.EC8027W": 3,
+      "EDINET.EC8029W": 117,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 4,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 5
+     }
+    }
+   },
+   {
+    "番号": 24,
+    "置いた数の fact": 1100,
+    "道具が読んだ: 元の数の fact": 1230,
+    "道具が読んだ: 組んだ数の fact": 1101,
+    "数の fact: 元と同じ行": 1101,
+    "数の fact: 組んだ側だけの行": 0,
+    "数の fact: 元の側だけの行": 129,
+    "道具が読んだ: 元の数でない fact": 283,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 19,
+     "EDINET.EC5700W": 20,
+     "EDINET.EC8029W": 207,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 154,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 23,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 69,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 33,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 435,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 23,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 19,
+      "EDINET.EC5611W": 74,
+      "EDINET.EC5700W": 20,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 33,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 207,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   }
+  ],
+  "held": [
+   {
+    "番号": 25,
+    "置いた数の fact": 365,
+    "道具が読んだ: 元の数の fact": 471,
+    "道具が読んだ: 組んだ数の fact": 366,
+    "数の fact: 元と同じ行": 358,
+    "数の fact: 組んだ側だけの行": 8,
+    "数の fact: 元の側だけの行": 113,
+    "道具が読んだ: 元の数でない fact": 200,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 16,
+     "EDINET.EC5700W": 19,
+     "EDINET.EC8029W": 140,
+     "EDINET.EC8054W": 10,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 4
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 70,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 19,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 25,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 282,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 19,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 16,
+      "EDINET.EC5611W": 27,
+      "EDINET.EC5700W": 19,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 140,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 10,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 4
+     }
+    }
+   },
+   {
+    "番号": 26,
+    "置いた数の fact": 811,
+    "道具が読んだ: 元の数の fact": 910,
+    "道具が読んだ: 組んだ数の fact": 812,
+    "数の fact: 元と同じ行": 806,
+    "数の fact: 組んだ側だけの行": 6,
+    "数の fact: 元の側だけの行": 104,
+    "道具が読んだ: 元の数でない fact": 303,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC5700W": 13,
+     "EDINET.EC8029W": 196,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 7,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC5602R": 1,
+     "EDINET.EC8023W": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 119,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 33,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5602R": 1,
+      "EDINET.EC5611W": 52,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 2,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 379,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 33,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 56,
+      "EDINET.EC5700W": 13,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8029W": 196,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 7,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 27,
+    "置いた数の fact": 967,
+    "道具が読んだ: 元の数の fact": 1122,
+    "道具が読んだ: 組んだ数の fact": 968,
+    "数の fact: 元と同じ行": 962,
+    "数の fact: 組んだ側だけの行": 6,
+    "数の fact: 元の側だけの行": 160,
+    "道具が読んだ: 元の数でない fact": 286,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC5700W": 21,
+     "EDINET.EC8029W": 210,
+     "EDINET.EC8030W": 1,
+     "EDINET.EC8054W": 4,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 9,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8023W": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 124,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 53,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 2,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 411,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 54,
+      "EDINET.EC5700W": 21,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8029W": 210,
+      "EDINET.EC8030W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 4,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 9,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 28,
+    "置いた数の fact": 923,
+    "道具が読んだ: 元の数の fact": 1467,
+    "道具が読んだ: 組んだ数の fact": 924,
+    "数の fact: 元と同じ行": 897,
+    "数の fact: 組んだ側だけの行": 27,
+    "数の fact: 元の側だけの行": 570,
+    "道具が読んだ: 元の数でない fact": 268,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 5,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC8024E": 3,
+     "EDINET.EC8029W": 247,
+     "EDINET.EC8050W": 1,
+     "EDINET.EC8054W": 8,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 4,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 3
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8055W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 5,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 159,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 64,
+      "EDINET.EC5700W": 2,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 31,
+      "EDINET.EC8055W": 1,
+      "EDINET.EC8065W": 1,
+      "EDINET.EC8067W": 1,
+      "xbrl.3.5.3.7": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 567,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 5,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 72,
+      "EDINET.EC5700W": 107,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 19,
+      "EDINET.EC8024E": 3,
+      "EDINET.EC8029W": 247,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 8,
+      "EDINET.EC8065W": 1,
+      "EDINET.EC8067W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 4,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 3,
+      "xbrl.3.5.3.7": 1
+     }
+    }
+   },
+   {
+    "番号": 29,
+    "置いた数の fact": 1027,
+    "道具が読んだ: 元の数の fact": 1179,
+    "道具が読んだ: 組んだ数の fact": 1028,
+    "数の fact: 元と同じ行": 1026,
+    "数の fact: 組んだ側だけの行": 2,
+    "数の fact: 元の側だけの行": 153,
+    "道具が読んだ: 元の数でない fact": 276,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 11,
+     "EDINET.EC3005E": 8,
+     "EDINET.EC5700W": 36,
+     "EDINET.EC8029W": 188,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {},
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 173,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 73,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 48,
+      "EDINET.EC8027W": 2
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 436,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC3002E": 11,
+      "EDINET.EC3005E": 8,
+      "EDINET.EC5611W": 74,
+      "EDINET.EC5700W": 36,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 37,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 188,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 30,
+    "置いた数の fact": 1054,
+    "道具が読んだ: 元の数の fact": 1329,
+    "道具が読んだ: 組んだ数の fact": 1049,
+    "数の fact: 元と同じ行": 1020,
+    "数の fact: 組んだ側だけの行": 29,
+    "数の fact: 元の側だけの行": 309,
+    "道具が読んだ: 元の数でない fact": 271,
+    "道具が読んだ: 組んだ数でない fact": 32,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1057E": 1,
+     "EDINET.EC8024E": 6,
+     "EDINET.EC8029W": 228,
+     "EDINET.EC8054W": 12,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 8,
+     "exception:AttributeError": 1,
+     "ix10.11.1.2:missingReferences": 6
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC5611W": 56,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 2,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "止まった"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 124,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 56,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "止まった",
+     "時間の上限を超えた": false,
+     "出力の行の数": 369,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8024E": 6,
+      "EDINET.EC8029W": 228,
+      "EDINET.EC8054W": 12,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 8,
+      "exception:AttributeError": 1,
+      "ix10.11.1.2:missingReferences": 6
+     }
+    }
+   },
+   {
+    "番号": 31,
+    "置いた数の fact": 1100,
+    "道具が読んだ: 元の数の fact": 1287,
+    "道具が読んだ: 組んだ数の fact": 179,
+    "数の fact: 元と同じ行": 176,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 1111,
+    "道具が読んだ: 元の数でない fact": 380,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "AttributeError": 1,
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 3,
+     "EDINET.EC5700W": 22,
+     "EDINET.EC8024E": 3,
+     "EDINET.EC8029W": 243,
+     "EDINET.EC8030W": 4,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 10,
+     "ix10.9.1.2:contextReference": 3,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7,
+     "xbrl.4.6.1:itemContextRef": 3
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 5,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "止まった"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 135,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 38,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 66,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "止まった",
+     "時間の上限を超えた": false,
+     "出力の行の数": 469,
+     "符号ごとの行": {
+      "AttributeError": 1,
+      "EDINET.EC0121E": 38,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 3,
+      "EDINET.EC5611W": 70,
+      "EDINET.EC5700W": 22,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8024E": 3,
+      "EDINET.EC8029W": 243,
+      "EDINET.EC8030W": 4,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 10,
+      "ix10.9.1.2:contextReference": 3,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7,
+      "xbrl.4.6.1:itemContextRef": 3
+     }
+    }
+   },
+   {
+    "番号": 32,
+    "置いた数の fact": 1126,
+    "道具が読んだ: 元の数の fact": 1282,
+    "道具が読んだ: 組んだ数の fact": 1127,
+    "数の fact: 元と同じ行": 1124,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 158,
+    "道具が読んだ: 元の数でない fact": 302,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 17,
+     "EDINET.EC3005E": 2,
+     "EDINET.EC5700W": 18,
+     "EDINET.EC8029W": 227,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 4,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 200,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 66,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 80,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 490,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC3002E": 17,
+      "EDINET.EC3005E": 2,
+      "EDINET.EC5611W": 71,
+      "EDINET.EC5700W": 18,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 74,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 227,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 4,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 33,
+    "置いた数の fact": 910,
+    "道具が読んだ: 元の数の fact": 1046,
+    "道具が読んだ: 組んだ数の fact": 911,
+    "数の fact: 元と同じ行": 893,
+    "数の fact: 組んだ側だけの行": 18,
+    "数の fact: 元の側だけの行": 153,
+    "道具が読んだ: 元の数でない fact": 290,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC5700W": 22,
+     "EDINET.EC8029W": 202,
+     "EDINET.EC8030W": 1,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 7,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8023W": 10,
+     "EDINET.EC8069W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 127,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 46,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 10,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8069W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 392,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 48,
+      "EDINET.EC5700W": 22,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 202,
+      "EDINET.EC8030W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 7,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 34,
+    "置いた数の fact": 974,
+    "道具が読んだ: 元の数の fact": 1107,
+    "道具が読んだ: 組んだ数の fact": 975,
+    "数の fact: 元と同じ行": 975,
+    "数の fact: 組んだ側だけの行": 0,
+    "数の fact: 元の側だけの行": 132,
+    "道具が読んだ: 元の数でない fact": 275,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 19,
+     "EDINET.EC5700W": 14,
+     "EDINET.EC8029W": 205,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 173,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 68,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 52,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 435,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 19,
+      "EDINET.EC5611W": 69,
+      "EDINET.EC5700W": 14,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 46,
+      "EDINET.EC8029W": 205,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 35,
+    "置いた数の fact": 976,
+    "道具が読んだ: 元の数の fact": 1103,
+    "道具が読んだ: 組んだ数の fact": 977,
+    "数の fact: 元と同じ行": 961,
+    "数の fact: 組んだ側だけの行": 16,
+    "数の fact: 元の側だけの行": 142,
+    "道具が読んだ: 元の数でない fact": 311,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 25,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 25,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 16,
+     "EDINET.EC5700W": 17,
+     "EDINET.EC8029W": 215,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 10,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8023W": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 133,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 62,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 2,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 414,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 16,
+      "EDINET.EC5611W": 63,
+      "EDINET.EC5700W": 17,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8029W": 215,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 10,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 36,
+    "置いた数の fact": 1009,
+    "道具が読んだ: 元の数の fact": 1195,
+    "道具が読んだ: 組んだ数の fact": 1010,
+    "数の fact: 元と同じ行": 1007,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 188,
+    "道具が読んだ: 元の数でない fact": 341,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC8029W": 212,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 9,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC5602R": 1,
+     "EDINET.EC8023W": 2,
+     "EDINET.EC8024E": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 135,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC5602R": 1,
+      "EDINET.EC5611W": 57,
+      "EDINET.EC5700W": 1,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 2,
+      "EDINET.EC8024E": 2,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 426,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 60,
+      "EDINET.EC5700W": 29,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 212,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 9,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 37,
+    "置いた数の fact": 949,
+    "道具が読んだ: 元の数の fact": 1090,
+    "道具が読んだ: 組んだ数の fact": 950,
+    "数の fact: 元と同じ行": 950,
+    "数の fact: 組んだ側だけの行": 0,
+    "数の fact: 元の側だけの行": 140,
+    "道具が読んだ: 元の数でない fact": 297,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC5700W": 15,
+     "EDINET.EC8029W": 209,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 8,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 126,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 57,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 405,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 61,
+      "EDINET.EC5700W": 15,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 209,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 8,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 38,
+    "置いた数の fact": 539,
+    "道具が読んだ: 元の数の fact": 607,
+    "道具が読んだ: 組んだ数の fact": 540,
+    "数の fact: 元と同じ行": 537,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 70,
+    "道具が読んだ: 元の数でない fact": 236,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 18,
+     "EDINET.EC5700W": 21,
+     "EDINET.EC8029W": 159,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 7,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 4
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC5602R": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 98,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5602R": 1,
+      "EDINET.EC5611W": 44,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 321,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 18,
+      "EDINET.EC5611W": 44,
+      "EDINET.EC5700W": 21,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 159,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 7,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 4
+     }
+    }
+   },
+   {
+    "番号": 39,
+    "置いた数の fact": 972,
+    "道具が読んだ: 元の数の fact": 1100,
+    "道具が読んだ: 組んだ数の fact": 973,
+    "数の fact: 元と同じ行": 969,
+    "数の fact: 組んだ側だけの行": 4,
+    "数の fact: 元の側だけの行": 131,
+    "道具が読んだ: 元の数でない fact": 302,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 16,
+     "EDINET.EC5700W": 23,
+     "EDINET.EC8029W": 205,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 12,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 141,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 70,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 419,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 16,
+      "EDINET.EC5611W": 68,
+      "EDINET.EC5700W": 23,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 205,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 12,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 40,
+    "置いた数の fact": 833,
+    "道具が読んだ: 元の数の fact": 992,
+    "道具が読んだ: 組んだ数の fact": 834,
+    "数の fact: 元と同じ行": 834,
+    "数の fact: 組んだ側だけの行": 0,
+    "数の fact: 元の側だけの行": 158,
+    "道具が読んだ: 元の数でない fact": 282,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 24,
+     "EDINET.EC5700W": 19,
+     "EDINET.EC8029W": 204,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 4,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 95,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 23,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 43,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 374,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 23,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 24,
+      "EDINET.EC5611W": 48,
+      "EDINET.EC5700W": 19,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 204,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 4,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 41,
+    "置いた数の fact": 1068,
+    "道具が読んだ: 元の数の fact": 1243,
+    "道具が読んだ: 組んだ数の fact": 1069,
+    "数の fact: 元と同じ行": 1066,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 177,
+    "道具が読んだ: 元の数でない fact": 339,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 16,
+     "EDINET.EC5700W": 30,
+     "EDINET.EC8029W": 210,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 11,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8055W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 152,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1016E": 1,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 82,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8055W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 443,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1016E": 1,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 16,
+      "EDINET.EC5611W": 83,
+      "EDINET.EC5700W": 30,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8029W": 210,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 11,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 43,
+    "置いた数の fact": 890,
+    "道具が読んだ: 元の数の fact": 1000,
+    "道具が読んだ: 組んだ数の fact": 891,
+    "数の fact: 元と同じ行": 877,
+    "数の fact: 組んだ側だけの行": 14,
+    "数の fact: 元の側だけの行": 123,
+    "道具が読んだ: 元の数でない fact": 293,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 19,
+     "EDINET.EC5700W": 13,
+     "EDINET.EC8029W": 189,
+     "EDINET.EC8054W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8,
+     "xbrldie:PrimaryItemDimensionallyInvalidError": 2
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 167,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 63,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 49,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 413,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 19,
+      "EDINET.EC5611W": 67,
+      "EDINET.EC5700W": 13,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 38,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 189,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8,
+      "xbrldie:PrimaryItemDimensionallyInvalidError": 2
+     }
+    }
+   },
+   {
+    "番号": 44,
+    "置いた数の fact": 1007,
+    "道具が読んだ: 元の数の fact": 1154,
+    "道具が読んだ: 組んだ数の fact": 1008,
+    "数の fact: 元と同じ行": 1006,
+    "数の fact: 組んだ側だけの行": 2,
+    "数の fact: 元の側だけの行": 148,
+    "道具が読んだ: 元の数でない fact": 306,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 11,
+     "EDINET.EC3005E": 8,
+     "EDINET.EC5700W": 19,
+     "EDINET.EC8029W": 233,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 171,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 23,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 58,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 60,
+      "EDINET.EC8027W": 3,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 470,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 23,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC3002E": 11,
+      "EDINET.EC3005E": 8,
+      "EDINET.EC5611W": 63,
+      "EDINET.EC5700W": 19,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 54,
+      "EDINET.EC8027W": 3,
+      "EDINET.EC8029W": 233,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 45,
+    "置いた数の fact": 1054,
+    "道具が読んだ: 元の数の fact": 1168,
+    "道具が読んだ: 組んだ数の fact": 1055,
+    "数の fact: 元と同じ行": 1052,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 116,
+    "道具が読んだ: 元の数でない fact": 296,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC5700W": 16,
+     "EDINET.EC8029W": 193,
+     "EDINET.EC8054W": 1,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 3,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 2,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 158,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 63,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 42,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 395,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 66,
+      "EDINET.EC5700W": 16,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 39,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 193,
+      "EDINET.EC8054W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 3,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 46,
+    "置いた数の fact": 583,
+    "道具が読んだ: 元の数の fact": 727,
+    "道具が読んだ: 組んだ数の fact": 584,
+    "数の fact: 元と同じ行": 581,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 146,
+    "道具が読んだ: 元の数でない fact": 293,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 18,
+     "EDINET.EC5700W": 22,
+     "EDINET.EC8029W": 165,
+     "EDINET.EC8054W": 2,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 6,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 4
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC5602R": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 73,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5602R": 1,
+      "EDINET.EC5611W": 22,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 309,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 18,
+      "EDINET.EC5611W": 26,
+      "EDINET.EC5700W": 22,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8029W": 165,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8054W": 2,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 6,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 4
+     }
+    }
+   },
+   {
+    "番号": 47,
+    "置いた数の fact": 978,
+    "道具が読んだ: 元の数の fact": 1148,
+    "道具が読んだ: 組んだ数の fact": 979,
+    "数の fact: 元と同じ行": 976,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 172,
+    "道具が読んだ: 元の数でない fact": 317,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 14,
+     "EDINET.EC3005E": 2,
+     "EDINET.EC5700W": 18,
+     "EDINET.EC8029W": 217,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 7,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 6
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 129,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 35,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 63,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 410,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 35,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC3002E": 14,
+      "EDINET.EC3005E": 2,
+      "EDINET.EC5611W": 64,
+      "EDINET.EC5700W": 18,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 217,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 7,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 6
+     }
+    }
+   },
+   {
+    "番号": 48,
+    "置いた数の fact": 711,
+    "道具が読んだ: 元の数の fact": 900,
+    "道具が読んだ: 組んだ数の fact": 712,
+    "数の fact: 元と同じ行": 707,
+    "数の fact: 組んだ側だけの行": 5,
+    "数の fact: 元の側だけの行": 193,
+    "道具が読んだ: 元の数でない fact": 252,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 16,
+     "EDINET.EC5700W": 23,
+     "EDINET.EC8029W": 188,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 10,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 6
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 101,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 32,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 369,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 16,
+      "EDINET.EC5611W": 40,
+      "EDINET.EC5700W": 23,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 188,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 10,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 6
+     }
+    }
+   },
+   {
+    "番号": 49,
+    "置いた数の fact": 492,
+    "道具が読んだ: 元の数の fact": 775,
+    "道具が読んだ: 組んだ数の fact": 493,
+    "数の fact: 元と同じ行": 484,
+    "数の fact: 組んだ側だけの行": 9,
+    "数の fact: 元の側だけの行": 291,
+    "道具が読んだ: 元の数でない fact": 229,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 16,
+     "EDINET.EC5700W": 55,
+     "EDINET.EC8029W": 198,
+     "EDINET.EC8050W": 1,
+     "EDINET.EC8054W": 34,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 5
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 81,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 19,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 20,
+      "EDINET.EC8023W": 17,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 410,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 19,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 16,
+      "EDINET.EC5611W": 30,
+      "EDINET.EC5700W": 55,
+      "EDINET.EC8023W": 6,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 198,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 34,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 5
+     }
+    }
+   },
+   {
+    "番号": 50,
+    "置いた数の fact": 513,
+    "道具が読んだ: 元の数の fact": 576,
+    "道具が読んだ: 組んだ数の fact": 512,
+    "数の fact: 元と同じ行": 501,
+    "数の fact: 組んだ側だけの行": 11,
+    "数の fact: 元の側だけの行": 75,
+    "道具が読んだ: 元の数でない fact": 222,
+    "道具が読んだ: 組んだ数でない fact": 28,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1057E": 1,
+     "EDINET.EC8029W": 150,
+     "EDINET.EC8054W": 1,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "exception:AttributeError": 1,
+     "ix10.11.1.2:missingReferences": 2
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC5611W": 13,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 1,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "止まった"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 60,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 19,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 13,
+      "EDINET.EC5700W": 1,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "止まった",
+     "時間の上限を超えた": false,
+     "出力の行の数": 247,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 19,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC5700W": 1,
+      "EDINET.EC8029W": 150,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8054W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "exception:AttributeError": 1,
+      "ix10.11.1.2:missingReferences": 2
+     }
+    }
+   },
+   {
+    "番号": 51,
+    "置いた数の fact": 927,
+    "道具が読んだ: 元の数の fact": 1061,
+    "道具が読んだ: 組んだ数の fact": 928,
+    "数の fact: 元と同じ行": 906,
+    "数の fact: 組んだ側だけの行": 22,
+    "数の fact: 元の側だけの行": 155,
+    "道具が読んだ: 元の数でない fact": 247,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1057E": 1,
+     "EDINET.EC8029W": 178,
+     "arelle:nonIxdsDocument": 5,
+     "exception:AttributeError": 1,
+     "xbrldie:ExplicitMemberUndefinedQNameError": 2,
+     "xbrldie:PrimaryItemDimensionallyInvalidError": 2
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC5611W": 51,
+     "EDINET.EC8023W": 22,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 1,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "止まった"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 126,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 51,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 22,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "止まった",
+     "時間の上限を超えた": false,
+     "出力の行の数": 255,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 178,
+      "arelle:nonIxdsDocument": 5,
+      "exception:AttributeError": 1,
+      "xbrldie:ExplicitMemberUndefinedQNameError": 2,
+      "xbrldie:PrimaryItemDimensionallyInvalidError": 2
+     }
+    }
+   },
+   {
+    "番号": 52,
+    "置いた数の fact": 348,
+    "道具が読んだ: 元の数の fact": 762,
+    "道具が読んだ: 組んだ数の fact": 349,
+    "数の fact: 元と同じ行": 289,
+    "数の fact: 組んだ側だけの行": 60,
+    "数の fact: 元の側だけの行": 473,
+    "道具が読んだ: 元の数でない fact": 353,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 24,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 18,
+     "EDINET.EC5700W": 51,
+     "EDINET.EC8029W": 255,
+     "EDINET.EC8043W": 1,
+     "EDINET.EC8049W": 1,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 16,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 4
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8015W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 104,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 33,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 454,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 18,
+      "EDINET.EC5611W": 22,
+      "EDINET.EC5700W": 51,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 255,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8049W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 16,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 4
+     }
+    }
+   },
+   {
+    "番号": 53,
+    "置いた数の fact": 985,
+    "道具が読んだ: 元の数の fact": 1330,
+    "道具が読んだ: 組んだ数の fact": 986,
+    "数の fact: 元と同じ行": 979,
+    "数の fact: 組んだ側だけの行": 7,
+    "数の fact: 元の側だけの行": 351,
+    "道具が読んだ: 元の数でない fact": 317,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3003E": 1,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC5700W": 75,
+     "EDINET.EC8029W": 237,
+     "EDINET.EC8030W": 1,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 11,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 5,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 134,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 64,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 503,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 37,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3003E": 1,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 65,
+      "EDINET.EC5700W": 75,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 237,
+      "EDINET.EC8030W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 11,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 54,
+    "置いた数の fact": 584,
+    "道具が読んだ: 元の数の fact": 753,
+    "道具が読んだ: 組んだ数の fact": 585,
+    "数の fact: 元と同じ行": 565,
+    "数の fact: 組んだ側だけの行": 20,
+    "数の fact: 元の側だけの行": 188,
+    "道具が読んだ: 元の数でない fact": 285,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 24,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 14,
+     "EDINET.EC5700W": 65,
+     "EDINET.EC8015W": 1,
+     "EDINET.EC8029W": 220,
+     "EDINET.EC8039W": 1,
+     "EDINET.EC8041W": 1,
+     "EDINET.EC8044W": 1,
+     "EDINET.EC8048W": 1,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 9,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8043W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 87,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 36,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 420,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 14,
+      "EDINET.EC5611W": 33,
+      "EDINET.EC5700W": 65,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8029W": 220,
+      "EDINET.EC8039W": 1,
+      "EDINET.EC8041W": 1,
+      "EDINET.EC8044W": 1,
+      "EDINET.EC8048W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 9,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 55,
+    "置いた数の fact": 1014,
+    "道具が読んだ: 元の数の fact": 1218,
+    "道具が読んだ: 組んだ数の fact": 1015,
+    "数の fact: 元と同じ行": 1012,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 206,
+    "道具が読んだ: 元の数でない fact": 274,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 24,
+     "EDINET.EC5700W": 22,
+     "EDINET.EC8029W": 217,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 4,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC5602R": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 181,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 23,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5602R": 1,
+      "EDINET.EC5611W": 47,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 80,
+      "EDINET.EC8027W": 3,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 456,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 23,
+      "EDINET.EC0130E": 13,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 24,
+      "EDINET.EC5611W": 54,
+      "EDINET.EC5700W": 22,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 58,
+      "EDINET.EC8027W": 3,
+      "EDINET.EC8029W": 217,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 4,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 56,
+    "置いた数の fact": 621,
+    "道具が読んだ: 元の数の fact": 1280,
+    "道具が読んだ: 組んだ数の fact": 622,
+    "数の fact: 元と同じ行": 583,
+    "数の fact: 組んだ側だけの行": 39,
+    "数の fact: 元の側だけの行": 697,
+    "道具が読んだ: 元の数でない fact": 324,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 21,
+     "EDINET.EC8024E": 1,
+     "EDINET.EC8029W": 300,
+     "EDINET.EC8050W": 1,
+     "EDINET.EC8054W": 1,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 7,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8055W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 5,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 159,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 29,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 86,
+      "EDINET.EC5700W": 2,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8055W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 511,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 29,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 21,
+      "EDINET.EC5611W": 47,
+      "EDINET.EC5700W": 40,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8024E": 1,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 300,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 7,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 57,
+    "置いた数の fact": 557,
+    "道具が読んだ: 元の数の fact": 640,
+    "道具が読んだ: 組んだ数の fact": 558,
+    "数の fact: 元と同じ行": 552,
+    "数の fact: 組んだ側だけの行": 6,
+    "数の fact: 元の側だけの行": 88,
+    "道具が読んだ: 元の数でない fact": 235,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 13,
+     "EDINET.EC3005E": 2,
+     "EDINET.EC5700W": 17,
+     "EDINET.EC8029W": 155,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 6,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 4
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC8023W": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 78,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 24,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8023W": 2,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 286,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC3002E": 13,
+      "EDINET.EC3005E": 2,
+      "EDINET.EC5611W": 21,
+      "EDINET.EC5700W": 17,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 155,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 6,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 4
+     }
+    }
+   },
+   {
+    "番号": 58,
+    "置いた数の fact": 582,
+    "道具が読んだ: 元の数の fact": 651,
+    "道具が読んだ: 組んだ数の fact": 583,
+    "数の fact: 元と同じ行": 580,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 71,
+    "道具が読んだ: 元の数でない fact": 237,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 14,
+     "EDINET.EC5700W": 19,
+     "EDINET.EC8029W": 147,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 8,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 4
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 92,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 40,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 301,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 25,
+      "EDINET.EC0130E": 11,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 14,
+      "EDINET.EC5611W": 40,
+      "EDINET.EC5700W": 19,
+      "EDINET.EC5710W": 2,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 147,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 8,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 4
+     }
+    }
+   },
+   {
+    "番号": 59,
+    "置いた数の fact": 824,
+    "道具が読んだ: 元の数の fact": 1002,
+    "道具が読んだ: 組んだ数の fact": 825,
+    "数の fact: 元と同じ行": 825,
+    "数の fact: 組んだ側だけの行": 0,
+    "数の fact: 元の側だけの行": 177,
+    "道具が読んだ: 元の数でない fact": 253,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 19,
+     "EDINET.EC5700W": 31,
+     "EDINET.EC8029W": 191,
+     "EDINET.EC8050W": 1,
+     "EDINET.EC8054W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 140,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 22,
+      "EDINET.EC0130E": 12,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 35,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 54,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 415,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 22,
+      "EDINET.EC0130E": 12,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 19,
+      "EDINET.EC5611W": 38,
+      "EDINET.EC5700W": 31,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 54,
+      "EDINET.EC8027W": 2,
+      "EDINET.EC8029W": 191,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8054W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 60,
+    "置いた数の fact": 1039,
+    "道具が読んだ: 元の数の fact": 1182,
+    "道具が読んだ: 組んだ数の fact": 1040,
+    "数の fact: 元と同じ行": 1022,
+    "数の fact: 組んだ側だけの行": 18,
+    "数の fact: 元の側だけの行": 160,
+    "道具が読んだ: 元の数でない fact": 326,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1057E": 1,
+     "EDINET.EC8029W": 211,
+     "arelle:nonIxdsDocument": 4,
+     "exception:AttributeError": 1,
+     "xbrldie:ExplicitMemberUndefinedQNameError": 2,
+     "xbrldie:PrimaryItemDimensionallyInvalidError": 4
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC5611W": 47,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 1,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "止まった"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 99,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 47,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "止まった",
+     "時間の上限を超えた": false,
+     "出力の行の数": 288,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8029W": 211,
+      "arelle:nonIxdsDocument": 4,
+      "exception:AttributeError": 1,
+      "xbrldie:ExplicitMemberUndefinedQNameError": 2,
+      "xbrldie:PrimaryItemDimensionallyInvalidError": 4
+     }
+    }
+   },
+   {
+    "番号": 61,
+    "置いた数の fact": 812,
+    "道具が読んだ: 元の数の fact": 941,
+    "道具が読んだ: 組んだ数の fact": 813,
+    "数の fact: 元と同じ行": 810,
+    "数の fact: 組んだ側だけの行": 3,
+    "数の fact: 元の側だけの行": 131,
+    "道具が読んだ: 元の数でない fact": 252,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 19,
+     "EDINET.EC5700W": 28,
+     "EDINET.EC8029W": 182,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 133,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 50,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 30,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 391,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 19,
+      "EDINET.EC5611W": 50,
+      "EDINET.EC5700W": 28,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 30,
+      "EDINET.EC8029W": 182,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 62,
+    "置いた数の fact": 751,
+    "道具が読んだ: 元の数の fact": 948,
+    "道具が読んだ: 組んだ数の fact": 752,
+    "数の fact: 元と同じ行": 619,
+    "数の fact: 組んだ側だけの行": 133,
+    "数の fact: 元の側だけの行": 329,
+    "道具が読んだ: 元の数でない fact": 272,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 20,
+     "EDINET.EC5700W": 43,
+     "EDINET.EC8024E": 2,
+     "EDINET.EC8029W": 205,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 8,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 7
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 5,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 115,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 47,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8070W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 424,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 36,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 20,
+      "EDINET.EC5611W": 55,
+      "EDINET.EC5700W": 43,
+      "EDINET.EC5710W": 3,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8024E": 2,
+      "EDINET.EC8029W": 205,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 8,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 7
+     }
+    }
+   },
+   {
+    "番号": 63,
+    "置いた数の fact": 994,
+    "道具が読んだ: 元の数の fact": 1055,
+    "道具が読んだ: 組んだ数の fact": 995,
+    "数の fact: 元と同じ行": 995,
+    "数の fact: 組んだ側だけの行": 0,
+    "数の fact: 元の側だけの行": 60,
+    "道具が読んだ: 元の数でない fact": 197,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 26,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 19,
+     "EDINET.EC8029W": 150,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8069W": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 191,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 71,
+      "EDINET.EC5700W": 1,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 55,
+      "EDINET.EC8069W": 2,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 375,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 19,
+      "EDINET.EC5611W": 59,
+      "EDINET.EC5700W": 13,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 48,
+      "EDINET.EC8029W": 150,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8
+     }
+    }
+   },
+   {
+    "番号": 65,
+    "置いた数の fact": 462,
+    "道具が読んだ: 元の数の fact": 477,
+    "道具が読んだ: 組んだ数の fact": 463,
+    "数の fact: 元と同じ行": 462,
+    "数の fact: 組んだ側だけの行": 1,
+    "数の fact: 元の側だけの行": 15,
+    "道具が読んだ: 元の数でない fact": 163,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 2,
+     "EDINET.EC3005E": 16,
+     "EDINET.EC5700W": 2,
+     "EDINET.EC8029W": 114,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 5,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 5
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1,
+     "EDINET.EC8069W": 2,
+     "EDINET.EC8070W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 87,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 18,
+      "EDINET.EC0130E": 10,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 37,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8069W": 2,
+      "EDINET.EC8070W": 1,
+      "EDINET.EC8075W": 1
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 238,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 18,
+      "EDINET.EC0130E": 10,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 2,
+      "EDINET.EC3005E": 16,
+      "EDINET.EC5611W": 37,
+      "EDINET.EC5700W": 2,
+      "EDINET.EC8027W": 1,
+      "EDINET.EC8029W": 114,
+      "EDINET.EC8043W": 1,
+      "EDINET.EC8050W": 1,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 5,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 5
+     }
+    }
+   },
+   {
+    "番号": 67,
+    "置いた数の fact": 1204,
+    "道具が読んだ: 元の数の fact": 1463,
+    "道具が読んだ: 組んだ数の fact": 1205,
+    "数の fact: 元と同じ行": 1180,
+    "数の fact: 組んだ側だけの行": 25,
+    "数の fact: 元の側だけの行": 283,
+    "道具が読んだ: 元の数でない fact": 473,
+    "道具が読んだ: 組んだ数でない fact": 26,
+    "数でない fact: 元と同じ行": 0,
+    "数でない fact: 最後の欄(提出日の期)を除けば元と同じ行": 26,
+    "組んだ側だけで鳴った符号": {
+     "EDINET.EC1001E": 15,
+     "EDINET.EC1057E": 1,
+     "EDINET.EC3002E": 1,
+     "EDINET.EC3005E": 24,
+     "EDINET.EC5700W": 66,
+     "EDINET.EC8029W": 219,
+     "EDINET.EC8075W": 1,
+     "EDINET.EC8076W": 1,
+     "arelle:nonIxdsDocument": 4,
+     "xbrl.3.5.2.4.5:roleRefMismatch": 8
+    },
+    "元の側だけで鳴った符号": {
+     "EDINET.EC2002W": 1
+    },
+    "組んだ側だけで鳴った E の符号の数": 4,
+    "道具の類: 元・組んだ": [
+     "走った",
+     "走った"
+    ],
+    "道具の数え: 元": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 160,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC2002W": 1,
+      "EDINET.EC5611W": 58,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 50,
+      "xbrl.3.5.3.7": 2
+     }
+    },
+    "道具の数え: 組んだ": {
+     "類": "走った",
+     "時間の上限を超えた": false,
+     "出力の行の数": 500,
+     "符号ごとの行": {
+      "EDINET.EC0121E": 24,
+      "EDINET.EC0130E": 14,
+      "EDINET.EC1001E": 15,
+      "EDINET.EC1057E": 1,
+      "EDINET.EC3002E": 1,
+      "EDINET.EC3005E": 24,
+      "EDINET.EC5611W": 60,
+      "EDINET.EC5700W": 66,
+      "EDINET.EC8015W": 1,
+      "EDINET.EC8023W": 49,
+      "EDINET.EC8029W": 219,
+      "EDINET.EC8075W": 1,
+      "EDINET.EC8076W": 1,
+      "arelle:nonIxdsDocument": 4,
+      "xbrl.3.5.2.4.5:roleRefMismatch": 8,
+      "xbrl.3.5.3.7": 2
+     }
+    }
+   }
+  ]
+ }
+}

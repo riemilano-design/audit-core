@@ -1,0 +1,27 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>監査の報告 ― 便 XC3(2026-11-26)</title><style>@page{size:A4;margin:14mm 13mm}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#16233b;font-size:9.5pt;line-height:1.6;max-width:190mm;margin:8mm auto;padding:0 4mm}
+h1{font-size:15pt;margin:0 0 3mm}h2{font-size:12pt;margin:6mm 0 2mm;border-bottom:.4mm solid #16233b;padding-bottom:1mm}
+p{margin:1.5mm 0}table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:9pt}
+th{background:#f3f5f9;text-align:left;font-weight:700}th,td{border:.25mm solid #d9dee8;padding:1.2mm 1.8mm;vertical-align:top}
+tr{break-inside:avoid}hr{border:0;border-top:.3mm solid #d9dee8;margin:5mm 0 2mm}small{color:#51607a;font-size:8.5pt}
+.notice{border-left:1.2mm solid #b7791f;background:#fbf1dc;padding:3mm 5mm;margin:0 0 5mm;line-height:1.65}</style></head><body><h1>監査の報告 ― 便 XC3(2026-11-26)</h1>
+<div class="notice">便 XC3 の結果の前の独立監査(1 回)。監査の席は道具 P の版と sha256 を確かめ、判定の 3 組を道具で走らせ直して out と全部の数で一致を見た。記録は tally で作り直して byte で一致。木は書いていない。</div>
+<div class="notice">直すべき点は無く GO。注意 3 つのうち 2 つを直した。</div>
+<h2>判定: GO</h2>
+<h2>数の表</h2>
+<table><thead><tr><th>区分</th><th>件数</th><th>内容</th></tr></thead><tbody>
+<tr><td>指摘して直した</td><td>2</td><td>AUDIT の file がまだ無い(この報告で置いた)・見出しの 98.4% に分母を添えた(作れた割合は元を分母にした 78.85%)</td></tr>
+<tr><td>気づいたが直す点としない</td><td>2</td><td>「最後の欄を除く」は欄の足りない行では別の欄を落とす(封 §3 に申告済み・影響は小さい)・XC3-3 は境のすぐ上で、止まった 5 組は道具の中の例外(原因は読んでいないと書いてある)</td></tr>
+<tr><td>合った</td><td>7</td><td>下に要点</td></tr>
+</tbody></table>
+<h2>合った(要点)</h2>
+<ul>
+<li>漏れなし。組む部品が読むのは今年の素の本文と前の年の書類だけ。今年の xsd の名は schemaRef の名にだけ使う。持ち込みは封 §2 の字どおり。</li>
+<li>道具 P: arelle-release 2.47.5・ModelValue.py の sha256 は封 §0 の値。</li>
+<li>採点は封 §2 の字どおり。</li>
+<li>再現: 判定の 3 組が out と全部のキーで一致。record.json は tally で作り直して byte で一致。</li>
+<li>RESULT §1・§2 の数は記録と一致。予測 5 本の判定は封の字どおり。§3 の 33010 は便 XC2 の記録の判定の 40 組の R3+R4 の一致。</li>
+<li>engine・measure/・便 XC0〜XC2・封の file は 0 行の変更。封 §3 の作りの 23 組の数は記録と一致。</li>
+<li>会社の名・コード・file の名・要素の名の具体は記録にも RESULT にも無い。</li>
+</ul>
+<p><small>凍結の sha256: 封の 3 file と記録・out は監査の前後で一致。RESULT.md は監査の注意の直しでだけ変わった。</small></p></body></html>
