@@ -1,0 +1,26 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>監査の報告 ― 便 XC0(2026-11-25)</title><style>@page{size:A4;margin:14mm 13mm}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#16233b;font-size:9.5pt;line-height:1.6;max-width:190mm;margin:8mm auto;padding:0 4mm}
+h1{font-size:15pt;margin:0 0 3mm}h2{font-size:12pt;margin:6mm 0 2mm;border-bottom:.4mm solid #16233b;padding-bottom:1mm}
+p{margin:1.5mm 0}table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:9pt}
+th{background:#f3f5f9;text-align:left;font-weight:700}th,td{border:.25mm solid #d9dee8;padding:1.2mm 1.8mm;vertical-align:top}
+tr{break-inside:avoid}hr{border:0;border-top:.3mm solid #d9dee8;margin:5mm 0 2mm}small{color:#51607a;font-size:8.5pt}
+.notice{border-left:1.2mm solid #b7791f;background:#fbf1dc;padding:3mm 5mm;margin:0 0 5mm;line-height:1.65}</style></head><body><h1>監査の報告 ― 便 XC0(2026-11-25)</h1>
+<div class="notice">便 XC0 の結果の前の独立監査(1 回)。監査の席は 63 組を走らせ直して記録を完全に再現し、2 組で属性の比べを別の書き方で数え直した。木は書いていない。</div>
+<div class="notice">直すべき点は無く GO。注意 3 つのうち 2 つを直した。</div>
+<h2>判定: GO</h2>
+<h2>数の表</h2>
+<table><thead><tr><th>区分</th><th>件数</th><th>内容</th></tr></thead><tbody>
+<tr><td>指摘して直した</td><td>2</td><td>AUDIT の file がまだ無い(この報告で置いた)・XZ1 の 61100 を記録に照らす(司令塔が XZ1 の記録の「集計 60 組」で確かめ、RESULT に出どころと XZ1 の W1 の数を足した)</td></tr>
+<tr><td>気づいたが直す点としない</td><td>1</td><td>属性の比べは空の字と欠けを同じに扱う。別の書き方(生の字・欠けは欠けとだけ同じ)の数え直しで差は 0</td></tr>
+<tr><td>合った</td><td>6</td><td>下に要点</td></tr>
+</tbody></table>
+<h2>合った(要点)</h2>
+<ul>
+<li>漏れなし。置く部品 <code>place</code> が受けるのは今年の素の本文と前の年から作った表だけ。今年の表 F・表 H は採点の所だけで読む。数え方は封 §2 の字どおり。</li>
+<li>再現: judge・train を走らせ直し、out の 2 file と byte で一致。tally で作り直した record.json も一致。</li>
+<li>RESULT §1・§2 の数は記録と一致。予測 8 本の判定は封 §4 の字どおり。</li>
+<li>一致の水増しなし: 組 5 は 431 / 472、組 20 は 1148 / 1473 で、out と同じ。</li>
+<li>訓練 3 組の数は封 §3 の値と一致。</li>
+<li>engine・measure/・封の 3 file は 0 行の変更。</li>
+</ul>
+<p><small>凍結の sha256: 封の 3 file と記録・out は監査の前後で一致。RESULT.md は監査の注意の足しでだけ変わった。</small></p></body></html>
