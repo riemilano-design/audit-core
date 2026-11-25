@@ -19,6 +19,7 @@ sys.argv = [sys.argv[0], OUT]
 sys.path.insert(0, os.path.join(AC, "explore", "tr2"))
 sys.path.insert(0, os.path.join(AC, "explore", "tr6"))
 import build_tr2 as B  # noqa: E402
+sys.argv = [sys.argv[0], AC, TR2, OUT]  # build_tr6 は import の時に引数を読む
 import build_tr6 as B6  # noqa: E402
 
 KINDS = ["同じ見出しの列の追加", "値の入れ替わり", "同じ字の行の入れ替え"]
