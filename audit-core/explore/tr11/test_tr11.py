@@ -28,6 +28,17 @@ class T(unittest.TestCase):
         self.assertNotIn("(引く)(引く)", h)
         self.assertNotIn("升の値 5000000000(引く)", h)
 
+    def test_fixed_mark_is_per_item(self):
+        srcs = dict(T10.SRCS)
+        dep = {"シート": "PL", "行": "減価償却費", "何番目": 1, "列": "当期", "升の値": 1000, "符号": 1}
+        srcs["売上高@当期"] = [dict(dep, 行="売上", 升の値=4629400000), dict(dep, 符号=-1)]
+        srcs["純資産合計@当期末"] = [dep]
+        rows = F.K.check_doc(T10.DOC, T10.TAGS, T10.LEDGER, srcs)
+        self.assertIn("純資産合計@当期末: シート「PL」・行「減価償却費」・列「当期」・升の値 1000(引く)", F.report11(51, rows, "x"))  # 封の形の欠陥
+        h = F.report11b(51, rows, "x")
+        self.assertIn("売上高@当期: シート「PL」・行「減価償却費」・列「当期」・升の値 1000(引く)", h)
+        self.assertNotIn("純資産合計@当期末: シート「PL」・行「減価償却費」・列「当期」・升の値 1000(引く)", h)
+
     def test_dup_column_note_has_head_words(self):
         b = T9.dup(T9.BOOK, hint=True)
         ch = R9.diff9(T9.DEC, T9.LED, b)

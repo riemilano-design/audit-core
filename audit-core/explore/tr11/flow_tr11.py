@@ -61,3 +61,15 @@ def report11(n, rows, title):
     for a in marks:
         h = re.sub(re.escape(a) + r"(?!(引く))", lambda m: m.group(0) + "(引く)", h)
     return h
+
+
+def report11b(n, rows, title):
+    """結果の後の直し(封の report11 は記録の実行のまま残す)。同じ升が、ある項目では足し・別の項目では引く時に、
+    足す側にも「(引く)」が付いた(第 52 社の減価償却費)。印を項目ごと(「鍵: シート…」の字)に付ける。"""
+    h = K.report(n, rows, title)
+    marks = {"%s: シート「%s」・行「%s」・列「%s」・升の値 %s" % (html.escape(s["鍵"]), html.escape(s["シート"]), html.escape(s["行"]),
+                                                       html.escape(s["列"]), html.escape(str(s["升の値"])))
+             for r in rows if r["区分"] == "確認済み" for s in r.get("出どころ") or [] if int(s.get("符号") or 1) == -1}
+    for a in marks:
+        h = re.sub(re.escape(a) + r"(?!(引く))", lambda m: m.group(0) + "(引く)", h)
+    return h

@@ -37,6 +37,9 @@ for n in NUMS:
         x[1] += b
 r56 = load("out", "reread", "56.json")
 rec["第 56 社の気づきに分かりにくいの形"] = bool(re.search(r"つながり|結びつき|分かりにく|気づきにく|別の所", str(r56.get("気づき") or "")))
+xp = os.path.join(ROOT, "out", "extra.json")
+if os.path.exists(xp):  # 結果の後の補足(extra_tr11.py)
+    rec["補足(結果の後)"] = load("out", "extra.json")
 rec["注"] = "数だけ。素材は作り物の 6 社。誤りは [入れた, 止めた]。"
 with open(OUT, "w", encoding="utf-8") as f:
     json.dump(rec, f, ensure_ascii=False, indent=1)
