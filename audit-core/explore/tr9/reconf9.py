@@ -77,4 +77,5 @@ def screen9(n, sk, changes, decided, book, plan_read, early):
         out = R8.screen8(n, sk, changes, decided, book, plan_read, early)
     finally:
         R8.note, R8._table = old_note, old_table
-    return out
+    empty = "<table><tr><th>項目@期</th><th>案を当てて今回の file から読んだ値(円)</th></tr></table>"
+    return out.replace(empty, "<p>案を当てても、影響する項目はありません(台帳の 15 の数は変わりません)。</p>")

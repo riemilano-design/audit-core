@@ -112,10 +112,16 @@ def prep():
             key[sk] = kind
             ch = R9.diff9(conf, led, bk)
             early = P.read_some(conf, bk, set(t) - R8.waiting8(conf, ch, bk))
+            d2, bad = R9.apply(conf, ch, R.plan_only(ch))
+            plan_read = None
+            if not bad:
+                r2 = G9.read(d2, G9.make(d2, bk), bk)
+                if r2[0] == "読めた":
+                    plan_read = {a: r2[1][a] for a in sorted({a for c in ch for a in c["影響"]})}
             p = os.path.join(ROOT, "screen", str(n), sk + ".html")
             os.makedirs(os.path.dirname(p), exist_ok=True)
             with open(p, "w", encoding="utf-8") as f:
-                f.write(R9.screen9(n, sk, ch, conf, bk, None, early))
+                f.write(R9.screen9(n, sk, ch, conf, bk, plan_read, early))
         dump(key, "key", "%d.json" % n)
         print(n, key)
 

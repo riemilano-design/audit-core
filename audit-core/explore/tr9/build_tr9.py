@@ -22,6 +22,7 @@ for d in ("tr2", "tr6", "tr8"):
 import build_tr2 as B  # noqa: E402
 sys.argv = [sys.argv[0], AC, TR2, OUT]
 import build_tr6 as B6  # noqa: E402
+sys.argv = [sys.argv[0], AC, TR2, OUT]  # build_tr6 が引数を書き換えるので、build_tr8 の前に並べ直す
 import build_tr8 as B8  # noqa: E402
 
 
