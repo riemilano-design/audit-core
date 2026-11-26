@@ -1,0 +1,19 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>監査 ― 便 XC11 の結果(2026-11-26)</title><style>@page{size:A4;margin:14mm 13mm}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#16233b;font-size:9.5pt;line-height:1.6;max-width:190mm;margin:8mm auto;padding:0 4mm}
+h1{font-size:15pt;margin:0 0 3mm}h2{font-size:12pt;margin:6mm 0 2mm;border-bottom:.4mm solid #16233b;padding-bottom:1mm}
+p{margin:1.5mm 0}table{border-collapse:collapse;width:100%;margin:2mm 0;font-size:9pt}
+th{background:#f3f5f9;text-align:left;font-weight:700}th,td{border:.25mm solid #d9dee8;padding:1.2mm 1.8mm;vertical-align:top}
+tr{break-inside:avoid}hr{border:0;border-top:.3mm solid #d9dee8;margin:5mm 0 2mm}small{color:#51607a;font-size:8.5pt}
+.notice{border-left:1.2mm solid #b7791f;background:#fbf1dc;padding:3mm 5mm;margin:0 0 5mm;line-height:1.65}</style></head><body><h1>監査 ― 便 XC11 の結果(2026-11-26)</h1>
+<p>席: step-auditor(独立。読むだけ。scratchpad は読ませていない)。判定: <b>GO</b>(直す所なし)。凍結: 監査の前後で RESULT.md・record.json・SEAL.md・BRIEF.md・xc11.py・tally11.py の sha256 は一致した。</p>
+<h2>確かめた事(席の報告の要旨)</h2>
+<p>1. 封の後の変更: <code>git diff b9ad753d</code> は xc11.py・tally11.py・SEAL.md・BRIEF.md で空。engine・<code>measure/</code> に変更 0。</p>
+<p>2. §1・§2 の数は record.json と全項目一致(判定の組: 印 3663・置いた 313・付けない 3350・答え 412・同じ 290・属性が違う 8・置き場が違う 15。組ごとの和も合計と一致し、各組で 同じ + 属性が違う + 置き場が違う = 置いた)。割合 290/412 = 70.39%・23/313 = 7.35%。</p>
+<p>3. tally11.py の判定の式は封 §4 の字のとおり(誤りの割合 ≤ 0.10・覆いの増分 ≥ 0.30)。予測 2 本とも当たり。</p>
+<p>4. record.json と RESULT.md に、EDINET コード・docID・file の名・日付・会社の形の字は 0 件(grep)。記録は数・組の番号・固定の見出しだけ。</p>
+<p>5. §3 の記録の外の読み(属性が違う 8 は要素の名だけ違う・席の報告)は、記録の外・席の報告・確かめていない事を断っている。</p>
+<h2>軽い指摘(直さなくてよい)</h2>
+<ul>
+<li>RESULT の冒頭の AUDIT へのリンクは、この file を置けば足りる。</li>
+<li>「組ごとの和が席ごとの札の数の和と合う」は記録の外の確かめだが、司令塔が見た節の字なので許す。</li>
+</ul></body></html>
